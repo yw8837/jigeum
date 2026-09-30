@@ -111,7 +111,7 @@ internal val PaleApricot = Color(0xFFFFEEE1)
 internal val Line = Color(0xFFE8E3D9)
 internal val White = Color(0xFFFFFFFF)
 
-private enum class Page { HOME, RECORD, TRANSLATE, TIMELINE, GUIDE, CAMERA, VIDEO_IMPORT, PRIVACY, ALBUM, PAYWALL }
+private enum class Page { HOME, RECORD, TRANSLATE, TIMELINE, GUIDE, CAMERA, VIDEO_IMPORT, PRIVACY, TERMS, ALBUM, PAYWALL }
 private enum class CapturePhase { READY, RECORDING, ANALYZING, REVIEW }
 private enum class Source { AUDIO, CAMERA, VIDEO_FILE }
 
@@ -173,6 +173,10 @@ class MainActivity : ComponentActivity() {
             var retryLoad by remember { mutableIntStateOf(0) }
             var busy by remember { mutableStateOf(false) }
             var sharing by remember { mutableStateOf(false) }
+            var requestedFeature by rememberSaveable { mutableStateOf(AccessFeature.PDF) }
+            var returnPage by rememberSaveable { mutableStateOf(Page.ALBUM) }
+            var mediaReturn by rememberSaveable { mutableStateOf(Page.HOME) }
+            val accessPolicy = remember { AccessPolicy(billingManager::hasCurrentEntitlement) }
             var privacyReturn by rememberSaveable { mutableStateOf(Page.GUIDE) }
             val screenState = rememberSaveableStateHolder()
             var draft by rememberSaveable(stateSaver = ExpressionSaver) { mutableStateOf<BabyExpression?>(null) }
@@ -180,6 +184,38 @@ class MainActivity : ComponentActivity() {
             val scope = rememberCoroutineScope()
             val snacks = remember { SnackbarHostState() }
             fun notify(message: String) { scope.launch { snacks.showSnackbar(message) } }
+            fun showPass(feature: AccessFeature, origin: Page) {
+                requestedFeature = feature
+                returnPage = origin
+                page = Page.PAYWALL
+            }
+            fun openPaid(feature: AccessFeature, origin: Page) {
+                if (accessPolicy.canStart(feature)) {
+                    if (feature == AccessFeature.CAMERA || feature == AccessFeature.STORED_VIDEO) mediaReturn = origin
+                    page = when (feature) {
+                        AccessFeature.CAMERA -> Page.CAMERA
+                        AccessFeature.STORED_VIDEO -> Page.VIDEO_IMPORT
+                        else -> Page.ALBUM
+                    }
+                } else showPass(feature, origin)
+            }
+            // Dispose paid media even while waiting on permission, a picker, or native analysis.
+            LaunchedEffect(page, billingState.isPremium) {
+                val feature = when (page) {
+                    Page.CAMERA -> AccessFeature.CAMERA
+                    Page.VIDEO_IMPORT -> AccessFeature.STORED_VIDEO
+                    else -> null
+                }
+                if (feature != null) {
+                    while (true) {
+                        if (!accessPolicy.canStart(feature)) {
+                            showPass(feature, mediaReturn)
+                            break
+                        }
+                        delay(250)
+                    }
+                }
+            }
             fun update(action: suspend () -> Unit, after: () -> Unit = {}) {
                 if (busy || !loaded) return
                 busy = true
@@ -212,11 +248,12 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(page, draft) { if (page == Page.TRANSLATE && draft == null) page = Page.HOME }
             fun goBack() {
                 page = when (page) {
-                    Page.PRIVACY -> privacyReturn
-                    Page.PAYWALL -> Page.ALBUM
+                    Page.PRIVACY, Page.TERMS -> privacyReturn
+                    Page.PAYWALL -> returnPage
+                    Page.CAMERA, Page.VIDEO_IMPORT -> mediaReturn
                     Page.TRANSLATE -> when (draft?.source) {
-                        Source.CAMERA -> Page.CAMERA
-                        Source.VIDEO_FILE -> Page.VIDEO_IMPORT
+                        Source.CAMERA -> { openPaid(AccessFeature.CAMERA, Page.TRANSLATE); page }
+                        Source.VIDEO_FILE -> { openPaid(AccessFeature.STORED_VIDEO, Page.TRANSLATE); page }
                         else -> Page.RECORD
                     }
                     else -> Page.HOME
@@ -244,14 +281,15 @@ class MainActivity : ComponentActivity() {
                                         } else when (page) {
                                             Page.HOME -> HomeScreen(observations, ageBand,
                                                 onAgeBand = { update({ store.saveAgeBand(it) }) },
-                                                onRecord = { page = Page.RECORD }, onCamera = { page = Page.CAMERA },
-                                                onVideoImport = { page = Page.VIDEO_IMPORT }, onTimeline = { page = Page.TIMELINE })
+                                                onRecord = { page = Page.RECORD }, onCamera = { openPaid(AccessFeature.CAMERA, Page.HOME) },
+                                                onVideoImport = { openPaid(AccessFeature.STORED_VIDEO, Page.HOME) }, onTimeline = { page = Page.TIMELINE })
                                             Page.RECORD -> RecordScreen({ stopCaptureOnBackground = it },
                                                 onBack = { page = Page.HOME }, onTranslate = { sound, context, note, cues ->
                                                     draft = BabyExpression(Source.AUDIO, sound, context, note, audioCues = cues)
                                                     page = Page.TRANSLATE
                                                 })
                                             Page.TRANSLATE -> draft?.let { expression ->
+                                                screenState.SaveableStateProvider("draft-${expression.sessionId}") {
                                                 TranslationScreen(expression, phraseEngine, busy, onBack = { goBack() },
                                                     onSave = { final, phrase ->
                                                         if (!busy && draft != null) update({
@@ -261,25 +299,31 @@ class MainActivity : ComponentActivity() {
                                                             store.save(Observation(newId, final.sound,
                                                                 final.context, final.note, phrase, final.source.name,
                                                                 final.audioCues.firstOrNull()?.label ?: ""))
-                                                        }, { draft = null; page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
+                                                        }, { screenState.removeState("draft-${expression.sessionId}"); draft = null; page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
                                                     })
                                             }
+                                            }
                                             Page.TIMELINE -> TimelineScreen(observations,
-                                                onDelete = { id -> update({ store.delete(id)
+                                                onDelete = { id ->
+                                                    MemoryArtifacts.invalidatePendingExports()
+                                                    update({ store.delete(id)
                                                     try { MemoryArtifacts.clear(this@MainActivity) }
                                                     catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("기록은 지웠어요. 임시 공유 파일을 정리하지 못했어요.") }
                                                 }) },
                                                 onAlbum = { page = Page.ALBUM },
-                                                onShare = { record -> if (!sharing) {
+                                                onShare = { record -> if (!sharing && !busy) {
+                                                    val generation = MemoryArtifacts.currentGeneration()
                                                     sharing = true
                                                     scope.launch {
-                                                        try { MemoryArtifacts.share(this@MainActivity, MemoryArtifacts.card(this@MainActivity, record), "image/png") }
+                                                        try { MemoryArtifacts.share(this@MainActivity, MemoryArtifacts.card(this@MainActivity, record, generation), "image/png", generation) }
                                                         catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("카드를 만들지 못했어요. 저장 공간을 확인해 주세요.") }
                                                         finally { sharing = false }
                                                     }
                                                 } })
                                             Page.GUIDE -> GuideScreen(onPrivacy = { privacyReturn = Page.GUIDE; page = Page.PRIVACY },
-                                                onDeleteAll = { update({ store.deleteAll()
+                                                onDeleteAll = {
+                                                    MemoryArtifacts.invalidatePendingExports()
+                                                    update({ store.deleteAll()
                                                     try { MemoryArtifacts.clear(this@MainActivity) }
                                                     catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("기록은 지웠어요. 임시 공유 파일을 정리하지 못했어요.") }
                                                     withContext(Dispatchers.IO) { phraseEngine.reset() }
@@ -287,26 +331,40 @@ class MainActivity : ComponentActivity() {
                                                 dataTools = { DataTransferPanel(store, observations, ageBand,
                                                     onImported = { snapshot -> observations = snapshot.observations; ageBand = snapshot.ageBand },
                                                     onMessage = ::notify, operationScope = scope) },
-                                                onRestore = { billingManager.restore(); page = Page.PAYWALL })
-                                            Page.CAMERA -> CameraScanScreen(onBack = { page = Page.HOME }, onTranslate = { cue ->
+                                                onRestore = { showPass(AccessFeature.PDF, Page.GUIDE); billingManager.restore() })
+                                            Page.CAMERA -> if (billingState.isPremium) CameraScanScreen(
+                                                canUseCamera = { page == Page.CAMERA && accessPolicy.canStart(AccessFeature.CAMERA) },
+                                                onAccessDenied = { if (page == Page.CAMERA) showPass(AccessFeature.CAMERA, mediaReturn) },
+                                                onBack = { page = mediaReturn }, onTranslate = { cue ->
+                                                if (page != Page.CAMERA || !accessPolicy.canStart(AccessFeature.CAMERA)) return@CameraScanScreen
                                                 draft = BabyExpression(Source.CAMERA, "영상 장면", "", cue.manualNote ?: "", cue.faceVisible, cue.mouthOpen)
                                                 page = Page.TRANSLATE
                                             })
-                                            Page.VIDEO_IMPORT -> VideoImportScreen(onBack = { page = Page.HOME }, onTranslate = { observed ->
+                                            Page.VIDEO_IMPORT -> if (billingState.isPremium) VideoImportScreen(
+                                                canUseVideo = { page == Page.VIDEO_IMPORT && accessPolicy.canStart(AccessFeature.STORED_VIDEO) },
+                                                onAccessDenied = { if (page == Page.VIDEO_IMPORT) showPass(AccessFeature.STORED_VIDEO, mediaReturn) },
+                                                onBack = { page = mediaReturn }, onTranslate = { observed ->
+                                                if (page != Page.VIDEO_IMPORT || !accessPolicy.canStart(AccessFeature.STORED_VIDEO)) return@VideoImportScreen
                                                 draft = BabyExpression(Source.VIDEO_FILE, observed.heardSound, "", observed.manualNote ?: "",
                                                     observed.faceVisible, observed.mouthOpen, observed.audioCues, observed.evidence)
                                                 page = Page.TRANSLATE
                                             })
                                             Page.PRIVACY -> PrivacyPolicyScreen { goBack() }
+                                            Page.TERMS -> DraftTermsScreen { goBack() }
                                             Page.ALBUM -> screenState.SaveableStateProvider("album") {
                                                 AlbumScreen(observations, billingState.isPremium,
-                                                    onPremium = { billingManager.refresh(); page = Page.PAYWALL }, onMessage = ::notify,
-                                                    operationScope = scope, exporting = sharing, onExportingChange = { sharing = it })
+                                                    canGeneratePdf = { accessPolicy.canStart(AccessFeature.PDF) },
+                                                    onPremium = { showPass(AccessFeature.PDF, Page.ALBUM); billingManager.refresh() }, onMessage = ::notify,
+                                                    operationScope = scope, exporting = sharing || busy, onExportingChange = { sharing = it })
                                             }
                                             Page.PAYWALL -> PremiumScreen(billingState,
                                                 onPurchase = { billingManager.purchase(this@MainActivity, it) },
                                                 onRestore = billingManager::restore, onRetry = billingManager::refresh,
-                                                onBack = { page = Page.ALBUM }, onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY })
+                                                requestedFeature = requestedFeature,
+                                                onContinue = { openPaid(requestedFeature, returnPage) },
+                                                onBack = { page = returnPage },
+                                                onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
+                                                onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY })
                                         }
                                     }
                                 }
@@ -432,7 +490,7 @@ private fun HeroRecordCard(
             Column(Modifier.weight(1f)) {
                 Text("아이의 작은 소리,", color = Muted, fontSize = 13.sp)
                 Text("아기말 번역하기", color = Ink, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-                Text("10초 녹음 · 아이 시점의 한 문장", color = Muted, fontSize = 13.sp)
+                Text("무료 10초 녹음 · 직접 입력도 가능", color = Muted, fontSize = 13.sp)
             }
             Image(
                 painter = painterResource(R.drawable.hero_touch),
@@ -444,13 +502,13 @@ private fun HeroRecordCard(
         Spacer(Modifier.height(14.dp))
         PrimaryButton("소리로 번역하기", onRecord)
         Spacer(Modifier.height(10.dp))
-        SecondaryButton("저장된 영상 가져오기", onVideoImport)
+        SecondaryButton("저장된 영상 가져오기 · 전체 이용권", onVideoImport)
         Spacer(Modifier.height(8.dp))
         TextButton(onClick = onCamera, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            Text("카메라로 살펴보기", color = Ink)
+            Text("카메라로 살펴보기 · 전체 이용권", color = Ink)
         }
         Spacer(Modifier.height(15.dp))
-        Text("그 순간의 소리와 상황을 아이의 말처럼 풀어드려요. 원본은 저장하지 않아요.", color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
+        Text("보호자가 상황을 확인해 만드는 표현 예시예요. 아이의 뜻을 판정하지 않으며 원본은 저장하지 않아요.", color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
     }
 }
 
@@ -830,24 +888,26 @@ private fun TranslationScreen(
     var editedPhrase by rememberSaveable(initial) { mutableStateOf("") }
     val inputsReady = sound.isNotEmpty() && recentContext.isNotEmpty()
     val phraseKey = "$sound|$recentContext"
-    var phraseState by remember(initial.sessionId) { mutableStateOf("" to emptyList<String>()) }
+    var savedPhraseKey by rememberSaveable(initial.sessionId) { mutableStateOf("") }
+    var savedPhrases by rememberSaveable(initial.sessionId) { mutableStateOf(arrayListOf<String>()) }
     var phraseError by remember { mutableStateOf(false) }
     var phraseRetry by remember { mutableIntStateOf(0) }
     LaunchedEffect(initial.sessionId, phraseKey, phraseRetry) {
         phraseError = false
-        if (inputsReady) {
+        if (inputsReady && (savedPhraseKey != phraseKey || savedPhrases.size != 3)) {
             try {
                 val result = withContext(Dispatchers.IO) {
                     phraseEngine.candidates(sound, recentContext, initial.sessionId)
                 }
-                phraseState = phraseKey to result
+                savedPhraseKey = phraseKey
+                savedPhrases = ArrayList(result)
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 phraseError = true
             }
         }
     }
-    val phrases = if (phraseState.first == phraseKey) phraseState.second else emptyList()
+    val phrases = if (savedPhraseKey == phraseKey) savedPhrases else emptyList()
     val ready = inputsReady && phrases.size == 3
     val selectedPhrase = if (isEditing) editedPhrase.trim() else phrases.getOrElse(candidate) { "" }
 
@@ -1081,6 +1141,8 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
             Text("걱정되는 증상이 있거나 평소와 다른 상태가 계속되면 소아청소년과 전문가에게 상담하세요.",
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
             Spacer(Modifier.height(35.dp))
+            Text("무료: 녹음·직접 입력·문장 수정과 저장·기록·공유와 백업·기본 요약·앨범 미리보기\n전체 이용권: 카메라·저장 영상·월별 PDF\n이용권 복원은 기록 복원이 아니에요. 기록은 JSON 백업으로 옮겨 주세요.",
+                modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
             dataTools()
             TextButton(onClick = onRestore, modifier = Modifier.padding(horizontal = 12.dp)) { Text("구매 복원 · 이용권 관리", color = Ink) }
             Text("내 데이터", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,

@@ -57,6 +57,7 @@ import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
+import java.util.concurrent.FutureTask
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.hypot
@@ -73,10 +74,17 @@ data class CameraObservation(
 
 @Composable
 fun CameraScanScreen(
+    canUseCamera: () -> Boolean,
+    onAccessDenied: () -> Unit,
     onBack: () -> Unit,
     onTranslate: ((CameraObservation) -> Unit)? = null
 ) {
     val context = LocalContext.current
+    val currentAccess by rememberUpdatedState(canUseCamera)
+    val currentDenied by rememberUpdatedState(onAccessDenied)
+    val session = remember { MediaAccessSession(AccessPolicy { currentAccess() }, AccessFeature.CAMERA) }
+    fun checkAccess(): Boolean = session.check { currentDenied() }
+    DisposableEffect(session) { onDispose { session.close() } }
     var hasPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
@@ -96,7 +104,7 @@ fun CameraScanScreen(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         hasPermission = granted
-        active = granted
+        active = granted && checkAccess()
         if (!granted) error = "카메라 권한이 없어 관찰을 시작할 수 없어요."
     }
     LaunchedEffect(active, cameraReady) {
@@ -134,6 +142,7 @@ fun CameraScanScreen(
             if (active && hasPermission) {
                 CameraObservationPreview(
                     requestedCamera = requestedCamera,
+                    canUseCamera = ::checkAccess,
                     onObservation = { observation = it },
                     onError = { error = it; cameraReady = false },
                     onWarning = { warning = it },
@@ -169,6 +178,7 @@ fun CameraScanScreen(
                 if (cameraReady && canSwitchCamera) {
                     OutlinedButton(
                         onClick = {
+                            if (!checkAccess()) return@OutlinedButton
                             cameraReady = false
                             canSwitchCamera = false
                             observation = FaceObservation.WAITING
@@ -203,6 +213,7 @@ fun CameraScanScreen(
             if (!active) {
                 Button(
                     onClick = {
+                        if (!checkAccess()) return@Button
                         error = null
                         warning = null
                         cameraReady = false
@@ -224,6 +235,7 @@ fun CameraScanScreen(
         if (onTranslate != null) {
             Button(
                 onClick = {
+                    if (!checkAccess()) return@Button
                     val cue = CameraObservation(
                         faceVisible = observation == FaceObservation.FACE_VISIBLE ||
                             observation == FaceObservation.MOUTH_OPEN,
@@ -263,6 +275,7 @@ private enum class FaceObservation { WAITING, NO_FACE, FACE_VISIBLE, MOUTH_OPEN 
 @Composable
 private fun CameraObservationPreview(
     requestedCamera: Int,
+    canUseCamera: () -> Boolean,
     onObservation: (FaceObservation) -> Unit,
     onError: (String) -> Unit,
     onWarning: (String) -> Unit,
@@ -270,6 +283,7 @@ private fun CameraObservationPreview(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val currentAccess by rememberUpdatedState(canUseCamera)
     val currentObservation by rememberUpdatedState(onObservation)
     val currentError by rememberUpdatedState(onError)
     val currentWarning by rememberUpdatedState(onWarning)
@@ -282,6 +296,8 @@ private fun CameraObservationPreview(
     }
 
     DisposableEffect(lifecycleOwner, previewView, requestedCamera) {
+        // Recheck before scheduling even model initialization from a restored UI snapshot.
+        if (!currentAccess()) return@DisposableEffect onDispose { }
         val mainExecutor = ContextCompat.getMainExecutor(context)
         val worker = Executors.newSingleThreadExecutor()
         val disposed = AtomicBoolean(false)
@@ -295,6 +311,7 @@ private fun CameraObservationPreview(
         var lastInferenceMs = 0L
 
         worker.execute {
+            if (disposed.get()) return@execute
             val model = try {
                 val options = FaceLandmarker.FaceLandmarkerOptions.builder()
                     .setBaseOptions(BaseOptions.builder()
@@ -325,7 +342,11 @@ private fun CameraObservationPreview(
             analysis.setAnalyzer(worker) { image ->
                 try {
                     val now = SystemClock.uptimeMillis()
-                    if (model != null && now - lastInferenceMs >= 180) {
+                    if (!disposed.get() && model != null && now - lastInferenceMs >= 180) {
+                        // Billing is main-thread owned. Recheck before every inference, not on the worker.
+                        val permitted = FutureTask { !disposed.get() && currentAccess() }
+                        mainExecutor.execute(permitted)
+                        if (!permitted.get()) return@setAnalyzer
                         lastInferenceMs = now
                         val bitmap = image.toUprightBitmap()
                         val result = try {
@@ -360,7 +381,7 @@ private fun CameraObservationPreview(
                             }
                         }
                         mainExecutor.execute {
-                            if (!disposed.get()) currentObservation(state)
+                            if (!disposed.get() && currentAccess()) currentObservation(state)
                         }
                     }
                 } catch (cause: Exception) {
@@ -374,7 +395,7 @@ private fun CameraObservationPreview(
 
             val providerFuture = ProcessCameraProvider.getInstance(context)
             providerFuture.addListener({
-                if (disposed.get()) return@addListener
+                if (disposed.get() || !currentAccess()) return@addListener
                 try {
                     provider = providerFuture.get()
                     val backAvailable = provider!!.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)

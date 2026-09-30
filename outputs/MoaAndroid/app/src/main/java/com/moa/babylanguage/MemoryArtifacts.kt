@@ -37,6 +37,17 @@ internal object MemoryArtifacts {
     private val ink = 0xFF24322E.toInt()
     private val muted = 0xFF526059.toInt()
     private val exportMutex = Mutex()
+    private val generationLock = Any()
+    private var exportGeneration = 0L
+
+    fun currentGeneration(): Long = synchronized(generationLock) { exportGeneration }
+
+    /** Call synchronously before deleting source records, not after the IO operation. */
+    fun invalidatePendingExports() = synchronized(generationLock) { exportGeneration++; Unit }
+
+    private fun requireCurrentGeneration(generation: Long) {
+        check(generation == currentGeneration()) { "기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요." }
+    }
 
     fun month(id: Long): YearMonth = YearMonth.from(Instant.ofEpochMilli(id).atZone(ZoneId.systemDefault()))
     fun date(id: Long): String = Instant.ofEpochMilli(id).atZone(ZoneId.systemDefault())
@@ -54,11 +65,14 @@ internal object MemoryArtifacts {
         }
     }
 
-    suspend fun clear(context: Context) = withContext(Dispatchers.IO) {
-        exportMutex.withLock {
-            File(context.cacheDir, "exports").listFiles()?.filter {
-                it.isFile && it.name.startsWith("jigeum-")
-            }?.forEach { file -> check(file.delete() || !file.exists()) { "공유용 임시 파일을 지우지 못했어요." } }
+    suspend fun clear(context: Context) {
+        invalidatePendingExports()
+        withContext(Dispatchers.IO) {
+            exportMutex.withLock {
+                File(context.cacheDir, "exports").listFiles()?.filter {
+                    it.isFile && it.name.startsWith("jigeum-")
+                }?.forEach { file -> check(file.delete() || !file.exists()) { "공유용 임시 파일을 지우지 못했어요." } }
+            }
         }
     }
 
@@ -104,8 +118,10 @@ internal object MemoryArtifacts {
         return end
     }
 
-    suspend fun card(context: Context, record: Observation): File = withContext(Dispatchers.IO) {
+    suspend fun card(context: Context, record: Observation,
+                     generation: Long = currentGeneration()): File = withContext(Dispatchers.IO) {
         exportMutex.withLock {
+        requireCurrentGeneration(generation)
         require(record.phrase.isNotBlank()) { "공유할 문장을 먼저 골라 주세요." }
         val file = File(folder(context), "jigeum-card-${UUID.randomUUID()}.png")
         val bitmap = Bitmap.createBitmap(1080, 1350, Bitmap.Config.ARGB_8888)
@@ -123,6 +139,7 @@ internal object MemoryArtifacts {
             draw(canvas, "보호자가 그 순간을 담아 쓴 표현이에요.", 84f, 1210f, 27f, 900, muted)
             coroutineContext.ensureActive()
             file.outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
+            requireCurrentGeneration(generation)
             file
         } catch (error: Throwable) {
             file.delete(); throw error
@@ -131,8 +148,10 @@ internal object MemoryArtifacts {
     }
 
     suspend fun album(context: Context, records: List<Observation>, month: YearMonth,
-                      theme: AlbumTheme, includeNotes: Boolean): File = withContext(Dispatchers.IO) {
+                      theme: AlbumTheme, includeNotes: Boolean,
+                      generation: Long = currentGeneration()): File = withContext(Dispatchers.IO) {
         exportMutex.withLock {
+        requireCurrentGeneration(generation)
         val taskContext = coroutineContext
         val selected = records.filter { MemoryArtifacts.month(it.id) == month }.sortedBy { it.id }
         require(selected.isNotEmpty()) { "이 달에 남긴 문장이 아직 없어요." }
@@ -208,6 +227,7 @@ internal object MemoryArtifacts {
             finish()
             coroutineContext.ensureActive()
             file.outputStream().use(document::writeTo)
+            requireCurrentGeneration(generation)
             file
         } catch (error: Throwable) {
             page?.let { runCatching { document.finishPage(it) } }; page = null
@@ -216,13 +236,22 @@ internal object MemoryArtifacts {
         }
     }
 
-    fun share(context: Context, file: File, mime: String) {
-        val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = mime; putExtra(Intent.EXTRA_STREAM, uri)
-            clipData = ClipData.newRawUri("아기말 파일", uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    suspend fun share(context: Context, file: File, mime: String, generation: Long) {
+        exportMutex.withLock {
+            withContext(Dispatchers.Main.immediate) {
+                // Deletion invalidation and chooser launch are ordered without a suspend point.
+                synchronized(generationLock) {
+                    requireCurrentGeneration(generation)
+                    check(file.isFile && file.length() > 0) { "공유 파일이 없어졌어요. 다시 만들어 주세요." }
+                    val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = mime; putExtra(Intent.EXTRA_STREAM, uri)
+                        clipData = ClipData.newRawUri("아기말 파일", uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    context.startActivity(Intent.createChooser(intent, "가족에게 보내기"))
+                }
+            }
         }
-        context.startActivity(Intent.createChooser(intent, "가족에게 보내기"))
     }
 }

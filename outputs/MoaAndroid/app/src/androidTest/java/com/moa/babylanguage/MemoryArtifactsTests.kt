@@ -132,6 +132,39 @@ class MemoryArtifactsTests {
         } finally { unrelated.delete(); file.delete() }
     }
 
+    @Test fun deletionBeforeQueuedCardGenerationRejectsStaleSnapshot() = runBlocking {
+        val generation = MemoryArtifacts.currentGeneration()
+        MemoryArtifacts.invalidatePendingExports()
+        var rejected = false
+        try { MemoryArtifacts.card(context, record(), generation) }
+        catch (_: IllegalStateException) { rejected = true }
+        assertTrue("A record selected before deletion must not create a new file", rejected)
+    }
+
+    @Test fun deletionAfterGenerationPreventsStaleChooser() = runBlocking {
+        val generation = MemoryArtifacts.currentGeneration()
+        val file = MemoryArtifacts.card(context, record(), generation)
+        try {
+            MemoryArtifacts.invalidatePendingExports()
+            MemoryArtifacts.clear(context)
+            var rejected = false
+            try { MemoryArtifacts.share(context, file, "image/png", generation) }
+            catch (_: IllegalStateException) { rejected = true }
+            assertTrue("A deleted/stale file must fail before starting the chooser", rejected)
+            assertFalse(file.exists())
+        } finally { file.delete() }
+    }
+
+    @Test fun deletionBeforeQueuedAlbumGenerationRejectsStaleSnapshot() = runBlocking {
+        val row = record()
+        val generation = MemoryArtifacts.currentGeneration()
+        MemoryArtifacts.invalidatePendingExports()
+        var rejected = false
+        try { MemoryArtifacts.album(context, listOf(row), MemoryArtifacts.month(row.id), AlbumTheme.SAGE, false, generation) }
+        catch (_: IllegalStateException) { rejected = true }
+        assertTrue(rejected)
+    }
+
     @Test fun pathologicalNotesHitPageCapWithoutPartialPdf() = runBlocking {
         val directory = java.io.File(context.cacheDir, "exports")
         val before = directory.listFiles()?.map { it.name }?.toSet().orEmpty()
@@ -148,3 +181,4 @@ class MemoryArtifactsTests {
         assertEquals(before, directory.listFiles()?.map { it.name }?.toSet().orEmpty())
     }
 }
+

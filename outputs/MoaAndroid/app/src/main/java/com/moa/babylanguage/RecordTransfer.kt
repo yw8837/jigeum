@@ -3,6 +3,9 @@ package com.moa.babylanguage
 import android.util.JsonReader
 import android.util.JsonToken
 import android.util.JsonWriter
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
+import java.security.MessageDigest
 import java.io.FilterInputStream
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -56,7 +59,7 @@ internal object RecordTransfer {
             reader.endObject()
             require(reader.peek() == JsonToken.END_DOCUMENT)
             require(format == FORMAT && version == 1L && age in ObservationStore.AGE_BANDS && rows != null)
-            val plan = planMerge(existing.observations, rows)
+            val plan = planMerge(existing.observations, rows, existing.importOrigins)
             return ImportPreview(rows, age!!, plan.added, plan.duplicates, plan.conflicts)
         } catch (cause: StoreException) {
             throw cause
@@ -142,15 +145,37 @@ internal object RecordTransfer {
             .also(ObservationStore::validateRecord)
     }
 
-    internal data class MergePlan(val additions: List<Observation>, val added: Int, val duplicates: Int, val conflicts: Int)
+    internal data class MergePlan(
+        val additions: List<Observation>, val added: Int, val duplicates: Int, val conflicts: Int,
+        val importOrigins: Map<String, Long>
+    )
+
+    // Include the original timestamp and every field. Content equality alone does not
+    // establish that two observations are the same memory. Length framing is unambiguous.
+    internal fun importOrigin(row: Observation): String {
+        val bytes = ByteArrayOutputStream()
+        DataOutputStream(bytes).use { output ->
+            output.writeLong(row.id)
+            listOf(row.sound, row.context, row.note, row.phrase, row.source, row.modelCue).forEach {
+                val encoded = it.toByteArray(Charsets.UTF_8)
+                output.writeInt(encoded.size)
+                output.write(encoded)
+            }
+        }
+        return MessageDigest.getInstance("SHA-256").digest(bytes.toByteArray())
+            .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+    }
 
     /** Shared by preview and transactional import, so stale previews are rechecked on commit. */
-    internal fun planMerge(existing: List<Observation>, incoming: List<Observation>): MergePlan {
+    internal fun planMerge(
+        existing: List<Observation>, incoming: List<Observation>,
+        importOrigins: Map<String, Long> = emptyMap()
+    ): MergePlan {
         val current = existing.associateBy { it.id }.toMutableMap()
         val zone = ZoneId.systemDefault()
         fun day(id: Long) = Instant.ofEpochMilli(id).atZone(zone).toLocalDate()
-        fun key(row: Observation) = day(row.id) to row.copy(id = 0)
-        val contents = current.values.map { key(it) }.toHashSet()
+        val origins = importOrigins.toMutableMap()
+        val newOrigins = HashMap<String, Long>()
         val additions = ArrayList<Observation>()
         var added = 0
         var duplicates = 0
@@ -158,7 +183,9 @@ internal object RecordTransfer {
         for (row in incoming) {
             ObservationStore.validateRecord(row)
             val atId = current[row.id]
-            if (atId == row || (atId != null && key(row) in contents)) { duplicates++; continue }
+            val origin = importOrigin(row)
+            val relocated = origins[origin]?.let(current::get)
+            if (atId == row || relocated?.copy(id = row.id) == row) { duplicates++; continue }
             if (current.size >= ObservationStore.MAX_ROWS) throw StoreException("가져온 기록을 합치면 10,000건을 넘어요. 기존 기록은 유지됐어요.")
             val merged = if (atId == null) { added++; row } else {
                 conflicts++
@@ -172,10 +199,13 @@ internal object RecordTransfer {
                 row.copy(id = candidate)
             }
             current[merged.id] = merged
-            contents += key(merged)
+            if (atId != null) {
+                origins[origin] = merged.id
+                newOrigins[origin] = merged.id
+            }
             additions += merged
         }
-        return MergePlan(additions, added, duplicates, conflicts)
+        return MergePlan(additions, added, duplicates, conflicts, newOrigins)
     }
 
     internal fun validUnicode(value: String): Boolean {
@@ -222,3 +252,4 @@ internal object RecordTransfer {
         }
     }
 }
+

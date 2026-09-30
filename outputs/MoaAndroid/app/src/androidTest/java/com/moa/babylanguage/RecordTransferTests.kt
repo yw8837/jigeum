@@ -88,6 +88,75 @@ class RecordTransferTests {
         assertEquals(2, store.snapshot().observations.size)
     }
 
+    @Test fun sameDayContentAtAnotherTimestampDoesNotEraseCollision() = runBlocking {
+        val incoming = row(base, "A")
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "A"))
+        val first = parse(backup(listOf(incoming)), store.snapshot())
+        assertEquals(1, first.conflictCount)
+        assertEquals(0, first.duplicateCount)
+        store.mergeImport(first)
+        val saved = store.snapshot()
+        assertEquals(3, saved.observations.size)
+        assertEquals(2, saved.observations.count { it.note == "A" })
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        val again = parse(backup(listOf(incoming)), store.snapshot())
+        assertEquals(1, again.duplicateCount)
+        store.mergeImport(again)
+        assertEquals(saved.observations, store.snapshot().observations)
+    }
+
+    @Test fun deletingRelocatedImportAllowsExplicitRestoreAgain() = runBlocking {
+        store.save(row(base, "B"))
+        val incoming = row(base, "A")
+        store.mergeImport(preview(listOf(incoming)))
+        val relocated = store.snapshot().observations.single { it.note == "A" }
+        store.delete(relocated.id)
+        store.mergeImport(preview(listOf(incoming)))
+        assertEquals(2, store.snapshot().observations.size)
+        assertEquals(1, store.snapshot().observations.count { it.note == "A" })
+        store.deleteAll()
+        store.mergeImport(preview(listOf(incoming)))
+        assertEquals(listOf(incoming), store.snapshot().observations)
+    }
+
+    @Test fun differentCollidingSourcesWithIdenticalContentRemainDistinct() = runBlocking {
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "C"))
+        val incoming = listOf(row(base, "A"), row(base + 100, "A"))
+        store.mergeImport(preview(incoming))
+        assertEquals(4, store.snapshot().observations.size)
+        assertEquals(2, store.snapshot().observations.count { it.note == "A" })
+        store.mergeImport(preview(incoming.reversed()))
+        assertEquals(4, store.snapshot().observations.size)
+    }
+
+    @Test fun staleCollisionPreviewStillRecordsOriginsTransactionally() = runBlocking {
+        val incoming = row(base, "A")
+        val parsed = parse(backup(listOf(incoming)))
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "A"))
+        store.mergeImport(parsed)
+        store.mergeImport(parsed)
+        assertEquals(3, store.snapshot().observations.size)
+    }
+
+    @Test fun maximumTimestampCollisionPreservesDateAndBoundsLocalOrigins() = runBlocking {
+        val incoming = row(ObservationStore.MAX_TIMESTAMP, "A")
+        store.save(row(incoming.id, "B"))
+        repeat(3) { store.mergeImport(preview(listOf(incoming, incoming))) }
+        val saved = store.snapshot()
+        assertEquals(2, saved.observations.size)
+        assertEquals(1, saved.importOrigins.size)
+        assertTrue(saved.importOrigins.size <= saved.observations.size)
+        val zone = ZoneId.systemDefault()
+        val date = java.time.Instant.ofEpochMilli(incoming.id).atZone(zone).toLocalDate()
+        assertTrue(saved.observations.all { java.time.Instant.ofEpochMilli(it.id).atZone(zone).toLocalDate() == date })
+        store.delete(saved.observations.single { it.note == "A" }.id)
+        assertTrue(store.snapshot().importOrigins.isEmpty())
+    }
+
     @Test fun stalePreviewRechecksCurrentRowsWithoutOverwriting() = runBlocking {
         val incoming = row(note = "백업")
         val parsed = parse(backup(listOf(incoming)))
@@ -200,3 +269,4 @@ class RecordTransferTests {
         assertTrue(csv.endsWith("\r\n"))
     }
 }
+

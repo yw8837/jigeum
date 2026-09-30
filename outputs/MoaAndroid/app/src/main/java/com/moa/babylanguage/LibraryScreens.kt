@@ -150,7 +150,7 @@ internal fun DataTransferPanel(store: ObservationStore, records: List<Observatio
 }
 
 @Composable
-internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium: () -> Unit,
+internal fun AlbumScreen(records: List<Observation>, premium: Boolean, canGeneratePdf: () -> Boolean, onPremium: () -> Unit,
                          onMessage: (String) -> Unit, operationScope: CoroutineScope? = null,
                          exporting: Boolean = false, onExportingChange: (Boolean) -> Unit = {}) {
     val context = LocalContext.current
@@ -205,15 +205,18 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                 Text("PDF는 기기에서 만들어요. 만든 파일은 이용권이 끝나도 계속 볼 수 있어요.", color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
                 Spacer(Modifier.height(16.dp))
                 if (busy || exporting) LinearProgressIndicator(Modifier.fillMaxWidth().padding(bottom = 12.dp))
-                PrimaryButton(if (busy || exporting) "아기말북을 만들고 있어요" else if (premium) "이 달의 아기말북 PDF 만들기" else "아기말북 이용권 보기", onClick = {
-                    if (!premium) onPremium()
+                PrimaryButton(if (busy || exporting) "아기말북을 만들고 있어요" else if (premium) "이 달의 아기말북 PDF 만들기" else "전체 이용권 보기", onClick = {
+                    if (!canGeneratePdf()) onPremium()
                     else if (!busy && !exporting) {
+                        val generation = MemoryArtifacts.currentGeneration()
                         busy = true
                         onExportingChange(true)
                         scope.launch {
                             try {
-                                val file = MemoryArtifacts.album(context, records.toList(), selected, theme, includeNotes)
-                                MemoryArtifacts.share(context, file, "application/pdf")
+                                // Authorize immediately before starting. Once started, expiry does not cancel this PDF.
+                                if (!canGeneratePdf()) { onPremium(); return@launch }
+                                val file = MemoryArtifacts.album(context, records.toList(), selected, theme, includeNotes, generation)
+                                MemoryArtifacts.share(context, file, "application/pdf", generation)
                             } catch (e: Exception) {
                                 if (e is CancellationException) throw e
                                 onMessage(if (e is IllegalArgumentException) e.message ?: "기록을 확인해 주세요."
@@ -233,20 +236,31 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
 
 @Composable
 internal fun PremiumScreen(state: BillingUiState, onPurchase: (BillingPlan) -> Unit,
-                           onRestore: () -> Unit, onRetry: () -> Unit, onBack: () -> Unit, onPrivacy: () -> Unit) {
+                           onRestore: () -> Unit, onRetry: () -> Unit,
+                           requestedFeature: AccessFeature, onContinue: () -> Unit, onBack: () -> Unit, onTerms: () -> Unit, onPrivacy: () -> Unit) {
     val context = LocalContext.current
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
     val processing = state.status in listOf(BillingStatus.CONNECTING, BillingStatus.PURCHASING, BillingStatus.VERIFYING)
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp)) { Text("닫기 · 기본 기능 계속 사용", color = Ink) }
-            TopBar(if (state.isPremium) "아기말북을 함께 만들어요" else "쌓인 아기말을 한 권으로")
+            TopBar("하나의 전체 이용권")
             Column(Modifier.padding(horizontal = 24.dp)) {
-                Text("월별 자동 구성 · 한글 PDF · 세 가지 표지\n기록은 휴대전화에만 남아요.", color = Muted, fontSize = 16.sp, lineHeight = 26.sp)
+                Text(when (requestedFeature) {
+                    AccessFeature.CAMERA -> "새 카메라 관찰에는 유효한 전체 이용권이 필요해요."
+                    AccessFeature.STORED_VIDEO -> "새 저장 영상 분석에는 유효한 전체 이용권이 필요해요."
+                    else -> "새 PDF 생성에는 유효한 전체 이용권이 필요해요. 미리보기는 무료예요."
+                }, color = Ink, fontSize = 15.sp, lineHeight = 23.sp)
+                Spacer(Modifier.height(12.dp))
+                Text("카메라 관찰 · 저장 영상 분석 · 월별 PDF와 세 가지 표지\n입력과 기록의 편의를 더해요. 아이의 뜻을 더 정확히 안다는 보장은 아니에요.", color = Muted, fontSize = 16.sp, lineHeight = 26.sp)
                 Spacer(Modifier.height(24.dp))
                 if (state.isPremium) {
                     Text("이용권을 확인했어요.", color = Ink, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(12.dp)); PrimaryButton("내 아기말북으로", onBack)
+                    Spacer(Modifier.height(12.dp)); PrimaryButton(when (requestedFeature) {
+                        AccessFeature.CAMERA -> "카메라로 계속하기"
+                        AccessFeature.STORED_VIDEO -> "영상 가져오기로 계속하기"
+                        else -> "아기말북으로"
+                    }, onContinue)
                 } else if (state.options.isNotEmpty()) {
                     state.options.forEach { option ->
                         val monthly = option.plan == BillingPlan.MONTHLY
@@ -271,7 +285,7 @@ internal fun PremiumScreen(state: BillingUiState, onPurchase: (BillingPlan) -> U
                 if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
                 Spacer(Modifier.height(16.dp))
                 Text("결제는 Google Play 확인창에서 완료됩니다. 같은 Google Play 계정으로 구매를 복원할 수 있어요. 아기 기록은 별도의 백업 파일로 옮겨 주세요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
-                TextButton(onClick = onRestore, enabled = !processing) { Text("구매 복원", color = Ink) }
+                TextButton(onClick = onRestore, enabled = !processing) { Text("이용권 복원", color = Ink) }
                 TextButton(onClick = {
                     managementError = null
                     runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/account/subscriptions?sku=jigeum_album&package=${context.packageName}"))) }
@@ -279,8 +293,26 @@ internal fun PremiumScreen(state: BillingUiState, onPurchase: (BillingPlan) -> U
                 }) { Text("Google Play에서 구독 관리", color = Ink) }
                 managementError?.let { Text(it, color = Muted, fontSize = 13.sp, lineHeight = 20.sp) }
                 TextButton(onClick = onPrivacy) { Text("개인정보처리방침", color = Ink) }
-                Text("기본 기능과 기존 기록은 결제·해지 여부와 관계없이 유지됩니다. 이용권은 결제한 Play 계정 기준이며 다른 가족 계정으로 자동 공유되지 않아요.", color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
+                TextButton(onClick = onTerms) { Text("이용약관 초안 · 미시행", color = Ink) }
+                Text("녹음·직접 입력·문장 수정/저장·기록·PNG 공유·JSON 백업/가져오기·CSV·주간 요약·앨범 미리보기는 무료예요. 이미 만든 문장과 기록은 만료 후에도 유지돼요. 이용권 복원은 기록 복원이 아니며 기록 이동에는 JSON 백업이 필요해요. 이용권은 결제한 Play 계정 기준이며 다른 가족 계정으로 자동 공유되지 않아요.", color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
             }
         }
+    }
+}
+
+/** Read-only approved draft; opening this page does not accept an agreement. */
+@Composable
+internal fun DraftTermsScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    var text by remember { mutableStateOf("이용약관 초안을 불러오고 있어요") }
+    LaunchedEffect(Unit) {
+        text = withContext(Dispatchers.IO) {
+            runCatching { context.assets.open("terms-ko-draft.txt").bufferedReader().use { it.readText() } }
+                .getOrElse { "초안을 열지 못했어요. 지원: bsfire1237@gmail.com" }
+        }
+    }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp)) {
+        item { TextButton(onClick = onBack) { Text("닫기", color = Ink) } }
+        item { Text(text, color = Ink, fontSize = 14.sp, lineHeight = 23.sp) }
     }
 }

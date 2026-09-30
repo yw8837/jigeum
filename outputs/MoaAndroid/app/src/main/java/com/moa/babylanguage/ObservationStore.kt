@@ -25,7 +25,9 @@ internal data class Observation(
 internal data class StoreSnapshot(
     val observations: List<Observation>,
     val ageBand: String,
-    val warning: String? = null
+    val warning: String? = null,
+    // Local-only provenance for relocated imports; never included in JSON/CSV exports.
+    val importOrigins: Map<String, Long> = emptyMap()
 )
 
 internal class StoreException(message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -56,7 +58,7 @@ internal class ObservationStore(context: Context,
                 )
             }
         }
-        StoreSnapshot(rows, meta(db, "age_band") ?: "", meta(db, "migration_warning"))
+        StoreSnapshot(rows, meta(db, "age_band") ?: "", meta(db, "migration_warning"), importOrigins(db))
     }
 
     suspend fun save(record: Observation): Unit = onStore { db ->
@@ -73,6 +75,7 @@ internal class ObservationStore(context: Context,
     suspend fun delete(id: Long): Unit = onStore { db ->
         transaction(db) {
             db.delete("observations", "id=?", arrayOf(id.toString()))
+            db.delete("meta", "key GLOB ? AND value=?", arrayOf("import_origin:*", id.toString()))
             meta(db, "legacy_recovery")?.let { raw ->
                 val old = JSONArray(raw)
                 val retained = JSONArray()
@@ -91,6 +94,7 @@ internal class ObservationStore(context: Context,
     suspend fun deleteAll(): Unit = onStore { db ->
         transaction(db) {
             db.delete("observations", null, null)
+            db.delete("meta", "key GLOB ?", arrayOf("import_origin:*"))
             db.delete("meta", "key IN (?,?)", arrayOf("legacy_recovery", "migration_warning"))
             putMeta(db, "age_band", "")
         }
@@ -119,8 +123,9 @@ internal class ObservationStore(context: Context,
                     current[row.id] = row
                 }
             }
-            val plan = RecordTransfer.planMerge(current.values.toList(), imported.records)
+            val plan = RecordTransfer.planMerge(current.values.toList(), imported.records, importOrigins(db))
             plan.additions.forEach { db.insertOrThrow("observations", null, values(it)) }
+            plan.importOrigins.forEach { (origin, target) -> putMeta(db, "import_origin:$origin", target.toString()) }
             if ((meta(db, "age_band") ?: "").isBlank() && imported.ageBand.isNotBlank())
                 putMeta(db, "age_band", imported.ageBand)
         }
@@ -237,6 +242,17 @@ internal class ObservationStore(context: Context,
                 if (it.moveToFirst()) it.getString(0) else null
             }
 
+        private fun importOrigins(db: SQLiteDatabase): Map<String, Long> {
+            val origins = HashMap<String, Long>()
+            db.rawQuery("SELECT key,value FROM meta WHERE key GLOB ?", arrayOf("import_origin:*")).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val target = cursor.getString(1).toLongOrNull() ?: continue
+                    origins[cursor.getString(0).removePrefix("import_origin:")] = target
+                }
+            }
+            return origins
+        }
+
         private fun putMeta(db: SQLiteDatabase, key: String, value: String) {
             db.execSQL("INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)", arrayOf(key, value))
         }
@@ -251,3 +267,4 @@ internal class ObservationStore(context: Context,
         }
     }
 }
+

@@ -1,0 +1,5 @@
+Source branch: atId == row || (atId != null && key(row) in contents)
+Source predicate evaluates duplicate = True
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+AssertionError: Distinct timestamp-colliding record is incorrectly discarded
