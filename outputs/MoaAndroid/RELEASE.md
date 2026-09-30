@@ -1,0 +1,40 @@
+# 지금 내 기분이 그래 Android 릴리스 빌드
+
+이 문서는 `0.3.0` (`versionCode 6`)의 패키징 설정을 설명합니다. 설치 식별자 `applicationId`는 기존의 `com.moa.babylanguage`를 유지하고, 사용자에게 보이는 앱 이름은 **지금 내 기분이 그래**입니다. 최소 SDK는 26, 타깃 SDK는 36입니다. 현재 범위는 로컬 통합 빌드와 QA이며 출시·제출·운영 배포는 별도 진행합니다.
+
+## 0.3.0 이용권 설정
+
+Google Play Billing 9.1.0과 서명된 이용권 검증을 구현했습니다. 빌드 시 `JIGEUM_PLAY_VERIFY_URL`(HTTPS 검증 주소)과 `JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY`(P-256 공개 키)를 설정합니다. **이번 설치 APK는 두 설정이 비어 있어 결제를 안전하게 비활성화합니다.** 가격을 임의로 표시하거나 미검증 이용권을 열지 않습니다. 무료 문장·기록·PNG 공유·JSON 백업은 이용할 수 있습니다.
+
+실제 유료 사용에는 Play Console 상품 `jigeum_album`, 플랜 `monthly`/`three-month-prepaid`, 운영 검증 서비스, 서명 키, 라이선스 테스터와 실제 구매 생애주기 검증이 필요합니다. 자세한 범위는 `../PlayVerifier/README.md`와 `../Jigeum-QA-0.3.0.md`를 참고합니다. 개인 기록은 외부 서버로 보내지 않으며 `INTERNET` 권한은 결제 검증 통신을 위해 추가했습니다.
+
+이번 후보는 **R8 코드 축소와 리소스 축소를 끕니다.** 축소된 시험 APK에서 MediaPipe 1.0.0의 protobuf 필드(`SystemInfo.platform_`)가 제거되어 카메라와 저장 영상의 얼굴 모델 생성이 실패했습니다. 필드 보존 규칙만 적용하면 다음 JNI 연결 오류가 나타났습니다. 축소 문제를 해결했다고 간주하지 않으며, 모델이 동작하는 후보만 배포합니다.
+
+## 검증용 미서명 빌드
+
+Android SDK 36과 JDK 17 이상에서 다음을 실행합니다.
+
+```powershell
+.\gradlew.bat :app:bundleRelease :app:assembleRelease :app:lintRelease
+```
+
+서명 환경변수가 없으면 `app/build/outputs/bundle/release/app-release.aab`는 **미서명**입니다. Play Console에 업로드할 수 없습니다. `app-release-unsigned.apk` 역시 설치용이 아닙니다. 디버그 키로 릴리스를 대신 서명하지 않습니다.
+
+## Play 업로드용 빌드
+
+Play App Signing에 등록할 업로드 키를 별도로 안전하게 보관한 뒤, 빌드 프로세스에 아래 환경변수 **네 개를 모두** 제공합니다. 키 파일과 암호를 저장소·소스 ZIP·공유 산출물에 넣지 마세요.
+
+- `MOA_UPLOAD_KEYSTORE`: 키스토어 파일의 절대 경로
+- `MOA_UPLOAD_KEY_ALIAS`: 업로드 키 별칭
+- `MOA_UPLOAD_STORE_PASSWORD`: 키스토어 암호
+- `MOA_UPLOAD_KEY_PASSWORD`: 키 암호
+
+한두 개만 설정한 경우 빌드 설정 단계에서 실패합니다. 모두 제공한 뒤 `:app:bundleRelease`를 실행하고 `jarsigner -verify app/build/outputs/bundle/release/app-release.aab`로 서명을 확인하세요. 실제 키는 출시 계정의 업로드 키로 만들고 백업해야 합니다. 테스트용 임시 키로 서명한 번들은 Play 제출용이 아닙니다.
+
+## 16KB 페이지 및 최종 확인
+
+CameraX 1.6.2를 사용합니다. 이전 1.3.4의 `libimage_processing_util_jni.so`는 arm64 ELF의 `PT_LOAD p_align=0x1000`이었고, 1.6.2의 최종 APK/AAB 네이티브 라이브러리는 `0x4000`입니다. AGP 8.13.2가 만든 AAB의 `BundleConfig.pb`에는 `PAGE_ALIGNMENT_16K`가 지정됐으며, APK에 `zipalign -c -P 16 -v 4`가 통과했습니다. 16KB ARM 실기기 실행은 별도 검증해야 합니다.
+
+Play 제출 전에는 릴리스 서명 APK 또는 AAB에서 만든 APK를 실제 ARM 기기에 설치해 녹음, 후면 카메라와 전후면 전환, 저장 영상의 첫 최대 10초 오디오 후보, 보호자 확인, 권한 거부·복구, 기록 삭제를 확인하세요. Play Console의 개인정보처리방침 URL, 데이터 보안, 앱 콘텐츠, 스토어 등록 정보와 심사 항목도 완성해야 합니다.
+
+공식 기준: [Play 타깃 API 요건](https://support.google.com/googleplay/android-developer/answer/11926878), [16KB 페이지 지원](https://developer.android.com/guide/practices/page-sizes), [Play 업로드 준비](https://developer.android.com/studio/publish/upload-bundle).

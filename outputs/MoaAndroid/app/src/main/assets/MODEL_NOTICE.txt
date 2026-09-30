@@ -1,0 +1,19 @@
+MediaPipe Face Landmarker model bundle
+
+Source (official Google AI Edge model bundle):
+https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+
+SHA-256:
+64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff
+
+Component model cards (each states Apache License, Version 2.0):
+https://storage.googleapis.com/mediapipe-assets/MediaPipe%20BlazeFace%20Model%20Card%20(Short%20Range).pdf
+https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Face%20Mesh%20V2.pdf
+https://storage.googleapis.com/mediapipe-assets/Model%20Card%20Blendshape%20V2.pdf
+
+See LICENSE-APACHE-2.0.txt in this directory for the license text.
+
+The models are documented for real-time face geometry and AR use. Accuracy for
+infants or interpretation of infant needs has not been validated by this app.
+The app uses the model only for visible face geometry while the camera screen
+is open. Camera frames and landmarks are not retained by this screen.

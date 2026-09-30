@@ -1,0 +1,22 @@
+# Local work logs, transient fixtures and generated deliverables.
+work/
+.serena/
+**/.gradle/
+**/.kotlin/
+**/.idea/
+**/build/
+**/node_modules/
+**/__pycache__/
+**/local.properties
+**/*.iml
+**/*.jks
+**/*.keystore
+**/keystore.properties
+**/.env
+**/.env.*
+!**/.env.example
+*.apk
+*.aab
+*.zip
+*.log
+outputs/QA/evidence/

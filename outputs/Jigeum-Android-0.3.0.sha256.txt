@@ -1,0 +1,4 @@
+bed16f4e0f3ba5d35ad50e9f35a17884c3885a7b5d1965e698633623cb1c006d  Jigeum-Android-debug-0.3.0.apk
+5d0daf36a52af93197be7a7accf84e85f02e8335e645bccd0a4ac34cd66eed60  Jigeum-Android-release-unsigned-0.3.0.aab
+d2a8667a2318f095f391061f9431fba11b4f7ee0774b5496d816bf1abaee9bd4  Jigeum-source-0.3.0.zip
+db79d7f2e02e88255e0df999a45173a186970759c1081166db435cf8816932d2  Jigeum-QA-evidence-0.3.0.zip
