@@ -1,0 +1,50 @@
+Run UTC: 2026-09-30T10:23:46.265974+00:00
+Source: f42238c341ff890449154562052be15dc7f9b2e7 plus edge-cases.test.js
+Exit: 0
+
+> test
+> node --test
+
+✔ purchase token exact size boundaries and control characters fail closed (1.45722ms)
+✔ installation UUID rejects invalid version and variant boundaries (0.153316ms)
+✔ exact subscription expiry is denied while one millisecond remaining is allowed (0.607917ms)
+✔ multiple subscription items select the latest eligible expiry (0.163822ms)
+✔ invalid subscription dates and unknown states deny access (0.223099ms)
+✔ long subscription grants have a 24-hour cap and reject payload tampering (1.294791ms)
+✔ shared purchase lookup returns a separately bound envelope to each installation (5.113517ms)
+✔ malformed and oversized Google JSON reject without poisoning the next lookup (3.059255ms)
+✔ streamed Google JSON enforces the cumulative response size cap (4.860813ms)
+✔ invalid OAuth payloads reject and allow a subsequent recovery (11.218606ms)
+✔ Play 401 invalidates the OAuth cache before the next verification (3.058965ms)
+✔ OAuth service failure does not poison the next independent request (3.124721ms)
+✔ 32 distinct in-flight lookups bound admission and release capacity after completion (6.094645ms)
+✔ canceling one waiter leaves another installation sharing its lookup usable (2.208469ms)
+✔ unsupported HTTP routes and methods never invoke purchase verification (39.329914ms)
+✔ HTTP accepts JSON charset and keeps denial responses token-free and non-cacheable (11.050939ms)
+✔ HTTP accepts exactly 16 KiB and rejects the next byte before verification (7.973068ms)
+✔ HTTP quota boundary leaves health live and recovers at exactly one minute (9.603373ms)
+✔ HTTP happy path, rejection and upstream failure remain distinct and token-free (45.930645ms)
+✔ HTTP malformed, unusual schema and oversized input do not reach Play (33.721367ms)
+✔ HTTP 60-request burst caps concurrent verification, health stays responsive, then recovers (132.03548ms)
+✔ HTTP rate limit ignores spoofed forwarding header and expires cleanly (13.480585ms)
+✔ HTTP verification deadline aborts bounded work and releases its slot (57.12028ms)
+✔ HTTP slow/chunked bodies are bounded and do not hold capacity indefinitely (69.273645ms)
+✔ only active, grace and unexpired canceled subscriptions are entitled (1.874526ms)
+✔ signed entitlement is bound to installation and expires within 24 hours (1.402059ms)
+✔ verification queries Play and refuses forged, expired and mismatched purchases (5.383906ms)
+✔ malformed upstream line items and wrong product/plan type cannot unlock (0.214407ms)
+✔ 20 concurrent duplicate requests share one OAuth and Play lookup; next request sees revocation (49.906453ms)
+✔ OAuth refresh is single-flight across different purchases (15.314061ms)
+✔ Google denial is distinguished from permission, quota and outage errors (3.677567ms)
+✔ upstream timeout is bounded, cleaned up and next call recovers (33.23573ms)
+✔ invalid configuration, cancellation and input fail without granting access (0.596901ms)
+✔ request-token path is URL encoded and a response is bound separately to each installation (1.381529ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 456.202198
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
