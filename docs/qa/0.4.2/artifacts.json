@@ -1,0 +1,17 @@
+{
+  "version": "0.4.2",
+  "versionCode": 9,
+  "source_commit": "1888f331d827eb8c7cd9fac7e504a4ad62c3ba39",
+  "artifacts": [
+    {
+      "path": "outputs/Jigeum-Android-debug-0.4.2.apk",
+      "bytes": 81248511,
+      "sha256": "6d30e3b04f994d33141922e57625fcf093b1ba56270bec40bb159cd81d0dae60"
+    },
+    {
+      "path": "outputs/Jigeum-Android-unsigned-0.4.2.aab",
+      "bytes": 44912448,
+      "sha256": "353adff0fc9895ef073bd4628351a9c28a165f07e890c459295d2c4be8b86ba9"
+    }
+  ]
+}

@@ -9,11 +9,11 @@ Google Play 상품, API 권한, 운영 HTTPS 주소가 없는 빌드는 유료 �
 1. Android가 Google Play Billing 9.1.0에서 `jigeum_album` 구매 내역을 조회합니다.
 2. 구매 완료 상태만 `/verify`로 전송합니다. 전송 항목은 패키지명, 상품 ID, 구매 토큰, 기기 설치 UUID입니다.
 3. 서버가 Android Publisher `purchases.subscriptionsv2.get`을 호출해 상품·플랜·유효기간을 확인합니다.
-4. EC P-256 서명과 최대 24시간 유효한 이용권을 반환합니다. Android가 서명·앱·설치 UUID·만료와 로컬 실제 경과시간을 확인한 뒤에만 새 카메라·영상·PDF 작업을 엽니다. 앨범 미리보기는 무료입니다.
-5. 최초 확인 후 Android에서 구매를 acknowledge합니다. 앱 재실행/복원 시 미확인 구매를 다시 확인합니다.
+4. 허용 가능한 구매의 acknowledgementState를 확인합니다. ACK PENDING이면 서버에서 `purchases.subscriptions.acknowledge`를 호출하고 성공 후에만 이용권을 서명합니다. ACKNOWLEDGED이면 추가 쓰기를 하지 않습니다. 누락·알 수 없는 상태·acknowledge 오류는 HTTP503이며 다음 검증에서 Play를 새로 조회합니다.
+5. EC P-256 서명과 최대24시간 이용권, acknowledge된 구매 토큰의 SHA-256 해시를 반환합니다. Android가 서명·앱·설치 UUID·만료와 로컬 실제 경과시간을 확인한 뒤 새 카메라·영상·PDF 작업을 엽니다. 서명 수락 후 정확한 토큰 해시가 일치하면 중복 client acknowledge를 생략합니다. 이전 서버 응답에 해시가 없거나 다르면 기존 Android acknowledge 재시도를 유지합니다. 앨범 미리보기는 무료입니다.
 
 아기 소리·영상·표정·문장·기록은 이 서버에 보내지 않습니다. 사용자 계정이나 외부 아기 기록 DB는 없습니다.
-구매 토큰은 서버의 진행 중 요청 메모리에만 있으며 로그·파일·DB에 저장하지 않습니다.
+원본 구매 토큰은 서버의 진행 중 요청 메모리에만 있으며 로그·파일·DB에 저장하지 않습니다. SHA-256 확인값은 서명 이용권에 포함돼 앱의 기존 private 권한 캐시에 저장됩니다. 원본 토큰이나 아기 기록을 해시에서 복원하는 기능은 없습니다.
 설치 UUID는 앱 내부에만 저장됩니다. 앱 재설치 후에는 Google Play 계정 구매 조회를 통해 새 설치에 복원합니다.
 
 ## 구독 판정
@@ -47,7 +47,7 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 
 | 서버 환경 변수 | 용도 |
 |---|---|
-| `PLAY_SERVICE_ACCOUNT_JSON_PATH` | Android Publisher에 필요한 최소 권한의 서비스 계정 JSON, 저장소 밖 비밀 파일 |
+| `PLAY_SERVICE_ACCOUNT_JSON_PATH` | Android Publisher 조회·구독 acknowledge에 필요한 서비스 계정 JSON, 저장소 밖 비밀 파일. 실제 Play 주문/구독 관리 권한을 별도 검증 |
 | `PLAY_ENTITLEMENT_PRIVATE_KEY_PATH` | P-256 PKCS#8 PEM 서명 개인키, 저장소 밖 비밀 파일 |
 | `HOST` | 기본 `127.0.0.1`. 직접 공개하지 말고 통제된 HTTPS ingress 사용 |
 | `PORT` | 기본 8080 |
@@ -59,9 +59,9 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 
 ## 몰림·장애 대응과 한계
 
-- 본문 최대 16 KiB, 수신 대기 5초, 전체 검증 대기 16초, Google 호출마다 7초 상한입니다.
+- 본문 최대16KiB, 수신 대기5초, HTTP 검증 대기16초, Google 호출마다7초 상한입니다. 최초 OAuth+구매 조회+acknowledge의 공유 작업은 최대3호출입니다. HTTP deadline이 먼저 지나면 해당 요청에 이용권을 반환하지 않으며, 공유 작업은 각 호출의 제한 시간 안에 끝나고 다음 요청이 최신 상태를 다시 조회합니다.
 - 진행 중 HTTP 요청 최대 32개, 전체 연결 256개입니다. 초과분은 빠르게 503과 Retry-After로 응답합니다.
-- OAuth 재발급은 동시에 하나만 합니다. 같은 구매 토큰의 진행 중 Play 조회는 합치되 완료 결과는 캐시하지 않습니다. 다음 조회는 환불/만료 상태를 다시 확인합니다.
+- OAuth 재발급은 동시에 하나만 합니다. 같은 구매 토큰의 진행 중 Play 조회와 acknowledge를 함께 합치며 공유 작업은32개를 넘지 않습니다. 완료 결과는 캐시하지 않고 다음 조회는 환불/만료/acknowledge 상태를 다시 확인합니다. 설치마다 이용권은 따로 서명합니다.
 - 원본 IP 테이블도 10,000개로 제한합니다. `X-Forwarded-For`는 신뢰하지 않습니다.
 - HTTPS 프록시 뒤에서는 모든 요청이 같은 프록시 주소로 보일 수 있습니다. **프록시에서 실제 사용자별 제한을 먼저 적용하고**, 원본의 `ORIGIN_REQUESTS_PER_MINUTE`를 프록시 총량에 맞춰 조정해야 합니다. 기본 30을 그대로 두면 여러 사용자 전체가 분당 30건으로 묶입니다.
 - 다중 인스턴스의 공통 제한, 전역 Google API 할당량, 외부 DDoS 차단, 용량 자동확장, 가용성 모니터링은 운영 인프라에서 설정해야 합니다. 로컬 테스트로 운영 수용 인원을 주장하지 않습니다.
@@ -69,6 +69,15 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 - 앱은 수신 당시의 단조시간과 부팅 횟수를 저장해 기기 시간 되돌림으로 오프라인 기한이 늘어나지 않게 합니다. 재부팅·누락되거나 손상된 검증 근거는 온라인 재확인이 필요합니다. 루팅한 기기나 변조 앱까지 보호한다는 뜻은 아닙니다.
 - 서버 무상태 설계는 구매 토큰을 가진 요청자의 실제 기기 소유권까지 증명하지 않습니다. 토큰 탈취 방지와 루팅/클라이언트 변조 방어를 강화하려면 출시 단계에서 Play Integrity와 검증 정책을 추가로 검토해야 합니다.
 - 로컬 health는 프로세스 응답만 확인합니다. 외부 Google 장애까지 정상이라는 뜻이 아닙니다.
+- 서버가 구매를 처음 수신하기 전에 앱이 완전히 종료되고 다시 실행되지 않으면 이 경로는 동작하지 않습니다. RTDN·누락 구매 복구·프로세스 장애 뒤 재처리와 실제 acknowledge 기한은 운영 검증 항목입니다. DB나 원본 아기 업로드를 추가하지 않았습니다.
+
+## 0.4.2 acknowledge 계약
+
+서명 payload의 선택 필드 `acknowledgedTokenHash`는 서버가 해당 구매를 acknowledge 완료하거나 Play의 ACKNOWLEDGED 상태를 읽은 후에만 포함하는 lowercase SHA-256 확인값입니다. 앱은 `accept()` 성공 후 현재 purchaseToken의 UTF-8 SHA-256과 비교합니다. 서명 실패·다른 토큰·해시 누락은 client acknowledge 생략 근거가 아닙니다.
+
+공식 API: [acknowledge](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.subscriptions/acknowledge), [SubscriptionPurchaseV2](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.subscriptionsv2). 현재 단일 SKU이므로 경로에 `jigeum_album`을 지정하고 body는 `{}`입니다. 계정 UUID·사용자 기록·developerPayload는 붙이지 않습니다.
+
+`node tools/create-ack-fixture.mjs`는 Android androidTest에 사용할 공개 합성 fixture를 재생성합니다. 임시 개인키는 메모리에서만 생성·폐기하며 운영 키/거래를 사용하지 않습니다. 새 서버와0.4.2앱의 계약을 먼저 시험한 뒤 함께 운영에 적용해야 합니다. 구버전 앱은 이미 서버에서 끝난 acknowledge를 중복 시도해 지연 안내를 표시할 수 있습니다.
 
 ## 실제 Play에서 남은 검증
 

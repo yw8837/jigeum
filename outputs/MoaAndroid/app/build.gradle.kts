@@ -26,8 +26,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.4.0"
+        versionCode = 9
+        versionName = "0.4.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")
@@ -87,6 +87,8 @@ dependencies {
     implementation("androidx.camera:camera-view:$cameraXVersion")
     implementation("com.google.mediapipe:tasks-vision:1.0.0")
     implementation("com.google.mediapipe:tasks-audio:1.0.0")
+    // MediaPipe requests 4.26.1; 4.27.5 patches CVE-2024-7254 while retaining the lite runtime.
+    implementation("com.google.protobuf:protobuf-javalite:4.27.5")
     implementation("com.android.billingclient:billing:9.1.0")
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")

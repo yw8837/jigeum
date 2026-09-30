@@ -2,6 +2,7 @@ package com.moa.babylanguage
 
 import android.app.Activity
 import android.content.Context
+import android.os.SystemClock
 import androidx.annotation.MainThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -21,14 +22,21 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.coroutines.resume
 
 /** Play owns purchases. Only a current server-signed entitlement unlocks full access. */
 class BillingManager internal constructor(
     private val verifier: BillingEntitlements,
     gatewayFactory: (PurchasesUpdatedListener) -> BillingGateway,
-    private val clock: () -> Long = System::currentTimeMillis
+    private val clock: () -> Long = System::currentTimeMillis,
+    private val recoveryClock: () -> Long = SystemClock::elapsedRealtime,
+    private val purchaseCallbackTimeoutMs: Long = 120_000,
+    private val purchaseQueryTimeoutMs: Long = 30_000,
+    private val acknowledgeRetryDelayMs: Long = 5_000
 ) : PurchasesUpdatedListener, AutoCloseable {
     constructor(context: Context) : this(
         PurchaseVerifier(context.applicationContext),
@@ -45,10 +53,16 @@ class BillingManager internal constructor(
     private var closed = false
     private var connecting = false
     private var catalogInFlight = false
-    private var queryInFlight = false
+    private var queryInFlight: Long? = null
+    private var querySequence = 0L
+    private var queryDeadline: Job? = null
+    private var purchaseDeadline: Long? = null
+    private var purchaseRecovery: Job? = null
+    private var purchaseHistoryConfirmed = false
     private var restoreRequested = false
     private var generation = 0L
     private var verification: Job? = null
+    private var acknowledgement: Job? = null
     private var expiry: Job? = null
 
     init { refresh() }
@@ -65,6 +79,10 @@ class BillingManager internal constructor(
         if (closed) return
         recheckEntitlement()
         if (!verifier.isConfigured) return
+        if (purchaseDeadline != null) {
+            recoverPurchaseIfDue()
+            return
+        }
         if (!client.isReady) { connect(); return }
         queryCatalog()
         // Returning from the Play activity may precede its purchase callback.
@@ -78,7 +96,12 @@ class BillingManager internal constructor(
             setState(BillingStatus.UNAVAILABLE, "구독 확인 서비스가 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요.")
             return
         }
-        if (mutableState.value.status == BillingStatus.PURCHASING || verification?.isActive == true) return
+        if (purchaseDeadline != null) {
+            restoreRequested = true
+            recoverPurchaseIfDue()
+            return
+        }
+        if (verification?.isActive == true) return
         restoreRequested = true
         if (!client.isReady) { connect(); return }
         queryPurchases()
@@ -89,17 +112,42 @@ class BillingManager internal constructor(
         recheckEntitlement()
         if (!verifier.isConfigured) { setState(BillingStatus.UNAVAILABLE, "구독 확인 서비스가 설정되지 않았어요."); return }
         // Both the UI and manager guard duplicate taps; pending purchases cannot be charged again.
-        if (mutableState.value.isPremium || mutableState.value.status != BillingStatus.READY || queryInFlight) return
+        if (mutableState.value.isPremium || mutableState.value.status != BillingStatus.READY || queryInFlight != null || !purchaseHistoryConfirmed) return
         if (!client.isReady || mutableState.value.options.none { it.plan == plan }) {
             setState(BillingStatus.ERROR, "구독 상품을 불러오지 못했어요. 다시 확인해 주세요.")
             return
         }
         invalidateVerification()
+        purchaseHistoryConfirmed = false
         setState(BillingStatus.PURCHASING, null)
+        purchaseDeadline = recoveryClock() + purchaseCallbackTimeoutMs
+        purchaseRecovery = scope.launch {
+            delay(purchaseCallbackTimeoutMs)
+            recoverPurchaseIfDue()
+        }
         val result = client.purchase(activity, plan)
         if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+            finishPurchaseLaunch()
             setState(BillingStatus.ERROR, "Google Play 결제 화면을 열지 못했어요. 다시 확인해 주세요.")
         }
+    }
+
+    /** Give Play's return callback time to arrive before an empty query may end a launch. */
+    private fun recoverPurchaseIfDue() {
+        val deadline = purchaseDeadline ?: return
+        if (closed || recoveryClock() < deadline || queryInFlight != null) return
+        if (!client.isReady) {
+            finishPurchaseLaunch()
+            setState(BillingStatus.ERROR, "Google Play 연결을 다시 확인해 주세요. 구매 내역을 확인한 뒤 다시 시도할 수 있어요.")
+            return
+        }
+        queryPurchases()
+    }
+
+    private fun finishPurchaseLaunch() {
+        purchaseDeadline = null
+        purchaseRecovery?.cancel()
+        purchaseRecovery = null
     }
 
     private fun connect() {
@@ -143,15 +191,30 @@ class BillingManager internal constructor(
     }
 
     private fun queryPurchases() {
-        if (queryInFlight) return
-        queryInFlight = true
+        if (queryInFlight != null) return
+        val request = ++querySequence
+        queryInFlight = request
         val token = generation
+        queryDeadline = scope.launch {
+            delay(purchaseQueryTimeoutMs)
+            if (closed || queryInFlight != request || token != generation) return@launch
+            queryInFlight = null
+            queryDeadline = null
+            purchaseHistoryConfirmed = false
+            finishPurchaseLaunch()
+            restoreRequested = false
+            setState(BillingStatus.ERROR, "구매 내역 확인이 지연되고 있어요. 다시 확인한 뒤 결제해 주세요.")
+        }
         client.queryPurchases purchasesResult@ { result, purchases ->
-            queryInFlight = false
-            if (closed || token != generation) return@purchasesResult
+            if (closed || token != generation || queryInFlight != request) return@purchasesResult
+            queryInFlight = null
+            queryDeadline?.cancel()
+            queryDeadline = null
+            finishPurchaseLaunch()
             val restoring = restoreRequested
             restoreRequested = false
             if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                purchaseHistoryConfirmed = false
                 setState(BillingStatus.ERROR, "구매 내역을 확인하지 못했어요. 인터넷 연결을 확인해 주세요.")
                 return@purchasesResult
             }
@@ -160,6 +223,9 @@ class BillingManager internal constructor(
     }
 
     private fun handlePurchases(purchases: List<Purchase>, restoring: Boolean) {
+        finishPurchaseLaunch()
+        restoreRequested = false
+        purchaseHistoryConfirmed = false
         val relevant = purchases.filter { PurchaseVerifier.PRODUCT_ID in it.products }
         val purchased = relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }.distinctBy { it.purchaseToken }
         when {
@@ -172,6 +238,7 @@ class BillingManager internal constructor(
                 invalidateVerification()
                 verifier.clear()
                 recheckEntitlement()
+                purchaseHistoryConfirmed = true
                 setState(idleStatus(), if (restoring) "복원할 활성 구독이 없어요." else null)
             }
         }
@@ -184,6 +251,7 @@ class BillingManager internal constructor(
         verification = scope.launch {
             var verified = false
             var unavailable = false
+            var unacknowledged: Purchase? = null
             // A malformed purchase list cannot cause an unbounded sequence of network calls.
             for (purchase in purchases.take(4)) {
                 val result = verifier.verify(PurchaseVerifier.PRODUCT_ID, purchase.purchaseToken)
@@ -191,7 +259,7 @@ class BillingManager internal constructor(
                 when (result) {
                     is VerificationResult.Verified -> {
                         verified = verifier.accept(result.envelope)
-                        if (verified && !purchase.isAcknowledged) acknowledge(purchase, token)
+                        if (verified && !purchase.isAcknowledged && !acknowledgesPurchase(result.envelope, purchase.purchaseToken)) unacknowledged = purchase
                         if (verified) break
                         unavailable = true
                     }
@@ -209,13 +277,29 @@ class BillingManager internal constructor(
                 !unavailable -> "현재 이용할 수 있는 구독이 없어요. Google Play 구독 상태를 확인해 주세요."
                 else -> "구독을 확인하지 못했어요. 잠시 후 다시 확인해 주세요."
             })
+            unacknowledged?.let { acknowledge(it, token) }
         }
     }
 
     private fun acknowledge(purchase: Purchase, token: Long) {
-        client.acknowledge(purchase.purchaseToken) { result ->
-            if (!closed && token == generation && result.responseCode != BillingClient.BillingResponseCode.OK) {
+        acknowledgement = scope.launch {
+            repeat(3) { attempt ->
+                val result = withTimeoutOrNull(purchaseQueryTimeoutMs) {
+                    suspendCancellableCoroutine<BillingResult> { continuation ->
+                        client.acknowledge(purchase.purchaseToken) { reply ->
+                            if (continuation.isActive) continuation.resume(reply)
+                        }
+                    }
+                }
+                if (closed || token != generation) return@launch
+                if (result?.responseCode == BillingClient.BillingResponseCode.OK) {
+                    if (mutableState.value.message == "결제 확인이 지연되고 있어요. 앱을 다시 열어 확인해 주세요.") {
+                        mutableState.value = mutableState.value.copy(message = null)
+                    }
+                    return@launch
+                }
                 mutableState.value = mutableState.value.copy(message = "결제 확인이 지연되고 있어요. 앱을 다시 열어 확인해 주세요.")
+                if (attempt < 2) delay(acknowledgeRetryDelayMs * (attempt + 1))
             }
         }
     }
@@ -224,16 +308,38 @@ class BillingManager internal constructor(
         if (closed) return
         when (result.responseCode) {
             BillingClient.BillingResponseCode.OK -> if (purchases?.any { PurchaseVerifier.PRODUCT_ID in it.products } == true) handlePurchases(purchases, false) else {
+                if (verification?.isActive == true) return
+                finishPurchaseLaunch()
                 setState(idleStatus(), null); refresh()
             }
-            BillingClient.BillingResponseCode.USER_CANCELED -> setState(idleStatus(), "결제를 취소했어요.")
-            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> { setState(idleStatus(), null); restore() }
-            else -> setState(BillingStatus.ERROR, "결제를 완료하지 못했어요. 다시 확인해 주세요.")
+            BillingClient.BillingResponseCode.USER_CANCELED -> if (purchaseDeadline != null) {
+                finishPurchaseLaunch()
+                setState(idleStatus(), "결제를 취소했어요.")
+                // Reconcile even cancellation before allowing another launch.
+                queryPurchases()
+            }
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                if (verification?.isActive == true) return
+                finishPurchaseLaunch(); setState(idleStatus(), null); restore()
+            }
+            else -> if (purchaseDeadline != null) {
+                finishPurchaseLaunch()
+                setState(BillingStatus.ERROR, "결제를 완료하지 못했어요. 다시 확인해 주세요.")
+            }
         }
     }
 
-    private fun invalidateVerification() { generation++; verification?.cancel(); verification = null }
-    private fun busy() = mutableState.value.status in setOf(BillingStatus.PURCHASING, BillingStatus.PENDING, BillingStatus.VERIFYING)
+    private fun invalidateVerification() {
+        generation++
+        verification?.cancel()
+        verification = null
+        acknowledgement?.cancel()
+        acknowledgement = null
+        queryInFlight = null
+        queryDeadline?.cancel()
+        queryDeadline = null
+    }
+    private fun busy() = purchaseDeadline != null || mutableState.value.status in setOf(BillingStatus.PURCHASING, BillingStatus.PENDING, BillingStatus.VERIFYING)
     private fun idleStatus(hasOptions: Boolean = mutableState.value.options.isNotEmpty()) = when {
         mutableState.value.isPremium -> BillingStatus.PREMIUM
         hasOptions -> BillingStatus.READY

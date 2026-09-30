@@ -1,0 +1,134 @@
+✖ pending verified purchase is acknowledged before the signed response, using an empty request body (34.2148ms)
+✔ already acknowledged purchases and ineligible purchases never produce acknowledgment writes (6.4239ms)
+✖ missing and unknown acknowledgement states fail without signing or writing (1.6452ms)
+✖ twenty concurrent callers share a single lookup and acknowledgment but receive installation bound grants (22.1274ms)
+✖ acknowledgment failures fail temporarily, then a fresh Play query observes completion without another write (1.6313ms)
+✖ hung acknowledgment has a timeout and releases the shared request for a later successful retry (1.4577ms)
+✖ expiry during acknowledgment denies the later signed response (1.9937ms)
+✖ actual localhost adapter returns 503 on acknowledgment failure and never leaks the token (34.9088ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 1
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 252.5571
+
+✖ failing tests:
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:25:1
+✖ pending verified purchase is acknowledged before the signed response, using an empty request body (34.2148ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:42:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:62:1
+✖ missing and unknown acknowledgement states fail without signing or writing (1.6452ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:66:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /acknowledgment.*unavailable/i,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:71:1
+✖ twenty concurrent callers share a single lookup and acknowledgment but receive installation bound grants (22.1274ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:76:34)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:80:1
+✖ acknowledgment failures fail temporarily, then a fresh Play query observes completion without another write (1.6313ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:84:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /acknowledgment.*unavailable/i,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:91:1
+✖ hung acknowledgment has a timeout and releases the shared request for a later successful retry (1.4577ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:98:9)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /timeout/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:102:1
+✖ expiry during acknowledgment denies the later signed response (1.9937ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + {
+  +   payload: 'eyJ2ZXJzaW9uIjoxLCJwYWNrYWdlTmFtZSI6ImNvbS5tb2EuYmFieWxhbmd1YWdlIiwicHJvZHVjdElkIjoiamlnZXVtX2FsYnVtIiwiYmFzZVBsYW5JZCI6Im1vbnRobHkiLCJpbnN0YWxsYXRpb25JZCI6Ijk0YmU4YmU2LTA0YzktNGI4NS05OTk0LTY5MTEzYmY0NDJkMCIsImlzc3VlZEF0TXMiOjE3OTA3MjY0MDAwMDAsImV4cGlyZXNBdE1zIjoxNzkwODEyODAwMDAwLCJzdWJzY3JpcHRpb25FeHBpcnlNcyI6MTc5MDgxMjgwMDAwMH0',
+  +   signature: 'MEUCIDcyb-RKWfxGlMA7f6gmw7xzL1SyukLG3-C_gD8O3Vu4AiEA0vJkDKRpcYOtcnrx4KOmCUoVp-_0Dg1BD8jEWbsYihw'
+  + }
+  - null
+
+      at TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:105:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { payload: 'eyJ2ZXJzaW9uIjoxLCJwYWNrYWdlTmFtZSI6ImNvbS5tb2EuYmFieWxhbmd1YWdlIiwicHJvZHVjdElkIjoiamlnZXVtX2FsYnVtIiwiYmFzZVBsYW5JZCI6Im1vbnRobHkiLCJpbnN0YWxsYXRpb25JZCI6Ijk0YmU4YmU2LTA0YzktNGI4NS05OTk0LTY5MTEzYmY0NDJkMCIsImlzc3VlZEF0TXMiOjE3OTA3MjY0MDAwMDAsImV4cGlyZXNBdE1zIjoxNzkwODEyODAwMDAwLCJzdWJzY3JpcHRpb25FeHBpcnlNcyI6MTc5MDgxMjgwMDAwMH0', signature: 'MEUCIDcyb-RKWfxGlMA7f6gmw7xzL1SyukLG3-C_gD8O3Vu4AiEA0vJkDKRpcYOtcnrx4KOmCUoVp-_0Dg1BD8jEWbsYihw' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at outputs\PlayVerifier\test\acknowledgment.test.js:108:1
+✖ actual localhost adapter returns 503 on acknowledgment failure and never leaks the token (34.9088ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  200 !== 503
+
+      at TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/acknowledgment.test.js:114:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 503,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

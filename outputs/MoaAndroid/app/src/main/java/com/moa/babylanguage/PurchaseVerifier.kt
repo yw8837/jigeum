@@ -11,6 +11,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.KeyFactory
+import java.security.MessageDigest
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
 import java.util.UUID
@@ -20,6 +21,16 @@ internal sealed interface VerificationResult {
     data object Rejected : VerificationResult
     data object Unavailable : VerificationResult
 }
+
+/** Call only after accept(envelope) verifies its signature and current grant. */
+internal fun acknowledgesPurchase(envelope: String, purchaseToken: String): Boolean = runCatching {
+    val payload = Base64.decode(JSONObject(envelope).getString("payload"), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+    val claimed = JSONObject(String(payload, Charsets.UTF_8)).opt("acknowledgedTokenHash") as? String ?: return false
+    if (!claimed.matches(Regex("[0-9a-f]{64}"))) return false
+    val actual = MessageDigest.getInstance("SHA-256").digest(purchaseToken.toByteArray(Charsets.UTF_8))
+        .joinToString("") { "%02x".format(it) }
+    MessageDigest.isEqual(claimed.toByteArray(Charsets.US_ASCII), actual.toByteArray(Charsets.US_ASCII))
+}.getOrDefault(false)
 
 /** Internal seam for lifecycle tests; the public manager always uses PurchaseVerifier. */
 internal interface BillingEntitlements {

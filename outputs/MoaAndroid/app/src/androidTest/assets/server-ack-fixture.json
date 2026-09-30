@@ -1,0 +1,11 @@
+{
+  "purpose": "Synthetic Node-to-Android contract fixture; not a purchase or production key.",
+  "now": 1790726400000,
+  "installationId": "94be8be6-04c9-4b85-9994-69113bf442d0",
+  "purchaseToken": "LOCAL-QA-owned-token/한글?x=1",
+  "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFdHjwH5vilIDfSy2tIPpXOo3aHvyVN1TnO0IHxexwxPuXYvORQCrkXhJsXPUKS/qt1bCX+46fkCWWDrVkb083g==",
+  "envelope": {
+    "payload": "eyJ2ZXJzaW9uIjoxLCJwYWNrYWdlTmFtZSI6ImNvbS5tb2EuYmFieWxhbmd1YWdlIiwicHJvZHVjdElkIjoiamlnZXVtX2FsYnVtIiwiYmFzZVBsYW5JZCI6Im1vbnRobHkiLCJpbnN0YWxsYXRpb25JZCI6Ijk0YmU4YmU2LTA0YzktNGI4NS05OTk0LTY5MTEzYmY0NDJkMCIsImlzc3VlZEF0TXMiOjE3OTA3MjY0MDAwMDAsImV4cGlyZXNBdE1zIjoxNzkwODEyODAwMDAwLCJzdWJzY3JpcHRpb25FeHBpcnlNcyI6MTc5MDgxMjgwMDAwMCwiYWNrbm93bGVkZ2VkVG9rZW5IYXNoIjoiMTNjNzhlNzcwNWI0YThiN2NiNWFlZTI2ZWJjNjY1Nzc4Nzg3N2U1OTcyMjQzMWI0NWU5YzE0NWNjMTFlYzYzZiJ9",
+    "signature": "MEUCIQDrZ0lkmJr_YnoPwGaPFX60PFpeWXZciEqs4hMlckHF6QIgWyXyg08GBlpl8QpvtX9g_NvIaVuubEsN3oCisrMdCi8"
+  }
+}
