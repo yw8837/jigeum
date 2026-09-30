@@ -1,0 +1,20 @@
+{
+  "runs": [
+    {
+      "iteration": 1,
+      "total_ms": 4871,
+      "wait_ms": 4896
+    },
+    {
+      "iteration": 2,
+      "total_ms": 3889,
+      "wait_ms": 3937
+    },
+    {
+      "iteration": 3,
+      "total_ms": 4493,
+      "wait_ms": 4570
+    }
+  ],
+  "environment": "API35 x86_64 1536MiB two-core SwiftShader debug. Sequential observational measurements, not a controlled ARM benchmark."
+}

@@ -1,0 +1,17 @@
+{
+  "resolved": [
+    "com.google.mediapipe:tasks-core:1.0.0",
+    "com.google.mediapipe:tasks-vision:1.0.0",
+    "com.google.mediapipe:tasks-audio:1.0.0",
+    "com.google.android.datatransport:transport-runtime:3.1.8",
+    "com.google.android.datatransport:transport-backend-cct:3.1.8",
+    "com.google.android.datatransport:transport-api:3.0.0",
+    "com.google.protobuf:protobuf-javalite:4.27.5",
+    "com.android.billingclient:billing:9.1.0"
+  ],
+  "dependency_report_sha256": "9beaeb790299b921817693d320e1328427912e4c2fcea4bc44b8f81943d6d1bc",
+  "network_state_permission_in_apk": false,
+  "internet_permission_in_apk": true,
+  "sdk_scheduling_permission_failures_observed": 12,
+  "scope": "Same reviewed Java/CCT path and permission composition as 0.4.3. No packet-wide or native-network certification."
+}

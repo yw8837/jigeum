@@ -1,0 +1,28 @@
+{
+  "delete_all": {
+    "records": 0,
+    "age_cleared": true,
+    "phrase_history_cleared": true,
+    "recovery_cleared": true,
+    "import_origins_cleared": true
+  },
+  "dispatched_snapshots_retained_after_delete": 1,
+  "owned_dispatched_snapshots_removed": [
+    "cache/exports/dispatched/jigeum-card-cfb19815-0067-4703-a032-ac317fb3e3e8.png"
+  ],
+  "test_databases_absent": true,
+  "draft_failure_diagnostics_absent": true,
+  "owned_fixtures_removed": true,
+  "display_restored": {
+    "size": "Physical size: 1080x2400\r\n",
+    "density": "Physical density: 420\r\n",
+    "font_scale": "1.0",
+    "show_ime_with_hard_keyboard": "1"
+  },
+  "test_package_was_already_absent": true,
+  "test_package_removed": true,
+  "permission_reset": true,
+  "cold_launch": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2504\r\nWaitTime: 2519\r\nComplete\r\n",
+  "crash_buffer_app_entries": 0,
+  "status": "pass"
+}

@@ -1,0 +1,42 @@
+{
+  "version": "0.4.4",
+  "versionCode": 11,
+  "build_source_commit": "9cef337db42a3ed038383dc87b84a1ffbde39474",
+  "qa_report_commit_parent": "9cef337db42a3ed038383dc87b84a1ffbde39474",
+  "ui_harness_sha256": "bea3bdcde3e706d979df9600d7186b6ffb4f0fbce5202ad3eb3d5896005c59ea",
+  "ui_harness_hash_format": "UTF-8 with LF normalized newlines",
+  "ui_harness_change": "Final QA waits for Activity start with am start -W; outside compiled Android inputs.",
+  "original_pr_head": "8475658f171b68e6d909f2798bd680fdeeaffd9d",
+  "artifacts": [
+    {
+      "path": "outputs/Jigeum-Android-debug-0.4.4.apk",
+      "bytes": 81690365,
+      "sha256": "98cf4674d51c020340987e73d61e3592395e7cf28067f0143dd0585ab1ec73b0"
+    },
+    {
+      "path": "outputs/Jigeum-Android-unsigned-0.4.4.aab",
+      "bytes": 44928344,
+      "sha256": "6b79841879a360f8a5537e493d56c4850b1adfa524c866871a5ff3fb8d2268e9"
+    },
+    {
+      "path": "outputs/Jigeum-Install-0.4.4.md",
+      "bytes": 1473,
+      "sha256": "9573353b4816013d9163ebba3134ca701b3b4632d3b6870d55e20d5b8f280a74"
+    },
+    {
+      "path": "outputs/Jigeum-QA-evidence-0.4.4.zip",
+      "bytes": 9444461,
+      "sha256": "749f8547b460de7188d8aee0c119cc5a40ef662bf1927767cdd3be75aa72a8d5"
+    },
+    {
+      "path": "outputs/Jigeum-0.4.4-package.zip",
+      "bytes": 106297293,
+      "sha256": "ae625b69d6749bfd1a712304eaaac5c6c5844be69853ef2d2c2b30eccc7156f1"
+    }
+  ],
+  "apk_signing": "development",
+  "aab_signing": "unsigned",
+  "actual_play_purchase_enabled": false,
+  "scope": "Local QA/package, no public submission. ARM/Play/upload signing pending.",
+  "package_embedded_manifest_scope": "APK/AAB/installation/evidence ZIP; external manifest also hashes package ZIP (no recursive self-hash)."
+}

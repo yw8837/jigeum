@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "exit": 0,
+  "timeout_seconds": 300,
+  "seconds": 10.77,
+  "verified_artifacts_byte_identical": true,
+  "sha256": {
+    "app-debug.apk": "98cf4674d51c020340987e73d61e3592395e7cf28067f0143dd0585ab1ec73b0",
+    "app-release.aab": "6b79841879a360f8a5537e493d56c4850b1adfa524c866871a5ff3fb8d2268e9"
+  }
+}

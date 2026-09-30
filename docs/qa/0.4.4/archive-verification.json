@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "crc_checked": true,
+  "unique_safe_paths": true,
+  "credential_pattern_scan": "pass",
+  "raw_evidence_files": 269,
+  "package_files": 72,
+  "build_cache_keys_and_user_records_excluded": true,
+  "synthetic_db_in_local_evidence_zip_only": true
+}

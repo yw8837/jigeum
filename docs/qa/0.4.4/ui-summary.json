@@ -1,0 +1,79 @@
+{
+  "status": "pass",
+  "scenarios": [
+    {
+      "mode": "normal",
+      "status": "pass",
+      "seconds": 79.7
+    },
+    {
+      "mode": "access",
+      "status": "pass",
+      "seconds": 84.7
+    },
+    {
+      "mode": "album",
+      "status": "pass",
+      "seconds": 42.0
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "pass",
+      "seconds": 93.7
+    },
+    {
+      "mode": "transfer-e2e",
+      "status": "pass"
+    }
+  ],
+  "prior_failures": {
+    "mode": "paywall-layout",
+    "count": 2,
+    "class": "UiAutomator null root after unsynchronized cold launch",
+    "preserved": true
+  },
+  "fix": "qa_harness.launch uses am start -W and verifies Status: ok; hierarchy/text/interaction assertions unchanged",
+  "paywall_layout_synchronized_runs": 2,
+  "timeout_seconds_each": 300,
+  "all_outcomes": [
+    {
+      "mode": "normal",
+      "status": "pass",
+      "seconds": 79.7
+    },
+    {
+      "mode": "access",
+      "status": "pass",
+      "seconds": 84.7
+    },
+    {
+      "mode": "album",
+      "status": "pass",
+      "seconds": 42.0
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "fail",
+      "error": "UiAutomator did not provide a hierarchy after 3 attempts"
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "fail",
+      "error": "UiAutomator did not provide a hierarchy after 3 attempts"
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "pass",
+      "seconds": 94.4
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "pass",
+      "seconds": 93.7
+    },
+    {
+      "mode": "transfer-e2e",
+      "status": "pass"
+    }
+  ]
+}

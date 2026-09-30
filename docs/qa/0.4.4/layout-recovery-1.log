@@ -1,0 +1,19 @@
+{"mode": "paywall-layout", "status": "fail", "error": "UiAutomator did not provide a hierarchy after 3 attempts"}
+Traceback (most recent call last):
+  File "<repo>\outputs\QA\run_qa.py", line 184, in <module>
+    MODES[mode](); result={'mode':mode,'status':'pass','seconds':round(time.monotonic()-start,1)}
+    ~~~~~~~~~~~^^
+  File "<repo>\outputs\QA\run_qa.py", line 158, in paywall_layout
+    home(); q.tap_text('카메라로 살펴보기',exact=False); q.wait_ui('지금의 표정도 함께 살펴봐요')
+    ~~~~^^
+  File "<repo>\outputs\QA\run_qa.py", line 32, in home
+    q.shell('input','keyevent','KEYCODE_BACK'); q.launch()
+                                                ~~~~~~~~^^
+  File "<repo>\outputs\QA\qa_harness.py", line 135, in launch
+    wait_ui("지금 아기는")
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "<repo>\outputs\QA\qa_harness.py", line 47, in wait_ui
+    last = nodes()
+  File "<repo>\outputs\QA\qa_harness.py", line 65, in nodes
+    raise RuntimeError("UiAutomator did not provide a hierarchy after 3 attempts")
+RuntimeError: UiAutomator did not provide a hierarchy after 3 attempts

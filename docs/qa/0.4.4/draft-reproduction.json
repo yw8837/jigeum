@@ -1,0 +1,62 @@
+[
+  {
+    "iteration": 1,
+    "status": "pass",
+    "seconds": 27.97
+  },
+  {
+    "iteration": 2,
+    "status": "pass",
+    "seconds": 18.18
+  },
+  {
+    "iteration": 3,
+    "status": "pass",
+    "seconds": 13.26
+  },
+  {
+    "iteration": 4,
+    "status": "pass",
+    "seconds": 12.39
+  },
+  {
+    "iteration": 5,
+    "status": "pass",
+    "seconds": 12.73
+  },
+  {
+    "iteration": 6,
+    "status": "pass",
+    "seconds": 12.26
+  },
+  {
+    "iteration": 7,
+    "status": "pass",
+    "seconds": 13.42
+  },
+  {
+    "iteration": 8,
+    "status": "pass",
+    "seconds": 13.04
+  },
+  {
+    "iteration": 9,
+    "status": "pass",
+    "seconds": 12.78
+  },
+  {
+    "iteration": 10,
+    "status": "pass",
+    "seconds": 12.06
+  },
+  {
+    "iteration": 11,
+    "status": "pass",
+    "seconds": 11.88
+  },
+  {
+    "iteration": 12,
+    "status": "pass",
+    "seconds": 12.75
+  }
+]

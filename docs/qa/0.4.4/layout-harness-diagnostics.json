@@ -1,0 +1,363 @@
+{
+  "status": "harness failure observed",
+  "failed_scenario": "paywall-layout",
+  "failed_at": "home launch after display/font reconfiguration",
+  "bad_dump_outputs": [
+    {
+      "at": 1790783110.9328465,
+      "seconds": 3.3,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783151.1175807,
+      "seconds": 2.28,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783176.5893977,
+      "seconds": 2.49,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783190.4853525,
+      "seconds": 2.5,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783208.6948667,
+      "seconds": 2.2,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783220.5444493,
+      "seconds": 2.82,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783223.5465722,
+      "seconds": 2.42,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783244.1720676,
+      "seconds": 2.59,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783275.0733142,
+      "seconds": 2.6,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783318.6608732,
+      "seconds": 2.77,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783322.1757646,
+      "seconds": 2.87,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783325.695654,
+      "seconds": 2.94,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    }
+  ],
+  "last_dumps": [
+    {
+      "at": 1790783313.957823,
+      "seconds": 2.28,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "UI hierchary dumped to: /sdcard/moa-ultraqa.xml\r\n",
+      "stderr": ""
+    },
+    {
+      "at": 1790783318.6608732,
+      "seconds": 2.77,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783322.1757646,
+      "seconds": 2.87,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783325.695654,
+      "seconds": 2.94,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "ERROR: null root node returned by UiTestAutomationBridge.\r\n"
+    },
+    {
+      "at": 1790783331.6755905,
+      "seconds": 4.78,
+      "command": [
+        "C:\\Users\\최용우\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "emulator-5554",
+        "shell",
+        "uiautomator",
+        "dump",
+        "/sdcard/moa-ultraqa.xml"
+      ],
+      "exit": 0,
+      "stdout": "UI hierchary dumped to: /sdcard/moa-ultraqa.xml\r\n",
+      "stderr": ""
+    }
+  ],
+  "post_failure_trace": "same app home hierarchy succeeded in failure trace",
+  "crash_buffer_app_entries": 0,
+  "root_cause_scope": "UiAutomator transient null root observed; no proven app exception or ANR. Underlying platform timing cause not established.",
+  "retry_limit": 2,
+  "qa_code_and_waits_changed": false,
+  "unsynchronized_scenario_failures": 2,
+  "synchronized_scenario_passes": 2,
+  "fix": "Wait for Activity start (-W), verify Status: ok, then perform existing hierarchy/text/interaction checks.",
+  "assertions_and_original_draft_8s_limit_changed": false,
+  "synchronized_start_outputs": [
+    {
+      "seconds": 8.55,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 8282\r\nWaitTime: 8375\r\nComplete\r\n"
+    },
+    {
+      "seconds": 6.0,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 5897\r\nWaitTime: 5904\r\nComplete\r\n"
+    },
+    {
+      "seconds": 5.14,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 5067\r\nWaitTime: 5075\r\nComplete\r\n"
+    },
+    {
+      "seconds": 5.05,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 4969\r\nWaitTime: 4978\r\nComplete\r\n"
+    },
+    {
+      "seconds": 5.67,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 5528\r\nWaitTime: 5562\r\nComplete\r\n"
+    },
+    {
+      "seconds": 7.15,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 7046\r\nWaitTime: 7054\r\nComplete\r\n"
+    },
+    {
+      "seconds": 4.75,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 4658\r\nWaitTime: 4673\r\nComplete\r\n"
+    },
+    {
+      "seconds": 4.33,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 4211\r\nWaitTime: 4213\r\nComplete\r\n"
+    },
+    {
+      "seconds": 4.83,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 4718\r\nWaitTime: 4724\r\nComplete\r\n"
+    },
+    {
+      "seconds": 3.92,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 3798\r\nWaitTime: 3806\r\nComplete\r\n"
+    },
+    {
+      "seconds": 4.31,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 4234\r\nWaitTime: 4236\r\nComplete\r\n"
+    },
+    {
+      "seconds": 3.04,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2937\r\nWaitTime: 2939\r\nComplete\r\n"
+    },
+    {
+      "seconds": 2.83,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2616\r\nWaitTime: 2620\r\nComplete\r\n"
+    },
+    {
+      "seconds": 2.6,
+      "exit": 0,
+      "stdout": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2504\r\nWaitTime: 2519\r\nComplete\r\n"
+    }
+  ],
+  "detailed_platform_timing_cause_established": false
+}

@@ -1,0 +1,21 @@
+{
+  "initial_cleanup_total_ms": 8465,
+  "runs": [
+    {
+      "iteration": 1,
+      "total_ms": 9404,
+      "wait_ms": 9490
+    },
+    {
+      "iteration": 2,
+      "total_ms": 7404,
+      "wait_ms": 7441
+    },
+    {
+      "iteration": 3,
+      "total_ms": 5139,
+      "wait_ms": 5164
+    }
+  ],
+  "environment": "API35 x86_64 1536MiB two-core SwiftShader debug, not ARM production performance"
+}

@@ -1,0 +1,101 @@
+{
+  "scope": "0.4.4/code11 final local QA",
+  "build_source": "9cef337db42a3ed038383dc87b84a1ffbde39474",
+  "recorded_at_utc": "2026-09-30T16:16:06.325827+00:00",
+  "compiled_android_inputs_clean_against_commit": true,
+  "ui_harness_sha256": "bea3bdcde3e706d979df9600d7186b6ffb4f0fbce5202ad3eb3d5896005c59ea",
+  "ui_harness_hash_format": "UTF-8 with LF normalized newlines",
+  "commands": [
+    {
+      "command": "gradlew -p outputs/MoaAndroid :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease :app:lintRelease --max-workers=1 --console=plain --no-watch-fs",
+      "exit": 0,
+      "candidate_build_seconds_from_gradle": 86,
+      "final_build_timeout_seconds": 300,
+      "verified_apk_aab_byte_identical": true,
+      "evidence": [
+        "build-final-lazy.log",
+        "build-final-bounded-result.json"
+      ]
+    },
+    {
+      "command": "python outputs/QA/instrument.py --install-app",
+      "exit": 0,
+      "timeout_seconds": 600,
+      "tests": 123,
+      "failures": 0,
+      "ignored": 0,
+      "seconds": 123.75
+    },
+    {
+      "command": "node --test outputs/PlayVerifier/test/*.test.js",
+      "exit": 0,
+      "timeout_seconds": 120,
+      "tests": 43,
+      "failures": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "command": "class-filtered Android BillingManagerLifecycleTest",
+      "exit": 0,
+      "timeout_seconds": 180,
+      "tests": 21
+    },
+    {
+      "command": "portable UI normal/access/album",
+      "exit": 0,
+      "timeout_seconds_each": 300
+    },
+    {
+      "command": "portable UI paywall-layout before start synchronization",
+      "exit": 1,
+      "runs": 2,
+      "timeout_seconds_each": 300,
+      "scope": "Harness null-root failure, preserved"
+    },
+    {
+      "command": "portable UI paywall-layout with am start -W",
+      "exit": 0,
+      "runs": 2,
+      "timeout_seconds_each": 300,
+      "assertions_changed": false
+    },
+    {
+      "command": "portable UI transfer_e2e.py",
+      "exit": 0,
+      "timeout_seconds": 300
+    },
+    {
+      "command": "actual 0.4.3 baseline UI/capture/install-r/verify",
+      "exit": 0,
+      "timeout_seconds": 240,
+      "evidence": "upgrade-result.json"
+    },
+    {
+      "command": "check_package.py --expect-unsigned-aab --baseline outputs/Jigeum-Android-debug-0.4.3.apk",
+      "exit": 0,
+      "timeout_seconds": 150,
+      "evidence": "package-verdict.json"
+    },
+    {
+      "command": "cleanup.py / cold-start probe / gradlew --stop / adb emu kill / scoped OMX clear",
+      "exit": 0,
+      "evidence": [
+        "cleanup-result.json",
+        "cold-start-lazy-summary.json",
+        "gradle-stop-final.log",
+        "adb-final-devices.txt",
+        "state-cleanup.json"
+      ]
+    }
+  ],
+  "prior_candidate": "before-billing-lazy folder: 5baca43/121, not final APK evidence",
+  "prior_failures_retained": [
+    "original 0.4.3 draft timeout",
+    "baseline PDF feedback wait timeout",
+    "feedback red",
+    "incremental resource errors",
+    "billing-lazy red",
+    "two UI null-root harness failures"
+  ]
+}

@@ -131,7 +131,12 @@ def trace(label: str, extra=None):
 
 def launch():
     shell("am", "force-stop", PACKAGE)
-    shell("am", "start", "-n", f"{PACKAGE}/.MainActivity")
+    # Wait for Activity startup before polling its hierarchy. Display/font
+    # reconfiguration followed by a cold start can otherwise exhaust nodes()
+    # while UiAutomator still reports a null root. Keep UI assertions unchanged.
+    started = shell("am", "start", "-W", "-n", f"{PACKAGE}/.MainActivity", timeout=30)
+    if b"Status: ok" not in started.stdout:
+        raise RuntimeError("Activity start did not complete successfully")
     wait_ui("지금 아기는")
 
 
