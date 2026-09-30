@@ -269,4 +269,3 @@ class RecordTransferTests {
         assertTrue(csv.endsWith("\r\n"))
     }
 }
-

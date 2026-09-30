@@ -1,6 +1,13 @@
 # Storage and export safeguards — 2026-09-30
 
-Base: `cc8403508dfb311e57c12d4b5d9f1226618ad851`. GitHub compare confirmed Android source unchanged from `f42238c341ff890449154562052be15dc7f9b2e7`.
+Reconciled base: `f83887c74a243dd3e535bd7e932265d612a7a511`, preserving the independently completed 0.4 implementation from `9a65a76`. GitHub compare plus fetched file contents confirm that RecordTransfer, ObservationStore, MemoryArtifacts and their two existing test files are unchanged from `cc84035`/`f42238c` (excluding an extra terminal newline in the prior local snapshot). Fetched latest source Git blob hashes were verified against connector metadata before the latest-baseline reproduction. Only the missing storage/export safeguards are added; upstream AccessPolicy, media gates, billing models, PurchaseVerifier monotonic-time protection, build version and existing 72 Android tests are preserved.
+
+## Latest main evidence, separate from this change
+
+- Inspected committed `docs/qa/0.4.0/instrumentation.log.txt`: 72 test-success status records, terminal `OK (72 tests)`, runner code -1. `instrumentation-result.json` reports pass/72/exit 0, harness 58.48 seconds; log reports instrumentation 46.784 seconds.
+- Inspected committed `build-final.log.txt`: `BUILD SUCCESSFUL in 2m 20s`, including debug/test/release and lint tasks. QA report records lint warnings and the final-APK UI rerun limits; do not call it warning-free or all UI newly retested.
+- These are the upstream author's committed execution receipts, not tests executed by this worker. They cover upstream 0.4, **not this storage/export delta**. The delta adds 8 instrumentation methods; no 80/80 claim is made.
+- Latest PurchaseVerifier now binds cached grants to same-boot elapsed time, wall time and boot count. That code is untouched. BillingManager remains unchanged, so the separate callback-loss/acknowledgment caveats below still apply.
 
 ## Changes
 

@@ -267,4 +267,3 @@ internal class ObservationStore(context: Context,
         }
     }
 }
-

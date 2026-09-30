@@ -11,3 +11,8 @@ gradlew text eol=lf
 *.jar binary
 *.tflite binary
 *.task binary
+# Preserve byte-identical evidence and supplied originals for source-manifest hashes.
+docs/references/originals/** -text
+docs/qa/baseline-0.3.0/** -text
+docs/qa/0.4.0/** -text
+tools/marketing/audio/*.json -text

@@ -181,4 +181,3 @@ class MemoryArtifactsTests {
         assertEquals(before, directory.listFiles()?.map { it.name }?.toSet().orEmpty())
     }
 }
-

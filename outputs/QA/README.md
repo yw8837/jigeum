@@ -1,6 +1,6 @@
 # Android 통합 QA 재현 도구
 
-0.3.0 통합 작업에서 사용한 계측·UI·파일 전송·패키지 점검 스크립트를 프로젝트 경로에 맞춰 정리한 소스입니다. **이 도구를 추가했다는 사실은 테스트 통과를 의미하지 않습니다.** 실행 결과는 해당 실행의 `evidence`와 최종 QA 보고서에서 확인합니다. 실제 Play 구매 시험이나 출시·제출·서비스 배포를 수행하는 도구가 아닙니다.
+0.3.0부터 사용한 계측·UI·파일 전송·패키지 점검 스크립트에 0.4.0 무료/전체 이용권 검증을 추가한 소스입니다. **이 도구를 추가했다는 사실은 테스트 통과를 의미하지 않습니다.** 실행 결과는 해당 실행의 `evidence`와 최종 QA 보고서에서 확인합니다. 실제 Play 구매 시험이나 출시·제출·서비스 배포를 수행하는 도구가 아닙니다.
 
 ## 준비와 기기 소유권
 
@@ -63,9 +63,8 @@ Android 테스트 assets의 합성 영상 3개를 사용하고 ffmpeg로 31초�
 ```powershell
 python outputs/QA/run_qa.py normal
 python outputs/QA/run_qa.py permission
-python outputs/QA/run_qa.py camera
-python outputs/QA/run_qa.py video
-python outputs/QA/run_qa.py invalid
+python outputs/QA/run_qa.py access
+python outputs/QA/run_qa.py paywall-layout
 python outputs/QA/run_qa.py album
 python outputs/QA/run_qa.py transfer
 python outputs/QA/transfer_e2e.py
@@ -74,6 +73,10 @@ python outputs/QA/run_qa.py stress
 ```
 
 앞 명령이 종료된 후 다음 명령을 실행합니다. `normal`은 직접 고친 문장의 프로세스 재생성, 연속 저장 탭, SQLite 저장과 무료 공유를 확인합니다. `album`은 데이터가 있는 상태에서 실행하며 **Play 설정이 비어 있는 현재 QA 빌드**의 구매 불가/복원 안내와 표지·메모 선택 유지에 맞춰져 있습니다. 실제 가격이 나오는 설정된 빌드에는 그대로 사용하지 않습니다.
+
+`access`는 무료 상태의 카메라·영상 선택이 센서 권한 요청/파일 선택보다 먼저 이용권 화면을 여는지, 이용권 화면의 프로세스 복원과 안전한 뒤로가기가 되는지, 그 후에도 무료 문장을 저장할 수 있는지 검사합니다. `paywall-layout`은 작은 화면·200% 글꼴·넓은 화면에서 설명과 구매 복원에 접근하고 원래 화면으로 돌아가는지 확인합니다. 결과 이미지를 직접 검토해야 시각 품질을 판단할 수 있습니다.
+
+기존 `camera`, `video`, `invalid` 모드는 카메라/영상의 실제 센서·파일 선택기용입니다. **0.4에서는 유효한 실제 이용권이 있는 운영 연결 시험 설치에서만** 사용할 수 있으며 현재 설정 없는 APK에는 적용하지 않습니다. 잠금 화면을 만난 것을 미디어 엔진 실패로 집계하지 마세요. 로컬 계측의 테스트 대역은 무료/유료 화면 전환과 만료를 검증하며 실제 Play 거래나 OEM 센서 시험을 대신하지 않습니다.
 
 `transfer`는 파일 선택 취소 복귀를, `transfer_e2e`는 저장 선택기에서 앱 프로세스가 실제로 죽은 뒤 백업 완료, JSON 재가져오기 중복 방지, 손상 파일 거부, 미래 시각 import 이후 현재 시각 저장을 확인합니다. DocumentsUI 저장 위치는 **기기의 Downloads**여야 합니다. 이전 실행의 동일 이름 백업이 있으면 `fixtures.py --push`로 소유 fixture를 다시 준비한 후 실행합니다.
 

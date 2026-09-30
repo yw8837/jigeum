@@ -23,7 +23,7 @@ KOTLIN_TOOLS=/absolute/path/to/jars bash qa-jvm/run-merge.sh
 
 This compiles the **actual complete production RecordTransfer.kt**, then executes eleven merge cases. It never compiles a rewritten merge algorithm. Build outputs stay under ignored `qa-jvm/build`.
 
-To reproduce the original failure, obtain RecordTransfer.kt from verified commit `f42238c341ff890449154562052be15dc7f9b2e7` (also unchanged at `cc8403508dfb311e57c12d4b5d9f1226618ad851`) and run:
+To reproduce the original failure, obtain RecordTransfer.kt from verified commit `f42238c341ff890449154562052be15dc7f9b2e7` (also unchanged at latest main `f83887c74a243dd3e535bd7e932265d612a7a511`) and run:
 
 ```sh
 KOTLIN_TOOLS=/absolute/path/to/jars \

@@ -57,8 +57,7 @@ def normal():
     q.shell('input','text','QA%sfamily%smoment'); q.shell('input','keyevent','KEYCODE_BACK')
     q.wait_ui('QA family moment')
     q.shell('input','keyevent','KEYCODE_HOME'); time.sleep(1)
-    q.shell('am','kill',q.PACKAGE); time.sleep(.5)
-    assert not q.shell('pidof',q.PACKAGE,check=False).stdout.strip()
+    q.kill_background_process()
     q.shell('am','start','-n',q.PACKAGE+'/.MainActivity'); q.wait_ui('QA family moment')
     q.trace('draft-recreated')
     before={row['id'] for row in events()}
@@ -85,11 +84,11 @@ def camera():
 def album():
     home(); q.tap_text('아기말북',scroll=False); q.wait_ui('한 달의 말')
     q.screenshot('album'); q.tap_text('살구빛 기억'); q.tap_text('보호자 메모도 담기')
-    q.tap_text('아기말북 이용권 보기'); q.wait_ui('닫기 · 기본 기능 계속 사용')
+    q.tap_text('전체 이용권 보기'); q.wait_ui('닫기 · 원래 화면으로')
     q.trace('billing-unavailable'); q.screenshot('paywall')
     assert not any('₩' in n['text'] for n in q.nodes()),'Unavailable price must not be invented'
     q.tap_text('구매 복원',exact=False); time.sleep(.5); q.trace('restore-unavailable')
-    q.tap_text('닫기 · 기본 기능 계속 사용',exact=False); q.wait_ui('표지의 색을 골라요')
+    q.shell('input','keyevent','KEYCODE_BACK'); q.wait_ui('표지의 색을 골라요')
     import xml.etree.ElementTree as ET
     tree=ET.fromstring(q.adb('exec-out','cat','/sdcard/moa-ultraqa.xml').stdout)
     for label in ['보호자 메모도 담기','살구빛 기억']:
@@ -126,6 +125,45 @@ def stress():
         q.shell('input','keyevent','KEYCODE_BACK'); q.wait_ui('지금 아기는')
     q.trace('stress-ten-routes',{'seconds':round(time.monotonic()-begin,2)})
     (q.RUN/'stress-meminfo.txt').write_bytes(q.shell('dumpsys','meminfo',q.PACKAGE).stdout)
+
+def access():
+    """0.4 unconfigured/free build: gates precede sensors and preserve safe returns."""
+    q.shell('pm','revoke',q.PACKAGE,'android.permission.CAMERA',check=False)
+    for entry,tag,title in [('카메라로 살펴보기','camera','지금의 표정도 함께 살펴봐요'),
+                            ('저장된 영상 가져오기','video','담아 둔 영상으로 이야기를 나눠요')]:
+        home(); q.tap_text(entry,exact=False); q.wait_ui(title)
+        texts=[n['text'] for n in q.nodes() if n['text']]
+        assert not any(value in texts for value in ['카메라 시작','영상 고르기','Files in Downloads','While using the app']),texts
+        assert not any('₩' in text for text in texts),'No invented price in an unconfigured build'
+        q.trace('free-'+tag+'-gate'); q.screenshot('access-'+tag)
+        if tag=='camera':
+            q.shell('input','keyevent','KEYCODE_HOME'); time.sleep(1)
+            q.kill_background_process()
+            q.shell('am','start','-n',q.PACKAGE+'/.MainActivity'); q.wait_ui(title)
+            q.trace('paywall-process-restored')
+        q.shell('input','keyevent','KEYCODE_BACK'); q.wait_ui('지금 아기는')
+    permissions=q.shell('dumpsys','package',q.PACKAGE).stdout.decode('utf-8','replace')
+    assert re.search(r'android.permission.CAMERA: granted=false',permissions),permissions[-2000:]
+    q.trace('free-media-permission-stays-denied')
+    manual(); q.tap_text('이 문장 저장하기'); q.wait_ui('우리가 나눈 아기말')
+    q.trace('free-creation-after-gates')
+
+def paywall_layout():
+    display=q.display_settings()
+    original=q.shell('settings','get','system','font_scale').stdout.decode().strip()
+    try:
+        for label,size,density,font in [('small','720x1280','320','1.0'),('large-font','1080x2400','420','2.0'),('wide','1280x720','160','1.0')]:
+            q.shell('wm','size',size); q.shell('wm','density',density)
+            q.shell('settings','put','system','font_scale',font)
+            home(); q.tap_text('카메라로 살펴보기',exact=False); q.wait_ui('지금의 표정도 함께 살펴봐요')
+            q.screenshot('paywall-'+label)
+            q.tap_text('구매 복원',exact=False); q.trace('paywall-'+label+'-restore')
+            q.screenshot('paywall-'+label+'-actions')
+            q.shell('input','keyevent','KEYCODE_BACK'); q.wait_ui('지금 아기는')
+    finally:
+        q.restore_display(display)
+        if original=='null': q.shell('settings','delete','system','font_scale')
+        else: q.shell('settings','put','system','font_scale',original)
 def confirm_layout():
     display=q.display_settings()
     try:
@@ -135,7 +173,8 @@ def confirm_layout():
     finally:
         q.restore_display(display)
 MODES={'migration':migration,'normal':normal,'permission':previous.permission,'camera':camera,'video':previous.video,
-       'invalid':previous.invalid,'album':album,'transfer':transfer,'layout':layout,'stress':stress,'confirm-layout':confirm_layout}
+       'invalid':previous.invalid,'album':album,'transfer':transfer,'layout':layout,'stress':stress,'confirm-layout':confirm_layout,
+       'access':access,'paywall-layout':paywall_layout}
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser(description='Run one UI scenario on the explicitly selected disposable test device.')

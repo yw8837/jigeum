@@ -1,0 +1,16 @@
+{
+  "write": {
+    "success": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\access-040-20260930\\.omx\\state\\ultraqa-state.json"
+  },
+  "clear": {
+    "cleared": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\access-040-20260930\\.omx\\state\\ultraqa-state.json"
+  },
+  "read": {
+    "exists": false,
+    "mode": "ultraqa"
+  }
+}

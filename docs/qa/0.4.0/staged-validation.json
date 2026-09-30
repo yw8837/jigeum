@@ -1,0 +1,10 @@
+{
+  "reference_blobs_matched": 23,
+  "python_syntax": "pass",
+  "links_checked_files": 13,
+  "missing_links": 0,
+  "staged_secret_patterns": 0,
+  "source_whitespace_check": "pass",
+  "raw_CRLF_evidence_excluded_from_whitespace_check": true,
+  "staged_files": 64
+}

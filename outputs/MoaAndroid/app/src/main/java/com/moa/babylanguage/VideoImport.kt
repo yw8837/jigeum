@@ -27,11 +27,12 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,10 +49,13 @@ import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.coroutineContext
 import kotlin.math.hypot
 
@@ -93,46 +97,60 @@ private data class VideoFrameSummary(
 }
 
 @Composable
-fun VideoImportScreen(canUseVideo: () -> Boolean, onAccessDenied: () -> Unit, onBack: () -> Unit, onTranslate: (ImportedVideoObservation) -> Unit) {
+fun VideoImportScreen(onBack: () -> Unit, onTranslate: (ImportedVideoObservation) -> Unit,
+                      authorize: () -> Boolean = { false }) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val currentAccess by rememberUpdatedState(canUseVideo)
-    val currentDenied by rememberUpdatedState(onAccessDenied)
-    val session = remember { MediaAccessSession(AccessPolicy { currentAccess() }, AccessFeature.STORED_VIDEO) }
-    fun checkAccess(): Boolean = session.check { currentDenied() }
-    DisposableEffect(session) { onDispose { session.close() } }
+    val currentAuthorize by rememberUpdatedState(authorize)
+    val alive = remember { AtomicBoolean(true) }
     var selectedUri by remember { mutableStateOf<Uri?>(null) }
     var summary by remember { mutableStateOf<VideoFrameSummary?>(null) }
     var analyzing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var heardSound by remember { mutableStateOf("") }
     var manualNote by remember { mutableStateOf<String?>(null) }
+    var analysisJob by remember { mutableStateOf<Job?>(null) }
+    var pickerPending by remember { mutableStateOf(false) }
+    fun checkAccess(): Boolean {
+        if (!alive.get()) return false
+        if (currentAuthorize()) return true
+        analysisJob?.cancel()
+        selectedUri = null
+        summary = null
+        heardSound = ""
+        manualNote = null
+        return false
+    }
+    DisposableEffect(Unit) { onDispose { alive.set(false); analysisJob?.cancel() } }
+    LaunchedEffect(Unit) { while (checkAccess()) delay(1000) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null && checkAccess()) {
+        pickerPending = false
+        if (!checkAccess()) return@rememberLauncherForActivityResult
+        if (uri != null) {
+            analysisJob?.cancel()
             selectedUri = null
             summary = null
             heardSound = ""
             manualNote = null
             error = null
             analyzing = true
-            scope.launch {
+            analysisJob = scope.launch {
                 try {
                     if (!checkAccess()) return@launch
                     val result = withContext(Dispatchers.IO) {
                         // Close the face model and frame retriever before starting audio decoding.
-                        val frames = inspectVideo(context, uri) { checkAccess() }
+                        val frames = inspectVideo(context, uri)
                         ensureActive()
-                        val allowed = withContext(Dispatchers.Main.immediate) { checkAccess() }
-                        if (!allowed) throw CancellationException("Media access ended")
                         val audio = VideoAudioDecoder.analyze(context, uri)
                         frames.copy(
                             hasAudioTrack = audio.status != VideoAudioAnalysis.Status.NO_TRACK,
                             audio = audio
                         )
                     }
-                    if (!checkAccess()) return@launch
-                    summary = result
-                    selectedUri = uri
+                    if (checkAccess()) {
+                        summary = result
+                        selectedUri = uri
+                    }
                 } catch (cause: CancellationException) {
                     throw cause
                 } catch (cause: IllegalArgumentException) {
@@ -159,7 +177,12 @@ fun VideoImportScreen(canUseVideo: () -> Boolean, onAccessDenied: () -> Unit, on
         Text("기기에서 영상의 일부 장면과 첫 10초 소리를 살펴봐요. 아이의 기분이나 욕구를 판정하지 않아요.",
             color = Color(0xFF65716B))
         Button(
-            onClick = { if (checkAccess()) picker.launch(arrayOf("video/*")) }, enabled = !analyzing,
+            onClick = choose@{
+                if (!checkAccess() || pickerPending || analyzing) return@choose
+                pickerPending = true
+                try { picker.launch(arrayOf("video/*")) }
+                catch (_: Exception) { pickerPending = false; error = "영상 선택기를 열지 못했어요. 잠시 후 다시 시도해 주세요." }
+            }, enabled = !analyzing && !pickerPending,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF24322E)),
             modifier = Modifier.fillMaxWidth()
         ) { Text(if (selectedUri == null) "영상 고르기" else "다른 영상 고르기") }
@@ -212,8 +235,8 @@ fun VideoImportScreen(canUseVideo: () -> Boolean, onAccessDenied: () -> Unit, on
             }
             Spacer(Modifier.height(4.dp))
             Button(
-                onClick = {
-                    if (!checkAccess()) return@Button
+                onClick = translate@{
+                    if (!checkAccess()) return@translate
                     onTranslate(
                         ImportedVideoObservation(
                             heardSound = if (heardSound == "소리 없음" || heardSound == "소리 확인 어려움")
@@ -260,13 +283,7 @@ private fun VideoPlayback(uri: Uri) {
     AndroidView(factory = { video }, modifier = Modifier.fillMaxWidth().height(220.dp))
 }
 
-private suspend fun inspectVideo(context: Context, uri: Uri, canAnalyze: () -> Boolean): VideoFrameSummary {
-    suspend fun requireAccess() {
-        coroutineContext.ensureActive()
-        if (!withContext(Dispatchers.Main.immediate) { canAnalyze() })
-            throw CancellationException("Media access ended")
-    }
-    requireAccess()
+private suspend fun inspectVideo(context: Context, uri: Uri): VideoFrameSummary {
     val size = context.contentResolver.openFileDescriptor(uri, "r")?.use { it.statSize } ?: -1L
     if (size <= 0L || size > 50L * 1024L * 1024L) {
         throw IllegalArgumentException("50MB 이하의 크기를 확인할 수 있는 영상을 골라 주세요.")
@@ -293,7 +310,6 @@ private suspend fun inspectVideo(context: Context, uri: Uri, canAnalyze: () -> B
         var mouthCount = 0
         var decoded = 0
         var analyzedFrames = 0
-        requireAccess()
         val landmarker = try {
             FaceLandmarker.createFromOptions(context,
                 FaceLandmarker.FaceLandmarkerOptions.builder()
@@ -308,7 +324,7 @@ private suspend fun inspectVideo(context: Context, uri: Uri, canAnalyze: () -> B
         }
         try {
             for (index in 0 until sampleCount) {
-                requireAccess()
+                coroutineContext.ensureActive()
                 val timeUs = (durationMs * 1000L * (index + 1)) / (sampleCount + 1)
                 val frame = if (Build.VERSION.SDK_INT >= 27) {
                     retriever.getScaledFrameAtTime(timeUs,
@@ -325,7 +341,6 @@ private suspend fun inspectVideo(context: Context, uri: Uri, canAnalyze: () -> B
                                 (frame.height * ratio).toInt().coerceAtLeast(1), true)
                         }
                         if (landmarker != null) {
-                            requireAccess()
                             val landmarks = BitmapImageBuilder(scaled).build().use { image ->
                                 landmarker.detect(image).faceLandmarks().firstOrNull()
                             }
@@ -345,8 +360,7 @@ private suspend fun inspectVideo(context: Context, uri: Uri, canAnalyze: () -> B
                                 }
                             }
                         }
-                    } catch (cause: CancellationException) { throw cause }
-                    catch (_: Exception) { /* A frame may be corrupt; other frames still count. */ }
+                    } catch (_: Exception) { /* A frame may be corrupt; other frames still count. */ }
                     finally {
                         if (scaled !== frame && !scaled.isRecycled) scaled.recycle()
                         if (!frame.isRecycled) frame.recycle()

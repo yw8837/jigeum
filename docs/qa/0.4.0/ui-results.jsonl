@@ -1,0 +1,9 @@
+{"mode": "normal", "status": "pass", "seconds": 95.6}
+{"mode": "access", "status": "fail", "error": ""}
+{"mode": "access", "status": "pass", "seconds": 80.4}
+{"mode": "album", "status": "pass", "seconds": 41.5}
+{"mode": "paywall-layout", "status": "pass", "seconds": 83.0}
+{"mode": "permission", "status": "pass", "seconds": 76.0}
+{"mode": "paywall-layout", "status": "pass", "seconds": 76.5}
+{"mode": "transfer-e2e", "status": "pass"}
+{"mode": "layout", "status": "pass", "seconds": 89.1}

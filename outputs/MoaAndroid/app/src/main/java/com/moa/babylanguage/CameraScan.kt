@@ -57,7 +57,6 @@ import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
-import java.util.concurrent.FutureTask
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.hypot
@@ -74,17 +73,13 @@ data class CameraObservation(
 
 @Composable
 fun CameraScanScreen(
-    canUseCamera: () -> Boolean,
-    onAccessDenied: () -> Unit,
     onBack: () -> Unit,
-    onTranslate: ((CameraObservation) -> Unit)? = null
+    onTranslate: ((CameraObservation) -> Unit)? = null,
+    authorize: () -> Boolean = { false }
 ) {
     val context = LocalContext.current
-    val currentAccess by rememberUpdatedState(canUseCamera)
-    val currentDenied by rememberUpdatedState(onAccessDenied)
-    val session = remember { MediaAccessSession(AccessPolicy { currentAccess() }, AccessFeature.CAMERA) }
-    fun checkAccess(): Boolean = session.check { currentDenied() }
-    DisposableEffect(session) { onDispose { session.close() } }
+    val currentAuthorize by rememberUpdatedState(authorize)
+    val alive = remember { AtomicBoolean(true) }
     var hasPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
@@ -100,11 +95,25 @@ fun CameraScanScreen(
     var activeCamera by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
     var canSwitchCamera by remember { mutableStateOf(false) }
     var manualNote by remember { mutableStateOf<String?>(null) }
+    fun checkAccess(): Boolean {
+        if (!alive.get()) return false
+        if (currentAuthorize()) return true
+        active = false
+        cameraReady = false
+        observation = FaceObservation.WAITING
+        manualNote = null
+        return false
+    }
+    DisposableEffect(Unit) { onDispose { alive.set(false) } }
+    LaunchedEffect(Unit) {
+        while (checkAccess()) delay(1000)
+    }
     val permissionRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
+        if (!checkAccess()) return@rememberLauncherForActivityResult
         hasPermission = granted
-        active = granted && checkAccess()
+        active = granted
         if (!granted) error = "카메라 권한이 없어 관찰을 시작할 수 없어요."
     }
     LaunchedEffect(active, cameraReady) {
@@ -142,15 +151,17 @@ fun CameraScanScreen(
             if (active && hasPermission) {
                 CameraObservationPreview(
                     requestedCamera = requestedCamera,
-                    canUseCamera = ::checkAccess,
+                    authorize = ::checkAccess,
                     onObservation = { observation = it },
                     onError = { error = it; cameraReady = false },
                     onWarning = { warning = it },
                     onReady = { facing, canSwitch ->
-                        activeCamera = facing
-                        canSwitchCamera = canSwitch
-                        cameraReady = true
-                        error = null
+                        if (checkAccess()) {
+                            activeCamera = facing
+                            canSwitchCamera = canSwitch
+                            cameraReady = true
+                            error = null
+                        }
                     }
                 )
             } else {
@@ -177,8 +188,8 @@ fun CameraScanScreen(
                 )
                 if (cameraReady && canSwitchCamera) {
                     OutlinedButton(
-                        onClick = {
-                            if (!checkAccess()) return@OutlinedButton
+                        onClick = switch@{
+                            if (!checkAccess()) return@switch
                             cameraReady = false
                             canSwitchCamera = false
                             observation = FaceObservation.WAITING
@@ -212,8 +223,8 @@ fun CameraScanScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (!active) {
                 Button(
-                    onClick = {
-                        if (!checkAccess()) return@Button
+                    onClick = start@{
+                        if (!checkAccess()) return@start
                         error = null
                         warning = null
                         cameraReady = false
@@ -234,8 +245,8 @@ fun CameraScanScreen(
         }
         if (onTranslate != null) {
             Button(
-                onClick = {
-                    if (!checkAccess()) return@Button
+                onClick = translate@{
+                    if (!checkAccess()) return@translate
                     val cue = CameraObservation(
                         faceVisible = observation == FaceObservation.FACE_VISIBLE ||
                             observation == FaceObservation.MOUTH_OPEN,
@@ -275,7 +286,7 @@ private enum class FaceObservation { WAITING, NO_FACE, FACE_VISIBLE, MOUTH_OPEN 
 @Composable
 private fun CameraObservationPreview(
     requestedCamera: Int,
-    canUseCamera: () -> Boolean,
+    authorize: () -> Boolean,
     onObservation: (FaceObservation) -> Unit,
     onError: (String) -> Unit,
     onWarning: (String) -> Unit,
@@ -283,7 +294,7 @@ private fun CameraObservationPreview(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val currentAccess by rememberUpdatedState(canUseCamera)
+    val currentAuthorize by rememberUpdatedState(authorize)
     val currentObservation by rememberUpdatedState(onObservation)
     val currentError by rememberUpdatedState(onError)
     val currentWarning by rememberUpdatedState(onWarning)
@@ -296,8 +307,6 @@ private fun CameraObservationPreview(
     }
 
     DisposableEffect(lifecycleOwner, previewView, requestedCamera) {
-        // Recheck before scheduling even model initialization from a restored UI snapshot.
-        if (!currentAccess()) return@DisposableEffect onDispose { }
         val mainExecutor = ContextCompat.getMainExecutor(context)
         val worker = Executors.newSingleThreadExecutor()
         val disposed = AtomicBoolean(false)
@@ -311,7 +320,6 @@ private fun CameraObservationPreview(
         var lastInferenceMs = 0L
 
         worker.execute {
-            if (disposed.get()) return@execute
             val model = try {
                 val options = FaceLandmarker.FaceLandmarkerOptions.builder()
                     .setBaseOptions(BaseOptions.builder()
@@ -342,11 +350,7 @@ private fun CameraObservationPreview(
             analysis.setAnalyzer(worker) { image ->
                 try {
                     val now = SystemClock.uptimeMillis()
-                    if (!disposed.get() && model != null && now - lastInferenceMs >= 180) {
-                        // Billing is main-thread owned. Recheck before every inference, not on the worker.
-                        val permitted = FutureTask { !disposed.get() && currentAccess() }
-                        mainExecutor.execute(permitted)
-                        if (!permitted.get()) return@setAnalyzer
+                    if (model != null && now - lastInferenceMs >= 180) {
                         lastInferenceMs = now
                         val bitmap = image.toUprightBitmap()
                         val result = try {
@@ -381,7 +385,7 @@ private fun CameraObservationPreview(
                             }
                         }
                         mainExecutor.execute {
-                            if (!disposed.get() && currentAccess()) currentObservation(state)
+                            if (!disposed.get()) currentObservation(state)
                         }
                     }
                 } catch (cause: Exception) {
@@ -395,7 +399,7 @@ private fun CameraObservationPreview(
 
             val providerFuture = ProcessCameraProvider.getInstance(context)
             providerFuture.addListener({
-                if (disposed.get() || !currentAccess()) return@addListener
+                if (disposed.get()) return@addListener
                 try {
                     provider = providerFuture.get()
                     val backAvailable = provider!!.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
@@ -415,6 +419,8 @@ private fun CameraObservationPreview(
                     val selector = if (actualCamera == CameraSelector.LENS_FACING_BACK)
                         CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
                     preview.setSurfaceProvider(previewView.surfaceProvider)
+                    // The provider may complete after entitlement expiry. Check before opening the sensor.
+                    if (!currentAuthorize()) return@addListener
                     provider?.bindToLifecycle(
                         lifecycleOwner, selector, preview, analysis
                     )
