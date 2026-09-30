@@ -1,0 +1,20 @@
+{
+  "status": "pass",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "native_models_unchanged_since_021": true,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "bed16f4e0f3ba5d35ad50e9f35a17884c3885a7b5d1965e698633623cb1c006d"
+}

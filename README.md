@@ -2,6 +2,8 @@
 
 6~18개월 아기의 보호자가 소리와 장면을 살펴보고, 직접 확인한 맥락을 아이 시점의 문장으로 남기는 Android 앱입니다.
 
+**협업 시작: [전체 맥락·결정·레퍼런스·다음 작업](docs/HANDOFF.md).** 현재 소스는 0.3.0 기준에 결제 수명주기 검사와 테스트를 추가한 체크포인트입니다. 0.4 무료/전체 이용권 정책은 확정됐으며 미디어 접근 제한 구현은 진행 예정입니다. [현재 검증 상태](docs/qa/handoff-checkpoint.md)를 먼저 확인하세요.
+
 - Android 소스: `outputs/MoaAndroid`
 - 로그인 없는 Google Play 이용권 검증 서비스 소스: `outputs/PlayVerifier`
 - 기획·시장·BM 문서: `outputs/Jigeum-*.md`

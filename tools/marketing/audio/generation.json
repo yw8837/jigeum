@@ -1,0 +1,23 @@
+{
+  "provider": "ElevenLabs Sound Effects web app",
+  "date": "2026-09-30",
+  "duration_seconds": 3,
+  "loop": false,
+  "prompt_influence": 0.3,
+  "public_explore_sharing": false,
+  "credits_used": 80,
+  "assets": [
+    {
+      "file": "baby-fuss.wav",
+      "selected_variant": 1,
+      "prompt": "A single 10-month-old baby makes two brief gentle wah-wah cries, then soft fussy whimpers and a small babble. Mild everyday fussing, warm and cute, not distressed. Natural small breaths. Close dry isolated baby voice, quiet background, no adults, no speech, no music, no reverb. About three seconds."
+    },
+    {
+      "file": "baby-giggle.wav",
+      "selected_variant": 1,
+      "prompt": "A single happy 10-month-old baby gives a brief spontaneous giggle, then a tiny delighted coo and a second soft chuckle. Warm, cute, affectionate everyday laughter. Natural baby breaths. Close dry isolated baby voice. Quiet background, no adults, no words, no music, no reverb. Three seconds."
+    }
+  ],
+  "source_type": "synthetic; no real baby recording or voice cloning",
+  "subjective_listening": "Not performed; audio input was unavailable to the agent."
+}

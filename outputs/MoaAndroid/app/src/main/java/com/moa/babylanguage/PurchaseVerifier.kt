@@ -19,15 +19,25 @@ internal sealed interface VerificationResult {
     data object Unavailable : VerificationResult
 }
 
+/** Internal seam for lifecycle tests; the public manager always uses PurchaseVerifier. */
+internal interface BillingEntitlements {
+    val isConfigured: Boolean
+    fun cachedEntitlement(): Boolean
+    fun cachedExpiryMs(): Long?
+    fun clear()
+    fun accept(envelope: String): Boolean
+    suspend fun verify(productId: String, purchaseToken: String): VerificationResult
+}
+
 /** Holds only a short signed entitlement; raw purchase tokens are never persisted. */
-internal class PurchaseVerifier(private val context: Context) {
+internal class PurchaseVerifier(private val context: Context) : BillingEntitlements {
     private val preferences = context.getSharedPreferences("play_entitlement", Context.MODE_PRIVATE)
     private val publicKey: java.security.PublicKey? = runCatching {
         val encoded = Base64.decode(BuildConfig.PLAY_ENTITLEMENT_PUBLIC_KEY, Base64.DEFAULT)
         KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(encoded))
     }.getOrNull()
     private val endpoint = BuildConfig.PLAY_VERIFY_URL.trim()
-    val isConfigured: Boolean = runCatching {
+    override val isConfigured: Boolean = runCatching {
         val url = URL(endpoint)
         url.protocol == "https" && url.host.isNotBlank() && url.userInfo == null && url.ref == null && publicKey != null
     }.getOrDefault(false)
@@ -39,7 +49,7 @@ internal class PurchaseVerifier(private val context: Context) {
         }
     }
 
-    fun cachedEntitlement(): Boolean {
+    override fun cachedEntitlement(): Boolean {
         if (!isConfigured) return false
         val envelope = preferences.getString("entitlement", null) ?: return false
         if (!isValid(envelope)) {
@@ -49,15 +59,15 @@ internal class PurchaseVerifier(private val context: Context) {
         return true
     }
 
-    fun clear() {
+    override fun clear() {
         preferences.edit().remove("entitlement").commit()
     }
 
     /** Called only by the current Main-thread verification generation. */
-    fun accept(envelope: String): Boolean = isValid(envelope) &&
+    override fun accept(envelope: String): Boolean = isConfigured && isValid(envelope) &&
         preferences.edit().putString("entitlement", envelope).commit()
 
-    fun cachedExpiryMs(): Long? {
+    override fun cachedExpiryMs(): Long? {
         if (!cachedEntitlement()) return null
         return runCatching {
             val envelope = JSONObject(preferences.getString("entitlement", null)!!)
@@ -67,7 +77,7 @@ internal class PurchaseVerifier(private val context: Context) {
     }
 
     /** Network work cannot mutate the cache: late/cancelled replies cannot unlock an old session. */
-    suspend fun verify(productId: String, purchaseToken: String): VerificationResult = withContext(Dispatchers.IO) {
+    override suspend fun verify(productId: String, purchaseToken: String): VerificationResult = withContext(Dispatchers.IO) {
         if (!isConfigured || installationId == null || productId != PRODUCT_ID || purchaseToken.length !in 8..4096 || purchaseToken.isBlank()) {
             return@withContext VerificationResult.Unavailable
         }

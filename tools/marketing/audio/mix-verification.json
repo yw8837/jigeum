@@ -1,0 +1,22 @@
+{
+  "duration_seconds": 26.5,
+  "events": [
+    [
+      "baby-fuss.wav",
+      0.22,
+      3.0
+    ],
+    [
+      "baby-giggle.wav",
+      19.62,
+      3.0
+    ]
+  ],
+  "picture_stream_unchanged": true,
+  "integrated_lufs": -20.02,
+  "true_peak_dbtp": -3.13,
+  "decode_errors": 0,
+  "sha256": "aeb86d3b2ee9673563342bbfbe6e306a0103e451914025fe7ca560a8ce7ab273",
+  "source": "ElevenLabs Sound Effects, generated from text; no real baby recording",
+  "subjective_listening": "Not performed by this agent; audio input unavailable"
+}

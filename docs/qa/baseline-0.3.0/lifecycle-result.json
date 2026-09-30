@@ -1,0 +1,16 @@
+{
+  "owned_emulator_stop_requested": true,
+  "owned_emulator_stopped": true,
+  "owned_raw_snapshots_and_fixtures_removed": true,
+  "state_cleared": {
+    "cleared": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\final-release-20260930\\.omx\\state\\ultraqa-state.json"
+  },
+  "state_after_clear": {
+    "exists": false,
+    "mode": "ultraqa"
+  },
+  "status": "ULTRAQA COMPLETE: Goal met after 2 cycles",
+  "scope": "Local integration only; Play transactions, ARM devices, deployment and publication excluded"
+}

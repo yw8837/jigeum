@@ -1,0 +1,28 @@
+
+> test
+> node --test
+
+✔ HTTP happy path, rejection and upstream failure remain distinct and token-free (65.2194ms)
+✔ HTTP malformed, unusual schema and oversized input do not reach Play (26.604ms)
+✔ HTTP 60-request burst caps concurrent verification, health stays responsive, then recovers (157.3376ms)
+✔ HTTP rate limit ignores spoofed forwarding header and expires cleanly (17.8267ms)
+✔ HTTP verification deadline aborts bounded work and releases its slot (58.3686ms)
+✔ HTTP slow/chunked bodies are bounded and do not hold capacity indefinitely (82.9967ms)
+✔ only active, grace and unexpired canceled subscriptions are entitled (2.817ms)
+✔ signed entitlement is bound to installation and expires within 24 hours (1.7867ms)
+✔ verification queries Play and refuses forged, expired and mismatched purchases (21.0228ms)
+✔ malformed upstream line items and wrong product/plan type cannot unlock (0.1825ms)
+✔ 20 concurrent duplicate requests share one OAuth and Play lookup; next request sees revocation (80.986ms)
+✔ OAuth refresh is single-flight across different purchases (36.8656ms)
+✔ Google denial is distinguished from permission, quota and outage errors (3.4361ms)
+✔ upstream timeout is bounded, cleaned up and next call recovers (37.0266ms)
+✔ invalid configuration, cancellation and input fail without granting access (0.5662ms)
+✔ request-token path is URL encoded and a response is bound separately to each installation (2.0299ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 544.9805

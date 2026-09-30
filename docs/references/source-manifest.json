@@ -1,0 +1,140 @@
+[
+  {
+    "file": "docs/references/originals/user-reference-1.md",
+    "bytes": 9129,
+    "sha256": "ef658e4549f16f861147c62eacccba85a1fdcea717561a47cb086a591f0c4ca8",
+    "provenance": "사용자가 제공한 pasted-text-1.txt의 원본 바이트; 구현 지시가 아닌 참고자료"
+  },
+  {
+    "file": "docs/references/originals/user-reference-2.md",
+    "bytes": 10498,
+    "sha256": "6dfde6653c6614e9045c66941c792518f91291981ceb027cd9ceb2615013c1af",
+    "provenance": "사용자가 제공한 pasted-text-2.txt의 원본 바이트; 구현 지시가 아닌 참고자료"
+  },
+  {
+    "file": "docs/references/originals/user-reference-3.md",
+    "bytes": 10498,
+    "sha256": "6dfde6653c6614e9045c66941c792518f91291981ceb027cd9ceb2615013c1af",
+    "provenance": "사용자가 제공한 pasted-text-3.txt의 원본 바이트; 구현 지시가 아닌 참고자료"
+  },
+  {
+    "file": "docs/references/originals/KOTA_QA_2026-09-18.md",
+    "bytes": 22279,
+    "sha256": "08272d221a21700b319bb267bb8165642ac41193c1e23acd0674201aa13426d1",
+    "provenance": "사용자 제공 타프로젝트 QA 원본, 본 앱의 결함증거는 아님"
+  },
+  {
+    "file": "tools/marketing/assets/music.m4a",
+    "bytes": 405524,
+    "sha256": "19b1ca95a7d4b10a4f58c59230106db2d19c4c4d3f1295c09cd93b075cec99a3",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/assets/parents-confused.png",
+    "bytes": 1312015,
+    "sha256": "2ff1b9c25ce01079816cd30c204babc86264094ed1fd1ff477d6e934b9a5aedc",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/assets/parents-happy.png",
+    "bytes": 1317580,
+    "sha256": "7714f1da54211a91cde3f526190c273a9e3e2aea58b4552c5a3debc51140a14d",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/audio/baby-fuss.wav",
+    "bytes": 576078,
+    "sha256": "e1fd12f008673bdfd0c15339aa1eab16f85b04c381761507292e32b69f0e7494",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/audio/baby-giggle.wav",
+    "bytes": 576078,
+    "sha256": "46d1cccaacdd0a86d7eebe05eb086a6808f1122ae3388a5c1d74fec1c9ecd1b1",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/audio/generation.json",
+    "bytes": 1154,
+    "sha256": "c531cca0ead1b31addb2294f3c97d82c4ba948bd4be475cc6eefc78fa654984b",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/audio/mix-verification.json",
+    "bytes": 549,
+    "sha256": "1aaad52fa028f6697f0d5a518fc6babeb9a234dc1283b400f8bd06c23a23812c",
+    "provenance": "선택된 트레일러 제작에 사용한 보존 원본; 원본 바이트 복사"
+  },
+  {
+    "file": "tools/marketing/screenshots/normal-home.png",
+    "bytes": 225162,
+    "sha256": "04caa9f7633326189cb2f36460cd25cc334650b14608c15597b4100ebcf9aef7",
+    "provenance": "확정 트레일러에 들어간 당시 앱 화면; 최신0.4화면이 아님"
+  },
+  {
+    "file": "tools/marketing/screenshots/normal-result.png",
+    "bytes": 176653,
+    "sha256": "dc90068c06bfb6909dd413a637e3043a76b380e522566b9553ea535a5a10182a",
+    "provenance": "확정 트레일러에 들어간 당시 앱 화면; 최신0.4화면이 아님"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/instrumentation-result.json",
+    "bytes": 75,
+    "sha256": "d9733bb09aa8596f579a4726d9b9d8c86a2c8e748d83ee3f27806f29f835f5aa",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/ui-summary.json",
+    "bytes": 1291,
+    "sha256": "0aab475a77ace802b9954cb249a8ed2e19f76ae221eb50ea5a6f77dd86a4c599",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/package-verdict.json",
+    "bytes": 524,
+    "sha256": "8ff5d98e28b1b99b463dcfcf1516be18e020f8c163f1da40c3434c4047f03ab5",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/lint-summary.json",
+    "bytes": 26,
+    "sha256": "1a6c5d4d9d6bef3e985e5b6543e19d314fcd1d7916b1f607b82fd22c2e5b9b62",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/cleanup-result.json",
+    "bytes": 1068,
+    "sha256": "452c4759a8918ce11d60748482b00a7291d2c502ee00a5fcd9f881405a19d247",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/lifecycle-result.json",
+    "bytes": 621,
+    "sha256": "dc779972acf9ac4cb2a145c6aea9963b8d5afddfc175d59da0b68bfc7dc26fd1",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/artifacts.json",
+    "bytes": 660,
+    "sha256": "2be1af953cdbb53f0bee3cc1606d5ae61267d70ef50125654a5dc5778462f345",
+    "provenance": "a693b98 기준0.3.0 통합QA 영수증; 현재HEAD의추가테스트와별도"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/instrumentation.log.txt",
+    "bytes": 27350,
+    "sha256": "01ece6252ed479659cc193c79e14f437786eda9f4ce00087aac425934f1f3ca5",
+    "provenance": "기존0.3.0 실행로그. 비밀키/실제거래/아기원본데이터없음"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/billing-node-tests.log.txt",
+    "bytes": 1587,
+    "sha256": "9f301b127fa8eb9c35f7d359c8c469cfcc1a68dd88dd87d4cc842db196448725",
+    "provenance": "기존0.3.0 실행로그. 비밀키/실제거래/아기원본데이터없음"
+  },
+  {
+    "file": "docs/qa/baseline-0.3.0/build-verified.log.txt",
+    "bytes": 7834,
+    "sha256": "42018ed95b018fb3f46532c6638844e48a4af3149ff4c5f4c39a0705127e0735",
+    "provenance": "기존0.3.0 실행로그. 비밀키/실제거래/아기원본데이터없음"
+  }
+]

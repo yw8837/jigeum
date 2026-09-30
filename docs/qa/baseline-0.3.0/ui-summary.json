@@ -1,0 +1,66 @@
+{
+  "status": "pass",
+  "types": 12,
+  "latest": {
+    "normal": {
+      "mode": "normal",
+      "status": "pass",
+      "seconds": 70.5
+    },
+    "migration": {
+      "mode": "migration",
+      "status": "pass",
+      "seconds": 2.3
+    },
+    "album": {
+      "mode": "album",
+      "status": "pass",
+      "seconds": 42.1
+    },
+    "transfer": {
+      "mode": "transfer",
+      "status": "pass",
+      "seconds": 28.8
+    },
+    "layout": {
+      "mode": "layout",
+      "status": "pass",
+      "seconds": 87.3
+    },
+    "permission": {
+      "mode": "permission",
+      "status": "pass",
+      "seconds": 86.1
+    },
+    "camera": {
+      "mode": "camera",
+      "status": "pass",
+      "seconds": 82.1
+    },
+    "video": {
+      "mode": "video",
+      "status": "pass",
+      "seconds": 129.7
+    },
+    "invalid": {
+      "mode": "invalid",
+      "status": "pass",
+      "seconds": 153.2
+    },
+    "transfer-e2e": {
+      "mode": "transfer-e2e",
+      "status": "pass"
+    },
+    "confirm-layout": {
+      "mode": "confirm-layout",
+      "status": "pass",
+      "seconds": 12.6
+    },
+    "stress": {
+      "mode": "stress",
+      "status": "pass",
+      "seconds": 81.7
+    }
+  },
+  "previous_failed_attempts": 7
+}

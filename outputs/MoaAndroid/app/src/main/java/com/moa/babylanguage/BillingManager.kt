@@ -2,6 +2,7 @@ package com.moa.babylanguage
 
 import android.app.Activity
 import android.content.Context
+import androidx.annotation.MainThread
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -23,9 +24,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-/** Play owns purchases. Only a current server-signed entitlement unlocks the album. */
-class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable {
-    private val verifier = PurchaseVerifier(context.applicationContext)
+/** Play owns purchases. Only a current server-signed entitlement unlocks full access. */
+class BillingManager internal constructor(
+    private val verifier: BillingEntitlements,
+    gatewayFactory: (PurchasesUpdatedListener) -> BillingGateway,
+    private val clock: () -> Long = System::currentTimeMillis
+) : PurchasesUpdatedListener, AutoCloseable {
+    constructor(context: Context) : this(
+        PurchaseVerifier(context.applicationContext),
+        { listener -> PlayBillingGateway(context.applicationContext, listener) }
+    )
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mutableState = MutableStateFlow(BillingUiState(
         status = if (verifier.isConfigured) BillingStatus.CONNECTING else BillingStatus.UNAVAILABLE,
@@ -33,11 +41,7 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
         message = if (verifier.isConfigured) null else "구독 확인 서비스가 아직 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요."
     ))
     val state: StateFlow<BillingUiState> = mutableState
-    private val client = BillingClient.newBuilder(context.applicationContext)
-        .setListener(this)
-        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().enablePrepaidPlans().build())
-        .enableAutoServiceReconnection()
-        .build()
+    private val client = gatewayFactory(this)
     private var closed = false
     private var connecting = false
     private var catalogInFlight = false
@@ -46,10 +50,16 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
     private var generation = 0L
     private var verification: Job? = null
     private var expiry: Job? = null
-    private var productDetails: ProductDetails? = null
-    private val offers = mutableMapOf<BillingPlan, ProductDetails.SubscriptionOfferDetails>()
 
     init { refresh() }
+
+    /** Every protected action must call this; StateFlow.isPremium is only a display snapshot. */
+    @MainThread
+    fun hasCurrentEntitlement(): Boolean {
+        if (closed) return false
+        recheckEntitlement()
+        return mutableState.value.isPremium
+    }
 
     fun refresh() {
         if (closed) return
@@ -80,18 +90,13 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
         if (!verifier.isConfigured) { setState(BillingStatus.UNAVAILABLE, "구독 확인 서비스가 설정되지 않았어요."); return }
         // Both the UI and manager guard duplicate taps; pending purchases cannot be charged again.
         if (mutableState.value.isPremium || mutableState.value.status != BillingStatus.READY || queryInFlight) return
-        val details = productDetails
-        val offer = offers[plan]
-        if (!client.isReady || details == null || offer == null) {
+        if (!client.isReady || mutableState.value.options.none { it.plan == plan }) {
             setState(BillingStatus.ERROR, "구독 상품을 불러오지 못했어요. 다시 확인해 주세요.")
             return
         }
-        val params = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(
-            BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(details).setOfferToken(offer.offerToken).build()
-        )).build()
         invalidateVerification()
         setState(BillingStatus.PURCHASING, null)
-        val result = client.launchBillingFlow(activity, params)
+        val result = client.purchase(activity, plan)
         if (result.responseCode != BillingClient.BillingResponseCode.OK) {
             setState(BillingStatus.ERROR, "Google Play 결제 화면을 열지 못했어요. 다시 확인해 주세요.")
         }
@@ -118,40 +123,18 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
     private fun queryCatalog() {
         if (catalogInFlight) return
         catalogInFlight = true
-        val params = QueryProductDetailsParams.newBuilder().setProductList(listOf(
-            QueryProductDetailsParams.Product.newBuilder().setProductId(PurchaseVerifier.PRODUCT_ID)
-                .setProductType(BillingClient.ProductType.SUBS).build()
-        )).build()
-        client.queryProductDetailsAsync(params) { result, detailsResult ->
+        client.queryCatalog catalogResult@ { result, catalog ->
             catalogInFlight = false
-            if (closed) return@queryProductDetailsAsync
+            if (closed) return@catalogResult
             if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                productDetails = null
-                offers.clear()
                 mutableState.value = mutableState.value.copy(options = emptyList())
                 if (!busy()) setState(BillingStatus.ERROR, "구독 상품을 불러오지 못했어요. 다시 확인해 주세요.")
-                return@queryProductDetailsAsync
+                return@catalogResult
             }
-            productDetails = detailsResult.productDetailsList.firstOrNull { it.productId == PurchaseVerifier.PRODUCT_ID }
-            offers.clear()
-            val details = productDetails
-            val options = details?.subscriptionOfferDetails.orEmpty().mapNotNull { offer ->
-                val plan = BillingPlan.entries.firstOrNull { it.basePlanId == offer.basePlanId }
-                val phase = offer.pricingPhases.pricingPhaseList.singleOrNull()
-                val correctTerms = when (plan) {
-                    BillingPlan.MONTHLY -> phase?.billingPeriod == "P1M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING
-                    BillingPlan.THREE_MONTH_PREPAID -> phase?.billingPeriod == "P3M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING
-                    null -> false
-                }
-                // Hide unexpected promotional/term configurations instead of misdescribing a charge.
-                if (plan == null || offer.offerId != null || phase == null || !correctTerms) return@mapNotNull null
-                offers[plan] = offer
-                BillingOption(plan, details!!.productId, offer.basePlanId, phase.formattedPrice, phase.billingPeriod,
-                    if (plan == BillingPlan.MONTHLY) "AUTO_RENEWING" else "PREPAID")
-            }
+            val options = catalog.options
             val before = mutableState.value
             mutableState.value = before.copy(
-                products = details?.let { listOf(BillingProduct(it.productId, it.title, it.description)) }.orEmpty(),
+                products = catalog.products,
                 options = options,
                 status = if (busy()) before.status else idleStatus(options.isNotEmpty()),
                 message = if (busy()) before.message else if (options.isEmpty()) "Google Play에 구독 상품이 아직 표시되지 않아요." else before.message
@@ -163,15 +146,14 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
         if (queryInFlight) return
         queryInFlight = true
         val token = generation
-        val params = QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
-        client.queryPurchasesAsync(params) { result, purchases ->
+        client.queryPurchases purchasesResult@ { result, purchases ->
             queryInFlight = false
-            if (closed || token != generation) return@queryPurchasesAsync
+            if (closed || token != generation) return@purchasesResult
             val restoring = restoreRequested
             restoreRequested = false
             if (result.responseCode != BillingClient.BillingResponseCode.OK) {
                 setState(BillingStatus.ERROR, "구매 내역을 확인하지 못했어요. 인터넷 연결을 확인해 주세요.")
-                return@queryPurchasesAsync
+                return@purchasesResult
             }
             handlePurchases(purchases, restoring)
         }
@@ -231,7 +213,7 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
     }
 
     private fun acknowledge(purchase: Purchase, token: Long) {
-        client.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()) { result ->
+        client.acknowledge(purchase.purchaseToken) { result ->
             if (!closed && token == generation && result.responseCode != BillingClient.BillingResponseCode.OK) {
                 mutableState.value = mutableState.value.copy(message = "결제 확인이 지연되고 있어요. 앱을 다시 열어 확인해 주세요.")
             }
@@ -265,7 +247,7 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
         if (wasPremium && validUntil == null && !busy()) setState(idleStatus(), "구독 확인 기간이 끝났어요. 인터넷에 연결해 다시 확인해 주세요.")
         if (validUntil != null) expiry = scope.launch {
             // Recheck wall-clock changes too; holding the screen open cannot keep an expired grant.
-            delay((validUntil - System.currentTimeMillis()).coerceIn(1, 60_000))
+            delay((validUntil - clock()).coerceIn(1, 60_000))
             recheckEntitlement()
         }
     }
@@ -277,4 +259,75 @@ class BillingManager(context: Context) : PurchasesUpdatedListener, AutoCloseable
         scope.cancel()
         client.endConnection()
     }
+}
+
+internal data class BillingCatalog(val products: List<BillingProduct>, val options: List<BillingOption>)
+
+/** Test implementations live only in androidTest; there is no runtime switch or intent override. */
+internal interface BillingGateway {
+    val isReady: Boolean
+    fun startConnection(listener: BillingClientStateListener)
+    fun queryCatalog(callback: (BillingResult, BillingCatalog) -> Unit)
+    fun queryPurchases(callback: (BillingResult, List<Purchase>) -> Unit)
+    fun purchase(activity: Activity, plan: BillingPlan): BillingResult
+    fun acknowledge(purchaseToken: String, callback: (BillingResult) -> Unit)
+    fun endConnection()
+}
+
+/** Production adapter always queries the Play SDK and launches its real purchase sheet. */
+private class PlayBillingGateway(context: Context, listener: PurchasesUpdatedListener) : BillingGateway {
+    private val client = BillingClient.newBuilder(context)
+        .setListener(listener)
+        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().enablePrepaidPlans().build())
+        .enableAutoServiceReconnection()
+        .build()
+    private var productDetails: ProductDetails? = null
+    private val offers = mutableMapOf<BillingPlan, ProductDetails.SubscriptionOfferDetails>()
+    override val isReady: Boolean get() = client.isReady
+    override fun startConnection(listener: BillingClientStateListener) = client.startConnection(listener)
+    override fun queryCatalog(callback: (BillingResult, BillingCatalog) -> Unit) {
+        val params = QueryProductDetailsParams.newBuilder().setProductList(listOf(
+            QueryProductDetailsParams.Product.newBuilder().setProductId(PurchaseVerifier.PRODUCT_ID)
+                .setProductType(BillingClient.ProductType.SUBS).build()
+        )).build()
+        client.queryProductDetailsAsync(params) { result, detailsResult ->
+            productDetails = if (result.responseCode == BillingClient.BillingResponseCode.OK)
+                detailsResult.productDetailsList.firstOrNull { it.productId == PurchaseVerifier.PRODUCT_ID } else null
+            offers.clear()
+            val details = productDetails
+            val options = details?.subscriptionOfferDetails.orEmpty().mapNotNull { offer ->
+                val plan = BillingPlan.entries.firstOrNull { it.basePlanId == offer.basePlanId }
+                val phase = offer.pricingPhases.pricingPhaseList.singleOrNull()
+                val correctTerms = when (plan) {
+                    BillingPlan.MONTHLY -> phase?.billingPeriod == "P1M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING
+                    BillingPlan.THREE_MONTH_PREPAID -> phase?.billingPeriod == "P3M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING
+                    null -> false
+                }
+                // Hide unexpected promotional/term configurations instead of misdescribing a charge.
+                if (plan == null || offer.offerId != null || phase == null || !correctTerms) return@mapNotNull null
+                offers[plan] = offer
+                BillingOption(plan, details!!.productId, offer.basePlanId, phase.formattedPrice, phase.billingPeriod,
+                    if (plan == BillingPlan.MONTHLY) "AUTO_RENEWING" else "PREPAID")
+            }
+            callback(result, BillingCatalog(details?.let { listOf(BillingProduct(it.productId, it.title, it.description)) }.orEmpty(), options))
+        }
+    }
+    override fun queryPurchases(callback: (BillingResult, List<Purchase>) -> Unit) {
+        client.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()) { result, purchases ->
+            callback(result, purchases)
+        }
+    }
+    override fun purchase(activity: Activity, plan: BillingPlan): BillingResult {
+        val details = productDetails
+        val offer = offers[plan]
+        if (!client.isReady || details == null || offer == null) return BillingResult.newBuilder()
+            .setResponseCode(BillingClient.BillingResponseCode.ITEM_UNAVAILABLE).build()
+        return client.launchBillingFlow(activity, BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(details).setOfferToken(offer.offerToken).build()
+        )).build())
+    }
+    override fun acknowledge(purchaseToken: String, callback: (BillingResult) -> Unit) {
+        client.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchaseToken).build()) { callback(it) }
+    }
+    override fun endConnection() = client.endConnection()
 }

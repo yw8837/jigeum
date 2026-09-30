@@ -1,0 +1,23 @@
+{
+  "delete_all": {
+    "records": 0,
+    "age_cleared": true,
+    "phrase_history_cleared": true,
+    "recovery_cleared": true,
+    "exports_empty": true
+  },
+  "owned_fixtures_removed": 9,
+  "test_package_removed": true,
+  "permission_reset": true,
+  "display_restored": {
+    "size": "Physical size: 1080x2400",
+    "density": "Physical density: 420"
+  },
+  "crash_buffer_app_entries": 0,
+  "cold_launches": [
+    "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2797\r\nWaitTime: 2807\r\nComplete\r\n",
+    "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2437\r\nWaitTime: 2459\r\nComplete\r\n",
+    "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2930\r\nWaitTime: 2937\r\nComplete\r\n"
+  ],
+  "status": "pass"
+}
