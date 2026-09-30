@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.SystemClock
 import android.provider.Settings
 import android.util.Base64
+import androidx.core.content.edit
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -102,13 +103,14 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
     override fun cachedEntitlement(): Boolean = cachedGrant() != null
 
     override fun clear() {
-        preferences.edit()
-            .remove("entitlement")
-            .remove("entitlement_cache_version")
-            .remove("entitlement_received_wall_ms")
-            .remove("entitlement_received_elapsed_ms")
-            .remove("entitlement_boot_count")
-            .commit()
+        // Keep revocation synchronous; async apply could restore an old grant after a crash.
+        preferences.edit(commit = true) {
+            remove("entitlement")
+            remove("entitlement_cache_version")
+            remove("entitlement_received_wall_ms")
+            remove("entitlement_received_elapsed_ms")
+            remove("entitlement_boot_count")
+        }
     }
 
     /** Called only by the current Main-thread verification generation. */

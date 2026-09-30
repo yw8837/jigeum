@@ -156,6 +156,8 @@ internal object VideoAudioDecoder {
                 }
                 val outputIndex = codec.dequeueOutputBuffer(outputInfo, CODEC_WAIT_US)
                 when (outputIndex) {
+                    MediaCodec.INFO_TRY_AGAIN_LATER -> Unit // Retry within the existing bounded deadline.
+                    MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED -> Unit // getOutputBuffer(index) reads the current buffer.
                     MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
                         val outputFormat = codec.outputFormat
                         val newRate = outputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE)

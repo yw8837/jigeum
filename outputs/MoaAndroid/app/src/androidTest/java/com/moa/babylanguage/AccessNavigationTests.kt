@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Button
@@ -14,6 +15,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -222,6 +224,26 @@ class AccessNavigationTests {
     }
 
     @Test fun expiredCameraDraftKeepsEditsAcrossPaywallRestoreAndSavesForFree() = withFailureEvidence {
+        exerciseExpiredCameraDraft(showKeyboard = false)
+    }
+
+    @Test fun expiredCameraDraftKeepsEditsWithVisibleKeyboardAndAccessibleRestartTarget() = withFailureEvidence {
+        val previous = imeSetting("get secure show_ime_with_hard_keyboard")
+        try {
+            imeSetting("put secure show_ime_with_hard_keyboard 1")
+            exerciseExpiredCameraDraft(showKeyboard = true)
+        } finally {
+            if (previous == "null" || previous.isBlank()) imeSetting("delete secure show_ime_with_hard_keyboard")
+            else { check(previous in listOf("0", "1")); imeSetting("put secure show_ime_with_hard_keyboard $previous") }
+        }
+    }
+
+    private fun imeSetting(arguments: String): String {
+        val fd = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("settings $arguments")
+        return ParcelFileDescriptor.AutoCloseInputStream(fd).bufferedReader().use { it.readText().trim() }
+    }
+
+    private fun exerciseExpiredCameraDraft(showKeyboard: Boolean) {
         start(paid = true)
         click("카메라로 살펴보기")
         waitPage("camera")
@@ -233,6 +255,19 @@ class AccessNavigationTests {
         val edited = "나도 같이 놀고 싶어. 잠깐 내 손을 잡아 줄래?"
         trace("replace draft text")
         compose.onNodeWithTag("draft-phrase-editor").performTextReplacement(edited)
+        if (showKeyboard) {
+            trace("focus draft editor and require visible IME")
+            compose.onNodeWithTag("draft-phrase-editor").performClick()
+            compose.waitUntil(8_000) {
+                var visible = false
+                compose.runOnIdle {
+                    visible = ViewCompat.getRootWindowInsets(compose.activity.window.decorView)
+                        ?.isVisible(WindowInsetsCompat.Type.ime()) == true
+                }
+                visible
+            }
+            compose.onNodeWithText("← 처음부터 다시 입력하기").performScrollTo().assertHeightIsAtLeast(48.dp)
+        }
         trace("expire verified grant")
         compose.runOnIdle { billing.publishVerified(false) }
         compose.onNodeWithTag("page-translate").assertExists()

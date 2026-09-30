@@ -38,6 +38,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -92,8 +94,8 @@ fun CameraScanScreen(
     var error by remember { mutableStateOf<String?>(null) }
     var warning by remember { mutableStateOf<String?>(null) }
     var cameraReady by remember { mutableStateOf(false) }
-    var requestedCamera by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
-    var activeCamera by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
+    var requestedCamera by remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
+    var activeCamera by remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
     var canSwitchCamera by remember { mutableStateOf(false) }
     var manualNote by remember { mutableStateOf<String?>(null) }
     fun checkAccess(): Boolean {
@@ -453,7 +455,7 @@ internal fun CameraObservationPreview(
 }
 
 private fun ImageProxy.toUprightBitmap(): Bitmap {
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
     try {
         val plane = planes[0]
         val source = plane.buffer.duplicate()

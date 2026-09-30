@@ -14,6 +14,9 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withClip
+import androidx.core.graphics.withTranslation
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.Dispatchers
@@ -154,7 +157,7 @@ internal object MemoryArtifacts {
     private fun draw(canvas: Canvas, text: String, x: Float, y: Float, size: Float, width: Int,
                      color: Int = ink, bold: Boolean = false): Int {
         val content = layout(text, size, width, color, bold)
-        canvas.save(); canvas.translate(x, y); content.draw(canvas); canvas.restore()
+        canvas.withTranslation(x, y) { content.draw(this) }
         return content.height
     }
 
@@ -190,7 +193,7 @@ internal object MemoryArtifacts {
         require(record.phrase.isNotBlank()) { "공유할 문장을 먼저 골라 주세요." }
         val file = File(folder(context), "jigeum-card-${UUID.randomUUID()}.png")
         output(file)
-        val bitmap = Bitmap.createBitmap(1080, 1350, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(1080, 1350, Bitmap.Config.ARGB_8888)
         try {
             val canvas = Canvas(bitmap)
             canvas.drawColor(0xFFFFF9F0.toInt())
@@ -199,7 +202,7 @@ internal object MemoryArtifacts {
             draw(canvas, date(record.id), 84f, 90f, 30f, 900, muted)
             draw(canvas, "우리 아이의 한마디", 114f, 256f, 35f, 850, AlbumTheme.SAGE.accent, true)
             val phrase = cardPhraseLayout(record.phrase)
-            canvas.save(); canvas.translate(114f, 374f); phrase.draw(canvas); canvas.restore()
+            canvas.withTranslation(114f, 374f) { phrase.draw(this) }
             val metadata = "${record.sound} · ${record.context}".replace(Regex("\\s+"), " ").trim()
             draw(canvas, metadata, 114f, 1020f, 28f, 850, muted)
             draw(canvas, "보호자가 그 순간을 담아 쓴 표현이에요.", 84f, 1210f, 27f, 900, muted)
@@ -260,11 +263,9 @@ internal object MemoryArtifacts {
                 val top = content.getLineTop(line)
                 val height = content.getLineBottom(end - 1) - top
                 val canvas = page!!.canvas
-                canvas.save()
-                canvas.clipRect(52f, y, 519f, y + height)
-                canvas.translate(52f, y - top)
-                content.draw(canvas)
-                canvas.restore()
+                canvas.withClip(52f, y, 519f, y + height) {
+                    withTranslation(52f, y - top) { content.draw(this) }
+                }
                 y += height
                 line = end
                 if (line < content.lineCount) nextPage()

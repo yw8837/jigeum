@@ -2,6 +2,7 @@ package com.moa.babylanguage
 
 import android.content.Intent
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -350,7 +351,7 @@ internal fun PremiumScreen(
                 TextButton(onClick = {
                     managementError = null
                     runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/account/subscriptions?sku=${PurchaseVerifier.PRODUCT_ID}&package=${context.packageName}"))) }
+                        "https://play.google.com/store/account/subscriptions?sku=${PurchaseVerifier.PRODUCT_ID}&package=${context.packageName}".toUri())) }
                         .onFailure { managementError = "구독 관리 화면을 열지 못했어요. Google Play 앱의 결제 및 정기 결제에서 확인해 주세요." }
                 }) { Text("Google Play에서 구독 관리", color = Ink) }
                 managementError?.let { Text(it, color = Muted, fontSize = 13.sp, lineHeight = 20.sp) }

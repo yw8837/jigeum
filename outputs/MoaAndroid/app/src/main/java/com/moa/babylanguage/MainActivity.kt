@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.net.toUri
 import android.os.Bundle
 import java.util.UUID
 import androidx.compose.runtime.collectAsState
@@ -221,7 +222,8 @@ internal fun JigeumApp(
     val billingState by billingManager.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snacks = remember { SnackbarHostState() }
-    fun notify(message: String) { scope.launch { snacks.showSnackbar(message) } }
+    val feedback = remember(snacks, scope) { LatestFeedback(snacks, scope) }
+    fun notify(message: String) { feedback.show(message) }
     fun showPass(feature: AppFeature?, origin: Page = page, notice: String? = null) {
         access.invalidateMedia()
         mediaSession = null
@@ -759,7 +761,7 @@ private fun RecordScreen(
                             Spacer(Modifier.height(12.dp))
                             SecondaryButton("앱 설정에서 마이크 권한 켜기", onClick = {
                                 context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    Uri.parse("package:${context.packageName}")))
+                                    "package:${context.packageName}".toUri()))
                             })
                         }
                         Spacer(Modifier.height(12.dp))
@@ -1130,8 +1132,10 @@ private fun TranslationScreen(
                 }
             }
             Spacer(Modifier.height(16.dp))
-            Text("← 처음부터 다시 입력하기", color = Muted, fontSize = 14.sp,
-                modifier = Modifier.padding(horizontal = 24.dp).clickable(onClick = onBack).padding(8.dp))
+            TextButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)
+                .heightIn(min = 48.dp)) {
+                Text("← 처음부터 다시 입력하기", color = Muted, fontSize = 14.sp)
+            }
         }
     }
     if (ready) Column(Modifier.fillMaxWidth().background(Cream).padding(horizontal = 24.dp, vertical = 10.dp)) {

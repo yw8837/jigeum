@@ -2,6 +2,7 @@ package com.moa.babylanguage
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.core.graphics.scale
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -336,7 +337,7 @@ private suspend fun inspectVideo(context: Context, uri: Uri): VideoFrameSummary 
                     try {
                         if (frame.width > 512 || frame.height > 512) {
                             val ratio = 512f / maxOf(frame.width, frame.height)
-                            scaled = Bitmap.createScaledBitmap(frame,
+                            scaled = frame.scale(
                                 (frame.width * ratio).toInt().coerceAtLeast(1),
                                 (frame.height * ratio).toInt().coerceAtLeast(1), true)
                         }
