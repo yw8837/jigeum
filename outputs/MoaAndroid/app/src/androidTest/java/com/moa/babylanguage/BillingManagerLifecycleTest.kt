@@ -18,6 +18,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.security.KeyPairGenerator
+import java.security.MessageDigest
 import java.security.Signature
 import java.security.spec.ECGenParameterSpec
 import kotlin.coroutines.Continuation
@@ -28,6 +29,39 @@ import kotlin.coroutines.suspendCoroutine
 @RunWith(AndroidJUnit4::class)
 class BillingManagerLifecycleTest {
     private fun onMain(block: () -> Unit) = InstrumentationRegistry.getInstrumentation().runOnMainSync { block() }
+
+    @Test fun serverAcknowledgmentForThisVerifiedTokenAvoidsDuplicateClientWrite() = onMain {
+        Fixture().use { f ->
+            val token = "server-confirmed-token"
+            f.play.finishQuery(listOf(purchase(token)))
+            f.entitlements.finish(token, VerificationResult.Verified(f.entitlements.envelope(f.now + 3_600_000, token)))
+            assertTrue(f.manager.hasCurrentEntitlement())
+            assertTrue(f.play.acknowledged.isEmpty())
+            assertEquals(null, f.manager.state.value.message)
+        }
+    }
+
+    @Test fun signedAcknowledgmentForDifferentTokenKeepsClientFallback() = onMain {
+        Fixture().use { f ->
+            f.play.finishQuery(listOf(purchase("current-owned-token")))
+            f.entitlements.finish("current-owned-token", VerificationResult.Verified(f.entitlements.envelope(f.now + 3_600_000, "other-owned-token")))
+            assertTrue(f.manager.hasCurrentEntitlement())
+            assertEquals(listOf("current-owned-token"), f.play.acknowledged)
+        }
+    }
+
+    @Test fun acknowledgmentClaimWithInvalidSignatureCannotUnlockOrSuppressVerification() = onMain {
+        Fixture().use { f ->
+            val token = "tampered-ack-token"
+            val invalid = JSONObject(f.entitlements.envelope(f.now + 3_600_000, token))
+                .put("signature", Base64.encodeToString(ByteArray(64), Base64.NO_WRAP or Base64.URL_SAFE or Base64.NO_PADDING)).toString()
+            f.play.finishQuery(listOf(purchase(token)))
+            f.entitlements.finish(token, VerificationResult.Verified(invalid))
+            assertFalse(f.manager.hasCurrentEntitlement())
+            assertEquals(0, f.entitlements.accepted)
+            assertTrue(f.play.acknowledged.isEmpty())
+        }
+    }
 
     @Test fun pendingPurchaseDoesNotUnlockAndVerifiedCompletionUnlocksOnce() = onMain {
         Fixture().use { f ->
@@ -424,11 +458,14 @@ class BillingManagerLifecycleTest {
         }
         fun finish(token: String, value: VerificationResult) { pending.remove(token)!!.resume(value) }
         private fun valid(value: String) = verifySignedEntitlement(value, keys.public, installation, "com.moa.babylanguage", clock())
-        fun envelope(expiry: Long): String {
-            val bytes = JSONObject().put("version", 1).put("packageName", "com.moa.babylanguage")
+        fun envelope(expiry: Long, acknowledgedToken: String? = null): String {
+            val claims = JSONObject().put("version", 1).put("packageName", "com.moa.babylanguage")
                 .put("productId", "jigeum_album").put("installationId", installation).put("basePlanId", "monthly")
                 .put("issuedAtMs", clock()).put("expiresAtMs", expiry).put("subscriptionExpiryMs", expiry)
-                .toString().toByteArray(Charsets.UTF_8)
+            acknowledgedToken?.let { value ->
+                claims.put("acknowledgedTokenHash", MessageDigest.getInstance("SHA-256").digest(value.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it) })
+            }
+            val bytes = claims.toString().toByteArray(Charsets.UTF_8)
             val signature = Signature.getInstance("SHA256withECDSA").apply { initSign(keys.private); update(bytes) }.sign()
             fun encode(value: ByteArray) = Base64.encodeToString(value, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
             return JSONObject().put("payload", encode(bytes)).put("signature", encode(signature)).toString()

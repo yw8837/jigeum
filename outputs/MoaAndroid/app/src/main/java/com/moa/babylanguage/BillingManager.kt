@@ -259,7 +259,7 @@ class BillingManager internal constructor(
                 when (result) {
                     is VerificationResult.Verified -> {
                         verified = verifier.accept(result.envelope)
-                        if (verified && !purchase.isAcknowledged) unacknowledged = purchase
+                        if (verified && !purchase.isAcknowledged && !acknowledgesPurchase(result.envelope, purchase.purchaseToken)) unacknowledged = purchase
                         if (verified) break
                         unavailable = true
                     }

@@ -1,4 +1,4 @@
-import { createSign, createPrivateKey, sign } from 'node:crypto';
+import { createSign, createPrivateKey, createHash, sign } from 'node:crypto';
 
 export const PACKAGE_NAME = 'com.moa.babylanguage';
 export const PRODUCT_ID = 'jigeum_album';
@@ -43,7 +43,7 @@ export function selectEntitlement(subscription, now = Date.now()) {
   return { basePlanId: item.offerDetails.basePlanId, subscriptionExpiryMs: Date.parse(item.expiryTime) };
 }
 
-export function signEntitlement({ installationId, basePlanId, subscriptionExpiryMs }, privateKey, now = Date.now()) {
+export function signEntitlement({ installationId, basePlanId, subscriptionExpiryMs, acknowledgedTokenHash }, privateKey, now = Date.now()) {
   if (!BASE_PLANS.has(basePlanId) || !Number.isSafeInteger(subscriptionExpiryMs) || subscriptionExpiryMs <= now) {
     throw new Error('Invalid entitlement claims');
   }
@@ -57,6 +57,10 @@ export function signEntitlement({ installationId, basePlanId, subscriptionExpiry
     expiresAtMs: Math.min(now + MAX_ENTITLEMENT_MS, subscriptionExpiryMs),
     subscriptionExpiryMs
   };
+  if (acknowledgedTokenHash !== undefined) {
+    if (!/^[0-9a-f]{64}$/.test(acknowledgedTokenHash)) throw new Error('Invalid acknowledgment claim');
+    claims.acknowledgedTokenHash = acknowledgedTokenHash;
+  }
   const payload = base64url(JSON.stringify(claims));
   const signature = base64url(sign('sha256', Buffer.from(payload, 'base64url'), privateKey));
   return { payload, signature };
@@ -140,6 +144,34 @@ export function createVerifier({ serviceAccount, privateKey, fetchImpl = fetch, 
     return readJsonLimited(response, 131_072);
   }
 
+  async function lookupAndAcknowledge(purchaseToken) {
+    const subscription = await lookup(purchaseToken);
+    // Never write for pending, expired, wrong-product, or otherwise ineligible purchases.
+    if (!selectEntitlement(subscription, clock())) return subscription;
+    if (subscription.acknowledgementState === 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED') return subscription;
+    if (subscription.acknowledgementState !== 'ACKNOWLEDGEMENT_STATE_PENDING') {
+      throw new Error('Google acknowledgment state unavailable');
+    }
+    const token = await googleAccessToken();
+    const path = `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PACKAGE_NAME}/purchases/subscriptions/${PRODUCT_ID}/tokens/${encodeURIComponent(purchaseToken)}:acknowledge`;
+    const response = await fetchImpl(path, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+      // No account, installation identifier, or baby data is attached to the purchase.
+      body: '{}',
+      signal: AbortSignal.timeout(upstreamTimeoutMs)
+    });
+    // This API returns an empty success body; do not parse or retain error bodies.
+    await response.body?.cancel().catch(() => {});
+    if (!response.ok) {
+      if (response.status === 401) { accessToken = null; accessTokenExpiresAt = 0; }
+      // A racing client acknowledgement can produce an error. A later verification
+      // must read Play again; never turn a guessed "already acknowledged" error into a grant.
+      throw new Error('Google acknowledgment unavailable');
+    }
+    return subscription;
+  }
+
   return async function verify(input, { signal } = {}) {
     if (!validRequest(input)) return null;
     signal?.throwIfAborted();
@@ -147,7 +179,7 @@ export function createVerifier({ serviceAccount, privateKey, fetchImpl = fetch, 
     let pending = lookups.get(purchaseToken);
     if (!pending) {
       if (lookups.size >= 32) throw new Error('Google verification busy');
-      pending = lookup(purchaseToken);
+      pending = lookupAndAcknowledge(purchaseToken);
       lookups.set(purchaseToken, pending);
     }
     let subscription;
@@ -158,6 +190,7 @@ export function createVerifier({ serviceAccount, privateKey, fetchImpl = fetch, 
     const now = clock();
     const eligible = selectEntitlement(subscription, now);
     if (!eligible) return null;
-    return signEntitlement({ ...eligible, installationId }, signingKey, now);
+    const acknowledgedTokenHash = createHash('sha256').update(purchaseToken).digest('hex');
+    return signEntitlement({ ...eligible, installationId, acknowledgedTokenHash }, signingKey, now);
   };
 }

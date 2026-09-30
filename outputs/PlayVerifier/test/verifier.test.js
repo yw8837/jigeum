@@ -10,6 +10,7 @@ const ec = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
 const rsa = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const subscription = (state = 'SUBSCRIPTION_STATE_ACTIVE', basePlanId = 'monthly', expiry = now + 5 * 86_400_000) => ({
   subscriptionState: state,
+  acknowledgementState: 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED',
   lineItems: [{
     productId: 'jigeum_album',
     expiryTime: new Date(expiry).toISOString(),

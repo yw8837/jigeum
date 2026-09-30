@@ -23,6 +23,7 @@ const serviceAccount = {
 };
 const subscription = (expiry = now + 5 * day) => ({
   subscriptionState: 'SUBSCRIPTION_STATE_ACTIVE',
+  acknowledgementState: 'ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED',
   lineItems: [{
     productId: 'jigeum_album',
     expiryTime: new Date(expiry).toISOString(),
