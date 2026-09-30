@@ -49,7 +49,9 @@ class BillingManager internal constructor(
         message = if (verifier.isConfigured) null else "구독 확인 서비스가 아직 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요."
     ))
     val state: StateFlow<BillingUiState> = mutableState
-    private val client = gatewayFactory(this)
+    // Unconfigured installations use only free features and never need a Play client.
+    private val clientDelegate = lazy(LazyThreadSafetyMode.NONE) { gatewayFactory(this) }
+    private val client by clientDelegate
     private var closed = false
     private var connecting = false
     private var catalogInFlight = false
@@ -363,7 +365,7 @@ class BillingManager internal constructor(
         closed = true
         generation++
         scope.cancel()
-        client.endConnection()
+        if (clientDelegate.isInitialized()) client.endConnection()
     }
 }
 

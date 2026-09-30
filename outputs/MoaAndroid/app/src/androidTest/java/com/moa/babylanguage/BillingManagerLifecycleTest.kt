@@ -30,6 +30,46 @@ import kotlin.coroutines.suspendCoroutine
 class BillingManagerLifecycleTest {
     private fun onMain(block: () -> Unit) = InstrumentationRegistry.getInstrumentation().runOnMainSync { block() }
 
+    @Test fun unconfiguredBillingNeverCreatesGatewayEvenWhenRefreshedRestoredOrClosed() = onMain {
+        var creations = 0
+        val entitlements = SignedTestEntitlements(isConfigured = false) { 1_790_000_000_000L }
+        val manager = BillingManager(entitlements, { creations++; FakePlay() })
+        try {
+            assertEquals(0, creations)
+            manager.refresh()
+            manager.restore()
+            assertFalse(manager.hasCurrentEntitlement())
+            assertEquals(BillingStatus.UNAVAILABLE, manager.state.value.status)
+            assertEquals(0, creations)
+        } finally {
+            manager.close()
+        }
+        manager.close()
+        manager.refresh()
+        manager.restore()
+        assertFalse(manager.hasCurrentEntitlement())
+        assertEquals(0, creations)
+    }
+
+    @Test fun configuredBillingCreatesOneGatewayAndClosesItOnce() = onMain {
+        var creations = 0
+        val play = FakePlay()
+        val entitlements = SignedTestEntitlements { 1_790_000_000_000L }
+        val manager = BillingManager(entitlements, { creations++; play })
+        try {
+            assertEquals(1, creations)
+            manager.refresh()
+            manager.restore()
+            assertEquals(1, creations)
+        } finally {
+            manager.close()
+        }
+        manager.close()
+        manager.refresh()
+        assertEquals(1, creations)
+        assertEquals(1, play.endCalls)
+    }
+
     @Test fun serverAcknowledgmentForThisVerifiedTokenAvoidsDuplicateClientWrite() = onMain {
         Fixture().use { f ->
             val token = "server-confirmed-token"
@@ -410,6 +450,7 @@ class BillingManagerLifecycleTest {
         override var isReady = true
         var queryCalls = 0
         var launches = 0
+        var endCalls = 0
         var acknowledgeCode = BillingClient.BillingResponseCode.OK
         var holdAcknowledgements = false
         private val acknowledgements = ArrayDeque<(BillingResult) -> Unit>()
@@ -427,14 +468,13 @@ class BillingManagerLifecycleTest {
             acknowledged += purchaseToken
             if (holdAcknowledgements) acknowledgements.addLast(callback) else callback(result(acknowledgeCode))
         }
-        override fun endConnection() { isReady = false }
+        override fun endConnection() { endCalls++; isReady = false }
         fun finishQuery(purchases: List<Purchase>, code: Int = BillingClient.BillingResponseCode.OK) { queries.removeFirst()(result(code), purchases) }
         fun emit(purchases: List<Purchase>) = listener.onPurchasesUpdated(result(), purchases.toMutableList())
         fun finishAcknowledgement(code: Int) { acknowledgements.removeFirst()(result(code)) }
     }
 
-    private class SignedTestEntitlements(private val clock: () -> Long) : BillingEntitlements {
-        override val isConfigured = true
+    private class SignedTestEntitlements(override val isConfigured: Boolean = true, private val clock: () -> Long) : BillingEntitlements {
         var accepted = 0
         var verifyCalls = 0
         private val keys = KeyPairGenerator.getInstance("EC").apply { initialize(ECGenParameterSpec("secp256r1")) }.generateKeyPair()
