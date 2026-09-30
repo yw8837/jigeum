@@ -11,6 +11,7 @@
 - [영아 관찰 정확도와 평가 설계](accuracy.md): 현재 소스의 계산·입력 문제, 연구·데이터 권리, 단계별 개선·평가
 - [Codex 정확도 작업 체크리스트](codex-accuracy-tasks.md)와 [합성 좌표 회귀 스크립트](geometry-regression.py): 실제 앱 코드에 반영하기 전의 재현·구현 지침
 - [시장과 BM 세부기획](business-model.md): 한국 경쟁 가격, 실제 제품 가치, 화면별 흐름, 유료 전환·재사용 검증
+- [인식 팁 튜토리얼 명세](recognition-tutorial.md): 처음 세 가지 팁, 화면별 도움말, 건너뛰기·재열람, 실제 상태·권한·초안 보존과 QA
 - [진행 중인 안전성 PR #2](https://github.com/yw8837/jigeum/pull/2): 기록 가져오기 충돌, 오래된 공유 작업 차단, 카메라 연결 직전 권한 검사
 
 ## 먼저 진행할 순서
