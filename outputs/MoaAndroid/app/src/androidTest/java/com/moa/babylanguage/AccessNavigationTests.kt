@@ -2,6 +2,9 @@ package com.moa.babylanguage
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.SystemClock
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -14,6 +17,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
@@ -22,6 +28,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 import java.util.UUID
 
 /** Real app composition/navigation with billing and sensor replies supplied only in androidTest. */
@@ -35,6 +42,49 @@ class AccessNavigationTests {
     private val visible = mutableStateOf(true)
     private var started = false
     private lateinit var restoration: StateRestorationTester
+    private val inputTrace = ArrayList<String>()
+
+    private fun trace(action: String) { inputTrace += "${SystemClock.uptimeMillis()} $action" }
+
+    /** Capture while the failing composition still exists, before @After removes it. */
+    private fun withFailureEvidence(block: () -> Unit) {
+        try { block() }
+        catch (failure: Throwable) {
+            val instrumentation = InstrumentationRegistry.getInstrumentation()
+            val directory = File(instrumentation.targetContext.filesDir, "access-navigation-failures/$id")
+            runCatching {
+                check(directory.mkdirs() || directory.isDirectory)
+                File(directory, "failure.txt").writeText(buildString {
+                    appendLine(failure.stackTraceToString())
+                    appendLine("verified=${billing.verified} state=${billing.state.value}")
+                    appendLine("cameraOpened=${media.cameraOpened} cameraClosed=${media.cameraClosed}")
+                    appendLine(inputTrace.joinToString("\n"))
+                })
+            }.onFailure { Log.e("AccessNavigationEvidence", "Cannot write failure context", it) }
+            runCatching {
+                compose.runOnIdle {
+                    val host = compose.activity
+                    val decor = host.window.decorView
+                    File(directory, "window.txt").writeText(buildString {
+                        appendLine("lifecycle=${host.lifecycle.currentState} finishing=${host.isFinishing} destroyed=${host.isDestroyed}")
+                        appendLine("windowFocus=${decor.hasWindowFocus()} focus=${host.currentFocus}")
+                        appendLine("imeVisible=${ViewCompat.getRootWindowInsets(decor)?.isVisible(WindowInsetsCompat.Type.ime())}")
+                        appendLine("width=${decor.width} height=${decor.height}")
+                    })
+                }
+            }.onFailure { Log.e("AccessNavigationEvidence", "Cannot capture host/window", it) }
+            runCatching {
+                File(directory, "semantics.txt").writeText(compose.onRoot(useUnmergedTree = true).printToString())
+            }.onFailure { Log.e("AccessNavigationEvidence", "Cannot capture semantics", it) }
+            runCatching {
+                val image = checkNotNull(instrumentation.uiAutomation.takeScreenshot())
+                try { File(directory, "screen.png").outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) } }
+                finally { image.recycle() }
+            }.onFailure { Log.e("AccessNavigationEvidence", "Cannot capture screenshot", it) }
+            Log.e("AccessNavigationEvidence", "Failure evidence before cleanup: ${directory.absolutePath}", failure)
+            throw failure
+        }
+    }
 
     @Before fun setup() {
         store = ObservationStore(compose.activity, "$id.db", "$id-legacy")
@@ -64,6 +114,7 @@ class AccessNavigationTests {
     }
 
     private fun waitPage(name: String) {
+        trace("await page-$name")
         compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-$name").fetchSemanticsNodes().isNotEmpty() }
         compose.waitForIdle()
     }
@@ -72,7 +123,10 @@ class AccessNavigationTests {
         compose.waitUntil(8_000) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
     }
 
-    private fun click(text: String) { compose.onNodeWithText(text).performScrollTo().performClick() }
+    private fun click(text: String) {
+        trace("scroll and tap: $text")
+        compose.onNodeWithText(text).performScrollTo().performClick()
+    }
 
     @Test fun lockedMediaHasContextAndFreeExitWithoutOpeningSensors() {
         start()
@@ -167,7 +221,7 @@ class AccessNavigationTests {
         assertEquals(1, media.cameraClosed)
     }
 
-    @Test fun expiredCameraDraftKeepsEditsAcrossPaywallRestoreAndSavesForFree() {
+    @Test fun expiredCameraDraftKeepsEditsAcrossPaywallRestoreAndSavesForFree() = withFailureEvidence {
         start(paid = true)
         click("카메라로 살펴보기")
         waitPage("camera")
@@ -177,7 +231,9 @@ class AccessNavigationTests {
         waitText("내가 직접 고치기")
         click("내가 직접 고치기")
         val edited = "나도 같이 놀고 싶어. 잠깐 내 손을 잡아 줄래?"
+        trace("replace draft text")
         compose.onNodeWithTag("draft-phrase-editor").performTextReplacement(edited)
+        trace("expire verified grant")
         compose.runOnIdle { billing.publishVerified(false) }
         compose.onNodeWithTag("page-translate").assertExists()
         click("← 처음부터 다시 입력하기")
