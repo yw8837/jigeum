@@ -23,9 +23,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ensureActive
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
+
+internal interface RecordImporter {
+    @Composable fun rememberPick(onPicked: (Uri?) -> Unit): () -> Unit
+    suspend fun preview(context: android.content.Context, uri: Uri, existing: StoreSnapshot): ImportPreview
+    suspend fun merge(store: ObservationStore, imported: ImportPreview)
+}
+
+internal object DeviceRecordImporter : RecordImporter {
+    @Composable override fun rememberPick(onPicked: (Uri?) -> Unit): () -> Unit {
+        val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument(), onPicked)
+        return { picker.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) }
+    }
+    override suspend fun preview(context: android.content.Context, uri: Uri, existing: StoreSnapshot) = withContext(Dispatchers.IO) {
+        context.contentResolver.openInputStream(uri)?.use { RecordTransfer.parseImport(it, existing) }
+            ?: error("이 파일을 열지 못했어요.")
+    }
+    override suspend fun merge(store: ObservationStore, imported: ImportPreview) { store.mergeImport(imported) }
+}
 
 @Composable
 internal fun WeeklySummary(records: List<Observation>, onAlbum: () -> Unit) {
@@ -48,7 +67,9 @@ internal fun WeeklySummary(records: List<Observation>, onAlbum: () -> Unit) {
 @Composable
 internal fun DataTransferPanel(store: ObservationStore, records: List<Observation>, ageBand: String,
                                onImported: (StoreSnapshot) -> Unit, onMessage: (String) -> Unit,
-                               operationScope: CoroutineScope? = null) {
+                               operationScope: CoroutineScope? = null,
+                               importer: RecordImporter = DeviceRecordImporter,
+                               beginMutation: () -> Boolean = { true }, endMutation: () -> Unit = {}) {
     val context = LocalContext.current
     val localScope = rememberCoroutineScope()
     val scope = operationScope ?: localScope
@@ -78,17 +99,14 @@ internal fun DataTransferPanel(store: ObservationStore, records: List<Observatio
     }
     val exportJson = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { write(it, false) }
     val exportCsv = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { write(it, true) }
-    val import = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    val pickImport = importer.rememberPick { uri ->
         pickerPending = false
         if (uri != null && !busy) {
             busy = true
             scope.launch {
                 try {
                     val existing = store.snapshot()
-                    preview = withContext(Dispatchers.IO) {
-                        context.contentResolver.openInputStream(uri)?.use { RecordTransfer.parseImport(it, existing) }
-                            ?: error("이 파일을 열지 못했어요.")
-                    }
+                    preview = importer.preview(context, uri, existing)
                 } catch (e: Exception) {
                     if (e is CancellationException) throw e
                     onMessage(if (e is IllegalArgumentException || e is StoreException)
@@ -120,7 +138,7 @@ internal fun DataTransferPanel(store: ObservationStore, records: List<Observatio
         OutlinedButton(enabled = !busy && !pickerPending && preview == null, onClick = {
             if (!busy && !pickerPending) {
                 pickerPending = true
-                try { import.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) }
+                try { pickImport() }
                 catch (_: Exception) { pickerPending = false; onMessage("파일 선택기를 열지 못했어요.") }
             }
         },
@@ -133,16 +151,18 @@ internal fun DataTransferPanel(store: ObservationStore, records: List<Observatio
             text = { Text("추가 ${imported.addedCount}개 · 같은 기록 ${imported.duplicateCount}개 · 날짜가 겹치는 다른 기록 ${imported.conflictCount}개\n\n기존 기록을 유지하면서 합칩니다. 같은 기록은 한 번만 남겨요. CSV는 가져오기용이 아니며 앱의 JSON 백업을 사용해 주세요.") },
             confirmButton = { TextButton(enabled = !busy, onClick = {
                 if (busy) return@TextButton
+                if (!beginMutation()) return@TextButton
                 busy = true
+                preview = null
                 scope.launch {
                     try {
-                        store.mergeImport(imported); onImported(store.snapshot()); preview = null
+                        importer.merge(store, imported); onImported(store.snapshot()); preview = null
                         onMessage("백업의 기록을 합쳤어요.")
                     } catch (e: Exception) {
                         if (e is CancellationException) throw e
                         onMessage(if (e is StoreException) e.message ?: "합치지 못했어요. 기존 기록은 그대로 있어요."
                             else "합치지 못했어요. 기존 기록은 그대로 있어요.")
-                    } finally { busy = false }
+                    } finally { busy = false; endMutation() }
                 }
             }) { Text("기록 합치기") } },
             dismissButton = { TextButton(enabled = !busy, onClick = { preview = null }) { Text("취소") } })
@@ -153,7 +173,8 @@ internal fun DataTransferPanel(store: ObservationStore, records: List<Observatio
 internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium: () -> Unit,
                          onMessage: (String) -> Unit, operationScope: CoroutineScope? = null,
                          exporting: Boolean = false, onExportingChange: (Boolean) -> Unit = {},
-                         authorizeExport: () -> Boolean = { false }) {
+                         artifactExporter: ArtifactExporter = DeviceArtifactExporter,
+                         authorizeExport: (List<Observation>) -> Boolean = { false }) {
     val context = LocalContext.current
     val localScope = rememberCoroutineScope()
     val scope = operationScope ?: localScope
@@ -209,16 +230,20 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                 PrimaryButton(if (busy || exporting) "아기말북을 만들고 있어요" else if (premium) "이 달의 아기말북 PDF 만들기" else "전체 이용권 보기", onClick = export@{
                     if (!premium) onPremium()
                     else if (!busy && !exporting) {
-                        if (!authorizeExport()) return@export
+                        if (!authorizeExport(records)) return@export
+                        val generation = MemoryArtifacts.currentGeneration()
                         busy = true
                         onExportingChange(true)
                         scope.launch {
                             try {
-                                val file = MemoryArtifacts.album(context, records.toList(), selected, theme, includeNotes)
-                                MemoryArtifacts.share(context, file, "application/pdf")
+                                val file = artifactExporter.album(context, records.toList(), selected, theme, includeNotes, generation)
+                                try {
+                                    coroutineContext.ensureActive()
+                                    artifactExporter.share(context, file, "application/pdf", generation)
+                                } finally { MemoryArtifacts.discardUnshared(context, file) }
                             } catch (e: Exception) {
                                 if (e is CancellationException) throw e
-                                onMessage(if (e is IllegalArgumentException) e.message ?: "기록을 확인해 주세요."
+                                onMessage(if (e is IllegalArgumentException || e is IllegalStateException) e.message ?: "기록을 확인해 주세요."
                                     else "파일을 만들지 못했어요. 저장 공간을 확인해 주세요.")
                             } finally { busy = false; onExportingChange(false) }
                         }
@@ -346,7 +371,7 @@ internal fun ServiceTermsScreen(onBack: () -> Unit) {
         "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 월간은 매월 자동 갱신하며 Play에서 해지할 수 있어요. 3개월은 선불 1회 결제이며 자동 갱신하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
         "구매 복원과 기록 복원" to "앱 회원가입 없이 같은 Play 계정의 유효한 구매를 다시 확인할 수 있어요. 다른 가족 계정에 권한이 자동 공유되지는 않아요. 아기 기록은 기기에만 저장되며 구매 복원으로 되살아나지 않아요. 무료 JSON 백업을 안전하게 보관해 주세요.",
         "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 카메라·영상 관찰은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",
-        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 직접 내보내거나 공유한 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 공개 약관과 정책의 시행일은 정식 배포 전에 고지합니다."
+        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 공개 약관과 정책의 시행일은 정식 배포 전에 고지합니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp)) {
         item {

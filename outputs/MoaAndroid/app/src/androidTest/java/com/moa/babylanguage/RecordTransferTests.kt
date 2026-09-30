@@ -88,6 +88,235 @@ class RecordTransferTests {
         assertEquals(2, store.snapshot().observations.size)
     }
 
+    @Test fun sameDayContentAtAnotherTimestampDoesNotEraseCollision() = runBlocking {
+        val incoming = row(base, "A")
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "A"))
+        val first = parse(backup(listOf(incoming)), store.snapshot())
+        assertEquals(1, first.conflictCount)
+        assertEquals(0, first.duplicateCount)
+        store.mergeImport(first)
+        val saved = store.snapshot()
+        assertEquals(3, saved.observations.size)
+        assertEquals(2, saved.observations.count { it.note == "A" })
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        val again = parse(backup(listOf(incoming)), store.snapshot())
+        assertEquals(1, again.duplicateCount)
+        store.mergeImport(again)
+        assertEquals(saved.observations, store.snapshot().observations)
+    }
+
+    @Test fun deletingRelocatedImportAllowsExplicitRestoreAgain() = runBlocking {
+        store.save(row(base, "B"))
+        val incoming = row(base, "A")
+        store.mergeImport(preview(listOf(incoming)))
+        val relocated = store.snapshot().observations.single { it.note == "A" }
+        store.delete(relocated.id)
+        store.mergeImport(preview(listOf(incoming)))
+        assertEquals(2, store.snapshot().observations.size)
+        assertEquals(1, store.snapshot().observations.count { it.note == "A" })
+        store.deleteAll()
+        store.mergeImport(preview(listOf(incoming)))
+        assertEquals(listOf(incoming), store.snapshot().observations)
+    }
+
+    @Test fun differentCollidingSourcesWithIdenticalContentRemainDistinct() = runBlocking {
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "C"))
+        val incoming = listOf(row(base, "A"), row(base + 100, "A"))
+        store.mergeImport(preview(incoming))
+        assertEquals(4, store.snapshot().observations.size)
+        assertEquals(2, store.snapshot().observations.count { it.note == "A" })
+        store.mergeImport(preview(incoming.reversed()))
+        assertEquals(4, store.snapshot().observations.size)
+    }
+
+    @Test fun staleCollisionPreviewStillRecordsOriginsTransactionally() = runBlocking {
+        val incoming = row(base, "A")
+        val parsed = parse(backup(listOf(incoming)))
+        store.save(row(base, "B"))
+        store.save(row(base + 100, "A"))
+        store.mergeImport(parsed)
+        store.mergeImport(parsed)
+        assertEquals(3, store.snapshot().observations.size)
+    }
+
+    @Test fun maximumTimestampCollisionPreservesDateAndBoundsLocalOrigins() = runBlocking {
+        val incoming = row(ObservationStore.MAX_TIMESTAMP, "A")
+        store.save(row(incoming.id, "B"))
+        repeat(3) { store.mergeImport(preview(listOf(incoming, incoming))) }
+        val saved = store.snapshot()
+        assertEquals(2, saved.observations.size)
+        assertEquals(1, saved.importOrigins.size)
+        assertTrue(saved.importOrigins.size <= saved.observations.size)
+        val zone = ZoneId.systemDefault()
+        val date = java.time.Instant.ofEpochMilli(incoming.id).atZone(zone).toLocalDate()
+        assertTrue(saved.observations.all { java.time.Instant.ofEpochMilli(it.id).atZone(zone).toLocalDate() == date })
+        store.delete(saved.observations.single { it.note == "A" }.id)
+        assertTrue(store.snapshot().importOrigins.isEmpty())
+    }
+
+    @Test fun originAndAgeWriteFailuresRollBackRecordsAndOriginsTogether() = runBlocking {
+        val original = row(base, "기존")
+        store.save(original)
+        val before = store.snapshot()
+        val imported = parse(backup(listOf(row(base, "충돌"), row(base + 100, "새 기록"))))
+        // An origin failure occurs after row inserts; an age failure occurs after origin
+        // inserts. Both must roll back all writes, including metadata, on disk.
+        for (key in listOf("import_origin:*", "age_band")) {
+            context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
+                db.execSQL("CREATE TRIGGER fail_transfer_write BEFORE INSERT ON meta WHEN NEW.key GLOB '$key' BEGIN SELECT RAISE(ABORT,'test write failure'); END")
+            }
+            try { store.mergeImport(imported); fail("Must roll back failed $key write") }
+            catch (_: StoreException) { }
+            store.close()
+            store = ObservationStore(context, dbName, prefsName)
+            assertEquals(before, store.snapshot())
+            context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
+                db.rawQuery("SELECT COUNT(*) FROM meta WHERE key GLOB 'import_origin:*'", null).use {
+                    it.moveToFirst(); assertEquals(0, it.getInt(0))
+                }
+                db.execSQL("DROP TRIGGER fail_transfer_write")
+            }
+        }
+        store.mergeImport(imported)
+        assertEquals(3, store.snapshot().observations.size)
+        assertEquals(1, store.snapshot().importOrigins.size)
+        assertEquals("9~12개월", store.snapshot().ageBand)
+        store.mergeImport(imported)
+        assertEquals(3, store.snapshot().observations.size)
+    }
+
+    @Test fun deletingCollisionBlockerKeepsLiveOriginAcrossRecreationAndStalePreview() = runBlocking {
+        store.save(row(base, "기존"))
+        val incoming = row(base, "가져온 기록")
+        val stale = parse(backup(listOf(incoming)), store.snapshot())
+        store.mergeImport(stale)
+        store.delete(base)
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        val before = store.snapshot()
+        assertEquals(1, before.observations.size)
+        assertEquals(1, before.importOrigins.size)
+        assertEquals(1, parse(backup(listOf(incoming)), before).duplicateCount)
+        store.mergeImport(stale)
+        assertEquals(before, store.snapshot())
+        store.delete(before.observations.single().id)
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        assertTrue(store.snapshot().observations.isEmpty())
+        assertTrue(store.snapshot().importOrigins.isEmpty())
+        store.mergeImport(stale)
+        assertEquals(listOf(incoming), store.snapshot().observations)
+        assertTrue(store.snapshot().importOrigins.isEmpty())
+    }
+
+    @Test fun deleteAllErasesOriginsAndAgeAcrossRecreationBeforeExplicitRestore() = runBlocking {
+        store.save(row(base, "기존"))
+        val incoming = row(base, "가져온 기록")
+        store.mergeImport(preview(listOf(incoming), "9~12개월"))
+        assertEquals(1, store.snapshot().importOrigins.size)
+        store.deleteAll()
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        assertEquals(StoreSnapshot(emptyList(), ""), store.snapshot())
+        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
+            db.rawQuery("SELECT COUNT(*) FROM meta WHERE key GLOB 'import_origin:*'", null).use {
+                it.moveToFirst(); assertEquals(0, it.getInt(0))
+            }
+        }
+        store.mergeImport(preview(listOf(incoming), "13~18개월"))
+        assertEquals(StoreSnapshot(listOf(incoming), "13~18개월"), store.snapshot())
+    }
+
+    @Test fun schemaOneDatabaseOpensWithoutMigrationAndAcceptsNewOrigins() = runBlocking {
+        store.close()
+        val existing = row(base, "기존 DB 기록")
+        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
+            db.execSQL("CREATE TABLE observations (id INTEGER PRIMARY KEY NOT NULL, sound TEXT NOT NULL, context TEXT NOT NULL, note TEXT NOT NULL, phrase TEXT NOT NULL, source TEXT NOT NULL, model_cue TEXT NOT NULL)")
+            db.execSQL("CREATE TABLE meta (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)")
+            db.execSQL("INSERT INTO observations VALUES(?,?,?,?,?,?,?)", arrayOf(existing.id, existing.sound,
+                existing.context, existing.note, existing.phrase, existing.source, existing.modelCue))
+            db.execSQL("INSERT INTO meta VALUES('migration_v1','done')")
+            db.execSQL("INSERT INTO meta VALUES('age_band','6~8개월')")
+            db.version = 1
+        }
+        store = ObservationStore(context, dbName, prefsName)
+        assertEquals(StoreSnapshot(listOf(existing), "6~8개월"), store.snapshot())
+        val incoming = row(base, "기존 백업")
+        val imported = parse(backup(listOf(incoming)))
+        store.mergeImport(imported)
+        store.close()
+        store = ObservationStore(context, dbName, prefsName)
+        store.mergeImport(imported)
+        assertEquals(2, store.snapshot().observations.size)
+        assertEquals(1, store.snapshot().importOrigins.size)
+        assertEquals("6~8개월", store.snapshot().ageBand)
+        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db -> assertEquals(1, db.version) }
+    }
+
+    @Test fun versionOneJsonRoundtripKeepsContractAndRecordsButNotLocalOrigins() = runBlocking {
+        store.save(row(base, "기존"))
+        store.mergeImport(preview(listOf(row(base, "충돌")), "9~12개월"))
+        val saved = store.snapshot()
+        val bytes = ByteArrayOutputStream().also { RecordTransfer.writeJson(it, saved) }.toByteArray()
+        val document = JSONObject(String(bytes, Charsets.UTF_8))
+        assertEquals(1, document.getInt("version"))
+        assertEquals(setOf("format", "version", "ageBand", "records"), document.keys().asSequence().toSet())
+        for (index in 0 until document.getJSONArray("records").length()) {
+            assertEquals(setOf("id", "sound", "context", "note", "phrase", "source", "modelCue"),
+                document.getJSONArray("records").getJSONObject(index).keys().asSequence().toSet())
+        }
+        val repeated = parse(bytes, saved)
+        assertEquals(2, repeated.duplicateCount)
+        store.mergeImport(repeated)
+        assertEquals(saved, store.snapshot())
+        store.close()
+        context.deleteDatabase(dbName)
+        store = ObservationStore(context, dbName, prefsName)
+        store.mergeImport(parse(bytes))
+        val restored = store.snapshot()
+        assertEquals(saved.observations, restored.observations)
+        assertEquals(saved.ageBand, restored.ageBand)
+        assertTrue(restored.importOrigins.isEmpty())
+        store.mergeImport(parse(bytes, restored))
+        assertEquals(restored, store.snapshot())
+    }
+
+    @Test fun oldRelocatedRowsWithoutOriginsAreNotGuessedFromSameContent() = runBlocking {
+        // This is also the state after restoring a v1 export to another installation.
+        store.save(row(base, "기존"))
+        store.save(row(base + 1, "충돌"))
+        val originalBackup = backup(listOf(row(base, "충돌")))
+        val imported = parse(originalBackup, store.snapshot())
+        assertEquals(1, imported.conflictCount)
+        assertEquals(0, imported.duplicateCount)
+        store.mergeImport(imported)
+        assertEquals(3, store.snapshot().observations.size)
+        assertEquals(2, store.snapshot().observations.count { it.note == "충돌" })
+        // Once this explicit import is recorded locally, retries are idempotent.
+        store.mergeImport(imported)
+        assertEquals(3, store.snapshot().observations.size)
+    }
+
+    @Test fun oversizedLocalOriginMetadataRejectsBeforeUnboundedSnapshotAllocation() = runBlocking {
+        store.save(row())
+        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
+            db.beginTransaction()
+            try {
+                for (index in 0..ObservationStore.MAX_ROWS)
+                    db.execSQL("INSERT INTO meta(key,value) VALUES(?,?)", arrayOf("import_origin:test-$index", base.toString()))
+                db.setTransactionSuccessful()
+            } finally { db.endTransaction() }
+        }
+        try { store.snapshot(); fail("Origin metadata must respect the 10,000 entry bound") }
+        catch (_: StoreException) { }
+        // Deletion must clean raw metadata as well, even if a snapshot could not load it.
+        store.deleteAll()
+        assertEquals(StoreSnapshot(emptyList(), ""), store.snapshot())
+    }
+
     @Test fun stalePreviewRechecksCurrentRowsWithoutOverwriting() = runBlocking {
         val incoming = row(note = "백업")
         val parsed = parse(backup(listOf(incoming)))
@@ -101,13 +330,14 @@ class RecordTransferTests {
     @Test fun capacityFailureRollsBackAndPreservesAgeBand() = runBlocking {
         store.mergeImport(preview((0 until 9_999).map { row(base + it, "") }, "6~8개월"))
         try {
-            store.mergeImport(preview(listOf(row(base + 20_000), row(base + 20_001)), "13~18개월"))
+            store.mergeImport(preview(listOf(row(base, "충돌"), row(base + 20_001)), "13~18개월"))
             fail("Must reject capacity overflow")
         } catch (_: StoreException) { }
         val saved = store.snapshot()
         assertEquals(9_999, saved.observations.size)
         assertEquals("6~8개월", saved.ageBand)
-        assertFalse(saved.observations.any { it.id == base + 20_000 })
+        assertFalse(saved.observations.any { it.note == "충돌" || it.id == base + 20_001 })
+        assertTrue(saved.importOrigins.isEmpty())
     }
 
     @Test fun successfulMigrationClearsLegacyAndDeletedRecordsNeverReturn() = runBlocking {

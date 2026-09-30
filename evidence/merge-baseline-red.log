@@ -1,0 +1,3 @@
+Exception in thread "main" java.lang.IllegalStateException: Distinct collision record discarded: MergePlan(additions=[], added=0, duplicates=1, conflicts=0)
+	at com.moa.babylanguage.MergeCollisionReproKt.main(MergeCollisionRepro.kt:8)
+	at com.moa.babylanguage.MergeCollisionReproKt.main(MergeCollisionRepro.kt)

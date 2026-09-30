@@ -95,6 +95,7 @@ import androidx.core.view.WindowCompat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -196,7 +197,9 @@ internal fun JigeumApp(
     billingManager: AccessBilling,
     phraseEngine: PhraseEngine,
     registerBackgroundStop: (() -> Unit) -> Unit = {},
-    mediaScreens: MediaScreens = DeviceMediaScreens
+    mediaScreens: MediaScreens = DeviceMediaScreens,
+    artifactExporter: ArtifactExporter = DeviceArtifactExporter,
+    recordImporter: RecordImporter = DeviceRecordImporter
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
@@ -253,9 +256,18 @@ internal fun JigeumApp(
             "이용권을 다시 확인해야 해서 관찰을 멈췄어요. 이미 만든 문장과 기록은 그대로 있어요.")
         return false
     }
-    fun update(action: suspend () -> Unit, after: () -> Unit = {}) {
-        if (busy || !loaded) return
+    fun beginMutation(): Boolean {
+        if (!loaded) return false
+        if (busy) {
+            notify("기록을 처리하고 있어요. 끝난 뒤 다시 시도해 주세요.")
+            return false
+        }
         busy = true
+        return true
+    }
+    fun update(action: suspend () -> Unit, after: () -> Unit = {}, invalidateExports: Boolean = false) {
+        if (!beginMutation()) return
+        if (invalidateExports) MemoryArtifacts.invalidatePendingExports()
         scope.launch {
             try {
                 action()
@@ -360,31 +372,46 @@ internal fun JigeumApp(
                                             })
                                     } }
                                     Page.TIMELINE -> TimelineScreen(observations,
-                                        onDelete = { id -> update({ store.delete(id)
+                                        onDelete = { id ->
+                                            update({ store.delete(id)
                                             try { MemoryArtifacts.clear(activity) }
                                             catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("기록은 지웠어요. 임시 공유 파일을 정리하지 못했어요.") }
-                                        }) },
+                                        }, invalidateExports = true) },
                                         onAlbum = { page = Page.ALBUM },
-                                        onShare = { record -> if (!sharing) {
+                                        onShare = { record -> if (!sharing && !busy) {
+                                            val generation = MemoryArtifacts.currentGeneration()
                                             sharing = true
                                             scope.launch {
-                                                try { MemoryArtifacts.share(activity, MemoryArtifacts.card(activity, record), "image/png") }
-                                                catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("카드를 만들지 못했어요. 저장 공간을 확인해 주세요.") }
+                                                try {
+                                                    // An old UI callback cannot mint a new export generation for a deleted record.
+                                                    val current = store.snapshot().observations.firstOrNull { it.id == record.id }
+                                                    check(current != null && !busy && current == record && observations.any { it == record }) {
+                                                        "기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요."
+                                                    }
+                                                    val file = artifactExporter.card(activity, current, generation)
+                                                    try {
+                                                        coroutineContext.ensureActive()
+                                                        artifactExporter.share(activity, file, "image/png", generation)
+                                                    } finally { MemoryArtifacts.discardUnshared(activity, file) }
+                                                }
+                                                catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify(if (e is IllegalStateException) e.message ?: "카드를 만들지 못했어요." else "카드를 만들지 못했어요. 저장 공간을 확인해 주세요.") }
                                                 finally { sharing = false }
                                             }
                                         } })
                                     Page.GUIDE -> GuideScreen(onPrivacy = { privacyReturn = Page.GUIDE; page = Page.PRIVACY },
-                                        onDeleteAll = { update({ store.deleteAll()
+                                        onDeleteAll = {
+                                            update({ store.deleteAll()
                                             try { MemoryArtifacts.clear(activity) }
                                             catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("기록은 지웠어요. 임시 공유 파일을 정리하지 못했어요.") }
                                             withContext(Dispatchers.IO) { phraseEngine.reset() }
                                         }, {
                                             draft?.let { screenState.removeState("translation-${it.sessionId}") }
                                             draft = null; notify("기록과 월령을 지웠어요.")
-                                        }) },
+                                        }, invalidateExports = true) },
                                         dataTools = { DataTransferPanel(store, observations, ageBand,
                                             onImported = { snapshot -> observations = snapshot.observations; ageBand = snapshot.ageBand },
-                                            onMessage = ::notify, operationScope = scope) },
+                                            onMessage = ::notify, operationScope = scope, importer = recordImporter,
+                                            beginMutation = ::beginMutation, endMutation = { busy = false }) },
                                         onRestore = { showPass(null, Page.GUIDE); billingManager.restore() })
                                     Page.CAMERA -> {
                                         val session = mediaSession
@@ -418,9 +445,14 @@ internal fun JigeumApp(
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
                                         AlbumScreen(observations, billingState.isPremium,
                                             onPremium = { showPass(AppFeature.PDF, Page.ALBUM) }, onMessage = ::notify,
-                                            operationScope = scope, exporting = sharing, onExportingChange = { sharing = it },
-                                            authorizeExport = {
-                                                if (access.canUse(AppFeature.PDF)) true
+                                            operationScope = scope, exporting = sharing || busy, onExportingChange = { sharing = it },
+                                            artifactExporter = artifactExporter,
+                                            authorizeExport = { selectedRecords ->
+                                                if (busy || sharing) false
+                                                else if (selectedRecords != observations) {
+                                                    notify("기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요."); false
+                                                }
+                                                else if (access.canUse(AppFeature.PDF)) true
                                                 else { showPass(AppFeature.PDF, Page.ALBUM, "PDF를 만들기 전에 이용권을 다시 확인해 주세요."); false }
                                             })
                                     }
@@ -1258,6 +1290,10 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "4. 보관과 삭제" to
             "문장과 메모는 보호자가 삭제하거나 앱을 제거할 때까지 기기에 남습니다. " +
             "기록 화면에서 항목을 삭제하거나 돌봄 화면에서 모든 기록과 월령 선택을 삭제할 수 있습니다. " +
+            "아직 공유 화면에 전달하지 않은 파일은 기록 삭제 때 정리합니다. 이미 전달한 파일은 수신 앱이 읽을 수 있도록 따로 남기며, " +
+            "전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상입니다. 앱을 실행하지 않으면 그때까지 남고 Android가 캐시를 먼저 지울 수 있습니다. " +
+            "최대 20개·64MiB가 차면 기존 파일을 보호하고 새 공유를 잠시 중단합니다. 앱 데이터 삭제·앱 제거는 이 캐시도 지웁니다. " +
+            "외부에 보낸 파일은 해당 저장 위치에서 직접 지워 주세요. " +
             "Android 백업과 기기 간 데이터 전송에서도 앱 데이터가 제외되도록 설정했습니다.",
         "5. 보호자와 아기 정보" to
             "앱의 사용 대상은 아기의 부모 등 성인 보호자입니다. 아기 이름, 생년월일, 연락처나 계정을 요구하지 않습니다. " +

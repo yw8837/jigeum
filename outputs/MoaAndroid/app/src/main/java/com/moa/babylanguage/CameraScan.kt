@@ -57,6 +57,7 @@ import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
+import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.hypot
@@ -151,6 +152,7 @@ fun CameraScanScreen(
             if (active && hasPermission) {
                 CameraObservationPreview(
                     requestedCamera = requestedCamera,
+                    authorize = ::checkAccess,
                     onObservation = { observation = it },
                     onError = { error = it; cameraReady = false },
                     onWarning = { warning = it },
@@ -280,18 +282,24 @@ fun CameraScanScreen(
     }
 }
 
-private enum class FaceObservation { WAITING, NO_FACE, FACE_VISIBLE, MOUTH_OPEN }
+internal enum class FaceObservation { WAITING, NO_FACE, FACE_VISIBLE, MOUTH_OPEN }
 
 @Composable
-private fun CameraObservationPreview(
+internal fun CameraObservationPreview(
     requestedCamera: Int,
+    authorize: () -> Boolean,
     onObservation: (FaceObservation) -> Unit,
     onError: (String) -> Unit,
     onWarning: (String) -> Unit,
-    onReady: (facing: Int, canSwitch: Boolean) -> Unit
+    onReady: (facing: Int, canSwitch: Boolean) -> Unit,
+    // Tests may hold the real provider's listener before it executes. Neither hook
+    // substitutes a provider or changes the live authorization decision.
+    providerCallbackExecutor: Executor? = null,
+    onUseCasesCreated: (Preview, ImageAnalysis) -> Unit = { _, _ -> }
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val currentAuthorize by rememberUpdatedState(authorize)
     val currentObservation by rememberUpdatedState(onObservation)
     val currentError by rememberUpdatedState(onError)
     val currentWarning by rememberUpdatedState(onWarning)
@@ -312,6 +320,7 @@ private fun CameraObservationPreview(
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .build()
+        onUseCasesCreated(preview, analysis)
         var provider: ProcessCameraProvider? = null
         var landmarker: FaceLandmarker? = null
         var lastInferenceMs = 0L
@@ -382,7 +391,7 @@ private fun CameraObservationPreview(
                             }
                         }
                         mainExecutor.execute {
-                            if (!disposed.get()) currentObservation(state)
+                            if (!disposed.get() && currentAuthorize()) currentObservation(state)
                         }
                     }
                 } catch (cause: Exception) {
@@ -415,6 +424,12 @@ private fun CameraObservationPreview(
                     }
                     val selector = if (actualCamera == CameraSelector.LENS_FACING_BACK)
                         CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+                    // The provider may complete after entitlement expiry. Check before opening the sensor.
+                    if (!currentAuthorize()) return@addListener
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        currentError("카메라 권한이 없어 관찰을 시작할 수 없어요.")
+                        return@addListener
+                    }
                     preview.setSurfaceProvider(previewView.surfaceProvider)
                     provider?.bindToLifecycle(
                         lifecycleOwner, selector, preview, analysis
@@ -423,7 +438,7 @@ private fun CameraObservationPreview(
                 } catch (cause: Exception) {
                     currentError("카메라를 열지 못했어요. 기기 카메라를 확인해 주세요.")
                 }
-            }, mainExecutor)
+            }, providerCallbackExecutor ?: mainExecutor)
         }
 
         onDispose {

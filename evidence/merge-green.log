@@ -1,0 +1,12 @@
+PASS: timestamp collision preserves distinct same-day identical content
+PASS: persisted provenance deduplicates a relocated source on retry
+PASS: same content at two colliding source timestamps stays distinct
+PASS: duplicate rows in the same incoming batch resolve once
+PASS: unrelated replacement at a provenance target cannot erase an import
+PASS: missing provenance target permits deliberate restore
+PASS: exact original timestamp and content remains a duplicate
+PASS: relocation wraps within original calendar day
+PASS: maximum timestamp collision stays valid and retry is bounded
+PASS: full store fails without returning a partial merge
+PASS: origin identity covers timestamp and every record field
+11/11 pure merge checks passed; no Android parser, SQLite, UI or renderer execution

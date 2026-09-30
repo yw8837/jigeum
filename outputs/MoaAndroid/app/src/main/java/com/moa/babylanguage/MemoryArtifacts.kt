@@ -3,6 +3,8 @@ package com.moa.babylanguage
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.app.Activity
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -12,8 +14,11 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -31,12 +36,52 @@ internal enum class AlbumTheme(val label: String, val accent: Int, val paper: In
     BLUE("하늘빛 편지", 0xFF446C80.toInt(), 0xFFF0F6F9.toInt())
 }
 
+internal fun interface ArtifactShareLauncher {
+    fun launch(context: Context, chooser: Intent)
+}
+
+internal object AndroidArtifactShareLauncher : ArtifactShareLauncher {
+    override fun launch(context: Context, chooser: Intent) { context.startActivity(chooser) }
+}
+
+/** Injectable app dependency; the public activity always uses real rendering and sharing. */
+internal interface ArtifactExporter {
+    suspend fun card(context: Context, record: Observation, generation: Long): File
+    suspend fun album(context: Context, records: List<Observation>, month: YearMonth,
+                      theme: AlbumTheme, includeNotes: Boolean, generation: Long): File
+    suspend fun share(context: Context, file: File, mime: String, generation: Long)
+}
+
+internal object DeviceArtifactExporter : ArtifactExporter {
+    override suspend fun card(context: Context, record: Observation, generation: Long) = MemoryArtifacts.card(context, record, generation)
+    override suspend fun album(context: Context, records: List<Observation>, month: YearMonth,
+                               theme: AlbumTheme, includeNotes: Boolean, generation: Long) =
+        MemoryArtifacts.album(context, records, month, theme, includeNotes, generation)
+    override suspend fun share(context: Context, file: File, mime: String, generation: Long) = MemoryArtifacts.share(context, file, mime, generation)
+}
+
 internal object MemoryArtifacts {
     const val MAX_ALBUM_RECORDS = 300
     const val MAX_ALBUM_PAGES = 300
+    // A selected recipient can open the URI after this app resumes and source records are deleted.
+    // Keep only already dispatched snapshots for this bounded window, independent of the source DB.
+    const val SHARED_SNAPSHOT_RETENTION_MS = 86_400_000L
+    const val MAX_SHARED_SNAPSHOTS = 20
+    const val MAX_SHARED_SNAPSHOT_BYTES = 67_108_864L
     private val ink = 0xFF24322E.toInt()
     private val muted = 0xFF526059.toInt()
     private val exportMutex = Mutex()
+    private val generationLock = Any()
+    private var exportGeneration = 0L
+
+    fun currentGeneration(): Long = synchronized(generationLock) { exportGeneration }
+
+    /** Call synchronously before deleting source records, not after the IO operation. */
+    fun invalidatePendingExports() = synchronized(generationLock) { exportGeneration++; Unit }
+
+    private fun requireCurrentGeneration(generation: Long) {
+        check(generation == currentGeneration()) { "기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요." }
+    }
 
     fun month(id: Long): YearMonth = YearMonth.from(Instant.ofEpochMilli(id).atZone(ZoneId.systemDefault()))
     fun date(id: Long): String = Instant.ofEpochMilli(id).atZone(ZoneId.systemDefault())
@@ -46,19 +91,53 @@ internal object MemoryArtifacts {
         check(isDirectory || mkdirs()) { "파일을 만들 공간이 부족해요. 휴대전화 저장 공간을 확인해 주세요." }
     }
 
-    suspend fun cleanup(context: Context) = withContext(Dispatchers.IO) {
-        exportMutex.withLock {
-        File(context.cacheDir, "exports").listFiles()?.filter {
-            it.isFile && it.name.startsWith("jigeum-") && System.currentTimeMillis() - it.lastModified() > 86_400_000L
-        }?.forEach { it.delete() }
+    private fun cleanupExpired(context: Context) {
+        val now = System.currentTimeMillis()
+        val root = File(context.cacheDir, "exports")
+        for (directory in listOf(root, File(root, "dispatched"))) {
+            directory.listFiles()?.filter {
+                it.isFile && it.name.startsWith("jigeum-") && now - it.lastModified() >= SHARED_SNAPSHOT_RETENTION_MS
+            }?.forEach { check(it.delete() || !it.exists()) { "임시 공유 파일을 정리하지 못했어요." } }
         }
     }
 
-    suspend fun clear(context: Context) = withContext(Dispatchers.IO) {
+    suspend fun cleanup(context: Context) = withContext(Dispatchers.IO) {
         exportMutex.withLock {
-            File(context.cacheDir, "exports").listFiles()?.filter {
-                it.isFile && it.name.startsWith("jigeum-")
-            }?.forEach { file -> check(file.delete() || !file.exists()) { "공유용 임시 파일을 지우지 못했어요." } }
+            cleanupExpired(context)
+        }
+    }
+
+    suspend fun clear(context: Context) {
+        invalidatePendingExports()
+        withContext(Dispatchers.IO) {
+            exportMutex.withLock {
+                File(context.cacheDir, "exports").listFiles()?.filter {
+                    it.isFile && it.name.startsWith("jigeum-")
+                }?.forEach { file -> check(file.delete() || !file.exists()) { "공유용 임시 파일을 지우지 못했어요." } }
+                cleanupExpired(context)
+            }
+        }
+    }
+
+    /** Remove only our unshared output; dispatched URI snapshots have their own lifetime. */
+    suspend fun discardUnshared(context: Context, file: File) = withContext(NonCancellable + Dispatchers.IO) {
+        exportMutex.withLock {
+            if (file.parentFile?.canonicalFile == File(context.cacheDir, "exports").canonicalFile && file.name.startsWith("jigeum-")) {
+                check(file.delete() || !file.exists()) { "임시 공유 파일을 정리하지 못했어요." }
+            }
+        }
+    }
+
+    private suspend fun renderOutput(render: suspend ((File) -> Unit) -> File): File {
+        var created: File? = null
+        try {
+            return withContext(Dispatchers.IO) { render { created = it } }
+        } catch (error: Throwable) {
+            // withContext can be cancelled at its return handoff, after a complete file was written.
+            withContext(NonCancellable + Dispatchers.IO) {
+                created?.let { if (!it.delete() && it.exists()) error.addSuppressed(IllegalStateException("임시 공유 파일을 정리하지 못했어요.")) }
+            }
+            throw error
         }
     }
 
@@ -104,10 +183,13 @@ internal object MemoryArtifacts {
         return end
     }
 
-    suspend fun card(context: Context, record: Observation): File = withContext(Dispatchers.IO) {
+    suspend fun card(context: Context, record: Observation,
+                     generation: Long = currentGeneration()): File = renderOutput { output ->
         exportMutex.withLock {
+        requireCurrentGeneration(generation)
         require(record.phrase.isNotBlank()) { "공유할 문장을 먼저 골라 주세요." }
         val file = File(folder(context), "jigeum-card-${UUID.randomUUID()}.png")
+        output(file)
         val bitmap = Bitmap.createBitmap(1080, 1350, Bitmap.Config.ARGB_8888)
         try {
             val canvas = Canvas(bitmap)
@@ -123,6 +205,7 @@ internal object MemoryArtifacts {
             draw(canvas, "보호자가 그 순간을 담아 쓴 표현이에요.", 84f, 1210f, 27f, 900, muted)
             coroutineContext.ensureActive()
             file.outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
+            requireCurrentGeneration(generation)
             file
         } catch (error: Throwable) {
             file.delete(); throw error
@@ -131,13 +214,16 @@ internal object MemoryArtifacts {
     }
 
     suspend fun album(context: Context, records: List<Observation>, month: YearMonth,
-                      theme: AlbumTheme, includeNotes: Boolean): File = withContext(Dispatchers.IO) {
+                      theme: AlbumTheme, includeNotes: Boolean,
+                      generation: Long = currentGeneration()): File = renderOutput { output ->
         exportMutex.withLock {
+        requireCurrentGeneration(generation)
         val taskContext = coroutineContext
         val selected = records.filter { MemoryArtifacts.month(it.id) == month }.sortedBy { it.id }
         require(selected.isNotEmpty()) { "이 달에 남긴 문장이 아직 없어요." }
         require(selected.size <= MAX_ALBUM_RECORDS) { "한 권에는 300개까지 담을 수 있어요. 전체 기록은 무료 백업으로 보관할 수 있어요." }
         val file = File(folder(context), "jigeum-album-$month-${UUID.randomUUID()}.pdf")
+        output(file)
         val document = PdfDocument()
         var page: PdfDocument.Page? = null
         var count = 0
@@ -208,6 +294,7 @@ internal object MemoryArtifacts {
             finish()
             coroutineContext.ensureActive()
             file.outputStream().use(document::writeTo)
+            requireCurrentGeneration(generation)
             file
         } catch (error: Throwable) {
             page?.let { runCatching { document.finishPage(it) } }; page = null
@@ -216,13 +303,51 @@ internal object MemoryArtifacts {
         }
     }
 
-    fun share(context: Context, file: File, mime: String) {
-        val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = mime; putExtra(Intent.EXTRA_STREAM, uri)
-            clipData = ClipData.newRawUri("아기말 파일", uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    suspend fun share(context: Context, file: File, mime: String, generation: Long,
+                      launcher: ArtifactShareLauncher = AndroidArtifactShareLauncher) {
+        var retained: File? = null
+        var dispatched = false
+        try { exportMutex.withLock {
+            withContext(Dispatchers.IO) { cleanupExpired(context) }
+            withContext(Dispatchers.Main.immediate) {
+                coroutineContext.ensureActive()
+                // Deletion invalidation and chooser launch are ordered without a suspend point.
+                synchronized(generationLock) {
+                    requireCurrentGeneration(generation)
+                    check(file.isFile && file.length() > 0) { "공유 파일이 없어졌어요. 다시 만들어 주세요." }
+                    var host = context
+                    while (host is ContextWrapper && host !is Activity) host = host.baseContext
+                    check(host is Activity && !host.isFinishing && !host.isDestroyed &&
+                        ((host as? LifecycleOwner)?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) != false)) {
+                        "앱으로 돌아온 뒤 다시 공유해 주세요."
+                    }
+                    check(file.parentFile?.canonicalFile == folder(context).canonicalFile && file.name.startsWith("jigeum-"))
+                    val sharedFolder = File(folder(context), "dispatched").apply { check(isDirectory || mkdirs()) }
+                    val leased = sharedFolder.listFiles()?.filter { it.isFile && it.name.startsWith("jigeum-") }.orEmpty()
+                    check(leased.size < MAX_SHARED_SNAPSHOTS && leased.sumOf { it.length() } + file.length() <= MAX_SHARED_SNAPSHOT_BYTES) {
+                        "이전에 공유한 파일을 보호하고 있어요. 하루 뒤 다시 공유해 주세요."
+                    }
+                    val sharedFile = File(sharedFolder, file.name)
+                    check(file.renameTo(sharedFile)) { "공유 파일을 준비하지 못했어요." }
+                    retained = sharedFile
+                    check(sharedFile.setLastModified(System.currentTimeMillis()))
+                    val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", sharedFile)
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = mime; putExtra(Intent.EXTRA_STREAM, uri)
+                        clipData = ClipData.newRawUri("아기말 파일", uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    launcher.launch(context, Intent.createChooser(intent, "가족에게 보내기"))
+                    dispatched = true
+                }
+            }
+        } } catch (error: Throwable) {
+            // Once dispatched, cancellation cannot revoke a recipient's readable snapshot.
+            if (!dispatched) {
+                withContext(NonCancellable + Dispatchers.IO) { retained?.delete() }
+                discardUnshared(context, file)
+            }
+            throw error
         }
-        context.startActivity(Intent.createChooser(intent, "가족에게 보내기"))
     }
 }

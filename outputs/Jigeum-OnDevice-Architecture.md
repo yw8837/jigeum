@@ -36,7 +36,7 @@ flowchart TD
 |---|---|---|
 | 기록 | 앱 전용 SQLite, 최대 10,000건. 시각·소리·상황·메모·문장·입력 경로·모델 단서, 별도 월령 메타데이터 | `MoaAndroid/.../ObservationStore.kt` |
 | 저장 실행 | IO dispatcher, 같은 DB를 쓰는 인스턴스 간 Mutex, SQLite 트랜잭션. 과거 SharedPreferences 기록 이전 후 정상 이전 사본 정리 | `ObservationStore.kt` |
-| 삭제 | 개별/전체 삭제, 해당 복구 사본 정리, 전체 삭제 시 월령·표현 이력 해제. SQLite secure_delete 사용. 앱 관리 공유 캐시도 정리 | `ObservationStore.kt`, `MainActivity.kt`, `MemoryArtifacts.kt` |
+| 삭제 | 개별/전체 삭제, 해당 복구 사본 정리, 전체 삭제 시 월령·표현 이력 해제. SQLite secure_delete 사용. 미전달 공유 캐시 정리, 전달한 snapshot은 별도 수명 유지 | `ObservationStore.kt`, `MainActivity.kt`, `MemoryArtifacts.kt` |
 | 원본 미디어 | 녹음·추출 PCM·카메라 프레임 일시 처리. 선택 영상은 원래 URI에서 읽고 앱에 복사하지 않음 | `SoundAnalyzer.kt`, `VideoAudioDecoder.kt`, `VideoImport.kt`, `CameraScan.kt` |
 | 무료 이동·공유 | JSON 백업/가져오기, CSV 내보내기, PNG 문장 카드, 주간 요약. 사용자가 시스템 저장/공유 화면에서 목적지 선택 | `RecordTransfer.kt`, `LibraryScreens.kt`, `MemoryArtifacts.kt` |
 | 무료/유료 접근 | 녹음·직접 입력·문장 편집/저장·기본 기록 기능 무료. 카메라·저장 영상·PDF는 하나의 전체 이용권을 실행 시점에 확인. 미디어 세션과 이전 콜백 구분 | `AccessPolicy.kt`, `MainActivity.kt`, `CameraScan.kt`, `VideoImport.kt` |
@@ -73,7 +73,9 @@ JSON은 `format=jigeum-observations`, `version=1`, `ageBand`, `records` 형식�
 
 미리보기와 실제 저장은 같은 합치기 규칙을 사용한다. 저장 순간 현재 DB를 다시 읽고 트랜잭션으로 적용해 오래된 미리보기가 기록을 덮어쓰지 않게 한다. 같은 시각의 다른 내용은 같은 날짜 안에서 새 밀리초 ID를 부여하며 재가져오기 중복을 확인한다. 용량·형식 실패 시 기존 기록을 유지한다. 손상된 과거 항목은 복구용으로 보관하고 안내하며 전체 기록 삭제에 포함한다.
 
-PNG/PDF는 전용 앱 캐시에서 만들고 FileProvider 읽기 권한을 시스템 공유에 부여한다. 24시간이 지난 자체 생성 파일은 정리 대상이다. 자동으로 가족 계정에 업로드하거나 동기화하지 않는다.
+PNG/PDF는 전용 앱 캐시에서 만들고 FileProvider 읽기 권한을 시스템 공유에 부여한다. 실제 삭제를 수락하면 generation을 무효화해 늦은 렌더/dispatch를 거절한다. 이미 chooser에 전달한 snapshot은 `exports/dispatched`로 옮겨 기록 삭제 후에도 읽을 수 있게 한다. 전달 시점으로부터 24시간이 지난 파일은 다음 시작/공유/삭제에서 정리 대상이다. 미실행 중 즉시 제거를 보장하지 않고 Android 캐시 회수 시 더 일찍 사라질 수 있다. 최대20개/64MiB admission 상한은 기존 전달파일을 유지하고 새 공유를 거절한다. 자동으로 가족 계정에 업로드하거나 동기화하지 않는다.
+
+가져오기는 timestamp와 길이 구분 UTF-8 필드의 SHA-256 출처를 schema1의 로컬 meta에 저장하며 기록·출처·월령을 한 transaction으로 쓴다. 출처는 충돌로 추가된 행당1개이며 원시 메타10,000개 상한을 적용한다. JSONv1/CSV에는 이 로컬 출처가 없다. 새 DB 복원 후 원래 충돌 백업을 다시 가져오면 별도 기록이 추가될 수 있고, 독립적인 외부 기록의 ID/모든 필드가 재배정된 행과 같으면 v1에서 구분할 수 없다. 설치 간 완전한 출처 보존을 구현한 것으로 표현하지 않는다.
 
 ## 4. 결제 검증 서비스와 몰림 대응
 

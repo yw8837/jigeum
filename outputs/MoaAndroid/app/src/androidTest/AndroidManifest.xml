@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Only the instrumentation APK owns this receiver; its UID differs from the app. -->
+        <activity android:name="com.moa.babylanguage.ArtifactGrantReceiverActivity"
+            android:exported="true" android:process=":share_probe" />
+    </application>
+</manifest>
