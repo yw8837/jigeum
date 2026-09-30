@@ -26,8 +26,13 @@ class ArtifactUriGrantTests {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test fun separateTestApkUidReopensOriginalGrantedUriAfterSourceAndCacheClear() {
+        // Launching another APK can destroy the ActivityScenario host. Resolve it once;
+        // provider/DB cleanup needs only the application context after dispatch.
+        val host = compose.activity
+        val appContext = host.applicationContext
+        val testPackage = InstrumentationRegistry.getInstrumentation().context.packageName
         val id = "uri-grant-${UUID.randomUUID()}"
-        val store = ObservationStore(compose.activity, "$id.db", "$id-legacy")
+        val store = ObservationStore(appContext, "$id.db", "$id-legacy")
         val record = Observation(System.currentTimeMillis(), "옹알이", "놀이 중", "", "같이 놀아 줄래?")
         val first = AtomicReference<Bundle>()
         val second = AtomicReference<Bundle>()
@@ -45,12 +50,11 @@ class ArtifactUriGrantTests {
             runBlocking {
                 store.save(record)
                 val generation = MemoryArtifacts.currentGeneration()
-                val file = MemoryArtifacts.card(compose.activity, record, generation)
+                val file = MemoryArtifacts.card(appContext, record, generation)
                 generated = file
-                retained = File(compose.activity.cacheDir, "exports/dispatched/${file.name}")
-                MemoryArtifacts.share(compose.activity, file, "image/png", generation, ArtifactShareLauncher { context, chooser ->
+                retained = File(appContext.cacheDir, "exports/dispatched/${file.name}")
+                MemoryArtifacts.share(host, file, "image/png", generation, ArtifactShareLauncher { context, chooser ->
                     val send = chooser.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)!!
-                    val testPackage = InstrumentationRegistry.getInstrumentation().context.packageName
                     val receiver = Intent(send).setComponent(ComponentName(testPackage, ArtifactGrantReceiverActivity::class.java.name))
                     receiver.putExtra("reply", reply)
                     context.startActivity(receiver)
@@ -60,7 +64,7 @@ class ArtifactUriGrantTests {
             assertNull(first.get().getString("error"))
             assertTrue(first.get().getInt("bytes") > 0)
             assertNotEquals("A same-UID provider read would not prove grant consumption", Process.myUid(), first.get().getInt("uid"))
-            runBlocking { store.deleteAll(); MemoryArtifacts.clear(compose.activity) }
+            runBlocking { store.deleteAll(); MemoryArtifacts.clear(appContext) }
             assertTrue(runBlocking { store.snapshot().observations.isEmpty() })
             first.get().getParcelable<Messenger>("requests")!!.send(Message.obtain().apply { what = 1 })
             assertTrue("Recipient must reopen its original grant after deletion", laterRead.await(8, TimeUnit.SECONDS))
@@ -70,8 +74,8 @@ class ArtifactUriGrantTests {
             // Finish a waiting receiver even when an earlier assertion fails.
             first.get()?.getParcelable<Messenger>("requests")?.let { runCatching { it.send(Message.obtain().apply { what = 1 }) } }
             runBlocking { store.close() }
-            compose.activity.deleteDatabase("$id.db")
-            compose.activity.getSharedPreferences("$id-legacy", 0).edit().clear().commit()
+            appContext.deleteDatabase("$id.db")
+            appContext.getSharedPreferences("$id-legacy", 0).edit().clear().commit()
             generated?.delete(); retained?.delete()
         }
     }
