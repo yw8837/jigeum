@@ -74,9 +74,12 @@ data class CameraObservation(
 @Composable
 fun CameraScanScreen(
     onBack: () -> Unit,
-    onTranslate: ((CameraObservation) -> Unit)? = null
+    onTranslate: ((CameraObservation) -> Unit)? = null,
+    authorize: () -> Boolean = { false }
 ) {
     val context = LocalContext.current
+    val currentAuthorize by rememberUpdatedState(authorize)
+    val alive = remember { AtomicBoolean(true) }
     var hasPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
@@ -92,9 +95,23 @@ fun CameraScanScreen(
     var activeCamera by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
     var canSwitchCamera by remember { mutableStateOf(false) }
     var manualNote by remember { mutableStateOf<String?>(null) }
+    fun checkAccess(): Boolean {
+        if (!alive.get()) return false
+        if (currentAuthorize()) return true
+        active = false
+        cameraReady = false
+        observation = FaceObservation.WAITING
+        manualNote = null
+        return false
+    }
+    DisposableEffect(Unit) { onDispose { alive.set(false) } }
+    LaunchedEffect(Unit) {
+        while (checkAccess()) delay(1000)
+    }
     val permissionRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
+        if (!checkAccess()) return@rememberLauncherForActivityResult
         hasPermission = granted
         active = granted
         if (!granted) error = "카메라 권한이 없어 관찰을 시작할 수 없어요."
@@ -138,10 +155,12 @@ fun CameraScanScreen(
                     onError = { error = it; cameraReady = false },
                     onWarning = { warning = it },
                     onReady = { facing, canSwitch ->
-                        activeCamera = facing
-                        canSwitchCamera = canSwitch
-                        cameraReady = true
-                        error = null
+                        if (checkAccess()) {
+                            activeCamera = facing
+                            canSwitchCamera = canSwitch
+                            cameraReady = true
+                            error = null
+                        }
                     }
                 )
             } else {
@@ -168,7 +187,8 @@ fun CameraScanScreen(
                 )
                 if (cameraReady && canSwitchCamera) {
                     OutlinedButton(
-                        onClick = {
+                        onClick = switch@{
+                            if (!checkAccess()) return@switch
                             cameraReady = false
                             canSwitchCamera = false
                             observation = FaceObservation.WAITING
@@ -202,7 +222,8 @@ fun CameraScanScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (!active) {
                 Button(
-                    onClick = {
+                    onClick = start@{
+                        if (!checkAccess()) return@start
                         error = null
                         warning = null
                         cameraReady = false
@@ -223,7 +244,8 @@ fun CameraScanScreen(
         }
         if (onTranslate != null) {
             Button(
-                onClick = {
+                onClick = translate@{
+                    if (!checkAccess()) return@translate
                     val cue = CameraObservation(
                         faceVisible = observation == FaceObservation.FACE_VISIBLE ||
                             observation == FaceObservation.MOUTH_OPEN,

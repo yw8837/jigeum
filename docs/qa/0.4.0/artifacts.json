@@ -1,0 +1,18 @@
+[
+  {
+    "file": "outputs/Jigeum-Android-debug-0.4.0.apk",
+    "bytes": 81101372,
+    "sha256": "3a60112e49198c6013c0630bbf688716c8be61f3ceb514b6e9a681d5c6283795"
+  },
+  {
+    "file": "outputs/Jigeum-Android-unsigned-0.4.0.aab",
+    "bytes": 44780019,
+    "sha256": "3cec11dd7795483b4c6064ca458d1ba2f70a7cc7d2ec0ec8ccb6c0192e4a6b8b"
+  },
+  {
+    "file": "outputs/Marketing/jigeum-trailer-small.mp4",
+    "bytes": 744721,
+    "sha256": "fcc9dccf5589e520a41c1c2c7fc79a7ea0794ba8c8727a2ebb14ce7455bce5ce",
+    "download_copy_verified": true
+  }
+]

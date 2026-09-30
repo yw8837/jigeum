@@ -26,8 +26,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 6
-        versionName = "0.3.0"
+        versionCode = 7
+        versionName = "0.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")
@@ -90,6 +90,9 @@ dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(composeBom)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.test:runner:1.6.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
 }

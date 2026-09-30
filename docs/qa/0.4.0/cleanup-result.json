@@ -1,0 +1,21 @@
+{
+  "delete_all": {
+    "records": 0,
+    "age_cleared": true,
+    "phrase_history_cleared": true,
+    "recovery_cleared": true,
+    "exports_empty": true
+  },
+  "owned_fixtures_removed": true,
+  "display_restored": {
+    "size": "Physical size: 1080x2400\r\n",
+    "density": "Physical density: 420\r\n",
+    "font_scale": "1.0"
+  },
+  "test_package_removed": true,
+  "permission_reset": true,
+  "cold_launch": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 2883\r\nWaitTime: 2895\r\nComplete\r\n",
+  "crash_buffer_app_entries": 0,
+  "status": "pass",
+  "owned_emulator_stopped": true
+}

@@ -21,8 +21,7 @@ def main():
     q.tap(*name['center']);q.shell('input','keycombination','113','29')
     q.shell('input','text','jigeum-qa-backup.json');q.shell('input','keyevent','KEYCODE_BACK')
     # Activity remains in the background while DocumentsUI owns the save destination.
-    q.shell('am','kill',q.PACKAGE);time.sleep(.5)
-    assert not q.shell('pidof',q.PACKAGE,check=False).stdout.strip(),'App must actually be killed in picker'
+    q.kill_background_process()
     q.tap_text('SAVE',scroll=False);q.wait_ui('기록 백업을 저장했어요',seconds=20)
     q.trace('backup-after-process-death')
     raw=q.adb('exec-out','cat','/sdcard/Download/jigeum-qa-backup.json').stdout

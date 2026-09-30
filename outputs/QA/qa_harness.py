@@ -135,6 +135,26 @@ def launch():
     wait_ui("지금 아기는")
 
 
+def kill_background_process():
+    """After onStop, terminate only this owned debug app while retaining task state."""
+    time.sleep(.8)
+    shell("am", "kill", PACKAGE)
+    time.sleep(1)
+    pid = shell("pidof", PACKAGE, check=False).stdout.decode().strip()
+    if pid:
+        # Android may keep a recently visible process despite advisory am kill.
+        # run-as confines the fallback to the debug app UID; force-stop would
+        # change saved-task semantics and is deliberately not used here.
+        if not pid.isdecimal():
+            raise AssertionError(f"Unexpected target process list: {pid}")
+        shell("run-as", PACKAGE, "kill", "-9", pid)
+    for _ in range(5):
+        if not shell("pidof", PACKAGE, check=False).stdout.strip():
+            return
+        time.sleep(.2)
+    raise AssertionError("Owned background app process did not terminate")
+
+
 def background():
     launch()
     tap_text("소리로 번역하기")

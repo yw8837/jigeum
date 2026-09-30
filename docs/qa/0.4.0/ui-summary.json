@@ -1,0 +1,59 @@
+{
+  "status": "pass",
+  "unique_scenarios": 7,
+  "latest_by_mode": [
+    {
+      "mode": "normal",
+      "status": "pass",
+      "seconds": 95.6
+    },
+    {
+      "mode": "access",
+      "status": "pass",
+      "seconds": 80.4
+    },
+    {
+      "mode": "album",
+      "status": "pass",
+      "seconds": 41.5
+    },
+    {
+      "mode": "permission",
+      "status": "pass",
+      "seconds": 76.0
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "pass",
+      "seconds": 76.5
+    },
+    {
+      "mode": "transfer-e2e",
+      "status": "pass"
+    },
+    {
+      "mode": "layout",
+      "status": "pass",
+      "seconds": 89.1
+    }
+  ],
+  "preserved_failed_runs": [
+    {
+      "mode": "access",
+      "status": "fail",
+      "error": ""
+    }
+  ],
+  "final_apk_modes": [
+    "paywall-layout",
+    "transfer-e2e",
+    "layout"
+  ],
+  "before_viewport_clip_modes": [
+    "normal",
+    "access",
+    "album",
+    "permission"
+  ],
+  "scope": "API35 x86_64 emulator; free production UI, paid navigation only through androidTest fakes. No real Play transaction or ARM device."
+}
