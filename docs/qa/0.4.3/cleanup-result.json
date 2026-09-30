@@ -1,0 +1,30 @@
+{
+  "delete_all": {
+    "records": 0,
+    "age_cleared": true,
+    "phrase_history_cleared": true,
+    "recovery_cleared": true,
+    "undispatched_exports_empty": true,
+    "dispatched_snapshots_retained": 2
+  },
+  "import_origins_cleared": true,
+  "owned_dispatched_test_snapshots_removed": [
+    "cache/exports/dispatched/jigeum-card-049c4474-77d6-4fd7-950a-8ddef1860b54.png",
+    "cache/exports/dispatched/jigeum-card-a892c003-4fc0-4625-8a0e-8662380a9de7.png"
+  ],
+  "cycle1_owned_test_db_removed": [
+    "uri-grant-6a11d019-d2fd-4bc3-b6bc-8f1e284ed2ab.db",
+    "uri-grant-6a11d019-d2fd-4bc3-b6bc-8f1e284ed2ab.db-journal"
+  ],
+  "owned_fixtures_removed": true,
+  "display_restored": {
+    "size": "Physical size: 1080x2400\r\n",
+    "density": "Physical density: 420\r\n",
+    "font_scale": "1.0"
+  },
+  "test_package_removed": true,
+  "permission_reset": true,
+  "cold_launch": "Starting: Intent { cmp=com.moa.babylanguage/.MainActivity }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: com.moa.babylanguage/.MainActivity\r\nTotalTime: 3548\r\nWaitTime: 3555\r\nComplete\r\n",
+  "crash_buffer_app_entries": 0,
+  "status": "pass"
+}

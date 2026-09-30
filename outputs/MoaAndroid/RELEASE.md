@@ -1,6 +1,10 @@
 # 지금 내 기분이 그래 Android 릴리스 빌드
 
-이 문서는 `0.3.0` (`versionCode 6`)의 패키징 설정을 설명합니다. 설치 식별자 `applicationId`는 기존의 `com.moa.babylanguage`를 유지하고, 사용자에게 보이는 앱 이름은 **지금 내 기분이 그래**입니다. 최소 SDK는 26, 타깃 SDK는 36입니다. 현재 범위는 로컬 통합 빌드와 QA이며 출시·제출·운영 배포는 별도 진행합니다.
+## 현재 SDK 진단 전송 구성
+
+0.4.3은 기존 `ACCESS_NETWORK_STATE` 제거를 유지한다. 현재 MediaPipe/Billing SDK의 CCT DataTransport는 decorate 단계의 네트워크 상태 조회에서 이 권한을 요구하므로 이벤트를 저장/HTTP 전송하기 전에 실패한다. 시험에서 SDK transport DB 초기화와 비어 있는 event/context, 해당 권한 오류를 확인했다. 이는 공식 telemetry opt-out 구현이 아니며, SDK 교체나 이 권한 추가 전에 소스·런타임·개인정보 선언을 다시 검토해야 한다. 단순히 오류 로그를 없애려고 권한을 추가하지 않는다. 결제 HTTPS의 `INTERNET`과는 구분한다. [현재 의존성 검토](../../docs/qa/0.4.3/sdk-transport-review.md).
+
+현재 통합 버전은 **0.4.3 (`versionCode 10`)**입니다. 아래 0.3.0/0.4.1/0.4.2 절은 패키징 설정과 검증 이력을 설명합니다. 설치 식별자 `applicationId`는 기존의 `com.moa.babylanguage`를 유지하고, 사용자에게 보이는 앱 이름은 **지금 내 기분이 그래**입니다. 최소 SDK는 26, 타깃 SDK는 36입니다. 현재 범위는 로컬 통합 빌드와 QA이며 출시·제출·운영 배포는 별도 진행합니다.
 
 ## 0.3.0 이용권 설정
 
@@ -41,8 +45,12 @@ Play 제출 전에는 릴리스 서명 APK 또는 AAB에서 만든 APK를 실제
 
 ## 0.4.1 검증 추가
 
-main은 code8/0.4.1이며 protobuf-javalite4.27.5와 결제 복구를 반영했다. 패키징 설정은 위 제한을 유지한다. [최신 QA](../Jigeum-QA-0.4.1.md)와 [PR #2 대기](../../docs/qa/PR2-INTEGRATION.md)를 구분한다. 실제 업로드 서명·Play/ARM은 미검증이며 R8/resource shrink를 켜지 않는다.
+0.4.1/code8은 protobuf-javalite4.27.5와 결제 복구를 반영했다. 패키징 설정은 위 제한을 유지한다. [당시 QA](../Jigeum-QA-0.4.1.md)와 [PR #2 통합 이력](../../docs/qa/PR2-INTEGRATION.md)을 구분한다. 실제 업로드 서명·Play/ARM은 미검증이며 R8/resource shrink를 켜지 않는다.
 
 ## 0.4.2 검증 추가
 
-code9/0.4.2는 서명된 구매 토큰 SHA-256 확인값으로 서버 acknowledge 완료를 연결한다. Node→Android 계약과 기존 회귀를 포함한85계측, 서버43시험을 통과했다. [최신 QA](../Jigeum-QA-0.4.2.md)를 확인한다. APK는 개발 서명, AAB는 unsigned이며 실제 Play/ARM/PR #2 통합은 미완료다.
+code9/0.4.2는 서명된 구매 토큰 SHA-256 확인값으로 서버 acknowledge 완료를 연결한다. Node→Android 계약과 기존 회귀를 포함한85계측, 서버43시험을 통과했다. [당시 QA](../Jigeum-QA-0.4.2.md)를 확인한다. APK는 개발 서명, AAB는 unsigned였으며 이 실행에는 PR #2를 포함하지 않았다.
+
+## 0.4.3 통합 검증
+
+code10/0.4.3은 준비 완료된 PR #2와 가져오기 transaction·공유 snapshot·CameraX 실행 경계 보강을 통합한다. Android 119/119, 서버 43/43, 실제 UI 5종, 0.4.2에서의 데이터 보존 업데이트, 패키지·정리를 확인했다. [최신 QA](../Jigeum-QA-0.4.3.md)에 두 실패 cycle과 초안 보존 timeout의 미확정 원인도 남겼다. 기존 0.4 접근 정책과 0.4.2 ACK 계약을 유지한다. APK는 개발 서명, AAB는 unsigned이며 실제 구매는 운영 URL/공개키 미설정으로 비활성화다. 실제 Play/ARM/업로드 서명·공개 제출은 여전히 별도다.

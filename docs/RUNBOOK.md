@@ -9,11 +9,11 @@
 | Android | Kotlin 2.2.10 / Compose BOM 2025.08.01 / CameraX 1.6.2 / MediaPipe 1.0.0 |
 | 빌드 | Gradle 8.14.3 / AGP 8.13.2 / JDK 17 이상. 검증 환경은 JDK 21.0.12 |
 | SDK | min 26 / target·compile 36 / 계측 기기 API 35 x86_64 |
-| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.2 / code 9 |
+| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.3 / code 10 |
 | 결제 | Play Billing 9.1.0. 서버는 Node 내장 모듈을 사용하며 외부 npm 의존성 없음 |
 | 테스트 도구 | Python 3.10 이상, ADB, ffmpeg(합성 fixture 생성), Android SDK build-tools 36 |
 
-0.4.0 전체 이용권의 권한 분리를 구현했다. 최신 main 검증 결과는 [0.4.2 QA](../outputs/Jigeum-QA-0.4.2.md)를 따른다. PR #2와 별도 로컬 후보는 이 소스에 포함되지 않았다. 이전 0.3.0 증거와 새 실행은 구분한다.
+0.4.0 전체 이용권의 권한 분리를 유지한다. 최신 통합 검증 결과는 [0.4.3 QA](../outputs/Jigeum-QA-0.4.3.md)를 따른다. PR #2와 가져오기·공유·카메라 경계 보강을 포함하며, JSONv2 로컬 대안은 적용하지 않았다. 이전 버전 증거와 새 실행은 구분한다.
 
 ## Android 빌드
 

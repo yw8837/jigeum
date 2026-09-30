@@ -1,0 +1,26 @@
+{
+  "tables": [
+    "android_metadata",
+    "events",
+    "event_metadata",
+    "transport_contexts",
+    "event_payloads",
+    "log_event_dropped",
+    "global_log_event_state"
+  ],
+  "event_columns": [
+    "_id",
+    "context_id",
+    "transport_name",
+    "timestamp_ms",
+    "uptime_ms",
+    "payload",
+    "code",
+    "num_attempts",
+    "payload_encoding",
+    "inline"
+  ],
+  "pending_events": 0,
+  "transports": [],
+  "backends": []
+}

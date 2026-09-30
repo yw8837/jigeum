@@ -4,7 +4,7 @@
 
 ## 지금 꼭 알아야 할 것
 
-**현재 main 소스는 0.4.2/code 9이다. 기존 0.4 무료/전체 이용권에 결제 복구·protobuf patch·서버 acknowledge와 앱의 서명된 토큰 확인을 추가했다. 최신 QA와 미완료 항목은 [0.4.2 보고서](../outputs/Jigeum-QA-0.4.2.md), 이전 접근 구현 근거는 [0.4 보고서](../outputs/Jigeum-QA-0.4.0.md)를 확인한다. PR #2는 준비 완료 안내 전에는 머지하지 않는다.** 사용자가 협업 자료를 먼저 푸시한 뒤 원래 구현을 계속하라고 요청해, `f42238c` 체크포인트 후에도 작업을 이어갔다.
+**현재 통합 소스는 0.4.3/code 10이다. 기존 0.4 무료/전체 이용권과 0.4.2 결제 계약을 유지하고 PR #2의 가져오기·공유·CameraX 경계를 보강했다. 준비 완료 안내를 받은 뒤 별도 통합 브랜치에서 Android 119개·서버 43개·실제 UI 5종을 검증했다. 최신 QA와 미완료 항목은 [0.4.3 보고서](../outputs/Jigeum-QA-0.4.3.md), 이전 접근 구현 근거는 [0.4 보고서](../outputs/Jigeum-QA-0.4.0.md)를 확인한다.** 사용자가 협업 자료를 먼저 푸시한 뒤 원래 구현을 계속하라고 요청해, `f42238c` 체크포인트 후에도 작업을 이어갔다.
 
 | 구분 | 상태 |
 |---|---|
@@ -14,7 +14,8 @@
 | 화면·상태 처리 | 기능별 안내, 안전한 복귀, 초안 보존, 실행 시 권한 검사, 만료 정리·늦은 결과 폐기 구현 |
 | 0.4 로컬 QA | Android 72/72, 서버 16/16, 무료 UI 7유형, debug/test/release/lint 및 패키지 통과. 합성 시험 데이터와 전용 에뮬레이터 정리 완료 |
 | 0.4.2 main QA | Android 85/85, 서버 43/43, 빌드·lint·패키지·정리 통과. 무료 UI 3유형은 이전0.4.1 결과. PR #2 미포함 |
-| 협업 대기 | ddot이 분석·시장·BM과 PR #2를 담당. 로컬 후보99ca1e1은 별도 보존. [통합 기준](qa/PR2-INTEGRATION.md) |
+| 0.4.3 통합 QA | Android119/119, 서버43/43, 실제UI5종, 업데이트·패키지·정리 통과. PR #2와 후속 보강 포함. 간헐적 계측 timeout1회의 원인은 미확정으로 보존 |
+| 협업 | ddot이 분석·시장·BM을 담당. PR #2는 준비 완료 안내 후 통합 검증. 로컬 JSONv2 후보99ca1e1은 적용하지 않고 별도 보존. [통합 결과](qa/PR2-INTEGRATION.md) |
 | 오프라인 캐시 | 서명과 실제 경과시간을 함께 검사. 재부팅 후 온라인 재확인 필요 |
 | 결제 운영 연결 | BuildConfig 검증 URL·공개 키가 비어 있어 실제 구매 비활성화 |
 | 실제 Play/ARM | 실제 거래·ARM 실기기 미검증. 테스트 대역 통과로 대체하지 말 것 |
@@ -67,7 +68,7 @@
 | `ObservationStore.kt`, `RecordTransfer.kt` | SQLite·이전·JSON/CSV·충돌/중복 방어 |
 | `MemoryArtifacts.kt`, `LibraryScreens.kt` | PNG/PDF·아기말북·백업 패널·paywall |
 | `AccessPolicy.kt`, `BillingManager.kt`, `BillingModels.kt`, `PurchaseVerifier.kt` | Play 결제 상태·서명 이용권·현재 권한 검사 |
-| `outputs/PlayVerifier` | Node 무상태 Google Play 검증 서버·16개 시험 |
+| `outputs/PlayVerifier` | Node 무상태 Google Play 검증 서버·43개 시험 |
 | `outputs/QA` | portable 계측/UI/미디어/패키지 검증 도구 |
 | `outputs/StoreListing` | 스토어·정책·이용약관 초안과 이미지 |
 | `outputs/Marketing`, `tools/marketing` | 승인된 결과물과 재편집 소스/선택 자산 |

@@ -1,6 +1,6 @@
 # 다음 작업 — 0.4.0 전체 이용권
 
-이 목록은 구현 승인 기준이다. 체크되지 않은 항목을 완료로 보고하지 않는다. **현재 main 코드는 0.4.2/code 9이다. 아래 접근 정책은 소스에 구현했고, 최신 실행 결과는 [0.4.2 QA](../outputs/Jigeum-QA-0.4.2.md)를 기준으로 한다. 기존0.4 정책은 유지한다. 실제 운영 연결과 Play/ARM 검증은 아래 3절에 남겨 두었다.**
+이 목록은 구현 승인 기준이다. 체크되지 않은 항목을 완료로 보고하지 않는다. **현재 통합 코드는 0.4.3/code 10이다. 접근 정책과 PR #2 경계를 소스에 구현했고, 최신 실행 결과는 [0.4.3 QA](../outputs/Jigeum-QA-0.4.3.md)를 기준으로 한다. 기존 0.4 정책은 유지한다. 실제 운영 연결과 Play/ARM 검증은 아래 3절에 남겨 두었다.**
 
 ## 1. 중앙 접근 정책과 화면 흐름
 
@@ -51,6 +51,8 @@ portable UI의 `access`/`paywall-layout`은 0.4 무료 상태를 검증한다. �
 
 ## 5. PR #2 준비 완료 후 통합
 
-- [ ] ddot 준비 완료 안내를 받고 PR #2를 최신 main과 조정한다. Draft 상태에서 자동 머지하지 않는다.
-- [ ] [통합 기준](qa/PR2-INTEGRATION.md)의 가져오기 충돌/반복/rollback/upgrade, 공유·삭제·늦은 callback, 전체 삭제와 진행 중 import, provider 대기 후 bind 권한 경계를 비교한다.
-- [ ] 정확한 PR head와 통합 source에서 debug/test/release/lint·기존+신규 전체 계측·관련 실제 UI를 검증한 뒤 변경을 커밋/푸시한다. 후보95 및 main81/85 결과를 PR 검증으로 재사용하지 않는다.
+- [x] ddot 준비 완료 안내를 받고 PR #2를 최신 main과 조정했다. Android 검증 전 main에 머지하지 않았다.
+- [x] [통합 결과](qa/PR2-INTEGRATION.md)의 가져오기 충돌/반복/rollback/upgrade, 공유·삭제·늦은 callback, 전체 삭제와 진행 중 import, provider 대기 후 bind 권한 경계를 비교·보강했다.
+- [x] 정확한 PR head와 통합 source에서 debug/test/release/lint·전체 119계측·서버 43·실제 UI 5종·패키지·정리를 검증했다. 후보95 및 main81/85 결과를 PR 검증으로 재사용하지 않았다. 최신 receipt와 Git 상태를 보고서에 남긴다.
+- [ ] 기존 초안 보존 시험의 한 차례 8초 timeout은 원인 미확정이다. 원본 입력 focused2회와 최종 전체에서는 통과했다. 재발 시 정리 전 의미 트리·IME·focus·실제 화면 진단으로 원인을 좁힌다.
+- [ ] SDK나 `ACCESS_NETWORK_STATE` 권한 변경 시 MediaPipe/Billing의 진단 전송 경로를 다시 검토한다. 현재 구성은 CCT 전송의 저장 전 단계에서 실패하며 공식 opt-out 구현은 아니다.

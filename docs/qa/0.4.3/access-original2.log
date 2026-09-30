@@ -1,0 +1,45 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+
+INSTRUMENTATION_STATUS: current=1
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=1
+
+INSTRUMENTATION_STATUS: stream=
+
+com.moa.babylanguage.AccessNavigationTests:
+
+INSTRUMENTATION_STATUS: test=expiredCameraDraftKeepsEditsAcrossPaywallRestoreAndSavesForFree
+
+INSTRUMENTATION_STATUS_CODE: 1
+
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+
+INSTRUMENTATION_STATUS: current=1
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=1
+
+INSTRUMENTATION_STATUS: stream=.
+
+INSTRUMENTATION_STATUS: test=expiredCameraDraftKeepsEditsAcrossPaywallRestoreAndSavesForFree
+
+INSTRUMENTATION_STATUS_CODE: 0
+
+INSTRUMENTATION_RESULT: stream=
+
+
+
+Time: 5.485
+
+
+
+OK (1 test)
+
+
+
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,20 @@
+{
+  "version": "0.4.3",
+  "versionCode": 10,
+  "build_source_commit": "c4edfed8910c1d2cf01160deb0fd2d87f811c407",
+  "qa_report_commit_parent": "c4edfed8910c1d2cf01160deb0fd2d87f811c407",
+  "original_pr_head": "0e19c09577352bd2c1c0da69dff4de58ed4d2844",
+  "reconciled_pr_head": "8475658f171b68e6d909f2798bd680fdeeaffd9d",
+  "artifacts": [
+    {
+      "path": "outputs/Jigeum-Android-debug-0.4.3.apk",
+      "bytes": 81264895,
+      "sha256": "137bc3154f9ebf947a5da078e6450bbd56f512f8b6be22e73537889a89d8ff35"
+    },
+    {
+      "path": "outputs/Jigeum-Android-unsigned-0.4.3.aab",
+      "bytes": 44927669,
+      "sha256": "122165f771381cc3d62af72b88ac65e8d330a787f99b3a13e3aeb5d286bb2334"
+    }
+  ]
+}

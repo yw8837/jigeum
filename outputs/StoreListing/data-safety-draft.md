@@ -33,6 +33,7 @@
 - **백업:** OS 자동 백업·기기 이전 제외 규칙을 사용한다. 모든 제조사 도구의 동작 검증은 별개다. 무료 JSON 백업은 사용자가 직접 관리한다.
 - **계정:** 앱 회원가입/로그인은 없다. Google Play 계정은 결제·복원에 사용된다. 앱 계정 삭제와 Google 계정/구매 기록 삭제를 혼동하지 않는다.
 - **기타 SDK:** 광고·행동 분석·앱 로그인 SDK는 없다. MediaPipe/YAMNet은 기기 내 추론에 사용한다.
+- **SDK 자체 진단:** MediaPipe Tasks에는 앱/작업 이름·처리 지연·처리 횟수 등의 성능 진단 경로가 있으며 확인한 payload에 원음/영상/랜드마크/아기 기록은 없다. Billing도 자체 진단을 같은 CCT DataTransport로 전달한다. 현재 APK는 ACCESS_NETWORK_STATE를 제거해 CCT decorate 단계의 네트워크 상태 조회가 실패하고 저장/HTTP 전송 전 중단한다. SDK transport DB는 초기화되지만 시험 종료 후 events/transport_contexts는 비어 있었다. 빈 DB만으로 모든 네트워크 미전송을 보장하지 않는다. 공식 opt-out 구현은 아니며 SDK/권한 변경 시 다시 검증해야 한다.
 - **대상 사용자:** 성인 보호자. 실제 스토어 소재·UI·마케팅과 Play 대상 연령 설문을 일치시킨다.
 
 ## 출시 전에 남은 확인

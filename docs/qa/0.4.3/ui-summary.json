@@ -1,0 +1,29 @@
+{
+  "version": "0.4.3",
+  "runs": [
+    {
+      "mode": "normal",
+      "status": "pass",
+      "seconds": 70.8
+    },
+    {
+      "mode": "access",
+      "status": "pass",
+      "seconds": 80.7
+    },
+    {
+      "mode": "album",
+      "status": "pass",
+      "seconds": 42.8
+    },
+    {
+      "mode": "paywall-layout",
+      "status": "pass",
+      "seconds": 74.3
+    },
+    {
+      "mode": "transfer-e2e",
+      "status": "pass"
+    }
+  ]
+}
