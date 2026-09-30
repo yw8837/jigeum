@@ -1,0 +1,6 @@
+{
+  "scoped_state_absent": true,
+  "completed_scope": "main billing and protobuf",
+  "pr2_integrated": false,
+  "harness_note": "Cleanup assertions initially assumed success wrappers for read/clear. Actual shapes checked: clear returned cleared:true, final read exists:false. Application QA unaffected."
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "normal",
+    "status": "pass",
+    "seconds": 70.4
+  },
+  {
+    "mode": "access",
+    "status": "pass",
+    "seconds": 77.9
+  },
+  {
+    "mode": "transfer-e2e",
+    "status": "pass"
+  }
+]

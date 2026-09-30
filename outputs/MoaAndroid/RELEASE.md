@@ -38,3 +38,7 @@ CameraX 1.6.2를 사용합니다. 이전 1.3.4의 `libimage_processing_util_jni.
 Play 제출 전에는 릴리스 서명 APK 또는 AAB에서 만든 APK를 실제 ARM 기기에 설치해 녹음, 후면 카메라와 전후면 전환, 저장 영상의 첫 최대 10초 오디오 후보, 보호자 확인, 권한 거부·복구, 기록 삭제를 확인하세요. Play Console의 개인정보처리방침 URL, 데이터 보안, 앱 콘텐츠, 스토어 등록 정보와 심사 항목도 완성해야 합니다.
 
 공식 기준: [Play 타깃 API 요건](https://support.google.com/googleplay/android-developer/answer/11926878), [16KB 페이지 지원](https://developer.android.com/guide/practices/page-sizes), [Play 업로드 준비](https://developer.android.com/studio/publish/upload-bundle).
+
+## 0.4.1 검증 추가
+
+main은 code8/0.4.1이며 protobuf-javalite4.27.5와 결제 복구를 반영했다. 패키징 설정은 위 제한을 유지한다. [최신 QA](../Jigeum-QA-0.4.1.md)와 [PR #2 대기](../../docs/qa/PR2-INTEGRATION.md)를 구분한다. 실제 업로드 서명·Play/ARM은 미검증이며 R8/resource shrink를 켜지 않는다.

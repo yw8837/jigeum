@@ -1,0 +1,38 @@
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+w: file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/build.gradle.kts:67:21: 'jvmTarget: String' is deprecated. Please migrate to the compilerOptions DSL. More details are here: https://kotl.in/u1r8ln
+
+> Task :app:dependencyInsight
+com.google.protobuf:protobuf-javalite:4.27.5
+  Variant runtime:
+    | Attribute Name                                  | Provided     | Requested    |
+    |-------------------------------------------------|--------------|--------------|
+    | org.gradle.libraryelements                      | jar          |              |
+    | org.gradle.status                               | release      |              |
+    | org.gradle.category                             | library      | library      |
+    | org.gradle.usage                                | java-runtime | java-runtime |
+    | com.android.build.api.attributes.AgpVersionAttr |              | 8.13.2       |
+    | com.android.build.api.attributes.BuildTypeAttr  |              | release      |
+    | org.gradle.jvm.environment                      |              | android      |
+    | org.jetbrains.kotlin.platform.type              |              | androidJvm   |
+   Selection reasons:
+      - By conflict resolution: between versions 4.27.5 and 4.26.1
+
+com.google.protobuf:protobuf-javalite:4.27.5
+\--- releaseRuntimeClasspath
+
+com.google.protobuf:protobuf-javalite:4.26.1 -> 4.27.5
+\--- com.google.mediapipe:tasks-core:1.0.0
+     +--- com.google.mediapipe:tasks-vision:1.0.0
+     |    \--- releaseRuntimeClasspath
+     \--- com.google.mediapipe:tasks-audio:1.0.0
+          \--- releaseRuntimeClasspath
+
+(*) - Indicates repeated occurrences of a transitive dependency subtree. Gradle expands transitive dependency subtrees only once per project; repeat occurrences only display the root of the subtree, followed by this annotation.
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 8s
+1 actionable task: 1 executed
