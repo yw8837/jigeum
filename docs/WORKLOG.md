@@ -30,3 +30,5 @@
 14. **0.4 최종 검증·압축 영상:** 중앙 viewport의 상태바 침범을 수정한 APK에서 72계측을 재통과했다. 서버 16개, 무료 UI 7유형과 패키지를 확인하고 합성 기록·fixture·테스트 패키지를 정리했다. 미니 영상은 다운로드 폴더의 사용자 지정 이름으로 저장했다. 실행별 범위·실패/수정·운영 미검증 사항은 [0.4 최종 보고서](../outputs/Jigeum-QA-0.4.0.md)에 보존한다.
 
 15. **협업 경계와0.4.1:** 사용자 요청에 따라 ddot은 조사/시장/BM 및 PR #2를 담당하고, 준비 완료 안내 전 머지를 보류했다. root의 겹치는 가져오기/공유 후보는 `codex/service-041-candidate` / `99ca1e1`에 로컬 보존(95계측 통과)하고, 결제 callback/query timeout·acknowledge 재시도·protobuf4.27.5만 main에 적용했다. main은 빌드/81계측/서버34/무료UI3/패키지/정리 통과. [0.4.1 QA](../outputs/Jigeum-QA-0.4.1.md)와 [통합 대기](qa/PR2-INTEGRATION.md)에 미통합 코드 경계·운영 제한을 명시했다. 전체 서비스 완료나 실제 출시 검증으로 보고하지 않는다.
+
+16. **0.4.2 구매 확인 안정성:** PR #2 보류 중 서버의 유효 구매 acknowledge를 추가했다. ACK 상태·POST 성공을 확인한 뒤 구매 토큰 SHA-256을 서명하며, 앱은 서명 수락과 정확한 토큰 확인 후 client 중복 acknowledge를 생략한다. 이전 서버 응답은 앱 fallback을 유지한다. 신규 서버 regression 8개는 수정 전7fail로 확인했고, 최종 서버43/Android85·빌드·패키지·정리를 통과했다. Node→Android 공개 합성 UTF-8 서명 fixture도 실제 계측에서 검증했다. 운영 설정/실제 거래/ARM과 PR #2는 미완료다. [0.4.2 보고서](../outputs/Jigeum-QA-0.4.2.md).

@@ -1,0 +1,5 @@
+{
+  "scoped_state_absent": true,
+  "scope": "0.4.2 server/client acknowledgment",
+  "pr2_integrated": false
+}

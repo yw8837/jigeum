@@ -42,3 +42,7 @@ Play 제출 전에는 릴리스 서명 APK 또는 AAB에서 만든 APK를 실제
 ## 0.4.1 검증 추가
 
 main은 code8/0.4.1이며 protobuf-javalite4.27.5와 결제 복구를 반영했다. 패키징 설정은 위 제한을 유지한다. [최신 QA](../Jigeum-QA-0.4.1.md)와 [PR #2 대기](../../docs/qa/PR2-INTEGRATION.md)를 구분한다. 실제 업로드 서명·Play/ARM은 미검증이며 R8/resource shrink를 켜지 않는다.
+
+## 0.4.2 검증 추가
+
+code9/0.4.2는 서명된 구매 토큰 SHA-256 확인값으로 서버 acknowledge 완료를 연결한다. Node→Android 계약과 기존 회귀를 포함한85계측, 서버43시험을 통과했다. [최신 QA](../Jigeum-QA-0.4.2.md)를 확인한다. APK는 개발 서명, AAB는 unsigned이며 실제 Play/ARM/PR #2 통합은 미완료다.

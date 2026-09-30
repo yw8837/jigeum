@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "JIGEUM_PLAY_VERIFY_URL",
+    "Configured": false
+  },
+  {
+    "Name": "JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY",
+    "Configured": false
+  },
+  {
+    "Name": "MOA_UPLOAD_KEYSTORE",
+    "Configured": false
+  },
+  {
+    "Name": "MOA_UPLOAD_KEY_ALIAS",
+    "Configured": false
+  },
+  {
+    "Name": "MOA_UPLOAD_STORE_PASSWORD",
+    "Configured": false
+  },
+  {
+    "Name": "MOA_UPLOAD_KEY_PASSWORD",
+    "Configured": false
+  }
+]

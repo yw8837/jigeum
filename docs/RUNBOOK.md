@@ -9,11 +9,11 @@
 | Android | Kotlin 2.2.10 / Compose BOM 2025.08.01 / CameraX 1.6.2 / MediaPipe 1.0.0 |
 | 빌드 | Gradle 8.14.3 / AGP 8.13.2 / JDK 17 이상. 검증 환경은 JDK 21.0.12 |
 | SDK | min 26 / target·compile 36 / 계측 기기 API 35 x86_64 |
-| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.1 / code 8 |
+| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.2 / code 9 |
 | 결제 | Play Billing 9.1.0. 서버는 Node 내장 모듈을 사용하며 외부 npm 의존성 없음 |
 | 테스트 도구 | Python 3.10 이상, ADB, ffmpeg(합성 fixture 생성), Android SDK build-tools 36 |
 
-0.4.0 전체 이용권의 권한 분리를 구현했다. 최신 main 검증 결과는 [0.4.1 QA](../outputs/Jigeum-QA-0.4.1.md)를 따른다. PR #2와 별도 로컬 후보는 이 소스에 포함되지 않았다. 이전 0.3.0 증거와 새 실행은 구분한다.
+0.4.0 전체 이용권의 권한 분리를 구현했다. 최신 main 검증 결과는 [0.4.2 QA](../outputs/Jigeum-QA-0.4.2.md)를 따른다. PR #2와 별도 로컬 후보는 이 소스에 포함되지 않았다. 이전 0.3.0 증거와 새 실행은 구분한다.
 
 ## Android 빌드
 
@@ -99,3 +99,7 @@ npm test
 브랜치는 `main`, remote는 `https://github.com/yw8837/jigeum.git`이다. 기존 기준 커밋은 `a693b98`이다. 협업 변경은 파일 담당자와 통합자를 정한 뒤 커밋 단위로 올린다. 키·토큰·`local.properties`·`work/`·APK/AAB/ZIP·cache는 제외한다. 공유용 설치 파일은 로컬 `outputs`에 있으므로 Git clone에 APK가 없는 것은 정상이다.
 
 `docs/qa/baseline-0.3.0`에는 요약 JSON과 주요 로그를 함께 보존했다. 전체 스크린샷과 동작 trace는 로컬 `outputs/Jigeum-QA-evidence-0.3.0.zip`에 있다. 원본 증거에 개인 자료가 포함돼 있다면 추가 공유 전에 범위를 검토한다. 테스트 수·skip·실패·실행 환경·새 APK SHA는 실행별로 기록한다.
+
+## 0.4.2 결제 계약
+
+검증 서버는 허용 가능한 구매의 acknowledge를 완료하거나 Play의 ACKNOWLEDGED 상태를 확인한 뒤 서명한다. 앱은 서명 수락 후 현재 토큰의 SHA-256과 일치하는 확인값에서만 중복 client acknowledge를 생략한다. 운영 서비스 계정에는 조회와 구독 acknowledge 권한이 필요하며, 새 앱·서버를 함께 실제 Play에서 검증한다. 자세한 오류·동시성·기한 제한은 [서버 README](../outputs/PlayVerifier/README.md)를 따른다. 실제 운영 연결은 아직 없다.
