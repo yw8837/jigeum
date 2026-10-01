@@ -1,0 +1,22 @@
+{
+  "project": "jigeum-play-20261001",
+  "url": "https://jigeum-verifier-th7ce7roma-du.a.run.app",
+  "revision": "jigeum-verifier-00002-hvb",
+  "image": "asia-northeast3-docker.pkg.dev/jigeum-play-20261001/jigeum/play-verifier@sha256:8b11b64a20b4eba7231991a3ef4a34fd845c384b2c869f7488e21cb8de10e95e",
+  "checks": {
+    "ready": true,
+    "runtime": true,
+    "maxOne": true,
+    "minZero": true,
+    "concurrency24": true,
+    "timeout30": true,
+    "cpuMemory": true,
+    "requestBased": true,
+    "digestPinned": true,
+    "allTrafficLatest": true,
+    "publicInvoker": true
+  },
+  "passed": 11,
+  "total": 11,
+  "hardCostCap": false
+}

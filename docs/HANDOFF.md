@@ -2,35 +2,32 @@
 
 갱신: **2026-10-01** · 비공개 저장소: **[yw8837/jigeum](https://github.com/yw8837/jigeum)**
 
-**등록 준비 재개(10월1일):** 사용자 인증 후 Yeolmae 계정에 앱 항목을 생성했다. 앱ID `4975993958261665020`, 패키지 `com.moa.babylanguage`, 한국어·무료설치다. 업로드키 서명 내부0.4.4/code11 AAB와 실제release 화면4장을 준비/검증했다. 원계정에서는 Cloud 생성 한도에 막혔지만 사용자 지정 studio계정에서 전용 프로젝트 생성에 성공했다. ACTIVE 및 결제 미연결을 재조회했고 실제 결제는 여전히 비활성이다. Console설정·업로드·테스트배포·공개출시 상태는 [등록 준비](PLAY-REGISTRATION.md)와 [실행 근거](release/20261001/README.md)를 먼저 따른다. 기존 QA123/43/UI5종을 실제Play검증으로 바꾸지 않는다.
+## 최신 체크포인트 — 0.4.5/code12 connected
 
-## 지금 꼭 알아야 할 것
+현재 소스와 최종 산출물은 **0.4.5/code12**다. 기존 0.4 이용 정책·PR #2·0.4.2 ACK를 유지한다. 실제 서명 기반 심사 접근·Keystore 보관·HTTP 전체 기한·workload 인증·설치별/전체 제한·공개 정책을 구현하고 전용 서버를 배포했다.
 
-**최신 사용자 요청 — 별도 계정의 프로젝트 준비 재개:** 사용자가 지정한 `studioyeolmae.com@gmail.com`의 SDK 인증이 완료됐고 전용 `jigeum-play-20261001`(표시명 jigeum, 번호 `795224750373`) 생성에 성공했다. CLI 재조회로 `ACTIVE` 및 `billingEnabled=false`를 확인했다. 결제 연결·서버 배포·서비스 계정/IAM 추가는 아직 없다. 기본 활성 gcloud 계정은 유지하고 새 계정은 명령마다 명시한다. 무료 온디바이스 기능의 사용·로컬 QA에는 서버가 필요하지 않다. 기존 일부 무료/전체 이용권 정책과 구매 검증을 유지한다.
-
-**10월1일 등록 후속:** 카테고리·이메일/광고·광고ID/정부·금융·건강 선언 저장과 IARC설문 완료를 실제Console에서확인했다. 사용자동의 후 새프로젝트1개한도요청접수성공,승인은대기다. 새로확인한출시 gate는**심사자가구매없이유료기능전체에접근하는실제경로**이며현재미구현이다. 계정프로젝트14개점검후사용자가지정한9개중8개를삭제예약했고1개는삭제권한부족으로실패했다. 상태를재조회했으며현재활성6개다. 삭제후전용jigeum생성을한번재시도했으나quota에다시거절됐다. 점검·삭제결과는별도Downloads에보존한다. 이후 사용자 지정 studio계정의 인증·전용 프로젝트 생성은 완료했다. 다른제품API키·서비스계정·결제연결을이앱에임의재사용하지않는다.
-
-**현재 소스는 0.4.4/code11이다. 코닷 PR #2와 기존0.4 이용 정책·0.4.2 결제 계약을 유지한다. 최신 행동의 알림이 오래된 확인 뒤에 밀리는 문제를 red→green 회귀로 고치고 재입력 터치 영역을 개선했다. 결제 미설정 시 SDK를 생성하지 않도록 개선하고 생성·종료 회귀를 확인했다. Android123·서버43·실제UI5종·업데이트·패키지를 검증했다. Lint11경고는6개 버전 안내와5개 Boolean 동기저장 권고로 항목별 검토했다. 원 초안timeout은 원본12회/실제IME12회에서 재현되지 않았고 원인은 미확정이다. 최신 범위와 운영 미완료 항목은 [0.4.4 보고서](../outputs/Jigeum-QA-0.4.4.md)를 따른다.**
-
-| 구분 | 상태 |
+| 구분 | 실제 현재 상태 |
 |---|---|
-| 이전 기준 | `a693b98` / 0.3.0 code 6 / Android 40, 서버 16, UI 12유형 통과 |
-| 협업 체크포인트 | `f42238c` / 레퍼런스·작업 과정·영상 소스 보존. 추가 결제 수명주기를 포함해 Android 49개 통과 |
-| 현재 0.4 권한 | 무료 녹음·직접 입력·문장·기록·공유·백업. 카메라·저장 영상·PDF는 하나의 전체 이용권 |
-| 화면·상태 처리 | 기능별 안내, 안전한 복귀, 초안 보존, 실행 시 권한 검사, 만료 정리·늦은 결과 폐기 구현 |
-| 0.4 로컬 QA | Android 72/72, 서버 16/16, 무료 UI 7유형, debug/test/release/lint 및 패키지 통과. 합성 시험 데이터와 전용 에뮬레이터 정리 완료 |
-| 0.4.2 main QA | Android 85/85, 서버 43/43, 빌드·lint·패키지·정리 통과. 무료 UI 3유형은 이전0.4.1 결과. PR #2 미포함 |
-| 0.4.3 통합 QA | Android119/119, 서버43/43, 실제UI5종, 업데이트·패키지·정리 통과. PR #2와 후속 보강 포함. 간헐적 계측 timeout1회의 원인은 미확정으로 보존 |
-| 0.4.4 최종 품질 | Android123/서버43/UI5종·업데이트·패키지 통과. 알림 겹침 교정, Lint0오류/11검토경고/0힌트. [근거](qa/0.4.4/README.md) |
-| 협업 | ddot이 분석·시장·BM을 담당. PR #2는 준비 완료 안내 후 통합 검증. 로컬 JSONv2 후보99ca1e1은 적용하지 않고 별도 보존. [통합 결과](qa/PR2-INTEGRATION.md) |
-| 오프라인 캐시 | 서명과 실제 경과시간을 함께 검사. 재부팅 후 온라인 재확인 필요 |
-| 결제 운영 연결 | BuildConfig 검증 URL·공개 키가 비어 있어 실제 구매 비활성화 |
-| 실제 Play/ARM | 실제 거래·ARM 실기기 미검증. 테스트 대역 통과로 대체하지 말 것 |
-| 공개/제출 | 사용자 요청으로 이후 진행 |
+| 최종 연결 Android | **142 통과 / 미설정 전용 2 skip / 실패 0**, Lint 오류 0·검토 경고 15 |
+| 실제 연결 release UI | **10/10**: 서버 서명 수락, 카메라 시작/종료, 영상 화면, PDF, 해제·재잠금·무료 기록 보존·200% 정책 |
+| 서버/HTTPS | Node **56/56** / 실제 HTTPS **9/9** / warm 오류 코드 제한·격리 **4/4** |
+| Cloud/Play 연결 | `jigeum-play-20261001`, billing=true, 서울 Run min0/max1, 실제 IAM19/19·Run11/11, Play 계정은 이 앱만 활성/4권한 |
+| 공개 정책 | 실제 HTTPS 게시·시행일 10월1일, Console 정책·심사 안내·성인 대상 연령 저장. 대시보드 **9/11** |
+| 금융 등록 | 판매자 프로필·지급 계좌 저장 완료. 소액 입금 확인 대기 |
+| 최종 파일 | `outputs/Jigeum-Android-connected-0.4.5-code12-upload-signed.apk` / `outputs/Jigeum-Play-connected-0.4.5-code12-signed.aab` |
+| 패키지·정리 | 실제 URL/공개 키 확인, 서명/16KB/백업/공유·native/model18 불변, 시험 앱/데이터/캐시·Gradle·emulator 정리 |
 
-[협업 체크포인트 결과](qa/handoff-checkpoint.md)와 [최신 0.4 결과](../outputs/Jigeum-QA-0.4.0.md)는 별도 실행이다. 기존 0.3.0 APK는 보존하며 새로운 결과를 옛 APK에 소급 적용하지 않는다.
+[최종 연결 QA](qa/0.4.5/connected/README.md), [실제 연결 진행](release/20261001/CONNECTION-PROGRESS.md), [운영 구성](release/20261001/OPERATIONS.md)을 먼저 따른다. 실제 구매/ACK/환불·Play 설치·ARM/16KB 실기기·TalkBack/보호자 사용성·12명14일·공개 제출은 **미완료**다. `connected`는 출시 준비 후보이며 실제 유료 출시 완료본이 아니다.
 
-0.4의 재현 로그와 산출물 해시는 [Git QA 근거](qa/0.4.0/README.md)에 있다. 마지막 앱 수정 후 72계측과 관련 화면 검사를 재실행했으며, 실제 Play 거래·ARM 실기기·운영 설정은 미완료로 명시했다.
+초기 0.4.5 `internal`은 URL/키가 비어 있다. Android144/Node55/UI7·업데이트·패키징은 [이전 로컬 체크포인트](../outputs/Jigeum-QA-0.4.5.md)의 별도 실행이다. 중간 `configured`와 최종 `connected`를 구분한다. 과거 파일·해시·독립 승인을 새 결과로 덮어쓰지 않았다.
+
+## 다음 실행
+
+- Console 심사 코드·영문 접근 안내·성인18세 이상을 저장했다. 최종 AAB 내부 테스트 초안 업로드는 사용자 응답 대기다. Data safety·스토어 정보·상품/가격·실거래와 실제 기기 검증을 완료한다.
+- 공개 출시 제출은 별도 지시를 따른다. 로컬 대역이나 실제 심사 이용권 수락을 실제 Play 구매로 보고하지 않는다.
+- 실제 키·코드·계좌·신원 자료는 저장소 밖에만 있다. 서비스 계정 JSON 키는 미생성이다. 무료 원음·영상·기록은 온디바이스다.
+- SDK 기본 계정은 바꾸지 않고 Cloud 명령마다 `studioyeolmae.com@gmail.com`을 지정한다. 월 1만원 예산 알림은 비용 상한이 아니다.
+- 빌드/ADB는 root 한 명이 수행했다. ddot의 다른 변경을 되돌리지 않는다. 이전 초안 timeout의 원인은 여전히 미확정이며 새 통과를 원인 해결에 소급하지 않는다.
 
 ## 읽는 순서
 
@@ -75,7 +72,7 @@
 | `ObservationStore.kt`, `RecordTransfer.kt` | SQLite·이전·JSON/CSV·충돌/중복 방어 |
 | `MemoryArtifacts.kt`, `LibraryScreens.kt` | PNG/PDF·아기말북·백업 패널·paywall |
 | `AccessPolicy.kt`, `BillingManager.kt`, `BillingModels.kt`, `PurchaseVerifier.kt` | Play 결제 상태·서명 이용권·현재 권한 검사 |
-| `outputs/PlayVerifier` | Node 무상태 Google Play 검증 서버·43개 시험 |
+| `outputs/PlayVerifier` | Node 무상태 Google Play 검증 서버·56개 시험 |
 | `outputs/QA` | portable 계측/UI/미디어/패키지 검증 도구 |
 | `outputs/StoreListing` | 스토어·정책·이용약관 초안과 이미지 |
 | `outputs/Marketing`, `tools/marketing` | 승인된 결과물과 재편집 소스/선택 자산 |

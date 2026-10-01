@@ -9,6 +9,20 @@ import time
 from qa_config import APK, TEST_APK, PACKAGE, adb_command, evidence_dir
 
 
+def parse_result(raw: str, code: int | None, seconds: float) -> dict:
+    match = re.search(r"OK \((\d+) tests?\)", raw)
+    statuses = [int(value) for value in re.findall(r"INSTRUMENTATION_STATUS_CODE:\s*(-?\d+)", raw)]
+    failed_tests = sum(status in (-1, -2) for status in statuses)
+    passed = code == 0 and bool(match) and failed_tests == 0 and not any(
+        text in raw for text in ["FAILURES", "INSTRUMENTATION_FAILED", "Process crashed", "HARNESS TIMEOUT"])
+    # Android's OK total includes assumption-skipped tests. Keep these separate
+    # rather than reporting every discovered test as an executed pass.
+    return {"status": "pass" if passed else "fail", "tests": int(match.group(1)) if match else None,
+            "passed_tests": statuses.count(0), "failed_tests": failed_tests,
+            "ignored_tests": statuses.count(-3), "assumption_skipped_tests": statuses.count(-4),
+            "seconds": round(seconds, 2), "exit": code}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--install-app", action="store_true", help="Install current debug APK before the test APK, keeping app data.")
@@ -39,13 +53,10 @@ def main():
             stopped = subprocess.run([*adb, "shell", "am", "force-stop", owned], capture_output=True, timeout=20)
             raw += "Timeout cleanup " + owned + ": " + str(stopped.returncode) + "\n"
     (run / "instrumentation.log").write_text(raw, encoding="utf-8")
-    match = re.search(r"OK \((\d+) tests?\)", raw)
-    passed = code == 0 and bool(match) and not any(text in raw for text in ["FAILURES", "INSTRUMENTATION_FAILED", "Process crashed", "HARNESS TIMEOUT"])
-    verdict = {"status": "pass" if passed else "fail", "tests": int(match.group(1)) if match else None,
-               "seconds": round(time.monotonic() - started, 2), "exit": code}
+    verdict = parse_result(raw, code, time.monotonic() - started)
     (run / "instrumentation-result.json").write_text(json.dumps(verdict, indent=2), encoding="utf-8")
     print(json.dumps(verdict)); print(raw[-1600:])
-    return 0 if passed else 1
+    return 0 if verdict["status"] == "pass" else 1
 
 if __name__ == "__main__":
     sys.exit(main())

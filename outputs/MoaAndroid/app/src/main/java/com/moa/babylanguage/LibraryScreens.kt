@@ -272,7 +272,9 @@ internal fun PremiumScreen(
     onFree: () -> Unit,
     onBack: () -> Unit,
     onPrivacy: () -> Unit,
-    onTerms: () -> Unit
+    onTerms: () -> Unit,
+    onReviewActivate: (String) -> Unit,
+    onReviewDeactivate: () -> Unit
 ) {
     val context = LocalContext.current
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -303,7 +305,8 @@ internal fun PremiumScreen(
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
                 Spacer(Modifier.height(18.dp))
                 if (state.isPremium) {
-                    Text("전체 이용권을 확인했어요.", color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                    Text(if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else "전체 이용권을 확인했어요.",
+                        color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(12.dp))
                     PrimaryButton(continueLabel, onContinue)
                 }
@@ -359,6 +362,7 @@ internal fun PremiumScreen(
                 TextButton(onClick = onPrivacy) { Text("개인정보처리방침", color = Ink) }
                 Text("이용권은 결제한 Play 계정 기준이에요. 다른 가족 계정으로 자동 공유되지 않아요. 앱 삭제나 기록 삭제로 구독이 해지되지는 않아요.",
                     color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
+                ReviewAccessSection(state, onReviewActivate, onReviewDeactivate, onRetry)
             }
         }
     }
@@ -372,7 +376,7 @@ internal fun ServiceTermsScreen(onBack: () -> Unit) {
         "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 월간은 매월 자동 갱신하며 Play에서 해지할 수 있어요. 3개월은 선불 1회 결제이며 자동 갱신하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
         "구매 복원과 기록 복원" to "앱 회원가입 없이 같은 Play 계정의 유효한 구매를 다시 확인할 수 있어요. 다른 가족 계정에 권한이 자동 공유되지는 않아요. 아기 기록은 기기에만 저장되며 구매 복원으로 되살아나지 않아요. 무료 JSON 백업을 안전하게 보관해 주세요.",
         "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 카메라·영상 관찰은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",
-        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 공개 약관과 정책의 시행일은 정식 배포 전에 고지합니다."
+        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 이용약관과 개인정보처리방침 시행일은 2026년 10월 1일입니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp)) {
         item {

@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "tests": 144,
+  "passed_tests": 142,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 2,
+  "seconds": 89.91,
+  "exit": 0
+}

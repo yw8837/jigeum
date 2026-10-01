@@ -1,7 +1,12 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { createHmac, randomBytes } from 'node:crypto';
 import { createVerifier, validRequest } from './verifier.js';
+import { createMetadataTokenProvider } from './credentials.js';
+import { createReviewVerifier, validReviewRequest } from './review.js';
+import { readRuntimeConfig } from './runtime-config.js';
+import { createPublicPageHandler } from './public-pages.js';
 
 const MAX_BODY_BYTES = 16_384;
 
@@ -19,14 +24,21 @@ function reply(response, status, body, extraHeaders = {}) {
 /** Stateless, bounded HTTP adapter. No request body, identifier or token is logged. */
 export function createVerificationServer({
   verify,
+  review = async () => null,
+  publicRouteHandler,
   maxConcurrent = 32,
   maxRequestsPerMinute = 30,
+  maxGlobalRequestsPerMinute = 1000,
+  rateLimitMode = 'socket',
   maxAddresses = 10_000,
   bodyTimeoutMs = 5_000,
   verificationTimeoutMs = 16_000,
   clock = Date.now
 }) {
+  if (!['socket', 'installation'].includes(rateLimitMode)) throw new Error('Invalid rate limit mode');
   const buckets = new Map();
+  const rateSalt = randomBytes(32);
+  let globalBucket = { start: clock(), count: 0 };
   let active = 0;
   function rateLimited(ip) {
     const now = clock();
@@ -46,11 +58,20 @@ export function createVerificationServer({
   }
 
   const server = createServer(async (request, response) => {
-    if (request.method === 'GET' && request.url === '/healthz') return reply(response, 200, { ok: true });
-    if (request.method !== 'POST' || request.url !== '/verify') return reply(response, 404, { error: 'not_found' });
-    // X-Forwarded-For is deliberately not trusted. The deployment's edge must
-    // enforce its own per-client quota before forwarding to this private origin.
-    if (rateLimited(request.socket.remoteAddress ?? 'unknown')) {
+    if (publicRouteHandler?.(request, response) === true) return;
+    // The public Google frontend returned its own HTML 404 for /healthz in live
+    // deployment. Use a service-specific route externally; keep the local alias.
+    if (request.method === 'GET' && ['/jigeum-health', '/healthz'].includes(request.url)) return reply(response, 200, { ok: true });
+    if (request.method !== 'POST' || !['/verify', '/review'].includes(request.url)) return reply(response, 404, { error: 'not_found' });
+    const now = clock();
+    if (now - globalBucket.start >= 60_000) globalBucket = { start: now, count: 0 };
+    if (++globalBucket.count > maxGlobalRequestsPerMinute) {
+      return reply(response, 429, { error: 'rate_limited' }, { 'retry-after': '60' });
+    }
+    // A Cloud Run proxy socket is not a client. Deployment uses bounded,
+    // salted installation keys; these are not an authenticated client identity.
+    // Forwarding headers are never trusted by either mode.
+    if (rateLimitMode === 'socket' && rateLimited(request.socket.remoteAddress ?? 'unknown')) {
       return reply(response, 429, { error: 'rate_limited' }, { 'retry-after': '60' });
     }
     if (active >= maxConcurrent) return reply(response, 503, { error: 'busy' }, { 'retry-after': '5' });
@@ -85,9 +106,13 @@ export function createVerificationServer({
       clearTimeout(timer);
       let input;
       try { input = JSON.parse(body); } catch { return reply(response, 400, { error: 'invalid_json' }); }
-      if (!validRequest(input)) return reply(response, 400, { error: 'invalid_request' });
+      const isReview = request.url === '/review';
+      if (!(isReview ? validReviewRequest(input) : validRequest(input))) return reply(response, 400, { error: 'invalid_request' });
+      if (rateLimitMode === 'installation' && rateLimited(createHmac('sha256', rateSalt).update(input.installationId.toLowerCase()).digest('hex'))) {
+        return reply(response, 429, { error: 'rate_limited' }, { 'retry-after': '60' });
+      }
       const entitlement = await Promise.race([
-        verify(input, { signal: controller.signal }),
+        (isReview ? review : verify)(input, { signal: controller.signal }),
         new Promise((_, reject) => {
           timer = setTimeout(() => {
             controller.abort();
@@ -116,14 +141,18 @@ export function createVerificationServer({
 }
 
 function start() {
-  const serviceAccount = JSON.parse(readFileSync(process.env.PLAY_SERVICE_ACCOUNT_JSON_PATH, 'utf8'));
-  const privateKey = readFileSync(process.env.PLAY_ENTITLEMENT_PRIVATE_KEY_PATH, 'utf8');
-  const quota = Number(process.env.ORIGIN_REQUESTS_PER_MINUTE || 30);
-  if (!Number.isInteger(quota) || quota < 1 || quota > 100_000) throw new Error('Invalid origin rate limit');
-  const server = createVerificationServer({ verify: createVerifier({ serviceAccount, privateKey }), maxRequestsPerMinute: quota });
-  const port = Number(process.env.PORT || 8080);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('PORT must be 1..65535');
-  server.listen(port, process.env.HOST || '127.0.0.1');
+  const config = readRuntimeConfig();
+  const privateKey = readFileSync(config.signingKeyPath, 'utf8');
+  const credentials = config.credentialsMode === 'workload' ? {
+    accessTokenProvider: createMetadataTokenProvider({ serviceAccountEmail: config.runtimeServiceAccountEmail, timeoutMs: config.upstreamTimeoutMs })
+  } : { serviceAccount: JSON.parse(readFileSync(config.serviceAccountPath, 'utf8')) };
+  const server = createVerificationServer({
+    ...config.server,
+    verify: createVerifier({ ...credentials, privateKey, upstreamTimeoutMs: config.upstreamTimeoutMs }),
+    review: createReviewVerifier({ privateKey, reviewCodeSha256: config.reviewCodeSha256, reviewAccessId: config.reviewAccessId }),
+    publicRouteHandler: createPublicPageHandler()
+  });
+  server.listen(config.port, config.host);
   for (const signal of ['SIGTERM', 'SIGINT']) {
     process.once(signal, () => {
       server.close(() => process.exit(0));

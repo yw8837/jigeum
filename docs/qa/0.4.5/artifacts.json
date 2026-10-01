@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Jigeum-Android-debug-0.4.5.apk",
+    "bytes": 81745906,
+    "sha256": "04db4ec2be35f039311634c057a5597a81ee8e2f978c8e075edaf47cd808f21a",
+    "billingConfigured": false,
+    "version": "0.4.5",
+    "versionCode": 12
+  },
+  {
+    "name": "Jigeum-Android-release-0.4.5-code12-upload-signed.apk",
+    "bytes": 73614991,
+    "sha256": "4c19913fc86b6b614f63efe0716e4ace86acdceaa54855b24fc9c844a503d7f1",
+    "billingConfigured": false,
+    "version": "0.4.5",
+    "versionCode": 12
+  },
+  {
+    "name": "Jigeum-Play-internal-0.4.5-code12-signed.aab",
+    "bytes": 44988602,
+    "sha256": "3019241e0697775b6acaec5d1de0d57365efa81835212af3a6d7b9ce433ba6ab",
+    "billingConfigured": false,
+    "version": "0.4.5",
+    "versionCode": 12
+  }
+]

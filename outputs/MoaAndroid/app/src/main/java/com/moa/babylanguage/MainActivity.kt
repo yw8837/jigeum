@@ -475,7 +475,9 @@ internal fun JigeumApp(
                                         },
                                         onBack = ::closePass,
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
-                                        onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS })
+                                        onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
+                                        onReviewActivate = billingManager::activateReviewAccess,
+                                        onReviewDeactivate = billingManager::deactivateReviewAccess)
                                 }
                             }
                         }
@@ -1290,8 +1292,16 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
+            "Play 심사 접근을 선택하면 심사 코드와 심사 전용 설치 식별자를 HTTPS로 확인하고, 코드는 기기 안에서 암호화해 보관하며 해제 시 삭제합니다. 서비스가 설정되지 않은 빌드는 이 통신을 하지 않습니다. " +
             "사용자가 직접 내보내거나 공유한 파일은 선택한 저장 위치·수신 앱의 정책이 적용됩니다.",
-        "4. 보관과 삭제" to
+        "4. 검증 서비스와 접속 정보" to
+            "결제·심사 확인 서비스는 Google Cloud 서울 리전에서 실행합니다. 구매 토큰·설치 식별자·심사 코드를 DB·파일·요청 본문 로그에 저장하지 않습니다. " +
+            "확인과 요청 제한을 위한 일시 상태는 서버 메모리에서만 처리합니다. 아기 소리·영상·기록은 이 서비스로 보내지 않습니다. " +
+            "Google Cloud Logging 접속 로그에는 IP 주소, 요청 경로, 응답 상태와 처리 시간이 포함될 수 있으며 30일 보관합니다. " +
+            "요청 본문·구매 토큰·설치 식별자·심사 코드는 접속 로그에 쓰지 않습니다. 로그는 운영·장애·보안 대응에만 사용합니다. " +
+            "Google의 서비스 운영과 기본 글로벌 로그 저장에 따라 정보가 국외에서 처리될 수 있습니다. 제공자는 Google LLC(미국)이며 해당 기능을 사용할 때 전송합니다. " +
+            "관련 열람·삭제·처리 정지 문의는 운영자에게 접수할 수 있습니다. Google Play의 계정·결제 정보 보관에는 Google 정책이 적용됩니다.",
+        "5. 보관과 삭제" to
             "문장과 메모는 보호자가 삭제하거나 앱을 제거할 때까지 기기에 남습니다. " +
             "기록 화면에서 항목을 삭제하거나 돌봄 화면에서 모든 기록과 월령 선택을 삭제할 수 있습니다. " +
             "아직 공유 화면에 전달하지 않은 파일은 기록 삭제 때 정리합니다. 이미 전달한 파일은 수신 앱이 읽을 수 있도록 따로 남기며, " +
@@ -1299,11 +1309,11 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "최대 20개·64MiB가 차면 기존 파일을 보호하고 새 공유를 잠시 중단합니다. 앱 데이터 삭제·앱 제거는 이 캐시도 지웁니다. " +
             "외부에 보낸 파일은 해당 저장 위치에서 직접 지워 주세요. " +
             "Android 백업과 기기 간 데이터 전송에서도 앱 데이터가 제외되도록 설정했습니다.",
-        "5. 보호자와 아기 정보" to
+        "6. 보호자와 아기 정보" to
             "앱의 사용 대상은 아기의 부모 등 성인 보호자입니다. 아기 이름, 생년월일, 연락처나 계정을 요구하지 않습니다. " +
             "메모에는 보호자가 직접 입력한 내용이 포함될 수 있으므로 민감한 개인정보는 적지 마세요. " +
             "이 앱은 의료 진단이나 영아의 의도를 확정하는 서비스를 제공하지 않습니다.",
-        "6. 문의와 변경" to
+        "7. 문의와 변경" to
             "운영자 최용우 · 문의 bsfire1237@gmail.com. " +
             "처리 방식이 바뀌면 이 방침과 앱 내 안내를 업데이트합니다. " +
             "계정, 동기화, 광고, 서버 기능을 추가하기 전에는 처리 범위를 다시 고지합니다."
@@ -1311,7 +1321,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("시행일 2026년 10월 1일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }

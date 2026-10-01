@@ -1,0 +1,36 @@
+[
+  {
+    "mode": "normal",
+    "status": "pass",
+    "seconds": 71.5
+  },
+  {
+    "mode": "access",
+    "status": "pass",
+    "seconds": 71.3
+  },
+  {
+    "mode": "album",
+    "status": "pass",
+    "seconds": 41.1
+  },
+  {
+    "mode": "layout",
+    "status": "pass",
+    "seconds": 87.2
+  },
+  {
+    "mode": "paywall-layout",
+    "status": "pass",
+    "seconds": 74.3
+  },
+  {
+    "mode": "review-layout",
+    "status": "pass",
+    "seconds": 101.9
+  },
+  {
+    "mode": "transfer-e2e",
+    "status": "pass"
+  }
+]

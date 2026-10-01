@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "projectId": "jigeum-play-20261001",
+  "projectNumber": "795224750373",
+  "account": "studioyeolmae.com@gmail.com",
+  "region": "asia-northeast3",
+  "service": "jigeum-verifier",
+  "artifactRepository": "jigeum",
+  "buildSourceBucket": "jigeum-play-20261001-build-source",
+  "imageName": "play-verifier",
+  "imageTag": "candidate-20261001",
+  "runtimeServiceAccountName": "jigeum-play-runtime",
+  "signingSecret": "jigeum-entitlement-signing",
+  "signingSecretVersion": "1",
+  "reviewHashSecret": "jigeum-review-code-sha256",
+  "reviewHashSecretVersion": "1",
+  "reviewAccessId": "play-review-20261001",
+  "scopedTokenRoleId": "JigeumScopedTokenMinter",
+  "apis": [
+    "run.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "secretmanager.googleapis.com",
+    "iamcredentials.googleapis.com",
+    "androidpublisher.googleapis.com"
+  ],
+  "runtime": {
+    "billing": "request-based",
+    "minInstances": 0,
+    "maxInstances": 1,
+    "cpu": 1,
+    "memory": "512Mi",
+    "concurrency": 24,
+    "timeoutSeconds": 30,
+    "host": "0.0.0.0",
+    "port": 8080,
+    "credentialsMode": "workload",
+    "rateLimitMode": "installation",
+    "perInstallationRequestsPerMinute": 30,
+    "globalRequestsPerMinute": 300,
+    "maxRateKeys": 10000,
+    "bodyTimeoutMs": 3000,
+    "upstreamTimeoutMs": 5000,
+    "verificationTimeoutMs": 23000
+  },
+  "permissions": {
+    "runtimeGoogleCloud": [
+      "Secret Manager accessor bound separately to the two named secrets",
+      "Custom role containing only iam.serviceAccounts.getAccessToken bound on the runtime service account to itself"
+    ],
+    "runtimeGooglePlay": [
+      "App-only access to com.moa.babylanguage",
+      "View financial data, orders, and cancellation survey responses",
+      "Manage orders and subscriptions (required to acknowledge)"
+    ],
+    "build": [
+      "Dedicated build identity, log writer, source bucket object viewer and artifact repository writer only"
+    ],
+    "deployer": [
+      "Cloud Run deploy/update permission",
+      "iam.serviceAccounts.actAs on the runtime identity",
+      "Read build/image status; public invoker policy changes require explicit operator approval"
+    ]
+  },
+  "executionOrder": [
+    "Confirm billing linkage/cost assumptions and review final policy publication text",
+    "Enable the six named APIs, create dedicated Artifact Registry and workload service account",
+    "Create signing/review-hash secrets from files outside the repository, bind only resource-specific accessor",
+    "Create scoped-token custom role and bind runtime account on itself",
+    "Grant the runtime account app-specific Play order/subscription permissions in Play Console",
+    "Select a dedicated least-privilege build account; do not reuse the default compute account or create an account key",
+    "Run local Node, signing contract, Docker context and dry-run checks",
+    "Execute build/deploy with explicitly selected build account; public invoker is a separate approved mutation",
+    "Confirm platform request metadata (IP/path/status/latency) retention at 30 days and budget alerts; never log bodies, codes, UUIDs or tokens",
+    "Smoke-test HTTPS health/public pages, malformed/rejected inputs, review access and live Play permission",
+    "Wire returned verify URL and matching public signing key into a NEW Android build and regress"
+  ],
+  "costEstimateUsd": {
+    "estimationOnly": true,
+    "currency": "USD",
+    "assumedCpuSecondsUnitPrice": 0.000024,
+    "assumedGibSecondsUnitPrice": 0.0000025,
+    "assumedPerMillionRequestsPrice": 0.4,
+    "scenarioRequestsPerDay": 1000,
+    "scenarioBilledSecondsPerRequest": 2,
+    "scenarioDaysPerMonth": 30,
+    "scenarioComputeAndRequestsBeforeFreeTier": 1.527,
+    "scenarioComputeAndRequestsIfMonthlyFreeTierAvailable": 0,
+    "continuousOneInstanceComputeAndMaxRateRequestsBeforeFreeTier": 70.632,
+    "exclusions": [
+      "Cold start/billable startup, instance overlap during rollout and regional rate changes",
+      "Cloud Build, Artifact Registry storage, Secret Manager active versions/access and optional monitoring",
+      "Network egress, applicable tax, currency conversion and shared free-tier consumption"
+    ],
+    "constraints": [
+      "min0 removes intentional idle instances; max1 and a budget alert are not hard spending caps",
+      "No fixed USD/month promise; confirm Seoul prices and free allocation at approval time",
+      "Low first-use traffic may have cold-start latency; one instance limits availability/peak throughput"
+    ],
+    "pricingReference": "https://cloud.google.com/run/pricing"
+  }
+}

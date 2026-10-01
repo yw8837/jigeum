@@ -1,0 +1,52 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "free-expression-and-save",
+      "pass": true
+    },
+    {
+      "name": "camera-locked-before-real-grant",
+      "pass": true
+    },
+    {
+      "name": "real-https-review-signature-accepted-in-release-app",
+      "pass": true
+    },
+    {
+      "name": "camera-start-stop-with-real-grant",
+      "pass": true
+    },
+    {
+      "name": "video-screen-with-real-grant",
+      "pass": true
+    },
+    {
+      "name": "pdf-generated-and-shared-with-real-grant",
+      "pass": true
+    },
+    {
+      "name": "real-review-access-deactivated",
+      "pass": true
+    },
+    {
+      "name": "camera-relocked-after-deactivation",
+      "pass": true
+    },
+    {
+      "name": "free-saved-record-preserved",
+      "pass": true
+    },
+    {
+      "name": "published-policy-matched-in-app-at-200-percent-font",
+      "pass": true
+    }
+  ],
+  "source": "upload-signed configured release APK, API35 x86_64",
+  "realReviewGrant": true,
+  "localPremiumOverride": false,
+  "realPurchase": false,
+  "ARM": false,
+  "videoScope": "paid screen entry only; prior local QA covers decoding",
+  "credentialRecorded": false
+}

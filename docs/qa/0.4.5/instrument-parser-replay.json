@@ -1,0 +1,14 @@
+{
+  "configured": {
+    "status": "pass",
+    "tests": 144,
+    "passed_tests": 142,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 2,
+    "seconds": 116.17,
+    "exit": 0
+  },
+  "replay_checks": 3,
+  "passed": 3
+}

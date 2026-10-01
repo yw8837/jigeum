@@ -1,0 +1,7 @@
+{
+  "status": "fail",
+  "tests_run": 144,
+  "failures": 1,
+  "ignored_status_count": 0,
+  "reason": "Disabled TextField has no SetText action; selector could not find real disabled input. Fix uses explicit field test tag without changing enablement."
+}

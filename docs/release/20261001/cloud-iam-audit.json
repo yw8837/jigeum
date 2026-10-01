@@ -1,0 +1,29 @@
+{
+  "project": "jigeum-play-20261001",
+  "actualCloudReads": true,
+  "secretPayloadsRead": false,
+  "exportedServiceAccountKeys": false,
+  "checks": {
+    "noParentIam": true,
+    "defaultAccountsNoProjectRoles": true,
+    "temporaryUserRolesRemoved": true,
+    "runtimeNoProjectRoles": true,
+    "buildOnlyProjectLogWriter": true,
+    "tokenRoleOnePermission": true,
+    "runtimeOnlySelfToken": true,
+    "noExportedKey-jigeum-play-runtime": true,
+    "noExportedKey-jigeum-play-build": true,
+    "seoulOnly-jigeum-entitlement-signing": true,
+    "oneEnabledVersion-jigeum-entitlement-signing": true,
+    "onlyRuntimeAccessor-jigeum-entitlement-signing": true,
+    "seoulOnly-jigeum-review-code-sha256": true,
+    "oneEnabledVersion-jigeum-review-code-sha256": true,
+    "onlyRuntimeAccessor-jigeum-review-code-sha256": true,
+    "buildRepositoryWriter": true,
+    "buildSourceReader": true,
+    "noPublicSourceBucket": true,
+    "logRetention30Days": true
+  },
+  "passed": 19,
+  "total": 19
+}

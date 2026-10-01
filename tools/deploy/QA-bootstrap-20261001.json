@@ -1,0 +1,177 @@
+{
+  "tests": 28,
+  "passed": 28,
+  "externalCloudOperations": 0,
+  "operationalSecretsRead": false,
+  "keys": "Ephemeral synthetic signing fixtures only; no account JSON",
+  "results": [
+    {
+      "shell": "powershell.exe",
+      "case": "dry-run",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "confirmation-missing",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "wrong-signing-curve",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "billing-disabled",
+      "pass": true,
+      "fakeCalls": 2
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "api-fails",
+      "pass": true,
+      "fakeCalls": 3
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "bucket-unsafe",
+      "pass": true,
+      "fakeCalls": 15
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "bucket-lifecycle-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "bucket-soft-delete-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "secret-reuse-unconfirmed",
+      "pass": true,
+      "fakeCalls": 20
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "version-disabled",
+      "pass": true,
+      "fakeCalls": 21
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "role-too-wide",
+      "pass": true,
+      "fakeCalls": 30
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "budget-mismatch",
+      "pass": true,
+      "fakeCalls": 35
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "new-resource-success",
+      "pass": true,
+      "fakeCalls": 45
+    },
+    {
+      "shell": "powershell.exe",
+      "case": "known-resource-reuse",
+      "pass": true,
+      "fakeCalls": 35
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "dry-run",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "confirmation-missing",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "wrong-signing-curve",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "billing-disabled",
+      "pass": true,
+      "fakeCalls": 2
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "api-fails",
+      "pass": true,
+      "fakeCalls": 3
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-unsafe",
+      "pass": true,
+      "fakeCalls": 15
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-lifecycle-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-soft-delete-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "secret-reuse-unconfirmed",
+      "pass": true,
+      "fakeCalls": 20
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "version-disabled",
+      "pass": true,
+      "fakeCalls": 21
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "role-too-wide",
+      "pass": true,
+      "fakeCalls": 30
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "budget-mismatch",
+      "pass": true,
+      "fakeCalls": 35
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "new-resource-success",
+      "pass": true,
+      "fakeCalls": 45
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "known-resource-reuse",
+      "pass": true,
+      "fakeCalls": 35
+    }
+  ]
+}

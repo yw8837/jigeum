@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "app_data_cleared": true,
+  "test_app_removed": true,
+  "app_removed": true,
+  "owned_downloads_removed": [
+    "jigeum-qa-fuss.mp4",
+    "jigeum-qa-no-audio.mp4",
+    "jigeum-qa-silence.mp4",
+    "jigeum-qa-long.mp4",
+    "jigeum-qa-big.mp4",
+    "jigeum-qa-broken.mp4",
+    "jigeum-qa-broken.json",
+    "jigeum-qa-future.json",
+    "jigeum-qa-backup.json"
+  ],
+  "display_restored": {
+    "size": "Physical size: 1080x2400",
+    "density": "Physical density: 420",
+    "font": "1.0"
+  },
+  "camera_denied_after_clear": true,
+  "private_capture_not_in_qa_package": true
+}

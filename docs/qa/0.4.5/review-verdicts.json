@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-01",
+  "appVersion": "0.4.5",
+  "versionCode": 12,
+  "reviewer": "quality_review",
+  "verdict": "approved",
+  "scope": "Android/Node source and guarded deployment tooling; local packaging candidate",
+  "productionLaunchApproved": false,
+  "baseCommit": "01b4b58fdcae496e5bacb4bb2f5749e75666a7d7",
+  "workingTreeAtReview": "uncommitted changes; content hashes identify reviewed files",
+  "sourceFiles": [
+    {
+      "path": "outputs/MoaAndroid/app/build.gradle.kts",
+      "sha256": "d1362ff4617ce4f1e6536394239aa214870ee80c8863ddd32248aa3349f94cd6"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/HttpRequestDeadline.kt",
+      "sha256": "7c34a7657b2cf860e2589e4e8ff20285b54c1bde0e80d21cc015f4f5d48cdff4"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PurchaseVerifier.kt",
+      "sha256": "311c29c3563e38da17f98fa22da72a806924d23f25dcfd2720795a16772b828f"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+      "sha256": "f20ed0d92ba3955db37b1c86c449de46688b890d1e1c2f9444988e48f1abf095"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BillingManager.kt",
+      "sha256": "3d08976661b573c3585115b18d7778cf3a7d4257b25da27fe13a2258759b5acc"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessPolicy.kt",
+      "sha256": "63cdc930d5345fc3dce3f29c27f34e26173ab9245459d8cc97f08c559f9a69f5"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessSection.kt",
+      "sha256": "8df735691745562ad3baf7468b68527cdc4f76e979bc8d1bb6040540d4e499af"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/credentials.js",
+      "sha256": "d2707dacdf60084df1a9945e3c3cffe7e9c2172495613411959122e8bcba581f"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/review.js",
+      "sha256": "8fef186f972c3dea5a87f6e80142fb2d6194c4fd1327dd80cb1e0c145fd1cfe8"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/server.js",
+      "sha256": "9dec11508f611cbcf3062f84075917aadacd7640392d26e03cced02b65d31cbb"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/runtime-config.js",
+      "sha256": "a7e2b3a88c4d58bc62c92dd58feb89bb512c6e47a7521e2f80957ef746cead20"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/public-pages.js",
+      "sha256": "b63f12888d86b67e8ea873f7239f35df8dac1d2685181b2ff42be54a4c741889"
+    },
+    {
+      "path": "outputs/PlayVerifier/src/verifier.js",
+      "sha256": "1014e324d81940929bc1207845a86df59d2c463250620247112a1868ac78e024"
+    },
+    {
+      "path": "tools/deploy/deploy-cloud-run.ps1",
+      "sha256": "0f1c424f25aed27cb0dffc504e96e09fcc90efcbd38f3b131fac39f0f0f58fa6"
+    },
+    {
+      "path": "tools/deploy/test-deployment-preflight.ps1",
+      "sha256": "719c9c83585258d5f84fd7940a77f23ed7075ebc3b766f9c607c15840a44e42d"
+    },
+    {
+      "path": "tools/deploy/plan.json",
+      "sha256": "2a00bf0a60b6cf98f277d66eb36c148422d72b9d6dd22f69c97e34c4b27685d9"
+    }
+  ],
+  "findings": [
+    {
+      "id": "DEPLOY-P2-PREREQUISITES",
+      "priority": "P2",
+      "status": "resolved",
+      "resolution": "Explicit manual gate confirmation plus read-only Cloud/resource/IAM and current Node test preflight precedes upload/build/push. Dry-run states gatesActuallyChecked=false."
+    },
+    {
+      "id": "DEPLOY-P2-PUBLIC-ACCESS",
+      "priority": "P2",
+      "status": "resolved",
+      "resolution": "Existing allUsers/disabled invoker IAM requires publication or reuse consent; lookup errors stop; exact not-found only; new private uses --no-allow-unauthenticated."
+    }
+  ],
+  "additionalP1P2Findings": [],
+  "independentExecution": {
+    "powershellAst": {
+      "errors": 0,
+      "pass": true
+    },
+    "defaultDryRun": {
+      "pass": true,
+      "gatesActuallyChecked": false,
+      "manualOperationalGatesConfirmed": false,
+      "publicInvokerMutation": false,
+      "reuseExistingPublicServiceConsent": false,
+      "billingMutation": false,
+      "resourcePreparationMutation": false
+    },
+    "preflightReportStructure": {
+      "declaredTests": 21,
+      "actualCases": 21,
+      "declaredPassed": 21,
+      "actualPassed": 21,
+      "externalCloudOperations": 0,
+      "pass": true
+    },
+    "all21PreflightTestsRerunByReviewer": false,
+    "androidTestsRunByReviewer": false,
+    "gradleOrAdbRunByReviewer": false,
+    "externalCloudOperationsByReviewer": 0,
+    "currentDeploymentSourceRereview": {
+      "dedicatedSourceBucketChecked": true,
+      "sourceStagingDirectory": "gs://jigeum-play-20261001-build-source/source",
+      "powershellAstErrors": 0,
+      "dryRunGateCheck": false
+    }
+  },
+  "integrationExecutionByRootOrAssignedWorker": {
+    "android": {
+      "tests": 144,
+      "pass": true,
+      "seconds": 88.77,
+      "failures": 0,
+      "ignored": 0,
+      "evidence": "work/release-completion-20261001/cycle2-instrumentation/instrumentation-result.json"
+    },
+    "focusedUi": {
+      "tests": 3,
+      "pass": true,
+      "evidence": "work/release-completion-20261001/focused-ui/result.json"
+    },
+    "firstAndroidAttempt": {
+      "tests": 144,
+      "failures": 1,
+      "ignored": 0,
+      "classification": "test-selector mismatch",
+      "correction": "Use explicit testTag to select disabled TextField; same disabled assertion retained; product enablement unchanged.",
+      "evidence": "work/release-completion-20261001/instrumentation/first-run-diagnosis.json"
+    },
+    "node": {
+      "tests": 55,
+      "passed": 55,
+      "googleResponses": "synthetic test doubles",
+      "rerunByReviewer": false
+    },
+    "deploymentPreflight": {
+      "tests": 21,
+      "passed": 21,
+      "externalCloudOperations": 0,
+      "evidence": "tools/deploy/QA-preflight-20261001.json",
+      "rerunByReviewer": false
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 15,
+    "informational": 0,
+    "source": "outputs/MoaAndroid/app/build/reports/lint-results-release.xml",
+    "baselineOrSuppressionAdded": false,
+    "sdkVersionsChanged": false,
+    "groups": {
+      "dependencyAdvisories": 6,
+      "useKtxExistingCommitBooleanChecks": 5,
+      "useKtxNewCommitBooleanChecks": 2,
+      "useKtxNewSynchronousClear": 1,
+      "applySharedPrefSynchronousClear": 1
+    },
+    "issues": [
+      {
+        "number": 1,
+        "id": "ApplySharedPref",
+        "severity": "Warning",
+        "message": "Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+        "line": 102,
+        "decision": "reviewed-retained",
+        "group": "new-synchronous-clear",
+        "checksCommitBoolean": false,
+        "reason": "동기 삭제 transaction 유지. 반환은 검사하지 않으며 디스크 삭제 성공 보장이 아니다. apply()는 완료 대기 의미를 바꾸고 KTX(commit=true)는 동일 의미 치환 가능. 명시적 해제의 키 삭제와 저장/키 실패 내구성 한계를 함께 기록."
+      },
+      {
+        "number": 2,
+        "id": "AndroidGradlePluginVersion",
+        "severity": "Warning",
+        "message": "A newer version of Gradle than 8.14.3 is available: 8.14.5",
+        "file": "outputs/MoaAndroid/gradle/wrapper/gradle-wrapper.properties",
+        "line": 3,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "Gradle wrapper 8.14.3 유지. 새 wrapper는 별도 빌드/패키지 회귀 후 검토한다."
+      },
+      {
+        "number": 3,
+        "id": "GradleDependency",
+        "severity": "Warning",
+        "message": "A newer version of androidx.activity:activity-compose than 1.10.1 is available: 1.13.0",
+        "file": "outputs/MoaAndroid/app/build.gradle.kts",
+        "line": 78,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "Activity Compose 1.10.1 유지. 권한/Activity/Compose 수명주기 업그레이드는 별도 회귀로 관리한다."
+      },
+      {
+        "number": 4,
+        "id": "GradleDependency",
+        "severity": "Warning",
+        "message": "A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.9.2 is available: 2.11.0",
+        "file": "outputs/MoaAndroid/app/build.gradle.kts",
+        "line": 83,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "Lifecycle runtime 2.9.2 유지. 취소/재진입/상태 흐름 업그레이드는 별도 회귀로 관리한다."
+      },
+      {
+        "number": 5,
+        "id": "GradleDependency",
+        "severity": "Warning",
+        "message": "A newer version of androidx.test:runner than 1.6.2 is available: 1.7.0",
+        "file": "outputs/MoaAndroid/app/build.gradle.kts",
+        "line": 98,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "계측 전용 runner 1.6.2 유지. 현재 통합 실행 도구를 마감 중 바꾸지 않는다."
+      },
+      {
+        "number": 6,
+        "id": "GradleDependency",
+        "severity": "Warning",
+        "message": "A newer version of androidx.test.ext:junit than 1.2.1 is available: 1.3.0",
+        "file": "outputs/MoaAndroid/app/build.gradle.kts",
+        "line": 99,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "계측 전용 JUnit 1.2.1 유지. runner와 함께 별도 도구 업그레이드로 관리한다."
+      },
+      {
+        "number": 7,
+        "id": "NewerVersionAvailable",
+        "severity": "Warning",
+        "message": "A newer version of com.google.protobuf:protobuf-javalite than 4.27.5 is available: 4.36.2",
+        "file": "outputs/MoaAndroid/app/build.gradle.kts",
+        "line": 91,
+        "decision": "reviewed-retained",
+        "group": "dependency-update-advisory",
+        "reason": "protobuf-javalite 4.27.5와 MediaPipe/protobuf/JNI release 계약 유지. 업그레이드는 모델/프로토콜 회귀를 요구한다."
+      },
+      {
+        "number": 8,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ObservationStore.kt",
+        "line": 195,
+        "decision": "reviewed-retained",
+        "group": "existing-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "legacy 삭제 commit Boolean의 실패 처리를 유지한다."
+      },
+      {
+        "number": 9,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PhraseEngine.kt",
+        "line": 80,
+        "decision": "reviewed-retained",
+        "group": "existing-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "문장 이력 삭제 commit 실패 check를 유지한다."
+      },
+      {
+        "number": 10,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PhraseEngine.kt",
+        "line": 130,
+        "decision": "reviewed-retained",
+        "group": "existing-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "문장 이력 저장 commit 실패 check를 유지한다."
+      },
+      {
+        "number": 11,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PurchaseVerifier.kt",
+        "line": 101,
+        "decision": "reviewed-retained",
+        "group": "existing-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "설치ID는 commit 성공 시에만 사용하며 실패하면 null이다."
+      },
+      {
+        "number": 12,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PurchaseVerifier.kt",
+        "line": 127,
+        "decision": "reviewed-retained",
+        "group": "existing-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "서명 envelope/clock anchor의 원자 저장 commit 성공만 수락한다."
+      },
+      {
+        "number": 13,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+        "line": 87,
+        "decision": "reviewed-retained",
+        "group": "new-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "심사 설치ID commit 성공을 확인하고 실패하면 null이다."
+      },
+      {
+        "number": 14,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+        "line": 100,
+        "decision": "reviewed-retained",
+        "group": "new-synchronous-clear",
+        "checksCommitBoolean": false,
+        "reason": "동기 삭제를 유지하되 Boolean 보존 사유는 적용되지 않는다. KTX(commit=true) 치환 가능이며 삭제 내구성/실제 I/O 한계는 남는다."
+      },
+      {
+        "number": 15,
+        "id": "UseKtx",
+        "severity": "Warning",
+        "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+        "file": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+        "line": 133,
+        "decision": "reviewed-retained",
+        "group": "new-boolean-check",
+        "checksCommitBoolean": true,
+        "reason": "서명 envelope/암호화 코드/clock anchor의 원자 저장 commit 성공만 수락한다."
+      }
+    ],
+    "clearGrantDurabilityLimit": "commit return is not checked. Explicit removal also deletes the Keystore key; invalid signed/time/boot evidence is independently rejected. Combined disk-write and key-delete failure restart durability and actual OEM preference latency were not verified."
+  },
+  "externalStatusReportedByRoot": {
+    "billingEnabled": true,
+    "temporaryProjectBillingManagerRemovedAndRechecked": true,
+    "independentlyRecheckedByReviewer": false,
+    "billingAccountIdentifierRecorded": false
+  },
+  "remainingOperationalGates": [
+    "Container image build/run and real HTTPS smoke/load/cold-start measurements",
+    "Runtime/Play permissions, secret injection, live verifier URL/public key, reusable real reviewer credentials",
+    "Real Play product/purchase/restore/pending/cancellation/refund/ACK recovery",
+    "ARM/16KB/OEM physical device and real accessibility validation",
+    "Policy HTTPS publication matched to actual logging/retention/cross-border processing",
+    "Play reviewer instructions, test distribution, twelve testers/fourteen days, production submission"
+  ],
+  "initialReadOnlyBootstrapReview": {
+    "path": "tools/deploy/bootstrap-cloud.ps1",
+    "sha256": "327031cae253690a2bf0ccb6d05cca2f19e123e407ef529c5509d418b6977ce8",
+    "verdict": "no-additional-P1-P2-identified-in-initial-read",
+    "executedByReviewer": false,
+    "externalCloudOperationsByReviewer": 0,
+    "observedGuards": [
+      "Exact project/number/region and immutable version1",
+      "Operational approval and KRW currency confirmation switches",
+      "Private input files outside repository and valid P256/hash formats",
+      "Matching existing billing link and read-after-write resource binding checks",
+      "Single-permission self-bound token role and per-secret/per-repository/per-bucket bindings",
+      "Project-filtered monthly KRW10000 alert rules; not a spending cap"
+    ],
+    "operationalCaveats": [
+      "Existing source bucket lifecycle7 and soft-delete0 are not rechecked in the initial revision; creation path sets them",
+      "Existing identity reuse is not an audit of all inherited/broad IAM grants",
+      "Existing secret-version reuse requires operator confirmation of the local signing key/hash correspondence without reading secret payload",
+      "Budget is checked last; a failure leaves earlier successful resource/IAM preparation in place; no rollback",
+      "Real KRW account currency, alert recipient permissions and platform logging configuration still require actual external checks"
+    ],
+    "scope": "Initial read-only review before root execution; subsequent edits require fresh review/content hash."
+  }
+}

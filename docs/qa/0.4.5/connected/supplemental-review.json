@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-01",
+  "reviewer": "quality_review",
+  "originalReviewPreserved": "../review-verdicts.json",
+  "reviews": [
+    {
+      "scope": "bootstrap-json-and-budget-quota",
+      "verdict": "approved",
+      "additionalP1P2Findings": [],
+      "files": [
+        {
+          "path": "tools/deploy/bootstrap-cloud.ps1",
+          "sha256": "9183df1e58dd20956fbe2a473905349a6e23520448007f853bd8e218c0d572e2"
+        },
+        {
+          "path": "tools/deploy/test-bootstrap.mjs",
+          "sha256": "9d74e796c89a933a4f263f55e4f8480a0d92c68312a0cf289195b517dfda47d5"
+        }
+      ]
+    },
+    {
+      "scope": "health-route-and-live-smoke",
+      "verdict": "approved",
+      "additionalP1P2Findings": [],
+      "files": [
+        {
+          "path": "outputs/PlayVerifier/src/server.js",
+          "sha256": "3b69b1d5522841bf9168bcc9b7437f3e80e4dd05e2ac4dc83f4ae3686da14960"
+        },
+        {
+          "path": "outputs/PlayVerifier/test/server.test.js",
+          "sha256": "efd560e18e8045f18dd5881a29c83cb05a9b5c5d3b166bf573f3a053c25e4484"
+        },
+        {
+          "path": "tools/deploy/smoke.mjs",
+          "sha256": "d8ddfa97b4945ec96e68eef67fcb70a028b0f8d6900fee6314833b2558805308"
+        },
+        {
+          "path": "tools/deploy/live-load-smoke.mjs",
+          "sha256": "44b04ffdc90d48e2ad0eba5a9d4686933db4e56d4dc6482ff3028ee8c558891e"
+        }
+      ]
+    },
+    {
+      "scope": "instrumentation-pass-skip-reporting",
+      "verdict": "approved",
+      "additionalP1P2Findings": [],
+      "files": [
+        {
+          "path": "outputs/QA/instrument.py",
+          "sha256": "9b9559ddca6bc490000e994ad4c5536aedc710e51ff27cec19493738c5a84c1f"
+        }
+      ]
+    },
+    {
+      "scope": "in-app-policy-text",
+      "verdict": "approved",
+      "additionalP1P2Findings": [],
+      "files": [
+        {
+          "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+          "sha256": "90959e9345518cfc928318712e5b247a1e7910c7055371a86f1972a087a08034"
+        },
+        {
+          "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+          "sha256": "08fe4976a4e2d17fc27951c1128406c7ca21d191e9a457023e929af35a89224a"
+        }
+      ]
+    }
+  ],
+  "reviewerCloudChanges": 0,
+  "reviewerGradleAdbRuns": 0,
+  "productionLaunchApproved": false
+}

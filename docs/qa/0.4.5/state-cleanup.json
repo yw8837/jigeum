@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "read_exit": 0,
+  "cli_read": {
+    "exists": false,
+    "mode": "ultraqa"
+  },
+  "isolated_state_absent": true,
+  "original_repo_state_touched": false,
+  "first_summary_helper_error": "Expected success field on read, but CLI read has a different schema. State write/clear already returned exit0; read/absence reverified."
+}

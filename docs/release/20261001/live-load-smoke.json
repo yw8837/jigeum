@@ -1,0 +1,33 @@
+{
+  "origin": "https://jigeum-verifier-th7ce7roma-du.a.run.app",
+  "checks": [
+    {
+      "name": "16-distinct-installations-same-client",
+      "pass": true,
+      "expectedDenied": 16
+    },
+    {
+      "name": "one-installation-30-per-minute-cap",
+      "pass": true,
+      "expectedDenied": 30,
+      "limited": 1
+    },
+    {
+      "name": "another-installation-remains-usable",
+      "pass": true
+    },
+    {
+      "name": "health-after-burst",
+      "pass": true
+    }
+  ],
+  "reviewRequests": 48,
+  "latencyMs": {
+    "median": 30,
+    "p95": 374,
+    "max": 422
+  },
+  "scope": "warm invalid-credential requests; bounded rate/isolation smoke, not capacity or cold-start benchmark",
+  "realPurchasesTested": false,
+  "realCredentialsUsed": false
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Jigeum-QA-connected-0.4.5.zip",
+    "bytes": 1009068,
+    "sha256": "2fff95b012341879e57f246a6871ccf91529dbf35965393ffaf4e7e21644fb79",
+    "entries": 70,
+    "archiveIntegrity": "pass",
+    "exactPrivateValueMatches": 0,
+    "financialIdentityOrRegistrationCapturesIncluded": false
+  },
+  {
+    "name": "Jigeum-Connected-0.4.5-code12.zip",
+    "bytes": 89306433,
+    "sha256": "287b67fdc92681134196896bdc5ab8b0d4770d32e5e18295df71ab02fc4e31dd",
+    "entries": 6,
+    "archiveIntegrity": "pass",
+    "exactPrivateValueMatches": 0,
+    "financialIdentityOrRegistrationCapturesIncluded": false
+  }
+]

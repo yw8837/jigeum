@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "appDataAndReviewCredentialCleared": true,
+  "appAndTestAppAbsent": true,
+  "removedPackages": [
+    "com.moa.babylanguage"
+  ],
+  "ownedFixturesRemoved": [
+    "jigeum-qa-fuss.mp4",
+    "jigeum-qa-no-audio.mp4",
+    "jigeum-qa-silence.mp4",
+    "jigeum-qa-long.mp4",
+    "jigeum-qa-big.mp4",
+    "jigeum-qa-broken.mp4",
+    "jigeum-qa-broken.json",
+    "jigeum-qa-future.json",
+    "jigeum-qa-backup.json"
+  ],
+  "ownedXmlAbsent": true,
+  "displayRestored": {
+    "size": "Physical size: 1080x2400",
+    "density": "Physical density: 420",
+    "font": "1.0"
+  },
+  "cameraDeniedAfterClear": true,
+  "appCrashObservedInFinalRun": false,
+  "privateCapturesNotIncludedInSharedEvidence": true
+}

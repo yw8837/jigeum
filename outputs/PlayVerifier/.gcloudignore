@@ -1,0 +1,10 @@
+# Match the Docker context allowlist when Cloud Build uploads source.
+**
+!Dockerfile
+!.dockerignore
+!.gcloudignore
+!package.json
+!src/
+!src/**
+!public/
+!public/**

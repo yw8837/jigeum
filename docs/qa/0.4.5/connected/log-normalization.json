@@ -1,0 +1,118 @@
+{
+  "operation": "line endings and trailing whitespace only",
+  "originalRawEvidenceArchive": "outputs/Jigeum-QA-connected-0.4.5.zip",
+  "originalWorkLogsPreserved": true,
+  "changedFiles": [
+    {
+      "path": "docs/qa/0.4.5/adb-final-devices.txt",
+      "originalSha256": "bbfcc7239a6f1be3544814ebdc6bcc9b66bf5b1f0b03baa3340808f19265a630",
+      "gitTextSha256": "64b7402f33254c3fdbe6eff364e661cd1164f8a17f4e247d5f8445757f543162"
+    },
+    {
+      "path": "docs/qa/0.4.5/bootstrap-pwsh-first-failure.txt",
+      "originalSha256": "818b9312354b7fb21f61d0c8b37d97f84ed31da67362aa975b1c65e880062034",
+      "gitTextSha256": "2f699aeb46aac542c40d6eb77d9601b407dcf1ef9527f36954b1c43a433cc3a9"
+    },
+    {
+      "path": "docs/qa/0.4.5/bootstrap-shells-regression.txt",
+      "originalSha256": "548f90a7b54ef41bcde015c7dbbb501b9affa97598606ac1e2821ed7974c273d",
+      "gitTextSha256": "a3e45caaab21c794cc44038d5cc307682187ff0d162f997a4f94d4faccaff41b"
+    },
+    {
+      "path": "docs/qa/0.4.5/build-connected-signed.txt",
+      "originalSha256": "c5421113dfc20351867721425bc230fbd8e87b4d11800c483f9bceda939099cd",
+      "gitTextSha256": "f163b725c998258d4f0a8c9c1bc050382f98adfb7739fa6ae1c6c243f3cee29c"
+    },
+    {
+      "path": "docs/qa/0.4.5/build-final.txt",
+      "originalSha256": "933248eba245ea591773ac1c4ac46c3cee46cc27c318625f7f2edcdc4256756e",
+      "gitTextSha256": "86b747ca523c1cf06758d91448db740293e99aa672955de9a8ba7fcae530c9c3"
+    },
+    {
+      "path": "docs/qa/0.4.5/build-first.txt",
+      "originalSha256": "b1ced70f130400019e07e9c4a6ba7ad1cf5861a397f2878b447daa55302b263b",
+      "gitTextSha256": "fabcc4622d07f674998451e747b5be73d5ef471dfd112a8ea67974fef35e4349"
+    },
+    {
+      "path": "docs/qa/0.4.5/build-signed.txt",
+      "originalSha256": "17265849e9a7f2c9b502fea09d3f5fb81ef7660816045f549ec4ab4c1505065c",
+      "gitTextSha256": "901c31215575d4e78e2d824efdcf988c70fc30b1794c79bf4071519e85e29016"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/aab-signature.txt",
+      "originalSha256": "09820c58472f57fde378992d58e1bbb3f99db8d5591b8117f209cd868d79b188",
+      "gitTextSha256": "7870816169bd40231669adaad8b34fff010377bb84c920e501d2bb10334efa4c"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/adb-final-devices.txt",
+      "originalSha256": "bbfcc7239a6f1be3544814ebdc6bcc9b66bf5b1f0b03baa3340808f19265a630",
+      "gitTextSha256": "64b7402f33254c3fdbe6eff364e661cd1164f8a17f4e247d5f8445757f543162"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/apk-signature.txt",
+      "originalSha256": "d36f5a2ab9a09c405af3c645ca049e3e66b2d3c9be956eb4a794828ac62517ea",
+      "gitTextSha256": "5b260291ed57b208e3a3ac86a115737e0161dd2700931e78a26a4082ee907053"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/build-debug.txt",
+      "originalSha256": "104975f382b4c3a252926448614ff54ce1ee7af503f3806dc71d7b99d0665fdc",
+      "gitTextSha256": "f31c775e43892c7f5d660e4e6acf685ad433ded02573a3723c7d36e89677dfa5"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/build-signed.txt",
+      "originalSha256": "c5421113dfc20351867721425bc230fbd8e87b4d11800c483f9bceda939099cd",
+      "gitTextSha256": "f163b725c998258d4f0a8c9c1bc050382f98adfb7739fa6ae1c6c243f3cee29c"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/gradle-stop.txt",
+      "originalSha256": "9506a3843eb1d5f4ed7f6bc87fe61055d213e2b3fbbfb86a9c5b5bd04fef88a6",
+      "gitTextSha256": "9bb9c19238f3fdde3213f2be84912b0c7e87b3e2295ec372ec245deab200d46d"
+    },
+    {
+      "path": "docs/qa/0.4.5/connected/instrumentation.txt",
+      "originalSha256": "d0d577cc3d58fb8cf50beb408fd93b94de6f064b54f2127136898074078ca325",
+      "gitTextSha256": "17239b4fc7b8dd2732bbc8d7258ce351a47d67aea7ccc0d4faa714836e721d3c"
+    },
+    {
+      "path": "docs/qa/0.4.5/first-attempt-instrumentation.txt",
+      "originalSha256": "16e09e8f94cd1a073eb14a75cd4c2a450fee8201f0e87f8c16aeac7258ef9872",
+      "gitTextSha256": "0f30fdba8e97852d96530fda2ad68e16699b7bde6f60647b9c41fdde661c91b0"
+    },
+    {
+      "path": "docs/qa/0.4.5/focused-ui.txt",
+      "originalSha256": "798d7171b46e411ace54c50d2db3baaa7f3402831579f8a50e4103e51af1a9fc",
+      "gitTextSha256": "07174f84198db9267d6f8502a7ac53dc479a5f1eb98ed02e304186016610bcd2"
+    },
+    {
+      "path": "docs/qa/0.4.5/gradle-stop.txt",
+      "originalSha256": "9506a3843eb1d5f4ed7f6bc87fe61055d213e2b3fbbfb86a9c5b5bd04fef88a6",
+      "gitTextSha256": "9bb9c19238f3fdde3213f2be84912b0c7e87b3e2295ec372ec245deab200d46d"
+    },
+    {
+      "path": "docs/qa/0.4.5/health-route-red.txt",
+      "originalSha256": "5c3a4e09f09529ba48af4084669d0067f50e4b99451a5d1fd34640d7a1c94dcc",
+      "gitTextSha256": "6578b7f025c8b23e09179a49a15993ab0084b0b44aaf33a0387502458fea71de"
+    },
+    {
+      "path": "docs/qa/0.4.5/instrumentation.txt",
+      "originalSha256": "d3683bcf1a5fe75cee3da95d6db6e49d116a80175c08827951667e147037bab2",
+      "gitTextSha256": "95e7260a773bd5858a319ffc94ed231e86bd4151db2d1af0e24aa67358ccad48"
+    },
+    {
+      "path": "docs/qa/0.4.5/server-tests-postdeploy.txt",
+      "originalSha256": "654e949cb4226acd5160b65ea76661bf0e34a37a640690e2862e18fd98d412de",
+      "gitTextSha256": "4351299f706138532ce255f3b08f30e651e72b72d173bf3e3393fafabae37b44"
+    },
+    {
+      "path": "docs/qa/0.4.5/server-tests.txt",
+      "originalSha256": "e272c5487607b0f3dccb9da717aa27bd6cd1344e2f2eed9f2fdac0fb0825c3e7",
+      "gitTextSha256": "7c6bf573aa77cadc1f7d20262507c1ebc22572e869b633321f762d297cf0266a"
+    },
+    {
+      "path": "docs/qa/0.4.5/server-upload-files.txt",
+      "originalSha256": "75577ba064393472dca97d3ebcc136cbafdd0341465bca9ae67c27eb5406b53b",
+      "gitTextSha256": "7e380dd3cf0f671de909aff47bf459af36298b32d7972e0b0df97ff921bfb29e"
+    }
+  ],
+  "semanticResultUnchanged": true
+}

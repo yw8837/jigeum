@@ -1,0 +1,31 @@
+✖ service-specific health route is exact GET, token-free and independent of Publisher (39.561ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 238.5158
+
+✖ failing tests:
+
+test at outputs\PlayVerifier\test\server.test.js:19:1
+✖ service-specific health route is exact GET, token-free and independent of Publisher (39.561ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  404 !== 200
+
+      at file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/server.test.js:23:12
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async withServer (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/server.test.js:11:9)
+      at async TestContext.<anonymous> (file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/PlayVerifier/test/server.test.js:21:3)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

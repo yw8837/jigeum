@@ -11,6 +11,9 @@ work/
 **/*.iml
 **/*.jks
 **/*.keystore
+**/*.p12
+# Public synthetic TLS fixture, only packaged into the androidTest APK.
+!outputs/MoaAndroid/app/src/androidTest/assets/transport-deadline-test.p12
 **/keystore.properties
 **/.env
 **/.env.*

@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "artifacts": [
+    {
+      "artifact": "Jigeum-Android-debug-0.4.5.apk",
+      "forbidden": []
+    },
+    {
+      "artifact": "Jigeum-Android-release-0.4.5-code12-upload-signed.apk",
+      "forbidden": []
+    },
+    {
+      "artifact": "Jigeum-Play-internal-0.4.5-code12-signed.aab",
+      "forbidden": []
+    }
+  ]
+}

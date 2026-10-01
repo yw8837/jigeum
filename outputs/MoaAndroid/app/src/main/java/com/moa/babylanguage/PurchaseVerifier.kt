@@ -7,6 +7,8 @@ import android.util.Base64
 import androidx.core.content.edit
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.job
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -181,12 +183,15 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
         } catch (_: Exception) {
             return@withContext VerificationResult.Unavailable
         }
+        val deadline = HttpRequestDeadline(connection, currentCoroutineContext().job)
         try {
+            deadline.checkActive()
             connection.requestMethod = "POST"
             // A misconfigured redirect must not forward a Play purchase token elsewhere.
             connection.instanceFollowRedirects = false
             connection.connectTimeout = 7_000
-            connection.readTimeout = 18_000
+            // The origin allows up to 23 seconds; leave room for its bounded reply.
+            connection.readTimeout = 26_000
             connection.doOutput = true
             connection.setRequestProperty("Content-Type", "application/json; charset=utf-8")
             connection.setRequestProperty("Accept", "application/json")
@@ -199,13 +204,16 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
                 .toString().toByteArray(Charsets.UTF_8)
             if (request.size > 16_384) return@withContext VerificationResult.Unavailable
             connection.setFixedLengthStreamingMode(request.size)
+            deadline.checkActive()
             connection.outputStream.use { it.write(request) }
+            deadline.checkActive()
             if (connection.responseCode == 403) return@withContext VerificationResult.Rejected
             if (connection.responseCode != 200) return@withContext VerificationResult.Unavailable
             val response = connection.inputStream.use { input ->
                 val bytes = java.io.ByteArrayOutputStream()
                 val buffer = ByteArray(1024)
                 while (true) {
+                    deadline.checkActive()
                     val count = input.read(buffer)
                     if (count < 0) break
                     if (bytes.size() + count > 16_384) return@withContext VerificationResult.Unavailable
@@ -214,13 +222,16 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
                 bytes.toString(Charsets.UTF_8.name())
             }
             val envelope = JSONObject(response).getJSONObject("entitlement").toString()
+            deadline.checkActive()
             if (!isValid(envelope)) return@withContext VerificationResult.Unavailable
+            deadline.checkActive()
             VerificationResult.Verified(envelope)
         } catch (cancelled: CancellationException) {
             throw cancelled
         } catch (_: Exception) {
             VerificationResult.Unavailable
         } finally {
+            deadline.close()
             connection.disconnect()
         }
     }
@@ -255,6 +266,7 @@ internal fun verifySignedEntitlement(
         val expiresAt = claims.getLong("expiresAtMs")
         val subscriptionExpiry = claims.getLong("subscriptionExpiryMs")
         claims.getInt("version") == 1 &&
+            claims.optString("grantSource", "play-purchase") == "play-purchase" &&
             claims.getString("installationId") == installation &&
             claims.getString("packageName") == packageName &&
             claims.getString("productId") == PurchaseVerifier.PRODUCT_ID &&

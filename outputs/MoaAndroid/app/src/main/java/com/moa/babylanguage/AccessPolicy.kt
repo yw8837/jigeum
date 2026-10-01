@@ -10,6 +10,8 @@ internal interface AccessBilling {
     fun refresh()
     fun restore()
     fun purchase(activity: Activity, plan: BillingPlan)
+    fun activateReviewAccess(code: String) = Unit
+    fun deactivateReviewAccess() = Unit
 }
 
 internal class PlayAccessBilling(private val manager: BillingManager) : AccessBilling {
@@ -18,6 +20,8 @@ internal class PlayAccessBilling(private val manager: BillingManager) : AccessBi
     override fun refresh() = manager.refresh()
     override fun restore() = manager.restore()
     override fun purchase(activity: Activity, plan: BillingPlan) = manager.purchase(activity, plan)
+    override fun activateReviewAccess(code: String) = manager.activateReviewAccess(code)
+    override fun deactivateReviewAccess() = manager.deactivateReviewAccess()
 }
 
 /** An internal composition seam, not a persisted setting or exported runtime switch. */

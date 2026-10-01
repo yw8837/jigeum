@@ -1,29 +1,52 @@
-# 결제 운영 연결 계획 — 미배포
+# 결제 검증 서비스 운영 — 2026-10-01
 
-사용자가 지정한 `studioyeolmae.com@gmail.com`의 SDK 인증이 완료됐고 전용 `jigeum-play-20261001`(표시명 jigeum, 번호 `795224750373`) 생성에 성공했다. CLI 재조회로 `ACTIVE` 및 `billingEnabled=false`를 확인했다. 결제 연결·서버 배포·서비스 계정/IAM 추가는 아직 없다. 기본 활성 gcloud 계정은 유지하고 새 계정은 명령마다 명시한다. 다른 제품의 프로젝트를 재사용하지 않았다. 비용·권한 구성은 아래 계획을 구체화한 뒤 진행한다.
+## 실제 구성
 
-## 배포 전 결정과 설정
+전용 프로젝트 `jigeum-play-20261001` / 번호 `795224750373` / ACTIVE / billingEnabled=true.
 
-- 전용 프로젝트와 청구 계정 확인. 최소 인스턴스0·최대 인스턴스 제한·예산 알림을 설정한다. **예산 알림은 비용 상한이 아니다.** API 사용료·호스팅·빌드·이미지 보관·로그·외부 차단 장치의 비용을 확인한 뒤 유료 자원을 연결한다.
-- HTTPS ingress, 인증서,16KiB 본문,5초 수신,16초 HTTP 검증,상류7초/호출,32진행요청/인스턴스 및256연결 상한을 맞춘다.
-- 서버는 X-Forwarded-For를 신뢰하지 않는다. 프록시 뒤에서 기본 원본IP30회/분을 사용자별 한도로 오해하지 않는다. **edge 실제 사용자별 제한 + origin 프록시 전체 한도**를 함께 설정하고 공유IP/모바일망 동시 접속·프록시 우회 접근을 시험한다. edge가 없으면 운영 부하 방어 완료라고 하지 않는다.
-- Google Publisher OAuth/주문·구독 관리 권한을 전용 서비스 계정에 최소한으로 부여한다. Play Console 접근은 별도다. 키 생성/접근권한 변경은 구체적인 계정·권한을 검토한 뒤 진행한다.
-- 서비스 계정 JSON·PKCS8 P-256 서명키는 Secret Manager 등 비밀 보관소에 넣고 전용 런타임만 읽게 한다. 앱에는 HTTPS URL·SPKI DER Base64 공개 키만 넣는다. `HOST=0.0.0.0`은 컨테이너 내부 수신용이며 외부 ingress 제한과 별개다.
-- 요청 본문/토큰/설치UUID를 access/error/debug 로그에 쓰지 않는다. 제공자의 실제 HTTP 접속 로그(IP·경로·상태·지연)의 지역·보존기간과 삭제 경로를 정하고 개인정보처리방침에 반영한다. 프록시가 구매 토큰을 URL query에 넣지 않게 한다.
+- Cloud Run: 서울 `asia-northeast3`, `jigeum-verifier-00002-hvb`, traffic 100%.
+- 공개 주소: https://jigeum-verifier-th7ce7roma-du.a.run.app
+- 상태 확인 `/jigeum-health`. 로컬 호환 `/healthz`의 외부 동작은 첫 실패 기록을 따른다.
+- 요청 기반 과금, min 0 / max 1, concurrency 24, 1CPU / 512MiB, timeout 30초.
+- image digest: `sha256:8b11b64a20b4eba7231991a3ef4a34fd845c384b2c869f7488e21cb8de10e95e`.
+- runtime `jigeum-play-runtime@jigeum-play-20261001.iam.gserviceaccount.com`; build `jigeum-play-build@jigeum-play-20261001.iam.gserviceaccount.com`.
+- service account JSON 키 미생성. metadata → IAM Credentials `androidpublisher` scope 토큰을 사용한다. runtime의 자체 SA 리소스 `getAccessToken` 한 권한과 secret 2개 accessor를 확인했다.
+- build는 전용 source bucket 읽기·image repository 쓰기·build 로그 쓰기 범위다. source bucket 서울/UBLA/public 방지/Delete age7/soft-delete0, signing/hash secret 서울 version1이다.
+- Play 권한은 **이 앱 하나만** 읽기·구매 조회·주문/구독 관리다. 계정 전체나 다른 앱의 권한을 추가하지 않았다.
+- 자동 기본 compute Editor·legacy builder 및 임시 billing 연결/Service Usage 사용자 역할을 제거하고 inventory를 재조회했다.
+- 접속 로그 30일. 구매 본문·토큰·UUID·심사 코드는 로그/DB/파일에 쓰지 않는다. 원본 아기 데이터는 서버로 보내지 않는다.
+- 이 프로젝트만 월 **10,000 KRW** actual 50/80/100%와 forecast 100% 알림. **알림과 최대 인스턴스 수는 비용 상한이 아니다.**
 
-## 시험과 출시 보류 조건
+실제 [IAM 19/19](cloud-iam-audit.json), [Run 11/11](run-service-verdict.json), [bootstrap](bootstrap-live.txt)을 확인했다. 기본 SDK 계정은 유지하고 명령마다 studio 계정을 지정했다.
 
-| 시험 | 실제 확인할 결과 |
+## 요청 제한과 장애 처리
+
+설치 UUID별 30/min, 인스턴스 전체 300/min, HTTP 진행 24개. 프록시 뒤 사용자를 하나의 소켓 IP 30/min으로 묶지 않는다. `X-Forwarded-For`를 신뢰하지 않는다. body 3초 / 각 upstream 5초 / 전체 검증 23초 / Run 30초로 제한한다.
+
+metadata/scoped 토큰 재발급과 같은 구매 토큰의 진행 작업을 공유한다. 완료된 구매 결과를 서버에 저장하지 않아 다음 검증은 Play에서 현재 상태를 읽는다. 인정할 구매는 acknowledge가 완료되거나 ACKNOWLEDGED일 때만 서명하며 0.4.2 ACK 계약을 유지한다.
+
+앱은 새 유료 실행 직전 현재 서명 권한을 확인한다. 명시적 거절 시 재잠금, 일시적 장애에서는 남아 있는 최대 24시간의 유효 캐시만 허용한다. 재부팅 후 온라인 재확인이 필요하고 이미 생성된 문장·무료 기록·내보낸 파일은 보존한다.
+
+UUID는 인증된 사용자 ID가 아니며 회전 공격을 막지 못한다. rate 상태는 메모리에 있고 재시작/여러 revision 간에 공유되지 않는다. 정책/health 요청도 비용을 유발할 수 있다. 별도 edge/LB/DDoS 방어 비용은 추가하지 않았다. 대규모 공격·Google quota·정확한 지출 차단을 검증했다고 하지 않는다.
+
+## 실제 시험과 남은 gate
+
+| 검증 | 실제 결과 |
 |---|---|
-| health/invalid body/content-type/too-large | TLS정상, 예상 상태코드, 비밀 미로그 |
-| Google 권한 부족·429·5xx·timeout |503과 재시도,새 유료 권한 미부여,유효 캐시 안에서만 유지 |
-| burst/다중 사용자/공유 프록시IP |한 사용자의 몰림이 다른 사용자를 전체30/분으로 잠그지 않음 |
-| 동시 같은 토큰 |조회/ACK진행 공유,각 설치로 서명,기한 제한 |
-| 실제 구매·선불·취소·보류 |Play현재상태→서버ACK→앱서명 수락. callback만으로 열지 않음 |
-| 환불/회수/만료 |온라인거절 즉시신규기능잠금,무료기록유지,오프라인 최대24h 한계명시 |
-| 콜드스타트/재배포/프로세스종료 |재연결·구매복원·Google ACK기한검증. RTDN 누락복구 필요여부 결정 |
-| 비용/할당량 |실제 부하에서 latency·503/429·Google quota·인스턴스·비용 관측 |
+| Node | 56/56, Google 응답 대역 |
+| 공개 HTTPS | 9/9, HTML/서명·잘못된 본문/코드/토큰 상태 |
+| 몰림·격리 | warm 잘못된 코드 48요청, 4/4. 설치 16개 동시, 한 설치 30회/31번째429, 다른 설치·health 응답 |
+| 지연 | 오류 코드 요청 median 30ms / p95 374ms / max 422ms. 구매 지연·수용량 아님 |
+| 실제 release 앱 | 서버 서명 심사 이용권 수락, 카메라·영상 화면·PDF·해제·무료 보존 포함 10/10 |
+| 미완료 | 상품/실제 구매·ACK/보류/복원/환불·계정 변경, 콜드 시작·구매 부하·장시간 운영·RTDN 복구 필요성 평가 |
 
-모니터링은 토큰 없이 요청수·429/503·상류 timeout·p95 지연·동시요청·구매확인실패율을 확인한다. 건강검사200을 Google구매검증정상으로 해석하지 않는다. 운영통과 결과가 없으면 결제완료/서버장애대응완료를 보고하지 않는다.
+근거: [HTTPS](https-smoke.json), [제한 시험](live-load-smoke.json), [연결 QA](../../qa/0.4.5/connected/README.md). health 200은 Google 구매 검증 정상의 증거가 아니다.
 
-상세 구현/43개 로컬 시험: [검증 서버](../../../outputs/PlayVerifier/README.md). Android/서버 계약은0.4.2이후ACK토큰해시를 유지한다. 운영 연결 전까지0.4.4실제구매는 비활성이다.
+## 후속 실행
+
+1. [등록 문서](../../PLAY-REGISTRATION.md)의 심사 안내·Console 선언·상품·내부 테스트를 실제 저장/업로드 상태로 확인한다.
+2. Play 설치로 라이선스 구매·보류·취소·복원·환불·ACK·계정 변경을 검증한다. 토큰·테스터 개인정보를 캡처하지 않는다.
+3. 실제 콜드 시작/구매 부하에서 latency·429/503·upstream timeout·quota·비용을 관측한다. 오류 코드 수치를 재사용하지 않는다.
+4. ARM/OEM/16KB·TalkBack·보호자 사용성과 12명·14일 테스트 후 사용자 출시 지시에 맞춰 제출한다.
+
+재배포는 [tools/deploy](../../../tools/deploy/README.md)의 read-only preflight와 숫자 secret 버전·고정 image digest를 따른다. 현재 기본 런타임/권한/비밀값을 임의 재생성하지 않는다. 비용·권한·공개 범위 변경은 구체적으로 확인하며 다른 앱 프로젝트를 재사용하지 않는다.

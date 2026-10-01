@@ -16,6 +16,7 @@ import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -36,17 +37,20 @@ class BillingManager internal constructor(
     private val recoveryClock: () -> Long = SystemClock::elapsedRealtime,
     private val purchaseCallbackTimeoutMs: Long = 120_000,
     private val purchaseQueryTimeoutMs: Long = 30_000,
-    private val acknowledgeRetryDelayMs: Long = 5_000
+    private val acknowledgeRetryDelayMs: Long = 5_000,
+    private val reviewer: ReviewEntitlements? = null
 ) : PurchasesUpdatedListener, AutoCloseable {
     constructor(context: Context) : this(
         PurchaseVerifier(context.applicationContext),
-        { listener -> PlayBillingGateway(context.applicationContext, listener) }
+        { listener -> PlayBillingGateway(context.applicationContext, listener) },
+        reviewer = ReviewAccessVerifier(context.applicationContext)
     )
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mutableState = MutableStateFlow(BillingUiState(
         status = if (verifier.isConfigured) BillingStatus.CONNECTING else BillingStatus.UNAVAILABLE,
         isPremium = verifier.cachedEntitlement(),
-        message = if (verifier.isConfigured) null else "구독 확인 서비스가 아직 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요."
+        message = if (verifier.isConfigured) null else "구독 확인 서비스가 아직 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요.",
+        reviewStatus = if (reviewer?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE
     ))
     val state: StateFlow<BillingUiState> = mutableState
     // Unconfigured installations use only free features and never need a Play client.
@@ -66,6 +70,9 @@ class BillingManager internal constructor(
     private var verification: Job? = null
     private var acknowledgement: Job? = null
     private var expiry: Job? = null
+    private var reviewGeneration = 0L
+    private var reviewVerification: Job? = null
+    private var nextReviewRetryElapsed = 0L
 
     init { refresh() }
 
@@ -80,6 +87,7 @@ class BillingManager internal constructor(
     fun refresh() {
         if (closed) return
         recheckEntitlement()
+        refreshReviewAccess()
         if (!verifier.isConfigured) return
         if (purchaseDeadline != null) {
             recoverPurchaseIfDue()
@@ -89,6 +97,71 @@ class BillingManager internal constructor(
         queryCatalog()
         // Returning from the Play activity may precede its purchase callback.
         if (mutableState.value.status != BillingStatus.PURCHASING && verification?.isActive != true) queryPurchases()
+    }
+
+    /** The code goes to the verifier; it is never a local switch or proof of Play ownership. */
+    @MainThread
+    fun activateReviewAccess(code: String) {
+        if (closed) return
+        val clean = code.trim()
+        if (!validReviewCode(clean)) {
+            updateReview(ReviewAccessStatus.ERROR, "심사 안내에 있는 접근 코드를 그대로 입력해 주세요.")
+            return
+        }
+        if (reviewer?.isConfigured != true) {
+            updateReview(ReviewAccessStatus.UNAVAILABLE, "심사 접근 서비스가 아직 설정되지 않았어요.")
+            return
+        }
+        verifyReviewAccess(clean, activation = true)
+    }
+
+    @MainThread
+    fun deactivateReviewAccess() {
+        if (closed) return
+        reviewGeneration++
+        reviewVerification?.cancel()
+        reviewVerification = null
+        reviewer?.clear()
+        nextReviewRetryElapsed = 0L
+        updateReview(if (reviewer?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE,
+            "심사 접근을 해제했어요. 구매 이용권과 기존 기록은 유지돼요.")
+        recheckEntitlement()
+    }
+
+    private fun refreshReviewAccess() {
+        if (closed || reviewer?.isConfigured != true || reviewVerification?.isActive == true) return
+        val code = reviewer.storedCode() ?: return
+        if (recoveryClock() < nextReviewRetryElapsed) return
+        verifyReviewAccess(code, activation = false)
+    }
+
+    private fun verifyReviewAccess(code: String, activation: Boolean) {
+        val review = reviewer ?: return
+        if (reviewVerification?.isActive == true) return
+        val token = ++reviewGeneration
+        nextReviewRetryElapsed = recoveryClock() + 60_000
+        updateReview(ReviewAccessStatus.VERIFYING, "심사 이용권을 안전하게 확인하고 있어요.")
+        reviewVerification = scope.launch {
+            val result = try { review.verify(code) }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { VerificationResult.Unavailable }
+            if (closed || token != reviewGeneration) return@launch
+            val accepted = result is VerificationResult.Verified && review.accept(result.envelope, code)
+            if (result == VerificationResult.Rejected && !activation) review.clear()
+            recheckEntitlement()
+            val active = review.cachedExpiryMs() != null
+            if (active && !busy()) setState(BillingStatus.PREMIUM, null)
+            updateReview(if (active) ReviewAccessStatus.ACTIVE else ReviewAccessStatus.ERROR, when {
+                accepted -> "Play 심사 접근이 활성화됐어요. 결제 없이 모든 기능을 확인할 수 있어요."
+                result == VerificationResult.Rejected -> "심사 접근 코드가 유효하지 않거나 해제됐어요. 심사 안내를 확인해 주세요."
+                active -> "이전에 서명 확인한 심사 이용권을 사용 중이에요. 연결되면 다시 확인해 주세요."
+                else -> "심사 접근을 확인하지 못했어요. 인터넷 연결 후 다시 확인해 주세요."
+            })
+        }
+    }
+
+    private fun updateReview(status: ReviewAccessStatus, message: String?) {
+        mutableState.value = mutableState.value.copy(reviewStatus = status, reviewMessage = message)
     }
 
     fun restore() {
@@ -275,7 +348,7 @@ class BillingManager internal constructor(
             val entitlement = mutableState.value.isPremium
             setState(if (entitlement) BillingStatus.PREMIUM else BillingStatus.ERROR, when {
                 verified -> if (restoring) "구독을 복원했어요." else null
-                entitlement -> "이전에 확인한 구독을 임시로 사용 중이에요. 연결되면 다시 확인해 주세요."
+                entitlement -> "이전에 확인한 이용권을 임시로 사용 중이에요. 연결되면 다시 확인해 주세요."
                 !unavailable -> "현재 이용할 수 있는 구독이 없어요. Google Play 구독 상태를 확인해 주세요."
                 else -> "구독을 확인하지 못했어요. 잠시 후 다시 확인해 주세요."
             })
@@ -350,13 +423,32 @@ class BillingManager internal constructor(
     private fun recheckEntitlement() {
         expiry?.cancel()
         val wasPremium = mutableState.value.isPremium
-        val validUntil = verifier.cachedExpiryMs()
-        mutableState.value = mutableState.value.copy(isPremium = validUntil != null)
+        val purchaseUntil = verifier.cachedExpiryMs()
+        val reviewUntil = reviewer?.cachedExpiryMs()
+        val validUntil = listOfNotNull(purchaseUntil, reviewUntil).maxOrNull()
+        val before = mutableState.value
+        mutableState.value = before.copy(isPremium = validUntil != null,
+            entitlementSource = when {
+                purchaseUntil != null -> EntitlementSource.PLAY_PURCHASE
+                reviewUntil != null -> EntitlementSource.PLAY_REVIEW
+                else -> EntitlementSource.NONE
+            },
+            reviewStatus = when {
+                reviewer?.isConfigured != true -> ReviewAccessStatus.UNAVAILABLE
+                before.reviewStatus == ReviewAccessStatus.VERIFYING -> ReviewAccessStatus.VERIFYING
+                reviewUntil != null -> ReviewAccessStatus.ACTIVE
+                before.reviewStatus == ReviewAccessStatus.ACTIVE -> ReviewAccessStatus.ERROR
+                else -> before.reviewStatus
+            },
+            reviewMessage = if (reviewUntil == null && before.reviewStatus == ReviewAccessStatus.ACTIVE)
+                "심사 이용권 확인 기간이 끝났어요. 인터넷에 연결해 다시 확인해 주세요." else before.reviewMessage)
         if (wasPremium && validUntil == null && !busy()) setState(idleStatus(), "구독 확인 기간이 끝났어요. 인터넷에 연결해 다시 확인해 주세요.")
         if (validUntil != null) expiry = scope.launch {
             // Recheck wall-clock changes too; holding the screen open cannot keep an expired grant.
             delay((validUntil - clock()).coerceIn(1, 60_000))
             recheckEntitlement()
+            // Renew the install-bound review grant after expiry or near its deadline.
+            if (reviewUntil == null || reviewUntil - clock() <= 300_000) refreshReviewAccess()
         }
     }
     private fun setState(status: BillingStatus, message: String?) { mutableState.value = mutableState.value.copy(status = status, message = message) }
@@ -364,6 +456,7 @@ class BillingManager internal constructor(
         if (closed) return
         closed = true
         generation++
+        reviewGeneration++
         scope.cancel()
         if (clientDelegate.isInitialized()) client.endConnection()
     }

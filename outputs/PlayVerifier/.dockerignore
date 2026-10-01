@@ -1,0 +1,9 @@
+# Allowlist build context: no tests, fixtures, environment or keys.
+**
+!Dockerfile
+!.dockerignore
+!package.json
+!src/
+!src/**
+!public/
+!public/**

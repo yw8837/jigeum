@@ -1,0 +1,155 @@
+{
+  "tests": 21,
+  "passed": 21,
+  "externalCloudOperations": 0,
+  "results": [
+    {
+      "case": "dry-run",
+      "pass": true,
+      "fakeCloudCalls": 0,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "manual-missing",
+      "pass": true,
+      "fakeCloudCalls": 0,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "billing-disabled",
+      "pass": true,
+      "fakeCloudCalls": 1,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "api-missing",
+      "pass": true,
+      "fakeCloudCalls": 2,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "secret-disabled",
+      "pass": true,
+      "fakeCloudCalls": 3,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "repository-wrong",
+      "pass": true,
+      "fakeCloudCalls": 5,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "runtime-disabled",
+      "pass": true,
+      "fakeCloudCalls": 6,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "build-missing",
+      "pass": true,
+      "fakeCloudCalls": 7,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "run-permission",
+      "pass": true,
+      "fakeCloudCalls": 8,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "wrong-not-found",
+      "pass": true,
+      "fakeCloudCalls": 8,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "iam-permission",
+      "pass": true,
+      "fakeCloudCalls": 9,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "public-denied",
+      "pass": true,
+      "fakeCloudCalls": 9,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "invoker-disabled",
+      "pass": true,
+      "fakeCloudCalls": 9,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "node-fails",
+      "pass": true,
+      "fakeCloudCalls": 9,
+      "fakeBuildCalls": 0,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "build-fails",
+      "pass": true,
+      "fakeCloudCalls": 10,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "digest-invalid",
+      "pass": true,
+      "fakeCloudCalls": 11,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 0
+    },
+    {
+      "case": "deploy-fails",
+      "pass": true,
+      "fakeCloudCalls": 12,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 1
+    },
+    {
+      "case": "private-existing",
+      "pass": true,
+      "fakeCloudCalls": 13,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 1
+    },
+    {
+      "case": "new-private",
+      "pass": true,
+      "fakeCloudCalls": 12,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 1
+    },
+    {
+      "case": "public-reuse",
+      "pass": true,
+      "fakeCloudCalls": 13,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 1
+    },
+    {
+      "case": "public-publish",
+      "pass": true,
+      "fakeCloudCalls": 13,
+      "fakeBuildCalls": 1,
+      "fakeDeployCalls": 1
+    }
+  ],
+  "dedicatedSourceStagingChecked": true
+}

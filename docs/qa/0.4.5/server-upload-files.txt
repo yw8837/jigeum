@@ -1,0 +1,13 @@
+.dockerignore
+.gcloudignore
+Dockerfile
+package.json
+public\privacy.html
+public\support.html
+public\terms.html
+src\credentials.js
+src\public-pages.js
+src\review.js
+src\runtime-config.js
+src\server.js
+src\verifier.js

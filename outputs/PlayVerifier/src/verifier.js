@@ -90,9 +90,12 @@ export function validRequest(input) {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input.installationId);
 }
 
-export function createVerifier({ serviceAccount, privateKey, fetchImpl = fetch, clock = Date.now, upstreamTimeoutMs = 7000 }) {
-  if (!serviceAccount?.client_email || !serviceAccount?.private_key || !privateKey) {
-    throw new Error('Service account and entitlement signing key are required');
+export function createVerifier({ serviceAccount, accessTokenProvider, privateKey, fetchImpl = fetch, clock = Date.now, upstreamTimeoutMs = 7000 }) {
+  if (((!serviceAccount?.client_email || !serviceAccount?.private_key) && typeof accessTokenProvider !== 'function') || !privateKey) {
+    throw new Error('Service account or workload credentials and entitlement signing key are required');
+  }
+  if (serviceAccount && accessTokenProvider) {
+    throw new Error('Select exactly one Google credential provider');
   }
   const signingKey = typeof privateKey === 'string' || Buffer.isBuffer(privateKey) ? createPrivateKey(privateKey) : privateKey;
   if (signingKey.asymmetricKeyType !== 'ec' || signingKey.asymmetricKeyDetails?.namedCurve !== 'prime256v1') {
@@ -110,21 +113,26 @@ export function createVerifier({ serviceAccount, privateKey, fetchImpl = fetch, 
     try { return await tokenRequest; } finally { tokenRequest = null; }
   }
   async function requestAccessToken(now) {
-    const response = await fetchImpl('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion: serviceAccountAssertion(serviceAccount, now)
-      }),
-      signal: AbortSignal.timeout(upstreamTimeoutMs)
-    });
-    if (!response.ok) throw new Error('Google authentication unavailable');
-    const body = await readJsonLimited(response, 16_384);
-    if (typeof body.access_token !== 'string' || !body.access_token) throw new Error('Google authentication invalid');
-    accessToken = body.access_token;
+    let body;
+    if (accessTokenProvider) {
+      body = await accessTokenProvider();
+    } else {
+      const response = await fetchImpl('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+          assertion: serviceAccountAssertion(serviceAccount, now)
+        }),
+        signal: AbortSignal.timeout(upstreamTimeoutMs)
+      });
+      if (!response.ok) throw new Error('Google authentication unavailable');
+      body = await readJsonLimited(response, 16_384);
+    }
+    if (typeof body?.access_token !== 'string' || !body.access_token || /[\r\n]/.test(body.access_token)) throw new Error('Google authentication invalid');
     const seconds = Number(body.expires_in);
     if (!Number.isFinite(seconds) || seconds <= 0) throw new Error('Google authentication expiry invalid');
+    accessToken = body.access_token;
     accessTokenExpiresAt = now + Math.min(seconds, 3600) * 1000;
     return accessToken;
   }

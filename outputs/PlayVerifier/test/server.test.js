@@ -16,6 +16,20 @@ const post = (url, body = input, headers = {}) => fetch(`${url}/verify`, {
   body: typeof body === 'string' ? body : JSON.stringify(body), signal: AbortSignal.timeout(3000)
 });
 
+test('service-specific health route is exact GET, token-free and independent of Publisher', async () => {
+  let calls = 0;
+  await withServer({ verify: async () => { calls++; throw new Error('must not run'); } }, async url => {
+    const response = await fetch(`${url}/jigeum-health`);
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { ok: true });
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    for (const [path, method] of [['/jigeum-health', 'POST'], ['/jigeum-health/', 'GET'], ['/jigeum-health?q=x', 'GET']]) {
+      assert.equal((await fetch(url + path, { method })).status, 404);
+    }
+    assert.equal(calls, 0);
+  });
+});
+
 test('HTTP happy path, rejection and upstream failure remain distinct and token-free', async () => {
   let mode = 'success';
   await withServer({ verify: async () => {

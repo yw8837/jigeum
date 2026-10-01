@@ -1,0 +1,110 @@
+pwsh.exe/dry-run: PASS
+pwsh.exe/confirmation-missing: PASS
+pwsh.exe/wrong-signing-curve: PASS
+pwsh.exe/billing-disabled: PASS
+pwsh.exe/api-fails: PASS
+pwsh.exe/bucket-unsafe: PASS
+pwsh.exe/bucket-lifecycle-drift: PASS
+pwsh.exe/bucket-soft-delete-drift: PASS
+pwsh.exe/secret-reuse-unconfirmed: PASS
+pwsh.exe/version-disabled: PASS
+pwsh.exe/role-too-wide: PASS
+pwsh.exe/budget-mismatch: FAIL
+{"exit":1,"reason":"Exception: C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\tools\\deploy\\bootstrap-cloud.ps1:175\r\nLine |\r\n 175 |  … ISABLED') { throw 'Scoped token custom role contains unexpected permi …\r\n     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Scoped token custom role contains unexpected permissions or is disabled\r\n"}
+pwsh.exe/new-resource-success: FAIL
+{"exit":1,"reason":"Exception: C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\tools\\deploy\\bootstrap-cloud.ps1:175\r\nLine |\r\n 175 |  … ISABLED') { throw 'Scoped token custom role contains unexpected permi …\r\n     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Scoped token custom role contains unexpected permissions or is disabled\r\n"}
+pwsh.exe/known-resource-reuse: FAIL
+{"exit":1,"reason":"Exception: C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\tools\\deploy\\bootstrap-cloud.ps1:175\r\nLine |\r\n 175 |  … ISABLED') { throw 'Scoped token custom role contains unexpected permi …\r\n     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Scoped token custom role contains unexpected permissions or is disabled\r\n"}
+{
+  "tests": 14,
+  "passed": 11,
+  "externalCloudOperations": 0,
+  "operationalSecretsRead": false,
+  "keys": "Ephemeral synthetic signing fixtures only; no account JSON",
+  "results": [
+    {
+      "shell": "pwsh.exe",
+      "case": "dry-run",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "confirmation-missing",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "wrong-signing-curve",
+      "pass": true,
+      "fakeCalls": 0
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "billing-disabled",
+      "pass": true,
+      "fakeCalls": 2
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "api-fails",
+      "pass": true,
+      "fakeCalls": 3
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-unsafe",
+      "pass": true,
+      "fakeCalls": 15
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-lifecycle-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "bucket-soft-delete-drift",
+      "pass": true,
+      "fakeCalls": 11
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "secret-reuse-unconfirmed",
+      "pass": true,
+      "fakeCalls": 20
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "version-disabled",
+      "pass": true,
+      "fakeCalls": 21
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "role-too-wide",
+      "pass": true,
+      "fakeCalls": 30
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "budget-mismatch",
+      "pass": false,
+      "fakeCalls": 30
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "new-resource-success",
+      "pass": false,
+      "fakeCalls": 39
+    },
+    {
+      "shell": "pwsh.exe",
+      "case": "known-resource-reuse",
+      "pass": false,
+      "fakeCalls": 30
+    }
+  ]
+}

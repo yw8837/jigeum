@@ -1,5 +1,7 @@
 # 실행·검증·운영 준비
 
+**현재 통합 버전은 0.4.5/code12 connected**다. [연결 QA](qa/0.4.5/connected/README.md)의 Android142/2skip/0fail·Node56·실제 release UI10·HTTPS9·서명/패키징을 따른다. [운영 구성](release/20261001/OPERATIONS.md)과 [연결 진행](release/20261001/CONNECTION-PROGRESS.md)이 과거 결제 미연결 설명보다 우선한다. SDK/모델 버전은 유지했다.
+
 아래 경로는 저장소 루트를 기준으로 한다. 비밀값은 예시에 넣지 않는다. 과거 0.3.0 산출물은 원래 이름으로 보존한다.
 
 ## 개발 환경
@@ -9,7 +11,7 @@
 | Android | Kotlin 2.2.10 / Compose BOM 2025.08.01 / CameraX 1.6.2 / MediaPipe 1.0.0 |
 | 빌드 | Gradle 8.14.3 / AGP 8.13.2 / JDK 17 이상. 검증 환경은 JDK 21.0.12 |
 | SDK | min 26 / target·compile 36 / 계측 기기 API 35 x86_64 |
-| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.4 / code 11 |
+| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.5 / code 12 |
 | 결제 | Play Billing 9.1.0. 서버는 Node 내장 모듈을 사용하며 외부 npm 의존성 없음 |
 | 테스트 도구 | Python 3.10 이상, ADB, ffmpeg(합성 fixture 생성), Android SDK build-tools 36 |
 
@@ -82,7 +84,7 @@ npm test
 | 릴리스 서명 | `MOA_UPLOAD_KEYSTORE`, `MOA_UPLOAD_KEY_ALIAS`, `MOA_UPLOAD_STORE_PASSWORD`, `MOA_UPLOAD_KEY_PASSWORD` | 키 경로·암호. Git에서 제외 |
 | 서버 | [PlayVerifier README](../outputs/PlayVerifier/README.md)의 서비스 계정·서명 키·패키지·한도 변수 | 개인 키·서비스 계정은 서버 전용 |
 
-현재 앱의 공개 설정은 비어 있어 결제할 수 없다. 업로드 키 설정 네 개는 모두 제공하거나 모두 생략해야 한다. 키 생성·권한 부여·배포를 자동 수행하는 설정은 저장소에 없다.
+소스의 기본 공개 설정은 비어 있다. 최종 connected 빌드는 실제 HTTPS `/verify` URL과 대응 공개 키를 환경 변수로 제공했다. 키는 저장소 밖 기존 경로를 재사용하며 업로드 서명 변수 네 개는 모두 제공하거나 모두 생략한다. build 도구는 Cloud나 Play 자원을 자동 생성하지 않는다.
 
 ## 운영 연결 순서
 
@@ -102,4 +104,4 @@ npm test
 
 ## 0.4.2 결제 계약
 
-검증 서버는 허용 가능한 구매의 acknowledge를 완료하거나 Play의 ACKNOWLEDGED 상태를 확인한 뒤 서명한다. 앱은 서명 수락 후 현재 토큰의 SHA-256과 일치하는 확인값에서만 중복 client acknowledge를 생략한다. 운영 서비스 계정에는 조회와 구독 acknowledge 권한이 필요하며, 새 앱·서버를 함께 실제 Play에서 검증한다. 자세한 오류·동시성·기한 제한은 [서버 README](../outputs/PlayVerifier/README.md)를 따른다. 실제 운영 연결은 아직 없다.
+검증 서버는 허용 가능한 구매의 acknowledge를 완료하거나 Play의 ACKNOWLEDGED 상태를 확인한 뒤 서명한다. 앱은 서명 수락 후 현재 토큰의 SHA-256과 일치하는 확인값에서만 중복 client acknowledge를 생략한다. 운영 서비스 계정에는 조회와 구독 acknowledge 권한이 필요하며, 새 앱·서버를 함께 실제 Play에서 검증한다. 자세한 오류·동시성·기한 제한은 [서버 README](../outputs/PlayVerifier/README.md)를 따른다. 실제 운영 서버/Play 앱 한정 접근은 연결됐고 실제 구매/ACK는 미검증이다.

@@ -1,6 +1,6 @@
 # 지금 내 기분이 그래 — Play 구독 확인 서비스
 
-현재 산출물은 **로컬 QA용 통합 후보**입니다. 배포하거나 실제 결제를 실행하지 않았습니다.
+사용자의 최신 연결 요청 후 전용 서울 Cloud Run에 실제 배포했습니다. 구성·공개 정책·최소 IAM·Play 앱 한정 runtime 접근은 [운영 문서](../../docs/release/20261001/OPERATIONS.md)를 따릅니다. Node56/56·실제HTTPS9/9·warm 오류 코드 제한4/4와 실제 release 앱의 심사 이용권 수락을 확인했습니다. **실제 Google Play 구매/ACK/환불은 미검증**이며 [최종 연결 QA](../../docs/qa/0.4.5/connected/README.md)를 먼저 읽습니다. 도구의 기본 dry-run은 외부 변경을 하지 않습니다.
 Google Play 상품, API 권한, 운영 HTTPS 주소가 없는 빌드는 유료 구매를 열지 않습니다.
 무료 소리 관찰·아기말·기록·기본 공유·백업 기능은 그대로 사용할 수 있습니다. 0.4의 카메라·저장 영상·PDF는 하나의 전체 이용권으로 제공합니다.
 
@@ -47,11 +47,18 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 
 | 서버 환경 변수 | 용도 |
 |---|---|
-| `PLAY_SERVICE_ACCOUNT_JSON_PATH` | Android Publisher 조회·구독 acknowledge에 필요한 서비스 계정 JSON, 저장소 밖 비밀 파일. 실제 Play 주문/구독 관리 권한을 별도 검증 |
+| `PLAY_CREDENTIALS_MODE` | 로컬 기존 `service-account` 또는 Cloud Run용 `workload`. workload에서는 서비스 계정 JSON을 거부 |
+| `PLAY_RUNTIME_SERVICE_ACCOUNT_EMAIL` | Cloud Run 실행 서비스 계정. metadata ADC→IAMCredentials의 androidpublisher scoped token, 원문키 내보내기 없음 |
+| `PLAY_SERVICE_ACCOUNT_JSON_PATH` | 이전 로컬 service-account mode 전용. Android Publisher 조회·acknowledge 권한을 별도 검증. Cloud Run 배포에 사용하지 않음 |
 | `PLAY_ENTITLEMENT_PRIVATE_KEY_PATH` | P-256 PKCS#8 PEM 서명 개인키, 저장소 밖 비밀 파일 |
+| `PLAY_REVIEW_CODE_SHA256` / `PLAY_REVIEW_ACCESS_ID` | 별도 심사자 코드의 SHA256 및 credential ID. 둘 다 없으면 /review403, 부분·잘못된 설정이면 시작 실패 |
 | `HOST` | 기본 `127.0.0.1`. 직접 공개하지 말고 통제된 HTTPS ingress 사용 |
 | `PORT` | 기본 8080 |
-| `ORIGIN_REQUESTS_PER_MINUTE` | 원본 서버의 소켓 주소별 1분 한도. 기본 30 |
+| `RATE_LIMIT_MODE` | 기존 로컬 `socket`, 배포 `installation`. 임의 forwarding header를 신뢰하지 않음 |
+| `ORIGIN_REQUESTS_PER_MINUTE` | 선택한 소켓 또는 salted 설치 UUID별1분 한도. 기본30 |
+| `GLOBAL_REQUESTS_PER_MINUTE` | 프로세스 전체한도. 기본1000, 배포계획300 |
+| `MAX_CONCURRENT_VERIFICATIONS` / `MAX_RATE_KEYS` | HTTP진행/한도테이블 최대. 배포24/10000 |
+| `BODY_TIMEOUT_MS` / `VERIFICATION_TIMEOUT_MS` / `UPSTREAM_TIMEOUT_MS` | 기본5000/16000/7000ms, workload배포3000/23000/5000ms |
 
 앱 빌드의 공개 설정은 `JIGEUM_PLAY_VERIFY_URL=https://…/verify`,
 `JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY=…`(SPKI DER을 Base64로 인코딩한 공개키)입니다.
@@ -63,7 +70,7 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 - 진행 중 HTTP 요청 최대 32개, 전체 연결 256개입니다. 초과분은 빠르게 503과 Retry-After로 응답합니다.
 - OAuth 재발급은 동시에 하나만 합니다. 같은 구매 토큰의 진행 중 Play 조회와 acknowledge를 함께 합치며 공유 작업은32개를 넘지 않습니다. 완료 결과는 캐시하지 않고 다음 조회는 환불/만료/acknowledge 상태를 다시 확인합니다. 설치마다 이용권은 따로 서명합니다.
 - 원본 IP 테이블도 10,000개로 제한합니다. `X-Forwarded-For`는 신뢰하지 않습니다.
-- HTTPS 프록시 뒤에서는 모든 요청이 같은 프록시 주소로 보일 수 있습니다. **프록시에서 실제 사용자별 제한을 먼저 적용하고**, 원본의 `ORIGIN_REQUESTS_PER_MINUTE`를 프록시 총량에 맞춰 조정해야 합니다. 기본 30을 그대로 두면 여러 사용자 전체가 분당 30건으로 묶입니다.
+- HTTPS 프록시 뒤에서는 모든 요청이 같은 프록시 주소로 보일 수 있습니다. Cloud Run 계획은 `RATE_LIMIT_MODE=installation`으로 설치 UUID별30/min·프로세스전체300/min·동시24개를 사용하므로 공유 proxy주소 때문에 사용자전체가30/min에묶이지 않습니다. UUID회전공격·전역한도독점방어를완료했다는뜻은아닙니다. 강한client별ingress보호는추가운영gate이며 소켓기본값30을Cloud Run에그대로사용하지않습니다.
 - 다중 인스턴스의 공통 제한, 전역 Google API 할당량, 외부 DDoS 차단, 용량 자동확장, 가용성 모니터링은 운영 인프라에서 설정해야 합니다. 로컬 테스트로 운영 수용 인원을 주장하지 않습니다.
 - 이용권은 최대 24시간 오프라인 허용입니다. 앱 실행 중 서명 만료 시 잠기고, 온라인에서 명시적 권한 거절을 받으면 즉시 잠깁니다. 환불 직후 오프라인 기기의 권한은 이 잔여기간만큼 남을 수 있습니다.
 - 앱은 수신 당시의 단조시간과 부팅 횟수를 저장해 기기 시간 되돌림으로 오프라인 기한이 늘어나지 않게 합니다. 재부팅·누락되거나 손상된 검증 근거는 온라인 재확인이 필요합니다. 루팅한 기기나 변조 앱까지 보호한다는 뜻은 아닙니다.
@@ -84,3 +91,11 @@ Google 응답은 대역입니다. **실제 Play 구매·취소·환불을 검증
 라이선스 테스트 계정과 실제 Android 기기로 구매 성공, 결제 취소, 보류→완료/취소, 3개월 선불,
 구매 acknowledge 재시도, 앱 삭제 후 복원, 계정 변경, 취소 후 만료, 환불/회수, 24시간 오프라인 경계를 확인해야 합니다.
 현재 로컬 테스트 결과와 이 외부 미검증 항목을 구분해 QA 보고서에 기록합니다.
+
+## 배포 패키지와 심사 계약 후보 — 2026-10-01
+
+배포 계획·비용 가정·정확한 IAM 범위와 순서는 `tools/deploy/README.md` / `plan.json`을 따릅니다. 이 패키지는 Cloud Run 단일 공급자와 최소0·최대1·서울·request billing을 사용합니다. Docker와Cloud Build업로드allowlist는source/public/package만포함하고테스트키·fixtures·env·로컬JSON은제외합니다. Docker daemon이현재실행되지않아컨테이너실행은아직확인하지않았습니다.
+
+`POST /review`의정확한3필드 `{packageName, installationId, reviewCode}`는고엔트로피코드SHA256과일치할때만최대24시간·설치bound·별도`grantSource=play-review`/`basePlanId=play-review`이용권을발급합니다. 이는구매SKU플랜·acknowledge와별도계약입니다. 서버에는코드원문을환경변수나로그로저장하지않습니다. 심사자코드의실제생성·운영주입·Play설명제출은미완료입니다. 정책GET/HEAD정적페이지는서버factory의`publicRouteHandler`로연결되며현재파일은게시승인전후보입니다.
+
+로컬시험에는기존구매43개와workload·심사·설치/global제한·정책계약시험이포함됩니다. 테스트의Google메타데이터/Play응답은합성대역이며실제IAM·Google Play거래·Cloud부하능력검증을대체하지않습니다.

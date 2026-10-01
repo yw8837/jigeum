@@ -1,0 +1,23 @@
+PASS: project identity and existing billing link verified
+PASS: six core APIs and four preparation APIs enabled
+PASS: dedicated runtime and build identities verified; no account keys exported
+PASS: source bucket and resource-specific build permissions verified
+PASS: two immutable Seoul secrets and individual runtime access verified; no payload printed
+PASS: single-permission token role bound only on the runtime identity to itself
+PASS: default request metadata retention verified at 30 days
+PASS: monthly KRW10000 project-only alerts verified; alerts do not cap spending
+{
+  "mode": "bootstrap-verified",
+  "project": "jigeum-play-20261001",
+  "region": "asia-northeast3",
+  "buildIdentity": "jigeum-play-build@jigeum-play-20261001.iam.gserviceaccount.com",
+  "runtimeIdentity": "jigeum-play-runtime@jigeum-play-20261001.iam.gserviceaccount.com",
+  "sourceStagingDirectory": "gs://jigeum-play-20261001-build-source/source",
+  "budgetAmountKRW": 10000,
+  "hardSpendingCap": false,
+  "inheritedAndUnexpectedIamAudited": false,
+  "exportedServiceAccountKeys": false,
+  "billingIdOrSecretPayloadPrinted": false,
+  "playPermissionConfigured": false,
+  "deployed": false
+}

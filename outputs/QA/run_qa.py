@@ -172,9 +172,33 @@ def confirm_layout():
         q.trace('wide-safe-area-confirmed')
     finally:
         q.restore_display(display)
+
+def review_layout():
+    """Review entry remains visible, disabled when unconfigured, and returns safely at each size."""
+    display=q.display_settings()
+    original=q.shell('settings','get','system','font_scale').stdout.decode().strip()
+    try:
+        for label,size,density,font in [('small','720x1280','320','1.0'),('large-font','1080x2400','420','2.0'),('wide','1280x720','160','1.0')]:
+            q.shell('wm','size',size); q.shell('wm','density',density)
+            q.shell('settings','put','system','font_scale',font)
+            home(); q.tap_text('카메라로 살펴보기',exact=False)
+            q.wait_ui('지금의 표정도 함께 살펴봐요')
+            q.tap_text('Play 심사 접근',attempts=9)
+            q.tap_text('심사 접근 확인',attempts=9)
+            q.wait_ui('심사 접근 서비스가 아직 설정되지 않았어요.')
+            entries=q.trace('review-'+label+'-disabled')
+            assert not any('심사 접근 확인 중' in n['text'] or '카메라 시작' in n['text'] for n in entries)
+            q.screenshot('review-'+label+'-actions')
+            q.shell('input','keyevent','KEYCODE_BACK'); q.wait_ui('지금 아기는')
+        q.trace('review-layout-safe-return')
+    finally:
+        q.restore_display(display)
+        if original=='null': q.shell('settings','delete','system','font_scale')
+        else: q.shell('settings','put','system','font_scale',original)
+
 MODES={'migration':migration,'normal':normal,'permission':previous.permission,'camera':camera,'video':previous.video,
        'invalid':previous.invalid,'album':album,'transfer':transfer,'layout':layout,'stress':stress,'confirm-layout':confirm_layout,
-       'access':access,'paywall-layout':paywall_layout}
+       'access':access,'paywall-layout':paywall_layout,'review-layout':review_layout}
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser(description='Run one UI scenario on the explicitly selected disposable test device.')

@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "from": "0.4.4/code11",
+  "to": "0.4.5/code12",
+  "records": 1,
+  "all_fields_equal": true,
+  "schema_before": 1,
+  "schema_after": 1
+}

@@ -9,6 +9,9 @@ enum class BillingStatus {
     UNAVAILABLE, CONNECTING, READY, PURCHASING, PENDING, VERIFYING, PREMIUM, ERROR
 }
 
+enum class EntitlementSource { NONE, PLAY_PURCHASE, PLAY_REVIEW }
+enum class ReviewAccessStatus { UNAVAILABLE, INACTIVE, VERIFYING, ACTIVE, ERROR }
+
 data class BillingProduct(
     val productId: String,
     val title: String,
@@ -29,5 +32,8 @@ data class BillingUiState(
     val options: List<BillingOption> = emptyList(),
     val status: BillingStatus = BillingStatus.CONNECTING,
     val isPremium: Boolean = false,
-    val message: String? = null
+    val message: String? = null,
+    val entitlementSource: EntitlementSource = EntitlementSource.NONE,
+    val reviewStatus: ReviewAccessStatus = ReviewAccessStatus.UNAVAILABLE,
+    val reviewMessage: String? = null
 )

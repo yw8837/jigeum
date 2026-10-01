@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Jigeum-Android-connected-0.4.5-code12-upload-signed.apk",
+    "bytes": 73614991,
+    "sha256": "34fa84b918f3c2a36211a4ae0712dc7db3e10685bad0281cfbbb439f761a1a18",
+    "version": "0.4.5",
+    "versionCode": 12,
+    "billingConfigured": true,
+    "reviewConfigured": true,
+    "publicVerifyUrl": "https://jigeum-verifier-th7ce7roma-du.a.run.app/verify",
+    "publicKeySha256": "0fdbb6f229873cf4f971c406e45e68db338b25ffc8ad07ec5ad0e7e21b84defe",
+    "privateOrTestFixtureEntries": 0,
+    "realPlayPurchaseVerified": false,
+    "ARMVerified": false
+  },
+  {
+    "name": "Jigeum-Play-connected-0.4.5-code12-signed.aab",
+    "bytes": 44989352,
+    "sha256": "1a163306cba49a3d979afa3e3445a8a1bfb9e713be1135dcd6d315d5a93b2e98",
+    "version": "0.4.5",
+    "versionCode": 12,
+    "billingConfigured": true,
+    "reviewConfigured": true,
+    "publicVerifyUrl": "https://jigeum-verifier-th7ce7roma-du.a.run.app/verify",
+    "publicKeySha256": "0fdbb6f229873cf4f971c406e45e68db338b25ffc8ad07ec5ad0e7e21b84defe",
+    "privateOrTestFixtureEntries": 0,
+    "realPlayPurchaseVerified": false,
+    "ARMVerified": false
+  }
+]

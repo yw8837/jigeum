@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "build": "0.4.5/code12 upload-signed internal",
+  "manual_save_record_share": true,
+  "unconfigured_review_disabled": true,
+  "play_resigned_install": false,
+  "actual_play_purchase": false
+}
