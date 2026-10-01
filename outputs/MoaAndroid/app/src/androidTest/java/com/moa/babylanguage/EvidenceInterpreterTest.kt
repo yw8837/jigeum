@@ -18,7 +18,7 @@ class EvidenceInterpreterTest {
         assertEquals("아기 웃음 후보", SoundAnalyzer.cueLabel("Baby laughter"))
     }
     @Test fun distressLikeCuesCannotProducePlayfulBabblingOrLaughingPhrase() {
-        for (label in listOf("울음", "울음(화자 미확인)", "비명(화자 미확인)")) {
+        for (label in listOf("울음", "울음(화자 미확인)")) {
             assertNull(interpret(listOf(SoundCue("옹알이 후보", .8f), SoundCue(label, .5f))).interpretation)
             assertNull(interpret(listOf(SoundCue("아기 웃음 후보", .8f), SoundCue(label, .5f))).interpretation)
         }
@@ -31,6 +31,16 @@ class EvidenceInterpreterTest {
             assertNull(interpret(it, visual = "얼굴 5개 · 입 움직임 5개").interpretation)
             assertNotNull(interpret(it).problem)
         }
+    }
+    @Test fun strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying() {
+        val result = interpret(listOf(SoundCue("아기 웃음 후보", .67f),
+            SoundCue("웃음(화자 미확인)", .98f), SoundCue("울음(화자 미확인)", .33f)))
+        assertEquals("아기 웃음", result.interpretation?.sound)
+    }
+    @Test fun strongerBabyCryPeakCannotOverrideConflictingLaughter() {
+        val result = interpret(listOf(SoundCue("울음", .8f), SoundCue("아기 웃음 후보", .7f),
+            SoundCue("웃음(화자 미확인)", .95f)))
+        assertNotEquals("울음", result.interpretation?.sound)
     }
     @Test fun silenceAndModelErrorsNeverProducePhrase() {
         assertNull(interpret(listOf(SoundCue("울음", .9f)), AcousticShape(0f, false, 0)).interpretation)

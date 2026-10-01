@@ -61,26 +61,26 @@ internal object EvidenceInterpreter {
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
                   visualEvidence: VisualEvidence? = null): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem)
-        val infantLabels = setOf("울음", "옹알이 후보", "아기 웃음 후보")
-        val cue = audio.cues.filter { it.label in infantLabels && it.score >= 0.35f }.maxByOrNull { it.score }
-            ?: return ClipAnalysisResult(problem = "이 구간에서는 아기 소리 단서를 충분히 찾지 못했어요. 소리가 또렷한 구간을 다시 골라 주세요.")
-        if (cue.label != "울음" && audio.cues.any {
-                it.label in setOf("울음", "울음(화자 미확인)", "비명(화자 미확인)") && it.score >= 0.30f
-            }) return ClipAnalysisResult(problem = "울음·높은 소리와 다른 소리가 섞여 있어 한마디로 표현하기 어려워요. 짧은 구간으로 다시 골라 주세요.")
+        val decision = SoundTimeline.decide(audio)
+        decision.problem?.let { return ClipAnalysisResult(problem = it) }
         if (shape.activeFraction < 0.04f) return ClipAnalysisResult(problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.")
-        val sound = when (cue.label) { "옹알이 후보" -> "옹알이"; "아기 웃음 후보" -> "아기 웃음"; else -> "울음" }
+        val sound = decision.sound
         val eligiblePhrases = when (sound) {
             "울음" -> when {
                 shape.rising -> listOf("으앙… 으아앙! 나 좀 봐주세요.", "으아앙… 여기 좀 봐줘요!", "응애! 잠깐 나 좀 봐줘요.")
                 shape.activeFraction >= 0.65f -> listOf("으앙, 으앙… 나 좀 도와줘요.", "으앙… 잠깐 내 곁에 있어줘요.", "응애, 응애… 토닥토닥 해줄래요?")
-                shape.bursts >= 3 -> listOf("응애… 응애… 여기 좀 봐주세요.", "으앙… 또 울음이 나와요.", "응애… 잠깐만 내 곁에 있어줘요.")
+                shape.bursts >= 3 -> listOf("응애… 응애… 여기 좀 봐주세요.", "으앙… 내 목소리 들려요?", "응애… 잠깐만 내 곁에 있어줘요.")
                 else -> listOf("응애… 나 좀 봐주세요.", "으앙… 잠깐 나한테 와줄래요?", "응애… 여기 좀 봐줘요.")
             }
-            "아기 웃음" -> if (shape.bursts >= 3) listOf("히히, 헤헤! 자꾸 웃음이 나요.", "까르르! 또 웃음이 나왔어요.", "히히! 내 웃음이 안 멈춰요.")
+            "아기 웃음" -> if (shape.bursts >= 3) listOf("히히, 헤헤! 내 웃음 들려요?", "까르르! 웃음이 나왔어요.", "히히! 나랑 눈 맞추고 웃어요.")
                 else listOf("헤헤! 같이 웃어요.", "히히, 웃음이 나요!", "헤헤, 나랑 같이 웃어줄래요?")
+            "여러 아기 소리" -> listOf("내 소리 좀 들어줘요. 잠깐 곁에 있어줄래요?",
+                "나 여기 있어요. 내 목소리에도 귀 기울여줘요.", "잠깐 나를 봐줘요. 내 소리, 들려요?")
+            "어린 말소리" -> listOf("내 목소리 들려요? 나도 한마디 할래요.",
+                "나도 소리 내볼래요. 잠깐 들어줄래요?", "내 얘기 들려요? 이번엔 내 차례예요.")
             else -> when {
                 shape.bursts >= 3 -> listOf("아아, 옹알옹알! 내 얘기도 들어봐요.", "아아… 우우! 나도 얘기할래요.", "옹알옹알! 이번엔 내 차례예요.")
-                shape.activeFraction >= 0.65f -> listOf("옹알옹알, 할 말이 많아요!", "아아, 우우! 내 얘기 아직 안 끝났어요.", "옹알옹알… 내 얘기 좀 들어봐요!")
+                shape.activeFraction >= 0.65f -> listOf("옹알옹알, 내 목소리예요!", "아아, 우우! 나도 소리 내볼래요.", "옹알옹알… 내 얘기 좀 들어봐요!")
                 else -> listOf("아아, 우우… 내 얘기 들려요?", "옹알… 나도 한마디 할래요.", "아아… 내 소리에도 답해줄래요?")
             }
         }
@@ -91,11 +91,14 @@ internal object EvidenceInterpreter {
             shape.activeFraction >= 0.65f -> "소리가 비교적 길게 이어졌어요."
             else -> "짧게 들리는 소리를 살펴봤어요."
         }
+        val timeline = decision.moments.filterIndexed { index, moment ->
+            index == 0 || decision.moments[index - 1].event != moment.event
+        }.joinToString(" → ") { "${ClipRange.clock(range.startMs + it.startMs)} 부근 ${it.event.label} 후보" }
         return ClipAnalysisResult(ClipInterpretation(phrase, sound,
-            "${range.label()}에서 $sound 후보를 찾았어요. $rhythm" +
+            "${range.label()}에서 $sound 후보를 찾았어요. $rhythm\n$timeline" +
                 (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
                 "\n일반 소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
-            responseGuide(sound), range.label(),
+            responseGuide(if (VocalEvent.CRY in decision.events) "울음" else sound), range.label(),
             visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
             visualEvidence?.notice))
     }
