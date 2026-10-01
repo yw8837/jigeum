@@ -128,6 +128,8 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 ?: return@withContext ClipAnalysisResult(problem = "이 영상에는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.")
             try {
                 val audio = SoundAnalyzer.analyzeDetailed(context, pcm)
+                // Invalid/empty decoder output must stop before rhythm filtering.
+                audio.problem?.let { return@withContext ClipAnalysisResult(problem = it) }
                 val shape = AcousticShape.from(pcm)
                 val preliminary = EvidenceInterpreter.interpret(audio, shape, range)
                 if (preliminary.interpretation == null) return@withContext preliminary
