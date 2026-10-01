@@ -19,8 +19,10 @@ internal data class ClipRange(val startMs: Long, val endMs: Long) {
 }
 
 /** Acoustic observations, not inferred needs. No random/session-dependent rewriting. */
+internal data class AcousticPause(val startMs: Long, val endMs: Long)
 internal data class AcousticShape(val activeFraction: Float, val rising: Boolean, val bursts: Int,
-                                  val wordingKey: Int = 0, val pauses: Int = 0) {
+                                  val wordingKey: Int = 0, val pauses: Int = 0,
+                                  val quietSpans: List<AcousticPause> = emptyList()) {
     companion object {
         fun from(pcm: FloatArray): AcousticShape {
             // Match the model's analysis filter. Removed hum/DC must not describe
@@ -43,9 +45,13 @@ internal data class AcousticShape(val activeFraction: Float, val rising: Boolean
             var heardSound = false
             var quietWindows = 0
             var pauses = 0
-            for (isActive in active) {
+            val quietSpans = mutableListOf<AcousticPause>()
+            for ((index, isActive) in active.withIndex()) {
                 if (isActive) {
-                    if (heardSound && quietWindows >= 3) pauses++
+                    if (heardSound && quietWindows >= 3) {
+                        pauses++
+                        quietSpans += AcousticPause((index - quietWindows) * 100L, index * 100L)
+                    }
                     heardSound = true
                     quietWindows = 0
                 } else if (heardSound) quietWindows++
@@ -58,7 +64,7 @@ internal data class AcousticShape(val activeFraction: Float, val rising: Boolean
             var wordingKey = 17
             for (i in pcm.indices step 160) wordingKey = wordingKey * 31 + (pcm[i] * 32767).toInt()
             return AcousticShape(active.count { it }.toFloat() / active.size.coerceAtLeast(1),
-                first > 0.003 && last > first * 1.8, bursts, wordingKey, pauses)
+                first > 0.003 && last > first * 1.8, bursts, wordingKey, pauses, quietSpans)
         }
     }
 }
@@ -146,7 +152,16 @@ internal object EvidenceInterpreter {
             supported.last().startMs - supported.first().startMs <= 10_000 ||
             supported.last().startMs - supported.first().startMs < range.durationMs * .55f) return null
 
-        val withPause = shape.pauses > 0
+        // Whole-waveform silence may separate a parent from the first baby sound.
+        // Require accepted baby observations immediately around the measured gap;
+        // a global pause count or a classifier gap alone cannot support this wording.
+        val orderedStarts = frameStarts.sorted()
+        val supportedStarts = supported.map { it.startMs }.toSet()
+        val withPause = shape.quietSpans.any { gap ->
+            gap.startMs >= 0 && gap.endMs <= range.durationMs && gap.endMs - gap.startMs >= 300 &&
+                orderedStarts.lastOrNull { it < gap.startMs } in supportedStarts &&
+                orderedStarts.firstOrNull { it >= gap.endMs } in supportedStarts
+        }
         return when (decision.events.singleOrNull()) {
             VocalEvent.LAUGH -> if (withPause) listOf(
                 "히히! 잠깐 쉬었다가… 또 웃음이 나와요. 까르르, 나랑 같이 웃어줄래요?",
