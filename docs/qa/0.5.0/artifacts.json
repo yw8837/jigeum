@@ -1,0 +1,21 @@
+{
+  "version": "0.5.0",
+  "code": 13,
+  "app": "아가톡 - 지금 내 기분이 그래",
+  "launcher": "아가톡",
+  "package": "com.moa.babylanguage",
+  "status": "test_candidate_not_paid_quality_approved",
+  "apk": {
+    "file": "Agattok-0.5.0-code13.apk",
+    "bytes": 73776727,
+    "sha256": "b150b344256b49ff3c10be364f99e10daa7f2e2f5c2d0a97e557539774263f05"
+  },
+  "aab": {
+    "file": "Agattok-0.5.0-code13.aab",
+    "bytes": 45151505,
+    "sha256": "c57abc48a6f533eef23515b8a2c190336f955467bf635cc170dd9b8865dca6a4"
+  },
+  "public_policy_deployed": false,
+  "real_play_transactions_verified": false,
+  "real_parent_quality_verified": false
+}

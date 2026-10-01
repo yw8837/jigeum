@@ -1,3 +1,7 @@
+# 0.5 현재 패키징
+
+아가톡0.5.0/code13, 기존 업로드 키와 실제 검증 URL/공개 키 사용. APK/AAB는 `outputs/Agattok-0.5.0-code13.*`. R8/shrink 비활성 유지. 최신 [QA](../../docs/qa/0.5.0/README.md)와 [RUNBOOK](../../docs/RUNBOOK.md)가 현재 기준이며 아래 버전별 설명은 이력이다. 상품/실제 구매·ARM·해석 적합성·공개 제출은 미완료.
+
 # 지금 내 기분이 그래 Android 릴리스 빌드
 
 ## 현재 SDK 진단 전송 구성

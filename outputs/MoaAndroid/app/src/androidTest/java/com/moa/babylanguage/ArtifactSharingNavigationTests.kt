@@ -32,7 +32,6 @@ class ArtifactSharingNavigationTests {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private val id = "sharing-${UUID.randomUUID()}"
     private lateinit var store: ObservationStore
-    private lateinit var phrases: PhraseEngine
     private var exporter = ControlledExporter()
     private val billing = TestBilling()
     private val visible = mutableStateOf(true)
@@ -42,7 +41,6 @@ class ArtifactSharingNavigationTests {
 
     @Before fun setup() {
         store = ObservationStore(compose.activity, "$id.db", "$id-legacy")
-        phrases = PhraseEngine(compose.activity, "$id-phrases")
         runBlocking { store.save(record) }
     }
     @After fun cleanup() {
@@ -55,7 +53,7 @@ class ArtifactSharingNavigationTests {
     private fun start(paid: Boolean = false) {
         billing.publish(paid)
         started = true
-        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, phrases, artifactExporter = exporter) }
+        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, artifactExporter = exporter) }
         waitPage("home")
     }
     private fun waitPage(page: String) {

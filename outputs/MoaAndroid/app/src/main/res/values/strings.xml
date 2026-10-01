@@ -1,1 +1,4 @@
-<resources><string name="app_name">지금 내 기분이 그래</string></resources>
+<resources>
+    <string name="app_name">아가톡 - 지금 내 기분이 그래</string>
+    <string name="launcher_name">아가톡</string>
+</resources>

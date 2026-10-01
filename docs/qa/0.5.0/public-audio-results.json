@@ -1,0 +1,56 @@
+[
+  {
+    "source_label": "cry",
+    "samples": 240000,
+    "milliseconds": 984,
+    "cues": [
+      {
+        "label": "울음(화자 미확인)",
+        "score": 0.95703125
+      },
+      {
+        "label": "울음",
+        "score": 0.8515625
+      }
+    ],
+    "phrase": "응애, 응애… 토닥토닥 해줄래요?",
+    "problem": null,
+    "activeFraction": 0.6666666865348816,
+    "bursts": 10
+  },
+  {
+    "source_label": "laugh",
+    "samples": 39665,
+    "milliseconds": 255,
+    "cues": [
+      {
+        "label": "웃음(화자 미확인)",
+        "score": 0.984375
+      },
+      {
+        "label": "아기 웃음 후보",
+        "score": 0.66796875
+      },
+      {
+        "label": "울음(화자 미확인)",
+        "score": 0.33203125
+      },
+      {
+        "label": "옹알이 후보",
+        "score": 0.33203125
+      },
+      {
+        "label": "말소리(화자 미확인)",
+        "score": 0.26171875
+      }
+    ],
+    "phrase": null,
+    "problem": "울음·높은 소리와 다른 소리가 섞여 있어 한마디로 표현하기 어려워요. 짧은 구간으로 다시 골라 주세요.",
+    "activeFraction": 0.6399999856948853,
+    "bursts": 2
+  },
+  {
+    "source_label": "babble",
+    "status": "not_run_missing_source"
+  }
+]

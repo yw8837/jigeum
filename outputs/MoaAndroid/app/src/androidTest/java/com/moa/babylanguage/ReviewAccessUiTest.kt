@@ -49,7 +49,7 @@ class ReviewAccessUiTest {
         var continues = 0
         var removals = 0
         compose.setContent { MaterialTheme {
-            PremiumScreen(state.value, { purchases++ }, {}, {}, AppFeature.CAMERA, null,
+            PremiumScreen(state.value, { purchases++ }, {}, {}, AppFeature.VISUAL_ANALYSIS, null,
                 { continues++ }, "무료로 계속하기", {}, {}, {}, {}, {}, {
                     removals++
                     state.value = BillingUiState(isPremium = false, entitlementSource = EntitlementSource.NONE,
@@ -57,7 +57,7 @@ class ReviewAccessUiTest {
                 })
         } }
         compose.onNodeWithText("Play 심사 이용권으로 확인 중이에요.").assertIsDisplayed()
-        compose.onNodeWithText("카메라로 계속하기").performClick()
+        compose.onNodeWithText("선택한 구간으로 돌아가기").performClick()
         compose.onNodeWithText("심사 접근 해제").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(1, removals); assertEquals(1, continues); assertEquals(0, purchases) }
         compose.onNodeWithText("Play 심사 이용권으로 확인 중이에요.").assertDoesNotExist()

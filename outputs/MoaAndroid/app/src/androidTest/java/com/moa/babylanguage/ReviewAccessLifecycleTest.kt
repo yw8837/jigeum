@@ -68,8 +68,8 @@ class ReviewAccessLifecycleTest {
         Fixture().use { f ->
             f.unlock()
             val access = AccessPolicy(f.manager::hasCurrentEntitlement)
-            val camera = checkNotNull(access.beginMedia(AppFeature.CAMERA))
-            val video = checkNotNull(access.beginMedia(AppFeature.VIDEO_IMPORT))
+            val camera = checkNotNull(access.beginMedia(AppFeature.VISUAL_ANALYSIS))
+            val video = checkNotNull(access.beginMedia(AppFeature.VISUAL_ANALYSIS))
             assertFalse(access.isCurrent(camera)) // New media generation invalidates the first session.
             assertTrue(access.isCurrent(video))
             f.now += 3_600_000
@@ -80,7 +80,7 @@ class ReviewAccessLifecycleTest {
             f.manager.refresh()
             f.review.finish(VerificationResult.Verified(f.envelope()))
             assertTrue(access.canUse(AppFeature.PDF))
-            assertNotNull(access.beginMedia(AppFeature.CAMERA))
+            assertNotNull(access.beginMedia(AppFeature.VISUAL_ANALYSIS))
         }
     }
 

@@ -92,4 +92,33 @@ class VideoAudioTest {
         assertTrue(result.cues.isEmpty())
         assertNotNull(result.problem)
     }
+
+    @Test fun selectedRangeDecodesLaterSoundInsteadOfFirstSeconds() = runBlocking {
+        val file = fixture("range-silence-tone.mp4")
+        try {
+            val first = VideoAudioDecoder.decode(context, Uri.fromFile(file), 0, 3_000)!!
+            val later = VideoAudioDecoder.decode(context, Uri.fromFile(file), 8_000, 11_000)!!
+            try {
+                assertTrue(first.size in 47_900..48_000)
+                assertTrue(later.size in 47_900..48_000)
+                val quiet = sqrt(first.sumOf { it.toDouble() * it } / first.size)
+                val tone = sqrt(later.sumOf { it.toDouble() * it } / later.size)
+                assertTrue("Beginning must be silent: $quiet", quiet < .001)
+                assertTrue("Selected later segment must contain tone: $tone", tone > .08)
+                val crossings = (1 until later.size).count { later[it-1] < 0 && later[it] >= 0 }
+                assertEquals(997.0, crossings * 16_000.0 / later.size, 8.0)
+            } finally { first.fill(0f); later.fill(0f) }
+        } finally { file.delete() }
+    }
+
+    @Test fun realModelCannotTurnSilenceOrToneIntoBabyPhrase() = runBlocking {
+        for (name in listOf("silence.mp4", "tone44-mono.mp4", "no-audio.mp4")) {
+            val file = fixture(name)
+            try {
+                val result = DeviceClipAnalyzer.analyze(context, Uri.fromFile(file), ClipRange(0, 2_000), false)
+                assertNull("$name must not produce a baby phrase", result.interpretation)
+                assertNotNull(result.problem)
+            } finally { file.delete() }
+        }
+    }
 }

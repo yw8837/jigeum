@@ -1,0 +1,20 @@
+[
+  {
+    "name": "cry",
+    "author": "the_yura",
+    "license": "CC0 1.0",
+    "source": "https://freesound.org/people/the_yura/sounds/211528/",
+    "url": "https://cdn.freesound.org/previews/211/211528_2451161-hq.mp3",
+    "sha256": "6db3e82746d1815b918d54d0931632e2043b5e850ceb4eac3b3d88216fa8ce39",
+    "changes": "First up to 15s of published MP3 preview, mono 16kHz float32 PCM. Local QA only, no training/redistribution."
+  },
+  {
+    "name": "laugh",
+    "author": "reinsamba",
+    "license": "CC BY 3.0",
+    "source": "https://freesound.org/people/reinsamba/sounds/47370/",
+    "url": "https://cdn.freesound.org/previews/47/47370_18799-hq.mp3",
+    "sha256": "d1129741d5761aa39935f74bd7ecb5474a0c889b73501a9d0e1cf2fba9dbd982",
+    "changes": "First up to 15s of published MP3 preview, mono 16kHz float32 PCM. Local QA only, no training/redistribution."
+  }
+]

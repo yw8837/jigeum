@@ -15,7 +15,7 @@ import java.nio.ByteOrder
 import kotlin.coroutines.coroutineContext
 import kotlin.math.sqrt
 
-/** A bounded, local analysis of the first ten seconds of a selected video's audio track. */
+/** A bounded, local analysis of the selected time range of local media's audio track. */
 internal data class VideoAudioAnalysis(
     val status: Status,
     val cues: List<SoundCue> = emptyList(),
@@ -35,11 +35,9 @@ internal data class VideoAudioAnalysis(
 }
 
 internal object VideoAudioDecoder {
-    private const val WINDOW_US = 10_000_000L
     private const val OUTPUT_RATE = 16_000
-    private const val MAX_OUTPUT = OUTPUT_RATE * 10
     private const val MAX_ENCODED_BYTES = 12 * 1024 * 1024L
-    private const val MAX_SOURCE_BYTES = 50L * 1024L * 1024L
+    private const val MAX_SOURCE_BYTES = 100L * 1024L * 1024L
     private const val DECODE_DEADLINE_MS = 12_000L
     private const val CODEC_WAIT_US = 10_000L
     private val decodeLock = Mutex()
@@ -80,16 +78,18 @@ internal object VideoAudioDecoder {
         }
     }
 
-    internal suspend fun decode(context: Context, uri: Uri): FloatArray? = decodeLock.withLock {
-        decodeOne(context, uri)
+    internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? = decodeLock.withLock {
+        require(startMs >= 0 && endMs <= 60_500 && endMs - startMs in 1_000..15_000)
+        decodeOne(context, uri, startMs * 1000, endMs * 1000)
     }
 
-    private suspend fun decodeOne(context: Context, uri: Uri): FloatArray? {
+    private suspend fun decodeOne(context: Context, uri: Uri, startUs: Long, endUs: Long): FloatArray? {
         val deadline = SystemClock.elapsedRealtime() + DECODE_DEADLINE_MS
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         var codecStarted = false
-        val resampler = BoundedPcmResampler()
+        val maxOutput = ((endUs - startUs) * OUTPUT_RATE / 1_000_000).toInt()
+        val resampler = BoundedPcmResampler(maxOutput)
         try {
             coroutineContext.ensureActive()
             val sourceSize = context.contentResolver.openFileDescriptor(uri, "r")
@@ -110,6 +110,9 @@ internal object VideoAudioDecoder {
             if (declaredRate !in 8_000..96_000 || declaredChannels !in 1..2)
                 throw UnsupportedAudioException()
             extractor.selectTrack(track)
+            // Preserve AAC priming at t=0. Later seeks decode a short preroll before
+            // cropping by output timestamps, so codec delay cannot eat the chosen start.
+            if (startUs > 250_000) extractor.seekTo(startUs - 250_000, MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
             codec = try { MediaCodec.createDecoderByType(mime) }
             catch (_: Exception) { throw UnsupportedAudioException() }
             codec.configure(format, null, null, 0)
@@ -123,7 +126,7 @@ internal object VideoAudioDecoder {
             var rate = declaredRate
             var channels = declaredChannels
             var pcmEncoding = AudioFormat.ENCODING_PCM_16BIT
-            while (!outputEnded && resampler.size < MAX_OUTPUT) {
+            while (!outputEnded && resampler.size < maxOutput) {
                 coroutineContext.ensureActive()
                 if (SystemClock.elapsedRealtime() >= deadline) throw DecodeTimeoutException()
                 if (!inputEnded) {
@@ -135,7 +138,7 @@ internal object VideoAudioDecoder {
                         val sampleTime = extractor.sampleTime
                         // AAC encoder priming can have a negative PTS. A negative timestamp
                         // is not EOS while a selected sample track still exists.
-                        if (extractor.sampleTrackIndex < 0 || sampleTime >= WINDOW_US) {
+                        if (extractor.sampleTrackIndex < 0 || sampleTime >= endUs) {
                             codec.queueInputBuffer(inputIndex, 0, 0,
                                 sampleTime.coerceAtLeast(0), MediaCodec.BUFFER_FLAG_END_OF_STREAM)
                             inputEnded = true
@@ -176,19 +179,24 @@ internal object VideoAudioDecoder {
                     }
                     in 0..Int.MAX_VALUE -> {
                         try {
-                            if (outputInfo.size > 0 && outputInfo.presentationTimeUs < WINDOW_US) {
+                            if (outputInfo.size > 0 && outputInfo.presentationTimeUs < endUs) {
                                 val buffer = codec.getOutputBuffer(outputIndex)
                                     ?: throw UnsupportedAudioException()
                                 val start = outputInfo.offset
                                 val end = start + outputInfo.size
                                 if (start < 0 || end > buffer.capacity() || outputInfo.size > 4 * 1024 * 1024)
                                     throw UnsupportedAudioException()
-                                buffer.position(start)
-                                buffer.limit(end)
-                                resampler.add(buffer.slice().order(ByteOrder.LITTLE_ENDIAN),
-                                    rate, channels, pcmEncoding)
+                                val frameBytes = channels * if (pcmEncoding == AudioFormat.ENCODING_PCM_FLOAT) 4 else 2
+                                val frames = outputInfo.size / frameBytes
+                                val skip = (((startUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
+                                val keepUntil = (((endUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
+                                if (keepUntil > skip) {
+                                    buffer.position(start + skip * frameBytes)
+                                    buffer.limit(start + keepUntil * frameBytes)
+                                    resampler.add(buffer.slice().order(ByteOrder.LITTLE_ENDIAN), rate, channels, pcmEncoding)
+                                }
                             }
-                            if (outputInfo.presentationTimeUs >= WINDOW_US ||
+                            if (outputInfo.presentationTimeUs >= endUs ||
                                 outputInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0)
                                 outputEnded = true
                         } finally { codec.releaseOutputBuffer(outputIndex, false) }
@@ -211,8 +219,8 @@ private class UnsupportedAudioException : Exception()
 private class DecodeTimeoutException : Exception()
 
 /** Small streaming resampler, preserving at most ten seconds of mono 16 kHz PCM. */
-internal class BoundedPcmResampler {
-    private val output = FloatArray(160_000)
+internal class BoundedPcmResampler(maxSamples: Int = 160_000) {
+    private val output = FloatArray(maxSamples)
     var size: Int = 0
         private set
     private var sourceFrame = 0L

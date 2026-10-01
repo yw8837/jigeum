@@ -1,3 +1,7 @@
+# 0.5 실행 안내 — 2026-10-01
+
+현재0.5.0/code13. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/0.5.0/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`를 사용한다. 카메라/가져오기는 무료이며 **시각 분석과 PDF만 유료**다. 월령/수동 입력/후보3개는 제거했다. 기존 환경·서명·데이터 계약은 유지한다.
+
 # 실행·검증·운영 준비
 
 **현재 통합 버전은 0.4.5/code12 connected**다. [연결 QA](qa/0.4.5/connected/README.md)의 Android142/2skip/0fail·Node56·실제 release UI10·HTTPS9·서명/패키징을 따른다. [운영 구성](release/20261001/OPERATIONS.md)과 [연결 진행](release/20261001/CONNECTION-PROGRESS.md)이 과거 결제 미연결 설명보다 우선한다. SDK/모델 버전은 유지했다.

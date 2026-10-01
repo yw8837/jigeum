@@ -1,38 +1,35 @@
-# 지금 내 기분이 그래
+# 아가톡 - 지금 내 기분이 그래
 
-6~18개월 아기의 보호자가 소리와 장면을 살펴보고, 직접 확인한 맥락을 아이 시점의 문장으로 남기는 Android 앱입니다.
+6~18개월 아기의 부모가 소리와 장면을 담고, 들린 소리를 바탕으로 상상한 아기말을 기록하는 Android 앱입니다. 앱서랍 이름은 **아가톡**, 기존 패키지는 `com.moa.babylanguage`입니다.
 
-**협업 시작: [전체 맥락·결정·레퍼런스·다음 작업](docs/HANDOFF.md).** 현재 소스는 **0.4.5/code12**입니다. 무료 음성·기록·백업과 카메라·영상·PDF 전체 이용권 정책, [PR #2 통합](docs/qa/PR2-INTEGRATION.md)을 유지합니다. 최신 기준은 [운영 연결 후 QA](docs/qa/0.4.5/connected/README.md)와 [연결 진행](docs/release/20261001/CONNECTION-PROGRESS.md)입니다.
+**[협업 시작점](docs/HANDOFF.md)** · **[실사용 피드백 반영 설계](docs/UX-0.5.md)** · **[최신 QA](docs/qa/0.5.0/README.md)**
 
-- Android 소스: `outputs/MoaAndroid`
-- 로그인 없는 Google Play 이용권 검증 서비스 소스: `outputs/PlayVerifier`
-- 기획·시장·BM 문서: `outputs/Jigeum-*.md`
-- 확정된 영상·홍보물: `outputs/Marketing`
-- QA 재현 도구: `outputs/QA`
-- 통합 검증 보고서: [0.4.5 연결 QA](docs/qa/0.4.5/connected/README.md), [0.4.5 초기 로컬 QA](outputs/Jigeum-QA-0.4.5.md), [0.4.4 QA](outputs/Jigeum-QA-0.4.4.md), [0.4.3 QA](outputs/Jigeum-QA-0.4.3.md), [이전 0.3.0 QA](outputs/Jigeum-QA-0.3.0.md)
-- 로컬 빌드 APK와 QA 증거 압축본은 생성물이며 Git에서 제외합니다.
+현재 소스는 **0.5.0/code13 테스트 후보**입니다. 이전 0.4.5 기능 QA 통과를 새 버전의 해석 품질이나 출시 승인으로 사용하지 않습니다.
 
-## 현재 범위
+## 현재 구현
 
-0.4.5 소스와 실제 서버 연결 후보의 QA 자료를 제공합니다. 서명 기반 심사 접근·HTTP 전체 기한·workload 인증·설치별/전체 요청 제한을 통합했습니다. 최종 Android는 **142통과·미설정 전용2skip·실패0**, Node **56/56**, 실제 release 앱 **10/10**, 실제 HTTPS **9/9**입니다. Lint 오류0·개별 검토 경고15이며 경고 억제나 baseline을 추가하지 않았습니다. 이전 초안 timeout의 원인은 미확정으로 유지합니다.
+- 최대 1분 영상+소리 촬영 또는 소리만 녹음 → 재생 → 1–15초 구간 선택 → 소리 분석 → 한마디·근거 → 수정·저장.
+- 촬영·저장 영상 가져오기·재생·소리 분석은 무료. 같은 구간의 얼굴/입 열림 관찰과 PDF는 검증된 이용권 필요.
+- 월령·수동 소리/상황 선택·녹음 없는 번역·후보 재뽑기 제거. 근거 부족·무음·모델 오류에서는 문장을 만들지 않음.
+- 일반 소리 모델 YAMNet과 MediaPipe 얼굴 관찰 사용. 배고픔·졸림 등 욕구를 분류하는 검증 모델, LLM, 개인화 학습은 구현하지 않음.
+- 같은 PCM/구간/모델은 같은 결과. 소리 종류·에너지 변화로 표현군을 제한하고 파형 키로 동등한 말투만 선택. 문구는 유한하여 반복 가능.
+- 원음·영상은 기기 안의 임시 자료. 기록은 SQLite에 보관하며 원본 미디어는 기록/백업에 넣지 않음. 앱 로그인과 외부 아기 기록 DB 없음.
 
-전용 Cloud Run 검증 서비스·정책 페이지와 이 앱 한정 Play runtime 권한을 연결했습니다. 최종 `connected` APK/AAB에는 실제 HTTPS 주소·공개 키가 있고 심사 이용권 왕복을 검증했습니다. 초기 `internal`·중간 `configured` 파일은 별도로 보존합니다. 실제 Play 상품·구매/ACK/환불·Play 설치·ARM 실기기·개인 계정12명14일·공개 제출은 남았습니다. 심사 이용권 수락과 로컬 대역 통과를 실제 구매 완료로 보고하지 않습니다.
+## 문서와 소스
 
-아기 기록은 기기의 SQLite에 저장하고 외부 아기 기록 DB·앱 회원가입을 사용하지 않습니다. 구매 확인은 구매 토큰·설치 식별자를, 선택한 심사 접근은 심사 코드·설치 식별자를 HTTPS 본문으로 전송합니다. 원본 미디어·아기 기록은 보내지 않습니다. 모델은 일반 소리·얼굴 단서를 찾으며, 의도 판독 모델이나 의료/발달 진단으로 소개하지 않습니다.
+- [엔진·논문·데이터 권리 조사](docs/research/20261001-cry-evidence.md)
+- [경쟁 앱·말투·상황 적합성 검증](docs/research/20261001-competitors-and-voice.md)
+- [현재 무료·유료 정책](outputs/Jigeum-Access-Policy.md), [다음 단계](docs/NEXT.md), [폰 테스트 안내](docs/OWNER-TEST.md)
+- Android: `outputs/MoaAndroid` / 무상태 결제 확인 서버: `outputs/PlayVerifier`
+- QA: `outputs/QA` / 이전 [0.4.5 연결 검증](docs/qa/0.4.5/connected/README.md)
+- 확정 트레일러: `outputs/Marketing/jigeum-trailer-b-family.mp4`. 새 이름·새 화면 반영본은 아직 제작하지 않음.
 
 ## 빌드
 
-JDK 17 이상과 Android SDK 36을 준비한 뒤 Android 소스 디렉터리에서 실행합니다.
+JDK17+·Android SDK36. Android 프로젝트에서:
 
 ```powershell
-.\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease :app:lintRelease --max-workers=1
+.\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest :app:lintRelease --max-workers=1
 ```
 
-결제 검증 서비스의 로컬 시험:
-
-```powershell
-cd outputs/PlayVerifier
-npm test
-```
-
-키·서비스 계정·결제 토큰·사용자 데이터는 저장소에 커밋하지 않습니다. 자세한 설정과 실제 검증 범위는 각 모듈 문서 및 최신 QA 보고서를 참고합니다.
+자세한 환경·서명·실행은 [RUNBOOK](docs/RUNBOOK.md). APK/AAB·캐시·비밀키·구매 토큰·사용자 기록은 Git 제외. 공개 정책의 0.5 소스는 준비했으나 서버에는 배포하지 않았습니다. 실제 Play 상품·구매/환불·ARM 실기기·보호자 해석 품질 검증은 별도 미완료입니다.

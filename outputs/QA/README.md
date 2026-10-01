@@ -1,3 +1,11 @@
+# 0.5 QA 진입점
+
+최신 [0.5 QA](../../docs/qa/0.5.0/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 새 촬영/가져오기/보류/유료 왕복 UI와 큰 글씨 확인, `check_package.py`는 서명/16KB/백업 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용으로 새 앱에서 성공한다고 가정하지 않는다. 기존 run_qa.py는 역사적 재현용으로 유지한다.
+
+`range-silence-tone.mp4`는12초 합성 fixture(앞6초무음/뒤6초997Hz순음)다. 실제 아기 분류 성공 자료가 아니다. 새 UI스크립트는 명시한 QA기기의 표시 설정을 임시 바꿨다가 복원한다. 전용 에뮬레이터에서만 실행한다.
+
+`PublicAudioProbeTest`는 기본 전체 실행에서 조건skip한다. 권리를 확인한 로컬 PCM자료를 명시적으로 준비한 뒤 `-e public_audio_probe true -e class com.moa.babylanguage.PublicAudioProbeTest`로 별도 실행한다. 없는 사건은 미실행으로 보고하며 측정 도구의 성공을 분류 성공으로 해석하지 않는다. [출처/절차/한계](../../docs/research/20261001-public-audio-probes.md).
+
 # Android 통합 QA 재현 도구
 
 0.3.0부터 사용한 계측·UI·파일 전송·패키지 점검 스크립트에 0.4.0 무료/전체 이용권 검증을 추가한 소스입니다. **이 도구를 추가했다는 사실은 테스트 통과를 의미하지 않습니다.** 실행 결과는 해당 실행의 `evidence`와 최종 QA 보고서에서 확인합니다. 실제 Play 구매 시험이나 출시·제출·서비스 배포를 수행하는 도구가 아닙니다.

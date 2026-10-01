@@ -26,7 +26,6 @@ class ImportMutationNavigationTests {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private val id = "import-ui-${UUID.randomUUID()}"
     private lateinit var store: ObservationStore
-    private lateinit var phrases: PhraseEngine
     private lateinit var file: File
     private lateinit var importer: DelayedImporter
     private val visible = mutableStateOf(true)
@@ -43,7 +42,6 @@ class ImportMutationNavigationTests {
 
     @Before fun setup() {
         store = ObservationStore(compose.activity, "$id.db", "$id-legacy")
-        phrases = PhraseEngine(compose.activity, "$id-phrases")
         runBlocking { store.save(original) }
         file = File(compose.activity.cacheDir, "$id.json")
         file.outputStream().use { RecordTransfer.writeJson(it, StoreSnapshot(listOf(imported), "")) }
@@ -63,7 +61,7 @@ class ImportMutationNavigationTests {
     private fun click(text: String) = compose.onNodeWithText(text).performScrollTo().performClick()
     private fun startMerge() {
         started = true
-        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, phrases, recordImporter = importer) }
+        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, recordImporter = importer) }
         waitPage("home")
         compose.onNodeWithText("돌봄").performClick()
         click("백업 파일 가져오기")

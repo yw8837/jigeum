@@ -41,7 +41,7 @@ try {
     $env:MOA_UPLOAD_KEY_PASSWORD = $env:MOA_UPLOAD_STORE_PASSWORD
     Push-Location $project
     try {
-        & ./gradlew.bat :app:bundleRelease :app:assembleRelease --console=plain --no-daemon
+        & ./gradlew.bat :app:bundleRelease :app:assembleRelease --max-workers=1 --console=plain --no-daemon
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }
     $aab = Join-Path $project 'app/build/outputs/bundle/release/app-release.aab'

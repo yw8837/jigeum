@@ -280,14 +280,12 @@ internal fun PremiumScreen(
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
     val processing = state.status in listOf(BillingStatus.CONNECTING, BillingStatus.PURCHASING, BillingStatus.VERIFYING)
     val title = when (requestedFeature) {
-        AppFeature.CAMERA -> "지금의 표정도 함께 살펴봐요"
-        AppFeature.VIDEO_IMPORT -> "담아 둔 영상으로 이야기를 나눠요"
+        AppFeature.VISUAL_ANALYSIS -> "지금의 표정도 함께 살펴봐요"
         AppFeature.PDF -> "쌓인 아기말을 한 권으로"
         else -> "전체 이용권을 확인해요"
     }
     val continueLabel = when (requestedFeature) {
-        AppFeature.CAMERA -> "카메라로 계속하기"
-        AppFeature.VIDEO_IMPORT -> "영상 가져오기로 계속하기"
+        AppFeature.VISUAL_ANALYSIS -> "선택한 구간으로 돌아가기"
         AppFeature.PDF -> "아기말북으로 계속하기"
         else -> "원래 화면으로 돌아가기"
     }
@@ -299,7 +297,7 @@ internal fun PremiumScreen(
             TopBar(title)
             Column(Modifier.padding(horizontal = 24.dp)) {
                 Text("하나의 전체 이용권", color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text("카메라 관찰 · 저장 영상 분석 · 월별 PDF\n세 가지 기능을 함께 사용해요.",
+                Text("영상의 표정 관찰 · 월별 PDF\n소리로 남긴 기록에 장면과 책을 더해요.",
                     color = Muted, fontSize = 16.sp, lineHeight = 26.sp, modifier = Modifier.padding(top = 10.dp))
                 if (!state.isPremium && notice != null) Text(notice, color = Muted,
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
@@ -313,9 +311,9 @@ internal fun PremiumScreen(
                 Spacer(Modifier.height(16.dp))
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(PaleSage).padding(18.dp)) {
                     Text("이용권으로 더할 수 있는 것", color = Ink, fontWeight = FontWeight.Bold)
-                    Text("카메라로 지금의 얼굴과 움직임 살펴보기\n30초·50MB 이하의 저장 영상 살펴보기\n세 가지 표지로 월별 아기말북 PDF 만들기",
+                    Text("선택한 구간의 얼굴·입 열림 살펴보기\n세 가지 표지로 월별 아기말북 PDF 만들기",
                         color = Ink, lineHeight = 25.sp, modifier = Modifier.padding(top = 10.dp))
-                    Text("입력과 기록 방법을 넓혀요. 무료와 유료의 문장 품질은 같고, 아기의 마음을 더 정확히 판정하는 등급은 아니에요.",
+                    Text("무료와 유료 모두 같은 소리 단서로 한마디를 만들어요. 이용권은 표정 관찰과 PDF를 더하며 마음 판독 정확도를 보장하지 않아요.",
                         color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(top = 12.dp))
                 }
                 Spacer(Modifier.height(22.dp))
@@ -344,7 +342,7 @@ internal fun PremiumScreen(
                 if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
                 Spacer(Modifier.height(20.dp))
                 Text("계속 무료로 쓸 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                Text("소리 녹음·직접 입력·문장 수정과 저장·기록 보기·PNG 공유·JSON 백업과 복원·주간 요약은 계속 무료예요. 이미 만든 문장과 기록도 유지돼요.",
+                Text("1분 촬영·녹음·영상 가져오기·재생·구간 선택·소리 번역·문장 수정과 저장·기록 보기·PNG 공유·JSON 백업과 복원·주간 요약은 계속 무료예요. 이미 만든 문장과 기록도 유지돼요.",
                     color = Muted, lineHeight = 23.sp, modifier = Modifier.padding(vertical = 10.dp))
                 SecondaryButton(freeContinuationLabel, onFree)
                 Spacer(Modifier.height(20.dp))
@@ -371,11 +369,11 @@ internal fun PremiumScreen(
 @Composable
 internal fun ServiceTermsScreen(onBack: () -> Unit) {
     val sections = listOf(
-        "표현 예시를 함께 만들어요" to "6~18개월 아기의 성인 보호자를 위한 서비스예요. 문장은 소리와 상황을 바탕으로 보호자가 확인하는 예시이며, 아기의 의도·감정·건강을 판정하거나 의료 진단을 하지 않아요. 표현 후보는 유한하므로 다시 나올 수 있어요.",
-        "무료 기본과 전체 이용권" to "녹음·직접 입력·문장 수정·저장·기록·PNG 공유·JSON 백업과 복원·CSV 내보내기·주간 요약·앨범 미리보기는 무료예요. 전체 이용권은 카메라 관찰·저장 영상 분석·월별 PDF 생성을 함께 제공해요. 기록은 최대 10,000건, 영상은 30초·50MB, PDF는 한 권에 300개 기록·300쪽까지이며 추가 결제로 늘리는 한도가 아니에요.",
+        "표현 예시를 함께 만들어요" to "6~18개월 아기의 성인 보호자를 위한 서비스예요. 문장은 실제 소리 단서를 아이 시점으로 풀어 쓴 표현이며, 아기의 의도·감정·건강을 판정하거나 의료 진단을 하지 않아요. 표현 후보는 유한하므로 다시 나올 수 있어요.",
+        "무료 기본과 전체 이용권" to "촬영·녹음·영상 가져오기·재생·구간 선택·소리 분석·문장 수정·저장·기록·PNG 공유·JSON 백업과 복원·CSV 내보내기·주간 요약·앨범 미리보기는 무료예요. 전체 이용권은 선택 구간의 시각 관찰·월별 PDF 생성을 제공해요. 기록은 최대 10,000건, 미디어는 1분·100MB, PDF는 한 권에 300개 기록·300쪽까지이며 추가 결제로 늘리는 한도가 아니에요.",
         "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 월간은 매월 자동 갱신하며 Play에서 해지할 수 있어요. 3개월은 선불 1회 결제이며 자동 갱신하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
         "구매 복원과 기록 복원" to "앱 회원가입 없이 같은 Play 계정의 유효한 구매를 다시 확인할 수 있어요. 다른 가족 계정에 권한이 자동 공유되지는 않아요. 아기 기록은 기기에만 저장되며 구매 복원으로 되살아나지 않아요. 무료 JSON 백업을 안전하게 보관해 주세요.",
-        "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 카메라·영상 관찰은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",
+        "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 시각 분석은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",
         "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 이용약관과 개인정보처리방침 시행일은 2026년 10월 1일입니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp)) {

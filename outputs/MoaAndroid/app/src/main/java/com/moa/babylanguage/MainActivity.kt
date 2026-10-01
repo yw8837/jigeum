@@ -16,6 +16,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.ui.semantics.Role
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
@@ -116,53 +117,7 @@ internal val PaleApricot = Color(0xFFFFEEE1)
 internal val Line = Color(0xFFE8E3D9)
 internal val White = Color(0xFFFFFFFF)
 
-private enum class Page { HOME, RECORD, TRANSLATE, TIMELINE, GUIDE, CAMERA, VIDEO_IMPORT, PRIVACY, TERMS, ALBUM, PAYWALL }
-private fun AppFeature.destination(): Page = when (this) {
-    AppFeature.CAMERA -> Page.CAMERA
-    AppFeature.VIDEO_IMPORT -> Page.VIDEO_IMPORT
-    AppFeature.PDF -> Page.ALBUM
-    else -> Page.HOME
-}
-private enum class CapturePhase { READY, RECORDING, ANALYZING, REVIEW }
-private enum class Source { AUDIO, CAMERA, VIDEO_FILE }
-
-private data class BabyExpression(
-    val source: Source,
-    val sound: String,
-    val context: String,
-    val note: String = "",
-    val faceVisible: Boolean? = null,
-    val mouthOpen: Boolean? = null,
-    val audioCues: List<SoundCue> = emptyList(),
-    val videoEvidence: String = "",
-    val sessionId: String = UUID.randomUUID().toString()
-)
-
-// Only the small derived draft is saved across process recreation, never PCM or media URIs.
-private val ExpressionSaver = Saver<BabyExpression?, String>(
-    save = { value -> value?.let {
-        JSONObject().apply {
-            put("source", it.source.name); put("sound", it.sound); put("context", it.context)
-            put("note", it.note); put("face", it.faceVisible); put("mouth", it.mouthOpen)
-            put("evidence", it.videoEvidence); put("session", it.sessionId)
-            put("cues", JSONArray().apply { it.audioCues.forEach { cue ->
-                put(JSONObject().put("label", cue.label).put("score", cue.score))
-            } })
-        }.toString()
-    } ?: "" },
-    restore = { raw -> runCatching {
-        if (raw.isBlank()) null else JSONObject(raw).let { value ->
-            val cues = value.optJSONArray("cues") ?: JSONArray()
-            BabyExpression(Source.valueOf(value.getString("source")), value.getString("sound"),
-                value.getString("context"), value.optString("note"),
-                if (value.has("face") && !value.isNull("face")) value.getBoolean("face") else null,
-                if (value.has("mouth") && !value.isNull("mouth")) value.getBoolean("mouth") else null,
-                (0 until cues.length()).map { i -> cues.getJSONObject(i).let {
-                    SoundCue(it.getString("label"), it.getDouble("score").toFloat()) } },
-                value.optString("evidence"), value.optString("session").ifBlank { UUID.randomUUID().toString() })
-        }
-    }.getOrNull() }
-)
+private enum class Page { HOME, CAPTURE, TIMELINE, GUIDE, PRIVACY, TERMS, ALBUM, PAYWALL }
 
 class MainActivity : ComponentActivity() {
     private var stopCaptureOnBackground: (() -> Unit)? = null
@@ -172,12 +127,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        CaptureFiles.cleanup(this)
         val store = ObservationStore(this).also { observationStore = it }
         val billingManager = BillingManager(this).also { billing = it }
-        val phraseEngine = PhraseEngine(this)
         val accessBilling = PlayAccessBilling(billingManager)
         setContent {
-            JigeumApp(this, store, accessBilling, phraseEngine,
+            JigeumApp(this, store, accessBilling,
                 registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }
@@ -196,9 +151,9 @@ internal fun JigeumApp(
     activity: Activity,
     store: ObservationStore,
     billingManager: AccessBilling,
-    phraseEngine: PhraseEngine,
     registerBackgroundStop: (() -> Unit) -> Unit = {},
-    mediaScreens: MediaScreens = DeviceMediaScreens,
+    captureAnalyzer: ClipAnalyzer = DeviceClipAnalyzer,
+    captureSeed: LocalClip? = null,
     artifactExporter: ArtifactExporter = DeviceArtifactExporter,
     recordImporter: RecordImporter = DeviceRecordImporter
 ) {
@@ -216,9 +171,7 @@ internal fun JigeumApp(
     var paywallNotice by rememberSaveable { mutableStateOf<String?>(null) }
     val access = remember { AccessPolicy(billingManager::hasCurrentEntitlement) }
     DisposableEffect(access) { onDispose { access.invalidateMedia() } }
-    var mediaSession by remember { mutableStateOf<MediaAccessSession?>(null) }
     val screenState = rememberSaveableStateHolder()
-    var draft by rememberSaveable(stateSaver = ExpressionSaver) { mutableStateOf<BabyExpression?>(null) }
     val billingState by billingManager.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snacks = remember { SnackbarHostState() }
@@ -226,10 +179,9 @@ internal fun JigeumApp(
     fun notify(message: String) { feedback.show(message) }
     fun showPass(feature: AppFeature?, origin: Page = page, notice: String? = null) {
         access.invalidateMedia()
-        mediaSession = null
         requestedFeature = feature
         paywallReturn = when (origin) {
-            Page.CAMERA, Page.VIDEO_IMPORT, Page.PAYWALL, Page.PRIVACY, Page.TERMS -> Page.HOME
+            Page.PAYWALL, Page.PRIVACY, Page.TERMS -> Page.HOME
             else -> origin
         }
         paywallNotice = notice
@@ -237,26 +189,9 @@ internal fun JigeumApp(
         billingManager.refresh()
     }
     fun closePass() {
-        page = if (paywallReturn == Page.TRANSLATE && draft == null) Page.HOME else paywallReturn
+        page = paywallReturn
         requestedFeature = null
         paywallNotice = null
-    }
-    fun enterPaid(feature: AppFeature, origin: Page = page) {
-        if (feature == AppFeature.PDF) {
-            if (access.canUse(feature)) page = Page.ALBUM else showPass(feature, origin)
-        } else {
-            val session = access.beginMedia(feature)
-            if (session == null) showPass(feature, origin)
-            else { mediaSession = session; page = feature.destination() }
-        }
-    }
-    fun authorizeMedia(session: MediaAccessSession): Boolean {
-        // Old activity results and callbacks cannot replace a newer screen/session.
-        if (page != session.feature.destination() || mediaSession != session) return false
-        if (access.isCurrent(session)) return true
-        showPass(session.feature, Page.HOME,
-            "이용권을 다시 확인해야 해서 관찰을 멈췄어요. 이미 만든 문장과 기록은 그대로 있어요.")
-        return false
     }
     fun beginMutation(): Boolean {
         if (!loaded) return false
@@ -296,35 +231,11 @@ internal fun JigeumApp(
             loadError = "기록을 열지 못했어요. 저장 공간을 확인하고 다시 시도해 주세요."
         }
     }
-    LaunchedEffect(page, draft) { if (page == Page.TRANSLATE && draft == null) page = Page.HOME }
-    LaunchedEffect(page, billingState.isPremium) {
-        val feature = when (page) {
-            Page.CAMERA -> AppFeature.CAMERA
-            Page.VIDEO_IMPORT -> AppFeature.VIDEO_IMPORT
-            else -> null
-        }
-        if (feature == null) {
-            if (mediaSession != null) { access.invalidateMedia(); mediaSession = null }
-        } else {
-            val current = mediaSession
-            if (current == null || current.feature != feature) {
-                // A saved route alone never restores permission to use a sensor/model.
-                val restored = access.beginMedia(feature)
-                if (restored == null) showPass(feature, Page.HOME, "이 기능을 사용하려면 전체 이용권을 확인해 주세요.")
-                else mediaSession = restored
-            } else authorizeMedia(current)
-        }
-    }
     fun goBack() {
         when (page) {
-            Page.PRIVACY, Page.TERMS -> { page = privacyReturn }
+            Page.PRIVACY, Page.TERMS -> page = privacyReturn
             Page.PAYWALL -> closePass()
-            Page.TRANSLATE -> when (draft?.source) {
-                Source.CAMERA -> enterPaid(AppFeature.CAMERA, Page.TRANSLATE)
-                Source.VIDEO_FILE -> enterPaid(AppFeature.VIDEO_IMPORT, Page.TRANSLATE)
-                else -> { page = Page.RECORD }
-            }
-            else -> { page = Page.HOME }
+            else -> page = Page.HOME
         }
     }
     BackHandler(enabled = page != Page.HOME) { goBack() }
@@ -347,32 +258,34 @@ internal fun JigeumApp(
                                         if (loadError != null) PrimaryButton("다시 열기", { retryLoad++ })
                                     }
                                 } else when (page) {
-                                    Page.HOME -> HomeScreen(observations, ageBand, billingState.isPremium,
-                                        onAgeBand = { update({ store.saveAgeBand(it) }) },
-                                        onRecord = { page = Page.RECORD }, onCamera = { enterPaid(AppFeature.CAMERA) },
-                                        onVideoImport = { enterPaid(AppFeature.VIDEO_IMPORT) }, onTimeline = { page = Page.TIMELINE })
-                                    Page.RECORD -> RecordScreen({ registerBackgroundStop(it) },
-                                        onBack = { page = Page.HOME }, onTranslate = { sound, context, note, cues ->
-                                            draft?.let { screenState.removeState("translation-${it.sessionId}") }
-                                            draft = BabyExpression(Source.AUDIO, sound, context, note, audioCues = cues)
-                                            page = Page.TRANSLATE
+                                    Page.HOME -> HomeScreen(observations,
+                                        onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE })
+                                    Page.CAPTURE -> CaptureFlow(
+                                        authorizeVisual = { access.canUse(AppFeature.VISUAL_ANALYSIS) },
+                                        onBack = { page = Page.HOME }, saving = busy,
+                                        analyzer = captureAnalyzer, initialClip = captureSeed,
+                                        onSave = { result, phrase, note ->
+                                            if (!busy) update({
+                                                val usedIds = observations.mapTo(HashSet()) { it.id }
+                                                var newId = System.currentTimeMillis()
+                                                while (newId in usedIds) newId++
+                                                store.save(Observation(newId, result.sound, result.range, note, phrase,
+                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound))
+                                            }, { page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
+                                        },
+                                        passContent = { close ->
+                                            var policy by remember { mutableStateOf("") }
+                                            when (policy) {
+                                                "privacy" -> PrivacyPolicyScreen { policy = "" }
+                                                "terms" -> ServiceTermsScreen { policy = "" }
+                                                else -> PremiumScreen(billingState, { billingManager.purchase(activity, it) },
+                                                    billingManager::restore, billingManager::refresh, AppFeature.VISUAL_ANALYSIS, null,
+                                                    onContinue = close, freeContinuationLabel = "같은 구간 소리로 계속하기", onFree = close,
+                                                    onBack = close, onPrivacy = { policy = "privacy" }, onTerms = { policy = "terms" },
+                                                    onReviewActivate = billingManager::activateReviewAccess,
+                                                    onReviewDeactivate = billingManager::deactivateReviewAccess)
+                                            }
                                         })
-                                    Page.TRANSLATE -> draft?.let { expression -> screenState.SaveableStateProvider("translation-${expression.sessionId}") {
-                                        TranslationScreen(expression, phraseEngine, busy, onBack = { goBack() },
-                                            onSave = { final, phrase ->
-                                                if (!busy && draft != null) update({
-                                                    val usedIds = observations.mapTo(HashSet()) { it.id }
-                                                    var newId = System.currentTimeMillis()
-                                                    while (newId in usedIds) newId++
-                                                    store.save(Observation(newId, final.sound,
-                                                        final.context, final.note, phrase, final.source.name,
-                                                        final.audioCues.firstOrNull()?.label ?: ""))
-                                                }, {
-                                                    screenState.removeState("translation-${expression.sessionId}")
-                                                    draft = null; page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.")
-                                                })
-                                            })
-                                    } }
                                     Page.TIMELINE -> TimelineScreen(observations,
                                         onDelete = { id ->
                                             update({ store.delete(id)
@@ -405,43 +318,14 @@ internal fun JigeumApp(
                                             update({ store.deleteAll()
                                             try { MemoryArtifacts.clear(activity) }
                                             catch (e: Exception) { if (e is kotlinx.coroutines.CancellationException) throw e; notify("기록은 지웠어요. 임시 공유 파일을 정리하지 못했어요.") }
-                                            withContext(Dispatchers.IO) { phraseEngine.reset() }
                                         }, {
-                                            draft?.let { screenState.removeState("translation-${it.sessionId}") }
-                                            draft = null; notify("기록과 월령을 지웠어요.")
+                                            notify("기록을 지웠어요.")
                                         }, invalidateExports = true) },
                                         dataTools = { DataTransferPanel(store, observations, ageBand,
                                             onImported = { snapshot -> observations = snapshot.observations; ageBand = snapshot.ageBand },
                                             onMessage = ::notify, operationScope = scope, importer = recordImporter,
                                             beginMutation = ::beginMutation, endMutation = { busy = false }) },
                                         onRestore = { showPass(null, Page.GUIDE); billingManager.restore() })
-                                    Page.CAMERA -> {
-                                        val session = mediaSession
-                                        if (billingState.isPremium && session?.feature == AppFeature.CAMERA) {
-                                            mediaScreens.Camera(authorize = { authorizeMedia(session) },
-                                                onBack = { page = Page.HOME }, onTranslate = { cue ->
-                                                    if (authorizeMedia(session)) {
-                                                        draft?.let { screenState.removeState("translation-${it.sessionId}") }
-                                                        draft = BabyExpression(Source.CAMERA, "영상 장면", "", cue.manualNote ?: "", cue.faceVisible, cue.mouthOpen)
-                                                        page = Page.TRANSLATE
-                                                    }
-                                                })
-                                        } else Text("이용권을 확인하고 있어요", Modifier.padding(24.dp), color = Muted)
-                                    }
-                                    Page.VIDEO_IMPORT -> {
-                                        val session = mediaSession
-                                        if (billingState.isPremium && session?.feature == AppFeature.VIDEO_IMPORT) {
-                                            mediaScreens.Video(authorize = { authorizeMedia(session) },
-                                                onBack = { page = Page.HOME }, onTranslate = { observed ->
-                                                    if (authorizeMedia(session)) {
-                                                        draft?.let { screenState.removeState("translation-${it.sessionId}") }
-                                                        draft = BabyExpression(Source.VIDEO_FILE, observed.heardSound, "", observed.manualNote ?: "",
-                                                            observed.faceVisible, observed.mouthOpen, observed.audioCues, observed.evidence)
-                                                        page = Page.TRANSLATE
-                                                    }
-                                                })
-                                        } else Text("이용권을 확인하고 있어요", Modifier.padding(24.dp), color = Muted)
-                                    }
                                     Page.PRIVACY -> PrivacyPolicyScreen { goBack() }
                                     Page.TERMS -> ServiceTermsScreen { goBack() }
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
@@ -465,14 +349,10 @@ internal fun JigeumApp(
                                         onContinue = {
                                             val feature = requestedFeature
                                             if (feature == null) closePass()
-                                            else enterPaid(feature, paywallReturn)
+                                            else if (feature == AppFeature.PDF) page = Page.ALBUM else page = Page.CAPTURE
                                         },
-                                        freeContinuationLabel = if (paywallReturn == Page.TRANSLATE && draft != null)
-                                            "만들던 문장 무료로 계속하기" else "무료 소리·직접 입력으로 계속하기",
-                                        onFree = {
-                                            if (paywallReturn == Page.TRANSLATE && draft != null) closePass()
-                                            else { requestedFeature = null; paywallNotice = null; page = Page.RECORD }
-                                        },
+                                        freeContinuationLabel = "무료로 촬영·소리 번역하기",
+                                        onFree = { requestedFeature = null; paywallNotice = null; page = Page.CAPTURE },
                                         onBack = ::closePass,
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
                                         onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
@@ -517,54 +397,22 @@ private fun AppNavigation(current: Page, rail: Boolean = false, onSelect: (Page)
 
 @Composable
 private fun HomeScreen(
-    observations: List<Observation>, ageBand: String, hasPass: Boolean, onAgeBand: (String) -> Unit,
-    onRecord: () -> Unit, onCamera: () -> Unit,
-    onVideoImport: () -> Unit, onTimeline: () -> Unit
+    observations: List<Observation>, onRecord: () -> Unit, onTimeline: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
         item {
-            TopBar("지금 아기는 뭐라고 할까요?", "지금 내 기분이 그래 · 우리 아이의 작은 표현")
+            TopBar("아가톡")
             Text(
-                "옹알이와 표정에 그때의 상황을 더해\n아이의 말처럼 따뜻한 문장으로 만나보세요.",
+                "지금 내 기분이 그래\n아기의 소리를 듣고, 한마디로 남겨요.",
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted,
                 fontSize = 15.sp, lineHeight = 23.sp
             )
             Spacer(Modifier.height(18.dp))
-            HeroRecordCard(onRecord, onCamera, onVideoImport, hasPass)
+            HeroRecordCard(onRecord)
             Spacer(Modifier.height(22.dp))
-            Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp)) {
-                Text("우리 아기는 몇 개월인가요?", color = Ink, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.height(8.dp))
-                BoxWithConstraints {
-                    val narrow = maxWidth < 360.dp || androidx.compose.ui.platform.LocalDensity.current.fontScale >= 1.5f
-                    val choices = listOf("6~8개월", "9~12개월", "13~18개월")
-                    @Composable fun AgeOption(value: String) {
-                        Text(
-                            value, color = Ink, fontSize = 12.sp,
-                            fontWeight = if (ageBand == value) FontWeight.Bold else FontWeight.Medium,
-                            modifier = Modifier.clip(RoundedCornerShape(12.dp))
-                                .background(if (ageBand == value) Sage else White)
-                                .heightIn(min = 48.dp).selectable(selected = ageBand == value, role = Role.RadioButton) { onAgeBand(value) }
-                                .padding(horizontal = 12.dp, vertical = 11.dp)
-                        )
-                    }
-                    if (narrow) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            choices.forEach { AgeOption(it) }
-                        }
-                    } else {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            choices.forEach { AgeOption(it) }
-                        }
-                    }
-                }
-                Spacer(Modifier.height(5.dp))
-                Text("월령은 기기에만 저장되며 문장 판정에는 사용하지 않아요.", color = Muted, fontSize = 11.sp)
-            }
-            Spacer(Modifier.height(20.dp))
             Row(Modifier.fillMaxWidth().padding(horizontal = 24.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("최근 번역", color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 Text("전체 보기  →", color = Muted, fontSize = 13.sp, modifier = Modifier.heightIn(min = 48.dp).clickable(onClick = onTimeline).padding(12.dp))
@@ -582,38 +430,20 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun HeroRecordCard(
-    onRecord: () -> Unit, onCamera: () -> Unit, onVideoImport: () -> Unit, hasPass: Boolean
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-            .clip(RoundedCornerShape(28.dp)).background(PaleSage).padding(24.dp)
-    ) {
+private fun HeroRecordCard(onRecord: () -> Unit) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+        .clip(RoundedCornerShape(28.dp)).background(PaleSage).padding(24.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("아이의 작은 소리,", color = Muted, fontSize = 13.sp)
-                Text("아기말 번역하기", color = Ink, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-                Text("10초 녹음 · 아이 시점의 한 문장", color = Muted, fontSize = 13.sp)
+                Text("아기의 소리를\n함께 들어봐요", color = Ink, fontSize = 22.sp, lineHeight = 30.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(8.dp))
+                Text("1분 촬영 → 다시 듣기 → 한마디", color = Muted, fontSize = 13.sp)
             }
-            Image(
-                painter = painterResource(R.drawable.hero_touch),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(88.dp)
-            )
+            Image(painterResource(R.drawable.hero_touch), null, contentScale = ContentScale.Fit, modifier = Modifier.size(80.dp))
         }
-        Spacer(Modifier.height(14.dp))
-        PrimaryButton("소리로 번역하기", onRecord)
-        Text("녹음·직접 입력은 횟수 제한 없이 무료예요.", color = Muted, fontSize = 12.sp,
-            modifier = Modifier.padding(top = 8.dp))
-        Spacer(Modifier.height(10.dp))
-        SecondaryButton(if (hasPass) "저장된 영상 가져오기" else "저장된 영상 가져오기 · 전체 이용권", onVideoImport)
-        Spacer(Modifier.height(8.dp))
-        TextButton(onClick = onCamera, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-            Text(if (hasPass) "카메라로 살펴보기" else "카메라로 살펴보기 · 전체 이용권", color = Ink)
-        }
-        Spacer(Modifier.height(15.dp))
-        Text("그 순간의 소리와 상황을 아이의 말처럼 풀어드려요. 원본은 저장하지 않아요.", color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
+        Spacer(Modifier.height(20.dp))
+        PrimaryButton("아기말 번역하기", onRecord)
+        Text("촬영·소리 분석은 무료예요", color = Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 10.dp))
     }
 }
 
@@ -641,293 +471,7 @@ private fun PrivacyNote() {
     ) {
         Text("♡", color = Ink, fontSize = 27.sp)
         Spacer(Modifier.width(14.dp))
-        Text("이 문장은 보호자가 고른 단서를 말로 풀어 쓴 예시예요.\n울음의 이유나 감정, 건강 상태를 단정하지 않아요.", color = Ink, fontSize = 12.sp, lineHeight = 18.sp)
-    }
-}
-
-@Composable
-private fun RecordScreen(
-    registerBackgroundStop: (() -> Unit) -> Unit,
-    onBack: () -> Unit,
-    onTranslate: (String, String, String, List<SoundCue>) -> Unit
-) {
-    val context = LocalContext.current
-    val recorder = remember { ShortAudioCapture() }
-    val scope = rememberCoroutineScope()
-    var phase by remember { mutableStateOf(CapturePhase.READY) }
-    var elapsed by remember { mutableIntStateOf(0) }
-    var message by remember { mutableStateOf("") }
-    var sound by remember { mutableStateOf("") }
-    var soundConfirmed by remember { mutableStateOf(false) }
-    var recentContext by remember { mutableStateOf("") }
-    var note by remember { mutableStateOf("") }
-    var soundCues by remember { mutableStateOf<List<SoundCue>>(emptyList()) }
-    var recorded by remember { mutableStateOf(false) }
-    var permissionDenied by remember { mutableStateOf(false) }
-    var analysisJob by remember { mutableStateOf<Job?>(null) }
-
-    fun finishCapture() {
-        if (phase != CapturePhase.RECORDING) return
-        phase = CapturePhase.ANALYZING
-        analysisJob = scope.launch {
-            val analysis = withContext(Dispatchers.Default) {
-                val pcm = recorder.finish()
-                try { SoundAnalyzer.analyzeDetailed(context.applicationContext, pcm) }
-                finally { pcm.fill(0f) }
-            }
-            soundCues = analysis.cues
-            message = analysis.problem ?: ""
-            sound = soundCues.firstOrNull()?.takeIf { it.score >= 0.50f }?.let {
-                when (it.label) {
-                    "울음" -> "울음"
-                    "웃음" -> "웃음"
-                    else -> ""
-                }
-            } ?: ""
-            soundConfirmed = false
-            recorded = true
-            phase = CapturePhase.REVIEW
-        }
-    }
-
-    fun startCapture() {
-        if (phase != CapturePhase.READY) return
-        if (recorder.start()) {
-            elapsed = 0
-            message = ""
-            soundCues = emptyList()
-            sound = ""
-            soundConfirmed = false
-            recorded = false
-            phase = CapturePhase.RECORDING
-        } else {
-            message = "마이크를 시작하지 못했어요. 다른 앱이 사용 중인지 확인해 주세요."
-        }
-    }
-
-    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) {
-            permissionDenied = false
-            startCapture()
-        } else {
-            permissionDenied = true
-            message = "마이크 권한이 있어야 10초 관찰을 시작할 수 있어요."
-        }
-    }
-
-    DisposableEffect(Unit) {
-        registerBackgroundStop {
-            if (phase == CapturePhase.RECORDING || phase == CapturePhase.ANALYZING) {
-                analysisJob?.cancel()
-                recorder.discard()
-                phase = CapturePhase.READY
-                message = "앱을 벗어나 녹음을 중단했어요. 음성은 저장되지 않았어요."
-            }
-        }
-        onDispose {
-            analysisJob?.cancel()
-            recorder.discard()
-            registerBackgroundStop { }
-        }
-    }
-
-    LaunchedEffect(phase) {
-        if (phase == CapturePhase.RECORDING) {
-            while (elapsed < 10) {
-                delay(1000)
-                elapsed += 1
-            }
-            finishCapture()
-        }
-    }
-
-    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
-        item {
-            TopBar("지금, 잠깐 들어볼까요?", "10초 소리 관찰")
-            Text(
-                "아기 가까이에서 조용히 녹음해 주세요.\n소리는 기기 안에서 분석하고 저장하지 않아요.",
-                color = Muted, fontSize = 15.sp, lineHeight = 23.sp,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-            Spacer(Modifier.height(29.dp))
-            CaptureCircle(phase, elapsed)
-            Spacer(Modifier.height(24.dp))
-            when (phase) {
-                CapturePhase.READY -> {
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        PrimaryButton("녹음 시작", onClick = {
-                            if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) startCapture()
-                            else micPermission.launch(Manifest.permission.RECORD_AUDIO)
-                        })
-                        if (permissionDenied) {
-                            Spacer(Modifier.height(12.dp))
-                            SecondaryButton("앱 설정에서 마이크 권한 켜기", onClick = {
-                                context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    "package:${context.packageName}".toUri()))
-                            })
-                        }
-                        Spacer(Modifier.height(12.dp))
-                        SecondaryButton("녹음 없이 직접 번역", onClick = {
-                            recorded = false; sound = ""; soundConfirmed = false; phase = CapturePhase.REVIEW
-                        })
-                    }
-                }
-                CapturePhase.RECORDING -> {
-                    Column(Modifier.padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        PrimaryButton("여기서 마치기", onClick = { finishCapture() })
-                        Spacer(Modifier.height(9.dp))
-                        Text("최대 10초 뒤 자동으로 멈춰요", color = Muted, fontSize = 13.sp)
-                    }
-                }
-                CapturePhase.ANALYZING -> {
-                    Text("소리 단서를 살펴보는 중이에요…", color = Muted, fontSize = 15.sp,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp), textAlign = TextAlign.Center)
-                }
-                CapturePhase.REVIEW -> ReviewForm(
-                    sound = sound, onSound = { sound = it; soundConfirmed = true },
-                    soundConfirmed = soundConfirmed,
-                    soundCues = soundCues, recorded = recorded,
-                    recentContext = recentContext, onContext = { recentContext = it },
-                    note = note, onNote = { note = it },
-                    onSave = { onTranslate(sound, recentContext, note.trim(), soundCues) }
-                )
-            }
-            if (phase == CapturePhase.REVIEW || phase == CapturePhase.ANALYZING) {
-                Spacer(Modifier.height(12.dp))
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    SecondaryButton(if (phase == CapturePhase.ANALYZING) "분석 취소하고 다시 듣기" else "다시 녹음하기") {
-                        analysisJob?.cancel()
-                        recorder.discard()
-                        phase = CapturePhase.READY
-                        soundCues = emptyList(); sound = ""; soundConfirmed = false
-                        recorded = false; message = ""; elapsed = 0
-                    }
-                }
-            }
-            AnimatedVisibility(message.isNotEmpty()) {
-                Text(message, color = Ink, fontSize = 13.sp, lineHeight = 19.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(14.dp)).background(PaleApricot).padding(14.dp))
-            }
-            if (phase == CapturePhase.READY) {
-                Spacer(Modifier.height(20.dp))
-                Text("← 오늘 화면으로", color = Muted, fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 24.dp).clickable(onClick = onBack).padding(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
-private fun CaptureCircle(phase: CapturePhase, elapsed: Int) {
-    val transition = rememberInfiniteTransition(label = "recording pulse")
-    val pulse by transition.animateFloat(
-        initialValue = 0.86f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(800), RepeatMode.Reverse), label = "pulse"
-    )
-    val active = phase == CapturePhase.RECORDING
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.size(194.dp), contentAlignment = Alignment.Center) {
-            Canvas(Modifier.fillMaxSize()) {
-                drawCircle(
-                    color = if (active) Apricot.copy(alpha = 0.25f) else PaleApricot,
-                    radius = size.minDimension * (if (active) pulse else 0.93f) / 2f
-                )
-                drawCircle(
-                    color = if (active) Apricot else Sage,
-                    radius = size.minDimension * 0.36f
-                )
-                if (active) {
-                    drawArc(color = Ink.copy(alpha = 0.45f), startAngle = -90f,
-                        sweepAngle = 360f * (elapsed / 10f), useCenter = false,
-                        topLeft = Offset(size.width * 0.05f, size.height * 0.05f),
-                        size = androidx.compose.ui.geometry.Size(size.width * 0.9f, size.height * 0.9f),
-                        style = Stroke(width = 5.dp.toPx(), cap = StrokeCap.Round))
-                }
-            }
-            if (phase == CapturePhase.REVIEW) Text("✓", color = Ink, fontSize = 48.sp, fontWeight = FontWeight.Light)
-            else SoundWave(Modifier.size(55.dp), Ink)
-        }
-        Spacer(Modifier.height(15.dp))
-        Text(
-            when (phase) {
-                CapturePhase.READY -> "준비되면 시작해요"
-                CapturePhase.RECORDING -> "듣는 중 · ${elapsed}초 / 10초"
-                CapturePhase.ANALYZING -> "소리 단서 살펴보는 중"
-                CapturePhase.REVIEW -> "원본 소리는 남기지 않았어요"
-            },
-            color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold
-        )
-        if (phase == CapturePhase.REVIEW) {
-            Spacer(Modifier.height(5.dp))
-            Text("이제 보호자가 들은 소리와 상황을 표시해 주세요.", color = Muted, fontSize = 13.sp)
-        }
-    }
-}
-
-@Composable
-private fun SoundWave(modifier: Modifier, color: Color) {
-    Canvas(modifier) {
-        val heights = listOf(0.30f, 0.63f, 0.98f, 0.55f, 0.36f)
-        heights.forEachIndexed { index, height ->
-            val x = size.width * (0.1f + index * 0.2f)
-            drawLine(color, Offset(x, size.height * (1-height)/2), Offset(x, size.height * (1+height)/2),
-                strokeWidth = 3.dp.toPx(), cap = StrokeCap.Round)
-        }
-    }
-}
-
-@Composable
-private fun ReviewForm(
-    sound: String, onSound: (String) -> Unit,
-    soundConfirmed: Boolean,
-    soundCues: List<SoundCue>, recorded: Boolean,
-    recentContext: String, onContext: (String) -> Unit,
-    note: String, onNote: (String) -> Unit,
-    onSave: () -> Unit
-) {
-    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-        Spacer(Modifier.height(27.dp))
-        Text("들은 것", color = Ink, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(4.dp))
-        Text("보호자가 들은 유형을 골라 주세요. 모델 단서는 참고만 해요.", color = Muted, fontSize = 13.sp)
-        if (sound.isNotEmpty() && !soundConfirmed) {
-            Spacer(Modifier.height(8.dp))
-            Text("‘$sound’이 추천되어 있어요. 맞으면 해당 칸을 눌러 확인해 주세요.",
-                color = Ink, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-        }
-        if (recorded) {
-            Spacer(Modifier.height(12.dp))
-            val cueText = if (soundCues.isEmpty()) {
-                "일반 소리 분류가 불확실했어요. 직접 들은 소리를 골라 주세요."
-            } else {
-                "기기에서 잡은 일반 소리 후보 · " + soundCues.joinToString(" · ") { it.label } +
-                    "\n영아에게서 검증된 번역 결과가 아니에요. 직접 들은 소리를 골라 주세요."
-            }
-            Text(cueText, color = Ink, fontSize = 13.sp, lineHeight = 20.sp,
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(15.dp)).background(PaleSage).padding(14.dp))
-        }
-        Spacer(Modifier.height(12.dp))
-        ChoiceGrid(listOf("울음", "웃음", "옹알이", "기타 소리"), sound, onSound)
-        Spacer(Modifier.height(24.dp))
-        Text("보호자가 확인할 것", color = Ink, fontSize = 21.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(4.dp))
-        Text("직전에 무엇을 했나요? 기억나는 상황 하나를 골라 주세요.", color = Muted, fontSize = 13.sp)
-        Spacer(Modifier.height(12.dp))
-        ChoiceGrid(listOf("수유 전", "수유 후", "잠들기 전", "잠에서 깬 후", "놀이 중", "기타 상황"), recentContext, onContext)
-        Spacer(Modifier.height(14.dp))
-        OutlinedTextField(
-            value = note, onValueChange = { if (it.length <= 120) onNote(it) },
-            label = { Text("메모 · 선택 사항") },
-            placeholder = { Text("예: 낮잠에서 깬 지 20분 정도") },
-            modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3,
-            shape = RoundedCornerShape(16.dp)
-        )
-        Spacer(Modifier.height(21.dp))
-        PrimaryButton("아기말 문장 보기", onClick = onSave,
-            enabled = sound.isNotEmpty() && soundConfirmed && recentContext.isNotEmpty())
-        Spacer(Modifier.height(8.dp))
-        Text("소리의 뜻이나 원인은 여기서 판단하지 않아요.", color = Muted, fontSize = 12.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        Text("실제 소리에서 찾은 단서를 아이의 말처럼 풀어드려요.\n울음의 이유나 감정, 건강 상태를 단정하지 않아요.", color = Ink, fontSize = 12.sp, lineHeight = 18.sp)
     }
 }
 
@@ -979,177 +523,6 @@ internal fun SecondaryButton(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-private fun TranslationScreen(
-    initial: BabyExpression,
-    phraseEngine: PhraseEngine,
-    saving: Boolean,
-    onBack: () -> Unit,
-    onSave: (BabyExpression, String) -> Unit
-) {
-    var sound by rememberSaveable(initial) { mutableStateOf(initial.sound) }
-    var recentContext by rememberSaveable(initial) { mutableStateOf(initial.context) }
-    var candidate by rememberSaveable(initial) { mutableIntStateOf(0) }
-    var isEditing by rememberSaveable(initial) { mutableStateOf(false) }
-    var editedPhrase by rememberSaveable(initial) { mutableStateOf("") }
-    val inputsReady = sound.isNotEmpty() && recentContext.isNotEmpty()
-    val phraseKey = "$sound|$recentContext"
-    var phraseState by remember(initial.sessionId) { mutableStateOf("" to emptyList<String>()) }
-    var phraseError by remember { mutableStateOf(false) }
-    var phraseRetry by remember { mutableIntStateOf(0) }
-    LaunchedEffect(initial.sessionId, phraseKey, phraseRetry) {
-        phraseError = false
-        if (inputsReady) {
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    phraseEngine.candidates(sound, recentContext, initial.sessionId)
-                }
-                phraseState = phraseKey to result
-            } catch (e: Exception) {
-                if (e is kotlinx.coroutines.CancellationException) throw e
-                phraseError = true
-            }
-        }
-    }
-    val phrases = if (phraseState.first == phraseKey) phraseState.second else emptyList()
-    val ready = inputsReady && phrases.size == 3
-    val selectedPhrase = if (isEditing) editedPhrase.trim() else phrases.getOrElse(candidate) { "" }
-
-    Column(Modifier.fillMaxSize()) {
-    LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(bottom = 20.dp)) {
-        item {
-            TopBar("아기말, 이렇게 들려요", "아기말 번역")
-            Text(
-                when (initial.source) {
-                    Source.CAMERA -> "카메라에서 본 장면과 보호자가 고른 상황을 문장으로 풀어봐요."
-                    Source.VIDEO_FILE -> "선택한 영상은 저장하지 않았어요. 확인한 장면과 직접 들은 소리를 문장으로 풀어봐요."
-                    Source.AUDIO -> "원본 소리는 저장하지 않아요. 보호자가 고른 단서를 문장으로 풀어봐요."
-                },
-                modifier = Modifier.padding(horizontal = 24.dp), color = Muted,
-                fontSize = 14.sp, lineHeight = 21.sp
-            )
-            Spacer(Modifier.height(23.dp))
-            if (inputsReady && !ready) {
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    Text(if (phraseError) "문장을 불러오지 못했어요. 저장 공간을 확인해 주세요." else "그 순간에 어울리는 문장을 고르고 있어요.", color = Muted)
-                    if (phraseError) TextButton(onClick = { phraseRetry++ }) { Text("다시 불러오기") }
-                }
-            }
-            if (!inputsReady) {
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    Text("먼저 그때의 상황을 알려주세요", color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(5.dp))
-                    Text("영상만으로 아이의 마음이나 욕구를 알 수 없어요.", color = Muted, fontSize = 13.sp)
-                    Spacer(Modifier.height(16.dp))
-                    ChoiceGrid(listOf("수유 전", "수유 후", "잠들기 전", "잠에서 깬 후", "놀이 중", "기타 상황"), recentContext) {
-                        recentContext = it
-                        candidate = 0
-                    }
-                }
-                Spacer(Modifier.height(20.dp))
-            }
-            if (ready) {
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    Text("가능한 한마디", color = Ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(10.dp))
-                    Column(
-                        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(27.dp))
-                            .background(PaleSage).padding(23.dp)
-                    ) {
-                        Text("“", color = Ink.copy(alpha = .55f), fontSize = 38.sp, lineHeight = 35.sp)
-                        if (isEditing) {
-                            OutlinedTextField(
-                                value = editedPhrase,
-                                onValueChange = { if (it.length <= 160) editedPhrase = it },
-                                modifier = Modifier.fillMaxWidth().testTag("draft-phrase-editor"),
-                                label = { Text("우리 아이 말로 고치기") },
-                                minLines = 3, maxLines = 5,
-                                shape = RoundedCornerShape(15.dp)
-                            )
-                        } else {
-                            Text(phrases[candidate], color = Ink, fontSize = 23.sp,
-                                lineHeight = 34.sp, fontWeight = FontWeight.SemiBold)
-                        }
-                        Spacer(Modifier.height(13.dp))
-                        Text("이렇게 말하는 걸까요?", color = Muted, fontSize = 13.sp)
-                    }
-                    Spacer(Modifier.height(23.dp))
-                    Text("다른 말로도 볼 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(9.dp))
-                    phrases.forEachIndexed { index, phrase ->
-                        if (index != candidate || isEditing) {
-                            Text(
-                                phrase,
-                                color = Ink,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
-                                    .clip(RoundedCornerShape(15.dp)).background(White)
-                                    .clickable { candidate = index; isEditing = false }
-                                    .padding(16.dp)
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(5.dp))
-                    Text(
-                        if (isEditing) "추천 문장으로 돌아가기" else "내가 직접 고치기",
-                        color = Muted, fontSize = 14.sp,
-                        modifier = Modifier.heightIn(min = 48.dp).clickable {
-                            if (isEditing) isEditing = false
-                            else { editedPhrase = phrases[candidate]; isEditing = true }
-                        }.padding(vertical = 10.dp)
-                    )
-                    Spacer(Modifier.height(19.dp))
-                    var showEvidence by rememberSaveable(initial.sessionId) { mutableStateOf(false) }
-                    TextButton(onClick = { showEvidence = !showEvidence }) {
-                        Text(if (showEvidence) "관찰 단서 접기" else "관찰 단서와 안내 보기", color = Ink)
-                    }
-                    if (showEvidence) EvidenceCard("이렇게 문장으로 풀었어요", buildString {
-                        append("보호자가 ‘$sound’, ‘$recentContext’을 확인했어요. ")
-                        if (initial.videoEvidence.isNotBlank()) append(initial.videoEvidence + " ")
-                        append("소리·표정 단서는 뜻이나 욕구를 판정하지 않아요. 실제 모습과 최근 돌봄을 함께 살펴주세요.")
-                    })
-                    Spacer(Modifier.height(18.dp))
-                    Text("상황 바꾸기", color = Muted, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                    Spacer(Modifier.height(10.dp))
-                    ChoiceGrid(listOf("수유 전", "수유 후", "잠들기 전", "잠에서 깬 후", "놀이 중", "기타 상황"), recentContext) {
-                        recentContext = it
-                        candidate = 0
-                        isEditing = false
-                    }
-                    if (initial.source == Source.AUDIO || initial.source == Source.VIDEO_FILE) {
-                        Spacer(Modifier.height(8.dp))
-                        Text("들은 소리 고치기", color = Muted, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                        Spacer(Modifier.height(10.dp))
-                        ChoiceGrid(listOf("울음", "웃음", "옹알이", "기타 소리"), sound) {
-                            sound = it
-                            candidate = 0
-                            isEditing = false
-                        }
-                    }
-                    Spacer(Modifier.height(17.dp))
-                    Spacer(Modifier.height(10.dp))
-                    Text("문장은 보호자 입력을 바탕으로 만든 표현 예시이며 감정·욕구·건강 판정이 아니에요.",
-                        color = Muted, fontSize = 12.sp, lineHeight = 18.sp, textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth())
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-            TextButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)
-                .heightIn(min = 48.dp)) {
-                Text("← 처음부터 다시 입력하기", color = Muted, fontSize = 14.sp)
-            }
-        }
-    }
-    if (ready) Column(Modifier.fillMaxWidth().background(Cream).padding(horizontal = 24.dp, vertical = 10.dp)) {
-        PrimaryButton(if (saving) "저장하고 있어요" else "이 문장 저장하기", onClick = {
-            if (!saving) onSave(initial.copy(sound = sound, context = recentContext), selectedPhrase)
-        }, enabled = selectedPhrase.isNotBlank() && !saving)
-    }
-    }
-
-}
-
-@Composable
 private fun EvidenceCard(title: String, body: String) {
     Column(
         Modifier.fillMaxWidth()
@@ -1194,7 +567,7 @@ private fun ObservationCard(observation: Observation, onDelete: (() -> Unit)?, o
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(44.dp).clip(CircleShape).background(PaleSage), contentAlignment = Alignment.Center) {
-                SoundWave(Modifier.size(23.dp), Ink)
+                Icon(Icons.Outlined.Mic, null, Modifier.size(23.dp), tint = Ink)
             }
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
@@ -1251,7 +624,7 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
             Text("내 데이터", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))
-            Text("번역 문장과 관찰 기록은 이 기기에만 남아요. 원본 음성·영상은 저장하지 않아요.",
+            Text("번역 문장과 관찰 기록은 이 기기에만 남아요. 원본은 다시 듣는 동안 임시 보관하고 화면을 닫으면 지워요.",
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
             Spacer(Modifier.height(10.dp))
             Text("개인정보처리방침 전문 보기  →", color = Ink, fontSize = 14.sp,
@@ -1280,15 +653,14 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
 private fun PrivacyPolicyScreen(onBack: () -> Unit) {
     val sections = listOf(
         "1. 서비스와 처리 범위" to
-            "‘지금 내 기분이 그래’는 6~18개월 아기의 보호자가 소리와 장면을 살펴보고 표현 예시를 만드는 앱입니다. " +
-            "보호자가 선택한 월령 범위, 소리 유형, 직전 상황, 메모, 문장, 모델 단서 이름은 이 기기에만 저장합니다. " +
+            "‘아가톡 - 지금 내 기분이 그래’는 6~18개월 아기의 보호자가 소리와 장면을 살펴보고 표현 예시를 만드는 앱입니다. " +
+            "소리 유형, 선택 구간, 메모, 문장, 모델 단서와 이전 버전의 기록은 이 기기에만 저장합니다. " +
             "아기 기록을 저장하는 외부 DB나 앱 회원가입은 없습니다.",
         "2. 마이크·카메라·선택한 영상" to
-            "마이크는 보호자가 녹음을 시작할 때 최대 10초 동안 사용합니다. 소리는 기기 메모리에서만 임시로 분석하며 " +
-            "원본 녹음 파일은 만들지 않습니다. 카메라는 보호자가 시작한 화면에서만 사용하며 프레임이나 얼굴 정보 파일을 저장하지 않습니다. " +
-            "영상 가져오기는 보호자가 시스템 파일 선택기에서 고른 파일만 읽어 기기에서 최대 5개 장면을 살펴봅니다. " +
-            "영상의 첫 최대 10초 소리는 기기 메모리에서만 임시로 일반 소리 후보를 분석하고, 보호자가 확인합니다. 원본 영상은 앱에 복사하거나 서버로 보내지 않습니다. " +
-            "다른 사진 서비스에 보관된 영상을 선택하면 그 서비스의 동기화와 접근에는 해당 제공자의 정책이 적용됩니다.",
+            "보호자가 시작할 때만 최대 1분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
+            "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
+            "가져온 영상은 읽기 권한으로 접근하며 원본을 복사하거나 수정하지 않습니다. 선택한 1~15초 구간만 기기 안에서 분석합니다. " +
+            "기록·백업·공유에는 원본 미디어를 포함하지 않으며 서버로 보내지 않습니다. 얼굴 단서는 아기의 신원·감정·건강을 판정하지 않습니다.",
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
@@ -1303,7 +675,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "관련 열람·삭제·처리 정지 문의는 운영자에게 접수할 수 있습니다. Google Play의 계정·결제 정보 보관에는 Google 정책이 적용됩니다.",
         "5. 보관과 삭제" to
             "문장과 메모는 보호자가 삭제하거나 앱을 제거할 때까지 기기에 남습니다. " +
-            "기록 화면에서 항목을 삭제하거나 돌봄 화면에서 모든 기록과 월령 선택을 삭제할 수 있습니다. " +
+            "기록 화면에서 항목을 삭제하거나 돌봄 화면에서 모든 기록 선택을 삭제할 수 있습니다. " +
             "아직 공유 화면에 전달하지 않은 파일은 기록 삭제 때 정리합니다. 이미 전달한 파일은 수신 앱이 읽을 수 있도록 따로 남기며, " +
             "전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상입니다. 앱을 실행하지 않으면 그때까지 남고 Android가 캐시를 먼저 지울 수 있습니다. " +
             "최대 20개·64MiB가 차면 기존 파일을 보호하고 새 공유를 잠시 중단합니다. 앱 데이터 삭제·앱 제거는 이 캐시도 지웁니다. " +
@@ -1320,6 +692,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
+            TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
             Text("시행일 2026년 10월 1일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))

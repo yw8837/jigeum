@@ -24,26 +24,11 @@ internal class PlayAccessBilling(private val manager: BillingManager) : AccessBi
     override fun deactivateReviewAccess() = manager.deactivateReviewAccess()
 }
 
-/** An internal composition seam, not a persisted setting or exported runtime switch. */
-internal interface MediaScreens {
-    @Composable fun Camera(authorize: () -> Boolean, onBack: () -> Unit, onTranslate: (CameraObservation) -> Unit)
-    @Composable fun Video(authorize: () -> Boolean, onBack: () -> Unit, onTranslate: (ImportedVideoObservation) -> Unit)
-}
-
-internal object DeviceMediaScreens : MediaScreens {
-    @Composable override fun Camera(authorize: () -> Boolean, onBack: () -> Unit, onTranslate: (CameraObservation) -> Unit) {
-        CameraScanScreen(onBack = onBack, onTranslate = onTranslate, authorize = authorize)
-    }
-    @Composable override fun Video(authorize: () -> Boolean, onBack: () -> Unit, onTranslate: (ImportedVideoObservation) -> Unit) {
-        VideoImportScreen(onBack = onBack, onTranslate = onTranslate, authorize = authorize)
-    }
-}
-
 /** All features use one policy. Free records and drafts never depend on their input source. */
 internal enum class AppFeature(val requiresPass: Boolean) {
-    SOUND_INPUT(false), MANUAL_INPUT(false), PHRASE_EDIT(false), RECORDS(false),
+    SOUND_INPUT(false), CAPTURE(false), VIDEO_IMPORT(false), PHRASE_EDIT(false), RECORDS(false),
     PNG_SHARE(false), BACKUP(false), WEEKLY_SUMMARY(false), ALBUM_PREVIEW(false),
-    CAMERA(true), VIDEO_IMPORT(true), PDF(true)
+    VISUAL_ANALYSIS(true), PDF(true)
 }
 
 internal class MediaAccessSession internal constructor(val feature: AppFeature, val generation: Long)
@@ -58,7 +43,7 @@ internal class AccessPolicy(private val currentEntitlement: () -> Boolean) {
     fun canUse(feature: AppFeature): Boolean = !feature.requiresPass || currentEntitlement()
 
     fun beginMedia(feature: AppFeature): MediaAccessSession? {
-        require(feature == AppFeature.CAMERA || feature == AppFeature.VIDEO_IMPORT)
+        require(feature == AppFeature.VISUAL_ANALYSIS)
         invalidateMedia()
         return if (canUse(feature)) MediaAccessSession(feature, generation) else null
     }

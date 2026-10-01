@@ -22,14 +22,12 @@ class FeedbackTimingTests {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private val id = "feedback-${UUID.randomUUID()}"
     private lateinit var store: ObservationStore
-    private lateinit var phrases: PhraseEngine
     private val visible = mutableStateOf(true)
     private var started = false
     private val expiredExportMessage = "기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요."
 
     @Before fun setup() {
         store = ObservationStore(compose.activity, "$id.db", "$id-legacy")
-        phrases = PhraseEngine(compose.activity, "$id-phrases")
         runBlocking { store.save(Observation(System.currentTimeMillis(), "옹알이", "놀이 중", "", "같이 놀아 줄래?")) }
     }
 
@@ -43,7 +41,7 @@ class FeedbackTimingTests {
 
     private fun start() {
         started = true
-        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, PaidBilling(), phrases) }
+        compose.setContent { if (visible.value) JigeumApp(compose.activity, store, PaidBilling()) }
         compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-home").fetchSemanticsNodes().isNotEmpty() }
     }
 
@@ -57,7 +55,7 @@ class FeedbackTimingTests {
         compose.onNodeWithText("다시 누르면 모든 기록을 삭제해요").performScrollTo().performClick()
         // This deliberately overlaps two real feedback events. The newest failure
         // must not wait for a four-second confirmation (or multiple queued copies).
-        compose.waitUntil(8_000) { compose.onAllNodesWithText("기록과 월령을 지웠어요.").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(8_000) { compose.onAllNodesWithText("기록을 지웠어요.").fetchSemanticsNodes().isNotEmpty() }
         compose.runOnIdle { oldExport.invoke(); oldExport.invoke(); oldExport.invoke() }
         compose.waitUntil(2_000) { compose.onAllNodesWithText(expiredExportMessage).fetchSemanticsNodes().isNotEmpty() }
         assertTrue(runBlocking { store.snapshot().observations.isEmpty() })

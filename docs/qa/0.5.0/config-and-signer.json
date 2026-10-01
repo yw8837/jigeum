@@ -1,0 +1,7 @@
+{
+  "same_upload_signer": true,
+  "actual_verify_url": true,
+  "actual_public_key": true,
+  "production_has_no_test_doubles": true,
+  "public_audio_not_bundled": true
+}
