@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
@@ -42,7 +43,19 @@ def main():
     rules = ET.parse(PROJECT / "app/src/main/res/xml/data_extraction_rules.xml").getroot()
     for mode in ["cloud-backup", "device-transfer"]:
         assert {node.attrib["domain"] for node in rules.find(mode).findall("exclude") if node.attrib["path"] == "."} == domains
-    compiled = run("backup-rules-apk.txt", [aapt, "dump", "xmltree", apk, "--file", "res/xml/data_extraction_rules.xml"])
+    # Release resource optimization can rename paths (e.g. res/4j.xml) even
+    # without resource shrinking. Resolve the compiled resource by its name.
+    resources = run("resource-table-apk.txt", [aapt, "dump", "resources", apk])
+    def xml_resource_path(name):
+        blocks = re.split(r"(?m)^\s*resource ", resources)
+        candidates = []
+        for block in blocks:
+            if re.match(r"0x[0-9a-fA-F]+\s+xml/" + re.escape(name) + r"\s*(?:\n|$)", block):
+                candidates.extend(re.findall(r"\(file\)\s+(\S+)\s+type=XML", block))
+        paths = set(candidates)
+        assert len(paths) == 1, f"Expected one compiled XML for {name}, got {paths}"
+        return paths.pop()
+    compiled = run("backup-rules-apk.txt", [aapt, "dump", "xmltree", apk, "--file", xml_resource_path("data_extraction_rules")])
     for domain in domains:
         assert compiled.count(f'domain="{domain}"') == 2, domain
     manifest = run("manifest-apk.txt", [aapt, "dump", "xmltree", apk, "--file", "AndroidManifest.xml"])
@@ -53,7 +66,7 @@ def main():
         if "android:allowBackup" in line or "android:fullBackupContent" in line:
             assert line.strip().endswith(("=false", "0x0")), line
     assert "com.moa.babylanguage.files" in manifest
-    paths = run("share-paths-apk.txt", [aapt, "dump", "xmltree", apk, "--file", "res/xml/share_paths.xml"])
+    paths = run("share-paths-apk.txt", [aapt, "dump", "xmltree", apk, "--file", xml_resource_path("share_paths")])
     assert "exports/" in paths and "root-path" not in paths and "external-path" not in paths
     run("apk-badging.txt", [aapt, "dump", "badging", apk])
     run("apk-signature.txt", [tool_path("apksigner", sdk), "verify", "--verbose", "--print-certs", apk])

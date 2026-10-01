@@ -1,0 +1,82 @@
+{
+  "status": "pass",
+  "files": [
+    {
+      "file": "screenshot-01-home.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\registration-20261001\\evidence\\store-01-home.png",
+      "source_sha256": "9f613c6fdbfcdee63eecea6a4cf8d1a03b1592d39273d1369a0f01158e673ebb",
+      "sha256": "90f993958fd2120a037a3df3541e1627bad66ecbda10b95e8f166e78cf0be462",
+      "width": 1080,
+      "height": 2160,
+      "mode": "RGB",
+      "visible_pixels_unchanged": true
+    },
+    {
+      "file": "screenshot-02-expression.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\registration-20261001\\evidence\\store-02-expression.png",
+      "source_sha256": "d9e89a0f7e871c2ea15873377f26cc5e73ef878156de432460b36e6e4be00547",
+      "sha256": "d48be1b6b4c2ffe3771a1f0398659a309507df895391f2e3ea24d52692d059e6",
+      "width": 1080,
+      "height": 2160,
+      "mode": "RGB",
+      "visible_pixels_unchanged": true
+    },
+    {
+      "file": "screenshot-03-record.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\registration-20261001\\evidence\\store-03-record.png",
+      "source_sha256": "e21f9ae420e384e8bfba3442c661989992dec318fc04ae8022a04631b36a7221",
+      "sha256": "f5f007b2f28bb0fc061241d04c8fe026b5d5573088d4049229f9602f9e984481",
+      "width": 1080,
+      "height": 2160,
+      "mode": "RGB",
+      "visible_pixels_unchanged": true
+    },
+    {
+      "file": "screenshot-04-album.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\registration-20261001\\evidence\\store-04-album.png",
+      "source_sha256": "dad3ef0c0a3aa95e271c191e6d32cbec37155e75a19f48c570ff5e3c54abc3a3",
+      "sha256": "41f89f622994bbf0f5d4909d3e26ac0b48d2b024fc1c65bceb90bf785773a98f",
+      "width": 1080,
+      "height": 2160,
+      "mode": "RGB",
+      "visible_pixels_unchanged": true
+    },
+    {
+      "file": "play-icon-512x512.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\StoreListing\\play-icon-512x512.png",
+      "sha256": "ee0e04675a4348bb60e3b4e2de9b59ef087c4cb7f5f589eab38c70dd4edf00f2",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA"
+    },
+    {
+      "file": "feature-graphic-1024x500.png",
+      "source": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\StoreListing\\feature-graphic-1024x500.png",
+      "sha256": "f59ccf677db7d3e0c997ce25d290f19fb366e884f7576750196ed803ff5afdf6",
+      "width": 1024,
+      "height": 500,
+      "mode": "RGB"
+    },
+    {
+      "file": "title-ko.txt",
+      "characters": 11,
+      "maximum": 30,
+      "sha256": "814c7fb7af5ad0e05dd5073f59ed445dc35ff9f042132e4153ccbd66ca00c1dc"
+    },
+    {
+      "file": "short-description-ko.txt",
+      "characters": 37,
+      "maximum": 80,
+      "sha256": "142fc9399287ca5b7461699e5aa61c0bd294ab8cafe6332b8faaccb54521eff0"
+    },
+    {
+      "file": "full-description-ko.txt",
+      "characters": 1393,
+      "maximum": 4000,
+      "sha256": "6f2510a20663f7ffc2806624554a5217c8514ea3769b055a4a8715fa8261143c"
+    }
+  ],
+  "screenshot_source": "actual signed release on API35 x86_64",
+  "demo_data": "two synthetic phrases saved in two capture passes, no real baby media",
+  "billing": "disabled in captured build; no actual purchase shown"
+}

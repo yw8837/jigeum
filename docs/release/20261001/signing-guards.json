@@ -1,0 +1,21 @@
+{
+  "status": "pass",
+  "cases": [
+    {
+      "case": "existing_key",
+      "exit": 1,
+      "expected_guard": true
+    },
+    {
+      "case": "existing_destination",
+      "exit": 1,
+      "expected_guard": true
+    },
+    {
+      "case": "unconfigured_paid",
+      "exit": 1,
+      "expected_guard": true
+    }
+  ],
+  "existing_key_unchanged": true
+}

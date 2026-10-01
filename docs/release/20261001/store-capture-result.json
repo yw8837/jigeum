@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "screens": 4,
+  "source": "upload-key-signed release APK",
+  "data": "one synthetic phrase in each capture pass; two sample records in final screen",
+  "billing": "disabled; real Play/paid features not tested",
+  "physical_ARM": false
+}

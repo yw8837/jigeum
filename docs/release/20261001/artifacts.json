@@ -1,0 +1,21 @@
+{
+  "version": "0.4.4",
+  "versionCode": 11,
+  "purpose": "internal bootstrap, billing disabled",
+  "actual_play_purchase_enabled": false,
+  "source_commit": "8e7a6aa9e9af3f3864249e71da5c9fbb6eec5dc5",
+  "android_source_changed": false,
+  "upload_certificate_sha256": "f1ed4457b926b985b0355d3e9d2bba285b7b6fc6142c395423c383ee92ea961d",
+  "artifacts": [
+    {
+      "path": "outputs/Jigeum-Play-internal-0.4.4-code11-signed.aab",
+      "bytes": 44973075,
+      "sha256": "6e5f1e50363a1e1d8da09436c452828d654c9efb9a2a357c46cb76683ec6765d"
+    },
+    {
+      "path": "outputs/Jigeum-Android-release-0.4.4-code11-upload-signed.apk",
+      "bytes": 73598607,
+      "sha256": "2410fae77a00d05369c7d44065b15ada4f31e686c009d217c469e146628e5666"
+    }
+  ]
+}
