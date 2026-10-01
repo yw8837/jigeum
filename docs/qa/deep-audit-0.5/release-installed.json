@@ -1,0 +1,10 @@
+{
+  "package": "com.moa.babylanguage",
+  "base_apk": "/data/app/~~SvtiA_csG1QRZsaD_SLp7Q==/com.moa.babylanguage-u27g4LrQYgqmXl1TB7_C7w==/base.apk",
+  "sha256": "bc05a2fc1cb7b09ff0e27b5f9da931101690bcd72f57e154742f1ba9e55d9c8a",
+  "expected_sha256": "bc05a2fc1cb7b09ff0e27b5f9da931101690bcd72f57e154742f1ba9e55d9c8a",
+  "version_code": 14,
+  "version_name": "0.5.1",
+  "verified": true,
+  "errors": []
+}

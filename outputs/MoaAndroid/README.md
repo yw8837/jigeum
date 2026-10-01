@@ -1,8 +1,8 @@
-# 아가톡 Android0.5.0 / code13
+# 아가톡 Android0.5.1 / code14
 
 앱 전체 이름은 **아가톡 - 지금 내 기분이 그래**, 앱서랍은 **아가톡**, package는 `com.moa.babylanguage`. minSDK26, target/compileSDK36. **실사용 평가 후보이며 유료 품질 승인 전**입니다.
 
-[협업 시작](../../docs/HANDOFF.md) · [흐름/문장 계약](../../docs/UX-0.5.md) · [QA](../../docs/qa/0.5.0/README.md) · [이용 정책](../Jigeum-Access-Policy.md) · [실행](../../docs/RUNBOOK.md)
+[협업 시작](../../docs/HANDOFF.md) · [흐름/문장 계약](../../docs/UX-0.5.md) · [QA](../../docs/qa/deep-audit-0.5/README.md) · [이용 정책](../Jigeum-Access-Policy.md) · [실행](../../docs/RUNBOOK.md)
 
 ## 실제 흐름
 
@@ -26,4 +26,4 @@
 
 JDK17+와 SDK36. `gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest :app:lintRelease --max-workers=1`.
 
-업로드 서명/공개 검증 URL을 넣은 재현은 [RUNBOOK](../../docs/RUNBOOK.md)과 [RELEASE](RELEASE.md). 키·토큰·APK/AAB·캐시는 Git 제외. 실제 설치 파일은 저장소 루트 `outputs/Agattok-0.5.0-code13.apk`입니다.
+업로드 서명/공개 검증 URL을 넣은 재현은 [RUNBOOK](../../docs/RUNBOOK.md)과 [RELEASE](RELEASE.md). 키·토큰·APK/AAB·캐시는 Git 제외. 실제 설치 파일은 저장소 루트 `outputs/Agattok-0.5.1-code14.apk`입니다.

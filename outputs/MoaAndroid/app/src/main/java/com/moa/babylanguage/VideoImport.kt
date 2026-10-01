@@ -60,6 +60,22 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.coroutineContext
 import kotlin.math.hypot
 
+/** A failed model run is not a completed observation, even when it has explanatory text. */
+internal enum class VisualEvidenceStatus { COMPLETE, PARTIAL, FAILED }
+
+internal data class VisualEvidence(
+    val status: VisualEvidenceStatus,
+    val evidence: String,
+    val notice: String? = null
+) {
+    companion object {
+        fun failed(): VisualEvidence {
+            val message = "표정 관찰을 완료하지 못했어요. 이번 한마디는 소리 단서로만 만들었어요."
+            return VisualEvidence(VisualEvidenceStatus.FAILED, message, message)
+        }
+    }
+}
+
 internal data class VideoFrameSummary(
     val durationSeconds: Int,
     val sampleCount: Int,
@@ -70,12 +86,35 @@ internal data class VideoFrameSummary(
     val modelAvailable: Boolean,
     val audio: VideoAudioAnalysis = VideoAudioAnalysis(VideoAudioAnalysis.Status.NO_TRACK)
 ) {
-    fun visualEvidence(): String = when {
-        !modelAvailable -> "표정 관찰을 완료하지 못했어요. 이번 한마디는 소리 단서로만 만들었어요."
-        faceFrames == 0 -> "선택 구간의 ${sampleCount}개 장면에서 얼굴을 찾지 못했어요. 이번 한마디는 소리 단서로만 만들었어요."
-        else -> "선택 구간 ${sampleCount}개 장면 중 얼굴 ${faceFrames}개 · 입이 열린 장면 ${mouthOpenFrames}개를 관찰했어요. 얼굴의 주인이나 감정은 구분하지 않아요."
+    fun visualEvidence(): VisualEvidence {
+        if (!modelAvailable || analyzedFrames == 0) {
+            return VisualEvidence.failed()
+        }
+        val partial = analyzedFrames < sampleCount
+        val observation = if (faceFrames == 0)
+            "선택 구간의 ${analyzedFrames}개 장면에서 얼굴을 찾지 못했어요. 이번 한마디는 소리 단서로만 만들었어요."
+        else "선택 구간 ${analyzedFrames}개 장면 중 얼굴 ${faceFrames}개 · 입이 열린 장면 ${mouthOpenFrames}개를 관찰했어요. 얼굴의 주인이나 감정은 구분하지 않아요."
+        val notice = if (partial) "전체 ${sampleCount}개 장면 중 ${analyzedFrames}개만 표정 관찰을 마쳤어요." else null
+        return VisualEvidence(if (partial) VisualEvidenceStatus.PARTIAL else VisualEvidenceStatus.COMPLETE,
+            listOfNotNull(observation, notice).joinToString("\n"), notice)
     }
 
+}
+
+/** Isolate optional visual failures from a sound interpretation already obtained for this clip. */
+internal suspend fun inspectVideoEvidence(context: Context, uri: Uri, startMs: Long, endMs: Long): VisualEvidence {
+    coroutineContext.ensureActive()
+    return try {
+        val evidence = inspectVideo(context, uri, startMs, endMs).visualEvidence()
+        coroutineContext.ensureActive()
+        evidence
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: Exception) {
+        VisualEvidence.failed()
+    } catch (_: LinkageError) {
+        VisualEvidence.failed()
+    }
 }
 
 internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, endMs: Long): VideoFrameSummary {
@@ -156,7 +195,8 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
                                 }
                             }
                         }
-                    } catch (_: Exception) { /* A frame may be corrupt; other frames still count. */ }
+                    } catch (cancelled: CancellationException) { throw cancelled }
+                    catch (_: Exception) { /* A frame may be corrupt; other frames still count. */ }
                     finally {
                         if (scaled !== frame && !scaled.isRecycled) scaled.recycle()
                         if (!frame.isRecycled) frame.recycle()
@@ -164,7 +204,7 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
                 }
             }
             if (decoded == 0) throw IOException("No frames decoded")
-            return VideoFrameSummary(durationSeconds, decoded, faceCount, mouthCount,
+            return VideoFrameSummary(durationSeconds, sampleCount, faceCount, mouthCount,
                 analyzedFrames, hasAudio, analyzedFrames > 0)
         } finally { landmarker?.close() }
     } finally { retriever.release() }

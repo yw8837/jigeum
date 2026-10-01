@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "small capture/import/paywall/policy/abstain",
+    "font200 capture/import/paywall/policy/abstain"
+  ],
+  "synthetic_media": true,
+  "baby_accuracy_tested": false
+}

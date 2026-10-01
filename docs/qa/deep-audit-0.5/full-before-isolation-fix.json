@@ -1,0 +1,89 @@
+{
+  "status": "fail",
+  "tests": null,
+  "passed_tests": 159,
+  "failed_tests": 1,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 3,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [
+    "Expected exactly one nonempty OK summary",
+    "Runner reported a failure or harness timeout",
+    "Discovered, started, completed and summary counts do not agree",
+    "One or more tests failed"
+  ],
+  "seconds": 249.58,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "bytes": 81456795
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "6f1a92e716b2197800146f583be99cb7abdf95139571154345faa57475954cc3",
+      "bytes": 1638834
+    },
+    "git": {
+      "sha": "4d9894440a2fa36911d7ac46659c3b133dc76144",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureDeviceTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/EvidenceInterpreterTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoImport.kt",
+        " M outputs/QA/README.md",
+        " M outputs/QA/check_package.py",
+        " M outputs/QA/instrument.py",
+        "?? docs/qa/deep-audit-0.5/",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/over-minute.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/under-second.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureInputAuditTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VisualEvidenceAuditTest.kt",
+        "?? outputs/QA/test_qa_gates.py"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~AEy9t_OIa2kcuzH1EKIm8w==/com.moa.babylanguage-zoXz0akJjai0HOFCiMHV6w==/base.apk",
+      "sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "expected_sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "version_code": 14,
+      "version_name": "0.5.1",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~u4hUak2GcCfeDj1gRZBHMQ==/com.moa.babylanguage.test-0j318mXU3AC0vuUle2wV3Q==/base.apk",
+      "sha256": "6f1a92e716b2197800146f583be99cb7abdf95139571154345faa57475954cc3",
+      "expected_sha256": "6f1a92e716b2197800146f583be99cb7abdf95139571154345faa57475954cc3",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

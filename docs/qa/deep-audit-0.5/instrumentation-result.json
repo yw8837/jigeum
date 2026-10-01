@@ -1,0 +1,87 @@
+{
+  "status": "pass",
+  "tests": 163,
+  "passed_tests": 160,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 3,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [],
+  "seconds": 231.24,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "bytes": 81456795
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "0439a22ce3b06034dca87817fb72fbce44f85ffb2874384078bdb49b41529636",
+      "bytes": 1638843
+    },
+    "git": {
+      "sha": "4d9894440a2fa36911d7ac46659c3b133dc76144",
+      "dirty": true,
+      "porcelain": [
+        " M README.md",
+        " M docs/HANDOFF.md",
+        " M docs/NEXT.md",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureDeviceTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/EvidenceInterpreterTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoImport.kt",
+        " M outputs/QA/README.md",
+        " M outputs/QA/check_package.py",
+        " M outputs/QA/instrument.py",
+        "?? docs/qa/deep-audit-0.5/",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/over-minute.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/under-second.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureInputAuditTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VisualEvidenceAuditTest.kt",
+        "?? outputs/QA/test_qa_gates.py"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~D5kymDd19pQtrAisK7Mdqg==/com.moa.babylanguage-EDDgfDXqqMwnt_cKv0SI8w==/base.apk",
+      "sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "expected_sha256": "12b574abcf1d0587f9ce7094afb756a5726db046249cbfdf253b6db2d4c8131e",
+      "version_code": 14,
+      "version_name": "0.5.1",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~knTo0MCCLCbJ1XPQJHC8pg==/com.moa.babylanguage.test-hugWhQMCOwBiKB6uejoVVg==/base.apk",
+      "sha256": "0439a22ce3b06034dca87817fb72fbce44f85ffb2874384078bdb49b41529636",
+      "expected_sha256": "0439a22ce3b06034dca87817fb72fbce44f85ffb2874384078bdb49b41529636",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

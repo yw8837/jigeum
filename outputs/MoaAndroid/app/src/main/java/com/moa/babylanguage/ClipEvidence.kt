@@ -49,7 +49,8 @@ internal data class ClipInterpretation(
     val evidence: String,
     val guide: String,
     val range: String,
-    val visual: Boolean
+    val visual: Boolean,
+    val visualNotice: String? = null
 )
 
 internal data class ClipAnalysisResult(val interpretation: ClipInterpretation? = null, val problem: String? = null)
@@ -58,7 +59,7 @@ internal object EvidenceInterpreter {
     // Conservative product gate, NOT a measured confidence/accuracy percentage.
     // Generic adult laughter/speech and a face alone cannot create a baby phrase.
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
-                  visualEvidence: String? = null): ClipAnalysisResult {
+                  visualEvidence: VisualEvidence? = null): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem)
         val infantLabels = setOf("울음", "옹알이 후보", "아기 웃음 후보")
         val cue = audio.cues.filter { it.label in infantLabels && it.score >= 0.35f }.maxByOrNull { it.score }
@@ -92,9 +93,11 @@ internal object EvidenceInterpreter {
         }
         return ClipAnalysisResult(ClipInterpretation(phrase, sound,
             "${range.label()}에서 $sound 후보를 찾았어요. $rhythm" +
-                (visualEvidence?.let { "\n$it" } ?: "") +
+                (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
                 "\n일반 소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
-            responseGuide(sound), range.label(), visualEvidence != null))
+            responseGuide(sound), range.label(),
+            visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
+            visualEvidence?.notice))
     }
 
     fun responseGuide(sound: String): String = if (sound == "울음")
@@ -119,7 +122,7 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 val preliminary = EvidenceInterpreter.interpret(audio, shape, range)
                 if (preliminary.interpretation == null) return@withContext preliminary
                 ensureActive()
-                val frames = if (visual) inspectVideo(context, uri, range.startMs, range.endMs).visualEvidence() else null
+                val frames = if (visual) inspectVideoEvidence(context, uri, range.startMs, range.endMs) else null
                 ensureActive()
                 EvidenceInterpreter.interpret(audio, shape, range, frames)
             } finally { pcm.fill(0f) }

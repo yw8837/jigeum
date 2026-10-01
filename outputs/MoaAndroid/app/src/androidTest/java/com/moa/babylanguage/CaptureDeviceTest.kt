@@ -16,6 +16,7 @@ import org.junit.Assert.*
 import java.io.File
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
 
 /** CameraX/MediaRecorder/MediaPlayer on the real emulator. No baby/intent accuracy claim. */
 class CaptureDeviceTest {
@@ -23,6 +24,9 @@ class CaptureDeviceTest {
     private val visible = mutableStateOf(true)
     private var started = false
     @Before fun grant() {
+        // This harness launches ComponentActivity, bypassing MainActivity's cold-start
+        // cleanup. A previous force-stopped UI probe may have left an owned capture.
+        CaptureFiles.cleanup(compose.activity)
         val ui = InstrumentationRegistry.getInstrumentation().uiAutomation
         ui.grantRuntimePermission(compose.activity.packageName, Manifest.permission.CAMERA)
         ui.grantRuntimePermission(compose.activity.packageName, Manifest.permission.RECORD_AUDIO)
@@ -49,6 +53,10 @@ class CaptureDeviceTest {
         assertTrue(clip.hasVideo)
         assertTrue(clip.durationMs in 2_000..10_000)
         assertTrue(file.length() > 0)
+        val pcm = runBlocking { VideoAudioDecoder.decode(compose.activity, clip.uri, 0, 2_000) }
+        assertNotNull("Camera recording must contain a decodable audio track", pcm)
+        assertTrue("Recorded audio must cover the selected interval", pcm!!.size in 30_000..32_000)
+        pcm.fill(0f)
         assertTrue(runCatching { FileProvider.getUriForFile(compose.activity, compose.activity.packageName + ".files", file) }.isFailure)
         compose.onNodeWithTag("clip-play").performScrollTo().performClick()
         compose.waitUntil(5_000) { compose.onAllNodes(hasText("재생 멈추기", substring = true)).fetchSemanticsNodes().isNotEmpty() }
@@ -85,5 +93,18 @@ class CaptureDeviceTest {
             val clip = CaptureFiles.inspect(compose.activity, Uri.fromFile(output!!), output)
             assertTrue("${clip.durationMs}", clip.durationMs in 59_000..60_500)
         } finally { compose.runOnUiThread { capture.discard() }; output?.delete() }
+    }
+    @Test fun videoStopsAtOneMinuteAndKeepsAudioTrack() {
+        start(); click("카메라 준비하기")
+        compose.waitUntil(15_000) { compose.onAllNodes(hasText("녹화 시작") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+        click("녹화 시작")
+        waitText("어느 순간을 들어볼까요?", 75_000)
+        val file = File(compose.activity.cacheDir, "captures").listFiles()!!.single()
+        val clip = CaptureFiles.inspect(compose.activity, Uri.fromFile(file), file)
+        assertTrue("${clip.durationMs}", clip.durationMs in 59_000..60_500)
+        val pcm = runBlocking { VideoAudioDecoder.decode(compose.activity, clip.uri, 55_000, 58_000) }
+        assertNotNull("Late segment must still contain a decodable audio track", pcm)
+        assertTrue("${pcm!!.size}", pcm.size in 47_000..48_000)
+        pcm.fill(0f)
     }
 }

@@ -1,0 +1,159 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.AccessNavigationTests:
+INSTRUMENTATION_STATUS: test=collapsingEditedDraftStillSavesTheEditedPhrase
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<[부모가 고친 소중한 문장]> but was:<[으앙, 으앙… 나 좀 도와줘요.]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.AccessNavigationTests.collapsingEditedDraftStillSavesTheEditedPhrase(AccessNavigationTests.kt:146)
+
+INSTRUMENTATION_STATUS: stream=
+Error in collapsingEditedDraftStillSavesTheEditedPhrase(com.moa.babylanguage.AccessNavigationTests):
+org.junit.ComparisonFailure: expected:<[부모가 고친 소중한 문장]> but was:<[으앙, 으앙… 나 좀 도와줘요.]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.AccessNavigationTests.collapsingEditedDraftStillSavesTheEditedPhrase(AccessNavigationTests.kt:146)
+
+INSTRUMENTATION_STATUS: test=collapsingEditedDraftStillSavesTheEditedPhrase
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=expiredVideoOptionCannotCancelNextFreeAudioCapture
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '분석 취소' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.AccessNavigationTests.expiredVideoOptionCannotCancelNextFreeAudioCapture(AccessNavigationTests.kt:160)
+
+INSTRUMENTATION_STATUS: stream=
+Error in expiredVideoOptionCannotCancelNextFreeAudioCapture(com.moa.babylanguage.AccessNavigationTests):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '분석 취소' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.AccessNavigationTests.expiredVideoOptionCannotCancelNextFreeAudioCapture(AccessNavigationTests.kt:160)
+
+INSTRUMENTATION_STATUS: test=expiredVideoOptionCannotCancelNextFreeAudioCapture
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellingAnalysisIgnoresLateCallback
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AccessNavigationTests
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellingAnalysisIgnoresLateCallback
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.VisualEvidenceAuditTest:
+INSTRUMENTATION_STATUS: test=failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: No visual inference completed; this must not be a visual success
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at com.moa.babylanguage.VisualEvidenceAuditTest.failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess(VisualEvidenceAuditTest.kt:28)
+
+INSTRUMENTATION_STATUS: stream=
+Error in failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess(com.moa.babylanguage.VisualEvidenceAuditTest):
+java.lang.AssertionError: No visual inference completed; this must not be a visual success
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at com.moa.babylanguage.VisualEvidenceAuditTest.failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess(VisualEvidenceAuditTest.kt:28)
+
+INSTRUMENTATION_STATUS: test=failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualSelectedVideoRangeRunsFaceModelAndReportsNoFace
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualSelectedVideoRangeRunsFaceModelAndReportsNoFace
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=completedAnalysisWithNoFaceIsNotModelFailure
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualEvidenceAuditTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=6
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=completedAnalysisWithNoFaceIsNotModelFailure
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 19.173
+There were 3 failures:
+1) collapsingEditedDraftStillSavesTheEditedPhrase(com.moa.babylanguage.AccessNavigationTests)
+org.junit.ComparisonFailure: expected:<[부모가 고친 소중한 문장]> but was:<[으앙, 으앙… 나 좀 도와줘요.]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.AccessNavigationTests.collapsingEditedDraftStillSavesTheEditedPhrase(AccessNavigationTests.kt:146)
+2) expiredVideoOptionCannotCancelNextFreeAudioCapture(com.moa.babylanguage.AccessNavigationTests)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '분석 취소' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.AccessNavigationTests.expiredVideoOptionCannotCancelNextFreeAudioCapture(AccessNavigationTests.kt:160)
+3) failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess(com.moa.babylanguage.VisualEvidenceAuditTest)
+java.lang.AssertionError: No visual inference completed; this must not be a visual success
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at com.moa.babylanguage.VisualEvidenceAuditTest.failedVisualModelKeepsAudioPhraseWithoutClaimingVisualSuccess(VisualEvidenceAuditTest.kt:28)
+
+FAILURES!!!
+Tests run: 6,  Failures: 3
+
+
+INSTRUMENTATION_CODE: -1

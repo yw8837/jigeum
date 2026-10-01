@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "owned_device": "emulator-5554 / MoaQA35",
+  "owned_app_data_cleared": true,
+  "test_apk_uninstalled": true,
+  "owned_shared_fixture_and_ui_dump_removed": true,
+  "display": "1080x2400 / 420dpi / font_scale 1.0; no overrides",
+  "app_process_stopped": true,
+  "owned_emulator_shutdown_requested_and_acknowledged": true,
+  "isolated_omx_ultraqa_state_cleared": true,
+  "isolated_omx_read_exists": false,
+  "prior_versions_and_unrelated_work_preserved": true,
+  "temporary_run_directory": "work/deep-audit",
+  "temporary_evidence_retention": "Archived to outputs/Agattok-QA-0.5.1.zip; work/deep-audit is retained because automatic tool policy rejected recursive cleanup before execution",
+  "temporary_directory_removed": false,
+  "cleanup_exception": "Recursive deletion was blocked by policy; no specific reason was returned. No alternative deletion was attempted.",
+  "cloud_or_play_changes": false
+}

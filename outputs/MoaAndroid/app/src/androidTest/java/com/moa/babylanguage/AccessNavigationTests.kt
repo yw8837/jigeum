@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -36,6 +37,7 @@ class AccessNavigationTests {
         clip = CaptureFiles.inspect(compose.activity, Uri.fromFile(file), file)
     }
     @After fun cleanup() {
+        analyzer.gate?.complete(Unit)
         if (started) { compose.runOnIdle { visible.value = false }; compose.waitForIdle() }
         runBlocking { store.close() }; compose.activity.deleteDatabase("$id.db"); clip.ownedFile?.delete()
     }
@@ -95,11 +97,13 @@ class AccessNavigationTests {
     }
     @Test fun expiryDuringAnalysisRejectsLateResultAndKeepsFreeClip() {
         analyzer.gate = CompletableDeferred()
+        analyzer.ignoreCancellation = true
         start(true); visual(); click("영상 + 소리로 번역하기")
         compose.waitUntil(8_000) { analyzer.calls == 1 }
         compose.runOnIdle { billing.publish(false) }
         compose.waitUntil(8_000) { compose.onAllNodesWithText("이 구간 소리로 번역하기").fetchSemanticsNodes().isNotEmpty() }
         analyzer.gate!!.complete(Unit)
+        compose.waitUntil(8_000) { analyzer.returns == 1 }
         compose.waitForIdle()
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
         assertTrue(clip.ownedFile!!.exists())
@@ -126,11 +130,62 @@ class AccessNavigationTests {
     }
     @Test fun cancellingAnalysisIgnoresLateCallback() {
         analyzer.gate = CompletableDeferred()
+        analyzer.ignoreCancellation = true
         start(); click("이 구간 소리로 번역하기")
         compose.waitUntil(8_000) { analyzer.calls == 1 }
-        click("분석 취소"); analyzer.gate!!.complete(Unit); compose.waitForIdle()
+        click("분석 취소"); analyzer.gate!!.complete(Unit)
+        compose.waitUntil(8_000) { analyzer.returns == 1 }
+        compose.waitForIdle()
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
         compose.onNodeWithText("이 구간 소리로 번역하기").assertExists()
+    }
+    @Test fun collapsingEditedDraftStillSavesTheEditedPhrase() {
+        start(); click("이 구간 소리로 번역하기"); awaitResult()
+        click("기록에 메모·수정 남기기")
+        compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("부모가 고친 소중한 문장")
+        click("기록 수정 접기")
+        restoration.emulateSavedInstanceStateRestore()
+        click("이 문장 저장하기")
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-timeline").fetchSemanticsNodes().isNotEmpty() }
+        assertEquals("부모가 고친 소중한 문장", runBlocking { store.snapshot().observations.single().phrase })
+    }
+    @Test fun collapsedEmptyEditCannotSilentlySaveOriginalPhrase() {
+        start(); click("이 구간 소리로 번역하기"); awaitResult()
+        click("기록에 메모·수정 남기기")
+        compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("")
+        click("기록 수정 접기")
+        compose.onNodeWithText("이 문장 저장하기").assertIsNotEnabled()
+        click("기록에 메모·수정 남기기")
+        assertEquals("", compose.onNodeWithTag("draft-phrase-editor").fetchSemanticsNode().config[SemanticsProperties.EditableText].text)
+        compose.onNodeWithText("이 문장 저장하기").assertIsNotEnabled()
+    }
+    @Test fun failedVisualNoticeIsVisibleWithoutExpandingAndSurvivesRestore() {
+        analyzer.visualFailure = true
+        start(true); visual(); click("영상 + 소리로 번역하기"); awaitResult()
+        compose.onNodeWithTag("visual-notice").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("0:00–0:10 · 소리 관찰").assertExists()
+        compose.onNodeWithTag("analysis-evidence").assertDoesNotExist()
+        restoration.emulateSavedInstanceStateRestore()
+        compose.onNodeWithTag("visual-notice").performScrollTo().assertIsDisplayed()
+        click("이 문장 저장하기")
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-timeline").fetchSemanticsNodes().isNotEmpty() }
+        assertEquals(1, runBlocking { store.snapshot().observations.size })
+    }
+    @Test fun expiredVideoOptionCannotCancelNextFreeAudioCapture() {
+        analyzer.gate = CompletableDeferred()
+        val ui = InstrumentationRegistry.getInstrumentation().uiAutomation
+        ui.grantRuntimePermission(compose.activity.packageName, android.Manifest.permission.RECORD_AUDIO)
+        start(true); visual(); click("다시 촬영하기")
+        click("카메라 없이 소리만 녹음"); click("마이크 준비하기"); click("녹음 시작")
+        waitText("0:02 / 1:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
+        compose.runOnIdle { billing.publish(false) }
+        click("이 구간 소리로 번역하기")
+        compose.waitUntil(8_000) { analyzer.calls == 1 }
+        // Give the entitlement watcher time to run while the real audio clip is held.
+        Thread.sleep(700)
+        compose.onNodeWithText("분석 취소").assertExists()
+        assertFalse(analyzer.lastVisual)
+        analyzer.gate!!.complete(Unit); awaitResult()
     }
     @Test fun selectedRangeIsUsedByBothPlaybackAndAnalysis() {
         start()
@@ -141,6 +196,8 @@ class AccessNavigationTests {
         compose.onNodeWithTag("selected-range").assertTextContains("0:08 — 0:11 · 3초 선택")
         compose.onNodeWithTag("clip-play").performScrollTo().performClick()
         compose.waitUntil(5_000) { compose.onAllNodes(hasText("재생 멈추기 · 0:08")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(3_000) { compose.onAllNodes(hasText("재생 멈추기 · 0:09")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(4_000) { compose.onAllNodes(hasText("재생 멈추기", substring = true)).fetchSemanticsNodes().isEmpty() }
         click("이 구간 소리로 번역하기"); awaitResult()
         assertEquals(ClipRange(8_000, 11_000), analyzer.lastRange)
     }
@@ -179,16 +236,23 @@ class AccessNavigationTests {
     }
     private class ControlledAnalyzer : ClipAnalyzer {
         @Volatile var calls = 0
+        @Volatile var returns = 0
+        var ignoreCancellation = false
+        var visualFailure = false
         var lastVisual = false
         var lastRange: ClipRange? = null
         var gate: CompletableDeferred<Unit>? = null
         var problem: String? = null
         override suspend fun analyze(context: Context, uri: Uri, range: ClipRange, visual: Boolean): ClipAnalysisResult {
             calls++; lastVisual = visual; lastRange = range
-            gate?.await()
+            if (ignoreCancellation) withContext(NonCancellable) { gate?.await(); returns++ }
+            else { gate?.await(); returns++ }
             return if (problem != null) ClipAnalysisResult(problem = problem)
             else EvidenceInterpreter.interpret(SoundAnalysis(listOf(SoundCue("울음", .8f))), AcousticShape(.8f, false, 1), range,
-                if (visual) "테스트에서 제공한 얼굴 관찰" else null)
+                if (visual) {
+                    if (visualFailure) VideoFrameSummary(3, 3, 0, 0, 0, true, false).visualEvidence()
+                    else VisualEvidence(VisualEvidenceStatus.COMPLETE, "테스트에서 제공한 얼굴 관찰")
+                } else null)
         }
     }
 }

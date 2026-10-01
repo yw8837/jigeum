@@ -1,0 +1,18 @@
+{
+  "artifacts": [
+    {
+      "name": "Agattok-0.5.1-code14.apk",
+      "bytes": 73776727,
+      "sha256": "bc05a2fc1cb7b09ff0e27b5f9da931101690bcd72f57e154742f1ba9e55d9c8a"
+    },
+    {
+      "name": "Agattok-0.5.1-code14.aab",
+      "bytes": 45155013,
+      "sha256": "0e22a825256bad476cb3f0e125f5c852917f6167a49abeea24f57e62918bd3e9"
+    }
+  ],
+  "public_verifier_config_present": true,
+  "same_upload_signer_as_code13": true,
+  "test_doubles_and_new_fixtures_absent_from_release": true,
+  "public_release_submitted": false
+}

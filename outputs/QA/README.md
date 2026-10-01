@@ -1,8 +1,10 @@
 # 0.5 QA 진입점
 
-최신 [0.5 QA](../../docs/qa/0.5.0/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 새 촬영/가져오기/보류/유료 왕복 UI와 큰 글씨 확인, `check_package.py`는 서명/16KB/백업 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용으로 새 앱에서 성공한다고 가정하지 않는다. 기존 run_qa.py는 역사적 재현용으로 유지한다.
+최신 [0.5.1 심층 QA](../../docs/qa/deep-audit-0.5/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 새 촬영/가져오기/보류/유료 왕복 UI와 큰 글씨 확인, `check_package.py`는 서명/16KB/백업 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용으로 새 앱에서 성공한다고 가정하지 않는다. 기존 run_qa.py는 역사적 재현용으로 유지한다.
 
 `range-silence-tone.mp4`는12초 합성 fixture(앞6초무음/뒤6초997Hz순음)다. 실제 아기 분류 성공 자료가 아니다. 새 UI스크립트는 명시한 QA기기의 표시 설정을 임시 바꿨다가 복원한다. 전용 에뮬레이터에서만 실행한다.
+
+`under-second.mp4`와 `over-minute.mp4`도 순수 합성 검은 화면이다. 각각0.5초/61초 입력 거절을 확인하며 androidTest에만 포함된다. 생성: `ffmpeg -f lavfi -i color=c=black:s=32x32:r=10:d=0.5 -an -c:v libx264 -preset ultrafast -movflags +faststart under-second.mp4`; 긴 fixture는 `r=1:d=61`로 생성한다. 아기 원본이나 외부 사진을 사용하지 않았다.
 
 `PublicAudioProbeTest`는 기본 전체 실행에서 조건skip한다. 권리를 확인한 로컬 PCM자료를 명시적으로 준비한 뒤 `-e public_audio_probe true -e class com.moa.babylanguage.PublicAudioProbeTest`로 별도 실행한다. 없는 사건은 미실행으로 보고하며 측정 도구의 성공을 분류 성공으로 해석하지 않는다. [출처/절차/한계](../../docs/research/20261001-public-audio-probes.md).
 
@@ -51,10 +53,19 @@ Pop-Location
 ### 1. 계측 테스트
 
 ```powershell
-python outputs/QA/instrument.py --install-app
+python outputs/QA/instrument.py --install-app `
+  --allow-skip 'com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes' `
+  --allow-skip 'com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose' `
+  --allow-skip 'com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium'
 ```
 
-현재 debug APK와 테스트 APK를 `install -r`로 설치하고 AndroidJUnitRunner를 실행합니다. 기존 앱 데이터는 유지하므로 전용 합성 설치를 사용합니다. 앱을 이미 설치한 경우 `--install-app`을 생략할 수 있습니다. 기본 대기 한도는 600초이며 `--timeout`으로 변경합니다. `instrumentation.log`와 결과 JSON에 실제 테스트 수·시간·결과를 씁니다. 서버측 검증기의 독립 테스트는 별도 터미널에서 `outputs/PlayVerifier`의 `npm test`로 실행하며 Android UI와 공유 자원을 점유하지 않습니다.
+위3개 허용목록은 **실제 검증URL·공개키가 설정된0.5 debug 빌드**의 예상skip입니다. 공개 음성 측정용 원본이 없고, 미설정 전용2개검사는 이 빌드에서 실행하지 않기 때문입니다. 다른 빌드는 그 실행에서 의도한skip만 정확한 `CLASS#METHOD`로 명시하세요. 미예상skip, 모든 테스트skip, 중복/미완료 결과, 비정상runner종료는 실패입니다. skip을 실행통과에 합산하지 않습니다.
+
+현재 debug APK와 테스트 APK를 `install -r`로 설치하고 AndroidJUnitRunner를 실행합니다. 기존 앱 데이터는 유지하므로 전용 합성 설치를 사용합니다. `--install-app`을 생략해도 **로컬 intended app/test APK가 둘 다 필요하며**, 실제 설치된 각 패키지의 base APK SHA256이 로컬 파일과 일치해야 실행합니다. 오래된 앱·누락패키지·읽을 수 없는 해시·split설치는 계측 시작 전에 실패합니다. 이 검사는 로컬에서 빌드한 단일 debug APK만 지원하며 Play split설치용이 아닙니다.
+
+`instrumentation-result.json`은 app/test APK 경로·SHA256·크기, git SHA·dirty상태, 선택한 ADB기기, 설치된 app/test base APK해시, target versionCode/versionName을 함께 기록합니다. source의 dirty상태도 보존하므로 commit SHA만 보고 완전히 같은 소스 빌드라고 추정하지 않습니다. 설치 추적성 실패는 `instrumentation_started:false`와 실패 사유를 남깁니다.
+
+기본 대기 한도는600초이며 `--timeout`으로 변경합니다. `instrumentation.log`와 결과 JSON에 실제 테스트 수·시간·결과를 씁니다. 서버측 검증기의 독립 테스트는 별도 터미널에서 `outputs/PlayVerifier`의 `npm test`로 실행하며 Android UI와 공유 자원을 점유하지 않습니다. 호스트 하네스만 검증하려면 `python -m unittest discover -s outputs/QA -p test_qa_gates.py -v`를 실행합니다. 이 unittest는 ADB·Gradle·네트워크를 실행하지 않습니다.
 
 ### 2. 합성 영상·JSON 파일 준비
 

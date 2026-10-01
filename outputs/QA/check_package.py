@@ -12,6 +12,18 @@ import zipfile
 from qa_config import ROOT, PROJECT, HERE, APK, AAB, evidence_dir, sdk_root, tool_path
 
 
+def aab_signature_state(output: str, expect_unsigned: bool = False) -> bool:
+    """jarsigner may exit zero for an unsigned archive: inspect its verdict too."""
+    unsigned = "jar is unsigned" in output.lower()
+    verified = bool(re.search(r"(?im)^jar verified\.\s*$", output))
+    if expect_unsigned:
+        if not unsigned or verified:
+            raise ValueError("Expected an explicitly unsigned AAB")
+    elif unsigned or not verified or "unsigned entries" in output.lower():
+        raise ValueError("AAB must be fully signed and verified; unsigned bundles require --expect-unsigned-aab")
+    return unsigned
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apk", type=Path, default=APK)
@@ -75,9 +87,7 @@ def main():
     aab_unsigned = None
     if not args.skip_aab:
         signature = run("aab-signature.txt", [tool_path("jarsigner", java), "-J-Duser.language=en", "-verify", aab])
-        aab_unsigned = "jar is unsigned" in signature
-        if args.expect_unsigned_aab:
-            assert aab_unsigned, "AAB is signed despite --expect-unsigned-aab"
+        aab_unsigned = aab_signature_state(signature, args.expect_unsigned_aab)
         run("elf-aab.txt", [sys.executable, HERE / "release_check.py", aab])
     baseline_result = {"status": "skipped", "reason": "No --baseline supplied"}
     if args.baseline:

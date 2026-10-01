@@ -1,6 +1,6 @@
 # 0.5 실행 안내 — 2026-10-01
 
-현재0.5.0/code13. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/0.5.0/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`를 사용한다. 카메라/가져오기는 무료이며 **시각 분석과 PDF만 유료**다. 월령/수동 입력/후보3개는 제거했다. 기존 환경·서명·데이터 계약은 유지한다.
+현재0.5.1/code14. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/deep-audit-0.5/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`를 사용한다. 계측의 조건skip은 [QA 도구 안내](../outputs/QA/README.md)의 명시 목록을 따른다. 카메라/가져오기는 무료이며 **시각 분석과 PDF만 유료**다. 월령/수동 입력/후보3개는 제거했다. 기존 환경·서명·데이터 계약은 유지한다.
 
 # 실행·검증·운영 준비
 

@@ -1,0 +1,68 @@
+
+> test
+> node --test
+
+✔ pending verified purchase is acknowledged before the signed response, using an empty request body (39.8601ms)
+✔ already acknowledged purchases and ineligible purchases never produce acknowledgment writes (11.2194ms)
+✔ missing and unknown acknowledgement states fail without signing or writing (13.4378ms)
+✔ twenty concurrent callers share a single lookup and acknowledgment but receive installation bound grants (35.4303ms)
+✔ acknowledgment failures fail temporarily, then a fresh Play query observes completion without another write (17.7995ms)
+✔ hung acknowledgment has a timeout and releases the shared request for a later successful retry (41.0116ms)
+✔ expiry during acknowledgment denies the later signed response (2.1886ms)
+✔ actual localhost adapter returns 503 on acknowledgment failure and recovers with a signed token-free 200 response (54.7158ms)
+✔ one cancelled caller receives no grant while another caller completes the shared acknowledgment (32.7664ms)
+✔ shared proxy socket does not collapse different installations into one quota (112.6104ms)
+✔ rotating client identifiers still meets global hard admission limit and recovers (41.8499ms)
+✔ installation table saturation does not reset quotas or retain stale slots (19.2323ms)
+✔ purchase token exact size boundaries and control characters fail closed (1.8561ms)
+✔ installation UUID rejects invalid version and variant boundaries (0.4335ms)
+✔ exact subscription expiry is denied while one millisecond remaining is allowed (4.2859ms)
+✔ multiple subscription items select the latest eligible expiry (0.4471ms)
+✔ invalid subscription dates and unknown states deny access (0.3825ms)
+✔ long subscription grants have a 24-hour cap and reject payload tampering (2.5187ms)
+✔ shared purchase lookup returns a separately bound envelope to each installation (12.4734ms)
+✔ malformed and oversized Google JSON reject without poisoning the next lookup (7.4072ms)
+✔ streamed Google JSON enforces the cumulative response size cap (5.2533ms)
+✔ invalid OAuth payloads reject and allow a subsequent recovery (38.1636ms)
+✔ Play 401 invalidates the OAuth cache before the next verification (7.6034ms)
+✔ OAuth service failure does not poison the next independent request (9.418ms)
+✔ 32 distinct in-flight lookups bound admission and release capacity after completion (13.9032ms)
+✔ canceling one waiter leaves another installation sharing its lookup usable (4.2328ms)
+✔ unsupported HTTP routes and methods never invoke purchase verification (69.2843ms)
+✔ HTTP accepts JSON charset and keeps denial responses token-free and non-cacheable (16.3852ms)
+✔ HTTP accepts exactly 16 KiB and rejects the next byte before verification (7.932ms)
+✔ HTTP quota boundary leaves health live and recovers at exactly one minute (8.7331ms)
+✔ public policies work without purchases and protect exact allowlist (157.7757ms)
+✔ review grant requires configured credential, signed source and installation binding (7.1711ms)
+✔ wrong, missing, unknown and purchase-shaped review requests fail closed (1.7471ms)
+✔ HTTP review route cannot invoke purchase verifier or accept extra data (99.5403ms)
+✔ service-specific health route is exact GET, token-free and independent of Publisher (100.2757ms)
+✔ HTTP happy path, rejection and upstream failure remain distinct and token-free (44.9756ms)
+✔ HTTP malformed, unusual schema and oversized input do not reach Play (33.6415ms)
+✔ HTTP 60-request burst caps concurrent verification, health stays responsive, then recovers (168.8655ms)
+✔ HTTP rate limit ignores spoofed forwarding header and expires cleanly (17.3833ms)
+✔ HTTP verification deadline aborts bounded work and releases its slot (71.6898ms)
+✔ HTTP slow/chunked bodies are bounded and do not hold capacity indefinitely (79.93ms)
+✔ only active, grace and unexpired canceled subscriptions are entitled (5.2609ms)
+✔ signed entitlement is bound to installation and expires within 24 hours (1.6026ms)
+✔ verification queries Play and refuses forged, expired and mismatched purchases (43.2887ms)
+✔ malformed upstream line items and wrong product/plan type cannot unlock (0.4502ms)
+✔ 20 concurrent duplicate requests share one OAuth and Play lookup; next request sees revocation (81.6652ms)
+✔ OAuth refresh is single-flight across different purchases (34.7558ms)
+✔ Google denial is distinguished from permission, quota and outage errors (3.6159ms)
+✔ upstream timeout is bounded, cleaned up and next call recovers (39.5164ms)
+✔ invalid configuration, cancellation and input fail without granting access (0.5888ms)
+✔ request-token path is URL encoded and a response is bound separately to each installation (1.5505ms)
+✔ workload provider uses fixed metadata, scopes Publisher token and never exports keys (39.8071ms)
+✔ metadata and scoped credential failures are closed and bounded (5.3146ms)
+✔ workload credentials are single-flight, cache safely and refresh after Play401 (10.208ms)
+✔ malformed workload token expiry cannot poison the credential cache (1.1341ms)
+✔ runtime config rejects exported workload keys and unsafe envelope changes (1.0701ms)
+ℹ tests 56
+ℹ suites 0
+ℹ pass 56
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 784.6913

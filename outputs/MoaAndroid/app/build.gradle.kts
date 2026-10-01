@@ -26,8 +26,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "0.5.0"
+        versionCode = 14
+        versionName = "0.5.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")

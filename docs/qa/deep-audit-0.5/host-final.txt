@@ -1,0 +1,26 @@
+test_intentionally_unsigned_bundle_requires_explicit_mode (test_qa_gates.BundleSignatureGateTest.test_intentionally_unsigned_bundle_requires_explicit_mode) ... ok
+test_missing_verification_and_partially_unsigned_bundle_fail (test_qa_gates.BundleSignatureGateTest.test_missing_verification_and_partially_unsigned_bundle_fail) ... ok
+test_signed_bundle_is_accepted_with_self_signed_warning (test_qa_gates.BundleSignatureGateTest.test_signed_bundle_is_accepted_with_self_signed_warning) ... ok
+test_unsigned_bundle_is_rejected_by_default (test_qa_gates.BundleSignatureGateTest.test_unsigned_bundle_is_rejected_by_default) ... ok
+test_installed_base_hash_and_target_version_are_verified (test_qa_gates.ExecutionProvenanceTest.test_installed_base_hash_and_target_version_are_verified) ... ok
+test_local_apk_hashes_and_git_state_are_recorded (test_qa_gates.ExecutionProvenanceTest.test_local_apk_hashes_and_git_state_are_recorded) ... ok
+test_main_never_starts_instrumentation_on_stale_install_without_install_flag (test_qa_gates.ExecutionProvenanceTest.test_main_never_starts_instrumentation_on_stale_install_without_install_flag) ... ok
+test_split_or_missing_package_is_rejected (test_qa_gates.ExecutionProvenanceTest.test_split_or_missing_package_is_rejected) ... ok
+test_stale_installed_app_is_rejected_without_install_flag (test_qa_gates.ExecutionProvenanceTest.test_stale_installed_app_is_rejected_without_install_flag) ... ok
+test_unreadable_hash_or_missing_target_version_fails (test_qa_gates.ExecutionProvenanceTest.test_unreadable_hash_or_missing_target_version_fails) ... ok
+test_abnormal_runner_end_fails_even_with_host_exit_zero (test_qa_gates.InstrumentationGateTest.test_abnormal_runner_end_fails_even_with_host_exit_zero) ... ok
+test_all_skipped_fails_even_if_allowed (test_qa_gates.InstrumentationGateTest.test_all_skipped_fails_even_if_allowed) ... ok
+test_complete_run_passes (test_qa_gates.InstrumentationGateTest.test_complete_run_passes) ... ok
+test_duplicate_terminal_results_fail (test_qa_gates.InstrumentationGateTest.test_duplicate_terminal_results_fail) ... ok
+test_explicit_expected_skip_is_reported_separately (test_qa_gates.InstrumentationGateTest.test_explicit_expected_skip_is_reported_separately) ... ok
+test_failure_timeout_and_host_failure_fail (test_qa_gates.InstrumentationGateTest.test_failure_timeout_and_host_failure_fail) ... ok
+test_incomplete_run_fails_even_with_ok_summary (test_qa_gates.InstrumentationGateTest.test_incomplete_run_fails_even_with_ok_summary) ... ok
+test_inconsistent_discovered_count_fails (test_qa_gates.InstrumentationGateTest.test_inconsistent_discovered_count_fails) ... ok
+test_missing_runner_end_fails (test_qa_gates.InstrumentationGateTest.test_missing_runner_end_fails) ... ok
+test_ok_line_without_results_fails (test_qa_gates.InstrumentationGateTest.test_ok_line_without_results_fails) ... ok
+test_unexpected_skip_fails (test_qa_gates.InstrumentationGateTest.test_unexpected_skip_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.022s
+
+OK

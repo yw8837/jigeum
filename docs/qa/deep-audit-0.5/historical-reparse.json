@@ -1,0 +1,26 @@
+{
+  "scope": "reparse existing code13 raw evidence; no new device run",
+  "historical_instrumentation": {
+    "status": "pass",
+    "tests": 149,
+    "passed_tests": 146,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 3,
+    "skipped_test_ids": [
+      "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+      "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+      "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+    ],
+    "unexpected_skips": [],
+    "allowed_skips": [
+      "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+      "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+      "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+    ],
+    "validation_errors": [],
+    "seconds": 183.99,
+    "exit": 0
+  },
+  "historical_aab_unsigned": false
+}

@@ -7,7 +7,8 @@ class EvidenceInterpreterTest {
     private val range = ClipRange(12_000, 20_000)
     private val audible = AcousticShape(.75f, false, 1)
     private fun interpret(cues: List<SoundCue>, shape: AcousticShape = audible, visual: String? = null) =
-        EvidenceInterpreter.interpret(SoundAnalysis(cues), shape, range, visual)
+        EvidenceInterpreter.interpret(SoundAnalysis(cues), shape, range,
+            visual?.let { VisualEvidence(VisualEvidenceStatus.COMPLETE, it) })
 
     @Test fun crowdSpeechBabbleAndDogWhimperAreNotBabyVocalizations() {
         assertEquals("옹알이 후보", SoundAnalyzer.cueLabel("Babbling"))
