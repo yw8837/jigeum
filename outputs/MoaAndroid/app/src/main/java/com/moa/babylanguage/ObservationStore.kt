@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
+import java.io.File
 
 internal data class Observation(
     val id: Long,
@@ -27,7 +28,8 @@ internal data class StoreSnapshot(
     val ageBand: String,
     val warning: String? = null,
     // Local-only provenance for relocated imports; never included in JSON/CSV exports.
-    val importOrigins: Map<String, Long> = emptyMap()
+    val importOrigins: Map<String, Long> = emptyMap(),
+    val mediaIds: Set<Long> = emptySet()
 )
 
 internal class StoreException(message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -58,23 +60,32 @@ internal class ObservationStore(context: Context,
                 )
             }
         }
-        StoreSnapshot(rows, meta(db, "age_band") ?: "", meta(db, "migration_warning"), importOrigins(db))
+        val mediaWarning = cleanupDeletedMedia(db)
+        StoreSnapshot(rows, meta(db, "age_band") ?: "", mediaWarning ?: meta(db, "migration_warning"), importOrigins(db), RecordMedia.ids(appContext, rows))
     }
 
-    suspend fun save(record: Observation): Unit = onStore { db ->
+    suspend fun save(record: Observation, renderedMedia: File? = null): Unit = onStore { db ->
         validateRecord(record)
-        transaction(db) {
+        cleanupDeletedMedia(db)
+        check(meta(db, "delete_media:${record.id}") == null) { "이전 영상 정리가 끝나지 않았어요. 잠시 후 다시 저장해 주세요." }
+        var adopted = false
+        try { transaction(db) {
             if (count(db) >= MAX_ROWS) throw StoreException("기록은 최대 10,000건까지 저장할 수 있어요. 기존 기록은 유지됐어요.")
+            if (renderedMedia != null) { RecordMedia.adopt(appContext, record.id, renderedMedia); adopted = true }
             try { db.insertOrThrow("observations", null, values(record)) }
             catch (cause: android.database.sqlite.SQLiteConstraintException) {
                 throw StoreException("같은 번호의 기록이 이미 있어요. 다시 시도해 주세요.", cause)
             }
+        } } catch (error: Throwable) {
+            if (adopted) RecordMedia.delete(appContext, record.id)
+            throw error
         }
     }
 
     suspend fun delete(id: Long): Unit = onStore { db ->
         transaction(db) {
             db.delete("observations", "id=?", arrayOf(id.toString()))
+            putMeta(db, "delete_media:$id", id.toString())
             db.delete("meta", "key GLOB ? AND value=?", arrayOf("import_origin:*", id.toString()))
             meta(db, "legacy_recovery")?.let { raw ->
                 val old = JSONArray(raw)
@@ -88,16 +99,43 @@ internal class ObservationStore(context: Context,
                 else putMeta(db, "legacy_recovery", retained.toString())
             }
         }
+        cleanupDeletedMedia(db)
+        Unit
     }
 
     /** Matches the old 'all records' action, including the selected age band. */
     suspend fun deleteAll(): Unit = onStore { db ->
         transaction(db) {
+            RecordMedia.allIds(appContext).forEach { putMeta(db, "delete_media:$it", it.toString()) }
             db.delete("observations", null, null)
             db.delete("meta", "key GLOB ?", arrayOf("import_origin:*"))
             db.delete("meta", "key IN (?,?)", arrayOf("legacy_recovery", "migration_warning"))
             putMeta(db, "age_band", "")
         }
+        cleanupDeletedMedia(db)
+        Unit
+    }
+
+    /** Commit deletion intent with the row; failed media cleanup stays retryable after restart. */
+    private fun cleanupDeletedMedia(db: SQLiteDatabase): String? {
+        val pending = ArrayList<Pair<String, Long>>()
+        db.rawQuery("SELECT key,value FROM meta WHERE key GLOB ?", arrayOf("delete_media:*")).use { cursor ->
+            while (cursor.moveToNext()) pending += cursor.getString(0) to cursor.getString(1).toLong()
+        }
+        var incomplete = false
+        pending.forEach { (key, id) ->
+            if (runCatching { RecordMedia.delete(appContext, id) }.isSuccess) db.delete("meta", "key=?", arrayOf(key))
+            else incomplete = true
+        }
+        return if (incomplete) "기록은 지웠지만 영상 파일 정리가 끝나지 않았어요. 다음 실행에서 다시 정리해요. 저장 공간을 확인해 주세요." else null
+    }
+
+    suspend fun cleanupMedia(): Unit = onStore { db ->
+        val retained = HashSet<Long>()
+        db.rawQuery("SELECT id FROM observations", null).use { cursor -> while (cursor.moveToNext()) retained += cursor.getLong(0) }
+        RecordMedia.allIds(appContext).filter { it !in retained }.forEach { putMeta(db, "delete_media:$it", it.toString()) }
+        cleanupDeletedMedia(db)
+        Unit
     }
 
     suspend fun saveAgeBand(value: String): Unit = onStore { db ->
@@ -110,6 +148,7 @@ internal class ObservationStore(context: Context,
      * fails, SQLite rolls back records, local import origins and age band together.
      */
     suspend fun mergeImport(imported: ImportPreview): Unit = onStore { db ->
+        cleanupDeletedMedia(db)
         if (imported.records.size > MAX_ROWS || imported.ageBand !in AGE_BANDS)
             throw StoreException("가져오기 파일의 기록 수 또는 월령이 올바르지 않아요.")
         imported.records.forEach(::validateRecord)
@@ -124,7 +163,10 @@ internal class ObservationStore(context: Context,
                 }
             }
             val plan = RecordTransfer.planMerge(current.values.toList(), imported.records, importOrigins(db))
-            plan.additions.forEach { db.insertOrThrow("observations", null, values(it)) }
+            plan.additions.forEach {
+                if (meta(db, "delete_media:${it.id}") != null) throw StoreException("이전 영상 정리를 마친 뒤 백업을 가져와 주세요.")
+                db.insertOrThrow("observations", null, values(it))
+            }
             plan.importOrigins.forEach { (origin, target) -> putMeta(db, "import_origin:$origin", target.toString()) }
             if ((meta(db, "age_band") ?: "").isBlank() && imported.ageBand.isNotBlank())
                 putMeta(db, "age_band", imported.ageBand)

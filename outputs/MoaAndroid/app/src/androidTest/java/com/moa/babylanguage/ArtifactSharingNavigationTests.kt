@@ -69,7 +69,7 @@ class ArtifactSharingNavigationTests {
         compose.onNodeWithText(if (all) "돌봄" else "기록").performClick()
         waitPage(if (all) "guide" else "timeline")
         click(if (all) "모든 기록 삭제" else "기록 삭제")
-        click(if (all) "다시 누르면 모든 기록을 삭제해요" else "다시 누르면 이 기록을 삭제해요")
+        click(if (all) "다시 누르면 모든 기록을 삭제해요" else "다시 누르면 기록과 보관한 장면을 삭제해요")
         compose.waitUntil(8_000) { runBlocking { store.snapshot().observations.isEmpty() } }
         compose.waitForIdle()
     }

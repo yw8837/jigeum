@@ -55,7 +55,10 @@ class AccessNavigationTests {
         node.performClick()
     }
     private fun visual() { compose.onNodeWithTag("visual-analysis").performScrollTo().performClick() }
-    private fun awaitResult() { compose.waitUntil(8_000) { compose.onAllNodesWithTag("baby-phrase").fetchSemanticsNodes().isNotEmpty() } }
+    private fun awaitResult() {
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("baby-phrase").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("keep-scene").performScrollTo().performClick()
+    }
 
     @Test fun previewRunsVisualWithoutPurchaseAndPreservesResultAcrossRestart() {
         start(preview = true)

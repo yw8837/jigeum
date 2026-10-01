@@ -26,8 +26,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 18
-        versionName = "0.5.4"
+        versionCode = 19
+        versionName = "0.5.5"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         manifestPlaceholders["testDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -105,6 +105,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraXVersion")
     implementation("androidx.camera:camera-view:$cameraXVersion")
     implementation("androidx.camera:camera-video:$cameraXVersion")
+    implementation("androidx.media3:media3-transformer:1.8.0")
+    implementation("androidx.media3:media3-effect:1.8.0")
     implementation("com.google.mediapipe:tasks-vision:1.0.0")
     implementation("com.google.mediapipe:tasks-audio:1.0.0")
     // MediaPipe requests 4.26.1; 4.27.5 patches CVE-2024-7254 while retaining the lite runtime.

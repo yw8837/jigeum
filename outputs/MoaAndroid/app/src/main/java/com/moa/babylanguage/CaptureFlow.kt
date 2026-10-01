@@ -74,7 +74,8 @@ internal fun CaptureFlow(
     passContent: @Composable (close: () -> Unit) -> Unit,
     analyzer: ClipAnalyzer = DeviceClipAnalyzer,
     initialClip: LocalClip? = null,
-    testDistribution: Boolean = false
+    testDistribution: Boolean = false,
+    onSaveWithMedia: ((ClipInterpretation, String, String, LocalClip, ClipRange) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -117,6 +118,7 @@ internal fun CaptureFlow(
     var phrase by rememberSaveable { mutableStateOf("") }
     var note by rememberSaveable { mutableStateOf("") }
     var stopPlayback by remember { mutableIntStateOf(0) }
+    var keepScene by rememberSaveable { mutableStateOf(true) }
 
     fun permissionsGranted() = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
         (audioOnly || context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
@@ -133,6 +135,7 @@ internal fun CaptureFlow(
         message = null; elapsed = 0; visual = false; edit = false; draftEdited = false; phrase = ""; note = ""
     }
     fun exit() {
+        if (saving) return
         if (recording || clip != null || result != null) { stopPlayback++; discardConfirmation = true }
         else onBack()
     }
@@ -236,7 +239,7 @@ internal fun CaptureFlow(
             message = "현재 이용 범위에 맞춰 ${limits.analysisSeconds}초 구간으로 조정했어요. 원본은 그대로 있어요."
         }
     }
-    BackHandler { if (pass) pass = false else exit() }
+    BackHandler { if (!saving) { if (pass) pass = false else exit() } }
     if (discardConfirmation) AlertDialog(onDismissRequest = { discardConfirmation = false },
         title = { Text("이 장면을 닫을까요?") }, text = { Text("임시 녹화·녹음과 아직 저장하지 않은 문장은 지워져요.") },
         confirmButton = { TextButton(onClick = { reset(); discardConfirmation = false; onBack() }) { Text("닫기") } },
@@ -247,7 +250,7 @@ internal fun CaptureFlow(
     val lockedResult = result
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = { exit() }) { Text("닫기", color = Muted) }
+            TextButton(onClick = { exit() }, enabled = !saving) { Text("닫기", color = Muted) }
             Text(when { lockedResult != null -> "아기의 한마디"; current != null -> "구간 고르기"; else -> "아기말 번역" },
                 color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
@@ -298,7 +301,7 @@ internal fun CaptureFlow(
                 }
             }
             if (current != null) {
-                ClipPlayerPane(current, selection.start.toLong(), selection.endInclusive.toLong(), stopPlayback, enabled = !analyzing && !selecting)
+                ClipPlayerPane(current, selection.start.toLong(), selection.endInclusive.toLong(), stopPlayback, enabled = !analyzing && !selecting && !saving)
             }
             if (lockedResult == null && current != null) {
                 Text("어느 순간을 들어볼까요?", color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
@@ -373,14 +376,24 @@ internal fun CaptureFlow(
                 if (expanded) Text(lockedResult.evidence, color = Ink, lineHeight = 23.sp, modifier = Modifier.testTag("analysis-evidence"))
                 Text("이렇게 응답해 주세요", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(lockedResult.guide, color = Muted, lineHeight = 23.sp)
-                TextButton(onClick = { edit = !edit; if (edit && !draftEdited) phrase = lockedResult.phrase }) { Text(if (edit) "기록 수정 접기" else "기록에 메모·수정 남기기", color = Muted) }
+                TextButton(onClick = { edit = !edit; if (edit && !draftEdited) phrase = lockedResult.phrase }, enabled = !saving) { Text(if (edit) "기록 수정 접기" else "기록에 메모·수정 남기기", color = Muted) }
                 if (edit) {
                     OutlinedTextField(value = phrase, onValueChange = { if (it.length <= 160) { phrase = it; draftEdited = true } }, label = { Text("보호자가 남길 문장") },
-                        modifier = Modifier.fillMaxWidth().testTag("draft-phrase-editor"), minLines = 2)
+                        modifier = Modifier.fillMaxWidth().testTag("draft-phrase-editor"), minLines = 2, enabled = !saving)
                     OutlinedTextField(value = note, onValueChange = { if (it.length <= 120) note = it }, label = { Text("보호자 메모 · 분석에 사용하지 않아요") },
-                        modifier = Modifier.fillMaxWidth(), minLines = 2)
+                        modifier = Modifier.fillMaxWidth(), minLines = 2, enabled = !saving)
                 }
-                TextButton(onClick = { result = null; edit = false; draftEdited = false; phrase = ""; note = ""; message = null }) { Text(if (current != null) "다른 구간 살펴보기" else "새로 촬영하기", color = Muted) }
+                TextButton(onClick = { result = null; edit = false; draftEdited = false; phrase = ""; note = ""; message = null }, enabled = !saving) { Text(if (current != null) "다른 구간 살펴보기" else "새로 촬영하기", color = Muted) }
+                if (current != null && onSaveWithMedia != null) {
+                    Row(Modifier.fillMaxWidth().toggleable(keepScene, enabled = !saving, role = Role.Checkbox,
+                        onValueChange = { keepScene = it }).testTag("keep-scene"), verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = keepScene, onCheckedChange = null, enabled = !saving)
+                        Column(Modifier.weight(1f)) {
+                            Text(if (current.hasVideo) "영상·소리 함께 보관" else "소리 함께 보관", color = Ink)
+                            Text("선택 구간과 번역 자막을 이 기기에 저장해요. 기록에서 재생·내려받을 수 있어요.", color = Muted, fontSize = 13.sp)
+                        }
+                    }
+                }
             }
             if (selecting) { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("파일을 준비하고 있어요", color = Muted) }
             message?.let { text ->
@@ -392,9 +405,15 @@ internal fun CaptureFlow(
             }
         }
         if (lockedResult != null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 10.dp)) {
-            PrimaryButton(if (saving) "저장하고 있어요" else "이 문장 저장하기", {
-                onSave(lockedResult, if (draftEdited) phrase.trim() else lockedResult.phrase, note.trim())
+            if (saving) LinearProgressIndicator(Modifier.fillMaxWidth().padding(bottom = 8.dp))
+            PrimaryButton(if (saving) "저장하고 있어요" else if (keepScene && current != null && onSaveWithMedia != null) "장면과 함께 저장하기" else "이 문장 저장하기", {
+                stopPlayback++
+                val finalPhrase = if (draftEdited) phrase.trim() else lockedResult.phrase
+                if (keepScene && current != null && onSaveWithMedia != null)
+                    onSaveWithMedia(lockedResult, finalPhrase, note.trim(), current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()))
+                else onSave(lockedResult, finalPhrase, note.trim())
             }, enabled = !saving && (!draftEdited || phrase.isNotBlank()))
+            if (saving) Text("앱을 열어 둔 채 잠시 기다려 주세요.", color = Muted, fontSize = 12.sp)
         }
     }
 }
@@ -420,8 +439,11 @@ private fun CameraRecordingPreview(facing: Int, onReady: (Recorder, Boolean) -> 
                 val active = future.get().also { provider = it }
                 val back = active.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)
                 val front = active.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
-                val selector = if ((facing == CameraSelector.LENS_FACING_BACK && back) || !front)
-                    CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+                val selector = if ((facing == CameraSelector.LENS_FACING_BACK && back) || !front) {
+                    CameraSelector.DEFAULT_BACK_CAMERA
+                } else {
+                    CameraSelector.DEFAULT_FRONT_CAMERA
+                }
                 preview.setSurfaceProvider(view.surfaceProvider)
                 active.bindToLifecycle(owner, selector, preview, video)
                 if (!disposed) ready(recorder, back && front)

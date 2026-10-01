@@ -1,0 +1,17 @@
+[
+  {
+    "file": "Agattok-0.5.5-test-code19.apk",
+    "bytes": 75305725,
+    "sha256": "637a4bef2808161bbedca0c2cdd70a80e144fef726eb23d975797c63a6072639"
+  },
+  {
+    "file": "Agattok-0.5.5-release-code19.apk",
+    "bytes": 75305721,
+    "sha256": "b3fe42b216475eac9e7dc02b7c549b4e1155a6fa135ac401b3d3b4d5d593607f"
+  },
+  {
+    "file": "Agattok-0.5.5-release-code19.aab",
+    "bytes": 46635611,
+    "sha256": "cd12b43a2658672c9c3b2e36015c985304e975edaf00d0e274a9e6323d176e6f"
+  }
+]

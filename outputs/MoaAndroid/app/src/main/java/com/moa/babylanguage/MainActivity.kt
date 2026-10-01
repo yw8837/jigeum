@@ -71,6 +71,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -163,6 +164,8 @@ internal fun JigeumApp(
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
+    var mediaIds by remember { mutableStateOf(emptySet<Long>()) }
+    var viewingMediaId by rememberSaveable { mutableLongStateOf(-1L) }
     var ageBand by remember { mutableStateOf("") }
     var loaded by remember { mutableStateOf(false) }
     var loadError by remember { mutableStateOf<String?>(null) }
@@ -213,8 +216,9 @@ internal fun JigeumApp(
             try {
                 action()
                 val snapshot = store.snapshot()
-                observations = snapshot.observations; ageBand = snapshot.ageBand
+                observations = snapshot.observations; ageBand = snapshot.ageBand; mediaIds = snapshot.mediaIds
                 after()
+                snapshot.warning?.let(::notify)
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 notify(if (e is StoreException)
@@ -226,10 +230,12 @@ internal fun JigeumApp(
     LaunchedEffect(retryLoad) {
         loadError = null
         try {
+            store.cleanupMedia()
             val snapshot = store.snapshot()
-            observations = snapshot.observations; ageBand = snapshot.ageBand; loaded = true
+            observations = snapshot.observations; ageBand = snapshot.ageBand; mediaIds = snapshot.mediaIds
             snapshot.warning?.let(::notify)
-            withContext(Dispatchers.IO) { MemoryArtifacts.cleanup(activity) }
+            withContext(Dispatchers.IO) { MemoryArtifacts.cleanup(activity); TranslatedMedia.cleanup(activity) }
+            withContext(Dispatchers.Main.immediate) { loaded = true }
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
             loadError = "기록을 열지 못했어요. 저장 공간을 확인하고 다시 시도해 주세요."
@@ -242,11 +248,14 @@ internal fun JigeumApp(
             else -> page = Page.HOME
         }
     }
-    BackHandler(enabled = page != Page.HOME) { goBack() }
+    BackHandler(enabled = page != Page.HOME) { if (!busy) goBack() }
     val destinations = page in listOf(Page.HOME, Page.TIMELINE, Page.GUIDE, Page.ALBUM)
     MaterialTheme(colorScheme = lightColorScheme(primary = Ink, onPrimary = White,
         surface = Cream, onSurface = Ink, secondaryContainer = PaleSage, onSecondaryContainer = Ink,
         background = Cream, onBackground = Ink, outline = Muted)) {
+        observations.find { it.id == viewingMediaId }?.let { record ->
+            RecordMediaViewer(record, onClose = { viewingMediaId = -1L }, onMessage = ::notify)
+        }
         Surface(color = Cream, modifier = Modifier.fillMaxSize()) {
             BoxWithConstraints(Modifier.fillMaxSize().statusBarsPadding()) {
                 val wide = maxWidth >= 840.dp
@@ -272,6 +281,22 @@ internal fun JigeumApp(
                                         onBack = { page = Page.HOME }, saving = busy,
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
                                         testDistribution = testDistribution,
+                                        onSaveWithMedia = { result, phrase, note, clip, range ->
+                                            if (!busy) update({
+                                                val usedIds = observations.mapTo(HashSet()) { it.id }
+                                                var newId = System.currentTimeMillis()
+                                                while (newId in usedIds) newId++
+                                                val record = Observation(newId, result.sound, result.range, note, phrase,
+                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound)
+                                                var rendered: java.io.File? = null
+                                                try {
+                                                    rendered = TranslatedMedia.render(activity, clip, range, record)
+                                                    store.save(record, rendered)
+                                                } finally {
+                                                    withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() }
+                                                }
+                                            }, { page = Page.TIMELINE; notify("그때의 장면과 아기말을 함께 남겼어요.") })
+                                        },
                                         onSave = { result, phrase, note ->
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
@@ -294,7 +319,8 @@ internal fun JigeumApp(
                                                     onReviewDeactivate = billingManager::deactivateReviewAccess)
                                             }
                                         })
-                                    Page.TIMELINE -> TimelineScreen(observations,
+                                    Page.TIMELINE -> TimelineScreen(observations, mediaIds,
+                                        onMedia = { if (!busy && !sharing) viewingMediaId = it.id },
                                         onDelete = { id ->
                                             update({ store.delete(id)
                                             try { MemoryArtifacts.clear(activity) }
@@ -331,7 +357,7 @@ internal fun JigeumApp(
                                             notify("기록을 지웠어요.")
                                         }, invalidateExports = true) },
                                         dataTools = { DataTransferPanel(store, observations, ageBand,
-                                            onImported = { snapshot -> observations = snapshot.observations; ageBand = snapshot.ageBand },
+                                            onImported = { snapshot -> observations = snapshot.observations; ageBand = snapshot.ageBand; mediaIds = snapshot.mediaIds },
                                             onMessage = ::notify, operationScope = scope, importer = recordImporter,
                                             beginMutation = ::beginMutation, endMutation = { busy = false }) },
                                         onRestore = { showPass(null, Page.GUIDE); billingManager.restore() })
@@ -544,7 +570,8 @@ private fun EvidenceCard(title: String, body: String) {
 }
 
 @Composable
-private fun TimelineScreen(observations: List<Observation>, onDelete: (Long) -> Unit, onAlbum: () -> Unit, onShare: (Observation) -> Unit) {
+private fun TimelineScreen(observations: List<Observation>, mediaIds: Set<Long>, onMedia: (Observation) -> Unit,
+                           onDelete: (Long) -> Unit, onAlbum: () -> Unit, onShare: (Observation) -> Unit) {
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
             TopBar("우리가 나눈 아기말", "기록")
@@ -557,7 +584,8 @@ private fun TimelineScreen(observations: List<Observation>, onDelete: (Long) -> 
             item { EmptyObservations() }
         } else {
             items(observations, key = { it.id }) { observation ->
-                ObservationCard(observation, onDelete = { onDelete(observation.id) }, onShare = { onShare(observation) })
+                ObservationCard(observation, onDelete = { onDelete(observation.id) }, onShare = { onShare(observation) },
+                    onMedia = if (observation.id in mediaIds) ({ onMedia(observation) }) else null)
             }
         }
         item {
@@ -568,7 +596,7 @@ private fun TimelineScreen(observations: List<Observation>, onDelete: (Long) -> 
 }
 
 @Composable
-private fun ObservationCard(observation: Observation, onDelete: (() -> Unit)?, onShare: (() -> Unit)? = null) {
+private fun ObservationCard(observation: Observation, onDelete: (() -> Unit)?, onShare: (() -> Unit)? = null, onMedia: (() -> Unit)? = null) {
     var confirmDelete by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp)
@@ -594,11 +622,13 @@ private fun ObservationCard(observation: Observation, onDelete: (() -> Unit)?, o
             Spacer(Modifier.height(12.dp))
             Text(observation.note, color = Muted, fontSize = 14.sp, lineHeight = 20.sp)
         }
+        if (onMedia != null) OutlinedButton(onClick = onMedia, modifier = Modifier.fillMaxWidth()) { Text("장면 보기 · 내려받기") }
+        else if (onDelete != null) Text("문장만 보관된 기록이에요.", color = Muted, fontSize = 12.sp)
         if (onShare != null) TextButton(onClick = onShare) { Text("문장 카드 공유", color = Ink) }
         if (onDelete != null) {
             Spacer(Modifier.height(5.dp))
             Text(
-                if (confirmDelete) "다시 누르면 이 기록을 삭제해요" else "기록 삭제",
+                if (confirmDelete) "다시 누르면 기록과 보관한 장면을 삭제해요" else "기록 삭제",
                 color = Muted, fontSize = 12.sp,
                 modifier = Modifier.heightIn(min = 48.dp).clickable {
                     if (confirmDelete) onDelete() else confirmDelete = true
@@ -636,7 +666,7 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
             Text("내 데이터", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))
-            Text("번역 문장과 관찰 기록은 이 기기에만 남아요. 원본은 다시 듣는 동안 임시 보관하고 화면을 닫으면 지워요.",
+            Text("번역 문장과 선택해 보관한 장면은 이 기기에 남아요. 저장한 장면은 기록에서 재생·내려받을 수 있어요. JSON·CSV에는 문장과 메모만 담겨요.",
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
             Spacer(Modifier.height(10.dp))
             Text("개인정보처리방침 전문 보기  →", color = Ink, fontSize = 14.sp,
@@ -672,7 +702,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "보호자가 시작할 때만 무료는 최대 1분, 전체 이용권은 최대 2분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
             "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
             "가져온 영상은 읽기 권한으로 접근하며 원본을 복사하거나 수정하지 않습니다. 선택한 구간만 기기 안에서 분석합니다. 한 번에 무료는 최대 10초, 전체 이용권은 최대 20초입니다. " +
-            "기록·백업·공유에는 원본 미디어를 포함하지 않으며 서버로 보내지 않습니다. 얼굴 단서는 아기의 신원·감정·건강을 판정하지 않습니다.",
+            "장면과 함께 저장하면 선택 구간의 영상·실제 소리·번역 자막을 MP4로 만들어 이 기기에 보관합니다. 기록에서 내려받거나 직접 공유할 수 있고 서버로 자동 전송하지 않습니다. JSON·CSV·PDF에는 미디어가 포함되지 않습니다. 얼굴 단서는 아기의 신원·감정·건강을 판정하지 않습니다.",
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
@@ -686,7 +716,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "Google의 서비스 운영과 기본 글로벌 로그 저장에 따라 정보가 국외에서 처리될 수 있습니다. 제공자는 Google LLC(미국)이며 해당 기능을 사용할 때 전송합니다. " +
             "관련 열람·삭제·처리 정지 문의는 운영자에게 접수할 수 있습니다. Google Play의 계정·결제 정보 보관에는 Google 정책이 적용됩니다.",
         "5. 보관과 삭제" to
-            "문장과 메모는 보호자가 삭제하거나 앱을 제거할 때까지 기기에 남습니다. " +
+            "문장·메모와 선택해 보관한 번역 영상은 보호자가 기록을 삭제하거나 앱을 제거할 때까지 기기에 남습니다. 기록 삭제 시 보관한 영상도 함께 삭제합니다. " +
             "기록 화면에서 항목을 삭제하거나 돌봄 화면에서 모든 기록 선택을 삭제할 수 있습니다. " +
             "아직 공유 화면에 전달하지 않은 파일은 기록 삭제 때 정리합니다. 이미 전달한 파일은 수신 앱이 읽을 수 있도록 따로 남기며, " +
             "전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상입니다. 앱을 실행하지 않으면 그때까지 남고 Android가 캐시를 먼저 지울 수 있습니다. " +
@@ -706,7 +736,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("시행일 2026년 10월 1일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("시행일 2026년 10월 2일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }

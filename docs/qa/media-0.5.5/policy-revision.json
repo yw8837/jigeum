@@ -1,0 +1,17 @@
+{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "image": "asia-northeast3-docker.pkg.dev/jigeum-play-20261001/jigeum/play-verifier@sha256:210b3d19a68df580c13e56202e72aa99750dfd476202e7ee334dbfb456f805e9"
+          }
+        ]
+      }
+    }
+  },
+  "status": {
+    "latestReadyRevisionName": "jigeum-verifier-00004-qnr",
+    "url": "https://jigeum-verifier-th7ce7roma-du.a.run.app"
+  }
+}

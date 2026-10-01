@@ -1,3 +1,15 @@
+# 0.5.5/code19 실행 안내
+
+전체 계측231통과/0실패/1명시제외, 미디어7개/관련회귀31개, 서명앱 UI와 패키징 결과는 [최신 QA](qa/media-0.5.5/README.md)를 따른다. 새 전달 APK/AAB는 `outputs/Agattok-0.5.5-*-code19.*`. 무료/전체 시간 상한은0.5.4와 같다.
+
+미디어 QA: `TranslatedMediaTests`(합성 fixture만), `outputs/QA/media_ui.py`(명시한 권리 확인 로컬 소리), 전체 `instrument.py --timeout 1500 --allow-skip com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes`. Gradle/ADB는 한 명. 기록/파일에 실제 아기 자료가 없는 전용 기기만 사용한다. 신규 SDK 선언1.8.0은 기존 의존성 정렬로 실제 Media3 1.9.0이 선택됨을 dependencyInsight로 확인했다. 플랫폼 진단 전송은 껐다.
+
+Play 초안은code18이다. code19 패키징을 업로드·검토 전송으로 보고하지 않는다. 공개 전화 승인과 계정 차단 해소 후 새 release AAB로 교체한다. preview APK는 Play 제출 불가. 사용자폰 자동 업데이트 전환은 code19보다 높은 후속 versionCode 및 실제 Play 서명/설치 경로로 검증해야 한다.
+
+## 0.5.4 이하 실행 안내 이력
+
+아래는 이전 실행 당시 기록이다. 현재 버전/검증/Play 상태는 위 설명과 HANDOFF를 우선한다.
+
 # 0.5.4/code18 실행 안내 — 2026-10-02
 
 **0.5.4/code18 로컬 QA·서명 UI·패키지 검사 통과, Play 미제출.** [HANDOFF](HANDOFF.md), [QA 보고서](qa/ux-quality-0.5.4/README.md)를 먼저 따른다. 전달본은 `outputs/Agattok-0.5.4-test-code18.apk`다. 유료20/30초는 사용자 검토 중이며 아래는20초 검토본 기준이다.

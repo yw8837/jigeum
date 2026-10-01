@@ -1,0 +1,87 @@
+{
+  "status": "pass",
+  "tests": 232,
+  "passed_tests": 231,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 1,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+  ],
+  "validation_errors": [],
+  "seconds": 580.26,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "be92197e59246434e914fa4214c30278980aedd5ab461883f1b16020004ccb79",
+      "bytes": 83938704
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "d05a7a0e941fd0fd496d12068eee6e3bcc9a23f60b0d848df0dac29934d087f4",
+      "bytes": 2128783
+    },
+    "git": {
+      "sha": "f5fb296c38bbcd66d990151e8105705b94b1ea9c",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/Jigeum-Access-Policy.md",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ArtifactSharingNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ImportMutationNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MemoryArtifacts.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ObservationStore.kt",
+        " M outputs/PlayVerifier/public/privacy.html",
+        " M outputs/PlayVerifier/public/support.html",
+        " M outputs/PlayVerifier/public/terms.html",
+        "?? docs/UX-MEDIA-0.5.5.md",
+        "?? docs/qa/media-0.5.5/",
+        "?? docs/release/20261002/MEDIA-055-POLICY.md",
+        "?? docs/research/20261002-face-only.md",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/media-quadrants-rotated.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/assets/media-quadrants.mp4",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/TranslatedMediaTests.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordMediaViewer.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt",
+        "?? outputs/QA/media_ui.py"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~FDWRfqkTFoNF22u9Q1FTyA==/com.moa.babylanguage-Ya93MsviqT9PTlWrWp7mUQ==/base.apk",
+      "sha256": "be92197e59246434e914fa4214c30278980aedd5ab461883f1b16020004ccb79",
+      "expected_sha256": "be92197e59246434e914fa4214c30278980aedd5ab461883f1b16020004ccb79",
+      "version_code": 19,
+      "version_name": "0.5.5",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~5jIhVAsZ2W9eIiqNN4osJw==/com.moa.babylanguage.test-ZIyaKM-WE3pYHLzTLja31A==/base.apk",
+      "sha256": "d05a7a0e941fd0fd496d12068eee6e3bcc9a23f60b0d848df0dac29934d087f4",
+      "expected_sha256": "d05a7a0e941fd0fd496d12068eee6e3bcc9a23f60b0d848df0dac29934d087f4",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

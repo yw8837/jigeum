@@ -1,0 +1,26 @@
+[
+  {
+    "route": "privacy",
+    "status": 200,
+    "mediaMention": true,
+    "version055": false
+  },
+  {
+    "route": "terms",
+    "status": 200,
+    "mediaMention": true,
+    "version055": false
+  },
+  {
+    "route": "support",
+    "status": 200,
+    "mediaMention": true,
+    "version055": true
+  },
+  {
+    "route": "jigeum-health",
+    "status": 200,
+    "mediaMention": false,
+    "version055": false
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "real model -> default media save -> persistent record -> movie playback",
+    "actual Android CreateDocument -> Downloads MP4 with video and original audio",
+    "MP4 system share chooser uses dispatched FileProvider copy",
+    "cold restart and font recreation retain saved media; canceled picker recovers",
+    "signed preview->release preserves media; download stays free; new PDF still gated"
+  ],
+  "intent_accuracy_tested": false,
+  "preview_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~9jX-EBuAuNk15s2ige4DTQ==/com.moa.babylanguage-RtOlfjXZrp2M0wLtXsUjOw==/base.apk",
+    "sha256": "637a4bef2808161bbedca0c2cdd70a80e144fef726eb23d975797c63a6072639",
+    "expected_sha256": "637a4bef2808161bbedca0c2cdd70a80e144fef726eb23d975797c63a6072639",
+    "version_code": 19,
+    "version_name": "0.5.5-test",
+    "verified": true,
+    "errors": []
+  },
+  "download": {
+    "bytes": 743293,
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~rsp5KaA7YWPemYryjkflTw==/com.moa.babylanguage-UHWiaYJTraBqJNIr7bYBtg==/base.apk",
+    "sha256": "b3fe42b216475eac9e7dc02b7c549b4e1155a6fa135ac401b3d3b4d5d593607f",
+    "expected_sha256": "b3fe42b216475eac9e7dc02b7c549b4e1155a6fa135ac401b3d3b4d5d593607f",
+    "version_code": 19,
+    "version_name": "0.5.5",
+    "verified": true,
+    "errors": []
+  }
+}

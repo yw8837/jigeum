@@ -144,6 +144,26 @@ internal object MemoryArtifacts {
         }
     }
 
+    suspend fun media(context: Context, recordId: Long, generation: Long): File = renderOutput { track ->
+        exportMutex.withLock {
+            requireCurrentGeneration(generation)
+            val source = RecordMedia.file(context, recordId)
+            check(source.isFile && source.length() > 0) { "이 기록에는 보관한 장면이 없어요." }
+            val target = File(folder(context), "jigeum-${UUID.randomUUID()}.mp4").also(track)
+            source.inputStream().use { input -> target.outputStream().use { output ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) {
+                    coroutineContext.ensureActive()
+                    requireCurrentGeneration(generation)
+                    val size = input.read(buffer); if (size < 0) break
+                    output.write(buffer, 0, size)
+                }
+            } }
+            requireCurrentGeneration(generation)
+            target
+        }
+    }
+
     private fun layout(text: String, size: Float, width: Int, color: Int = ink, bold: Boolean = false): StaticLayout {
         val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
             this.color = color; textSize = size
