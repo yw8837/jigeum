@@ -39,7 +39,8 @@ class LongExpressionTest {
         assertEquals(twentyPhrase, phrase(thirtySeconds, 30_000))
         assertEquals(twentyPhrase, phrase(paddedThirty, 30_000, sustained.copy(activeFraction = .53f)))
         // A real measured pause changes the expression, not the paid duration.
-        assertNotEquals(twentyPhrase, phrase(thirtySeconds, 30_000, sustained.copy(pauses = 1)))
+        assertNotEquals(twentyPhrase, phrase(thirtySeconds, 30_000,
+            sustained.copy(pauses = 1, quietSpans = listOf(AcousticPause(6_000, 7_000)))))
     }
 
     @Test fun tenSecondExpressionsRemainCompleteAndDoNotRequirePaidAccess() {
@@ -131,7 +132,8 @@ class LongExpressionTest {
                 val audio = recording(30_000) {
                     cue(if (label == "mixed") if (it < 15) "울음" else "아기 웃음 후보" else label)
                 }
-                val shape = sustained.copy(rising = rising, wordingKey = key, pauses = pauses)
+                val shape = sustained.copy(rising = rising, wordingKey = key, pauses = pauses,
+                    quietSpans = if (pauses > 0) listOf(AcousticPause(6_000, 7_000)) else emptyList())
                 val result = phrase(audio, 30_000, shape)
                 assertTrue(result.isNotBlank())
                 assertTrue("$label: ${result.length}", result.length <= 160)
