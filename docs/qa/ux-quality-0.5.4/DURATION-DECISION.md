@@ -24,4 +24,4 @@
 - 로컬 로그 `work/ux-quality-054/expression-result.json`:18 pass,0 fail,0 skip, 설치 APK 해시 일치.
 - red 로그 `work/ux-quality-054/padding-filter-fixed-red.log`: 두 표현 결함의 실제 실패.
 
-유료 시간을 최종 결정하면 소스, 정책, 스토어 설명, 서명 산출물을 함께 일치시키고 제출한다.
+현재 검증된20초 버전으로 비공개 Alpha AAB 업로드·출시 저장을 진행했다. 이것은 상용 유료 시간의 최종 확정이 아니다. 최종 기간을 바꾸면 소스, 정책, 스토어 설명, 새 서명 산출물을 함께 일치시켜 후속 버전으로 제출한다. 현재 Console 상태는 [출시 기록](../../release/20261002/PLAY-STATUS.md)을 따른다.

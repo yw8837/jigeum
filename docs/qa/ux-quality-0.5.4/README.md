@@ -1,6 +1,6 @@
 # UltraQA Report — 아가톡 0.5.4/code18
 
-2026-10-02. **현재 소스의 계측·패키지·서명 앱 화면 검사는 통과했다. Play 등록은 아직 초안이며 검토 제출 전이다.** 무료60초 촬영/10초 분석 확정, 유료20초/30초는 검토 중이며 검사한 UI 상한은20초다. [기간 결정 근거](DURATION-DECISION.md).
+2026-10-02. **현재 소스의 계측·패키지·서명 앱 화면 검사는 통과했다. Play 스토어 저장·Alpha AAB 업로드·출시 저장 완료, 공개 연락처 보완으로 검토 전송 대기 중이다.** [Console 후속 결과](../../release/20261002/PLAY-STATUS.md). 무료60초 촬영/10초 분석 확정, 유료20초/30초는 검토 중이며 검사한 UI 상한은20초다. [기간 결정 근거](DURATION-DECISION.md).
 
 ## Goal and success criteria
 
@@ -44,7 +44,7 @@
 - ARM 실기기 품질·TalkBack 사용자 경험·아기 의도 정확도·실제 Play 결제/환불/복원은 별도 검증이 필요하다.
 - 같은 발성이20초/30초 이어지면 문장이 같을 수 있다. 유료 시간을 늘리는 것만으로 새로운 의미가 생성되지 않는다.
 - Chrome 정책 페이지는 ERR_FAILED였고 shell HTTPS 검사만 성공했다. 브라우저 시각 검증 완료로 보고하지 않는다.
-- Play 등록 설명·아이콘·그래픽은 초안 저장. 실제 release 스크린샷4장도 초안에 저장했다. AAB 업로드·검토 제출·참여 링크는 아직 완료되지 않았다.12명14일이 시작된 상태가 아니다.
+- Play 등록 설명·아이콘·그래픽·release 스크린샷4장과 Alpha code18 AAB/출시 저장을 완료했다. 계정 공개 연락처 보완으로 검토 전송이 막혀 있다. 참여 URL은 확인했지만 게시 전 비활성 상태다.12명14일이 시작된 상태가 아니다.
 
 ## Cleanup and rollback
 
@@ -58,7 +58,7 @@
 
 - `outputs/Agattok-0.5.4-test-code18.apk`:전체 기능 sideload, SHA256 `da288df645c176be961bff5aad145949a139f2af6ec7a5e904d6f981117d9813`.
 - `outputs/Agattok-0.5.4-closed-code18.apk`:실제 권한 검사, SHA256 `dbee6576af94efd0ef5cd0f5cf404f53637ea584ba979764bfe9c7988f0f9808`.
-- `outputs/Agattok-0.5.4-closed-code18.aab`:서명 Play 후보, SHA256 `7a652f460d8847e8704de3e99cde167174009cec2ab2cc4957e6c9e23c2424b7`. **미업로드**.
+- `outputs/Agattok-0.5.4-closed-code18.aab`:서명 Play 후보, SHA256 `7a652f460d8847e8704de3e99cde167174009cec2ab2cc4957e6c9e23c2424b7`. **Alpha 업로드·출시 저장 완료, 검토 전송 전**.
 - 다운로드 폴더 `아가톡 테스트`에는 최신 `아가톡-전체기능테스트.apk` 하나만 둔다. 이전0.5.3 산출물은 outputs의 검증 기준본으로 보존한다.
 
 ## 범위 종료
