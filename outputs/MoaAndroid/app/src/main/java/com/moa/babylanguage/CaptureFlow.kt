@@ -82,6 +82,14 @@ internal fun CaptureFlow(
     val capture = remember { LocalCapture(context.applicationContext) }
     val alive = remember { AtomicBoolean(true) }
     val currentAuthorize by rememberUpdatedState(authorizeVisual)
+    fun hasFullAccess() = testDistribution || currentAuthorize()
+    fun liveLimits() = CaptureLimits.forAccess(hasFullAccess())
+    var limits by remember { mutableStateOf(liveLimits()) }
+    var recordingLimits by remember { mutableStateOf(limits) }
+    var analyzingExtended by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        while (true) { limits = liveLimits(); delay(500) }
+    }
     var clip by remember { mutableStateOf(initialClip) }
     var result by rememberSaveable(stateSaver = InterpretationSaver) { mutableStateOf<ClipInterpretation?>(null) }
     var audioOnly by rememberSaveable { mutableStateOf(false) }
@@ -118,7 +126,7 @@ internal fun CaptureFlow(
         if (clip == null && result == null) hasPermission = permissionsGranted()
     }
 
-    fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; selecting = false }
+    fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; analyzingExtended = false; selecting = false }
     fun reset() {
         cancelAnalysis(); capture.discard(); recording = false; finishing = false
         clip?.ownedFile?.delete(); clip = null; result = null; hasPermission = false; cameraRecorder = null
@@ -137,7 +145,7 @@ internal fun CaptureFlow(
         job = scope.launch {
             var adopted = false
             try {
-                val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, Uri.fromFile(file), file) }
+                val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, Uri.fromFile(file), file, recordingLimits) }
                 if (alive.get() && request == generation) {
                     clip = inspected; selection = 0f..minOf(inspected.durationMs.toFloat(), 10_000f)
                     visual = testDistribution && inspected.hasVideo
@@ -168,7 +176,8 @@ internal fun CaptureFlow(
             val request = generation
             job = scope.launch {
                 try {
-                    val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, uri) }
+                    val importLimits = liveLimits()
+                    val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, uri, limits = importLimits) }
                     if (request == generation && alive.get()) {
                         clip?.ownedFile?.delete(); clip = inspected
                         visual = testDistribution && inspected.hasVideo
@@ -204,19 +213,27 @@ internal fun CaptureFlow(
     }
     LaunchedEffect(recording) {
         if (recording) while (recording) {
-            elapsed = ((SystemClock.elapsedRealtime() - startedAt) / 1000).toInt().coerceAtMost(60)
-            if (elapsed >= 60) { finishing = true; recording = false; capture.stop(); break }
+            val allowed = minOf(recordingLimits.captureMs, liveLimits().captureMs)
+            elapsed = ((SystemClock.elapsedRealtime() - startedAt) / 1000).toInt()
+            if (elapsed * 1000L >= allowed) { finishing = true; recording = false; capture.stop(); break }
             delay(100)
         }
     }
-    LaunchedEffect(analyzing, analyzingVisual) {
-        if (analyzing && analyzingVisual) while (analyzing) {
-            if (!currentAuthorize()) {
+    LaunchedEffect(analyzing, analyzingVisual, analyzingExtended) {
+        if (analyzing && (analyzingVisual || analyzingExtended)) while (analyzing) {
+            if (!hasFullAccess()) {
                 cancelAnalysis(); visual = false
-                message = "이용권 확인이 필요해 표정 분석을 멈췄어요. 같은 구간의 소리 분석은 무료로 계속할 수 있어요."
+                message = "이용권 확인이 필요해 분석을 멈췄어요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
                 break
             }
             delay(500)
+        }
+    }
+    LaunchedEffect(limits, clip, result, analyzing) {
+        if (result == null && !analyzing && selection.endInclusive - selection.start > limits.analysisMs) {
+            selection = selection.start..(selection.start + limits.analysisMs)
+            stopPlayback++
+            message = "현재 이용 범위에 맞춰 ${limits.analysisSeconds}초 구간으로 조정했어요. 원본은 그대로 있어요."
         }
     }
     BackHandler { if (pass) pass = false else exit() }
@@ -238,7 +255,7 @@ internal fun CaptureFlow(
             verticalArrangement = Arrangement.spacedBy(16.dp)) {
             if (current == null && lockedResult == null) {
                 Text(if (recording) "편하게 담아 주세요" else "아기의 순간을 담아요", color = Ink, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                Text("최대 1분 담고, 아기 소리가 들리는 구간만 골라요.", color = Muted, lineHeight = 23.sp)
+                Text("최대 ${limits.minutes}분 담고, ${limits.analysisSeconds}초까지 골라요.", color = Muted, lineHeight = 23.sp)
                 if (!audioOnly && hasPermission) {
                     CameraRecordingPreview(facing, onReady = { recorder, switch -> cameraRecorder = recorder; canSwitch = switch },
                         onError = { cameraRecorder = null; message = it })
@@ -246,7 +263,7 @@ internal fun CaptureFlow(
                     Icon(Icons.Outlined.Mic, null, Modifier.size(64.dp), tint = Ink)
                 }
                 if (recording || finishing) {
-                    Text("${ClipRange.clock(elapsed * 1000L)} / 1:00", color = Ink, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                    Text("${ClipRange.clock(elapsed * 1000L)} / ${ClipRange.clock(recordingLimits.captureMs)}", color = Ink, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                     Text(if (audioOnly) "마이크로 녹음 중이에요" else "영상과 소리를 함께 녹화 중이에요", color = Muted)
                     PrimaryButton(if (finishing) "마무리 중…" else "촬영 마치기", {
                         finishing = true; recording = false; capture.stop()
@@ -258,8 +275,9 @@ internal fun CaptureFlow(
                         prepare()
                         if (hasPermission) {
                             generation++; message = null
-                            val ok = if (audioOnly) capture.startAudio(::acceptFile)
-                                else cameraRecorder?.let { capture.startVideo(it, ::acceptFile) } ?: false
+                            recordingLimits = liveLimits()
+                            val ok = if (audioOnly) capture.startAudio(recordingLimits, ::acceptFile)
+                                else cameraRecorder?.let { capture.startVideo(it, recordingLimits, ::acceptFile) } ?: false
                             if (ok) { elapsed = 0; startedAt = SystemClock.elapsedRealtime(); recording = true }
                             else message = "시작하지 못했어요. 권한이나 다른 앱의 카메라·마이크 사용을 확인해 주세요."
                         }
@@ -276,7 +294,7 @@ internal fun CaptureFlow(
                     TextButton(onClick = {
                         if (!selecting) runCatching { picker.launch(arrayOf("video/*")) }.onFailure { message = "영상 선택기를 열지 못했어요." }
                     }, enabled = !selecting) { Text("저장된 영상 가져오기", color = Ink) }
-                    Text("촬영·재생·소리 분석은 무료예요. 원본은 기기 안에서만 임시로 보관해요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                    Text("무료는 1분 촬영·10초 분석, 전체 이용권은 2분 촬영·20초 분석이에요. 원본은 기기 안에서만 임시로 보관해요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                 }
             }
             if (current != null) {
@@ -284,21 +302,17 @@ internal fun CaptureFlow(
             }
             if (lockedResult == null && current != null) {
                 Text("어느 순간을 들어볼까요?", color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Text("${ClipRange.clock(selection.start.toLong())} — ${ClipRange.clock(selection.endInclusive.toLong())} · ${((selection.endInclusive - selection.start)/1000).toInt()}초 선택",
-                    color = Ink, fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("selected-range"))
-                RangeSlider(value = selection, onValueChange = { proposed ->
-                    val start = (proposed.start / 1000).toInt() * 1000f
-                    val end = minOf(current.durationMs.toFloat(), kotlin.math.round(proposed.endInclusive / 1000) * 1000f)
-                    if (end - start in 1000f..15000f) { selection = start..end; message = null; stopPlayback++ }
-                }, valueRange = 0f..current.durationMs.toFloat(), enabled = !analyzing,
-                    modifier = Modifier.testTag("clip-range"))
-                Text("양 끝을 움직여 1–15초를 골라 주세요. 재생하면 선택한 구간만 들려요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                ClipRangeEditor(current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()),
+                    maxSelectionMs = limits.analysisMs, enabled = !analyzing && !selecting, onRangeChange = { proposed ->
+                        selection = proposed.startMs.toFloat()..proposed.endMs.toFloat()
+                        message = null; stopPlayback++
+                    })
                 if (current.hasVideo) {
                     Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = visual, enabled = !analyzing,
                         role = Role.Switch, onValueChange = {
                             stopPlayback++
                             if (!it) visual = false
-                            else if (currentAuthorize()) visual = true
+                            else if (hasFullAccess()) visual = true
                             else pass = true
                         }).testTag("visual-analysis"), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
@@ -316,17 +330,21 @@ internal fun CaptureFlow(
                 } else PrimaryButton(if (visual && current.hasVideo) "영상 + 소리로 번역하기" else "이 구간 소리로 번역하기", {
                     if (!alive.get()) return@PrimaryButton
                     val useVisual = visual && current.hasVideo
-                    if (useVisual && !currentAuthorize()) { visual = false; pass = true; return@PrimaryButton }
-                    stopPlayback++; cancelAnalysis(); analyzingVisual = useVisual; analyzing = true; message = null
-                    val request = generation
+                    if (useVisual && !hasFullAccess()) { visual = false; pass = true; return@PrimaryButton }
                     val range = ClipRange(selection.start.toLong(), selection.endInclusive.toLong())
+                    if (!liveLimits().allowsAnalysis(range)) { limits = liveLimits(); pass = true; return@PrimaryButton }
+                    stopPlayback++; cancelAnalysis(); analyzingVisual = useVisual
+                    analyzingExtended = range.durationMs > CaptureLimits.FREE.analysisMs
+                    analyzing = true; message = null
+                    val request = generation
                     job = scope.launch {
                         try {
                             val analyzed = withTimeout(45_000) { analyzer.analyze(context, current.uri, range, useVisual) }
                             ensureActive()
                             if (request == generation && alive.get()) {
-                                if (useVisual && !currentAuthorize()) {
-                                    visual = false; message = "이용권이 만료됐어요. 소리 분석으로 다시 볼 수 있어요."
+                                if ((useVisual && !hasFullAccess()) || !liveLimits().allowsAnalysis(range)) {
+                                    visual = false; limits = liveLimits()
+                                    message = "이용권 확인이 필요해요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
                                 } else { result = analyzed.interpretation; message = analyzed.problem }
                             }
                         } catch (_: TimeoutCancellationException) { if (request == generation) message = "분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요." }

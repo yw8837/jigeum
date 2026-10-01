@@ -297,7 +297,7 @@ internal fun PremiumScreen(
             TopBar(title)
             Column(Modifier.padding(horizontal = 24.dp)) {
                 Text("하나의 전체 이용권", color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text("영상의 표정 관찰 · 월별 PDF\n소리로 남긴 기록에 장면과 책을 더해요.",
+                Text("2분 촬영 · 20초 분석 · 표정 관찰 · 월별 PDF\n더 여유롭게 담고, 아기말을 한 권으로 간직해요.",
                     color = Muted, fontSize = 16.sp, lineHeight = 26.sp, modifier = Modifier.padding(top = 10.dp))
                 if (!state.isPremium && notice != null) Text(notice, color = Muted,
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
@@ -311,9 +311,9 @@ internal fun PremiumScreen(
                 Spacer(Modifier.height(16.dp))
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(PaleSage).padding(18.dp)) {
                     Text("이용권으로 더할 수 있는 것", color = Ink, fontWeight = FontWeight.Bold)
-                    Text("선택한 구간의 얼굴·입 열림 살펴보기\n세 가지 표지로 월별 아기말북 PDF 만들기",
+                    Text("최대 2분 촬영하고 20초까지 구간 선택\n같은 구간의 얼굴·입 열림 살펴보기\n세 가지 표지로 월별 아기말북 PDF 만들기",
                         color = Ink, lineHeight = 25.sp, modifier = Modifier.padding(top = 10.dp))
-                    Text("무료와 유료 모두 같은 소리 단서로 한마디를 만들어요. 이용권은 표정 관찰과 PDF를 더하며 마음 판독 정확도를 보장하지 않아요.",
+                    Text("같은 소리 단서에는 같은 표현을 만들어요. 소리가 충분히 이어지면 더 풀어 쓰며, 구간 길이만으로 문장을 늘리지는 않아요. 표정 관찰은 마음의 뜻을 확정하지 않아요.",
                         color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(top = 12.dp))
                 }
                 Spacer(Modifier.height(22.dp))
@@ -342,7 +342,7 @@ internal fun PremiumScreen(
                 if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
                 Spacer(Modifier.height(20.dp))
                 Text("계속 무료로 쓸 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                Text("1분 촬영·녹음·영상 가져오기·재생·구간 선택·소리 번역·문장 수정과 저장·기록 보기·PNG 공유·JSON 백업과 복원·주간 요약은 계속 무료예요. 이미 만든 문장과 기록도 유지돼요.",
+                Text("1분 촬영·녹음·영상 가져오기와 10초 구간의 소리 번역은 계속 무료예요. 재생·구간 선택·문장 수정과 저장·기록 보기·PNG 공유·JSON 백업과 복원·주간 요약도 무료예요. 이미 만든 문장과 기록도 유지돼요.",
                     color = Muted, lineHeight = 23.sp, modifier = Modifier.padding(vertical = 10.dp))
                 SecondaryButton(freeContinuationLabel, onFree)
                 Spacer(Modifier.height(20.dp))
@@ -370,7 +370,7 @@ internal fun PremiumScreen(
 internal fun ServiceTermsScreen(onBack: () -> Unit) {
     val sections = listOf(
         "표현 예시를 함께 만들어요" to "6~18개월 아기의 성인 보호자를 위한 서비스예요. 문장은 실제 소리 단서를 아이 시점으로 풀어 쓴 표현이며, 아기의 의도·감정·건강을 판정하거나 의료 진단을 하지 않아요. 표현 후보는 유한하므로 다시 나올 수 있어요.",
-        "무료 기본과 전체 이용권" to "촬영·녹음·영상 가져오기·재생·구간 선택·소리 분석·문장 수정·저장·기록·PNG 공유·JSON 백업과 복원·CSV 내보내기·주간 요약·앨범 미리보기는 무료예요. 전체 이용권은 선택 구간의 시각 관찰·월별 PDF 생성을 제공해요. 기록은 최대 10,000건, 미디어는 1분·100MB, PDF는 한 권에 300개 기록·300쪽까지이며 추가 결제로 늘리는 한도가 아니에요.",
+        "무료 기본과 전체 이용권" to "촬영·녹음·영상 가져오기·재생·구간 선택·소리 분석·문장 수정·저장·기록·PNG 공유·JSON 백업과 복원·CSV 내보내기·주간 요약·앨범 미리보기는 무료예요. 전체 이용권은 최대 2분 촬영·20초 구간 분석과 시각 관찰·월별 PDF 생성을 제공해요. 기록은 최대 10,000건, 무료 미디어는 1분·100MB와 10초 분석, 전체 이용권은 2분·200MB와 20초 분석까지예요. PDF는 한 권에 300개 기록·300쪽까지예요.",
         "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 월간은 매월 자동 갱신하며 Play에서 해지할 수 있어요. 3개월은 선불 1회 결제이며 자동 갱신하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
         "구매 복원과 기록 복원" to "앱 회원가입 없이 같은 Play 계정의 유효한 구매를 다시 확인할 수 있어요. 다른 가족 계정에 권한이 자동 공유되지는 않아요. 아기 기록은 기기에만 저장되며 구매 복원으로 되살아나지 않아요. 무료 JSON 백업을 안전하게 보관해 주세요.",
         "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 시각 분석은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",

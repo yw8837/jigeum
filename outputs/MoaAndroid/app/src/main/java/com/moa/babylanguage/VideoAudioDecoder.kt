@@ -37,7 +37,7 @@ internal data class VideoAudioAnalysis(
 internal object VideoAudioDecoder {
     private const val OUTPUT_RATE = 16_000
     private const val MAX_ENCODED_BYTES = 12 * 1024 * 1024L
-    private const val MAX_SOURCE_BYTES = 100L * 1024L * 1024L
+    private const val MAX_SOURCE_BYTES = 200L * 1024L * 1024L
     private const val DECODE_DEADLINE_MS = 12_000L
     private const val CODEC_WAIT_US = 10_000L
     private val decodeLock = Mutex()
@@ -79,7 +79,7 @@ internal object VideoAudioDecoder {
     }
 
     internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? = decodeLock.withLock {
-        require(startMs >= 0 && endMs <= 60_500 && endMs - startMs in 1_000..15_000)
+        require(startMs >= 0 && endMs <= 120_500 && endMs - startMs in 1_000..30_000)
         decodeOne(context, uri, startMs * 1000, endMs * 1000)
     }
 

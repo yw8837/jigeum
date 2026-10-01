@@ -132,7 +132,9 @@ class MainActivity : ComponentActivity() {
         val billingManager = BillingManager(this).also { billing = it }
         val accessBilling = PlayAccessBilling(billingManager)
         setContent {
-            JigeumApp(this, store, accessBilling,
+            var showTitle by rememberSaveable { mutableStateOf(savedInstanceState == null) }
+            if (showTitle) AppTitleScreen { showTitle = false }
+            else JigeumApp(this, store, accessBilling,
                 testDistribution = BuildConfig.FULL_ACCESS_PREVIEW,
                 registerBackgroundStop = { stopCaptureOnBackground = it })
         }
@@ -444,7 +446,7 @@ private fun HeroRecordCard(onRecord: () -> Unit) {
             Column(Modifier.weight(1f)) {
                 Text("아기의 소리를\n함께 들어봐요", color = Ink, fontSize = 22.sp, lineHeight = 30.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
-                Text("1분 촬영 → 다시 듣기 → 한마디", color = Muted, fontSize = 13.sp)
+                Text("촬영 → 구간 고르기 → 아기말", color = Muted, fontSize = 13.sp)
             }
             Image(painterResource(R.drawable.hero_touch), null, contentScale = ContentScale.Fit, modifier = Modifier.size(80.dp))
         }
@@ -667,9 +669,9 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "소리 유형, 선택 구간, 메모, 문장, 모델 단서와 이전 버전의 기록은 이 기기에만 저장합니다. " +
             "아기 기록을 저장하는 외부 DB나 앱 회원가입은 없습니다.",
         "2. 마이크·카메라·선택한 영상" to
-            "보호자가 시작할 때만 최대 1분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
+            "보호자가 시작할 때만 무료는 최대 1분, 전체 이용권은 최대 2분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
             "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
-            "가져온 영상은 읽기 권한으로 접근하며 원본을 복사하거나 수정하지 않습니다. 선택한 1~15초 구간만 기기 안에서 분석합니다. " +
+            "가져온 영상은 읽기 권한으로 접근하며 원본을 복사하거나 수정하지 않습니다. 선택한 구간만 기기 안에서 분석합니다. 한 번에 무료는 최대 10초, 전체 이용권은 최대 20초입니다. " +
             "기록·백업·공유에는 원본 미디어를 포함하지 않으며 서버로 보내지 않습니다. 얼굴 단서는 아기의 신원·감정·건강을 판정하지 않습니다.",
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +

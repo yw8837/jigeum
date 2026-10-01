@@ -119,16 +119,16 @@ internal suspend fun inspectVideoEvidence(context: Context, uri: Uri, startMs: L
 
 internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, endMs: Long): VideoFrameSummary {
     val size = context.contentResolver.openFileDescriptor(uri, "r")?.use { it.statSize } ?: -1L
-    if (size <= 0L || size > 100L * 1024L * 1024L) {
-        throw IllegalArgumentException("100MB 이하의 크기를 확인할 수 있는 영상을 골라 주세요.")
+    if (size <= 0L || size > CaptureLimits.FULL.fileBytes) {
+        throw IllegalArgumentException("200MB 이하의 크기를 확인할 수 있는 영상을 골라 주세요.")
     }
     val retriever = MediaMetadataRetriever()
     try {
         retriever.setDataSource(context, uri)
         val durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             ?.toLongOrNull() ?: 0L
-        if (durationMs <= 0L || durationMs > 60_500L)
-            throw IllegalArgumentException("재생 시간이 1분 이내인 영상을 골라 주세요.")
+        if (!CaptureLimits.FULL.acceptsDuration(durationMs))
+            throw IllegalArgumentException("재생 시간이 1초 이상, 2분 이내인 영상을 골라 주세요.")
         val width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)
             ?.toIntOrNull() ?: 0
         val height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
@@ -138,7 +138,7 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
         if (Build.VERSION.SDK_INT < 27 && width.toLong() * height > 1920L * 1080L)
             throw IllegalArgumentException("이 기기에서는 FHD 이하의 영상을 골라 주세요.")
         val hasAudio = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) == "yes"
-        require(startMs >= 0 && endMs <= durationMs && endMs > startMs)
+        require(startMs >= 0 && endMs <= durationMs && endMs > startMs && endMs - startMs <= 30_000L)
         val durationSeconds = ((endMs - startMs + 999) / 1000).toInt()
         val sampleCount = minOf(5, maxOf(1, durationSeconds))
         var faceCount = 0

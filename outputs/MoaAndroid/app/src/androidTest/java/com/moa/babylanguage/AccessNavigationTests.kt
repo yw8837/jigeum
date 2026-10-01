@@ -217,7 +217,7 @@ class AccessNavigationTests {
         ui.grantRuntimePermission(compose.activity.packageName, android.Manifest.permission.RECORD_AUDIO)
         start(true); visual(); click("다시 촬영하기")
         click("카메라 없이 소리만 녹음"); click("녹음 시작")
-        waitText("0:02 / 1:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
+        waitText("0:02 / 2:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
         compose.runOnIdle { billing.publish(false) }
         click("이 구간 소리로 번역하기")
         compose.waitUntil(8_000) { analyzer.calls == 1 }
@@ -233,7 +233,7 @@ class AccessNavigationTests {
         val handles = compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsActions.SetProgress))
         handles[0].performSemanticsAction(SemanticsActions.SetProgress) { it(8_000f) }
         handles[1].performSemanticsAction(SemanticsActions.SetProgress) { it(11_000f) }
-        compose.onNodeWithTag("selected-range").assertTextContains("0:08 — 0:11 · 3초 선택")
+        compose.onNodeWithTag("selected-range").assertTextContains("0:08.0 – 0:11.0 · 3초")
         compose.onNodeWithTag("clip-play").performScrollTo().performClick()
         compose.waitUntil(5_000) { compose.onAllNodes(hasText("재생 멈추기 · 0:08")).fetchSemanticsNodes().isNotEmpty() }
         compose.waitUntil(3_000) { compose.onAllNodes(hasText("재생 멈추기 · 0:09")).fetchSemanticsNodes().isNotEmpty() }

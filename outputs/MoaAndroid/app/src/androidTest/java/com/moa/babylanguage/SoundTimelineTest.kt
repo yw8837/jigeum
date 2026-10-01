@@ -66,7 +66,7 @@ class SoundTimelineTest {
         for (value in listOf(Float.NaN, Float.POSITIVE_INFINITY, -1f, 2f))
             assertNotNull(SoundTimeline.decide(analyze(frame(0,"울음" to value))).problem)
         val context=InstrumentationRegistry.getInstrumentation().targetContext
-        for (pcm in listOf(FloatArray(16000){Float.NaN},FloatArray(16000){2f},FloatArray(240001){.1f}))
+        for (pcm in listOf(FloatArray(16000){Float.NaN},FloatArray(16000){2f},FloatArray(480001){.1f}))
             assertNotNull(SoundAnalyzer.analyzeDetailed(context,pcm).problem)
     }
     @Test fun childVoiceRequiresThreeWindowsAndMakesOnlyNeutralSpeech() {

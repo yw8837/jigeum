@@ -42,7 +42,7 @@ object SoundAnalyzer {
         coroutineContext.ensureActive()
         if (pcm.size < 16_000) return@withLock SoundAnalysis(emptyList(),
             "구간이 너무 짧아요. 아기 소리가 담긴 구간을 1초 이상 골라 주세요.")
-        if (pcm.size > 240_000 || pcm.any { !it.isFinite() || kotlin.math.abs(it) > 1.001f })
+        if (pcm.size > 480_000 || pcm.any { !it.isFinite() || kotlin.math.abs(it) > 1.001f })
             return@withLock SoundAnalysis(emptyList(), "소리 데이터를 읽지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.")
         val cleaned = AudioCleanup.filter(pcm)
         try {

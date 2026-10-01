@@ -28,14 +28,14 @@ internal object CaptureFiles {
     fun cleanup(context: Context) {
         File(context.cacheDir, "captures").listFiles()?.filter { it.isFile }?.forEach { it.delete() }
     }
-    fun inspect(context: Context, uri: Uri, ownedFile: File? = null): LocalClip {
+    fun inspect(context: Context, uri: Uri, ownedFile: File? = null, limits: CaptureLimits = CaptureLimits.FREE): LocalClip {
         val size = context.contentResolver.openFileDescriptor(uri, "r")?.use { it.statSize } ?: -1
-        require(size in 1..100L * 1024 * 1024) { "100MB 이하의 기기에 저장된 파일을 골라 주세요." }
+        require(size in 1..limits.fileBytes) { "${limits.fileBytes / (1024 * 1024)}MB 이하의 기기에 저장된 파일을 골라 주세요." }
         val retriever = MediaMetadataRetriever()
         try {
             retriever.setDataSource(context, uri)
             val duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0
-            require(duration in 1_000..60_500) { "1초 이상, 1분 이내의 영상이나 녹음이 필요해요." }
+            require(limits.acceptsDuration(duration)) { "1초 이상, ${limits.minutes}분 이내의 영상이나 녹음이 필요해요." }
             val width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toFloatOrNull() ?: 1f
             val height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toFloatOrNull() ?: 1f
             val rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
@@ -55,7 +55,7 @@ internal class LocalCapture(private val context: Context) {
     private var audioCallback: ((File?, String?) -> Unit)? = null
 
     @Suppress("MissingPermission", "DEPRECATION")
-    fun startAudio(onFinished: (File?, String?) -> Unit): Boolean {
+    fun startAudio(limits: CaptureLimits = CaptureLimits.FREE, onFinished: (File?, String?) -> Unit): Boolean {
         discard()
         if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) return false
         return try {
@@ -67,7 +67,7 @@ internal class LocalCapture(private val context: Context) {
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             recorder.setAudioSamplingRate(44_100)
             recorder.setAudioEncodingBitRate(96_000)
-            recorder.setMaxDuration(60_000)
+            recorder.setMaxDuration(limits.captureMs.toInt())
             recorder.setOutputFile(output.absolutePath)
             recorder.setOnInfoListener { _, what, _ -> if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) stop() }
             recorder.setOnErrorListener { _, _, _ ->
@@ -81,7 +81,7 @@ internal class LocalCapture(private val context: Context) {
     }
 
     @Suppress("MissingPermission")
-    fun startVideo(recorder: Recorder, onFinished: (File?, String?) -> Unit): Boolean {
+    fun startVideo(recorder: Recorder, limits: CaptureLimits = CaptureLimits.FREE, onFinished: (File?, String?) -> Unit): Boolean {
         discard()
         if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||
             context.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) return false
@@ -89,7 +89,7 @@ internal class LocalCapture(private val context: Context) {
         return try {
             val output = CaptureFiles.create(context, true).also { file = it }
             video = recorder.prepareRecording(context, FileOutputOptions.Builder(output)
-                .setDurationLimitMillis(60_000).setFileSizeLimit(90L * 1024 * 1024).build())
+                .setDurationLimitMillis(limits.captureMs).setFileSizeLimit(limits.recordingBytes).build())
                 .withAudioEnabled().start(ContextCompat.getMainExecutor(context)) { event ->
                     if (event is VideoRecordEvent.Finalize) {
                         if (current != generation) { output.delete(); return@start }

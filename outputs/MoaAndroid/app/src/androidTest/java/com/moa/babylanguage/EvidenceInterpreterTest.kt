@@ -85,10 +85,10 @@ class EvidenceInterpreterTest {
         assertTrue(AcousticShape.from(bursts).bursts >= 5)
         assertTrue(AcousticShape.from(rising).rising)
     }
-    @Test fun rangeCannotEscapeCapturedMinuteOrDecodeMoreThanFifteenSeconds() {
-        for (pair in listOf(-1L to 1000L, 0L to 999L, 0L to 16_000L, 59_000L to 61_000L)) {
+    @Test fun rangeCannotEscapeTwoMinutesOrDecodeMoreThanThirtySeconds() {
+        for (pair in listOf(-1L to 1000L, 0L to 999L, 0L to 30_001L, 119_000L to 120_501L)) {
             assertTrue(runCatching { ClipRange(pair.first, pair.second) }.isFailure)
         }
-        assertEquals(15_000, ClipRange(45_000, 60_000).durationMs.toInt())
+        assertEquals(30_000, ClipRange(90_000, 120_000).durationMs.toInt())
     }
 }
