@@ -182,6 +182,41 @@ CC BY 파일은 로컬 QA manifest에도 저자·원 URL·license URL·변환 �
 
 LiteRT는 배포 런타임, librosa는 특징 추출·평가 도구다. 이 둘을 추가 의미 분석 엔진으로 세지 않는다. 기존 [L2]의 역할 분담과 라이선스 검토를 유지한다.
 
+### 후속 후보: 실제 탑재 모델의 내부 양자화와 원본 YAMNet 비교
+
+**로컬 파일을 직접 읽은 결과, 현재 모델은 입출력만 FLOAT32이고 내부에 INT8 양자화가 있다.** 공식 MediaPipe 다운로드 경로의 `float32` 표기만 보고 완전한 float 연산 모델이라고 부르면 안 된다. 2026-10-02에 현재 asset을 Python 표준 라이브러리로 읽고 TensorFlow의 [공식 FlatBuffer schema](https://github.com/tensorflow/tensorflow/blob/v2.15.0/tensorflow/lite/schema/schema.fbs)에 따라 tensor type·quantization·operator 연결을 확인했다. 모델을 실행하거나 변경하지 않았다.
+
+| 현재 asset 직접 확인 항목 | 값 |
+|---|---|
+| 경로·규격 | `outputs/MoaAndroid/app/src/main/assets/yamnet.tflite`, `TFL3`, **4,126,810 bytes** |
+| SHA-256 | `4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf` |
+| MD5 / base64 MD5 | `d02e1b838813107817b755d09d6b56b3` / `0C4bg4gTEHgXt1XQnWtWsw==` |
+| 입력·출력 | tensor0 `waveform_binary`: FLOAT32 `[15600]`; tensor120 `final_output`: FLOAT32 `[1,521]` |
+| 전체121 tensors | FLOAT32 16개, INT32 42개, COMPLEX64 2개, **INT8 61개** |
+| 분류기 가중치 tensor116 | INT8 `[521,1024]`, scale `0.02734142355620861`, zero point0 |
+| logit tensor118 | INT8 `[1,521]`, scale **`0.3471774756908417`**, zero point100 |
+| sigmoid 직후 tensor119 | INT8 `[1,521]`, scale **`0.00390625` (1/256)**, zero point-128; 이후 DEQUANTIZE가 FLOAT32 출력120으로 연결 |
+| 포함된 표기 | `yamnet/classification`, `yamnet_label_list.txt`, `Apache License. Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.` |
+
+이 scale은 실측 score가 몇 값에 집중된 현상을 구체적으로 설명한다. `sigmoid(k × 0.3471774756908417)`를1/256 단위로 반올림하면 k=-4…2에서 **0.19921875, 0.26171875, 0.33203125, 0.4140625, 0.5, 0.5859375, 0.66796875**가 된다. 이는 보고된 계단과 일치한다. 다만 이 계산만으로 특정 clip의 오분류 원인이 양자화라고 확정하거나, float 모델의 성능 향상 폭을 추정하지 않는다. 원 데이터 분포·클래스 정의·학습량·모델 변형도 영향을 준다.
+
+**공식 `float32` 파일을 다시 받는 것만으로는 교체가 되지 않는다.** 아래 두 URL에 모델 본문을 받지 않는 HTTP HEAD를 실행했다. 둘 다 Content-Length4,126,810, `x-goog-hash` MD5 `0C4bg4gTEHgXt1XQnWtWsw==`, ETag `d02e1b838813107817b755d09d6b56b3`로, 현재 로컬 파일의 크기·MD5와 일치했다. 이번 원격 본문 SHA-256을 계산한 것은 아니다.
+
+- [MediaPipe version1](https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/1/yamnet.tflite)
+- [MediaPipe latest](https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/latest/yamnet.tflite)
+
+공식 Audio Classifier 페이지는 여전히 이 모델을 `None (float32)`로 소개한다. 실제 내부 tensor 검사는 그것보다 구체적이다. TensorFlow YAMNet 유지보수자의 [공식 저장소 답변](https://github.com/tensorflow/models/issues/10241#issuecomment-914437021)은 두 변형을 구분한다: 원본 variable-length YAMNet TFLite와, fixed15600·양자화·ReLU 대신 **ReLU6**를 사용한 classification 모델이다. 따라서 두 모델의 차이는 출력 숫자 정밀도 하나만의 차이가 아니다.
+
+| 후속 비교 경로 | 확인한 URL·파일 크기·허가 | 현재 앱과의 호환 상태 |
+|---|---|---|
+| 기존 MediaPipe `float32/1` 및 latest | 위 URL, 각각4,126,810B. 현재 asset에 Apache2.0 표기. | 현재 탑재본과 크기·MD5가 같음. 완전 float 대체본으로 사용할 수 없음. |
+| 원본 YAMNet checkpoint를 정수 양자화 없이 변환 | [공식 `yamnet.h5`](https://storage.googleapis.com/audioset/yamnet.h5), HEAD **15,296,092B**. [공식 export.py](https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/export.py)는 `TFLiteConverter.from_saved_model(...).convert()` 경로를 제공하며 별도 정수 quantization 설정이 없다. TensorFlow models 소스는 Apache2.0. | 공식 원본은 scores/embeddings/spectrogram과 동적 길이를 가지므로 **현재 MediaPipe AudioClassifier의 대체 파일로 바로 호환된다고 확인하지 않았다.** fixed waveform·scores만 반환하는 wrapper, 모델 metadata와 label 연결, 지원 operator를 확인할 필요가 있다. 변환 후 실제크기는 미확인. |
+| 공식 TFLite Support 저장소의 원본형 테스트 fixture | [yamnet_tfhub.tflite](https://github.com/tensorflow/tflite-support/blob/master/tensorflow_lite_support/metadata/python/tests/testdata/audio_classifier/yamnet_tfhub.tflite), GitHub contents API size **16,096,668B**, Git blob SHA `f19a3fbcadc54ab4d3f24ff35a050f60d54a8467`. 저장소 LICENSE Apache2.0. 공식 metadata writer test는 이를 dynamic-input 모델로 부른다. | 파일 metadata만 조회했고 본문을 받지 않아 내부 tensor·모델 metadata·현재 Tasks1.0.0 로딩 여부는 미확인. 연구 비교 후보이며 배포본으로 승인하지 않음. |
+
+이번 조사에서 **현재 SDK에 바로 넣을 수 있다고 검증된 별도의 완전 float32 공식 MediaPipe checkpoint는 확보하지 못했다.** 원본 float 비교는 가능성이 있는 후속 작업이다. 먼저 같은 PCM·같은 구간·같은 사건 label·같은 집계 규칙으로 현재 모델과 비교하고, 점수 분포와 유용 응답률/반대 상황 오류/negative 오생성을 함께 본다. 원본의0.48초 hop과 현 Tasks의0.975초 interval 차이까지 같이 바꾸면 개선의 원인이 혼재하므로 조건을 맞춘 비교와 프레임 간격 자체 비교를 나눈다. 변환본은 크기·cold/warm 지연·메모리·ARM 실행·16KB 패키징·metadata license/label을 별도로 검증한다. 기존 양자화 모델의 threshold를 float 모델에 그대로 옮겨 성능이 좋아졌다고 하지 않는다.
+
+현재0.5.3 작업은 모델 파일을 교체하지 않고 시간 집계·문장 선택을 개선하는 범위다. 위 구조 분석은 다음 비교의 근거이며, **‘float 모델이면 더 정확하다’거나 ‘현재 모순이 모두 양자화 때문’이라는 결론은 아니다.**
+
 ### 서비스 참고
 
 - **ChatterBaby 공식 FAQ:** crying 검출과 pain 등 세부 추정을 분리해 설명하고, minimal background noise를 권장하며, 보호자가 노래하거나 개 짖는 clip에는 작동하지 않는다고 명시한다. 추가 이유 label은 reliably different라는 증거가 생길 때 추가한다고 설명한다. 이것은 **개발사 주장과 사용 조건**이지 아가톡에 이전되는 90% 성능이 아니다. [C1]

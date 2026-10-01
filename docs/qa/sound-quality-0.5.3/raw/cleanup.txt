@@ -1,0 +1,16 @@
+{"success":true,"mode":"ultraqa","path":"C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\sound-quality-053\\.omx\\state\\ultraqa-state.json"}
+ 
+{"active":false,"current_phase":"complete","iteration":3,"scenario_matrix":"docs/qa/sound-quality-0.5.3/PLAN.md","completed_at":"2026-10-01T16:39:58.051508+00:00","run_outcome":"finish","lifecycle_outcome":"finished"}
+ 
+Harness read assertion corrected: installed CLI returns a present state directly, without exists=true. Read succeeded but old assertion rejected it; no application failure.
+{"active":false,"current_phase":"complete","iteration":3,"scenario_matrix":"docs/qa/sound-quality-0.5.3/PLAN.md","completed_at":"2026-10-01T16:39:58.051508+00:00","run_outcome":"finish","lifecycle_outcome":"finished"}
+ 
+{"cleared":true,"mode":"ultraqa","path":"C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\sound-quality-053\\.omx\\state\\ultraqa-state.json"}
+ 
+{"exists":false,"mode":"ultraqa"}
+ 
+List of devices attached
+
+
+Final device cleanup from completed command: app force-stop; uninstall Success; test package already uninstalled before signed UI run. Display 1080x2400, density420, font1.0; owned UI XML removed; harness removed its three named Download fixtures. Crash buffer is 0 bytes. Emulator kill returned OK; subsequent adb devices is empty.
+Temporary directory removal: one native PowerShell Remove-Item attempt against the resolved exact workspace/work/sound-quality-053 path was rejected before execution by automatic approval review: "blocked by policy". No reason beyond this generic policy rejection was supplied. No alternate method or retry used. The directory remains ignored and excluded from delivery archives. Prior blocked work/deep-audit and work/test-access-052 were not retried. Device and isolated OMX state cleanup above succeeded independently.

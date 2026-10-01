@@ -14,6 +14,8 @@
 
 `PublicAudioProbeTest`는 기본 전체 실행에서 조건skip한다. 권리를 확인한 로컬 PCM자료를 명시적으로 준비한 뒤 `-e public_audio_probe true -e class com.moa.babylanguage.PublicAudioProbeTest`로 별도 실행한다. 없는 사건은 미실행으로 보고하며 측정 도구의 성공을 분류 성공으로 해석하지 않는다. [출처/절차/한계](../../docs/research/20261001-public-audio-probes.md).
 
+0.5.3부터 opt-in PCM은 앱 내부 `files/qa-public-audio`를 사용한다(ADB가 만든 external 폴더의 소유권 문제 회피). `sound_probe.py --corpus <manifest.json+f32폴더> --install-app`은 현재 APK의 실제 설치 해시와 fixture 해시를 확인하고 주입한다. 소스 라벨 불일치는 보고서에 남으며 `--strict`이면 계측 실패로도 반환한다. 일반 모드의 명령 성공은 측정 완료일 뿐 정확도 통과가 아니다. [22개 측정·필터·회귀](../../docs/qa/sound-quality-0.5.3/README.md).
+
 # Android 통합 QA 재현 도구
 
 0.3.0부터 사용한 계측·UI·파일 전송·패키지 점검 스크립트에 0.4.0 무료/전체 이용권 검증을 추가한 소스입니다. **이 도구를 추가했다는 사실은 테스트 통과를 의미하지 않습니다.** 실행 결과는 해당 실행의 `evidence`와 최종 QA 보고서에서 확인합니다. 실제 Play 구매 시험이나 출시·제출·서비스 배포를 수행하는 도구가 아닙니다.

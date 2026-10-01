@@ -1,0 +1,79 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:prePreviewBuild UP-TO-DATE
+> Task :app:processPreviewNavigationResources UP-TO-DATE
+> Task :app:compilePreviewNavigationResources UP-TO-DATE
+> Task :app:generatePreviewResValues UP-TO-DATE
+> Task :app:mapPreviewSourceSetPaths UP-TO-DATE
+> Task :app:generatePreviewResources UP-TO-DATE
+> Task :app:mergePreviewResources UP-TO-DATE
+> Task :app:createPreviewCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksPreview UP-TO-DATE
+> Task :app:processPreviewMainManifest UP-TO-DATE
+> Task :app:processPreviewManifest UP-TO-DATE
+> Task :app:processApplicationManifestPreviewForBundle UP-TO-DATE
+> Task :app:checkPreviewAarMetadata UP-TO-DATE
+> Task :app:packagePreviewResources UP-TO-DATE
+> Task :app:parsePreviewLocalResources UP-TO-DATE
+> Task :app:processPreviewManifestForPackage UP-TO-DATE
+> Task :app:processPreviewResources UP-TO-DATE
+> Task :app:bundlePreviewResources UP-TO-DATE
+> Task :app:extractPreviewVersionControlInfo UP-TO-DATE
+> Task :app:checkPreviewDuplicateClasses UP-TO-DATE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generatePreviewBuildConfig UP-TO-DATE
+> Task :app:compilePreviewKotlin UP-TO-DATE
+> Task :app:javaPreCompilePreview UP-TO-DATE
+> Task :app:compilePreviewJavaWithJavac UP-TO-DATE
+> Task :app:dexBuilderPreview UP-TO-DATE
+> Task :app:desugarPreviewFileDependencies UP-TO-DATE
+> Task :app:mergePreviewStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexPreview UP-TO-DATE
+> Task :app:mergeDexPreview UP-TO-DATE
+> Task :app:mergePreviewShaders UP-TO-DATE
+> Task :app:compilePreviewShaders NO-SOURCE
+> Task :app:generatePreviewAssets UP-TO-DATE
+> Task :app:mergePreviewAssets UP-TO-DATE
+> Task :app:mergePreviewGlobalSynthetics UP-TO-DATE
+> Task :app:processPreviewJavaRes UP-TO-DATE
+> Task :app:mergePreviewJavaResource UP-TO-DATE
+> Task :app:mergePreviewJniLibFolders UP-TO-DATE
+> Task :app:mergePreviewNativeLibs UP-TO-DATE
+> Task :app:stripPreviewDebugSymbols UP-TO-DATE
+> Task :app:writePreviewAppMetadata UP-TO-DATE
+> Task :app:buildPreviewPreBundle
+> Task :app:mergePreviewArtProfile UP-TO-DATE
+> Task :app:compilePreviewArtProfile UP-TO-DATE
+> Task :app:collectPreviewDependencies UP-TO-DATE
+> Task :app:configurePreviewDependencies UP-TO-DATE
+> Task :app:extractPreviewNativeSymbolTables UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generatePreviewLintVitalReportModel UP-TO-DATE
+> Task :app:lintVitalAnalyzePreview UP-TO-DATE
+> Task :app:lintVitalReportPreview UP-TO-DATE
+> Task :app:lintVitalPreview
+> Task :app:parsePreviewIntegrityConfig UP-TO-DATE
+> Task :app:packagePreviewBundle FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:packagePreviewBundle'.
+> Preview is sideload-only. Use assemblePreview for testing or bundleRelease for Play.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+51 actionable tasks: 3 executed, 48 up-to-date
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 34s

@@ -1,0 +1,64 @@
+{
+  "execution": {
+    "status": "pass",
+    "tests": 1,
+    "passed_tests": 1,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 4.7,
+    "exit": 0
+  },
+  "provenance": {
+    "app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~dD1udutVsVzTZIgjSHB8DA==/com.moa.babylanguage-joJBgRE0ZxhRnHeJmsZubg==/base.apk",
+      "sha256": "ca4d2c0b58cdc068fd3c5d07fbc117dc9fa1921f4156a487c5ec7bbd673d73b2",
+      "expected_sha256": "ca4d2c0b58cdc068fd3c5d07fbc117dc9fa1921f4156a487c5ec7bbd673d73b2",
+      "version_code": 16,
+      "version_name": "0.5.3",
+      "verified": true,
+      "errors": []
+    },
+    "test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~5j33vrj0seSnglfC8IuVlw==/com.moa.babylanguage.test-rJ7ubwEopvAqFnTmYe9IVA==/base.apk",
+      "sha256": "1d08b6b21833e393eac136b1198742c19cdde387a884f664f4794f7a43d03b85",
+      "expected_sha256": "1d08b6b21833e393eac136b1198742c19cdde387a884f664f4794f7a43d03b85",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  },
+  "cases": 22,
+  "outputs": 8,
+  "source_label_disagreements": [
+    {
+      "id": "babble",
+      "expected": "babble",
+      "observed": "abstain"
+    },
+    {
+      "id": "cry_six_month",
+      "expected": "cry",
+      "observed": "여러 아기 소리"
+    },
+    {
+      "id": "babble_seven_month",
+      "expected": "babble",
+      "observed": "어린 말소리"
+    },
+    {
+      "id": "laugh_quiet",
+      "expected": "laugh",
+      "observed": "abstain"
+    }
+  ],
+  "independent_accuracy_validated": false,
+  "strict_labels_requested": false
+}

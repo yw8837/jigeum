@@ -1,0 +1,325 @@
+[
+  {
+    "id": "cry",
+    "author": "the_yura",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/the_yura/sounds/211528/",
+    "expected": "cry",
+    "allowed": [
+      "울음"
+    ],
+    "split": "development",
+    "source_sha256": "6db3e82746d1815b918d54d0931632e2043b5e850ceb4eac3b3d88216fa8ce39",
+    "clamped_samples": 310,
+    "pcm_sha256": "15b315b1b74c6fe3eb9ec8d2e262ec6e98999ad2e863d69100c2d7bfe375f3f3",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only",
+    "url": "https://cdn.freesound.org/previews/211/211528_2451161-hq.mp3"
+  },
+  {
+    "id": "laugh",
+    "author": "reinsamba",
+    "license": "CC-BY-3.0",
+    "page": "https://freesound.org/people/reinsamba/sounds/47370/",
+    "expected": "laugh",
+    "allowed": [
+      "아기 웃음"
+    ],
+    "split": "development",
+    "source_sha256": "d1129741d5761aa39935f74bd7ecb5474a0c889b73501a9d0e1cf2fba9dbd982",
+    "clamped_samples": 0,
+    "pcm_sha256": "2bb061a12e4611edd6c2097011227f38542a5e4f5bde82332c8bcb227c0cc35e",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only",
+    "url": "https://cdn.freesound.org/previews/47/47370_18799-hq.mp3"
+  },
+  {
+    "id": "babble",
+    "author": "keplar",
+    "license": "CC-BY-4.0",
+    "page": "https://freesound.org/people/keplar/sounds/139046/",
+    "url": "https://cdn.freesound.org/previews/139/139046_316502-lq.mp3",
+    "expected": "babble",
+    "allowed": [
+      "옹알이"
+    ],
+    "split": "development",
+    "source_sha256": "4fac0655715f632a30853b572b6f77d9feeb0816941e77b4efceaf7385085799",
+    "clamped_samples": 0,
+    "pcm_sha256": "d8d461674fa5513046127bc333f65f0c6e2d341b8f7a0202fbc866ff3a04d526",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "laugh_babble",
+    "author": "Precipice_6",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/Precipice_6/sounds/575331/",
+    "url": "https://cdn.freesound.org/previews/575/575331_3570210-lq.mp3",
+    "expected": "laugh/babble mixed",
+    "allowed": [
+      "아기 웃음",
+      "옹알이",
+      "여러 아기 소리",
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "943856255562b9406b17f9cf4e5f562e4a952c9b261dc460b02a2f7acd84dda8",
+    "clamped_samples": 0,
+    "pcm_sha256": "e99a178a1666d1d21a4e24216b9067e90c33ec865f9b4f779fe47df5e283e9d9",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "almost_laugh",
+    "author": "Erdie",
+    "license": "CC-BY-4.0",
+    "page": "https://freesound.org/people/Erdie/sounds/58308/",
+    "url": "https://cdn.freesound.org/previews/58/58308_118241-lq.mp3",
+    "expected": "almost laughing boundary",
+    "allowed": [
+      "아기 웃음",
+      "옹알이",
+      "여러 아기 소리",
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "8bb3d547b29b2c1ce6196d2061fc20e92db65f030de16337cbf6498c4ec07368",
+    "clamped_samples": 0,
+    "pcm_sha256": "65377fed20ce0241d5a7e1eda0c59a7d3edb97fcd3834f77ad721366bbf90ad5",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "cry_six_month",
+    "author": "simo170075",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/simo170075/sounds/410741/",
+    "url": "https://cdn.freesound.org/previews/410/410741_7118067-lq.mp3",
+    "expected": "cry",
+    "allowed": [
+      "울음"
+    ],
+    "split": "holdout",
+    "source_sha256": "2c51cae19f40480299b3038eb70a99f22f3d3b4e458e19c299fb8daecac2df40",
+    "clamped_samples": 0,
+    "pcm_sha256": "bfbc74d2821e647eaaae0579f831d340d9e2e8a11dc0665df6809118a488d178",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "conversation",
+    "author": "miguel2613",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/miguel2613/sounds/324783/",
+    "url": "https://cdn.freesound.org/previews/324/324783_5589643-lq.mp3",
+    "expected": "non-infant conversation",
+    "allowed": [
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "0f878df8ee019f9cdd0a804d8d2e2d35b6e0d6eba0dc269e8fe6c2efd016a302",
+    "clamped_samples": 0,
+    "pcm_sha256": "aa0280798325740bf97278335682e9c0521d5b6f3650e5807f75622f89c246bf",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "vacuum",
+    "author": "RutgerMuller",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/RutgerMuller/sounds/50762/",
+    "url": "https://cdn.freesound.org/previews/50/50762_179538-lq.mp3",
+    "expected": "vacuum",
+    "allowed": [
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "03b35c288e4b4dabe28239c2d925138b04b477b29466bc957b5776223a447306",
+    "clamped_samples": 0,
+    "pcm_sha256": "c69b3141d2821101c62019e3d1441c04f4305e4a31acb969d65b6b0fcd18d661",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "piano",
+    "author": "Rvgerxini",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/Rvgerxini/sounds/505990/",
+    "url": "https://cdn.freesound.org/previews/505/505990_9453283-lq.mp3",
+    "expected": "music",
+    "allowed": [
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "447e5b59bc1d2e1831dee7bcad8b62d9585a9b644557f1310aa88fc267ece38f",
+    "clamped_samples": 0,
+    "pcm_sha256": "43331125b3a15f4aa4080a93d14e64e445b25f1dd3e3560ab6b2aeef3c77f50c",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "generic_laugh",
+    "author": "moxobna",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/moxobna/sounds/33658/",
+    "url": "https://cdn.freesound.org/previews/33/33658_43834-lq.mp3",
+    "expected": "speaker-unverified laughter",
+    "allowed": [
+      "abstain"
+    ],
+    "split": "holdout",
+    "source_sha256": "81c89c40b172459521aabcfa19463c4aad54912a0ed534bcb7eb13bacb6f1d0a",
+    "clamped_samples": 0,
+    "pcm_sha256": "fdd66fc0a97e6e4faddeec3ea951002ae9e5eb298734a92baceeb3885e26ae60",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "babble_seven_month",
+    "author": "Islabonita",
+    "license": "CC0-1.0",
+    "page": "https://freesound.org/people/Islabonita/sounds/471061/",
+    "url": "https://cdn.freesound.org/previews/471/471061_2200015-lq.mp3",
+    "expected": "babble",
+    "allowed": [
+      "옹알이"
+    ],
+    "split": "holdout",
+    "source_sha256": "db3e0cc67dc17aa78e67a81d13230df1770003842431f68f3c4509cf8624b24f",
+    "clamped_samples": 0,
+    "pcm_sha256": "74ebc6171a6efe241ce994ae69dac087a1d5a64076438d41c39d9c247cfc58ef",
+    "changes": "First up to 15 seconds, mono 16kHz float32; clamp [-1,1] matching Android decoder; no normalization; local QA only"
+  },
+  {
+    "id": "laugh_quiet",
+    "split": "derived",
+    "expected": "laugh",
+    "allowed": [
+      "아기 웃음"
+    ],
+    "parents": [
+      "laugh"
+    ],
+    "pcm_sha256": "a9ba81281f75b41c0733d479b62a75fe7cd4ce4def5fa943f9c026dc21ec2b33",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "laugh_then_cry",
+    "split": "derived",
+    "expected": "mixed",
+    "allowed": [
+      "여러 아기 소리",
+      "abstain"
+    ],
+    "parents": [
+      "laugh",
+      "cry"
+    ],
+    "pcm_sha256": "ecb783ce1529dd39e2acb23cc8d81bc3906d11105d431a04e569f63551c5fe9c",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "cry_then_laugh",
+    "split": "derived",
+    "expected": "mixed",
+    "allowed": [
+      "여러 아기 소리",
+      "abstain"
+    ],
+    "parents": [
+      "cry",
+      "laugh"
+    ],
+    "pcm_sha256": "eabb389ef9096415852348c0eadf630b78f12b74833b454dcc535f68b7a1e431",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "overlap",
+    "split": "derived",
+    "expected": "overlap",
+    "allowed": [
+      "여러 아기 소리",
+      "abstain"
+    ],
+    "parents": [
+      "laugh",
+      "cry"
+    ],
+    "pcm_sha256": "594aa0508008bfe852cda46e0cc14eb5430bca8edbcfe07536123805c26461d4",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "silence",
+    "split": "derived",
+    "expected": "silence",
+    "allowed": [
+      "abstain"
+    ],
+    "parents": [],
+    "pcm_sha256": "ea0787f65f73b0013d03b359490e3125211b28ad5c1502ffb1544c0ded4192f5",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "tone",
+    "split": "derived",
+    "expected": "tone",
+    "allowed": [
+      "abstain"
+    ],
+    "parents": [],
+    "pcm_sha256": "05008947c28dacb6129f65f85a7bd526882580a6d935af2fb7b1965feab5c71c",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "noise",
+    "split": "derived",
+    "expected": "noise",
+    "allowed": [
+      "abstain"
+    ],
+    "parents": [],
+    "pcm_sha256": "63cc92b48a3f898039ab223800a6e3ef741cec44f7ac9245dd278a573c520bd7",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "laugh_with_rumble",
+    "split": "derived",
+    "expected": "laugh with 40Hz rumble",
+    "allowed": [
+      "아기 웃음",
+      "abstain"
+    ],
+    "parents": [
+      "laugh"
+    ],
+    "pcm_sha256": "528dfd438cc9295ee604d7918f76072189b1de3db5c9b3b72f0a9223202984b3",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "cry_with_dc",
+    "split": "derived",
+    "expected": "cry with DC offset",
+    "allowed": [
+      "울음",
+      "abstain"
+    ],
+    "parents": [
+      "cry"
+    ],
+    "pcm_sha256": "c40e6a2d08dc38ce6e4c9e4eb3d0cdd91e8bd1171c7e13adc8041e91fd8a47ee",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "rumble",
+    "split": "derived",
+    "expected": "rumble",
+    "allowed": [
+      "abstain"
+    ],
+    "parents": [],
+    "pcm_sha256": "604c4ab9f2a22a12ca30a64a53b6a2a6442ce7d79ef629065010f5e133be75ea",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  },
+  {
+    "id": "dc",
+    "split": "derived",
+    "expected": "dc",
+    "allowed": [
+      "abstain"
+    ],
+    "parents": [],
+    "pcm_sha256": "5e60b78654416ac768f8c1978232179baed452e643d0efcf7c8f53af585aa59e",
+    "changes": "Owned synthetic perturbation; not an independent infant/source"
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "baseline to preview same-package signed update preserves records",
+    "unpaid real YAMNet + face model no-face result, save, actual PDF export/share",
+    "cold restart keeps test access without a code",
+    "preview to production update keeps records and restores PDF/visual gates"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~IIYTwPCmLb0ve5CiQ_NpFg==/com.moa.babylanguage-F8Yeu__vS9vhLWlY8j-euw==/base.apk",
+      "sha256": "45f85f0f46816a7e4d0585b7c1ad360b1b130f5414c6414c88cc425794325e4d",
+      "expected_sha256": "45f85f0f46816a7e4d0585b7c1ad360b1b130f5414c6414c88cc425794325e4d",
+      "version_code": 15,
+      "version_name": "0.5.2",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~TdjhN43G5E3aM9V8ZNbZvQ==/com.moa.babylanguage-ONQ2OoDHnOJLFw4kaSD_ag==/base.apk",
+      "sha256": "64617e5167d83efaf9fd15e5baf804447473786b84261df051f0b86eef414b70",
+      "expected_sha256": "64617e5167d83efaf9fd15e5baf804447473786b84261df051f0b86eef414b70",
+      "version_code": 16,
+      "version_name": "0.5.3-test",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~HIXt5hT8wWJ2JEvDXtkI-A==/com.moa.babylanguage-Qh-TfAmCHx5MN722Mp1CDw==/base.apk",
+      "sha256": "5c6c6c6a17eade2da492d54006f18aa33b003413fd3210894f597f2349897dfb",
+      "expected_sha256": "5c6c6c6a17eade2da492d54006f18aa33b003413fd3210894f597f2349897dfb",
+      "version_code": 16,
+      "version_name": "0.5.3",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_infant_intent_accuracy_tested": false,
+  "layout_retested": false,
+  "visual_fixture": "CC0 public cry with generated plain-color video: intentionally no face"
+}

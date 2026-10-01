@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "baseline to preview same-package signed update preserves records",
+    "small authorized capture, preview video analysis selection, non-infant abstention",
+    "font200 authorized capture, preview video analysis selection, non-infant abstention",
+    "unpaid real YAMNet + face model no-face result, save, actual PDF export/share",
+    "cold restart keeps test access without a code",
+    "preview to production update keeps records and restores PDF/visual gates"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~ptKSj4rkxS3QtZN8OYYnSA==/com.moa.babylanguage-QK53L6Ad4ePRBGgoe8Wbrg==/base.apk",
+      "sha256": "45f85f0f46816a7e4d0585b7c1ad360b1b130f5414c6414c88cc425794325e4d",
+      "expected_sha256": "45f85f0f46816a7e4d0585b7c1ad360b1b130f5414c6414c88cc425794325e4d",
+      "version_code": 15,
+      "version_name": "0.5.2",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~KOpYCqKIW1fcP1raXbZSGA==/com.moa.babylanguage-9B47vblAtiBlpMg_tTy1CQ==/base.apk",
+      "sha256": "5815fe6111c14834ca7df8040f3af2ad007388b937cbdc1144df431062b422eb",
+      "expected_sha256": "5815fe6111c14834ca7df8040f3af2ad007388b937cbdc1144df431062b422eb",
+      "version_code": 16,
+      "version_name": "0.5.3-test",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~PHvlw74cQoJDslQS0LhloQ==/com.moa.babylanguage-qKsBkhgcSVl87XoI-6lCyw==/base.apk",
+      "sha256": "5edd5dc158f1040647c933c9eb875c8b5e0a636367b2b36061e9c425ad480e4f",
+      "expected_sha256": "5edd5dc158f1040647c933c9eb875c8b5e0a636367b2b36061e9c425ad480e4f",
+      "version_code": 16,
+      "version_name": "0.5.3",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_infant_intent_accuracy_tested": false,
+  "layout_retested": true,
+  "visual_fixture": "CC0 public cry with generated plain-color video: intentionally no face"
+}

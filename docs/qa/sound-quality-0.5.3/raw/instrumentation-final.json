@@ -1,0 +1,77 @@
+{
+  "status": "pass",
+  "tests": 184,
+  "passed_tests": 181,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 3,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [],
+  "seconds": 352.7,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "ca4d2c0b58cdc068fd3c5d07fbc117dc9fa1921f4156a487c5ec7bbd673d73b2",
+      "bytes": 81890756
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "1d08b6b21833e393eac136b1198742c19cdde387a884f664f4794f7a43d03b85",
+      "bytes": 1653658
+    },
+    "git": {
+      "sha": "70ba55fa6083153552e41ccdc940c07151067935",
+      "dirty": true,
+      "porcelain": [
+        " M AGENTS.md",
+        " M docs/HANDOFF.md",
+        " M docs/NEXT.md",
+        " M docs/OWNER-TEST.md",
+        " M outputs/QA/README.md",
+        "?? docs/qa/sound-quality-0.5.3/audio-manifest.json",
+        "?? docs/qa/sound-quality-0.5.3/spec-review.md",
+        "?? docs/qa/sound-quality-0.5.3/standards-review.md",
+        "?? outputs/QA/sound_corpus.py"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~9Dlj1zncD_j6_r2Vr0GMRA==/com.moa.babylanguage-VH2HBW-ynj30BVwH3FQdVg==/base.apk",
+      "sha256": "ca4d2c0b58cdc068fd3c5d07fbc117dc9fa1921f4156a487c5ec7bbd673d73b2",
+      "expected_sha256": "ca4d2c0b58cdc068fd3c5d07fbc117dc9fa1921f4156a487c5ec7bbd673d73b2",
+      "version_code": 16,
+      "version_name": "0.5.3",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~UdcNJ2yESyodJwoHdO6IRA==/com.moa.babylanguage.test-Z-98tgulpUALlKKHmOfamA==/base.apk",
+      "sha256": "1d08b6b21833e393eac136b1198742c19cdde387a884f664f4794f7a43d03b85",
+      "expected_sha256": "1d08b6b21833e393eac136b1198742c19cdde387a884f664f4794f7a43d03b85",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

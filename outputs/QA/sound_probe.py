@@ -10,6 +10,7 @@ import hashlib
 import json
 import re
 import subprocess
+import time
 from qa_config import APK, TEST_APK, PACKAGE, adb_command, evidence_dir
 from instrument import installed_provenance, parse_result
 
@@ -46,12 +47,13 @@ def main():
         r=subprocess.run([*adb,'exec-in','run-as',PACKAGE,'sh','-c',f'cat > {destination}/{name}'],
                          input=(corpus/name).read_bytes(),capture_output=True,timeout=30)
         r.check_returncode()
+    started=time.monotonic()
     r=subprocess.run([*adb,'shell','am','instrument','-w','-r','-e','class',PACKAGE+'.PublicAudioProbeTest',
         '-e','public_audio_probe','true','-e','enforce_sound_expectations',str(args.strict).lower(),
         PACKAGE+'.test/androidx.test.runner.AndroidJUnitRunner'],capture_output=True,timeout=300)
     raw=(r.stdout+r.stderr).decode('utf-8','replace')
     (out/'probe-instrumentation.txt').write_text(raw,encoding='utf-8')
-    execution=parse_result(raw,r.returncode,0)
+    execution=parse_result(raw,r.returncode,time.monotonic()-started)
     data=call('shell','run-as',PACKAGE,'cat',destination+'/probe-results.json')
     (out/'sound-results.json').write_bytes(data)
     results=json.loads(data)

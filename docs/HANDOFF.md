@@ -1,10 +1,12 @@
 # 협업 인수인계 — 아가톡
 
-갱신: **2026-10-01** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
+갱신: **2026-10-02** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
 ## 가장 먼저 읽을 현재 상태
 
-**현재 소스는 0.5.2/code15이며 유료 출시 완료본이 아니다.** 사용자에게 전달할 파일은 `outputs/Agattok-0.5.2-test-code15.apk`. 테스트 중 전체 기능을 열라는 요청 누락을 복구한 sideload 전용 preview로, 상단 테스트 표시와 구매 없이 시각 관찰/PDF가 열린다. 정식 release는 기존 이용권 검증을 유지한다. [이번 QA](qa/test-access-0.5.2/README.md)를 따른다. [0.5.1 심층 QA](qa/deep-audit-0.5/README.md)와 [0.5.0/code13](qa/0.5.0/README.md)은 과거 실행 증거다.
+**현재 소스는 0.5.3/code16이며 유료 출시 완료본이 아니다.** 사용자 파일은 `outputs/Agattok-0.5.3-test-code16.apk`. sideload preview는 구매 없이 시각 관찰/PDF가 열리고 정식 release는 기존 이용권 검증을 유지한다. [이번 소리 품질·QA](qa/sound-quality-0.5.3/README.md)를 따른다. [0.5.2 접근 QA](qa/test-access-0.5.2/README.md)와 이전 보고서는 과거 실행 증거다.
+
+0.5.3은 사용자가 지적한 분석 품질도 실제 수정했다. 전체 최고점 대신 시간별 YAMNet 출력·대칭 충돌·지속성을 판정한다. 혼합 후보에 울음/웃음 흉내를 억지로 붙이지 않고 중립 대사를 쓴다. 어린 말소리가3창 이상 확인되는 경로를 추가했다. DC/80Hz 저주파 필터를 분류와 리듬 근거에 함께 적용하며 원음은 그대로 재생한다. 공개 음원·합성 교란22개는 source-label 탐색 QA이며 독립 아기 의도 정확도가 아니다. 일부 옹알이/작은 웃음 보류, 울음과 웃음 모델 혼동, TV/다른 아이의 신원 미확인은 남는다. [결정 과정](qa/sound-quality-0.5.3/DECISIONS.md).
 
 사용자가 실제 앱에서 다른 녹음에도 비슷한 성인 말투, 울음 뒤 놀이 제안, 녹음 없이 선택만으로 문장이 나오는 문제를 제기했다. 스크린샷은 문구·UX 문제의 증거다. **원본 아기 음성·영상은 받지 않았으므로 해당 클립의 분류 전후 비교는 아직 없다.**
 
@@ -25,7 +27,7 @@
 | 영역 | 구현 | 한계 |
 |---|---|---|
 | 입력 | CameraX 영상+AAC / MediaRecorder 음성,60초 상한, 재생,1–15초 구간 | 가져오는 영상도1분·100MB 이하. 임시 원본은 종료/재촬영/다음 실행 시 삭제 |
-| 소리 | YAMNet의 정확한 라벨 매칭, 무음 검사, 아기 울음/웃음/옹알이 후보, 충돌 보류 | 일반 AudioSet 모델이며 아기 신원/욕구를 알지 못함. 임계값은 미보정 규칙 |
+| 소리 | 시간별 YAMNet·양방향 충돌·지속성, 어린 말소리3창 확인, DC/80Hz 필터 | 일반 AudioSet 모델이며 아기 신원/욕구를 알지 못함. 임계값은 미보정 규칙; TV의 아기 소리와 현장 아기 구별 못함 |
 | 한마디 | 관찰된 소리·에너지 패턴 안에서 짧은 캐릭터 문장, 동일 파형은 동일 문장 | 유한 풀. 파형 키는 말투 선택일 뿐 의미 특징·정확도 개선이 아님 |
 | 표정 | 선택 구간 최대5장면 얼굴·입 열림 관찰 | 감정·배고픔 판독 아님. 얼굴 주인도 확인하지 않음. 유료가 더 정확한 뜻을 보장하지 않음 |
 | 접근 | 무료 캡처/가져오기/소리, 실제 이용권으로 시각/PDF | PENDING·화면Boolean으로 열지 않음. 초안/기존 기록은 만료 후에도 무료 |
@@ -40,6 +42,7 @@
 1. [심층 QA](qa/deep-audit-0.5/README.md) → [0.5.0 과거 QA](qa/0.5.0/README.md) → [UX 결정](UX-0.5.md) → [이용 정책](../outputs/Jigeum-Access-Policy.md)
 2. [엔진·논문·권리](research/20261001-cry-evidence.md) / [경쟁 앱·문장 계약](research/20261001-competitors-and-voice.md)
 3. [공개 음성 실제 실행과 웃음 보류](research/20261001-public-audio-probes.md)
+   → [시간별 판정·발성·추가 자료 조사](research/20261002-sound-appropriateness.md): 기존 웃음 보류는 개선. 새 모델 학습/엔진 교체는 하지 않음.
 4. [NEXT](NEXT.md) / [RUNBOOK](RUNBOOK.md) / [운영자 테스트](OWNER-TEST.md)
 
 YAMNet·MediaPipe는 실제 탑재. LiteRT는 추론 런타임이며 의미 모델이 아니다. librosa는 평가 전처리 도구 후보, voc2vec는 연구 후보로만 검토했다. 다섯 레퍼런스를 모두 앱의 독립 엔진으로 사용했다고 말하지 않는다. ICSD·CryCeleb는 비상업 제한 때문에 현 상용 경로에 추가하지 않았다.
@@ -50,7 +53,7 @@ YAMNet·MediaPipe는 실제 탑재. LiteRT는 추론 런타임이며 의미 모�
 |---|---|
 | MainActivity.kt | 홈·기록·앨범·돌봄·저장·접근 정책 연결 |
 | CaptureFlow.kt / LocalCapture.kt | 촬영·임시파일·재생·구간·분석/결과 수명주기 |
-| ClipEvidence.kt / SoundAnalyzer.kt | 관찰·문장 계약 / YAMNet 정확한 라벨·소리 분석 |
+| ClipEvidence.kt / SoundAnalyzer.kt / SoundTimeline.kt / AudioCleanup.kt | 필터와 리듬·관찰·문장 계약 / YAMNet / 시간별 사건 판정 |
 | VideoAudioDecoder.kt / VideoImport.kt | 선택 구간 PCM / 같은 구간의 얼굴 관찰 |
 | ObservationStore.kt / RecordTransfer.kt | 기존 SQLite·JSON/CSV·복원 보존 |
 | AccessPolicy.kt / BillingManager.kt / PurchaseVerifier.kt | 실행 시점 접근 검사·서명 검증 |

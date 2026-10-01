@@ -1,4 +1,8 @@
-# 0.5 실행 안내 — 2026-10-01
+# 0.5.3 실행 안내 — 2026-10-02
+
+현재 배포 파일은 `outputs/Agattok-0.5.3-test-code16.apk`. [소리·필터·전체 QA](qa/sound-quality-0.5.3/README.md)를 먼저 따른다. 공개음원 재현은 `python outputs/QA/sound_corpus.py --directory <로컬 폴더>`로 권리가 확인된 fixture를 준비한 뒤, 전용 기기의 현재 debug/test APK를 빌드하고 `python outputs/QA/sound_probe.py --corpus <같은 폴더> --install-app`으로 실행한다. `ANDROID_SERIAL`, `ANDROID_HOME`, `JIGEUM_QA_EVIDENCE`를 명시한다. 원본은 Git/APK/QA ZIP에 넣지 않는다. `--strict`는 배포자 사건 라벨과 불일치하면 실패하지만 그 라벨 자체가 독립 청취 정답은 아니다.
+
+아래는 이전 버전의 실행 이력이다. 버전 번호·설치 파일은 위 현재 값을 사용한다.
 
 현재0.5.2/code15. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/test-access-0.5.2/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`, `preview_ui.py`를 사용한다. 계측의 조건skip은 [QA 도구 안내](../outputs/QA/README.md)의 명시 목록을 따른다. 정식 버전은 카메라/가져오기 무료, **시각 관찰과 PDF만 유료**. sideload `preview`는 사용자의 전체 기능 테스트 요청으로 구매 없이 열린다.
 

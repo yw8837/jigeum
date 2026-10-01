@@ -1,0 +1,83 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.EvidenceInterpreterTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.EvidenceInterpreterTest:
+INSTRUMENTATION_STATUS: test=strongerBabyCryPeakCannotOverrideConflictingLaughter
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.EvidenceInterpreterTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Values should be different. Actual: 울음
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failEquals(Assert.java:187)
+	at org.junit.Assert.assertNotEquals(Assert.java:163)
+	at org.junit.Assert.assertNotEquals(Assert.java:177)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongerBabyCryPeakCannotOverrideConflictingLaughter(EvidenceInterpreterTest.kt:43)
+
+INSTRUMENTATION_STATUS: stream=
+Error in strongerBabyCryPeakCannotOverrideConflictingLaughter(com.moa.babylanguage.EvidenceInterpreterTest):
+java.lang.AssertionError: Values should be different. Actual: 울음
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failEquals(Assert.java:187)
+	at org.junit.Assert.assertNotEquals(Assert.java:163)
+	at org.junit.Assert.assertNotEquals(Assert.java:177)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongerBabyCryPeakCannotOverrideConflictingLaughter(EvidenceInterpreterTest.kt:43)
+
+INSTRUMENTATION_STATUS: test=strongerBabyCryPeakCannotOverrideConflictingLaughter
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.EvidenceInterpreterTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.EvidenceInterpreterTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<아기 웃음> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying(EvidenceInterpreterTest.kt:38)
+
+INSTRUMENTATION_STATUS: stream=
+Error in strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying(com.moa.babylanguage.EvidenceInterpreterTest):
+java.lang.AssertionError: expected:<아기 웃음> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying(EvidenceInterpreterTest.kt:38)
+
+INSTRUMENTATION_STATUS: test=strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.068
+There were 2 failures:
+1) strongerBabyCryPeakCannotOverrideConflictingLaughter(com.moa.babylanguage.EvidenceInterpreterTest)
+java.lang.AssertionError: Values should be different. Actual: 울음
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failEquals(Assert.java:187)
+	at org.junit.Assert.assertNotEquals(Assert.java:163)
+	at org.junit.Assert.assertNotEquals(Assert.java:177)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongerBabyCryPeakCannotOverrideConflictingLaughter(EvidenceInterpreterTest.kt:43)
+2) strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying(com.moa.babylanguage.EvidenceInterpreterTest)
+java.lang.AssertionError: expected:<아기 웃음> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.EvidenceInterpreterTest.strongLaughterIsNotDiscardedBecauseOfWeakGenericCrying(EvidenceInterpreterTest.kt:38)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

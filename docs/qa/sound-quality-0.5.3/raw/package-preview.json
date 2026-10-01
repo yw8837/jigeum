@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "distribution_checked": "preview",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "pass",
+    "files_compared": 18,
+    "baseline": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\Agattok-0.5.2-test-code15.apk"
+  },
+  "aab_checked": false,
+  "aab_unsigned": null,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "64617e5167d83efaf9fd15e5baf804447473786b84261df051f0b86eef414b70"
+}

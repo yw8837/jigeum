@@ -1,0 +1,1659 @@
+[
+  {
+    "id": "cry",
+    "author": "the_yura",
+    "license": "CC0-1.0",
+    "page": "https:\/\/freesound.org\/people\/the_yura\/sounds\/211528\/",
+    "local": "cry.mp3",
+    "expected": "cry",
+    "allowed": [
+      "울음"
+    ],
+    "split": "development",
+    "source_sha256": "6db3e82746d1815b918d54d0931632e2043b5e850ceb4eac3b3d88216fa8ce39",
+    "pcm_sha256": "021891b549278d7728c207ce9a87db6466dc295d8a3bae9464079eff62ddd2c3",
+    "changes": "First up to 15 seconds, mono 16kHz float32; no normalization; local QA only",
+    "source_label": "cry",
+    "samples": 240000,
+    "milliseconds": 611,
+    "observed": "울음",
+    "frames": [
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.33203125
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.26171875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.19921875
+        },
+        {
+          "label": "Screaming",
+          "score": 0.19921875
+        },
+        {
+          "label": "Groan",
+          "score": 0.109375
+        },
+        {
+          "label": "Whimper",
+          "score": 0.109375
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.109375
+        },
+        {
+          "label": "Speech",
+          "score": 0.05859375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.05859375
+        },
+        {
+          "label": "Babbling",
+          "score": 0.04296875
+        },
+        {
+          "label": "Giggle",
+          "score": 0.04296875
+        },
+        {
+          "label": "Child singing",
+          "score": 0.04296875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.03125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.01171875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.33203125
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.26171875
+        },
+        {
+          "label": "Hiccup",
+          "score": 0.19921875
+        },
+        {
+          "label": "Cough",
+          "score": 0.19921875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.19921875
+        },
+        {
+          "label": "Babbling",
+          "score": 0.1484375
+        },
+        {
+          "label": "Giggle",
+          "score": 0.1484375
+        },
+        {
+          "label": "Laughter",
+          "score": 0.1484375
+        },
+        {
+          "label": "Whimper",
+          "score": 0.1484375
+        },
+        {
+          "label": "Sneeze",
+          "score": 0.109375
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.109375
+        },
+        {
+          "label": "Throat clearing",
+          "score": 0.109375
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.08203125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.05859375
+        },
+        {
+          "label": "Screaming",
+          "score": 0.05859375
+        },
+        {
+          "label": "Gasp",
+          "score": 0.05859375
+        },
+        {
+          "label": "Wheeze",
+          "score": 0.05859375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.04296875
+        },
+        {
+          "label": "Speech",
+          "score": 0.04296875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.01953125
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.890625
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.80078125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.33203125
+        },
+        {
+          "label": "Laughter",
+          "score": 0.08203125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.08203125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.05859375
+        },
+        {
+          "label": "Giggle",
+          "score": 0.05859375
+        },
+        {
+          "label": "Screaming",
+          "score": 0.015625
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.015625
+        },
+        {
+          "label": "Speech",
+          "score": 0.0078125
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.0078125
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.8515625
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.73828125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.26171875
+        },
+        {
+          "label": "Babbling",
+          "score": 0.08203125
+        },
+        {
+          "label": "Giggle",
+          "score": 0.03125
+        },
+        {
+          "label": "Laughter",
+          "score": 0.03125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.01953125
+        },
+        {
+          "label": "Speech",
+          "score": 0.015625
+        },
+        {
+          "label": "Screaming",
+          "score": 0.015625
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.015625
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Animal",
+          "score": 0.5
+        },
+        {
+          "label": "Chicken, rooster",
+          "score": 0.33203125
+        },
+        {
+          "label": "Livestock, farm animals, working animals",
+          "score": 0.26171875
+        },
+        {
+          "label": "Fowl",
+          "score": 0.26171875
+        },
+        {
+          "label": "Cluck",
+          "score": 0.19921875
+        },
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.1484375
+        },
+        {
+          "label": "Wild animals",
+          "score": 0.1484375
+        },
+        {
+          "label": "Dog",
+          "score": 0.109375
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.109375
+        },
+        {
+          "label": "Bird",
+          "score": 0.08203125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.04296875
+        },
+        {
+          "label": "Rodents, rats, mice",
+          "score": 0.04296875
+        },
+        {
+          "label": "Pig",
+          "score": 0.04296875
+        },
+        {
+          "label": "Whimper",
+          "score": 0.03125
+        },
+        {
+          "label": "Speech",
+          "score": 0.015625
+        },
+        {
+          "label": "Laughter",
+          "score": 0.015625
+        },
+        {
+          "label": "Giggle",
+          "score": 0.01171875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.0078125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.0078125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.00390625
+        },
+        {
+          "label": "Screaming",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Cap gun",
+          "score": 0.26171875
+        },
+        {
+          "label": "Speech",
+          "score": 0.109375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.109375
+        },
+        {
+          "label": "Gunshot, gunfire",
+          "score": 0.109375
+        },
+        {
+          "label": "Camera",
+          "score": 0.05859375
+        },
+        {
+          "label": "Explosion",
+          "score": 0.05859375
+        },
+        {
+          "label": "Outside, rural or natural",
+          "score": 0.05859375
+        },
+        {
+          "label": "Silence",
+          "score": 0.04296875
+        },
+        {
+          "label": "Arrow",
+          "score": 0.04296875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.00390625
+        },
+        {
+          "label": "Screaming",
+          "score": 0
+        },
+        {
+          "label": "Whimper",
+          "score": 0
+        },
+        {
+          "label": "Laughter",
+          "score": 0
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Giggle",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Inside, small room",
+          "score": 0.26171875
+        },
+        {
+          "label": "Walk, footsteps",
+          "score": 0.08203125
+        },
+        {
+          "label": "Crumpling, crinkling",
+          "score": 0.08203125
+        },
+        {
+          "label": "Speech",
+          "score": 0.05859375
+        },
+        {
+          "label": "Tearing",
+          "score": 0.04296875
+        },
+        {
+          "label": "Fire",
+          "score": 0.04296875
+        },
+        {
+          "label": "Crackle",
+          "score": 0.04296875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.00390625
+        },
+        {
+          "label": "Screaming",
+          "score": 0
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0
+        },
+        {
+          "label": "Whimper",
+          "score": 0
+        },
+        {
+          "label": "Laughter",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        },
+        {
+          "label": "Giggle",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.66796875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.4140625
+        },
+        {
+          "label": "Whimper",
+          "score": 0.26171875
+        },
+        {
+          "label": "Animal",
+          "score": 0.109375
+        },
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.08203125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.08203125
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.05859375
+        },
+        {
+          "label": "Cat",
+          "score": 0.05859375
+        },
+        {
+          "label": "Wild animals",
+          "score": 0.04296875
+        },
+        {
+          "label": "Crow",
+          "score": 0.04296875
+        },
+        {
+          "label": "Speech",
+          "score": 0.03125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.015625
+        },
+        {
+          "label": "Giggle",
+          "score": 0.01171875
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.0078125
+        },
+        {
+          "label": "Laughter",
+          "score": 0.0078125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Babbling",
+          "score": 0.19921875
+        },
+        {
+          "label": "Dog",
+          "score": 0.1484375
+        },
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.1484375
+        },
+        {
+          "label": "Animal",
+          "score": 0.1484375
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.1484375
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.1484375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.08203125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.08203125
+        },
+        {
+          "label": "Giggle",
+          "score": 0.05859375
+        },
+        {
+          "label": "Speech",
+          "score": 0.05859375
+        },
+        {
+          "label": "Canidae, dogs, wolves",
+          "score": 0.04296875
+        },
+        {
+          "label": "Whimper",
+          "score": 0.04296875
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.04296875
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.04296875
+        },
+        {
+          "label": "Cat",
+          "score": 0.04296875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.04296875
+        },
+        {
+          "label": "Whimper (dog)",
+          "score": 0.04296875
+        },
+        {
+          "label": "Screaming",
+          "score": 0.03125
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.0078125
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.890625
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.80078125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.26171875
+        },
+        {
+          "label": "Speech",
+          "score": 0.01953125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.01171875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.0078125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.0078125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.00390625
+        },
+        {
+          "label": "Giggle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.95703125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.8515625
+        },
+        {
+          "label": "Whimper",
+          "score": 0.19921875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.0078125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.0078125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.00390625
+        },
+        {
+          "label": "Speech",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0
+        },
+        {
+          "label": "Giggle",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.95703125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.8515625
+        },
+        {
+          "label": "Whimper",
+          "score": 0.19921875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.01171875
+        },
+        {
+          "label": "Screaming",
+          "score": 0.0078125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.0078125
+        },
+        {
+          "label": "Giggle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        },
+        {
+          "label": "Speech",
+          "score": 0
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.5859375
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.4140625
+        },
+        {
+          "label": "Whimper",
+          "score": 0.26171875
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.19921875
+        },
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.1484375
+        },
+        {
+          "label": "Babbling",
+          "score": 0.1484375
+        },
+        {
+          "label": "Animal",
+          "score": 0.1484375
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.109375
+        },
+        {
+          "label": "Giggle",
+          "score": 0.109375
+        },
+        {
+          "label": "Laughter",
+          "score": 0.109375
+        },
+        {
+          "label": "Dog",
+          "score": 0.109375
+        },
+        {
+          "label": "Screaming",
+          "score": 0.05859375
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.05859375
+        },
+        {
+          "label": "Cough",
+          "score": 0.04296875
+        },
+        {
+          "label": "Cat",
+          "score": 0.04296875
+        },
+        {
+          "label": "Groan",
+          "score": 0.04296875
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.04296875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.01953125
+        },
+        {
+          "label": "Speech",
+          "score": 0.015625
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.015625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.5859375
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.5
+        },
+        {
+          "label": "Whimper",
+          "score": 0.1484375
+        },
+        {
+          "label": "Babbling",
+          "score": 0.109375
+        },
+        {
+          "label": "Speech",
+          "score": 0.08203125
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.05859375
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.05859375
+        },
+        {
+          "label": "Giggle",
+          "score": 0.04296875
+        },
+        {
+          "label": "Screaming",
+          "score": 0.04296875
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.04296875
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.04296875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.04296875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Crying, sobbing",
+          "score": 0.73828125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.5
+        },
+        {
+          "label": "Whimper",
+          "score": 0.19921875
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.08203125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.05859375
+        },
+        {
+          "label": "Animal",
+          "score": 0.04296875
+        },
+        {
+          "label": "Giggle",
+          "score": 0.04296875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.04296875
+        },
+        {
+          "label": "Babbling",
+          "score": 0.03125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.01953125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.01953125
+        },
+        {
+          "label": "Speech",
+          "score": 0.01953125
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Groan",
+          "score": 0.26171875
+        },
+        {
+          "label": "Speech",
+          "score": 0.109375
+        },
+        {
+          "label": "Wail, moan",
+          "score": 0.109375
+        },
+        {
+          "label": "Screaming",
+          "score": 0.109375
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.05859375
+        },
+        {
+          "label": "Sound effect",
+          "score": 0.05859375
+        },
+        {
+          "label": "Silence",
+          "score": 0.04296875
+        },
+        {
+          "label": "Whimper",
+          "score": 0.04296875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.03125
+        },
+        {
+          "label": "Giggle",
+          "score": 0.015625
+        },
+        {
+          "label": "Laughter",
+          "score": 0.01171875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.01171875
+        },
+        {
+          "label": "Conversation",
+          "score": 0.00390625
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.00390625
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0.00390625
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        }
+      ]
+    ],
+    "cues": [
+      {
+        "label": "울음(화자 미확인)",
+        "score": 0.95703125
+      },
+      {
+        "label": "울음",
+        "score": 0.8515625
+      }
+    ],
+    "phrase": "응애, 응애… 토닥토닥 해줄래요?",
+    "problem": null,
+    "activeFraction": 0.6666666865348816,
+    "bursts": 10
+  },
+  {
+    "id": "laugh",
+    "author": "reinsamba",
+    "license": "CC-BY-3.0",
+    "page": "https:\/\/freesound.org\/people\/reinsamba\/sounds\/47370\/",
+    "local": "laugh.mp3",
+    "expected": "laugh",
+    "allowed": [
+      "아기 웃음"
+    ],
+    "split": "development",
+    "source_sha256": "d1129741d5761aa39935f74bd7ecb5474a0c889b73501a9d0e1cf2fba9dbd982",
+    "pcm_sha256": "2bb061a12e4611edd6c2097011227f38542a5e4f5bde82332c8bcb227c0cc35e",
+    "changes": "First up to 15 seconds, mono 16kHz float32; no normalization; local QA only",
+    "source_label": "laugh",
+    "samples": 39665,
+    "milliseconds": 91,
+    "observed": "abstain",
+    "frames": [
+      [
+        {
+          "label": "Laughter",
+          "score": 0.984375
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.66796875
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.19921875
+        },
+        {
+          "label": "Giggle",
+          "score": 0.05859375
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.01953125
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0
+        },
+        {
+          "label": "Screaming",
+          "score": 0
+        },
+        {
+          "label": "Whimper",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Speech",
+          "score": 0
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Laughter",
+          "score": 0.4140625
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.33203125
+        },
+        {
+          "label": "Babbling",
+          "score": 0.33203125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.26171875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.19921875
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.19921875
+        },
+        {
+          "label": "Giggle",
+          "score": 0.1484375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.04296875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.03125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.01953125
+        },
+        {
+          "label": "Speech",
+          "score": 0.01953125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.015625
+        },
+        {
+          "label": "Screaming",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Speech",
+          "score": 0.26171875
+        },
+        {
+          "label": "Silence",
+          "score": 0.08203125
+        },
+        {
+          "label": "Breathing",
+          "score": 0.08203125
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.05859375
+        },
+        {
+          "label": "Snoring",
+          "score": 0.05859375
+        },
+        {
+          "label": "Babbling",
+          "score": 0.05859375
+        },
+        {
+          "label": "Sneeze",
+          "score": 0.04296875
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.04296875
+        },
+        {
+          "label": "Laughter",
+          "score": 0.03125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.01953125
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.01953125
+        },
+        {
+          "label": "Giggle",
+          "score": 0.01953125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.01171875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.0078125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.0078125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ]
+    ],
+    "cues": [
+      {
+        "label": "웃음(화자 미확인)",
+        "score": 0.984375
+      },
+      {
+        "label": "아기 웃음 후보",
+        "score": 0.66796875
+      },
+      {
+        "label": "울음(화자 미확인)",
+        "score": 0.33203125
+      },
+      {
+        "label": "옹알이 후보",
+        "score": 0.33203125
+      },
+      {
+        "label": "말소리(화자 미확인)",
+        "score": 0.26171875
+      }
+    ],
+    "phrase": null,
+    "problem": "울음·높은 소리와 다른 소리가 섞여 있어 한마디로 표현하기 어려워요. 짧은 구간으로 다시 골라 주세요.",
+    "activeFraction": 0.6399999856948853,
+    "bursts": 2
+  },
+  {
+    "id": "babble",
+    "author": "keplar",
+    "license": "CC-BY-4.0",
+    "page": "https:\/\/freesound.org\/people\/keplar\/sounds\/139046\/",
+    "url": "https:\/\/cdn.freesound.org\/previews\/139\/139046_316502-lq.mp3",
+    "expected": "babble",
+    "allowed": [
+      "옹알이"
+    ],
+    "split": "development",
+    "source_sha256": "4fac0655715f632a30853b572b6f77d9feeb0816941e77b4efceaf7385085799",
+    "pcm_sha256": "d8d461674fa5513046127bc333f65f0c6e2d341b8f7a0202fbc866ff3a04d526",
+    "changes": "First up to 15 seconds, mono 16kHz float32; no normalization; local QA only",
+    "source_label": "babble",
+    "samples": 45564,
+    "milliseconds": 68,
+    "observed": "아기 웃음",
+    "frames": [
+      [
+        {
+          "label": "Animal",
+          "score": 0.109375
+        },
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.08203125
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.08203125
+        },
+        {
+          "label": "Bird",
+          "score": 0.08203125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.05859375
+        },
+        {
+          "label": "Whimper",
+          "score": 0.04296875
+        },
+        {
+          "label": "Wild animals",
+          "score": 0.04296875
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.03125
+        },
+        {
+          "label": "Speech",
+          "score": 0.01953125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.015625
+        },
+        {
+          "label": "Laughter",
+          "score": 0.015625
+        },
+        {
+          "label": "Giggle",
+          "score": 0.01171875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.00390625
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Domestic animals, pets",
+          "score": 0.33203125
+        },
+        {
+          "label": "Animal",
+          "score": 0.26171875
+        },
+        {
+          "label": "Dog",
+          "score": 0.19921875
+        },
+        {
+          "label": "Whimper",
+          "score": 0.1484375
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.109375
+        },
+        {
+          "label": "Inside, small room",
+          "score": 0.08203125
+        },
+        {
+          "label": "Squeak",
+          "score": 0.05859375
+        },
+        {
+          "label": "Screaming",
+          "score": 0.015625
+        },
+        {
+          "label": "Speech",
+          "score": 0.01171875
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.00390625
+        },
+        {
+          "label": "Laughter",
+          "score": 0.00390625
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.00390625
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0
+        },
+        {
+          "label": "Babbling",
+          "score": 0
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0
+        },
+        {
+          "label": "Giggle",
+          "score": 0
+        }
+      ],
+      [
+        {
+          "label": "Laughter",
+          "score": 0.80078125
+        },
+        {
+          "label": "Baby laughter",
+          "score": 0.5
+        },
+        {
+          "label": "Belly laugh",
+          "score": 0.26171875
+        },
+        {
+          "label": "Giggle",
+          "score": 0.26171875
+        },
+        {
+          "label": "Chuckle, chortle",
+          "score": 0.05859375
+        },
+        {
+          "label": "Crying, sobbing",
+          "score": 0.04296875
+        },
+        {
+          "label": "Babbling",
+          "score": 0.01953125
+        },
+        {
+          "label": "Baby cry, infant cry",
+          "score": 0.01953125
+        },
+        {
+          "label": "Child speech, kid speaking",
+          "score": 0.0078125
+        },
+        {
+          "label": "Speech",
+          "score": 0.0078125
+        },
+        {
+          "label": "Screaming",
+          "score": 0.0078125
+        },
+        {
+          "label": "Whimper",
+          "score": 0.00390625
+        },
+        {
+          "label": "Hubbub, speech noise, speech babble",
+          "score": 0
+        },
+        {
+          "label": "Conversation",
+          "score": 0
+        }
+      ]
+    ],
+    "cues": [
+      {
+        "label": "웃음(화자 미확인)",
+        "score": 0.80078125
+      },
+      {
+        "label": "아기 웃음 후보",
+        "score": 0.5
+      }
+    ],
+    "phrase": "헤헤, 나랑 같이 웃어줄래요?",
+    "problem": null,
+    "activeFraction": 0.7931034564971924,
+    "bursts": 1
+  }
+]
