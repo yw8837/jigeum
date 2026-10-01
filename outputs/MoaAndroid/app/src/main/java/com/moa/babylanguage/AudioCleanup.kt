@@ -10,7 +10,7 @@ import kotlin.math.sqrt
  * vocalizations must not be removed just because they are quiet/non-speech. */
 internal object AudioCleanup {
     fun filter(pcm: FloatArray): FloatArray {
-        require(pcm.isNotEmpty() && pcm.size <= 240_000 && pcm.all { it.isFinite() })
+        require(pcm.isNotEmpty() && pcm.size <= 480_000 && pcm.all { it.isFinite() })
         val mean = pcm.sumOf { it.toDouble() } / pcm.size
         // Second-order Butterworth high-pass, 80 Hz (well below typical vocal harmonics).
         val omega = 2 * PI * 80 / 16_000
