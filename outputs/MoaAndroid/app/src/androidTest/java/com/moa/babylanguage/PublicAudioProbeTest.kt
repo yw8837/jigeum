@@ -45,6 +45,7 @@ class PublicAudioProbeTest {
                 val shape = AcousticShape.from(pcm)
                 val range = ClipRange(0, (pcm.size * 1000L / 16_000).coerceAtMost(15_000))
                 val result = EvidenceInterpreter.interpret(audio, shape, range)
+                val elapsedMs = android.os.SystemClock.elapsedRealtime() - started
                 val observed = result.interpretation?.sound ?: "abstain"
                 val (rawFrames, rawAudio) = rawFrames(context, pcm)
                 val rawResult = EvidenceInterpreter.interpret(rawAudio, shape, range)
@@ -52,7 +53,7 @@ class PublicAudioProbeTest {
                         entry.getJSONArray("allowed").getString(it) == observed
                     }) mismatches += "$name: $observed"
                 results.put(JSONObject(entry.toString()).put("source_label", name).put("samples", pcm.size)
-                    .put("milliseconds", android.os.SystemClock.elapsedRealtime() - started)
+                    .put("milliseconds", elapsedMs)
                     .put("observed", observed)
                     .put("frame_starts_ms", JSONArray(audio.frames.map { it.startMs }))
                     .put("raw_observed", rawResult.interpretation?.sound ?: "abstain")
@@ -77,7 +78,7 @@ class PublicAudioProbeTest {
             val audio = AudioData.create(format, pcm.size)
             audio.load(pcm)
             val raw = classifier.classify(audio).classificationResults()
-            val timeline = raw.map { frame -> SoundFrame(frame.timestampMs().orElseThrow(),
+            val timeline = raw.map { frame -> SoundFrame(frame.timestampMs().orElseThrow { IllegalStateException("Missing audio timestamp") },
                 frame.classifications().flatMap { it.categories() }.mapNotNull { category ->
                     SoundAnalyzer.cueLabel(category.categoryName())?.let { SoundCue(it,category.score()) }
                 }) }

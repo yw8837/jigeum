@@ -72,7 +72,7 @@ def main():
         verdict['installs'].append(install(args.preview_apk))
         flow.launch(); q.wait_ui('테스트 버전 · 전체 기능 열림')
         q.tap_text('기록'); q.wait_ui(seed['records'][0]['phrase'])
-        verdict['scenarios'].append('code14 to code15-test same-package signed update preserves records')
+        verdict['scenarios'].append('baseline to preview same-package signed update preserves records')
         for permission in ['android.permission.CAMERA', 'android.permission.RECORD_AUDIO']:
             q.shell('pm', 'grant', q.PACKAGE, permission)
         layouts = [] if args.skip_layout else [('small','720x1280','320','1.0'), ('font200','1080x2400','420','2.0')]

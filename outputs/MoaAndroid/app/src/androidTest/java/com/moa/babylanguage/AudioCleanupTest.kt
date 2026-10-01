@@ -29,4 +29,16 @@ class AudioCleanupTest {
         assertTrue(AudioCleanup.filter(FloatArray(16000)).all { it==0f })
         assertTrue(runCatching { AudioCleanup.filter(FloatArray(16000){Float.NaN}) }.isFailure)
     }
+    @Test fun removedDcCannotBecomeInfantRhythmOrVolumeEvidence() {
+        val shape=AcousticShape.from(FloatArray(48000){.3f})
+        assertEquals(0f,shape.activeFraction,0f)
+        assertEquals(0,shape.bursts)
+        assertFalse(shape.rising)
+        val quiet=tone(440,.02f)
+        val withDc=FloatArray(quiet.size){quiet[it]+.3f}
+        val before=AcousticShape.from(quiet); val after=AcousticShape.from(withDc)
+        assertEquals(before.activeFraction,after.activeFraction,.01f)
+        assertEquals(before.bursts,after.bursts)
+        assertEquals(before.rising,after.rising)
+    }
 }

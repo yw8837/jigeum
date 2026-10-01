@@ -22,11 +22,18 @@ internal data class ClipRange(val startMs: Long, val endMs: Long) {
 internal data class AcousticShape(val activeFraction: Float, val rising: Boolean, val bursts: Int, val wordingKey: Int = 0) {
     companion object {
         fun from(pcm: FloatArray): AcousticShape {
-            val energy = (pcm.indices step 1600).map { start ->
-                val end = minOf(start + 1600, pcm.size)
-                var sum = 0.0
-                for (i in start until end) sum += pcm[i].toDouble() * pcm[i]
-                sqrt(sum / (end - start)).toFloat()
+            // Match the model's analysis filter. Removed hum/DC must not describe
+            // an infant's volume or rhythm. Playback and the wording key use raw PCM.
+            val cleaned = AudioCleanup.filter(pcm)
+            val energy = try {
+                (cleaned.indices step 1600).map { start ->
+                    val end = minOf(start + 1600, cleaned.size)
+                    var sum = 0.0
+                    for (i in start until end) sum += cleaned[i].toDouble() * cleaned[i]
+                    sqrt(sum / (end - start)).toFloat()
+                }
+            } finally {
+                cleaned.fill(0f)
             }
             val active = energy.map { it >= 0.012f }
             val bursts = active.indices.count { active[it] && (it == 0 || !active[it - 1]) }

@@ -77,9 +77,10 @@ class EvidenceInterpreterTest {
         assertEquals(AcousticShape.from(clip), AcousticShape.from(clip.copyOf()))
     }
     @Test fun acousticShapeMeasuresWaveformInsteadOfCaregiverChoices() {
-        val flat = FloatArray(48_000) { .05f }
-        val bursts = FloatArray(48_000) { if (it / 1600 % 3 == 0) .05f else 0f }
-        val rising = FloatArray(48_000) { if (it < 24_000) .02f else .15f }
+        fun tone(i: Int) = kotlin.math.sin(i * 2 * kotlin.math.PI * 440 / 16000).toFloat()
+        val flat = FloatArray(48_000) { .05f * tone(it) }
+        val bursts = FloatArray(48_000) { if (it / 1600 % 3 == 0) .05f * tone(it) else 0f }
+        val rising = FloatArray(48_000) { (if (it < 24_000) .02f else .15f) * tone(it) }
         assertEquals(1f, AcousticShape.from(flat).activeFraction, .01f)
         assertTrue(AcousticShape.from(bursts).bursts >= 5)
         assertTrue(AcousticShape.from(rising).rising)
