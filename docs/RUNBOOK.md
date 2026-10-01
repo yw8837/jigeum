@@ -1,10 +1,10 @@
-# 0.5.5/code19 실행 안내
+# 0.5.6/code20 실행 안내
 
-전체 계측231통과/0실패/1명시제외, 미디어7개/관련회귀31개, 서명앱 UI와 패키징 결과는 [최신 QA](qa/media-0.5.5/README.md)를 따른다. 새 전달 APK/AAB는 `outputs/Agattok-0.5.5-*-code19.*`. 무료/전체 시간 상한은0.5.4와 같다.
+전체 계측246통과/0실패/1명시제외, 갤러리15개/기존 미디어7개 포함. 서명 UI는 결과 저장 앞부분의 통과 증거와 이후 기록 중심 실행의 통과를 합쳐 검증했다. [최신 QA](qa/gallery-0.5.6/README.md)를 따른다. 새 전달 APK/AAB는 `outputs/Agattok-0.5.6-*-code20.*`. 무료/전체 시간 상한은0.5.4와 같다.
 
-미디어 QA: `TranslatedMediaTests`(합성 fixture만), `outputs/QA/media_ui.py`(명시한 권리 확인 로컬 소리), 전체 `instrument.py --timeout 1500 --allow-skip com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes`. Gradle/ADB는 한 명. 기록/파일에 실제 아기 자료가 없는 전용 기기만 사용한다. 신규 SDK 선언1.8.0은 기존 의존성 정렬로 실제 Media3 1.9.0이 선택됨을 dependencyInsight로 확인했다. 플랫폼 진단 전송은 껐다.
+갤러리 QA: `GalleryMediaTests`15개 / `TranslatedMediaTests`7개(합성 fixture만), `outputs/QA/gallery_ui.py --preview-apk <새 test.apk> --release-apk <새 release.apk> --source <권리 확인 로컬 파일>`, 전체 `instrument.py --timeout 1500 --allow-skip com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes`. 기록 전용 `--record-only`는 같은 최종 서명 APK의 앞부분 결과 저장 증거와 저장된 기록이 있을 때만 이어가고, 앞부분 실패 결과를 통과로 덮어쓰지 않는다. Gradle/ADB는 한 명. 실제 아기자료가 없는 전용 기기만 사용한다. 원본·파생 PNG/MP4는 Git에 넣지 않는다. 기존 Media3 1.9.0 의존성·플랫폼 진단 전송 비활성화 유지.
 
-Play 초안은code18이다. code19 패키징을 업로드·검토 전송으로 보고하지 않는다. 공개 전화 승인과 계정 차단 해소 후 새 release AAB로 교체한다. preview APK는 Play 제출 불가. 사용자폰 자동 업데이트 전환은 code19보다 높은 후속 versionCode 및 실제 Play 서명/설치 경로로 검증해야 한다.
+Play Alpha는release20 업로드·출시 저장 완료이며 공개 전화 문자 인증/저장 때문에 검토 미전송이다. [현재 상태](release/20261002/PLAY-STATUS.md). preview APK는 Play 제출 불가. 사용자폰 자동 업데이트 전환은code21 이상의 후속 versionCode 및 실제 Play 서명/설치 경로로 검증해야 한다. 공개 갤러리 정책은revision `jigeum-verifier-00005-ph7`에 반영됐으며 재배포할 필요 없다.
 
 ## 0.5.4 이하 실행 안내 이력
 

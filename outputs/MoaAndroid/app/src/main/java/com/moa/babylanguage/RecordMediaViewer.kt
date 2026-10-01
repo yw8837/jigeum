@@ -8,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,6 +63,7 @@ internal fun RecordMediaViewer(record: Observation, onClose: () -> Unit, onMessa
     var media by remember(record.id) { mutableStateOf<LocalClip?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     var downloaded by rememberSaveable(record.id) { mutableStateOf(false) }
+    var galleryMessage by rememberSaveable(record.id) { mutableStateOf<String?>(null) }
     var working by remember { mutableStateOf(false) }
     var stop by remember { mutableIntStateOf(0) }
     var pendingGeneration by rememberSaveable { mutableLongStateOf(-1) }
@@ -97,6 +100,32 @@ internal fun RecordMediaViewer(record: Observation, onClose: () -> Unit, onMessa
                 Text(record.phrase, color = Ink, fontSize = 19.sp)
                 Text("선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.", color = Muted, fontSize = 13.sp)
                 if (working) LinearProgressIndicator(Modifier.fillMaxWidth())
+                GallerySaveButton("앨범에 영상 저장", media != null && !working && !pickerPending, { error = it }) {
+                    stop++; working = true; error = null; galleryMessage = null
+                    val generation = MemoryArtifacts.currentGeneration()
+                    scope.launch {
+                        try {
+                            GalleryMedia.video(context, RecordMedia.file(context, record.id), generation)
+                            galleryMessage = "아가톡 앨범에 영상 카드를 저장했어요."
+                        } catch (cancelled: CancellationException) { throw cancelled }
+                        catch (failure: Exception) { error = failure.message ?: "앨범에 영상을 저장하지 못했어요." }
+                        finally { working = false }
+                    }
+                }
+                GallerySaveButton("카드 이미지 앨범에 저장", media != null && !working && !pickerPending, { error = it }) {
+                    stop++; working = true; error = null; galleryMessage = null
+                    val generation = MemoryArtifacts.currentGeneration()
+                    scope.launch {
+                        var bitmap: android.graphics.Bitmap? = null
+                        try {
+                            withContext(Dispatchers.IO) { bitmap = MomentCardRenderer.savedFrame(context, record) }
+                            GalleryMedia.image(context, checkNotNull(bitmap), generation)
+                            galleryMessage = "아가톡 앨범에 카드 이미지를 저장했어요."
+                        } catch (cancelled: CancellationException) { throw cancelled }
+                        catch (failure: Exception) { error = failure.message ?: "앨범에 이미지를 저장하지 못했어요." }
+                        finally { bitmap?.recycle(); working = false }
+                    }
+                }
                 PrimaryButton("번역 영상 내려받기", {
                     stop++; error = null; downloaded = false; pendingGeneration = MemoryArtifacts.currentGeneration(); pickerPending = true
                     try { picker.launch("아가톡-${record.id}.mp4") }
@@ -116,6 +145,11 @@ internal fun RecordMediaViewer(record: Observation, onClose: () -> Unit, onMessa
                     }
                 }, enabled = media != null && !working && !pickerPending, modifier = Modifier.fillMaxWidth()) { Text("번역 영상 공유") }
                 if (downloaded) Text("번역 영상을 선택한 위치에 내려받았어요.", color = Ink)
+                galleryMessage?.let {
+                    val bring = remember { BringIntoViewRequester() }
+                    LaunchedEffect(it) { bring.bringIntoView() }
+                    Text(it, color = Ink, modifier = Modifier.bringIntoViewRequester(bring))
+                }
                 error?.let { Text(it, color = Ink) }
                 Text("JSON·CSV·PDF 백업에는 영상과 소리가 포함되지 않아요. 보관하려면 이 영상도 따로 내려받아 주세요.", color = Muted, fontSize = 13.sp)
             }

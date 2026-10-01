@@ -44,7 +44,7 @@ class TranslatedMediaTests {
             assertTrue("duration=$duration expected=$expectedMs", kotlin.math.abs(duration - expectedMs) < 150)
             assertEquals("yes", retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO))
             val frame = retriever.getFrameAtTime(500_000, MediaMetadataRetriever.OPTION_CLOSEST)!!
-            assertEquals(720, frame.width); assertEquals(960, frame.height)
+            assertEquals(720, frame.width); assertTrue(frame.height in 960..4096)
             val samples = VideoAudioDecoder.decode(context, Uri.fromFile(file), startMs = 0, endMs = expectedMs)!!
             assertTrue("original audio must remain audible", sqrt(samples.sumOf { it.toDouble()*it } / samples.size) > .025)
             samples.fill(0f)
@@ -109,7 +109,7 @@ class TranslatedMediaTests {
                 try {
                     assertEquals(if(video) 0 else 255, Color.alpha(frame.getPixel(20,20)))
                     // The measured body must end before the metadata/footer margin.
-                    for (x in 0 until 720) assertEquals(0xFFFFF9F0.toInt(),frame.getPixel(x,900))
+                    for (x in 0 until 720) assertEquals(0xFFFFF9F0.toInt(),frame.getPixel(x,frame.height-60))
                 } finally { frame.recycle() }
             }
         }

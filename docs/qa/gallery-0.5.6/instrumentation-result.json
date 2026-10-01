@@ -1,0 +1,78 @@
+{
+  "status": "pass",
+  "tests": 247,
+  "passed_tests": 246,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 1,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+  ],
+  "validation_errors": [],
+  "seconds": 704.96,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "6596070be836b66d338c8651265954b6a3175064d91bb625f0b39eb314895e53",
+      "bytes": 84002758
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "39e1495058f6a6f7f5a825d082a55442898a6811e42d6316097a9a7d98963c9d",
+      "bytes": 2150620
+    },
+    "git": {
+      "sha": "31042d7cbf6a0333d43abf43222822c2fa6a3937",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/Jigeum-Access-Policy.md",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/TranslatedMediaTests.kt",
+        " M outputs/MoaAndroid/app/src/main/AndroidManifest.xml",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordMediaViewer.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt",
+        " M outputs/PlayVerifier/public/privacy.html",
+        " M outputs/PlayVerifier/public/support.html",
+        "?? docs/UX-GALLERY-0.5.6.md",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/GalleryMediaTests.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/GalleryMedia.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ResultMomentCard.kt"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~KLQ7l6kqBdmnCxEfnPwcNw==/com.moa.babylanguage--Yisq4AKPptaL7vslutkog==/base.apk",
+      "sha256": "6596070be836b66d338c8651265954b6a3175064d91bb625f0b39eb314895e53",
+      "expected_sha256": "6596070be836b66d338c8651265954b6a3175064d91bb625f0b39eb314895e53",
+      "version_code": 20,
+      "version_name": "0.5.6",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~TMXkwW8d0uj304EH75w0Bw==/com.moa.babylanguage.test-V_CVxEfc-_TLBz8NaTirjQ==/base.apk",
+      "sha256": "39e1495058f6a6f7f5a825d082a55442898a6811e42d6316097a9a7d98963c9d",
+      "expected_sha256": "39e1495058f6a6f7f5a825d082a55442898a6811e42d6316097a9a7d98963c9d",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

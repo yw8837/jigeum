@@ -1,0 +1,77 @@
+{
+  "known_files": 10,
+  "all_files_removed": true,
+  "provider_rows_absent": true,
+  "entries": [
+    {
+      "path": "/sdcard/Movies/아가톡/아가톡-1790889698646-2a182bba-7bc1-47f8-8225-aab7b8d3b4d3.mp4",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Movies/아가톡/아가톡-1790889901201-f6130ba9-0bba-4921-80e6-a32d1db1e3ed.mp4",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Movies/아가톡/아가톡-1790890104309-717e0123-9200-402e-8d4e-d27b1f4a17c0.mp4",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Movies/아가톡/아가톡-1790890304440-ed77ece4-6a03-438d-858d-a0d607705295.mp4",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Movies/아가톡/아가톡-1790890501517-71175f72-af49-41a9-8ede-c5dfe45e8259.mp4",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Pictures/아가톡/아가톡-1790889649276-3704f120-1678-48b0-97f8-94fd61a7f035.png",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Pictures/아가톡/아가톡-1790889853173-042e94e2-bce3-4e99-b308-8230cab9b93c.png",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Pictures/아가톡/아가톡-1790890055540-40bde4f6-a86e-4708-8985-95f5719d0913.png",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Pictures/아가톡/아가톡-1790890520390-5828a0da-3650-487d-94eb-8b966549ad67.png",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    },
+    {
+      "path": "/sdcard/Pictures/아가톡/아가톡-1790890562633-eac5af4f-0c6e-4f14-9ffd-9df2db7e399d.png",
+      "file_removed": true,
+      "query_exit": 0,
+      "query_output": "No result found.",
+      "provider_row_absent": true
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "ApplySharedPref",
+    "severity": "Warning",
+    "message": "Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background",
+    "file": "ReviewAccessVerifier.kt",
+    "line": "102"
+  },
+  {
+    "id": "AndroidGradlePluginVersion",
+    "severity": "Warning",
+    "message": "A newer version of Gradle than 8.14.3 is available: 8.14.5",
+    "file": "gradle-wrapper.properties",
+    "line": "3"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.activity:activity-compose than 1.10.1 is available: 1.13.0",
+    "file": "build.gradle.kts",
+    "line": "97"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.9.2 is available: 2.11.0",
+    "file": "build.gradle.kts",
+    "line": "102"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.media3:media3-transformer than 1.8.0 is available: 1.11.1",
+    "file": "build.gradle.kts",
+    "line": "108"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.media3:media3-effect than 1.8.0 is available: 1.11.1",
+    "file": "build.gradle.kts",
+    "line": "109"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.test:runner than 1.6.2 is available: 1.7.0",
+    "file": "build.gradle.kts",
+    "line": "120"
+  },
+  {
+    "id": "GradleDependency",
+    "severity": "Warning",
+    "message": "A newer version of androidx.test.ext:junit than 1.2.1 is available: 1.3.0",
+    "file": "build.gradle.kts",
+    "line": "121"
+  },
+  {
+    "id": "NewerVersionAvailable",
+    "severity": "Warning",
+    "message": "A newer version of com.google.protobuf:protobuf-javalite than 4.27.5 is available: 4.36.2",
+    "file": "build.gradle.kts",
+    "line": "113"
+  },
+  {
+    "id": "UsableSpace",
+    "severity": "Warning",
+    "message": "Consider also using `StorageManager#getAllocatableBytes` and `allocateBytes` which will consider clearable cached data",
+    "file": "LocalCapture.kt",
+    "line": "25"
+  },
+  {
+    "id": "UsableSpace",
+    "severity": "Warning",
+    "message": "Consider also using `StorageManager#getAllocatableBytes` and `allocateBytes` which will consider clearable cached data",
+    "file": "TranslatedMedia.kt",
+    "line": "84"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `String.toUri` instead?",
+    "file": "CaptureFlow.kt",
+    "line": "290"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "GalleryMedia.kt",
+    "line": "37"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "GalleryMedia.kt",
+    "line": "44"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "ObservationStore.kt",
+    "line": "237"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "PurchaseVerifier.kt",
+    "line": "101"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "PurchaseVerifier.kt",
+    "line": "127"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "ReviewAccessVerifier.kt",
+    "line": "87"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "ReviewAccessVerifier.kt",
+    "line": "100"
+  },
+  {
+    "id": "UseKtx",
+    "severity": "Warning",
+    "message": "Use the KTX extension function `SharedPreferences.edit` instead?",
+    "file": "ReviewAccessVerifier.kt",
+    "line": "133"
+  }
+]

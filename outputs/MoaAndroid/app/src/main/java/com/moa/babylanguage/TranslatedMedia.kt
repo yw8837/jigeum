@@ -89,13 +89,13 @@ internal object TranslatedMedia {
         var bitmap: Bitmap? = null
         var completed = false
         try {
-            val overlay = withContext(Dispatchers.Default) { caption(record, clip.hasVideo) }
+            val overlay = withContext(Dispatchers.Default) { caption(record, clip.hasVideo, context.resources.configuration.fontScale) }
             bitmap = overlay
             val source = MediaItem.Builder().setUri(clip.uri).setClippingConfiguration(
                 MediaItem.ClippingConfiguration.Builder().setStartPositionMs(range.startMs)
                     .setEndPositionMs(range.endMs).build()).build()
             val composition = if (clip.hasVideo) {
-                val effects = listOf(SceneLayout(), OverlayEffect(listOf(BitmapOverlay.createStaticBitmapOverlay(overlay))))
+                val effects = listOf(SceneLayout(overlay.height), OverlayEffect(listOf(BitmapOverlay.createStaticBitmapOverlay(overlay))))
                 val movie = EditedMediaItem.Builder(source).setEffects(Effects(emptyList(), effects)).build()
                 Composition.Builder(EditedMediaItemSequence.Builder(listOf(movie)).build()).build()
             } else {
@@ -146,23 +146,34 @@ internal object TranslatedMedia {
     }
 
     /** Fit the entire scene above the caption; never cover or crop the baby's face. */
-    private class SceneLayout : MatrixTransformation {
+    private class SceneLayout(private val outputHeight: Int) : MatrixTransformation {
         private val matrix = Matrix()
         override fun configure(inputWidth: Int, inputHeight: Int): Size {
             val scale = minOf(720f / inputWidth, 640f / inputHeight)
-            matrix.setScale(inputWidth * scale / 720f, inputHeight * scale / 960f)
-            matrix.postTranslate(0f, 1f / 3f)
-            return Size(720, 960)
+            matrix.setScale(inputWidth * scale / 720f, inputHeight * scale / outputHeight)
+            matrix.postTranslate(0f, 1f - 640f / outputHeight)
+            return Size(720, outputHeight)
         }
         override fun getMatrix(presentationTimeUs: Long) = matrix
     }
 
-    internal fun caption(record: Observation, video: Boolean): Bitmap {
-        val bitmap = createBitmap(720, 960)
+    internal fun caption(record: Observation, video: Boolean, fontScale: Float = 1f): Bitmap {
+        val text = record.phrase.replace(Regex("\\s+"), " ").trim()
+        val bodyPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 56f * fontScale.coerceIn(1f, 2f)
+            typeface = Typeface.create("sans-serif", Typeface.BOLD)
+        }
+        fun bodyLayout() = StaticLayout.Builder.obtain(text, 0, text.length, bodyPaint, 624)
+            .setIncludePad(false).setLineSpacing(5f, 1f).build()
+        var body = bodyLayout()
+        while (body.height > 2_700 && bodyPaint.textSize > 20f) { bodyPaint.textSize -= 1f; body = bodyLayout() }
+        val phraseTop = if (video) 708 else 390
+        val height = maxOf(960, ((phraseTop + body.height + 170 + 1) / 2) * 2)
+        val bitmap = createBitmap(720, height)
         val canvas = Canvas(bitmap)
         val paper = Paint().apply { color = 0xFFFFF9F0.toInt() }
         if (!video) canvas.drawColor(paper.color)
-        else canvas.drawRect(0f, 640f, 720f, 960f, paper)
+        else canvas.drawRect(0f, 640f, 720f, height.toFloat(), paper)
         val ink = 0xFF24322E.toInt()
         val muted = 0xFF65716B.toInt()
         fun draw(text: String, y: Float, size: Float, color: Int, bold: Boolean = false, maxHeight: Int = 960): Int {
@@ -181,7 +192,6 @@ internal object TranslatedMedia {
             canvas.withTranslation(48f, y) { layout.draw(this) }
             return layout.height
         }
-        val text = record.phrase.replace(Regex("\\s+"), " ").trim()
         if (!video) {
             val accent = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFA8C6A0.toInt() }
             canvas.drawCircle(360f, 218f, 78f, accent)
@@ -190,13 +200,15 @@ internal object TranslatedMedia {
                 canvas.drawLine(320f + i * 20f, 218f - half, 320f + i * 20f, 218f + half, wave)
             }
             draw("아가톡 · 소리로 남긴 순간", 330f, 26f, muted)
-            draw(text, 390f, 38f, ink, true, 390)
-            draw("${MemoryArtifacts.date(record.id)} · ${record.context.replace(Regex("\\s+"), " ")}", 815f, 23f, muted, maxHeight = 70)
+            draw(text, 390f, bodyPaint.textSize, ink, true, body.height)
+            draw(record.context.replace(Regex("\\s+"), " "), height - 145f, 23f, muted, maxHeight = 70)
         } else {
-            draw("아가톡 · ${MemoryArtifacts.date(record.id)}", 666f, 21f, muted)
-            draw(text, 708f, 27f, ink, true, 180)
+            draw("아가톡 · 그때의 아기말", 666f, 21f, muted)
+            val sage = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFEDF3E9.toInt() }
+            canvas.drawRoundRect(24f, 695f, 696f, 708f + body.height + 32f, 28f, 28f, sage)
+            draw(text, 708f, bodyPaint.textSize, ink, true, body.height)
         }
-        draw("소리를 바탕으로 상상한 아기말", 910f, 20f, muted)
+        draw("소리를 바탕으로 상상한 아기말", height - 50f, 20f, muted)
         return bitmap
     }
 }

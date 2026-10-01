@@ -1,0 +1,71 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "saved edited record -> actual MP4 playback -> album export and visible completion inside dialog",
+    "small display plus font200: preserved saved card, reachable export, completion scrolled into view",
+    "signed preview -> release preserves media; gallery copy remains free; new PDF stays gated"
+  ],
+  "copies": [
+    {
+      "file": "record-video.mp4",
+      "bytes": 751977,
+      "width": 720,
+      "height": 960,
+      "rotation": -90,
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    {
+      "file": "record-card-font200.png",
+      "bytes": 48410,
+      "width": 720,
+      "height": 960,
+      "rotation": 0,
+      "duration": null,
+      "streams": [
+        "video"
+      ]
+    },
+    {
+      "file": "release-free-card.png",
+      "bytes": 48410,
+      "width": 720,
+      "height": 960,
+      "rotation": 0,
+      "duration": null,
+      "streams": [
+        "video"
+      ]
+    }
+  ],
+  "record_only": true,
+  "intent_accuracy_tested": false,
+  "preview_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~w70UcKOkJliyEJnibIAyYw==/com.moa.babylanguage-pPDTrRSgtFaO2L_fhS02-w==/base.apk",
+    "sha256": "fc337fc0a47087760c634d98b062a6b7e13fd01e5fde2e3b8412414073133781",
+    "expected_sha256": "fc337fc0a47087760c634d98b062a6b7e13fd01e5fde2e3b8412414073133781",
+    "version_code": 20,
+    "version_name": "0.5.6-test",
+    "verified": true,
+    "errors": []
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~uaKsXC2da0ZYqBOn-KBclw==/com.moa.babylanguage-gjro3_cSB0amPnXgep4GUg==/base.apk",
+    "sha256": "4ffd80fd88ff3b5c97db8d18020dbcb3aaff7b55f1e9aeff94296dfc4d13679c",
+    "expected_sha256": "4ffd80fd88ff3b5c97db8d18020dbcb3aaff7b55f1e9aeff94296dfc4d13679c",
+    "version_code": 20,
+    "version_name": "0.5.6",
+    "verified": true,
+    "errors": []
+  },
+  "cleanup": {
+    "source_removed": true,
+    "generated_gallery_files_removed": 3,
+    "display_restored": true
+  }
+}

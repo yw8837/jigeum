@@ -1,0 +1,48 @@
+{
+  "status": "fail",
+  "scenarios": [
+    "small signed preview: actual model -> rendered result card PNG -> edited card MP4 with original audio"
+  ],
+  "copies": [
+    {
+      "file": "result-card.png",
+      "bytes": 27659,
+      "width": 720,
+      "height": 1016,
+      "rotation": 0,
+      "duration": null,
+      "streams": [
+        "video"
+      ]
+    },
+    {
+      "file": "edited-result-video.mp4",
+      "bytes": 751977,
+      "width": 720,
+      "height": 960,
+      "rotation": -90,
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    }
+  ],
+  "intent_accuracy_tested": false,
+  "preview_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~2NECBJhmUuMtPDk2x-mIvA==/com.moa.babylanguage-08VN7i3VwyDsieg0Y4SQ3g==/base.apk",
+    "sha256": "fc337fc0a47087760c634d98b062a6b7e13fd01e5fde2e3b8412414073133781",
+    "expected_sha256": "fc337fc0a47087760c634d98b062a6b7e13fd01e5fde2e3b8412414073133781",
+    "version_code": 20,
+    "version_name": "0.5.6-test",
+    "verified": true,
+    "errors": []
+  },
+  "error": "UI missing 번역 영상 내려받기; current: ['기록으로 돌아가기', '그때의 아기말', '10월 1일 · 21:28 · 0:00–0:10', '선택 구간 다시 듣기 · 영상 함께 보기', 'QA_GALLERY_EDITED', '선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.']",
+  "cleanup": {
+    "source_removed": true,
+    "generated_gallery_files_removed": 2,
+    "display_restored": true
+  }
+}

@@ -75,7 +75,8 @@ internal fun CaptureFlow(
     analyzer: ClipAnalyzer = DeviceClipAnalyzer,
     initialClip: LocalClip? = null,
     testDistribution: Boolean = false,
-    onSaveWithMedia: ((ClipInterpretation, String, String, LocalClip, ClipRange) -> Unit)? = null
+    onSaveWithMedia: ((ClipInterpretation, String, String, LocalClip, ClipRange) -> Unit)? = null,
+    onGallery: ((ClipInterpretation, String, LocalClip?, ClipRange?, Boolean) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -361,16 +362,25 @@ internal fun CaptureFlow(
             }
             if (lockedResult != null) {
                 Text("소리를 바탕으로 상상한 아기말", color = Muted, fontSize = 14.sp)
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(PaleSage).padding(24.dp)) {
-                    Text(lockedResult.phrase, color = Ink, fontSize = 25.sp, lineHeight = 37.sp, fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.testTag("baby-phrase"))
-                }
+                val cardPhrase = if (draftEdited) phrase.trim() else lockedResult.phrase
+                val cardRecord = Observation(1, lockedResult.sound, lockedResult.range, "", cardPhrase.ifBlank { lockedResult.phrase })
+                val cardRange = current?.let { ClipRange(selection.start.toLong(), selection.endInclusive.toLong()) }
+                ResultMomentCard(cardRecord, current, cardRange)
                 Text("${lockedResult.range} · ${if (lockedResult.visual) "소리 + 표정 관찰" else "소리 관찰"}", color = Muted, fontSize = 13.sp)
                 lockedResult.visualNotice?.let {
                     Text(it, color = Ink, lineHeight = 23.sp, modifier = Modifier.fillMaxWidth()
                         .background(PaleApricot, RoundedCornerShape(16.dp)).padding(16.dp).testTag("visual-notice"))
                 }
-                Text("아이의 의도를 확정한 번역은 아니에요. 실제 모습과 함께 살펴주세요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                Text("우리 아기 모습과 함께 재미있게 살펴보세요. 마음에 드는 순간은 영상과 함께 간직해요. 실제 마음·욕구를 알아낸 번역은 아니에요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                if (onGallery != null) {
+                    GallerySaveButton("카드 이미지 앨범에 저장", !saving && cardPhrase.isNotBlank(), { message = it }) {
+                        stopPlayback++; onGallery(lockedResult, cardPhrase, current, cardRange, false)
+                    }
+                    if (current != null) GallerySaveButton("영상 카드 앨범에 저장", !saving && cardPhrase.isNotBlank(), { message = it }) {
+                        stopPlayback++; onGallery(lockedResult, cardPhrase, current, cardRange, true)
+                    }
+                    Text("사진·동영상 앱의 ‘아가톡’ 앨범에 저장해요. 앱 기록 보관은 아래 저장 버튼을 눌러 주세요.", color = Muted, fontSize = 13.sp)
+                }
                 var expanded by remember { mutableStateOf(false) }
                 TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) "관찰 근거 접기" else "어떤 소리를 들었나요?", color = Ink) }
                 if (expanded) Text(lockedResult.evidence, color = Ink, lineHeight = 23.sp, modifier = Modifier.testTag("analysis-evidence"))

@@ -235,6 +235,7 @@ internal fun JigeumApp(
             observations = snapshot.observations; ageBand = snapshot.ageBand; mediaIds = snapshot.mediaIds
             snapshot.warning?.let(::notify)
             withContext(Dispatchers.IO) { MemoryArtifacts.cleanup(activity); TranslatedMedia.cleanup(activity) }
+            if (!GalleryMedia.cleanupInterrupted(activity)) notify("이전 앨범 저장을 정리하지 못했어요. 기존 기록은 볼 수 있어요. 다음 실행에서 다시 확인할게요.")
             withContext(Dispatchers.Main.immediate) { loaded = true }
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
@@ -281,6 +282,28 @@ internal fun JigeumApp(
                                         onBack = { page = Page.HOME }, saving = busy,
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
                                         testDistribution = testDistribution,
+                                        onGallery = { result, phrase, clip, range, video ->
+                                            if (!busy && !sharing) {
+                                                val generation = MemoryArtifacts.currentGeneration()
+                                                update({
+                                                    val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase)
+                                                    if (video) {
+                                                        check(clip != null && range != null) { "원래 장면이 없어 영상으로 저장할 수 없어요. 카드 이미지로 남길 수 있어요." }
+                                                        var rendered: java.io.File? = null
+                                                        try {
+                                                            rendered = TranslatedMedia.render(activity, clip, range, record)
+                                                            GalleryMedia.video(activity, rendered, generation)
+                                                        } finally { withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() } }
+                                                    } else {
+                                                        var bitmap: android.graphics.Bitmap? = null
+                                                        try {
+                                                            withContext(Dispatchers.IO) { bitmap = MomentCardRenderer.frame(activity, record, clip, range) }
+                                                            GalleryMedia.image(activity, checkNotNull(bitmap), generation)
+                                                        } finally { bitmap?.recycle() }
+                                                    }
+                                                }, { notify(if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
+                                            }
+                                        },
                                         onSaveWithMedia = { result, phrase, note, clip, range ->
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
@@ -703,6 +726,9 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
             "가져온 영상은 읽기 권한으로 접근하며 원본을 복사하거나 수정하지 않습니다. 선택한 구간만 기기 안에서 분석합니다. 한 번에 무료는 최대 10초, 전체 이용권은 최대 20초입니다. " +
             "장면과 함께 저장하면 선택 구간의 영상·실제 소리·번역 자막을 MP4로 만들어 이 기기에 보관합니다. 기록에서 내려받거나 직접 공유할 수 있고 서버로 자동 전송하지 않습니다. JSON·CSV·PDF에는 미디어가 포함되지 않습니다. 얼굴 단서는 아기의 신원·감정·건강을 판정하지 않습니다.",
+        "앨범에 직접 저장" to
+            "보호자가 앨범 저장 버튼을 누르면 결과 카드 PNG 또는 영상·원음·번역 MP4 사본을 사진·동영상 앱의 아가톡 앨범에 저장합니다. Android 10 이상은 별도 저장소 읽기 권한 없이 앱이 만든 파일만 추가합니다. Android 8·9에서는 저장 버튼을 누를 때 저장 권한을 요청합니다. " +
+            "앨범 사본은 앱 기록을 삭제하거나 앱을 제거해도 남으며 해당 사진 앱에서 관리·삭제합니다. 사진 앱의 클라우드 백업이 켜져 있다면 그 앱의 설정과 정책에 따라 백업될 수 있습니다.",
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +

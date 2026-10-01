@@ -1,0 +1,17 @@
+[
+  {
+    "file": "Agattok-0.5.6-test-code20.apk",
+    "bytes": 75322173,
+    "sha256": "fc337fc0a47087760c634d98b062a6b7e13fd01e5fde2e3b8412414073133781"
+  },
+  {
+    "file": "Agattok-0.5.6-release-code20.apk",
+    "bytes": 75322169,
+    "sha256": "4ffd80fd88ff3b5c97db8d18020dbcb3aaff7b55f1e9aeff94296dfc4d13679c"
+  },
+  {
+    "file": "Agattok-0.5.6-release-code20.aab",
+    "bytes": 46658641,
+    "sha256": "586a2bd08b97093da0bc65efdf1245d0de69d5aac994d4d17e465e4c6333af42"
+  }
+]
