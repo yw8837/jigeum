@@ -143,6 +143,7 @@ internal object EvidenceInterpreter {
             .distinctBy { it.startMs }.sortedBy { it.startMs }
         val minimumWindows = maxOf(6, ((range.durationMs + 1_999) / 2_000).toInt())
         if (supported.size < minimumWindows || supported.size < frameStarts.size * .60f ||
+            supported.last().startMs - supported.first().startMs <= 10_000 ||
             supported.last().startMs - supported.first().startMs < range.durationMs * .55f) return null
 
         val withPause = shape.pauses > 0
