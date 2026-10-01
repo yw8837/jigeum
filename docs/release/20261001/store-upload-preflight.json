@@ -1,0 +1,43 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "file": "screenshot-01-home.png",
+      "unchanged": true
+    },
+    {
+      "file": "screenshot-02-expression.png",
+      "unchanged": true
+    },
+    {
+      "file": "screenshot-03-record.png",
+      "unchanged": true
+    },
+    {
+      "file": "screenshot-04-album.png",
+      "unchanged": true
+    },
+    {
+      "file": "play-icon-512x512.png",
+      "unchanged": true
+    },
+    {
+      "file": "feature-graphic-1024x500.png",
+      "unchanged": true
+    },
+    {
+      "file": "title-ko.txt",
+      "unchanged": true
+    },
+    {
+      "file": "short-description-ko.txt",
+      "unchanged": true
+    },
+    {
+      "file": "full-description-ko.txt",
+      "unchanged": true
+    }
+  ],
+  "source": "existing actual release screenshots; no purchase shown",
+  "phoneScreenshotAspectRatio": "1:2; actual Console upload validation pending"
+}

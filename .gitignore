@@ -23,4 +23,5 @@ work/
 *.zip
 *.log
 outputs/*.aab.signature.txt
+outputs/artifact-history/
 outputs/QA/evidence/

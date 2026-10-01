@@ -1,0 +1,20 @@
+[
+  {
+    "original": "outputs/Jigeum-Android-configured-0.4.5-code12-upload-signed.apk",
+    "archived": "outputs/artifact-history/configured-0.4.5-code12/Jigeum-Android-configured-0.4.5-code12-upload-signed.apk",
+    "sha256": "e1b830c27be125692f3ee73b2c3080499ba5eca74a7fdf2f184ec12c071efffa",
+    "unchanged": true
+  },
+  {
+    "original": "outputs/Jigeum-Play-configured-0.4.5-code12-signed.aab",
+    "archived": "outputs/artifact-history/configured-0.4.5-code12/Jigeum-Play-configured-0.4.5-code12-signed.aab",
+    "sha256": "0cbb2f0de8668b0cf1af55ea099183bab17ad5abbe2f138434d9964468392745",
+    "unchanged": true
+  },
+  {
+    "original": "outputs/Jigeum-Play-configured-0.4.5-code12-signed.aab.signature.txt",
+    "archived": "outputs/artifact-history/configured-0.4.5-code12/Jigeum-Play-configured-0.4.5-code12-signed.aab.signature.txt",
+    "sha256": "30bd334bfb219ab4babbc1ac860e182663feb180b01f1b6af4fe59e66ed59d3d",
+    "unchanged": true
+  }
+]
