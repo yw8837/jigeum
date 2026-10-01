@@ -1,0 +1,41 @@
+{
+  "debug": {
+    "severity_counts": {
+      "Warning": 15
+    },
+    "issue_counts": {
+      "ApplySharedPref": 1,
+      "AndroidGradlePluginVersion": 1,
+      "GradleDependency": 4,
+      "NewerVersionAvailable": 1,
+      "UsableSpace": 1,
+      "UseKtx": 7
+    }
+  },
+  "release": {
+    "severity_counts": {
+      "Warning": 15
+    },
+    "issue_counts": {
+      "ApplySharedPref": 1,
+      "AndroidGradlePluginVersion": 1,
+      "GradleDependency": 4,
+      "NewerVersionAvailable": 1,
+      "UsableSpace": 1,
+      "UseKtx": 7
+    }
+  },
+  "preview": {
+    "severity_counts": {
+      "Warning": 15
+    },
+    "issue_counts": {
+      "ApplySharedPref": 1,
+      "AndroidGradlePluginVersion": 1,
+      "GradleDependency": 4,
+      "NewerVersionAvailable": 1,
+      "UsableSpace": 1,
+      "UseKtx": 7
+    }
+  }
+}

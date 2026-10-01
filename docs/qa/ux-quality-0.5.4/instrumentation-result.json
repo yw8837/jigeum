@@ -1,0 +1,78 @@
+{
+  "status": "pass",
+  "tests": 225,
+  "passed_tests": 224,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 1,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [],
+  "seconds": 516.28,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "88a1ad7663b6ea7d6b1a4e1d32d4e3d9cdb81747c346407500ffe1b3ac46c430",
+      "bytes": 82025967
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "6ee82f7831d76e1ba059d5ad94dbe206a8026609316851d433e58aa4e8a28b47",
+      "bytes": 2112214
+    },
+    "git": {
+      "sha": "9365cb43f016d7a60d6b598fa96d9de5979a0558",
+      "dirty": true,
+      "porcelain": [
+        " M AGENTS.md",
+        " M docs/HANDOFF.md",
+        " M docs/NEXT.md",
+        " M docs/RUNBOOK.md",
+        " M docs/UX-0.5.md",
+        " M docs/qa/0.5.0/README.md",
+        " M docs/research/20261001-public-audio-probes.md",
+        " M outputs/Jigeum-Access-Policy.md",
+        " M outputs/PlayVerifier/public/privacy.html",
+        " M outputs/PlayVerifier/public/support.html",
+        " M outputs/PlayVerifier/public/terms.html",
+        "?? outputs/StoreListing/registration-20261002/"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~puvRkLIQkZi6kNUENPZoPA==/com.moa.babylanguage-LY-OdUp4wNZBMUhwXnvEdg==/base.apk",
+      "sha256": "88a1ad7663b6ea7d6b1a4e1d32d4e3d9cdb81747c346407500ffe1b3ac46c430",
+      "expected_sha256": "88a1ad7663b6ea7d6b1a4e1d32d4e3d9cdb81747c346407500ffe1b3ac46c430",
+      "version_code": 18,
+      "version_name": "0.5.4",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~u-pLe-iH3lvoC3iiWwy9SA==/com.moa.babylanguage.test-RGJGncOBDQPt1eA8VvTmvA==/base.apk",
+      "sha256": "6ee82f7831d76e1ba059d5ad94dbe206a8026609316851d433e58aa4e8a28b47",
+      "expected_sha256": "6ee82f7831d76e1ba059d5ad94dbe206a8026609316851d433e58aa4e8a28b47",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "route": "privacy",
+    "status": 200,
+    "contentType": [
+      "text/html; charset=utf-8"
+    ],
+    "mentionsFree10": true,
+    "mentionsFull20": true
+  },
+  {
+    "route": "terms",
+    "status": 200,
+    "contentType": [
+      "text/html; charset=utf-8"
+    ],
+    "mentionsFree10": true,
+    "mentionsFull20": true
+  },
+  {
+    "route": "support",
+    "status": 200,
+    "contentType": [
+      "text/html; charset=utf-8"
+    ],
+    "mentionsFree10": true,
+    "mentionsFull20": true
+  },
+  {
+    "route": "jigeum-health",
+    "status": 200,
+    "contentType": [
+      "application/json; charset=utf-8"
+    ],
+    "mentionsFree10": false,
+    "mentionsFull20": false
+  }
+]

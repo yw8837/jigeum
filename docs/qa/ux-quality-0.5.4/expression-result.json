@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "tests": 18,
+  "passed_tests": 18,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [],
+  "seconds": 3.59,
+  "exit": 0,
+  "provenance": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~Dk9hqHPzecwz6uNLXC209w==/com.moa.babylanguage-9DuVDhT1G9R2u3gIJTTREQ==/base.apk",
+      "sha256": "88a1ad7663b6ea7d6b1a4e1d32d4e3d9cdb81747c346407500ffe1b3ac46c430",
+      "expected_sha256": "88a1ad7663b6ea7d6b1a4e1d32d4e3d9cdb81747c346407500ffe1b3ac46c430",
+      "version_code": 18,
+      "version_name": "0.5.4",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~SPCMqQ-FWq_bYjFzBfEhpQ==/com.moa.babylanguage.test-hcxox0M1cqNQzjd-3NqsHw==/base.apk",
+      "sha256": "6ee82f7831d76e1ba059d5ad94dbe206a8026609316851d433e58aa4e8a28b47",
+      "expected_sha256": "6ee82f7831d76e1ba059d5ad94dbe206a8026609316851d433e58aa4e8a28b47",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  ]
+}

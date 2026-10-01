@@ -1,0 +1,18 @@
+{
+  "state_closed": {
+    "success": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\ux-quality-054\\.omx\\state\\ultraqa-state.json"
+  },
+  "cleared": {
+    "cleared": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\ux-quality-054\\.omx\\state\\ultraqa-state.json"
+  },
+  "read_after_clear": {
+    "exists": false,
+    "mode": "ultraqa"
+  },
+  "state_file_absent": true,
+  "unrelated_project_state_untouched": true
+}

@@ -1,3 +1,39 @@
+# 0.5.4/code18 실행 안내 — 2026-10-02
+
+**0.5.4/code18 로컬 QA·서명 UI·패키지 검사 통과, Play 미제출.** [HANDOFF](HANDOFF.md), [QA 보고서](qa/ux-quality-0.5.4/README.md)를 먼저 따른다. 전달본은 `outputs/Agattok-0.5.4-test-code18.apk`다. 유료20/30초는 사용자 검토 중이며 아래는20초 검토본 기준이다.
+
+## 현재 시간·접근 계약
+
+| 항목 | 무료 | 전체 이용권 |
+|---|---|---|
+| 영상·소리 녹화/녹음 | 60초 | 120초 |
+| 영상 가져오기 | 60초·100MB | 120초·200MB |
+| 한 번의 소리 분석 | 1~10초 | 1~20초 |
+| 같은 구간 시각 관찰·PDF | 이용권 필요 | 제공 |
+
+PCM 디코더의30초 상한은 실제 모델까지 검증했다. 현재 검토본 UI는20초이며 사용자가20초/30초를 검토 중이다. `BillingManager.hasCurrentEntitlement()` 실행 시점 확인을 유지한다. sideload `preview`만 전체 기능을 열고, `release`/Play AAB에는 테스트 접근을 포함하지 않는다.
+
+## 이번 빌드·QA 실행 기준
+
+- Gradle/ADB는 한 담당자가 수행한다. 작업별 `ANDROID_SERIAL`, `ANDROID_HOME`, `JIGEUM_QA_EVIDENCE`를 명시하고 실제 사용자 자료가 없는 전용 기기를 쓴다.
+- 현재 UI는 `instrument.py`, `capture_ui.py`, `preview_ui.py`를 사용한다. 아래 과거 0.4 `run_qa.py`의 UI 선택기를 현재 화면 통과 근거로 재사용하지 않는다.
+- 실제 무료 60초·전체 120초 녹음/녹화 자동 종료가 포함돼 전체 계측은 장시간 실행될 수 있다. 예: `python outputs/QA/instrument.py --install-app --timeout 1200`. timeout 확대는 실패 은폐나 무한 재시도 허가가 아니다.
+- `AppTitleScreenTest`/`AppTitleActivityTest`, `FullCaptureDeviceTest`와 구간 편집·접근 변경·후반 디코딩 회귀를 포함한다. test별 완료·명시 skip·설치 APK 해시를 확인한다.
+- 테스트 APK는 `tools/release/build-test-apk.ps1 -Destination <새 test.apk 경로>`로 만들고, `tools/release/build-play-bundle.ps1`은 정식 release를 만든다. 기존 업로드키·공개 결제 설정을 사용한다. `bundlePreview`는 실패해야 한다.
+- 현재 버전은 0.5.4/code18이다. 최종 APK/AAB의 실제 파일·서명·SHA는 새 QA 뒤 확정하며 기존 파일명을 덮어쓰지 않는다. preview code18을 전달한 후 Play 자동 업데이트용 버전은 code18보다 높아야 한다.
+- 공개 음원 재현은 `python outputs/QA/sound_corpus.py --directory <로컬 폴더>`로 권리 확인 fixture를 준비하고, 현재 debug/test APK에서 `python outputs/QA/sound_probe.py --corpus <같은 폴더> --install-app`으로 실행한다. 원본은 Git/APK/QA ZIP에 넣지 않는다. `--strict`의 사건 라벨은 독립 청취 정답이 아니다.
+
+## QA 다음 단계 — 승인된 비공개 테스트
+
+사용자는 앱 등록 마무리·테스트 버전 업로드·검토 제출·테스터 참여 링크 준비를 승인했다. QA/서명/정책·스토어 문구를 맞춘 뒤 실제 Play Console 상태를 확인하며 진행한다. 참여 대상과 실제 링크 접근·검토/배포 상태를 확인하기 전 ‘12명·14일 시작 가능’으로 보고하지 않는다. 상품 등록·실제 거래 검증·공개 프로덕션 출시는 보류한다. sideload preview를 Play에 제출하지 않는다.
+
+## 이전 실행 안내 이력
+
+아래는 0.5.3·0.5.2 당시 안내를 보존한 것이다. ‘현재’라는 과거 표현·파일·시간·유료 범위는 해당 버전 당시 사실이며 현재 실행에는 위 0.5.4 기준을 적용한다.
+
+<details>
+<summary>0.5.3·0.5.2 실행 안내 원문</summary>
+
 # 0.5.3 실행 안내 — 2026-10-02
 
 현재 배포 파일은 `outputs/Agattok-0.5.3-test-code16.apk`. [소리·필터·전체 QA](qa/sound-quality-0.5.3/README.md)를 먼저 따른다. 공개음원 재현은 `python outputs/QA/sound_corpus.py --directory <로컬 폴더>`로 권리가 확인된 fixture를 준비한 뒤, 전용 기기의 현재 debug/test APK를 빌드하고 `python outputs/QA/sound_probe.py --corpus <같은 폴더> --install-app`으로 실행한다. `ANDROID_SERIAL`, `ANDROID_HOME`, `JIGEUM_QA_EVIDENCE`를 명시한다. 원본은 Git/APK/QA ZIP에 넣지 않는다. `--strict`는 배포자 사건 라벨과 불일치하면 실패하지만 그 라벨 자체가 독립 청취 정답은 아니다.
@@ -8,20 +44,24 @@
 
 테스트 APK: `tools/release/build-test-apk.ps1 -Destination <새 test.apk 경로>` (기존 업로드키, JAVA_HOME/ANDROID_HOME 필요). `assemblePreview`는 same-package/서명·0.5.2-test, 공개 결제 설정은 빈값. `bundlePreview`는 명시적으로 실패해야 한다. `build-play-bundle.ps1`은 기존 release만 만들며 테스트 권한을 포함하지 않는다. 정식 배포는 이후 요청에서 진행한다.
 
-# 실행·검증·운영 준비
+</details>
 
-**현재 통합 버전은 0.4.5/code12 connected**다. [연결 QA](qa/0.4.5/connected/README.md)의 Android142/2skip/0fail·Node56·실제 release UI10·HTTPS9·서명/패키징을 따른다. [운영 구성](release/20261001/OPERATIONS.md)과 [연결 진행](release/20261001/CONNECTION-PROGRESS.md)이 과거 결제 미연결 설명보다 우선한다. SDK/모델 버전은 유지했다.
+# 실행·검증·운영 준비 — 0.4.5 기준 이력
+
+이하 외부 운영 상태와 옛 UI 명령은 과거 확인 기록이다. 공통 환경·서명 계약을 참고하되 현재 Console/공개 URL 상태는 후속 작업에서 다시 확인한다.
+
+**당시 통합 버전은 0.4.5/code12 connected**였다. [연결 QA](qa/0.4.5/connected/README.md)의 Android142/2skip/0fail·Node56·실제 release UI10·HTTPS9·서명/패키징을 따른다. [운영 구성](release/20261001/OPERATIONS.md)과 [연결 진행](release/20261001/CONNECTION-PROGRESS.md)이 과거 결제 미연결 설명보다 우선한다. SDK/모델 버전은 유지했다.
 
 아래 경로는 저장소 루트를 기준으로 한다. 비밀값은 예시에 넣지 않는다. 과거 0.3.0 산출물은 원래 이름으로 보존한다.
 
 ## 개발 환경
 
-| 항목 | 현재 값 |
+| 항목 | 0.4.5 당시 값 |
 |---|---|
 | Android | Kotlin 2.2.10 / Compose BOM 2025.08.01 / CameraX 1.6.2 / MediaPipe 1.0.0 |
 | 빌드 | Gradle 8.14.3 / AGP 8.13.2 / JDK 17 이상. 검증 환경은 JDK 21.0.12 |
 | SDK | min 26 / target·compile 36 / 계측 기기 API 35 x86_64 |
-| 앱 식별 | `com.moa.babylanguage`, 현재 0.4.5 / code 12 |
+| 앱 식별 | `com.moa.babylanguage`, 당시 0.4.5 / code 12 |
 | 결제 | Play Billing 9.1.0. 서버는 Node 내장 모듈을 사용하며 외부 npm 의존성 없음 |
 | 테스트 도구 | Python 3.10 이상, ADB, ffmpeg(합성 fixture 생성), Android SDK build-tools 36 |
 

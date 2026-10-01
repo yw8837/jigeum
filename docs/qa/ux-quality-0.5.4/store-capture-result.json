@@ -1,0 +1,21 @@
+{
+  "status": "pass",
+  "provenance": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~q5RNiwY2li1G-XcIynZhjA==/com.moa.babylanguage-zx7T5V9oiVUy0f-SzXo9EA==/base.apk",
+    "sha256": "dbee6576af94efd0ef5cd0f5cf404f53637ea584ba979764bfe9c7988f0f9808",
+    "expected_sha256": "dbee6576af94efd0ef5cd0f5cf404f53637ea584ba979764bfe9c7988f0f9808",
+    "version_code": 18,
+    "version_name": "0.5.4",
+    "verified": true,
+    "errors": []
+  },
+  "screens": [
+    "store-01-home.png",
+    "store-02-range.png",
+    "store-03-expression.png",
+    "store-04-record.png"
+  ],
+  "fixture_sha256": "1cd9bac30f90625c3b9e079f4be61684afec974d512011d0e6b92a65c9cb81d7",
+  "actual_infant_intent_accuracy_tested": false
+}
