@@ -30,17 +30,8 @@ def import_fixture():
 
 
 def visual_switch():
-    q.tap_text('표정도 함께 보기')  # scroll the label into view, then target the real switch.
-    q.nodes()
-    root=ET.fromstring(q.adb('exec-out','cat','/sdcard/moa-ultraqa.xml').stdout)
-    switch=next(n for n in root.iter('node') if n.attrib.get('checkable')=='true')
-    # Compose exposes a checkable View; class is not android.widget.Switch.
-    q.swipe_up()
-    q.nodes()
-    root=ET.fromstring(q.adb('exec-out','cat','/sdcard/moa-ultraqa.xml').stdout)
-    switch=next(n for n in root.iter('node') if n.attrib.get('checkable')=='true')
-    x1,y1,x2,y2=map(int,re.findall(r'\d+',switch.attrib['bounds']))
-    q.tap((x1+x2)//2,(y1+y2)//2)
+    # The complete labelled row is now one accessible switch/touch target.
+    q.tap_text('표정도 함께 보기', exact=False)
 
 
 def main():
@@ -58,7 +49,7 @@ def main():
             launch(); q.screenshot(label+'-home')
             q.tap_text('아기말 번역하기'); q.screenshot(label+'-capture')
             if label=='small':
-                q.tap_text('카메라 준비하기'); q.wait_ui('녹화 시작')
+                q.wait_ui('녹화 시작')
                 q.screenshot('camera-preview'); q.tap_text('녹화 시작'); time.sleep(3)
                 q.tap_text('촬영 마치기'); q.wait_ui('어느 순간을 들어볼까요?')
                 q.screenshot('recorded-video-review')

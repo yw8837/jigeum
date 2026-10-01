@@ -26,8 +26,10 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 14
-        versionName = "0.5.1"
+        versionCode = 15
+        versionName = "0.5.2"
+        buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
+        manifestPlaceholders["testDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")
@@ -58,6 +60,16 @@ android {
                 signingConfig = signingConfigs.getByName("upload")
             }
         }
+        // Explicit sideload-only tester distribution. Never a stored purchase/entitlement.
+        create("preview") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            versionNameSuffix = "-test"
+            buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "true")
+            buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
+            buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
+            manifestPlaceholders["testDistribution"] = "true"
+        }
     }
 
     compileOptions {
@@ -68,6 +80,13 @@ android {
     buildFeatures { compose = true; buildConfig = true }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+}
+
+// A full-access test build must not accidentally become a Play upload bundle.
+tasks.configureEach {
+    if (name == "bundlePreview" || name == "packagePreviewBundle") {
+        doFirst { error("Preview is sideload-only. Use assemblePreview for testing or bundleRelease for Play.") }
     }
 }
 

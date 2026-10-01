@@ -24,6 +24,25 @@ def finish(total=1, code=-1):
     return f"OK ({total} tests)\nINSTRUMENTATION_CODE: {code}\n"
 
 
+class DistributionGateTest(unittest.TestCase):
+    def manifest(self, value):
+        return ('A: http://schemas.android.com/apk/res/android:name="com.moa.babylanguage.TEST_DISTRIBUTION"\n'
+                '  A: http://schemas.android.com/apk/res/android:value(0x01010024)='+value+'\n')
+
+    def test_correct_release_and_preview_pass(self):
+        check_package.assert_distribution(self.manifest('false'), "package: versionName='0.5.2'", 'release')
+        check_package.assert_distribution(self.manifest('true'), "package: versionName='0.5.2-test'", 'preview')
+
+    def test_preview_cannot_be_reported_as_release(self):
+        with self.assertRaises(ValueError):
+            check_package.assert_distribution(self.manifest('true'), "package: versionName='0.5.2-test'", 'release')
+
+    def test_missing_ambiguous_or_mislabelled_marker_fails(self):
+        for manifest, name in [('', '0.5.2'), (self.manifest('false')*2, '0.5.2'), (self.manifest('false'),'0.5.2-test')]:
+            with self.subTest(manifest=manifest, name=name), self.assertRaises(ValueError):
+                check_package.assert_distribution(manifest, "package: versionName='"+name+"'", 'release')
+
+
 class InstrumentationGateTest(unittest.TestCase):
     def test_complete_run_passes(self):
         verdict = parse_result(event("one", 1) + event("one", 0) + finish(), 0, .1)

@@ -1,0 +1,33 @@
+{
+  "android": {
+    "status": "pass",
+    "tests": 167,
+    "passed_tests": 164,
+    "failed_tests": 0,
+    "assumption_skipped_tests": 3,
+    "seconds": 280.15
+  },
+  "signed_preview_ui": "pass",
+  "signed_ui_scenarios": [
+    "code14 to code15-test same-package signed update preserves records",
+    "unpaid real YAMNet + face model no-face result, save, actual PDF export/share",
+    "cold restart keeps test access without a code",
+    "preview to production update keeps records and restores PDF/visual gates"
+  ],
+  "layout_evidence": "preview-ui-first.json: small and font200 completed before PDF harness assertion",
+  "host_gates": 24,
+  "lint": {
+    "debug": {
+      "errors": 0,
+      "warnings": 15
+    },
+    "preview": {
+      "errors": 0,
+      "warnings": 15
+    }
+  },
+  "preview_aab": "blocked intentionally",
+  "public_submission": false,
+  "physical_phone": false,
+  "baby_intent_accuracy": false
+}

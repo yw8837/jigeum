@@ -1,0 +1,71 @@
+--------- beginning of crash
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: FATAL EXCEPTION: AsyncTask #1
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: Process: com.android.bips, PID: 13925
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: java.lang.RuntimeException: An error occurred while executing doInBackground()
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.AsyncTask$4.done(AsyncTask.java:415)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:381)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.FutureTask.setException(FutureTask.java:250)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.FutureTask.run(FutureTask.java:269)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:305)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1012)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: Caused by: java.lang.SecurityException: Permission Denial: opening provider androidx.core.content.FileProvider from ProcessRecord{150f67b 13925:com.android.bips/u0a103} (pid=13925, uid=10103) that is not exported from UID 10221
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3242)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3226)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3209)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3151)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.app.IActivityManager$Stub$Proxy.getContentProvider(IActivityManager.java:6315)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.app.ActivityThread.acquireProvider(ActivityThread.java:7841)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.app.ContextImpl$ApplicationContentResolver.acquireUnstableProvider(ContextImpl.java:3776)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.content.ContentResolver.acquireUnstableProvider(ContentResolver.java:2542)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:2027)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1858)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.content.ContentResolver.openInputStream(ContentResolver.java:1528)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.bips.PdfPrintActivity$PdfDeliverTask.doInBackground(PdfPrintActivity.java:129)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.bips.PdfPrintActivity$PdfDeliverTask.doInBackground(PdfPrintActivity.java:117)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.os.AsyncTask$3.call(AsyncTask.java:394)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	... 4 more
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: Caused by: android.os.RemoteException: Remote stack trace:
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.checkAssociationAndPermissionLocked(ContentProviderHelper.java:724)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.getContentProviderImpl(ContentProviderHelper.java:310)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.getContentProvider(ContentProviderHelper.java:150)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at com.android.server.am.ActivityManagerService.getContentProvider(ActivityManagerService.java:7127)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:2950)
+10-01 14:39:14.917 13925 14013 E AndroidRuntime: 
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: FATAL EXCEPTION: AsyncTask #1
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: Process: com.android.bips, PID: 16391
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: java.lang.RuntimeException: An error occurred while executing doInBackground()
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.AsyncTask$4.done(AsyncTask.java:415)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:381)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.FutureTask.setException(FutureTask.java:250)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.FutureTask.run(FutureTask.java:269)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:305)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.lang.Thread.run(Thread.java:1012)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: Caused by: java.lang.SecurityException: Permission Denial: opening provider androidx.core.content.FileProvider from ProcessRecord{4565620 16391:com.android.bips/u0a103} (pid=16391, uid=10103) that is not exported from UID 10221
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3242)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3226)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3209)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3151)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.app.IActivityManager$Stub$Proxy.getContentProvider(IActivityManager.java:6315)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.app.ActivityThread.acquireProvider(ActivityThread.java:7841)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.app.ContextImpl$ApplicationContentResolver.acquireUnstableProvider(ContextImpl.java:3776)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.content.ContentResolver.acquireUnstableProvider(ContentResolver.java:2542)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:2027)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1858)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.content.ContentResolver.openInputStream(ContentResolver.java:1528)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.bips.PdfPrintActivity$PdfDeliverTask.doInBackground(PdfPrintActivity.java:129)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.bips.PdfPrintActivity$PdfDeliverTask.doInBackground(PdfPrintActivity.java:117)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.os.AsyncTask$3.call(AsyncTask.java:394)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	... 4 more
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: Caused by: android.os.RemoteException: Remote stack trace:
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.checkAssociationAndPermissionLocked(ContentProviderHelper.java:724)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.getContentProviderImpl(ContentProviderHelper.java:310)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.server.am.ContentProviderHelper.getContentProvider(ContentProviderHelper.java:150)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at com.android.server.am.ActivityManagerService.getContentProvider(ActivityManagerService.java:7127)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:2950)
+10-01 14:40:01.623 16391 17096 E AndroidRuntime: 

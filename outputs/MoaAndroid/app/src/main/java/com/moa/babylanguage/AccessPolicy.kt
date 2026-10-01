@@ -35,12 +35,17 @@ internal class MediaAccessSession internal constructor(val feature: AppFeature, 
 
 /**
  * Called on Main. The checker is BillingManager.hasCurrentEntitlement, never a UI snapshot.
- * It is injected as a function so androidTest can exercise expiry without a release bypass.
+ * The explicit sideload preview distribution opens features without claiming a purchase.
+ * Release always supplies false; nothing is persisted when switching distributions.
  */
-internal class AccessPolicy(private val currentEntitlement: () -> Boolean) {
+internal class AccessPolicy(
+    private val currentEntitlement: () -> Boolean,
+    private val testDistribution: Boolean
+) {
+    constructor(currentEntitlement: () -> Boolean) : this(currentEntitlement, false)
     private var generation = 0L
 
-    fun canUse(feature: AppFeature): Boolean = !feature.requiresPass || currentEntitlement()
+    fun canUse(feature: AppFeature): Boolean = !feature.requiresPass || testDistribution || currentEntitlement()
 
     fun beginMedia(feature: AppFeature): MediaAccessSession? {
         require(feature == AppFeature.VISUAL_ANALYSIS)

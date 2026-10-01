@@ -44,7 +44,7 @@ class CaptureDeviceTest {
         compose.waitUntil(timeout) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
     }
     @Test fun realVideoRecordsAudioPlaysAndPrivateFileCannotBeShared() {
-        start(); click("카메라 준비하기")
+        start()
         compose.waitUntil(15_000) { compose.onAllNodes(hasText("녹화 시작") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
         click("녹화 시작"); waitText("0:03 / 1:00")
         click("촬영 마치기"); waitText("어느 순간을 들어볼까요?", 20_000)
@@ -64,7 +64,7 @@ class CaptureDeviceTest {
         assertFalse(file.exists())
     }
     @Test fun actualAudioFileCanBePlayedAndBackgroundCancelsAnotherCapture() {
-        start(); click("카메라 없이 소리만 녹음"); click("마이크 준비하기"); click("녹음 시작")
+        start(); click("카메라 없이 소리만 녹음"); click("녹음 시작")
         waitText("0:02 / 1:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
         val file = File(compose.activity.cacheDir, "captures").listFiles()!!.single()
         val clip = CaptureFiles.inspect(compose.activity, Uri.fromFile(file), file)
@@ -75,7 +75,7 @@ class CaptureDeviceTest {
             Thread.sleep(250)
             assertTrue(player.currentPosition > 0)
         } finally { player.release() }
-        click("다시 촬영하기"); click("마이크 준비하기"); click("녹음 시작"); waitText("0:01 / 1:00")
+        click("다시 촬영하기"); click("녹음 시작"); waitText("0:01 / 1:00")
         compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
         compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
         waitText("앱을 벗어나 촬영을 중단했어요. 다시 시작해 주세요.")
@@ -95,7 +95,7 @@ class CaptureDeviceTest {
         } finally { compose.runOnUiThread { capture.discard() }; output?.delete() }
     }
     @Test fun videoStopsAtOneMinuteAndKeepsAudioTrack() {
-        start(); click("카메라 준비하기")
+        start()
         compose.waitUntil(15_000) { compose.onAllNodes(hasText("녹화 시작") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
         click("녹화 시작")
         waitText("어느 순간을 들어볼까요?", 75_000)
@@ -106,5 +106,20 @@ class CaptureDeviceTest {
         assertNotNull("Late segment must still contain a decodable audio track", pcm)
         assertTrue("${pcm!!.size}", pcm.size in 47_000..48_000)
         pcm.fill(0f)
+    }
+
+    @Test fun authorizedEntryAndResumePrepareButNeverStartRecording() {
+        start(); waitText("녹화 시작")
+        compose.onNodeWithText("카메라·마이크 허용하기").assertDoesNotExist()
+        compose.onNodeWithText("촬영 마치기").assertDoesNotExist()
+        assertTrue(File(compose.activity.cacheDir, "captures").listFiles().isNullOrEmpty())
+        compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
+        compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
+        waitText("녹화 시작")
+        compose.onNodeWithText("촬영 마치기").assertDoesNotExist()
+        click("카메라 없이 소리만 녹음")
+        compose.onNodeWithText("녹음 시작").assertIsEnabled()
+        compose.onNodeWithText("마이크 허용하기").assertDoesNotExist()
+        assertTrue(File(compose.activity.cacheDir, "captures").listFiles().isNullOrEmpty())
     }
 }

@@ -24,6 +24,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +43,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +73,8 @@ internal fun CaptureFlow(
     onSave: (ClipInterpretation, String, String) -> Unit,
     passContent: @Composable (close: () -> Unit) -> Unit,
     analyzer: ClipAnalyzer = DeviceClipAnalyzer,
-    initialClip: LocalClip? = null
+    initialClip: LocalClip? = null,
+    testDistribution: Boolean = false
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -82,7 +85,7 @@ internal fun CaptureFlow(
     var clip by remember { mutableStateOf(initialClip) }
     var result by rememberSaveable(stateSaver = InterpretationSaver) { mutableStateOf<ClipInterpretation?>(null) }
     var audioOnly by rememberSaveable { mutableStateOf(false) }
-    var visual by rememberSaveable { mutableStateOf(false) }
+    var visual by rememberSaveable { mutableStateOf(testDistribution && initialClip?.hasVideo == true) }
     var hasPermission by remember { mutableStateOf(false) }
     var permissionDenied by remember { mutableStateOf(false) }
     var cameraRecorder by remember { mutableStateOf<Recorder?>(null) }
@@ -107,6 +110,14 @@ internal fun CaptureFlow(
     var note by rememberSaveable { mutableStateOf("") }
     var stopPlayback by remember { mutableIntStateOf(0) }
 
+    fun permissionsGranted() = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+        (audioOnly || context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+
+    // Only prepare already-authorized hardware. Permission prompts and recording require a tap.
+    LaunchedEffect(audioOnly, clip, result) {
+        if (clip == null && result == null) hasPermission = permissionsGranted()
+    }
+
     fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; selecting = false }
     fun reset() {
         cancelAnalysis(); capture.discard(); recording = false; finishing = false
@@ -129,6 +140,7 @@ internal fun CaptureFlow(
                 val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, Uri.fromFile(file), file) }
                 if (alive.get() && request == generation) {
                     clip = inspected; selection = 0f..minOf(inspected.durationMs.toFloat(), 10_000f)
+                    visual = testDistribution && inspected.hasVideo
                     result = null; message = null; adopted = true
                 }
             } catch (e: CancellationException) { throw e }
@@ -138,10 +150,10 @@ internal fun CaptureFlow(
     }
     val permissions = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (alive.get() && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            hasPermission = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
-                (audioOnly || context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+            hasPermission = permissionsGranted()
             permissionDenied = !hasPermission
-            if (!hasPermission) message = "촬영에는 카메라와 마이크 권한이 필요해요. 소리만 녹음할 수도 있어요."
+            if (!hasPermission) message = if (audioOnly) "녹음에는 마이크 권한이 필요해요. 앱 설정에서 허용해 주세요."
+                else "촬영에는 카메라와 마이크 권한이 필요해요. 소리만 녹음할 수도 있어요."
         }
     }
     fun prepare() {
@@ -159,6 +171,7 @@ internal fun CaptureFlow(
                     val inspected = withContext(Dispatchers.IO) { CaptureFiles.inspect(context, uri) }
                     if (request == generation && alive.get()) {
                         clip?.ownedFile?.delete(); clip = inspected
+                        visual = testDistribution && inspected.hasVideo
                         selection = 0f..minOf(inspected.durationMs.toFloat(), 10_000f); result = null
                     }
                 } catch (e: CancellationException) { throw e }
@@ -169,6 +182,10 @@ internal fun CaptureFlow(
     }
     DisposableEffect(Unit) {
         val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && clip == null && result == null) {
+                hasPermission = permissionsGranted()
+                if (hasPermission) permissionDenied = false
+            }
             if (event == Lifecycle.Event.ON_STOP) {
                 stopPlayback++
                 if (recording || finishing) {
@@ -235,8 +252,8 @@ internal fun CaptureFlow(
                         finishing = true; recording = false; capture.stop()
                     }, enabled = !finishing)
                 } else {
-                    if (!hasPermission) PrimaryButton(if (audioOnly) "마이크 준비하기" else "카메라 준비하기", { prepare() })
-                    else PrimaryButton(if (audioOnly) "녹음 시작" else "녹화 시작", {
+                    if (!hasPermission) PrimaryButton(if (audioOnly) "마이크 허용하기" else "카메라·마이크 허용하기", { prepare() })
+                    else PrimaryButton(if (audioOnly) "녹음 시작" else if (cameraRecorder == null) "카메라 연결 중…" else "녹화 시작", {
                         // Permissions can change after preview preparation.
                         prepare()
                         if (hasPermission) {
@@ -252,7 +269,7 @@ internal fun CaptureFlow(
                     if (hasPermission && !audioOnly && canSwitch) TextButton(onClick = {
                         cameraRecorder = null; facing = if (facing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
                     }) { Text("카메라 전환") }
-                    TextButton(onClick = { audioOnly = !audioOnly; hasPermission = false; cameraRecorder = null; message = null; permissionDenied = false }) {
+                    TextButton(onClick = { audioOnly = !audioOnly; hasPermission = permissionsGranted(); cameraRecorder = null; message = null; permissionDenied = false }) {
                         Text(if (audioOnly) "영상과 소리 함께 담기" else "카메라 없이 소리만 녹음", color = Ink)
                     }
                     HorizontalDivider(color = Line)
@@ -277,17 +294,19 @@ internal fun CaptureFlow(
                     modifier = Modifier.testTag("clip-range"))
                 Text("양 끝을 움직여 1–15초를 골라 주세요. 재생하면 선택한 구간만 들려요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                 if (current.hasVideo) {
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text("표정도 함께 보기", color = Ink, fontWeight = FontWeight.SemiBold)
-                            Text("전체 이용권 · 같은 구간의 얼굴·입 관찰", color = Muted, fontSize = 12.sp)
-                        }
-                        Switch(checked = visual, enabled = !analyzing, onCheckedChange = {
+                    Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = visual, enabled = !analyzing,
+                        role = Role.Switch, onValueChange = {
                             stopPlayback++
                             if (!it) visual = false
                             else if (currentAuthorize()) visual = true
                             else pass = true
-                        }, modifier = Modifier.testTag("visual-analysis").semantics { contentDescription = "표정도 함께 보기" })
+                        }).testTag("visual-analysis"), verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("표정도 함께 보기", color = Ink, fontWeight = FontWeight.SemiBold)
+                            Text(if (testDistribution) "테스트에서 바로 사용 · 같은 구간의 얼굴·입 관찰"
+                                else "전체 이용권 · 같은 구간의 얼굴·입 관찰", color = Muted, fontSize = 12.sp)
+                        }
+                        Switch(checked = visual, enabled = !analyzing, onCheckedChange = null)
                     }
                 }
                 if (analyzing) {

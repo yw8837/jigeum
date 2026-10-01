@@ -1,0 +1,2 @@
+# Preserve generated tool evidence verbatim, including Windows/ADB line endings.
+raw/** -text -whitespace

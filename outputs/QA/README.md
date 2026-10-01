@@ -1,6 +1,12 @@
 # 0.5 QA 진입점
 
-최신 [0.5.1 심층 QA](../../docs/qa/deep-audit-0.5/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 새 촬영/가져오기/보류/유료 왕복 UI와 큰 글씨 확인, `check_package.py`는 서명/16KB/백업 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용으로 새 앱에서 성공한다고 가정하지 않는다. 기존 run_qa.py는 역사적 재현용으로 유지한다.
+최신 [0.5.2 테스트 접근 QA](../../docs/qa/test-access-0.5.2/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 출시용 촬영/가져오기/보류/유료 왕복 UI, `preview_ui.py`는 실제 서명 APK의 전체 기능 테스트 및 업데이트/재잠금 확인, `check_package.py`는 서명/16KB/백업/배포 종류 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용이다.
+
+## 0.5.2 테스트 APK 경로
+
+`tools/release/build-test-apk.ps1`로 기존 서명키의 preview APK를 만든다. `preview_ui.py --baseline-apk <code14.apk> --preview-apk <test-code15.apk> --release-apk <release-code15.apk> --cry-video <권리를 확인한 로컬 시험영상.mp4>`는 전용 기기에 baseline을 설치하고 합성 기록을 가져온 뒤 순서대로 업데이트한다. 시작 기기는 이전 baseline 설치를 허용해야 한다. 사용 중인 폰에 실행하지 않는다. UI QA 자료는 Git/설치본에 포함하지 않는다.
+
+테스트 APK에는 `check_package.py --distribution preview --skip-aab --apk ...`, 정식 APK/AAB에는 `--distribution release --apk ... --aab ...`를 사용한다. compiled manifest marker와 version suffix가 일치하지 않으면 실패한다. `bundlePreview`는 실패해야 한다. preview가 결제를 검증했다는 주장은 금지하며 실제 Play 거래와 별개다.
 
 `range-silence-tone.mp4`는12초 합성 fixture(앞6초무음/뒤6초997Hz순음)다. 실제 아기 분류 성공 자료가 아니다. 새 UI스크립트는 명시한 QA기기의 표시 설정을 임시 바꿨다가 복원한다. 전용 에뮬레이터에서만 실행한다.
 

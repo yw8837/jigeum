@@ -1,0 +1,33 @@
+{
+  "status": "fail",
+  "scenarios": [
+    "code14 to code15-test same-package signed update preserves records",
+    "small authorized capture, preview video analysis selection, non-infant abstention",
+    "font200 authorized capture, preview video analysis selection, non-infant abstention"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~asGvxQtr19FbxzoWSIHqUA==/com.moa.babylanguage-MbMxN3y7bbL8p2WiOEST9A==/base.apk",
+      "sha256": "bc05a2fc1cb7b09ff0e27b5f9da931101690bcd72f57e154742f1ba9e55d9c8a",
+      "expected_sha256": "bc05a2fc1cb7b09ff0e27b5f9da931101690bcd72f57e154742f1ba9e55d9c8a",
+      "version_code": 14,
+      "version_name": "0.5.1",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~iQofckD9hhDSP0NMG5aK6g==/com.moa.babylanguage-p2QXqM6kV7B4XshUAT30aA==/base.apk",
+      "sha256": "7c7d9d74fb9d215abbc41aa259b6a60d4dec46cd6bcb45c77d5d6694ec44e170",
+      "expected_sha256": "7c7d9d74fb9d215abbc41aa259b6a60d4dec46cd6bcb45c77d5d6694ec44e170",
+      "version_code": 15,
+      "version_name": "0.5.2-test",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_infant_intent_accuracy_tested": false,
+  "visual_fixture": "CC0 public cry with generated plain-color video: intentionally no face",
+  "error": "Actual PDF share intent/chooser not observed"
+}

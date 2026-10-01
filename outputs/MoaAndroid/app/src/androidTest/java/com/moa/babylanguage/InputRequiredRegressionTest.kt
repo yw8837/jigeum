@@ -27,7 +27,7 @@ class InputRequiredRegressionTest {
         compose.onNodeWithText("녹음 없이 직접 번역").assertDoesNotExist()
         compose.onNodeWithText("들은 것").assertDoesNotExist()
         compose.onNodeWithText("이 문장 저장하기").assertDoesNotExist()
-        compose.onNodeWithText("카메라 준비하기").assertExists()
+        compose.onNodeWithText("아기의 순간을 담아요").assertExists()
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
         runBlocking { store.close() }
         compose.activity.deleteDatabase("input-regression.db")

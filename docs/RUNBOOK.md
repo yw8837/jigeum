@@ -1,6 +1,8 @@
 # 0.5 실행 안내 — 2026-10-01
 
-현재0.5.1/code14. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/deep-audit-0.5/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`를 사용한다. 계측의 조건skip은 [QA 도구 안내](../outputs/QA/README.md)의 명시 목록을 따른다. 카메라/가져오기는 무료이며 **시각 분석과 PDF만 유료**다. 월령/수동 입력/후보3개는 제거했다. 기존 환경·서명·데이터 계약은 유지한다.
+현재0.5.2/code15. 먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/test-access-0.5.2/README.md)를 따른다. 아래0.4 QA UI선택기는 역사적 시나리오다.0.5는 `instrument.py`, `capture_ui.py`, `preview_ui.py`를 사용한다. 계측의 조건skip은 [QA 도구 안내](../outputs/QA/README.md)의 명시 목록을 따른다. 정식 버전은 카메라/가져오기 무료, **시각 관찰과 PDF만 유료**. sideload `preview`는 사용자의 전체 기능 테스트 요청으로 구매 없이 열린다.
+
+테스트 APK: `tools/release/build-test-apk.ps1 -Destination <새 test.apk 경로>` (기존 업로드키, JAVA_HOME/ANDROID_HOME 필요). `assemblePreview`는 same-package/서명·0.5.2-test, 공개 결제 설정은 빈값. `bundlePreview`는 명시적으로 실패해야 한다. `build-play-bundle.ps1`은 기존 release만 만들며 테스트 권한을 포함하지 않는다. 정식 배포는 이후 요청에서 진행한다.
 
 # 실행·검증·운영 준비
 

@@ -41,9 +41,10 @@ class AccessNavigationTests {
         if (started) { compose.runOnIdle { visible.value = false }; compose.waitForIdle() }
         runBlocking { store.close() }; compose.activity.deleteDatabase("$id.db"); clip.ownedFile?.delete()
     }
-    private fun start(paid: Boolean = false) {
+    private fun start(paid: Boolean = false, preview: Boolean = false) {
         billing.publish(paid); restoration = StateRestorationTester(compose); started = true
-        restoration.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, captureAnalyzer = analyzer, captureSeed = clip) }
+        restoration.setContent { if (visible.value) JigeumApp(compose.activity, store, billing, captureAnalyzer = analyzer, captureSeed = clip,
+            testDistribution = preview) }
         waitText("아기말 번역하기"); click("아기말 번역하기")
         waitText("어느 순간을 들어볼까요?")
     }
@@ -55,6 +56,45 @@ class AccessNavigationTests {
     }
     private fun visual() { compose.onNodeWithTag("visual-analysis").performScrollTo().performClick() }
     private fun awaitResult() { compose.waitUntil(8_000) { compose.onAllNodesWithTag("baby-phrase").fetchSemanticsNodes().isNotEmpty() } }
+
+    @Test fun previewRunsVisualWithoutPurchaseAndPreservesResultAcrossRestart() {
+        start(preview = true)
+        compose.onNodeWithTag("test-distribution").assertIsDisplayed()
+        compose.onNodeWithTag("visual-analysis").assertIsOn()
+        assertFalse(billing.hasCurrentEntitlement())
+        assertFalse(billing.state.value.isPremium)
+        click("영상 + 소리로 번역하기"); awaitResult()
+        assertTrue(analyzer.lastVisual)
+        restoration.emulateSavedInstanceStateRestore()
+        compose.onNodeWithTag("baby-phrase").assertExists()
+        click("이 문장 저장하기")
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-timeline").fetchSemanticsNodes().isNotEmpty() }
+        assertEquals("VIDEO_FILE", runBlocking { store.snapshot().observations.single().source })
+        compose.onNodeWithText("아기말북").performClick()
+        compose.onNodeWithText("이 달의 아기말북 PDF 만들기").performScrollTo().assertIsEnabled()
+        compose.onNodeWithText("전체 이용권 보기").assertDoesNotExist()
+    }
+
+    @Test fun previewOptionRowCanChooseAudioAndDoesNotCreateResultForMissingEvidence() {
+        analyzer.problem = "아기 소리 단서가 없어요"
+        start(preview = true)
+        click("표정도 함께 보기")
+        compose.onNodeWithTag("visual-analysis").assertIsOff()
+        click("이 구간 소리로 번역하기"); waitText("아기 소리 단서가 없어요")
+        assertFalse(analyzer.lastVisual)
+        compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
+    }
+
+    @Test fun testDistributionNeverPersistsAnEntitlementForRelease() {
+        val preview = AccessPolicy({ false }, true)
+        assertTrue(preview.canUse(AppFeature.VISUAL_ANALYSIS))
+        assertTrue(preview.canUse(AppFeature.PDF))
+        val production = AccessPolicy { false }
+        assertFalse(production.canUse(AppFeature.VISUAL_ANALYSIS))
+        assertFalse(production.canUse(AppFeature.PDF))
+        assertTrue(production.canUse(AppFeature.CAPTURE))
+        assertFalse(BuildConfig.FULL_ACCESS_PREVIEW)
+    }
 
     @Test fun freeAudioWorksAndNoManualOrAgeChoicesExist() {
         start()
@@ -176,7 +216,7 @@ class AccessNavigationTests {
         val ui = InstrumentationRegistry.getInstrumentation().uiAutomation
         ui.grantRuntimePermission(compose.activity.packageName, android.Manifest.permission.RECORD_AUDIO)
         start(true); visual(); click("다시 촬영하기")
-        click("카메라 없이 소리만 녹음"); click("마이크 준비하기"); click("녹음 시작")
+        click("카메라 없이 소리만 녹음"); click("녹음 시작")
         waitText("0:02 / 1:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
         compose.runOnIdle { billing.publish(false) }
         click("이 구간 소리로 번역하기")

@@ -133,6 +133,7 @@ class MainActivity : ComponentActivity() {
         val accessBilling = PlayAccessBilling(billingManager)
         setContent {
             JigeumApp(this, store, accessBilling,
+                testDistribution = BuildConfig.FULL_ACCESS_PREVIEW,
                 registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }
@@ -155,7 +156,8 @@ internal fun JigeumApp(
     captureAnalyzer: ClipAnalyzer = DeviceClipAnalyzer,
     captureSeed: LocalClip? = null,
     artifactExporter: ArtifactExporter = DeviceArtifactExporter,
-    recordImporter: RecordImporter = DeviceRecordImporter
+    recordImporter: RecordImporter = DeviceRecordImporter,
+    testDistribution: Boolean = false
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
@@ -169,7 +171,7 @@ internal fun JigeumApp(
     var paywallReturn by rememberSaveable { mutableStateOf(Page.HOME) }
     var requestedFeature by rememberSaveable { mutableStateOf<AppFeature?>(null) }
     var paywallNotice by rememberSaveable { mutableStateOf<String?>(null) }
-    val access = remember { AccessPolicy(billingManager::hasCurrentEntitlement) }
+    val access = remember(billingManager, testDistribution) { AccessPolicy(billingManager::hasCurrentEntitlement, testDistribution) }
     DisposableEffect(access) { onDispose { access.invalidateMedia() } }
     val screenState = rememberSaveableStateHolder()
     val billingState by billingManager.state.collectAsState()
@@ -249,6 +251,9 @@ internal fun JigeumApp(
                 Row(Modifier.fillMaxSize()) {
                     if (wide && destinations) AppNavigation(page, rail = true) { page = it }
                     Column(Modifier.weight(1f).fillMaxSize().imePadding()) {
+                        if (testDistribution) Text("테스트 버전 · 전체 기능 열림", color = Ink, fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth().background(PaleSage)
+                                .padding(horizontal = 24.dp, vertical = 6.dp).testTag("test-distribution"))
                         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth(), color = Ink)
                         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                             Box(Modifier.widthIn(max = 720.dp).fillMaxSize().clipToBounds().testTag(if (loaded) "page-${page.name.lowercase()}" else "page-loading")) {
@@ -264,6 +269,7 @@ internal fun JigeumApp(
                                         authorizeVisual = { access.canUse(AppFeature.VISUAL_ANALYSIS) },
                                         onBack = { page = Page.HOME }, saving = busy,
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
+                                        testDistribution = testDistribution,
                                         onSave = { result, phrase, note ->
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
@@ -313,7 +319,8 @@ internal fun JigeumApp(
                                                 finally { sharing = false }
                                             }
                                         } })
-                                    Page.GUIDE -> GuideScreen(onPrivacy = { privacyReturn = Page.GUIDE; page = Page.PRIVACY },
+                                    Page.GUIDE -> GuideScreen(testDistribution = testDistribution,
+                                        onPrivacy = { privacyReturn = Page.GUIDE; page = Page.PRIVACY },
                                         onDeleteAll = {
                                             update({ store.deleteAll()
                                             try { MemoryArtifacts.clear(activity) }
@@ -329,7 +336,7 @@ internal fun JigeumApp(
                                     Page.PRIVACY -> PrivacyPolicyScreen { goBack() }
                                     Page.TERMS -> ServiceTermsScreen { goBack() }
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
-                                        AlbumScreen(observations, billingState.isPremium,
+                                        AlbumScreen(observations, testDistribution || billingState.isPremium,
                                             onPremium = { showPass(AppFeature.PDF, Page.ALBUM) }, onMessage = ::notify,
                                             operationScope = scope, exporting = sharing || busy, onExportingChange = { sharing = it },
                                             artifactExporter = artifactExporter,
@@ -603,7 +610,8 @@ private fun formatDate(timestamp: Long): String =
     SimpleDateFormat("M월 d일 EEEE · a h:mm", Locale.KOREAN).format(Date(timestamp))
 
 @Composable
-private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTools: @Composable () -> Unit, onRestore: () -> Unit) {
+private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTools: @Composable () -> Unit,
+                        onRestore: () -> Unit, testDistribution: Boolean = false) {
     var confirmDelete by remember { mutableStateOf(false) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
@@ -620,7 +628,9 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
             Spacer(Modifier.height(35.dp))
             dataTools()
-            TextButton(onClick = onRestore, modifier = Modifier.padding(horizontal = 12.dp)) { Text("구매 복원 · 이용권 관리", color = Ink) }
+            if (testDistribution) Text("${BuildConfig.VERSION_NAME} · 테스트 중에는 표정 관찰과 PDF도 바로 사용할 수 있어요. 정식 버전에서는 이용권이 필요해요.",
+                color = Muted, fontSize = 13.sp, lineHeight = 20.sp, modifier = Modifier.padding(24.dp))
+            else TextButton(onClick = onRestore, modifier = Modifier.padding(horizontal = 12.dp)) { Text("구매 복원 · 이용권 관리", color = Ink) }
             Text("내 데이터", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))

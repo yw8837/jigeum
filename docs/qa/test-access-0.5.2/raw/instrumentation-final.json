@@ -1,0 +1,89 @@
+{
+  "status": "pass",
+  "tests": 167,
+  "passed_tests": 164,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 3,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [],
+  "seconds": 280.15,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "084ed1e70a03c19767ae127d739c676a31832cea8993e1b10e6fd20251427783",
+      "bytes": 81456839
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "6e69d173a9563a6420b3e3744ef5bf9e4b78a0c77f71b0f49dc720fa2284e557",
+      "bytes": 1640657
+    },
+    "git": {
+      "sha": "d33b886a1dbf8c3783b2a755f7649c1be181fdbb",
+      "dirty": true,
+      "porcelain": [
+        " M AGENTS.md",
+        " M docs/HANDOFF.md",
+        " M docs/NEXT.md",
+        " M docs/OWNER-TEST.md",
+        " M docs/RUNBOOK.md",
+        " M outputs/Jigeum-Access-Policy.md",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureDeviceTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/InputRequiredRegressionTest.kt",
+        " M outputs/MoaAndroid/app/src/main/AndroidManifest.xml",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessPolicy.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/QA/README.md",
+        " M outputs/QA/capture_ui.py",
+        " M outputs/QA/check_package.py",
+        " M outputs/QA/test_qa_gates.py",
+        "?? docs/qa/test-access-0.5.2/",
+        "?? outputs/QA/preview_ui.py",
+        "?? tools/release/build-test-apk.ps1"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~kKLy9sEXnyV0EHZaHzQUYg==/com.moa.babylanguage-vLxdD10E96EbPiuZfEO5Jg==/base.apk",
+      "sha256": "084ed1e70a03c19767ae127d739c676a31832cea8993e1b10e6fd20251427783",
+      "expected_sha256": "084ed1e70a03c19767ae127d739c676a31832cea8993e1b10e6fd20251427783",
+      "version_code": 15,
+      "version_name": "0.5.2",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~BFscF6eXYe-IuO80tOBBHg==/com.moa.babylanguage.test-i2NKTYWQI29YTdsUTcedTA==/base.apk",
+      "sha256": "6e69d173a9563a6420b3e3744ef5bf9e4b78a0c77f71b0f49dc720fa2284e557",
+      "expected_sha256": "6e69d173a9563a6420b3e3744ef5bf9e4b78a0c77f71b0f49dc720fa2284e557",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

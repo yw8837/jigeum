@@ -24,15 +24,28 @@ def aab_signature_state(output: str, expect_unsigned: bool = False) -> bool:
     return unsigned
 
 
+def assert_distribution(manifest: str, badging: str, distribution: str) -> None:
+    markers = re.findall(r'com\.moa\.babylanguage\.TEST_DISTRIBUTION[^\n]*\n\s*A: (?:http://schemas.android.com/apk/res/)?android:value[^\n]*=(true|false|0xffffffff|0x0)\s*$', manifest, re.M)
+    if len(markers) != 1:
+        raise ValueError('Missing or ambiguous compiled test distribution marker')
+    preview = markers[0] in ('true', '0xffffffff')
+    version = re.search(r"\bversionName='([^']+)'", badging)
+    if version is None or preview != (distribution == 'preview') or version[1].endswith('-test') != preview:
+        raise ValueError('Compiled distribution marker/version does not match intended delivery')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apk", type=Path, default=APK)
     parser.add_argument("--aab", type=Path, default=AAB)
     parser.add_argument("--skip-aab", action="store_true", help="Record AAB inspection as skipped.")
     parser.add_argument("--baseline", type=Path, help="Optional known-good local APK; compare its native libraries/model assets byte for byte.")
+    parser.add_argument("--distribution", choices=['release','preview'], help="Assert the compiled sideload-test marker and version suffix.")
     parser.add_argument("--expect-unsigned-aab", action="store_true", help="Require an unsigned bundle when upload credentials were intentionally omitted.")
     parser.add_argument("--build-tools", default=os.environ.get("JIGEUM_QA_BUILD_TOOLS", "36.0.0"))
     args = parser.parse_args()
+    if args.distribution == 'preview' and not args.skip_aab:
+        parser.error('Preview is sideload-only; use --skip-aab and never deliver its AAB.')
     evidence = evidence_dir()
     sdk = sdk_root() / "build-tools" / args.build_tools
     java = Path(os.environ["JAVA_HOME"]) / "bin" if os.environ.get("JAVA_HOME") else None
@@ -80,7 +93,9 @@ def main():
     assert "com.moa.babylanguage.files" in manifest
     paths = run("share-paths-apk.txt", [aapt, "dump", "xmltree", apk, "--file", xml_resource_path("share_paths")])
     assert "exports/" in paths and "root-path" not in paths and "external-path" not in paths
-    run("apk-badging.txt", [aapt, "dump", "badging", apk])
+    badging = run("apk-badging.txt", [aapt, "dump", "badging", apk])
+    if args.distribution:
+        assert_distribution(manifest, badging, args.distribution)
     run("apk-signature.txt", [tool_path("apksigner", sdk), "verify", "--verbose", "--print-certs", apk])
     run("zipalign.txt", [tool_path("zipalign", sdk), "-c", "-P", "16", "-v", "4", apk])
     run("elf-apk.txt", [sys.executable, HERE / "release_check.py", apk])
@@ -97,7 +112,7 @@ def main():
             for name in names:
                 assert old.read(name) == new.read(name), name
         baseline_result = {"status": "pass", "files_compared": len(names), "baseline": str(args.baseline.resolve())}
-    verdict = {"status": "pass", "backup_domains_excluded_in_both_modes": sorted(domains),
+    verdict = {"status": "pass", "distribution_checked": args.distribution, "backup_domains_excluded_in_both_modes": sorted(domains),
                "compiled_apk_has_internet_permission": True, "allowBackup": False, "fullBackupContent": False,
                "baseline_comparison": baseline_result, "aab_checked": not args.skip_aab, "aab_unsigned": aab_unsigned,
                "physical_OEM_transfer_tested": False, "apk_sha256": hashlib.sha256(apk.read_bytes()).hexdigest()}

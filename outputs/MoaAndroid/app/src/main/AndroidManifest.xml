@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false">
+        <meta-data android:name="com.moa.babylanguage.TEST_DISTRIBUTION" android:value="${testDistribution}" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.files"

@@ -1,0 +1,370 @@
+{
+  "base_commit": "d33b886a1dbf8c3783b2a755f7649c1be181fdbb",
+  "note": "Built from modified source; hashes pin exact files independently of later documentation commit.",
+  "files": [
+    {
+      "path": "outputs/MoaAndroid/app/build.gradle.kts",
+      "sha256": "8377f576ed4ba01dbec04c3505527a36612cdbd2f2dc5695de924309c5f7cd25"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/AndroidManifest.xml",
+      "sha256": "b86d3358cf4fbb1b8b5ac6b0b7d7235cb400b9a61cc202aea05629fa7beb80a0"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/generated-fuss.mp4",
+      "sha256": "7c90c6c91f01d5797b03de9761dcb18a2eabfac13326973267425b66cf963d1c"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/no-audio.mp4",
+      "sha256": "56232efd68fedd17d73677bd3a3ad20db8ae4c99ef50161d63b5dd4e43f29379"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/over-minute.mp4",
+      "sha256": "c7b7122ea5b25ac3eeccb63ece11486943a95332529de1fabb835be31cfa8641"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/range-silence-tone.mp4",
+      "sha256": "dbce89cb720be531e43e05dacb54e9318e3a6914931b4d6bffe3c58ecb69b321"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/server-ack-fixture.json",
+      "sha256": "945cb1a681f4ad095f5bfeeaba21216eb524e63121239ebfa5edcfa74ad8eed8"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/silence.mp4",
+      "sha256": "d6bb48d6803517cc8f683c48686ed46d07b5d1c9fcbce2589389d5f607b75e03"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/tone44-mono.mp4",
+      "sha256": "1101353e8a020f7fcc6a818c493de0f4df1ece4fc39c3be96f45bb84e82d4a35"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/tone48-stereo.mp4",
+      "sha256": "7209bc7f39a43c17c2099cf4ed1a4f24b837a06a2501cdfd2e3ac04f5d451c40"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/transport-deadline-test.p12",
+      "sha256": "5c8174fabe4df0b90c121f8f379ffe80a300e538e5192baebb37bf474e41a247"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/assets/under-second.mp4",
+      "sha256": "f224a38d55ae393495fd27acad001f751bb81f45c76fbd5991df643fc4fc2bcc"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+      "sha256": "c5587af40fc411581c0d29b06caa27889db2d169ae5c89648d971e7a3f664f85"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessPolicyTests.kt",
+      "sha256": "252e44942d47183c7691bc74c8526e220722e7e47701cb9311be471acc7bd317"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ArtifactGrantReceiverActivity.java",
+      "sha256": "71565600686a67aed99e582ba30629f1e0b84b57829a6f6ee6e8204f6d0d3642"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ArtifactSharingNavigationTests.kt",
+      "sha256": "42e6c4eda3d7106ffa79ff50c2d88a63c50a0fca890d8990083be57fb897c401"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ArtifactUriGrantTests.kt",
+      "sha256": "0c9ac96eed2b7fe7f9a78d8772d744338382907295809a7e529d595476ffb876"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/BillingManagerLifecycleTest.kt",
+      "sha256": "110bc59de072c5544115e694f7dcf1dd8004de776a7879c337ba2e78ec5f5a02"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureDeviceTest.kt",
+      "sha256": "ae129af62342e9961fcabd9c19f5edf02412b7c32cec6df07d34e9e633ffb636"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureInputAuditTest.kt",
+      "sha256": "ab82d582a0f54fb690414940e87101b2aceeb55f5d9c8bdd8783671ab0a2856b"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/EntitlementTimingTest.kt",
+      "sha256": "c0e7821d4a1bf9a7ddc3a0390433dfa7a0e9a245c3a102e5b7d24f8af8ec9f31"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/EvidenceInterpreterTest.kt",
+      "sha256": "2374d0807e7ff7dc848c4f20ad8998316e1854d2edf6748d4e379c92b42a41d4"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/FeedbackTimingTests.kt",
+      "sha256": "a4f4da6883bca4f75c203b83292616ec6e52c90bd4c69aee1146f5a454bae925"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/HttpRequestDeadlineTest.kt",
+      "sha256": "4d28d2d4a2482430c89095cb100bd5b5fc4cc00807102827409e4d15b6415263"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ImportMutationNavigationTests.kt",
+      "sha256": "1c3ddb1c0d0bd1d11fdaaf787458d6a6f6543d7b4ca3f21f8632e28c1393c926"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/InputRequiredRegressionTest.kt",
+      "sha256": "50607c87554ee8f9a45d7dff238fca236236fb11483a11187a5fac66545b7e0a"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/MemoryArtifactsTests.kt",
+      "sha256": "b904ba5e6b458b503df1aeae298b302fdd13bfbe92fe92cbc9b0f916c14d025b"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ProtobufRuntimeTest.kt",
+      "sha256": "65a7dac0436b3633902f2ed5452f104b96064d3dd110644b718cc6c22bd6b4b0"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/PublicAudioProbeTest.kt",
+      "sha256": "0dbfc636499be861e51bdcfe7261660960bd1d9908c6fd711f1d3045e2fd961f"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/PurchaseVerifierTest.kt",
+      "sha256": "6f913fc23cab3ec91ec6e003b0572661a34cf5e673ce18b2e0dfac3c187bf9ee"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/RecordTransferTests.kt",
+      "sha256": "6f9b910024425487546e613af4764d2448ef315d4ad7f8d595c2798103a1c1e8"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ReviewAccessLifecycleTest.kt",
+      "sha256": "ab1a76840c1b64a2a78a79a45863e78f55fde10fa4f322bd62f60208b30255d4"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ReviewAccessUiTest.kt",
+      "sha256": "a8ec4f5d816b6ce557c6f24f77eb38225ffb4ac332095957f1bee9e27feadc66"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ReviewAccessVerifierTest.kt",
+      "sha256": "4e7c62842f7436e6c1114588b272fbe361b16a58cf30f82334dc937f4631e806"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ServerAcknowledgmentContractTest.kt",
+      "sha256": "84fd2a3c45cdaf986e8297cf07b4eeed92e56744929c066a19a14c1901403856"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VideoAudioTest.kt",
+      "sha256": "3b5fb5ac7e81163f8cf51744781219197f54e8a51fc0be49046b81a637fd4935"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VisualEvidenceAuditTest.kt",
+      "sha256": "e573cbe34251235eb165e42d372f3fbe28d433a7442eb86dc8d907a37aa3bcc3"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/AndroidManifest.xml",
+      "sha256": "4a8ac9c07235c789b476c15a6ff75ca2b1d2c4cd062a623fab4b6fecdc3ab7df"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/assets/LICENSE-APACHE-2.0.txt",
+      "sha256": "364aafdc6c88e810a89323e46a2c50b7e5e2e67076c89d20eb9732031fa36a3b"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/assets/MODEL_NOTICE.txt",
+      "sha256": "7c0d235e50f2b399e483faa9e0639529341c687c5437008757b6db1c8abc6ade"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/assets/YAMNET_NOTICE.txt",
+      "sha256": "5b078f8793be3b86101cec9328db1a7dd4df6d461109b97ec1e5b91ccf1aeab6"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/assets/face_landmarker.task",
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/assets/yamnet.tflite",
+      "sha256": "4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessPolicy.kt",
+      "sha256": "ecc86a07d5590c1312973f105219aeb7fcaf67ffdcdeddec69ada1929903701a"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BillingManager.kt",
+      "sha256": "3d08976661b573c3585115b18d7778cf3a7d4257b25da27fe13a2258759b5acc"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BillingModels.kt",
+      "sha256": "b5edfdd6f557cf9ec25569db31d6c909c8678d717eef65cab5e009771ff1008f"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+      "sha256": "8fdd1f84c08552c2e1afb23c57270c71eaf9baefcd75358a952d10c64595e04e"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt",
+      "sha256": "d4bf42f487e1755278aa41a6640a89ff6f868010c39d7e156f85c30b0e64c116"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/HttpRequestDeadline.kt",
+      "sha256": "7c34a7657b2cf860e2589e4e8ff20285b54c1bde0e80d21cc015f4f5d48cdff4"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LatestFeedback.kt",
+      "sha256": "284f223f62f3e603476cb02ae6a614f66c381293190ca34fc18916e76a885f94"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+      "sha256": "9619cde0bc9d5e0f0d7d103cfc7c2ffbb1bade13531e83bab91e9f6a13e0c6b0"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LocalCapture.kt",
+      "sha256": "ec776436c8f2b4c95474a2d654a50eff7db217a2dfe1efca9d32c067b1a687ca"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+      "sha256": "90cfad79ff375baa52f42b75e4d21c3886123fe4bd0df2885d3f933da3132880"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MemoryArtifacts.kt",
+      "sha256": "da9b1427fc770960c89d831be9b9a4118849a73780beabb83362a6949f926e6c"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ObservationStore.kt",
+      "sha256": "ac2d3b9098e9318db11a0991c8e1a1e1827b0fbff3a17ced2df2ebe459860c11"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PurchaseVerifier.kt",
+      "sha256": "311c29c3563e38da17f98fa22da72a806924d23f25dcfd2720795a16772b828f"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordTransfer.kt",
+      "sha256": "02876b00cb407da3ff10c45a8eba97547ca74fb8c844695974e9f273d7b10501"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessSection.kt",
+      "sha256": "8df735691745562ad3baf7468b68527cdc4f76e979bc8d1bb6040540d4e499af"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+      "sha256": "f20ed0d92ba3955db37b1c86c449de46688b890d1e1c2f9444988e48f1abf095"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/SoundAnalyzer.kt",
+      "sha256": "8f4bf3b85fa118e6325c75897fa1015efc26127e91c2a25a920f3dcd00345388"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoAudioDecoder.kt",
+      "sha256": "ebfe460a78fadfbc0f261454fa5e6a32f681f1c0a732747b1707b71d34954ec1"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoImport.kt",
+      "sha256": "43201b77e202ad06f819bb16874b2a97f43b1104fb1584ed5dadb36f64ff1e0d"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/drawable-nodpi/agattok_icon.png",
+      "sha256": "76b5f48ded215c17834b37378ba06f1438b90737867cefd5d1acad374c8b3353"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/drawable-nodpi/hero_touch.png",
+      "sha256": "3078d0ef252c49ae4bed8e3c56a6364a91cd57cfc4632211edcda3f1bd6d86b4"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/drawable/ic_launcher_foreground.xml",
+      "sha256": "02712f93175344ea9a267719eb6ffe526f41de7cbea8f4c1f0679c0df45d2b63"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/drawable/ic_launcher_monochrome.xml",
+      "sha256": "786b19da627e6b171f2f019598dbc988d821158b12891ddfa5f9b389b0b0f5bb"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/mipmap-anydpi/ic_launcher.xml",
+      "sha256": "ad15b9261437a879d083ad828c1a38ef04c9335cfffeebbca8c8c511c4a30718"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/values/launcher_colors.xml",
+      "sha256": "500e51d1db1158d8f39de8349b91fe7b39e0225cdb87ad811e2d4cca59d705c0"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/values/strings.xml",
+      "sha256": "481f32eaad69b2d4a40421750a5a40cedd89bb9277b4e5fb96e911fe2a085b2e"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "f7666ed180041ead342e96e5b5f6ed24afb86743ef26fe1a06d80e6d6dcf01e5"
+    },
+    {
+      "path": "outputs/MoaAndroid/app/src/main/res/xml/share_paths.xml",
+      "sha256": "687bf31edc6dda8ce9c0751119cd5475cac537bb466b646e5cd678f0d4ed934c"
+    },
+    {
+      "path": "outputs/QA/.gitignore",
+      "sha256": "77fe7c98897ac303c4355f8c4c38323935883c89439ace6c6f18cd360b7ae6b2"
+    },
+    {
+      "path": "outputs/QA/README.md",
+      "sha256": "231b27ec5d3c62183447be0379bbb752aeef3ae53b088d81933f416599bef688"
+    },
+    {
+      "path": "outputs/QA/capture_legacy.py",
+      "sha256": "fda8f4e7cd793b630d06b40be0496976c35d5de7a33aaee28e75a79cb3284ba2"
+    },
+    {
+      "path": "outputs/QA/capture_ui.py",
+      "sha256": "025378528868522bbc9f9e897fa35baf8442e16e6016cec4f3529757098b1e01"
+    },
+    {
+      "path": "outputs/QA/check_package.py",
+      "sha256": "61210559d9ddc5c147280f940f750eae0c090b6020254962303f6b8528bbe8bc"
+    },
+    {
+      "path": "outputs/QA/fixtures.py",
+      "sha256": "f1f7fe6afe14c1ad73f4daeb122863ac0faa8daea4d4f6a6c271594129a4b9de"
+    },
+    {
+      "path": "outputs/QA/instrument.py",
+      "sha256": "40b3a2a058dead5361f65a6baca0be17632617e90e50dc0453324515d033825b"
+    },
+    {
+      "path": "outputs/QA/legacy_ui.py",
+      "sha256": "e9fe62eb85470e7a01c679e98977824102917da0aaba4ce638f5b589dacbfbf1"
+    },
+    {
+      "path": "outputs/QA/preview_ui.py",
+      "sha256": "e49d300f23bef01fd82c28ac8e3e88f6dc6f97b6a456490a697ca22a2b4072f3"
+    },
+    {
+      "path": "outputs/QA/qa_config.py",
+      "sha256": "8ea9936c4f8e45aefdb33b14b39b9993030020d2dd33a723cf4260bd2a2aca0b"
+    },
+    {
+      "path": "outputs/QA/qa_harness.py",
+      "sha256": "bea3bdcde3e706d979df9600d7186b6ffb4f0fbce5202ad3eb3d5896005c59ea"
+    },
+    {
+      "path": "outputs/QA/release_check.py",
+      "sha256": "00030e991fb9dbf324c1ec851e3078177959801b4f581f7840ebcee6af8539e8"
+    },
+    {
+      "path": "outputs/QA/run_qa.py",
+      "sha256": "1ecdd9763e17ba595ea2b3589d388f1d7b9f7234f03c994fe6b0f14e26d1be8e"
+    },
+    {
+      "path": "outputs/QA/test_qa_gates.py",
+      "sha256": "265dfefadf7574b876c870adf1c9b8ee0863f17fdd3066a6400c52a3fc8701c1"
+    },
+    {
+      "path": "outputs/QA/transfer_e2e.py",
+      "sha256": "cbb8c4038526e293b0407db71a7d854108358944702c0272404a951e8fe38edd"
+    },
+    {
+      "path": "tools/release/build-play-bundle.ps1",
+      "sha256": "1fa473f3d6366d40f0274f71cfb62f116cb9cc55312ed132bd8c0ad295e38806"
+    },
+    {
+      "path": "tools/release/build-test-apk.ps1",
+      "sha256": "82a44a77f5a0d68a5ae34143a9bf8ab5b921f0c0affb1191204d5e4f3c183f73"
+    },
+    {
+      "path": "tools/release/capture-store-screenshots.py",
+      "sha256": "7a81cb79f324036e5dcfbb11b82416d43c6d1c04806c9f4ddc934cdd77955824"
+    },
+    {
+      "path": "tools/release/collect-registration-assets.py",
+      "sha256": "7460771c7cac0460d9db6e81412b27b541dc6dd1df24e7febedf158f8142bcc5"
+    },
+    {
+      "path": "tools/release/prepare-upload-key.ps1",
+      "sha256": "a8185d1978124d61781ccf84ae5359718f7e07b20f42cfe014146741cb01b38f"
+    }
+  ]
+}

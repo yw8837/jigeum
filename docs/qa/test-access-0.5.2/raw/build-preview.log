@@ -1,0 +1,84 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+w: file:///C:/Users/%EC%B5%9C%EC%9A%A9%EC%9A%B0/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/build.gradle.kts:79:21: 'jvmTarget: String' is deprecated. Please migrate to the compilerOptions DSL. More details are here: https://kotl.in/u1r8ln
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:prePreviewBuild UP-TO-DATE
+> Task :app:mergePreviewJniLibFolders
+> Task :app:mergePreviewNativeLibs
+
+> Task :app:stripPreviewDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libimage_processing_util_jni.so, libmediapipe_tasks_jni.so, libsurface_util_jni.so. Run with --info option to learn more.
+
+> Task :app:extractPreviewNativeSymbolTables
+> Task :app:mergePreviewNativeDebugMetadata NO-SOURCE
+> Task :app:checkPreviewDuplicateClasses
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generatePreviewBuildConfig
+> Task :app:checkPreviewAarMetadata
+> Task :app:processPreviewNavigationResources
+> Task :app:compilePreviewNavigationResources
+> Task :app:generatePreviewResValues
+> Task :app:mapPreviewSourceSetPaths
+> Task :app:generatePreviewResources
+> Task :app:mergePreviewResources
+> Task :app:packagePreviewResources
+> Task :app:parsePreviewLocalResources
+> Task :app:createPreviewCompatibleScreenManifests
+> Task :app:extractDeepLinksPreview
+> Task :app:processPreviewMainManifest
+> Task :app:processPreviewManifest
+> Task :app:processPreviewManifestForPackage
+> Task :app:processPreviewResources
+
+> Task :app:compilePreviewKotlin
+w: file:///C:/Users/최용우/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoAudioDecoder.kt:163:32 'static field INFO_OUTPUT_BUFFERS_CHANGED: Int' is deprecated. Deprecated in Java.
+
+> Task :app:javaPreCompilePreview
+> Task :app:compilePreviewJavaWithJavac
+> Task :app:dexBuilderPreview
+> Task :app:desugarPreviewFileDependencies
+> Task :app:mergePreviewStartupProfile
+> Task :app:mergeExtDexPreview
+> Task :app:mergeDexPreview
+> Task :app:mergePreviewArtProfile
+> Task :app:mergePreviewGlobalSynthetics
+> Task :app:compilePreviewArtProfile
+> Task :app:mergePreviewShaders
+> Task :app:compilePreviewShaders NO-SOURCE
+> Task :app:generatePreviewAssets UP-TO-DATE
+> Task :app:mergePreviewAssets
+> Task :app:compressPreviewAssets
+> Task :app:extractPreviewVersionControlInfo
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generatePreviewLintVitalReportModel
+> Task :app:lintVitalAnalyzePreview
+> Task :app:lintVitalReportPreview
+> Task :app:lintVitalPreview
+> Task :app:processPreviewJavaRes
+> Task :app:mergePreviewJavaResource
+> Task :app:optimizePreviewResources
+> Task :app:collectPreviewDependencies
+> Task :app:sdkPreviewDependencyData
+> Task :app:validateSigningPreview
+> Task :app:writePreviewAppMetadata
+> Task :app:writePreviewSigningConfigVersions
+> Task :app:packagePreview
+> Task :app:createPreviewApkListingFileRedirect
+> Task :app:assemblePreview
+
+BUILD SUCCESSFUL in 2m 37s
+52 actionable tasks: 50 executed, 2 up-to-date
+{
+  "purpose": "full-access-sideload-test",
+  "playSubmission": false,
+  "artifact": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\Agattok-0.5.2-test-code15.apk",
+  "bytes": 73776779,
+  "sha256": "7c7d9d74fb9d215abbc41aa259b6a60d4dec46cd6bcb45c77d5d6694ec44e170"
+}
