@@ -26,10 +26,12 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 21
-        versionName = "0.5.7"
+        versionCode = 22
+        versionName = "0.5.8"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
+        buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         manifestPlaceholders["testDistribution"] = "false"
+        manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")
@@ -70,6 +72,18 @@ android {
             buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
             manifestPlaceholders["testDistribution"] = "true"
         }
+        // User-authorized full access on the Play closed-test track only.
+        // Production release keeps both flags false and checks real purchases.
+        create("beta") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            versionNameSuffix = "-beta"
+            buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
+            buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
+            buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
+            manifestPlaceholders["testDistribution"] = "true"
+            manifestPlaceholders["closedTestDistribution"] = "true"
+        }
     }
 
     compileOptions {
@@ -83,7 +97,7 @@ android {
     }
 }
 
-// A full-access test build must not accidentally become a Play upload bundle.
+// Sideload preview remains blocked; beta is only for the authorized closed track.
 tasks.configureEach {
     if (name == "bundlePreview" || name == "packagePreviewBundle") {
         doFirst { error("Preview is sideload-only. Use assemblePreview for testing or bundleRelease for Play.") }

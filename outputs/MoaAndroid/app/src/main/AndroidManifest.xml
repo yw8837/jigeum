@@ -20,6 +20,7 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false">
         <meta-data android:name="com.moa.babylanguage.TEST_DISTRIBUTION" android:value="${testDistribution}" />
+        <meta-data android:name="com.moa.babylanguage.CLOSED_TEST_DISTRIBUTION" android:value="${closedTestDistribution}" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.files"

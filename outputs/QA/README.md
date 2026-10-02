@@ -1,8 +1,18 @@
 # 0.5 QA 진입점
 
-최신 [0.5.2 테스트 접근 QA](../../docs/qa/test-access-0.5.2/README.md). `instrument.py --install-app`은 현재 전체 계측, `capture_ui.py`는 출시용 촬영/가져오기/보류/유료 왕복 UI, `preview_ui.py`는 실제 서명 APK의 전체 기능 테스트 및 업데이트/재잠금 확인, `check_package.py`는 서명/16KB/백업/배포 종류 검사다. 아래 `run_qa.py normal/camera/video/access/layout` 등0.4 선택기는 과거 화면용이다.
+최신은 [0.5.8 Play 전체 기능 beta QA](../../docs/qa/closed-test-0.5.8/README.md)다. 전체 계측253통과/0실패/3명시제외·host30통과·서명 UI7시나리오 증거 결합을 기록했다. 실제 Play 설치·자동 업데이트·실기기·의도 정확도 검증과 구분한다. 현재 실행은 [RUNBOOK](../../docs/RUNBOOK.md)을 우선한다.
 
-## 0.5.2 테스트 APK 경로
+`instrument.py --install-app`은 설치 출처를 확인하는 전체 계측, `capture_ui.py`는 촬영/가져오기/보류/유료 왕복 UI, `closed_test_ui.py`는 최종 서명 beta의 전체 기능·release 재잠금과 실제 미디어 보존을 검증한다. 아래0.5.2 preview/0.4 UI 설명은 과거 실행 이력이다.
+
+## 0.5.8 Play beta 경로
+
+- `build-play-bundle.ps1 -Purpose closed-test`로 beta APK/AAB를 만든다. `check_package.py --distribution beta --apk <beta.apk> --aab <beta.aab> --bundletool <공식 bundletool.jar> --baseline <이전 test.apk>`는 APK와 AAB의 실제 manifest·version·두 배포 표시를 검사한다. beta는 `--skip-aab`를 허용하지 않는다. 실제 반대 배포 AAB 혼입도 거부해야 한다.
+- 정식 비교용은 `--distribution release`를 사용한다. 기존 preview는 여전히 sideload 전용이며 `bundlePreview`가 차단된다. verifier URL/key·업로드키는 각 빌드 목적과 RUNBOOK의 환경 설정을 따른다.
+- `closed_test_ui.py --beta-apk <beta.apk> --release-apk <release.apk> --cry-video <권리를 확인한 로컬 QA.mp4>`는 전용 기기에서 실제2분 자동 녹화·20초 분석·200MiB 허용/1바이트 초과 거절·작은폰/200%글자·실제 YAMNet/시각/PDF·재시작·release 재잠금을 실행한다. 같은 기록 MP4를 실제 내려받아 ffprobe와 SHA256으로 비교한다.
+- 재개 `--access-proof <이전 결과.json>`는 같은 beta APK SHA·실제 캡처 길이·정확한 용량 경계를 확인해 완료한 앞4개만 재사용한다. 실패 실행 전체를 pass로 바꾸거나 중단 없이7개가 한 번에 통과했다고 보고하지 않는다. 원본과 다운로드 MP4·대용량 fixture는 정리하고 표시/글자 설정을 복원한다.
+- 계측의3개 `--allow-skip`는 최신 QA 보고서의 정확한 test ID만 사용한다. 제외를 passed에 합산하지 않는다. 실제 상품/거래/Play 제출은 이 도구가 수행하지 않는다.
+
+## 0.5.2 테스트 APK 경로 — 과거 이력
 
 `tools/release/build-test-apk.ps1`로 기존 서명키의 preview APK를 만든다. `preview_ui.py --baseline-apk <code14.apk> --preview-apk <test-code15.apk> --release-apk <release-code15.apk> --cry-video <권리를 확인한 로컬 시험영상.mp4>`는 전용 기기에 baseline을 설치하고 합성 기록을 가져온 뒤 순서대로 업데이트한다. 시작 기기는 이전 baseline 설치를 허용해야 한다. 사용 중인 폰에 실행하지 않는다. UI QA 자료는 Git/설치본에 포함하지 않는다.
 

@@ -80,6 +80,8 @@ class UiFeedbackTest {
         assertFalse(billing.hasCurrentEntitlement())
         compose.onNodeWithTag("home-pass").performClick()
         compose.onNodeWithText("이 설치본은 전체 기능 테스트용이에요.").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("구매 복원").assertDoesNotExist()
+        compose.onNodeWithText("Google Play에서 구독 관리").assertDoesNotExist()
         compose.onNodeWithText("현재 결제를 준비 중이에요").assertDoesNotExist()
         assertEquals(0, billing.purchases)
     }

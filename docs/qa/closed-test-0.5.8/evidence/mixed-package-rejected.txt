@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\check_package.py", line 177, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\check_package.py", line 157, in main
+    aab_distribution = assert_bundle_distribution(bundle_manifest, badging, args.distribution)
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\check_package.py", line 61, in assert_bundle_distribution
+    raise ValueError('AAB package/version differs from the inspected APK')
+ValueError: AAB package/version differs from the inspected APK

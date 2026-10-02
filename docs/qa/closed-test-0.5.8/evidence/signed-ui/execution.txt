@@ -1,0 +1,15 @@
+Signed beta real two-minute video started.
+{"status": "fail", "scenarios": ["small: full access visible, purchase/restore hidden, explanation/capture reachable", "font200: full access visible, purchase/restore hidden, explanation/capture reachable", "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase", "beta imports valid exact 200MiB video and rejects 200MiB+1 byte"], "installs": [{"package": "com.moa.babylanguage", "base_apk": "/data/app/~~HTwyImIz7VX6ykvGIHMsrQ==/com.moa.babylanguage-U5nELW9FUji8__q-cj4ArQ==/base.apk", "sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803", "expected_sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803", "version_code": 22, "version_name": "0.5.8-beta", "verified": true, "errors": []}], "actual_play_install_tested": false, "infant_intent_accuracy_tested": false, "fixture": "the_yura CC0 cry + plain-color video", "observed_capture_seconds": 123.65, "capture_timeline": {"end_label": "1:59.7", "lower_ms": 119700, "precision_ms": 100}, "abstention_message": "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.", "large_fixture_bytes": 209715200, "oversized_fixture_bytes": 209715201, "error": "UI missing 번역 영상을 선택한 위치에 내려받았어요; current: ['기록으로 돌아가기', '그때의 아기말', '10월 2일 · 06:04 · 0:00–0:10', '선택 구간 다시 듣기 · 영상 함께 보기', '응애… 또 응애. 내 소리 좀 들어줘요.', '선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.', '앨범에 영상 저장', '카드 이미지 앨범에 저장', '번역 영상 내려받기', '번역 영상 공유']"}
+Traceback (most recent call last):
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\closed_test_ui.py", line 217, in <module>
+    assert q.display_settings() == display, 'Display settings were not restored'
+                       ^^^^^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\closed_test_ui.py", line 167, in main
+    result['beta_media'] = download_media(owned, 'beta')
+                           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\closed_test_ui.py", line 46, in download_media
+    q.wait_ui('번역 영상을 선택한 위치에 내려받았어요', seconds=30)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\qa_harness.py", line 51, in wait_ui
+    raise AssertionError(f"UI missing {expect}; current: {[n['text'] for n in last if n['text']][:25]}")
+AssertionError: UI missing 번역 영상을 선택한 위치에 내려받았어요; current: ['기록으로 돌아가기', '그때의 아기말', '10월 2일 · 06:04 · 0:00–0:10', '선택 구간 다시 듣기 · 영상 함께 보기', '응애… 또 응애. 내 소리 좀 들어줘요.', '선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.', '앨범에 영상 저장', '카드 이미지 앨범에 저장', '번역 영상 내려받기', '번역 영상 공유']

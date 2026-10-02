@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
             var showTitle by rememberSaveable { mutableStateOf(savedInstanceState == null) }
             if (showTitle) AppTitleScreen { showTitle = false }
             else JigeumApp(this, store, accessBilling,
-                testDistribution = BuildConfig.FULL_ACCESS_PREVIEW,
+                testDistribution = BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST,
                 registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }

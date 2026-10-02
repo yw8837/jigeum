@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('internal', 'paid-candidate')][string]$Purpose = 'internal',
+    [ValidateSet('internal', 'paid-candidate', 'closed-test')][string]$Purpose = 'internal',
     [string]$SigningDirectory = (Join-Path ([Environment]::GetFolderPath('UserProfile')) '.jigeum/signing'),
     [string]$JavaHome = $env:JAVA_HOME,
     [string]$AndroidSdk = $env:ANDROID_HOME,
@@ -8,6 +8,9 @@ param(
 $ErrorActionPreference = 'Stop'
 if (-not $JavaHome -or -not $AndroidSdk) { throw 'Set JAVA_HOME and ANDROID_HOME or pass their paths.' }
 if (Test-Path -LiteralPath $Destination) { throw 'Destination already exists; preserve the old artifact.' }
+if ($Purpose -eq 'closed-test' -and [IO.Path]::GetFileName($Destination) -notmatch '-beta-code\d+\.aab$') {
+    throw 'Closed-test artifacts must be visibly named *-beta-codeN.aab, never a production release.'
+}
 if ($Purpose -eq 'paid-candidate') {
     if (-not $env:JIGEUM_PLAY_VERIFY_URL -or -not $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY) {
         throw 'Paid candidates require the actual HTTPS verification URL and public key.'
@@ -15,7 +18,7 @@ if ($Purpose -eq 'paid-candidate') {
     if (-not $env:JIGEUM_PLAY_VERIFY_URL.StartsWith('https://', [StringComparison]::OrdinalIgnoreCase)) {
         throw 'Verifier URL must use HTTPS.'
     }
-} elseif ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY) {
+} elseif ($Purpose -eq 'internal' -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
     throw 'Internal bootstrap is explicitly billing-disabled. Use paid-candidate for configured billing.'
 }
 $keystore = Join-Path $SigningDirectory 'jigeum-upload.p12'
@@ -41,10 +44,12 @@ try {
     $env:MOA_UPLOAD_KEY_PASSWORD = $env:MOA_UPLOAD_STORE_PASSWORD
     Push-Location $project
     try {
-        & ./gradlew.bat :app:bundleRelease :app:assembleRelease --max-workers=1 --console=plain --no-daemon
+        $variant = if ($Purpose -eq 'closed-test') { 'Beta' } else { 'Release' }
+        & ./gradlew.bat ":app:bundle$variant" ":app:assemble$variant" --max-workers=1 --console=plain --no-daemon
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }
-    $aab = Join-Path $project 'app/build/outputs/bundle/release/app-release.aab'
+    $variantDirectory = $variant.ToLowerInvariant()
+    $aab = Join-Path $project "app/build/outputs/bundle/$variantDirectory/app-$variantDirectory.aab"
     New-Item -ItemType Directory -Path (Split-Path -Parent $final) -Force | Out-Null
     # Use the JDK's documented AAB signer as the final writer. AGP places its
     # manifest at the end of this archive; JarInputStream then reports it missing.
@@ -64,6 +69,7 @@ try {
     # Android uses self-signed upload certificates; trust-chain warnings are expected.
     [pscustomobject]@{
         purpose = $Purpose
+        playTrack = if ($Purpose -eq 'closed-test') { 'closed-test-only' } else { 'release-candidate' }
         billingConfigured = ($Purpose -eq 'paid-candidate')
         artifact = $final
         bytes = (Get-Item -LiteralPath $final).Length

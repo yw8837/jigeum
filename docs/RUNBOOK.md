@@ -1,22 +1,24 @@
-# 0.5.7/code21 실행 안내
+# 0.5.8-beta/code22 실행 안내
 
-먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/ux-feedback-0.5.7/README.md)를 읽는다. 관련8개 클래스62통과/0실패/0제외·최종 서명 UI7시나리오·서명 패키징 완료다. 이번 버전에서 전체 클래스를 재실행한 것은 아니며0.5.6 전체246통과/1명시제외는 이전 기준본이다.
+먼저 [HANDOFF](HANDOFF.md), [변경 계약](UX-CLOSED-TEST-0.5.8.md), [최신 QA](qa/closed-test-0.5.8/README.md)를 따른다. 전체 Android 계측 **253통과/0실패/3명시제외**, 최종 서명 UI **7시나리오 통과**, 호스트 게이트 **30통과**, beta/release lint **오류0/기존 경고20**다.
 
 ## 빌드·재현
 
-- Gradle/ADB 담당자는 한 명이며 실제 아기 자료가 없는 전용 기기만 사용한다. 프로젝트별 JDK/SDK/serial·evidence 경로를 지정한다.
-- debug/androidTest/lint 빌드: `assembleDebug assembleDebugAndroidTest lintRelease`. 기존 빌드 도구·Media3 **1.8.0**·플랫폼 진단 전송 비활성화를 유지했다. 새 버전 의존성은 이번 UI 변경에 포함하지 않았다.
-- 변경 범위 계측은 `UiFeedbackTest`, `ClipRangeEditorTest`, `AccessNavigationTests`, `CaptureAccessLimitsTest`, `CaptureDeviceTest`, `FullCaptureDeviceTest`, `MemoryArtifactsTests`, `InputRequiredRegressionTest`다. 실제60/120초 촬영을 포함하며 제한900초·test별 완료·요약 수·설치 해시를 검사했다. 명령/로그는 최신 QA를 따른다.
-- 최종 서명 UI 재현: `python outputs/QA/ux_feedback_ui.py`를 실행한다. 인자 없는 하네스이며code21의preview/release APK와합성fixture 경로가기본값으로지정돼있다. 작은폰·200%글자·태블릿·실제2분 녹화·합성 무입력·release 무료 복구를 실행한다. 기존 gallery/capture 하네스는 별도 계약 재현에 사용하며 과거 UI 선택기를 현재 통과 증거로 쓰지 않는다.
-- 서명 빌드는 기존 `tools/release/build-test-apk.ps1`, `tools/release/build-play-bundle.ps1`를 사용한다. `bundlePreview`는 차단한다. 업로드키·심사코드·원본·구매 토큰·빌드 캐시는 커밋하지 않는다.
+- Gradle/ADB 담당자는 한 명. 사용자 자료 없는 전용 기기에 SDK/JDK/serial/evidence 경로를 명시한다.
+- debug/test/lint: `assembleDebug assembleDebugAndroidTest lintRelease lintBeta`. 기존 SDK/모델/Media3 1.8.0을 유지한다.
+- Play 베타 빌드: `tools/release/build-play-bundle.ps1 -Purpose closed-test -Destination <새 beta-codeN.aab>`. 기존 업로드키를 저장소 밖에서 읽고 beta APK/AAB를 만든다. 정식 비교용은 `-Purpose paid-candidate`. `bundlePreview`는 차단한다.
+- 최종 beta AAB와 APK를 함께 `check_package.py --distribution beta --apk <beta.apk> --aab <beta.aab> --bundletool <공식 bundletool.jar> --baseline <이전 test.apk>`로 검사한다. beta는 AAB 검사를 생략할 수 없다. release는 `--distribution release`로 검사한다. 같은 버전의 반대 배포 AAB가 섞여도 실패해야 한다.
+- 전체 계측: `instrument.py --install-app --timeout 1600`에 QA 보고서의3개 정확한 `--allow-skip`를 전달한다. test별 완료/요약/설치 해시를 확인하고 제외를 통과 수에 합산하지 않는다.
+- 최종 서명 UI: `closed_test_ui.py --beta-apk <beta.apk> --release-apk <release.apk> --cry-video <권리 확인 로컬 QA.mp4>`. 작은폰/200%글자·실제2분 녹화·20초 선택·200MiB 경계·실제 모델/시각/PDF·미디어 보존/실제 내보내기·release 재잠금을 검사한다. CC0 원본과 생성 MP4는 Git/Play/설치본에 넣지 않는다.
+- 모든 서명키·심사코드·사용자 원본·구매 토큰·빌드 캐시는 저장소 밖만 사용한다.
 
 ## 전달·Play
 
-- 산출물: `outputs/Agattok-0.5.7-test-code21.apk`, `Agattok-0.5.7-release-code21.apk`, `Agattok-0.5.7-release-code21.aab`. 기존 산출물을 같은 이름으로 덮어쓰지 않았다.
-- 다운로드 전달본은 `아가톡 테스트/아가톡-전체기능테스트.apk` 하나이며preview21과 해시 일치한다. 이 파일은 전체120초/20초를 열지만 Play12명14일 참여를 대신하지 않는다.
-- preview21 이후 자동 정식 전환에는code22 이상 및 실제 Play 서명/설치 경로 확인이 필요하다. 같은code21 release 수동 교체는 자동 업데이트가 아니다.
-- release20은Alpha 게시 완료. release21·그룹 변경은검토 전송·자동 검사 완료·Google 검토 중이며 최신 게시 여부는 [Play 상태](release/20261002/PLAY-STATUS.md)를 따른다. 그룹 가입·Play 참여·설치는 [초대 안내](release/20261002/TESTER-INVITE.md)를 따른다. Play 테스터 참여만으로 이용권을 만들지 않는다.
-- 상품/실거래/공개 프로덕션은 보류. 현재 UI 수정으로 정책 서버를 다시 배포하지 않았다. 기존revision `jigeum-verifier-00005-ph7`을 유지한다.
+- `Agattok-0.5.8-beta-code22.apk/.aab`가 테스트 배포본이다. 다운로드 `아가톡 테스트/아가톡-전체기능테스트.apk` 하나와 beta APK 해시가 같다.
+- Play에는 beta AAB만 Alpha로 제출한다. 비교용 `Agattok-0.5.8-release-code22.aab`와 sideload preview는 제출하지 않는다. beta22는 Alpha 업로드·검토 전송 완료·Google 검토 중.
+- Google 그룹 연결은 적용됐다. [초대 안내](release/20261002/TESTER-INVITE.md)를 따른다. 직접 설치는12명14일을 대신하지 않는다.
+- 정식 Play 전환은 code23 이상·실제 서명/업데이트 경로 확인이 필요하다. 베타 자동 만료는 없으며 정식 업데이트 후 새 유료 작업을 제한한다. 기존 기록/영상/무료 내보내기는 보존한다.
+- 상품·실거래·공개 프로덕션은 보류. 서버 revision `jigeum-verifier-00005-ph7`을 유지하며 이번 배포로 정책 서버를 재배포하지 않았다.
 
 ## 0.5.6 기준본
 

@@ -1,0 +1,106 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preBetaBuild UP-TO-DATE
+> Task :app:processBetaNavigationResources UP-TO-DATE
+> Task :app:compileBetaNavigationResources UP-TO-DATE
+> Task :app:generateBetaResValues UP-TO-DATE
+> Task :app:mapBetaSourceSetPaths UP-TO-DATE
+> Task :app:generateBetaResources UP-TO-DATE
+> Task :app:mergeBetaResources UP-TO-DATE
+> Task :app:createBetaCompatibleScreenManifests
+> Task :app:extractDeepLinksBeta UP-TO-DATE
+> Task :app:processBetaMainManifest UP-TO-DATE
+> Task :app:processBetaManifest
+> Task :app:processApplicationManifestBetaForBundle
+> Task :app:checkBetaAarMetadata UP-TO-DATE
+> Task :app:packageBetaResources UP-TO-DATE
+> Task :app:parseBetaLocalResources UP-TO-DATE
+> Task :app:processBetaManifestForPackage UP-TO-DATE
+> Task :app:processBetaResources
+> Task :app:bundleBetaResources
+> Task :app:extractBetaVersionControlInfo
+> Task :app:mergeBetaShaders
+> Task :app:compileBetaShaders NO-SOURCE
+> Task :app:generateBetaAssets UP-TO-DATE
+> Task :app:mergeBetaAssets
+> Task :app:desugarBetaFileDependencies
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateBetaBuildConfig UP-TO-DATE
+> Task :app:compileBetaKotlin UP-TO-DATE
+> Task :app:javaPreCompileBeta UP-TO-DATE
+> Task :app:compileBetaJavaWithJavac UP-TO-DATE
+> Task :app:dexBuilderBeta
+> Task :app:mergeBetaGlobalSynthetics
+> Task :app:processBetaJavaRes
+> Task :app:mergeBetaJavaResource
+> Task :app:checkBetaDuplicateClasses
+> Task :app:mergeBetaStartupProfile
+> Task :app:mergeExtDexBeta
+> Task :app:mergeDexBeta
+> Task :app:mergeBetaJniLibFolders
+> Task :app:mergeBetaNativeLibs
+
+> Task :app:stripBetaDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libimage_processing_util_jni.so, libmediapipe_tasks_jni.so, libsurface_util_jni.so. Run with --info option to learn more.
+
+> Task :app:writeBetaAppMetadata
+> Task :app:buildBetaPreBundle
+> Task :app:mergeBetaArtProfile
+> Task :app:compileBetaArtProfile
+> Task :app:collectBetaDependencies
+> Task :app:configureBetaDependencies
+> Task :app:extractBetaNativeSymbolTables
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateBetaLintVitalReportModel
+> Task :app:lintVitalAnalyzeBeta
+> Task :app:lintVitalReportBeta
+> Task :app:lintVitalBeta
+> Task :app:parseBetaIntegrityConfig
+> Task :app:packageBetaBundle
+> Task :app:validateSigningBeta
+> Task :app:signBetaBundle
+> Task :app:produceBetaBundleIdeListingFile
+> Task :app:createBetaBundleListingFileRedirect
+> Task :app:bundleBeta
+> Task :app:mergeBetaNativeDebugMetadata NO-SOURCE
+> Task :app:compressBetaAssets
+> Task :app:optimizeBetaResources
+> Task :app:sdkBetaDependencyData
+> Task :app:writeBetaSigningConfigVersions
+> Task :app:packageBeta
+> Task :app:createBetaApkListingFileRedirect
+> Task :app:assembleBeta
+
+BUILD SUCCESSFUL in 1m 40s
+61 actionable tasks: 43 executed, 18 up-to-date
+jar signed.
+
+Warning:
+The signer's certificate is self-signed.
+POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.
+
+jar verified.
+
+Warning:
+This jar contains entries whose certificate chain is invalid. Reason: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+This jar contains entries whose signer certificate is self-signed.
+This jar contains signatures that do not include a timestamp. Without a timestamp, users may not be able to validate this jar after any of the signer certificates expire (as early as 2054-02-16).
+POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.
+
+Re-run with the -verbose and -certs options for more details.
+{
+  "purpose": "closed-test",
+  "playTrack": "closed-test-only",
+  "billingConfigured": false,
+  "artifact": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\Agattok-0.5.8-beta-code22.aab",
+  "bytes": 46682799,
+  "sha256": "4f393f9561bfcf1b73575e60e12a0f8f7308332459dbdc54f665a04f729e52fd"
+}

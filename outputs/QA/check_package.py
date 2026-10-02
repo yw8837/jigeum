@@ -11,6 +11,16 @@ import xml.etree.ElementTree as ET
 import zipfile
 from qa_config import ROOT, PROJECT, HERE, APK, AAB, evidence_dir, sdk_root, tool_path
 
+DISTRIBUTIONS = {'release': (False, False, ''), 'preview': (True, False, '-test'), 'beta': (True, True, '-beta')}
+
+
+def assert_markers_version(full_test: bool, closed_test: bool, version: str, distribution: str) -> None:
+    if distribution not in DISTRIBUTIONS:
+        raise ValueError('Unknown distribution')
+    suffix = re.search(r'-(test|beta)$', version)
+    if (full_test, closed_test, suffix[0] if suffix else '') != DISTRIBUTIONS[distribution]:
+        raise ValueError('Compiled distribution marker/version does not match intended delivery')
+
 
 def aab_signature_state(output: str, expect_unsigned: bool = False) -> bool:
     """jarsigner may exit zero for an unsigned archive: inspect its verdict too."""
@@ -28,10 +38,41 @@ def assert_distribution(manifest: str, badging: str, distribution: str) -> None:
     markers = re.findall(r'com\.moa\.babylanguage\.TEST_DISTRIBUTION[^\n]*\n\s*A: (?:http://schemas.android.com/apk/res/)?android:value[^\n]*=(true|false|0xffffffff|0x0)\s*$', manifest, re.M)
     if len(markers) != 1:
         raise ValueError('Missing or ambiguous compiled test distribution marker')
-    preview = markers[0] in ('true', '0xffffffff')
+    full_test = markers[0] in ('true', '0xffffffff')
+    closed_markers = re.findall(r'com\.moa\.babylanguage\.CLOSED_TEST_DISTRIBUTION[^\n]*\n\s*A: (?:http://schemas.android.com/apk/res/)?android:value[^\n]*=(true|false|0xffffffff|0x0)\s*$', manifest, re.M)
+    if len(closed_markers) > 1 or (distribution == 'beta' and len(closed_markers) != 1):
+        raise ValueError('Missing or ambiguous compiled closed-test distribution marker')
+    closed_test = bool(closed_markers and closed_markers[0] in ('true', '0xffffffff'))
     version = re.search(r"\bversionName='([^']+)'", badging)
-    if version is None or preview != (distribution == 'preview') or version[1].endswith('-test') != preview:
-        raise ValueError('Compiled distribution marker/version does not match intended delivery')
+    if version is None:
+        raise ValueError('Missing compiled version')
+    assert_markers_version(full_test, closed_test, version[1], distribution)
+
+
+def assert_bundle_distribution(manifest_xml: str, apk_badging: str, distribution: str) -> dict:
+    """Read the final AAB through official bundletool, not a neighboring APK."""
+    android = '{http://schemas.android.com/apk/res/android}'
+    tree = ET.fromstring(manifest_xml)
+    package = tree.get('package')
+    version_code = tree.get(android + 'versionCode')
+    version_name = tree.get(android + 'versionName')
+    apk = re.search(r"package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'", apk_badging)
+    if not apk or (package, version_code, version_name) != apk.groups():
+        raise ValueError('AAB package/version differs from the inspected APK')
+    application = tree.find('application')
+    if application is None:
+        raise ValueError('AAB application missing')
+    def marker(name):
+        values = [node.get(android + 'value') for node in application.findall('meta-data')
+                  if node.get(android + 'name') == 'com.moa.babylanguage.' + name]
+        if len(values) != 1 or values[0] not in ('true', 'false'):
+            raise ValueError('Missing, ambiguous or invalid AAB marker: ' + name)
+        return values[0] == 'true'
+    full_test = marker('TEST_DISTRIBUTION')
+    closed_test = marker('CLOSED_TEST_DISTRIBUTION')
+    assert_markers_version(full_test, closed_test, version_name, distribution)
+    return {'package': package, 'version_code': int(version_code), 'version_name': version_name,
+            'test_distribution': full_test, 'closed_test_distribution': closed_test}
 
 
 def main():
@@ -40,12 +81,15 @@ def main():
     parser.add_argument("--aab", type=Path, default=AAB)
     parser.add_argument("--skip-aab", action="store_true", help="Record AAB inspection as skipped.")
     parser.add_argument("--baseline", type=Path, help="Optional known-good local APK; compare its native libraries/model assets byte for byte.")
-    parser.add_argument("--distribution", choices=['release','preview'], help="Assert the compiled sideload-test marker and version suffix.")
+    parser.add_argument("--distribution", choices=['release','preview','beta'], help="Assert compiled release, sideload preview or Play closed-test beta markers and version suffix.")
     parser.add_argument("--expect-unsigned-aab", action="store_true", help="Require an unsigned bundle when upload credentials were intentionally omitted.")
+    parser.add_argument("--bundletool", type=Path, help="Official local bundletool JAR to inspect the final AAB manifest; required for beta.")
     parser.add_argument("--build-tools", default=os.environ.get("JIGEUM_QA_BUILD_TOOLS", "36.0.0"))
     args = parser.parse_args()
     if args.distribution == 'preview' and not args.skip_aab:
         parser.error('Preview is sideload-only; use --skip-aab and never deliver its AAB.')
+    if args.distribution == 'beta' and (args.skip_aab or not args.bundletool):
+        parser.error('Beta requires its exact final AAB and --bundletool manifest verification.')
     evidence = evidence_dir()
     sdk = sdk_root() / "build-tools" / args.build_tools
     java = Path(os.environ["JAVA_HOME"]) / "bin" if os.environ.get("JAVA_HOME") else None
@@ -100,10 +144,17 @@ def main():
     run("zipalign.txt", [tool_path("zipalign", sdk), "-c", "-P", "16", "-v", "4", apk])
     run("elf-apk.txt", [sys.executable, HERE / "release_check.py", apk])
     aab_unsigned = None
+    aab_distribution = None
     if not args.skip_aab:
         signature = run("aab-signature.txt", [tool_path("jarsigner", java), "-J-Duser.language=en", "-verify", aab])
         aab_unsigned = aab_signature_state(signature, args.expect_unsigned_aab)
         run("elf-aab.txt", [sys.executable, HERE / "release_check.py", aab])
+        if args.bundletool:
+            if not args.distribution or not args.bundletool.is_file():
+                raise ValueError('AAB manifest verification needs a valid --bundletool and --distribution.')
+            bundle_manifest = run('manifest-aab.xml', [tool_path('java', java), '-jar', args.bundletool.resolve(),
+                                                       'dump', 'manifest', '--bundle=' + str(aab), '--module=base'])
+            aab_distribution = assert_bundle_distribution(bundle_manifest, badging, args.distribution)
     baseline_result = {"status": "skipped", "reason": "No --baseline supplied"}
     if args.baseline:
         with zipfile.ZipFile(args.baseline.resolve()) as old, zipfile.ZipFile(apk) as new:
@@ -115,7 +166,9 @@ def main():
     verdict = {"status": "pass", "distribution_checked": args.distribution, "backup_domains_excluded_in_both_modes": sorted(domains),
                "compiled_apk_has_internet_permission": True, "allowBackup": False, "fullBackupContent": False,
                "baseline_comparison": baseline_result, "aab_checked": not args.skip_aab, "aab_unsigned": aab_unsigned,
-               "physical_OEM_transfer_tested": False, "apk_sha256": hashlib.sha256(apk.read_bytes()).hexdigest()}
+               "physical_OEM_transfer_tested": False, "apk_sha256": hashlib.sha256(apk.read_bytes()).hexdigest(),
+               "aab_distribution": aab_distribution,
+               "aab_sha256": hashlib.sha256(aab.read_bytes()).hexdigest() if not args.skip_aab else None}
     (evidence / "package-verdict.json").write_text(json.dumps(verdict, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(verdict, indent=2))
 

@@ -42,6 +42,52 @@ class DistributionGateTest(unittest.TestCase):
             with self.subTest(manifest=manifest, name=name), self.assertRaises(ValueError):
                 check_package.assert_distribution(manifest, "package: versionName='"+name+"'", 'release')
 
+    def beta_manifest(self, closed_value='true'):
+        return (self.manifest('true') +
+                'A: http://schemas.android.com/apk/res/android:name="com.moa.babylanguage.CLOSED_TEST_DISTRIBUTION"\n'
+                '  A: http://schemas.android.com/apk/res/android:value(0x01010024)='+closed_value+'\n')
+
+    def test_closed_test_bundle_passes_only_as_beta(self):
+        check_package.assert_distribution(self.beta_manifest(), "package: versionName='0.5.8-beta'", 'beta')
+        for distribution in ('release', 'preview'):
+            with self.subTest(distribution=distribution), self.assertRaises(ValueError):
+                check_package.assert_distribution(self.beta_manifest(), "package: versionName='0.5.8-beta'", distribution)
+
+    def test_beta_rejects_missing_false_or_duplicate_closed_marker(self):
+        for manifest in (self.manifest('true'), self.beta_manifest('false'), self.beta_manifest()*2):
+            with self.subTest(manifest=manifest), self.assertRaises(ValueError):
+                check_package.assert_distribution(manifest, "package: versionName='0.5.8-beta'", 'beta')
+
+    def test_closed_marker_cannot_hide_in_a_production_label(self):
+        manifest = self.beta_manifest().replace('=true\n', '=false\n', 1)
+        with self.assertRaises(ValueError):
+            check_package.assert_distribution(manifest, "package: versionName='0.5.8'", 'release')
+
+
+class BundleDistributionGateTest(unittest.TestCase):
+    badging = "package: name='com.moa.babylanguage' versionCode='22' versionName='0.5.8-beta'"
+
+    def manifest(self, name='0.5.8-beta', code='22', package='com.moa.babylanguage', test='true', closed='true'):
+        return (f'<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="{package}" '
+                f'android:versionCode="{code}" android:versionName="{name}"><application>'
+                f'<meta-data android:name="com.moa.babylanguage.TEST_DISTRIBUTION" android:value="{test}"/>'
+                f'<meta-data android:name="com.moa.babylanguage.CLOSED_TEST_DISTRIBUTION" android:value="{closed}"/>'
+                '</application></manifest>')
+
+    def test_same_beta_bundle_and_apk_pass(self):
+        result = check_package.assert_bundle_distribution(self.manifest(), self.badging, 'beta')
+        self.assertEqual(22, result['version_code'])
+        self.assertTrue(result['closed_test_distribution'])
+
+    def test_production_bundle_cannot_be_paired_with_beta_apk(self):
+        with self.assertRaises(ValueError):
+            check_package.assert_bundle_distribution(self.manifest(name='0.5.8', test='false', closed='false'), self.badging, 'beta')
+
+    def test_mismatched_version_package_or_flags_fail(self):
+        for changes in ({'code': '21'}, {'package': 'example.other'}, {'closed': 'false'}, {'test': 'false'}, {'closed': 'unknown'}):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                check_package.assert_bundle_distribution(self.manifest(**changes), self.badging, 'beta')
+
 
 class InstrumentationGateTest(unittest.TestCase):
     def test_complete_run_passes(self):

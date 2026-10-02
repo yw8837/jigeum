@@ -1,0 +1,77 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+    "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+    "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+    "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+    "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase",
+    "cold restart retains distribution access and records without a purchase or code",
+    "same-key release update restores 60/10/100, visual/PDF gates and preserves records/media"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~P0soSeJCbW5X6TyMPb9dAQ==/com.moa.babylanguage-3utUd4KRtZGgVpfYzPmWtw==/base.apk",
+      "sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803",
+      "expected_sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803",
+      "version_code": 22,
+      "version_name": "0.5.8-beta",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~-rzTozXvUYgLxKjpmG9F5A==/com.moa.babylanguage-Qdm-j4yTXuyLw0UKFtYWTQ==/base.apk",
+      "sha256": "5b3d699a15bbd4d68e11717fa44a6c87d43ffa5e03c0aeb5c6cc77baa6a9e5d7",
+      "expected_sha256": "5b3d699a15bbd4d68e11717fa44a6c87d43ffa5e03c0aeb5c6cc77baa6a9e5d7",
+      "version_code": 22,
+      "version_name": "0.5.8",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "infant_intent_accuracy_tested": false,
+  "fixture": "the_yura CC0 cry + plain-color video",
+  "observed_capture_seconds": 123.65,
+  "capture_timeline": {
+    "end_label": "1:59.7",
+    "lower_ms": 119700,
+    "precision_ms": 100
+  },
+  "abstention_message": "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.",
+  "large_fixture_bytes": 209715200,
+  "oversized_fixture_bytes": 209715201,
+  "resumed_access_proof": {
+    "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\closed-test-058\\signed-ui\\closed-test-ui-result.json",
+    "sha256": "9c1df3f403139631e001a97fbf81455f96056ec90054a139fb97f2f0eea08c20"
+  },
+  "beta_media": {
+    "name": "아가톡-1790921866899.mp4",
+    "bytes": 825395,
+    "sha256": "d97dc005f454943e008b50a56fe9d7802b580d8fe63319c0f1704f8b53b13e0b",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_media": {
+    "name": "아가톡-1790921866899.mp4",
+    "bytes": 825395,
+    "sha256": "d97dc005f454943e008b50a56fe9d7802b580d8fe63319c0f1704f8b53b13e0b",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "cleanup": {
+    "owned_external_files_removed": true,
+    "large_local_files_removed": true,
+    "raw_downloaded_media_removed": true,
+    "display_restored": true,
+    "font_restored": true
+  }
+}

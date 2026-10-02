@@ -59,6 +59,12 @@ class AccessNavigationTests {
         compose.waitUntil(8_000) { compose.onAllNodesWithTag("baby-phrase").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("keep-scene").performScrollTo().performClick()
     }
+    private fun openDraft() {
+        // isDisplayed also accepts a partially clipped node. After scrolling to
+        // keep-scene, bring this button fully into view before a pointer click.
+        compose.onNodeWithText("기록에 메모·수정 남기기").performScrollTo().performClick()
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("draft-phrase-editor").fetchSemanticsNodes().isNotEmpty() }
+    }
 
     @Test fun previewRunsVisualWithoutPurchaseAndPreservesResultAcrossRestart() {
         start(preview = true)
@@ -155,7 +161,7 @@ class AccessNavigationTests {
     }
     @Test fun resultAndEditedDraftStayFreeAfterExpiryAndRestoration() {
         start(true); visual(); click("영상 + 소리로 번역하기"); awaitResult()
-        click("기록에 메모·수정 남기기")
+        openDraft()
         compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("오늘의 소중한 소리")
         compose.runOnIdle { billing.publish(false) }
         restoration.emulateSavedInstanceStateRestore()
@@ -184,7 +190,7 @@ class AccessNavigationTests {
     }
     @Test fun collapsingEditedDraftStillSavesTheEditedPhrase() {
         start(); click("이 구간 소리로 번역하기"); awaitResult()
-        click("기록에 메모·수정 남기기")
+        openDraft()
         compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("부모가 고친 소중한 문장")
         click("기록 수정 접기")
         restoration.emulateSavedInstanceStateRestore()
@@ -194,11 +200,11 @@ class AccessNavigationTests {
     }
     @Test fun collapsedEmptyEditCannotSilentlySaveOriginalPhrase() {
         start(); click("이 구간 소리로 번역하기"); awaitResult()
-        click("기록에 메모·수정 남기기")
+        openDraft()
         compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("")
         click("기록 수정 접기")
         compose.onNodeWithText("이 문장 저장하기").assertIsNotEnabled()
-        click("기록에 메모·수정 남기기")
+        openDraft()
         assertEquals("", compose.onNodeWithTag("draft-phrase-editor").fetchSemanticsNode().config[SemanticsProperties.EditableText].text)
         compose.onNodeWithText("이 문장 저장하기").assertIsNotEnabled()
     }

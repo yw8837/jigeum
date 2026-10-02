@@ -373,26 +373,28 @@ internal fun PremiumScreen(
                     if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
                 }
                 Spacer(Modifier.height(20.dp))
-                Text("계속 무료로 쓸 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                Text(if (testDistribution) "정식 버전에서도 무료인 기능" else "계속 무료로 쓸 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 Text("1분 촬영·녹음·영상 가져오기와 10초 구간의 소리 번역은 계속 무료예요. 재생·구간 선택·문장 수정과 저장·기록 보기·영상·소리와 번역을 함께 보관·내려받기·공유하는 기능, PNG 공유·JSON 백업과 복원·주간 요약도 무료예요. 이미 만든 문장과 기록도 유지돼요.",
                     color = Muted, lineHeight = 23.sp, modifier = Modifier.padding(vertical = 10.dp))
                 SecondaryButton(freeContinuationLabel, onFree)
                 Spacer(Modifier.height(20.dp))
-                Text("결제는 Google Play 확인창에서 완료돼요. 같은 Play 계정으로 구매를 복원할 수 있어요. 기록 복원에는 직접 보관한 JSON 백업이 필요해요.",
-                    color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
-                TextButton(onClick = onRestore, enabled = !processing) { Text("구매 복원", color = Ink) }
-                TextButton(onClick = {
-                    managementError = null
-                    runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,
-                        "https://play.google.com/store/account/subscriptions?sku=${PurchaseVerifier.PRODUCT_ID}&package=${context.packageName}".toUri())) }
-                        .onFailure { managementError = "구독 관리 화면을 열지 못했어요. Google Play 앱의 결제 및 정기 결제에서 확인해 주세요." }
-                }) { Text("Google Play에서 구독 관리", color = Ink) }
-                managementError?.let { Text(it, color = Muted, fontSize = 13.sp, lineHeight = 20.sp) }
+                if (!testDistribution) {
+                    Text("결제는 Google Play 확인창에서 완료돼요. 같은 Play 계정으로 구매를 복원할 수 있어요. 기록 복원에는 직접 보관한 JSON 백업이 필요해요.",
+                        color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                    TextButton(onClick = onRestore, enabled = !processing) { Text("구매 복원", color = Ink) }
+                    TextButton(onClick = {
+                        managementError = null
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,
+                            "https://play.google.com/store/account/subscriptions?sku=${PurchaseVerifier.PRODUCT_ID}&package=${context.packageName}".toUri())) }
+                            .onFailure { managementError = "구독 관리 화면을 열지 못했어요. Google Play 앱의 결제 및 정기 결제에서 확인해 주세요." }
+                    }) { Text("Google Play에서 구독 관리", color = Ink) }
+                    managementError?.let { Text(it, color = Muted, fontSize = 13.sp, lineHeight = 20.sp) }
+                }
                 TextButton(onClick = onTerms) { Text("이용 조건", color = Ink) }
                 TextButton(onClick = onPrivacy) { Text("개인정보처리방침", color = Ink) }
-                Text("이용권은 결제한 Play 계정 기준이에요. 다른 가족 계정으로 자동 공유되지 않아요. 앱 삭제나 기록 삭제로 구독이 해지되지는 않아요.",
+                if (!testDistribution) Text("이용권은 결제한 Play 계정 기준이에요. 다른 가족 계정으로 자동 공유되지 않아요. 앱 삭제나 기록 삭제로 구독이 해지되지는 않아요.",
                     color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
-                if (testDistribution) Text("Play 비공개 테스터 등록은 구매 권한을 제공하지 않아요. 이 테스트 설치본에서만 구매 없이 2분 촬영·20초 분석·표정 관찰·PDF를 사용할 수 있어요.",
+                if (testDistribution) Text("테스트 기간에는 구매 없이 2분 촬영·20초 분석·표정 관찰·PDF를 모두 사용할 수 있어요. 구매 이용권이 생기는 것은 아니에요. 정식 버전으로 업데이트하면 무료 범위와 전체 이용권이 적용되며, 이미 저장한 기록과 영상은 유지돼요.",
                     color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(vertical = 12.dp))
                 else ReviewAccessSection(state, onReviewActivate, onReviewDeactivate, onRetry)
             }

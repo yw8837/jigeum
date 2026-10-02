@@ -35,7 +35,7 @@ internal class MediaAccessSession internal constructor(val feature: AppFeature, 
 
 /**
  * Called on Main. The checker is BillingManager.hasCurrentEntitlement, never a UI snapshot.
- * The explicit sideload preview distribution opens features without claiming a purchase.
+ * Explicit sideload preview / Play closed-test beta open features without claiming a purchase.
  * Release always supplies false; nothing is persisted when switching distributions.
  */
 internal class AccessPolicy(

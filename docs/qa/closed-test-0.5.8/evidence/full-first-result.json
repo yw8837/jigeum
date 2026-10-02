@@ -1,0 +1,85 @@
+{
+  "status": "fail",
+  "tests": null,
+  "passed_tests": 252,
+  "failed_tests": 1,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 3,
+  "skipped_test_ids": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "unexpected_skips": [],
+  "allowed_skips": [
+    "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes",
+    "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium",
+    "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"
+  ],
+  "validation_errors": [
+    "Expected exactly one nonempty OK summary",
+    "Runner reported a failure or harness timeout",
+    "Discovered, started, completed and summary counts do not agree",
+    "One or more tests failed"
+  ],
+  "seconds": 589.81,
+  "exit": 0,
+  "instrumentation_started": true,
+  "provenance": {
+    "adb": [
+      "C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "-s",
+      "emulator-5554"
+    ],
+    "install_app_requested": true,
+    "scope": "single debug APK on an exclusively owned device",
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "628aa9689f2578ad515a833069f07400a2c34834eb04ad4f9f9e729c11ac7f17",
+      "bytes": 83486015
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "d8e94731c8b3f9280f2b8096f13b211d41f063502eae9988825ac37f24a22892",
+      "bytes": 2163812
+    },
+    "git": {
+      "sha": "2374fb8025dfc781def90de45f4036e8dc94b7ca",
+      "dirty": true,
+      "porcelain": [
+        " M AGENTS.md",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/UiFeedbackTest.kt",
+        " M outputs/MoaAndroid/app/src/main/AndroidManifest.xml",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessPolicy.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/QA/check_package.py",
+        " M outputs/QA/test_qa_gates.py",
+        " M tools/release/build-play-bundle.ps1",
+        "?? docs/UX-CLOSED-TEST-0.5.8.md",
+        "?? docs/qa/closed-test-0.5.8/"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~s7Z6wToPD2Knb02l7G3DdA==/com.moa.babylanguage-w7eq_ZsVnNQbnv_A48RYKA==/base.apk",
+      "sha256": "628aa9689f2578ad515a833069f07400a2c34834eb04ad4f9f9e729c11ac7f17",
+      "expected_sha256": "628aa9689f2578ad515a833069f07400a2c34834eb04ad4f9f9e729c11ac7f17",
+      "version_code": 22,
+      "version_name": "0.5.8",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~nRZJl0m1MvY4VdCIp2fO2Q==/com.moa.babylanguage.test-idfy4g_yyTxTRrVHCGwvdQ==/base.apk",
+      "sha256": "d8e94731c8b3f9280f2b8096f13b211d41f063502eae9988825ac37f24a22892",
+      "expected_sha256": "d8e94731c8b3f9280f2b8096f13b211d41f063502eae9988825ac37f24a22892",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

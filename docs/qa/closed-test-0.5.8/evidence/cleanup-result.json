@@ -1,0 +1,29 @@
+{
+  "status": "pass",
+  "device": {
+    "status": "pass",
+    "avd": "MoaQA35",
+    "serial": "emulator-5554",
+    "owned_pid": 28112,
+    "emulator_stopped": true,
+    "adb_device_absent": true,
+    "packages_absent_before_stop": true,
+    "downloads_empty_before_stop": true,
+    "ui_dump_absent_before_stop": true,
+    "signed_ui_cleanup": {
+      "owned_external_files_removed": true,
+      "large_local_files_removed": true,
+      "raw_downloaded_media_removed": true,
+      "display_restored": true,
+      "font_restored": true
+    },
+    "stop_wait_note": "adb emu kill succeeded; initial 15-second Wait-Process timed out; subsequent PID/child and ADB inventory confirmed stopped without force-kill",
+    "unrelated_processes_terminated": false
+  },
+  "ultraqa_state": {
+    "exists": false,
+    "mode": "ultraqa"
+  },
+  "cleared": true,
+  "scope": "only work/closed-test-058 state and owned MoaQA35 fixtures/process"
+}
