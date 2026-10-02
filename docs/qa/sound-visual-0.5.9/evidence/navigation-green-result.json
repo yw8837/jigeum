@@ -1,0 +1,69 @@
+{
+  "status": "pass",
+  "tests": 42,
+  "passed_tests": 42,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [],
+  "seconds": 112.95,
+  "exit": 0,
+  "provenance": {
+    "app_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9",
+      "bytes": 84125710
+    },
+    "test_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "24d83cdde08897daa15843c08197dcffde9c0b15a3cca3cb5e8b1e80b8490fa9",
+      "bytes": 2187484
+    },
+    "git": {
+      "sha": "efa5fd04db14f6139c80fd55dc32451ec21f4477",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/RecordTransferTests.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MemoryArtifacts.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ObservationStore.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordMediaViewer.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordTransfer.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ResultMomentCard.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/SoundAnalyzer.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/SoundTimeline.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoImport.kt",
+        " M outputs/QA/closed_test_ui.py",
+        "?? docs/UX-SOUND-VISUAL-0.5.9.md",
+        "?? docs/qa/sound-visual-0.5.9/",
+        "?? docs/release/20261002/RELEASE-NOTES-059.md",
+        "?? docs/research/20261002-model-059-comparison.md",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisUiTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/SoundVisual059Test.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VisualFeatures059Test.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ExpressionBasis.kt",
+        "?? outputs/QA/record_upgrade_ui.py"
+      ]
+    }
+  },
+  "installed": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~ATRLqsFOzIQaRpLL-dD40A==/com.moa.babylanguage-ENgQ4OkyEZSx9s0XcBnYUg==/base.apk",
+    "sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9",
+    "expected_sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9",
+    "version_code": 23,
+    "version_name": "0.5.9",
+    "verified": true,
+    "errors": []
+  }
+}

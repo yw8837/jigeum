@@ -56,12 +56,18 @@ import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-private val InterpretationSaver = Saver<ClipInterpretation?, String>(
-    save = { it?.let { v -> JSONObject().put("phrase", v.phrase).put("sound", v.sound).put("evidence", v.evidence)
-        .put("guide", v.guide).put("range", v.range).put("visual", v.visual).put("visualNotice", v.visualNotice).toString() } ?: "" },
-    restore = { raw -> runCatching { JSONObject(raw).let { ClipInterpretation(it.getString("phrase"), it.getString("sound"),
+internal object InterpretationState {
+    fun encode(value: ClipInterpretation?): String = value?.let { v -> JSONObject().put("phrase", v.phrase).put("sound", v.sound).put("evidence", v.evidence)
+        .put("guide", v.guide).put("range", v.range).put("visual", v.visual).put("visualNotice", v.visualNotice)
+        .put("basis", ExpressionBasis.normalize(v.basis)).toString() } ?: ""
+    fun decode(raw: String): ClipInterpretation? = runCatching { JSONObject(raw).let { ClipInterpretation(it.getString("phrase"), it.getString("sound"),
         it.getString("evidence"), it.getString("guide"), it.getString("range"), it.getBoolean("visual"),
-        if (it.has("visualNotice") && !it.isNull("visualNotice")) it.getString("visualNotice") else null) } }.getOrNull() }
+        if (it.has("visualNotice") && !it.isNull("visualNotice")) it.getString("visualNotice") else null,
+        ExpressionBasis.normalize(it.optString("basis"))) } }.getOrNull()
+}
+
+private val InterpretationSaver = Saver<ClipInterpretation?, String>(
+    save = { InterpretationState.encode(it) }, restore = { InterpretationState.decode(it) }
 )
 
 /** One input and review flow. Test substitutes are supplied by androidTest, never persisted. */
@@ -110,6 +116,7 @@ internal fun CaptureFlow(
     var analyzingVisual by remember { mutableStateOf(false) }
     var selecting by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
+    var withheldAnalysis by remember { mutableStateOf<ClipAnalysisResult?>(null) }
     var selection by remember { mutableStateOf(0f..minOf(initialClip?.durationMs?.toFloat() ?: 10_000f, 10_000f)) }
     var pass by remember { mutableStateOf(false) }
     var discardConfirmation by remember { mutableStateOf(false) }
@@ -129,7 +136,7 @@ internal fun CaptureFlow(
         if (clip == null && result == null) hasPermission = permissionsGranted()
     }
 
-    fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; analyzingExtended = false; selecting = false }
+    fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; analyzingExtended = false; selecting = false; withheldAnalysis = null }
     fun reset() {
         cancelAnalysis(); capture.discard(); recording = false; finishing = false
         clip?.ownedFile?.delete(); clip = null; result = null; hasPermission = false; cameraRecorder = null
@@ -236,7 +243,7 @@ internal fun CaptureFlow(
     LaunchedEffect(limits, clip, result, analyzing) {
         if (result == null && !analyzing && selection.endInclusive - selection.start > limits.analysisMs) {
             selection = selection.start..(selection.start + limits.analysisMs)
-            stopPlayback++
+            stopPlayback++; withheldAnalysis = null
             message = "현재 이용 범위에 맞춰 ${limits.analysisSeconds}초 구간으로 조정했어요. 원본은 그대로 있어요."
         }
     }
@@ -279,7 +286,10 @@ internal fun CaptureFlow(
                     if ((useVisual && !hasFullAccess()) || !liveLimits().allowsAnalysis(range)) {
                         visual = false; limits = liveLimits()
                         message = "이용권 확인이 필요해요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
-                    } else { result = analyzed.interpretation; message = analyzed.problem }
+                    } else {
+                        result = analyzed.interpretation; message = analyzed.problem
+                        withheldAnalysis = analyzed.takeIf { it.interpretation == null }
+                    }
                 }
             } catch (_: TimeoutCancellationException) { if (request == generation) message = "분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요." }
             catch (e: CancellationException) { throw e }
@@ -331,12 +341,13 @@ internal fun CaptureFlow(
                 ClipRangeEditor(current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()),
                     maxSelectionMs = limits.analysisMs, enabled = !analyzing && !selecting, onRangeChange = { proposed ->
                         selection = proposed.startMs.toFloat()..proposed.endMs.toFloat()
-                        message = null; stopPlayback++
+                        message = null; withheldAnalysis = null; stopPlayback++
                     })
                 if (current.hasVideo) {
                     Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = visual, enabled = !analyzing,
                         role = Role.Switch, onValueChange = {
                             stopPlayback++
+                            withheldAnalysis = null; message = null
                             if (!it) visual = false
                             else if (hasFullAccess()) visual = true
                             else pass = true
@@ -352,9 +363,10 @@ internal fun CaptureFlow(
                 if (!analyzing) TextButton(onClick = { reset() }) { Text("다시 촬영하기", color = Muted) }
             }
             if (lockedResult != null) {
-                Text("소리를 바탕으로 상상한 아기말", color = Muted, fontSize = 14.sp)
                 val cardPhrase = if (draftEdited) phrase.trim() else lockedResult.phrase
-                val cardRecord = Observation(1, lockedResult.sound, lockedResult.range, "", cardPhrase.ifBlank { lockedResult.phrase })
+                val cardBasis = ExpressionBasis.forPhrase(lockedResult.basis, lockedResult.phrase, cardPhrase)
+                Text(ExpressionBasis.label(cardBasis), color = Muted, fontSize = 14.sp, modifier = Modifier.testTag("expression-basis"))
+                val cardRecord = Observation(1, lockedResult.sound, lockedResult.range, "", cardPhrase.ifBlank { lockedResult.phrase }, basis = cardBasis)
                 val cardRange = current?.let { ClipRange(selection.start.toLong(), selection.endInclusive.toLong()) }
                 ResultMomentCard(cardRecord, current, cardRange)
                 Text("${lockedResult.range} · ${if (lockedResult.visual) "소리 + 표정 관찰" else "소리 관찰"}", color = Muted, fontSize = 13.sp)
@@ -365,10 +377,10 @@ internal fun CaptureFlow(
                 Text("우리 아기 모습과 함께 재미있게 살펴보세요. 마음에 드는 순간은 영상과 함께 간직해요. 실제 마음·욕구를 알아낸 번역은 아니에요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                 if (onGallery != null) {
                     GallerySaveButton("카드 이미지 앨범에 저장", !saving && cardPhrase.isNotBlank(), { message = it }) {
-                        stopPlayback++; onGallery(lockedResult, cardPhrase, current, cardRange, false)
+                        stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, false)
                     }
                     if (current != null) GallerySaveButton("영상 카드 앨범에 저장", !saving && cardPhrase.isNotBlank(), { message = it }) {
-                        stopPlayback++; onGallery(lockedResult, cardPhrase, current, cardRange, true)
+                        stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, true)
                     }
                     Text("사진·동영상 앱의 ‘아가톡’ 앨범에 저장해요. 앱 기록 보관은 아래 저장 버튼을 눌러 주세요.", color = Muted, fontSize = 13.sp)
                 }
@@ -404,6 +416,22 @@ internal fun CaptureFlow(
                     .bringIntoViewRequester(messageView).background(PaleApricot, RoundedCornerShape(16.dp))
                     .padding(16.dp).testTag("capture-message"))
             }
+            if (lockedResult == null && current != null && !analyzing) {
+                withheldAnalysis?.visualEvidence?.let { observation ->
+                    Text(observation.evidence, color = Muted, fontSize = 13.sp, lineHeight = 21.sp,
+                        modifier = Modifier.testTag("withheld-visual-evidence"))
+                }
+                withheldAnalysis?.suggestedRange?.let { suggested ->
+                    OutlinedButton(onClick = {
+                        // A suggestion only moves the editor; analysis remains an explicit next tap.
+                        val fitted = ClipRangeEdits.fit(suggested, current.durationMs, liveLimits().analysisMs)
+                        selection = fitted.startMs.toFloat()..fitted.endMs.toFloat()
+                        stopPlayback++; withheldAnalysis = null; message = "소리가 있는 구간으로 옮겼어요. 다시 듣고 번역해 주세요."
+                    }, enabled = !selecting && !saving, modifier = Modifier.fillMaxWidth().testTag("apply-sound-range")) {
+                        Text("소리가 있는 구간 보기 · ${ClipRangeEdits.time(suggested.startMs)}–${ClipRangeEdits.time(suggested.endMs)}")
+                    }
+                }
+            }
         }
         if (current == null && lockedResult == null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp).testTag("capture-action")) {
             if (recording || finishing) {
@@ -435,9 +463,10 @@ internal fun CaptureFlow(
             PrimaryButton(if (saving) "저장하고 있어요" else if (keepScene && current != null && onSaveWithMedia != null) "장면과 함께 저장하기" else "이 문장 저장하기", {
                 stopPlayback++
                 val finalPhrase = if (draftEdited) phrase.trim() else lockedResult.phrase
+                val savedResult = lockedResult.copy(basis = ExpressionBasis.forPhrase(lockedResult.basis, lockedResult.phrase, finalPhrase))
                 if (keepScene && current != null && onSaveWithMedia != null)
-                    onSaveWithMedia(lockedResult, finalPhrase, note.trim(), current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()))
-                else onSave(lockedResult, finalPhrase, note.trim())
+                    onSaveWithMedia(savedResult, finalPhrase, note.trim(), current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()))
+                else onSave(savedResult, finalPhrase, note.trim())
             }, enabled = !saving && (!draftEdited || phrase.isNotBlank()))
             if (saving) Text("앱을 열어 둔 채 잠시 기다려 주세요.", color = Muted, fontSize = 12.sp)
         }

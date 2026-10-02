@@ -226,7 +226,7 @@ internal object MemoryArtifacts {
             canvas.withTranslation(114f, 374f) { phrase.draw(this) }
             val metadata = "${record.sound} · ${record.context}".replace(Regex("\\s+"), " ").trim()
             draw(canvas, metadata, 114f, 1020f, 28f, 850, muted)
-            draw(canvas, "보호자가 그 순간을 담아 쓴 표현이에요.", 84f, 1210f, 27f, 900, muted)
+            draw(canvas, ExpressionBasis.label(record.basis), 84f, 1210f, 27f, 900, muted)
             coroutineContext.ensureActive()
             file.outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
             requireCurrentGeneration(generation)
@@ -307,6 +307,8 @@ internal object MemoryArtifacts {
                 paragraph("${date(record.id)} · ${record.context}", 10f, muted)
                 y += 12
                 paragraph(phrase, 16f, ink, true)
+                y += 8
+                paragraph(ExpressionBasis.label(record.basis), 9f, muted)
                 if (note.isNotBlank()) {
                     y += 14
                     paragraph(note, 11f, muted)

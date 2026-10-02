@@ -1,0 +1,52 @@
+{
+  "status": "fail",
+  "scenarios": [
+    "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+    "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+    "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+    "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+    "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~onr-zoq--P16lzCi9TjQ1g==/com.moa.babylanguage-3AFYlVrqAWOsNTm4xEFhUQ==/base.apk",
+      "sha256": "b938c70436815e84bc81cfc07e9e578b270b965091eff02f2f0d3c56736b5dfc",
+      "expected_sha256": "b938c70436815e84bc81cfc07e9e578b270b965091eff02f2f0d3c56736b5dfc",
+      "version_code": 23,
+      "version_name": "0.5.9-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "infant_intent_accuracy_tested": false,
+  "fixture": "the_yura CC0 cry + plain-color video",
+  "observed_capture_seconds": 122.87,
+  "capture_timeline": {
+    "end_label": "1:59.6",
+    "lower_ms": 119600,
+    "precision_ms": 100
+  },
+  "abstention_message": "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.",
+  "large_fixture_bytes": 209715200,
+  "oversized_fixture_bytes": 209715201,
+  "beta_media": {
+    "name": "아가톡-1790954705550.mp4",
+    "bytes": 824745,
+    "sha256": "3167b18911ad4af0e8d82c9a0619f27c9916af98acb1429d6d48d1005f1b404a",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "error": "UI missing 정식 업데이트 뒤에도 남는 테스트 기록; current: ['테스트 버전 · 전체 기능 열림', '우리가 나눈 아기말', '함께 만든 문장을 한곳에 모았어요.', '최근 일주일의 작은 대화', '함께 남긴 문장 3개 · 서로 다른 1일의 기억', '최근 남긴 말\\n“응애… 또 응애. 내 소리 좀 들어줘요.”', '월별 아기말북 둘러보기', '울음', '10월 2일 금요일 · 오후 3:25', '0:00–0:10', '“응애… 또 응애. 내 소리 좀 들어줘요.”', '소리를 바탕으로 예상한 아기말', '장면 보기 · 내려받기', '문장 카드 공유', '기록 삭제', '옹알이', '10월 2일 금요일 · 오후 3:18', 'QA', '오늘', '기록', '아기말북', '돌봄']",
+  "cleanup": {
+    "owned_external_files_removed": true,
+    "large_local_files_removed": true,
+    "raw_downloaded_media_removed": true,
+    "display_restored": true,
+    "font_restored": true
+  }
+}

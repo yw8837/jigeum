@@ -230,7 +230,7 @@ class RecordTransferTests {
         assertEquals(StoreSnapshot(listOf(incoming), "13~18개월"), store.snapshot())
     }
 
-    @Test fun schemaOneDatabaseOpensWithoutMigrationAndAcceptsNewOrigins() = runBlocking {
+    @Test fun schemaOneDatabaseMigratesWithUnknownBasisAndAcceptsNewOrigins() = runBlocking {
         store.close()
         val existing = row(base, "기존 DB 기록")
         context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db ->
@@ -253,19 +253,19 @@ class RecordTransferTests {
         assertEquals(2, store.snapshot().observations.size)
         assertEquals(1, store.snapshot().importOrigins.size)
         assertEquals("6~8개월", store.snapshot().ageBand)
-        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db -> assertEquals(1, db.version) }
+        context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null).use { db -> assertEquals(2, db.version) }
     }
 
-    @Test fun versionOneJsonRoundtripKeepsContractAndRecordsButNotLocalOrigins() = runBlocking {
+    @Test fun versionTwoJsonRoundtripKeepsBasisAndRecordsButNotLocalOrigins() = runBlocking {
         store.save(row(base, "기존"))
         store.mergeImport(preview(listOf(row(base, "충돌")), "9~12개월"))
         val saved = store.snapshot()
         val bytes = ByteArrayOutputStream().also { RecordTransfer.writeJson(it, saved) }.toByteArray()
         val document = JSONObject(String(bytes, Charsets.UTF_8))
-        assertEquals(1, document.getInt("version"))
+        assertEquals(2, document.getInt("version"))
         assertEquals(setOf("format", "version", "ageBand", "records"), document.keys().asSequence().toSet())
         for (index in 0 until document.getJSONArray("records").length()) {
-            assertEquals(setOf("id", "sound", "context", "note", "phrase", "source", "modelCue"),
+            assertEquals(setOf("id", "sound", "context", "note", "phrase", "source", "modelCue", "basis"),
                 document.getJSONArray("records").getJSONObject(index).keys().asSequence().toSet())
         }
         val repeated = parse(bytes, saved)
@@ -386,7 +386,7 @@ class RecordTransferTests {
     @Test fun corruptImportsRejectBeforeChangingExistingData() = runBlocking {
         store.save(row())
         val valid = String(backup(listOf(row())), Charsets.UTF_8)
-        val cases = listOf(valid + "{}", valid.replace("\"version\":1", "\"version\":2"),
+        val cases = listOf(valid + "{}", valid.replace("\"version\":2", "\"version\":3"),
             valid.replace("\"id\":$base", "\"id\":\"$base\""),
             valid.replace("\"id\":$base", "\"id\":$base,\"id\":$base"),
             valid.replace("\"note\":", "\"unknown\":"),

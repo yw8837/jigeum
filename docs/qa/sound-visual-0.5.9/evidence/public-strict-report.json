@@ -1,0 +1,70 @@
+{
+  "execution": {
+    "status": "fail",
+    "tests": null,
+    "passed_tests": 0,
+    "failed_tests": 1,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [
+      "Expected exactly one nonempty OK summary",
+      "Runner reported a failure or harness timeout",
+      "Discovered, started, completed and summary counts do not agree",
+      "One or more tests failed",
+      "No executed passing tests"
+    ],
+    "seconds": 9.32,
+    "exit": 0
+  },
+  "provenance": {
+    "app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~JGSATsnWsjpxT3J_Lqhzdw==/com.moa.babylanguage-poIFUCnTSDFj8gg7vM4m2w==/base.apk",
+      "sha256": "fbbf246a2aa6a15590aa17ec4996a081404b6ed58789bea34db8ebf159fa4e88",
+      "expected_sha256": "fbbf246a2aa6a15590aa17ec4996a081404b6ed58789bea34db8ebf159fa4e88",
+      "version_code": 23,
+      "version_name": "0.5.9",
+      "verified": true,
+      "errors": []
+    },
+    "test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~xZDS_2LOuDdSW6vZ2sY3CQ==/com.moa.babylanguage.test-IEYbuZwXhVubh-eRzSVbKw==/base.apk",
+      "sha256": "66492719d662130564fd4f6a032c3a09d84b70dc61fe284b703d22c30c5a8929",
+      "expected_sha256": "66492719d662130564fd4f6a032c3a09d84b70dc61fe284b703d22c30c5a8929",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  },
+  "cases": 22,
+  "outputs": 8,
+  "source_label_disagreements": [
+    {
+      "id": "babble",
+      "expected": "babble",
+      "observed": "abstain"
+    },
+    {
+      "id": "cry_six_month",
+      "expected": "cry",
+      "observed": "여러 아기 소리"
+    },
+    {
+      "id": "babble_seven_month",
+      "expected": "babble",
+      "observed": "어린 말소리"
+    },
+    {
+      "id": "laugh_quiet",
+      "expected": "laugh",
+      "observed": "abstain"
+    }
+  ],
+  "independent_accuracy_validated": false,
+  "strict_labels_requested": true
+}

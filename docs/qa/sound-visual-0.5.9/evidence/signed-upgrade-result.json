@@ -1,0 +1,29 @@
+{
+  "status": "pass",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~mGjEa3JTAsWx5IXoKGwtpw==/com.moa.babylanguage-OKcVwJQJsSbeRKteH20HIw==/base.apk",
+      "sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803",
+      "expected_sha256": "5aeddc4140435a5d89340bc656d44d8502cc28f870081f5808ae86c765c4d803",
+      "version_code": 22,
+      "version_name": "0.5.8-beta",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~jRTnSi6-W0BgyX6e0ze-wg==/com.moa.babylanguage-1SO3OJTn7lAQNGMZ9p1Bvg==/base.apk",
+      "sha256": "b938c70436815e84bc81cfc07e9e578b270b965091eff02f2f0d3c56736b5dfc",
+      "expected_sha256": "b938c70436815e84bc81cfc07e9e578b270b965091eff02f2f0d3c56736b5dfc",
+      "version_code": 23,
+      "version_name": "0.5.9-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "phrase_preserved": true,
+  "legacy_basis": true,
+  "app_data_cleared": false
+}

@@ -1,0 +1,76 @@
+{"status": "pass", "tests": 284, "passed_tests": 281, "failed_tests": 0, "ignored_tests": 0, "assumption_skipped_tests": 3, "skipped_test_ids": ["com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes", "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium", "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"], "unexpected_skips": [], "allowed_skips": ["com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes", "com.moa.babylanguage.PurchaseVerifierTest#missingConfigurationCannotUnlockPremium", "com.moa.babylanguage.PurchaseVerifierTest#unconfiguredManagerSurvivesRefreshRestoreAndRepeatedClose"], "validation_errors": [], "seconds": 706.06, "exit": 0, "instrumentation_started": true, "provenance": {"adb": ["C:\\Users\\\ucd5c\uc6a9\uc6b0\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe", "-s", "emulator-5554"], "install_app_requested": true, "scope": "single debug APK on an exclusively owned device", "app_apk": {"path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk", "sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9", "bytes": 84125710}, "test_apk": {"path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk", "sha256": "24d83cdde08897daa15843c08197dcffde9c0b15a3cca3cb5e8b1e80b8490fa9", "bytes": 2187484}, "git": {"sha": "efa5fd04db14f6139c80fd55dc32451ec21f4477", "dirty": true, "porcelain": [" M outputs/MoaAndroid/app/build.gradle.kts", " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt", " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/RecordTransferTests.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MemoryArtifacts.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ObservationStore.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordMediaViewer.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/RecordTransfer.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ResultMomentCard.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/SoundAnalyzer.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/SoundTimeline.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt", " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/VideoImport.kt", " M outputs/QA/closed_test_ui.py", "?? docs/UX-SOUND-VISUAL-0.5.9.md", "?? docs/qa/sound-visual-0.5.9/", "?? docs/release/20261002/RELEASE-NOTES-059.md", "?? docs/research/20261002-model-059-comparison.md", "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisTest.kt", "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisUiTest.kt", "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/SoundVisual059Test.kt", "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/VisualFeatures059Test.kt", "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ExpressionBasis.kt", "?? outputs/QA/record_upgrade_ui.py"]}, "installed_app": {"package": "com.moa.babylanguage", "base_apk": "/data/app/~~23rjWi_wCBW_ixIn9MkR1w==/com.moa.babylanguage-XlsK5UtPjTqUF1hqSufiGg==/base.apk", "sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9", "expected_sha256": "619efc1da4d4188765a81d6a1311e3c50f663e2105a01e5c3f4219e88c69bae9", "version_code": 23, "version_name": "0.5.9", "verified": true, "errors": []}, "installed_test": {"package": "com.moa.babylanguage.test", "base_apk": "/data/app/~~JpSB_VeVzLw-xNngRchd-w==/com.moa.babylanguage.test-BHYZRmqa4Ou2K22Ysrj6og==/base.apk", "sha256": "24d83cdde08897daa15843c08197dcffde9c0b15a3cca3cb5e8b1e80b8490fa9", "expected_sha256": "24d83cdde08897daa15843c08197dcffde9c0b15a3cca3cb5e8b1e80b8490fa9", "version_code": 0, "version_name": "null", "verified": true, "errors": []}}}
+eFacesCannotBorrowFirstFacesMouthOrBlendshapes
+
+INSTRUMENTATION_STATUS_CODE: 0
+
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualFeatures059Test
+
+INSTRUMENTATION_STATUS: current=283
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=284
+
+INSTRUMENTATION_STATUS: stream=
+
+INSTRUMENTATION_STATUS: test=missingBlendshapesStayUnknownInsteadOfBecomingOpenEyesOrNoSmile
+
+INSTRUMENTATION_STATUS_CODE: 1
+
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualFeatures059Test
+
+INSTRUMENTATION_STATUS: current=283
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=284
+
+INSTRUMENTATION_STATUS: stream=.
+
+INSTRUMENTATION_STATUS: test=missingBlendshapesStayUnknownInsteadOfBecomingOpenEyesOrNoSmile
+
+INSTRUMENTATION_STATUS_CODE: 0
+
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualFeatures059Test
+
+INSTRUMENTATION_STATUS: current=284
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=284
+
+INSTRUMENTATION_STATUS: stream=
+
+INSTRUMENTATION_STATUS: test=failureAndNoFaceMessagesDoNotInventAnAudioPhraseThatMayNotExist
+
+INSTRUMENTATION_STATUS_CODE: 1
+
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VisualFeatures059Test
+
+INSTRUMENTATION_STATUS: current=284
+
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+
+INSTRUMENTATION_STATUS: numtests=284
+
+INSTRUMENTATION_STATUS: stream=.
+
+INSTRUMENTATION_STATUS: test=failureAndNoFaceMessagesDoNotInventAnAudioPhraseThatMayNotExist
+
+INSTRUMENTATION_STATUS_CODE: 0
+
+INSTRUMENTATION_RESULT: stream=
+
+
+
+Time: 699.428
+
+
+
+OK (284 tests)
+
+
+
+
+
+INSTRUMENTATION_CODE: -1

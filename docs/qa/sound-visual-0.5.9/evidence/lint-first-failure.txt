@@ -1,0 +1,115 @@
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+WARNING: The following problems were found when resolving the SDK location:
+Where: ANDROID_SDK_ROOT environment variable. Problem: Set with empty value
+
+
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+> Task :app:compileReleaseNavigationResources UP-TO-DATE
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:mergeReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :app:processReleaseResources
+> Task :app:compileReleaseKotlin UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateReleaseLintReportModel
+> Task :app:bundleReleaseClassesToCompileJar
+> Task :app:preReleaseUnitTestBuild UP-TO-DATE
+> Task :app:generateReleaseUnitTestLintModel
+> Task :app:lintAnalyzeRelease
+> Task :app:lintAnalyzeReleaseUnitTest
+
+> Task :app:lintReportRelease
+Wrote HTML report to file:///C:/Users/최용우/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/build/reports/lint-results-release.html
+Lint found 1 error and 20 warnings. First failure:
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ResultMomentCard.kt:65: Error: Reading Configuration using LocalContext.current.resources.configuration [LocalContextConfigurationRead from androidx.compose.ui]
+    val fontScale = context.resources.configuration.fontScale
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+> Task :app:lintRelease FAILED
+Lint found 1 error, 20 warnings. First failure:
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ResultMomentCard.kt:65: Error: Reading Configuration using LocalContext.current.resources.configuration [LocalContextConfigurationRead from androidx.compose.ui]
+    val fontScale = context.resources.configuration.fontScale
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "LocalContextConfigurationRead":
+   Changes to the Configuration object will not cause LocalContext reads to be
+   invalidated, so you may end up with stale values when the Configuration
+   changes. Instead, use LocalConfiguration.current to retrieve the
+   Configuration - this will recompose callers when the Configuration object
+   changes.
+
+   Vendor: Jetpack Compose
+   Identifier: androidx.compose.ui
+   Feedback: https://issuetracker.google.com/issues/new?component=612128
+
+
+The full lint text report is located at:
+  C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build\intermediates\lint_intermediate_text_report\release\lintReportRelease\lint-results-release.txt
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:lintRelease'.
+> Lint found errors in the project; aborting build.
+
+  Fix the issues identified by lint, or create a baseline to see only new errors.
+  To create a baseline, run `gradlew updateLintBaseline` after adding the following to the module's build.gradle file:
+  ```
+  android {
+      lint {
+          baseline = file("lint-baseline.xml")
+      }
+  }
+  ```
+  For more details, see https://developer.android.com/studio/write/lint#snapshot
+
+  Lint found 1 error, 20 warnings. First failure:
+
+  C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ResultMomentCard.kt:65: Error: Reading Configuration using LocalContext.current.resources.configuration [LocalContextConfigurationRead from androidx.compose.ui]
+      val fontScale = context.resources.configuration.fontScale
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+     Explanation for issues of type "LocalContextConfigurationRead":
+     Changes to the Configuration object will not cause LocalContext reads to be
+     invalidated, so you may end up with stale values when the Configuration
+     changes. Instead, use LocalConfiguration.current to retrieve the
+     Configuration - this will recompose callers when the Configuration object
+     changes.
+
+     Vendor: Jetpack Compose
+     Identifier: androidx.compose.ui
+     Feedback: https://issuetracker.google.com/issues/new?component=612128
+28 actionable tasks: 10 executed, 18 up-to-date
+
+
+  The full lint text report is located at:
+    C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build\intermediates\lint_intermediate_text_report\release\lintReportRelease\lint-results-release.txt
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 20s

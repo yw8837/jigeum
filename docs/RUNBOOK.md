@@ -1,6 +1,6 @@
-# 0.5.8-beta/code22 실행 안내
+# 0.5.9-beta/code23 실행 안내
 
-먼저 [HANDOFF](HANDOFF.md), [변경 계약](UX-CLOSED-TEST-0.5.8.md), [최신 QA](qa/closed-test-0.5.8/README.md)를 따른다. 전체 Android 계측 **253통과/0실패/3명시제외**, 최종 서명 UI **7시나리오 통과**, 호스트 게이트 **30통과**, beta/release lint **오류0/기존 경고20**다.
+먼저 [HANDOFF](HANDOFF.md), [변경 계약](UX-SOUND-VISUAL-0.5.9.md), [최신 QA](qa/sound-visual-0.5.9/README.md)를 따른다. 전체 Android 계측281통과/0실패/3명시제외, 호스트30통과, beta/release lint 각각 오류0/기존경고20. 서명 UI와 실제 배포 상태도 최신 QA를 확인한다.
 
 ## 빌드·재현
 
@@ -9,15 +9,16 @@
 - Play 베타 빌드: `tools/release/build-play-bundle.ps1 -Purpose closed-test -Destination <새 beta-codeN.aab>`. 기존 업로드키를 저장소 밖에서 읽고 beta APK/AAB를 만든다. 정식 비교용은 `-Purpose paid-candidate`. `bundlePreview`는 차단한다.
 - 최종 beta AAB와 APK를 함께 `check_package.py --distribution beta --apk <beta.apk> --aab <beta.aab> --bundletool <공식 bundletool.jar> --baseline <이전 test.apk>`로 검사한다. beta는 AAB 검사를 생략할 수 없다. release는 `--distribution release`로 검사한다. 같은 버전의 반대 배포 AAB가 섞여도 실패해야 한다.
 - 전체 계측: `instrument.py --install-app --timeout 1600`에 QA 보고서의3개 정확한 `--allow-skip`를 전달한다. test별 완료/요약/설치 해시를 확인하고 제외를 통과 수에 합산하지 않는다.
+- 기존 DB/JSON 이전은 `record_upgrade_ui.py --old-apk <이전 beta.apk> --new-apk <새 beta.apk>`로 사용자 자료 없는 전용 기기에서 검사한다. 기존JSON1을 이전 앱에서 가져온 후 앱 데이터 삭제 없이 업데이트해 기록과 LEGACY 표시를 확인한다. 새JSON2/DB2의 구버전 다운그레이드는 지원하지 않는다.
 - 최종 서명 UI: `closed_test_ui.py --beta-apk <beta.apk> --release-apk <release.apk> --cry-video <권리 확인 로컬 QA.mp4>`. 작은폰/200%글자·실제2분 녹화·20초 선택·200MiB 경계·실제 모델/시각/PDF·미디어 보존/실제 내보내기·release 재잠금을 검사한다. CC0 원본과 생성 MP4는 Git/Play/설치본에 넣지 않는다.
 - 모든 서명키·심사코드·사용자 원본·구매 토큰·빌드 캐시는 저장소 밖만 사용한다.
 
 ## 전달·Play
 
-- `Agattok-0.5.8-beta-code22.apk/.aab`가 테스트 배포본이다. 다운로드 `아가톡 테스트/아가톡-전체기능테스트.apk` 하나와 beta APK 해시가 같다.
-- Play에는 beta AAB만 Alpha로 제출한다. 비교용 `Agattok-0.5.8-release-code22.aab`와 sideload preview는 제출하지 않는다. beta22는 Alpha 업로드·검토 전송 완료·Google 검토 중.
+- `Agattok-0.5.9-beta-code23.apk/.aab`가 이번 테스트 업데이트 패키지다. 이전 파일을 같은 이름으로 덮어쓰지 않는다.
+- Play에는 beta AAB만 Alpha로 제출한다. 비교용 `Agattok-0.5.9-release-code23.aab`와 sideload preview는 제출하지 않는다. beta23 실제 상태는 [Play 상태](release/20261003/PLAY-STATUS.md)를 따른다.
 - Google 그룹 연결은 적용됐다. [초대 안내](release/20261002/TESTER-INVITE.md)를 따른다. 직접 설치는12명14일을 대신하지 않는다.
-- 정식 Play 전환은 code23 이상·실제 서명/업데이트 경로 확인이 필요하다. 베타 자동 만료는 없으며 정식 업데이트 후 새 유료 작업을 제한한다. 기존 기록/영상/무료 내보내기는 보존한다.
+- 정식 Play 전환은 code24 이상·실제 서명/업데이트 경로 확인이 필요하다. 베타 자동 만료는 없으며 정식 업데이트 후 새 유료 작업을 제한한다. 기존 기록/영상/무료 내보내기는 보존한다.
 - 상품·실거래·공개 프로덕션은 보류. 서버 revision `jigeum-verifier-00005-ph7`을 유지하며 이번 배포로 정책 서버를 재배포하지 않았다.
 
 ## 0.5.6 기준본

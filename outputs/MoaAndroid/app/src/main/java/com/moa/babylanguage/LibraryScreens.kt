@@ -218,6 +218,7 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                     monthRecords.take(2).forEach { record ->
                         Text("“${record.phrase}”", color = Ink, lineHeight = 24.sp,
                             modifier = Modifier.padding(top = 16.dp))
+                        Text(ExpressionBasis.label(record.basis), color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
                     }
                 }
                 Spacer(Modifier.height(24.dp))

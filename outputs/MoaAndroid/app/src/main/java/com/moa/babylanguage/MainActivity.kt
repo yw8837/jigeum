@@ -296,7 +296,8 @@ internal fun JigeumApp(
                                             if (!busy && !sharing) {
                                                 val generation = MemoryArtifacts.currentGeneration()
                                                 update({
-                                                    val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase)
+                                                    val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase,
+                                                        basis = ExpressionBasis.forPhrase(result.basis, result.phrase, phrase))
                                                     if (video) {
                                                         check(clip != null && range != null) { "원래 장면이 없어 영상으로 저장할 수 없어요. 카드 이미지로 남길 수 있어요." }
                                                         var rendered: java.io.File? = null
@@ -320,7 +321,8 @@ internal fun JigeumApp(
                                                 var newId = System.currentTimeMillis()
                                                 while (newId in usedIds) newId++
                                                 val record = Observation(newId, result.sound, result.range, note, phrase,
-                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound)
+                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound,
+                                                    ExpressionBasis.forPhrase(result.basis, result.phrase, phrase))
                                                 var rendered: java.io.File? = null
                                                 try {
                                                     rendered = TranslatedMedia.render(activity, clip, range, record)
@@ -336,7 +338,8 @@ internal fun JigeumApp(
                                                 var newId = System.currentTimeMillis()
                                                 while (newId in usedIds) newId++
                                                 store.save(Observation(newId, result.sound, result.range, note, phrase,
-                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound))
+                                                    if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound,
+                                                    ExpressionBasis.forPhrase(result.basis, result.phrase, phrase)))
                                             }, { page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
                                         },
                                         passContent = { close ->
@@ -676,6 +679,8 @@ private fun ObservationCard(observation: Observation, onDelete: (() -> Unit)?, o
         if (observation.phrase.isNotBlank()) {
             Spacer(Modifier.height(14.dp))
             Text("“${observation.phrase}”", color = Ink, fontSize = 17.sp, lineHeight = 24.sp, fontWeight = FontWeight.SemiBold)
+            Text(ExpressionBasis.label(observation.basis), color = Muted, fontSize = 12.sp, lineHeight = 19.sp,
+                modifier = Modifier.padding(top = 6.dp))
         }
         if (observation.note.isNotBlank()) {
             Spacer(Modifier.height(12.dp))

@@ -76,20 +76,25 @@ internal data class ClipInterpretation(
     val guide: String,
     val range: String,
     val visual: Boolean,
-    val visualNotice: String? = null
+    val visualNotice: String? = null,
+    val basis: String = "LEGACY"
 )
 
-internal data class ClipAnalysisResult(val interpretation: ClipInterpretation? = null, val problem: String? = null)
+internal data class ClipAnalysisResult(val interpretation: ClipInterpretation? = null, val problem: String? = null,
+    val issue: AnalysisIssue? = null, val visualEvidence: VisualEvidence? = null,
+    val suggestedRange: ClipRange? = null)
 
 internal object EvidenceInterpreter {
     // Conservative product gate, NOT a measured confidence/accuracy percentage.
     // Generic adult laughter/speech and a face alone cannot create a baby phrase.
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
                   visualEvidence: VisualEvidence? = null): ClipAnalysisResult {
-        if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem)
+        if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
         val decision = SoundTimeline.decide(audio)
-        decision.problem?.let { return ClipAnalysisResult(problem = it) }
-        if (shape.activeFraction < 0.04f) return ClipAnalysisResult(problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.")
+        decision.problem?.let { return ClipAnalysisResult(problem = it, issue = decision.issue, visualEvidence = visualEvidence) }
+        if (!shape.activeFraction.isFinite() || shape.activeFraction < 0.04f) return ClipAnalysisResult(
+            problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.",
+            issue = AnalysisIssue.QUIET, visualEvidence = visualEvidence)
         val sound = decision.sound
         val eligiblePhrases = when (sound) {
             "울음" -> when {
@@ -112,7 +117,8 @@ internal object EvidenceInterpreter {
         }
         val longPhrases = sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
-        val phrase = phrases[Math.floorMod(shape.wordingKey, phrases.size)]
+        val audioPhrase = phrases[Math.floorMod(shape.wordingKey, phrases.size)]
+        val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence)
         val rhythm = when {
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
             shape.bursts >= 3 -> "소리와 쉼이 여러 번 이어졌어요."
@@ -122,13 +128,14 @@ internal object EvidenceInterpreter {
         val timeline = decision.moments.filterIndexed { index, moment ->
             index == 0 || decision.moments[index - 1].event != moment.event
         }.joinToString(" → ") { "${ClipRange.clock(range.startMs + it.startMs)} 부근 ${it.event.label} 후보" }
-        return ClipAnalysisResult(ClipInterpretation(phrase, sound,
+        return ClipAnalysisResult(ClipInterpretation(combined.phrase, sound,
             "${range.label()}에서 $sound 후보를 찾았어요. $rhythm\n$timeline" +
                 (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
+                (if (combined.usedVisual) "\n화면의 입 모양을 함께 보고 답을 청하는 표현을 더했어요. 소리와 얼굴의 주인이 같거나 동시에 움직였는지는 확인하지 않아요." else "") +
                 "\n일반 소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
             responseGuide(if (VocalEvent.CRY in decision.events) "울음" else sound), range.label(),
             visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
-            visualEvidence?.notice))
+            visualEvidence?.notice, if (combined.usedVisual) "AUDIO_VISUAL" else "AUDIO"), visualEvidence = visualEvidence)
     }
 
     fun responseGuide(sound: String): String = if (sound == "울음")
@@ -211,19 +218,76 @@ internal interface ClipAnalyzer {
 internal object DeviceClipAnalyzer : ClipAnalyzer {
     override suspend fun analyze(context: Context, uri: Uri, range: ClipRange, visual: Boolean): ClipAnalysisResult =
         withContext(Dispatchers.Default) {
-            val pcm = VideoAudioDecoder.decode(context, uri, range.startMs, range.endMs)
-                ?: return@withContext ClipAnalysisResult(problem = "이 영상에는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.")
+            var decodeFailed = false
+            val pcm = try { VideoAudioDecoder.decode(context, uri, range.startMs, range.endMs) }
+                catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                catch (_: Exception) { decodeFailed = true; null }
+                catch (_: LinkageError) { decodeFailed = true; null }
             try {
-                val audio = SoundAnalyzer.analyzeDetailed(context, pcm)
-                // Invalid/empty decoder output must stop before rhythm filtering.
-                audio.problem?.let { return@withContext ClipAnalysisResult(problem = it) }
-                val shape = AcousticShape.from(pcm)
-                val preliminary = EvidenceInterpreter.interpret(audio, shape, range)
-                if (preliminary.interpretation == null) return@withContext preliminary
+                val audio = if (decodeFailed) SoundAnalysis(emptyList(),
+                    "이 파일의 소리를 읽지 못했어요. 다른 파일이나 형식으로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
+                    else if (pcm == null) SoundAnalysis(emptyList(),
+                    "이 영상에는 읽을 수 있는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.", issue = AnalysisIssue.NO_AUDIO)
+                    else SoundAnalyzer.analyzeDetailed(context, pcm)
+                // Visual observation remains available on abstention, but never authorizes a phrase.
+                val shape = if (pcm != null && audio.problem == null) AcousticShape.from(pcm) else AcousticShape(0f, false, 0)
                 ensureActive()
                 val frames = if (visual) inspectVideoEvidence(context, uri, range.startMs, range.endMs) else null
                 ensureActive()
-                EvidenceInterpreter.interpret(audio, shape, range, frames)
-            } finally { pcm.fill(0f) }
+                val result = EvidenceInterpreter.interpret(audio, shape, range, frames)
+                if (pcm != null && audio.problem == null && result.interpretation == null) {
+                    val cleaned = AudioCleanup.filter(pcm)
+                    try {
+                        val rms = sqrt(cleaned.sumOf { it.toDouble() * it } / cleaned.size)
+                        val quiet = result.issue == AnalysisIssue.INFANT_UNCONFIRMED && rms < .012
+                        result.copy(problem = if (quiet) "소리가 작게 담겼고 아기 발성 단서를 충분히 찾지 못했어요. 선택 구간을 다시 듣고, 다음 촬영은 조금 가까이에서 해주세요." else result.problem,
+                            issue = if (quiet) AnalysisIssue.QUIET else result.issue,
+                            suggestedRange = AudibleRange.suggest(cleaned, range))
+                    } finally { cleaned.fill(0f) }
+                } else result
+            } finally { pcm?.fill(0f) }
         }
+}
+
+/** A display rule after the audio gate; neither face identity nor lip sync is inferred.
+ * Frames are sparse observations of the selection, not synchronized speaking evidence.
+ * Wording asks for a response; it never attributes the visible person's action to the baby. */
+internal object VisualExpression {
+    data class Result(val phrase: String, val usedVisual: Boolean)
+    fun combine(phrase: String, decision: SoundDecision, range: ClipRange, visual: VisualEvidence?): Result {
+        if (visual == null || visual.status == VisualEvidenceStatus.FAILED || decision.problem != null) return Result(phrase, false)
+        val event = decision.events.singleOrNull() ?: return Result(phrase, false)
+        // Multiple visible people anywhere in the selection make attribution too ambiguous.
+        if (visual.frames.any { it.faceCount > 1 }) return Result(phrase, false)
+        val supported = visual.frames.filter { frame ->
+            frame.valid && frame.faceCount == 1 && frame.requestedOffsetMs in 0 until range.durationMs
+        }.distinctBy { it.requestedOffsetMs }
+        if (supported.size < 2) return Result(phrase, false)
+        fun Float?.above(floor: Float) = this != null && isFinite() && this in floor..1f
+        val addition = when {
+            event == VocalEvent.LAUGH && supported.count { it.mouthCornerLift.above(.60f) } >= 2 -> " 웃는 얼굴로 답해줄래요?"
+            event in setOf(VocalEvent.BABBLE, VocalEvent.CHILD_VOICE) && supported.count { it.mouthOpening.above(.18f) } >= 2 -> " 입 모양도 보면서, 내 소리에 답해줄래요?"
+            else -> return Result(phrase, false)
+        }
+        return Result(phrase + addition, true)
+    }
+}
+
+/** Finds louder sound, not a baby. Uses only the selected PCM and never starts analysis. */
+internal object AudibleRange {
+    fun suggest(cleanedPcm: FloatArray, range: ClipRange): ClipRange? {
+        if (range.durationMs < 6_000 || cleanedPcm.size < 96_000 || cleanedPcm.any { !it.isFinite() }) return null
+        val energies = (cleanedPcm.indices step 1600).map { start ->
+            val end = minOf(start + 1600, cleanedPcm.size)
+            cleanedPcm.sliceArray(start until end).sumOf { it.toDouble() * it } / (end - start)
+        }
+        val width = 50 // Five seconds, within both free and full limits.
+        if (energies.size < width) return null
+        val sums = energies.windowed(width).map { it.sum() / width }
+        val best = sums.indices.maxByOrNull { sums[it] } ?: return null
+        if (sums[best] < .003 * .003 || sums[best] < energies.average() * 1.5) return null
+        val start = range.startMs + best * 100L
+        val end = minOf(start + 5_000, range.endMs)
+        return if (end - start >= 1_000) ClipRange(start, end) else null
+    }
 }

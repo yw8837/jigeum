@@ -1,0 +1,35 @@
+{
+  "status": "pass",
+  "distribution_checked": "beta",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "pass",
+    "files_compared": 18,
+    "baseline": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\Agattok-0.5.8-beta-code22.apk"
+  },
+  "aab_checked": true,
+  "aab_unsigned": false,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "b938c70436815e84bc81cfc07e9e578b270b965091eff02f2f0d3c56736b5dfc",
+  "aab_distribution": {
+    "package": "com.moa.babylanguage",
+    "version_code": 23,
+    "version_name": "0.5.9-beta",
+    "test_distribution": true,
+    "closed_test_distribution": true
+  },
+  "aab_sha256": "4ec607c43b978642bc58bd6736d751a1fe74c7dbce185a88f383e4ccc6cccfc6"
+}

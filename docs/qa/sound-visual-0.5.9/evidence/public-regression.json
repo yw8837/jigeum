@@ -1,0 +1,161 @@
+{
+  "cases": [
+    {
+      "id": "cry",
+      "before": "울음",
+      "after": "울음",
+      "expected": "cry",
+      "declared_match": true
+    },
+    {
+      "id": "laugh",
+      "before": "아기 웃음",
+      "after": "아기 웃음",
+      "expected": "laugh",
+      "declared_match": true
+    },
+    {
+      "id": "babble",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "babble",
+      "declared_match": false
+    },
+    {
+      "id": "laugh_babble",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "laugh/babble mixed",
+      "declared_match": true
+    },
+    {
+      "id": "almost_laugh",
+      "before": "여러 아기 소리",
+      "after": "여러 아기 소리",
+      "expected": "almost laughing boundary",
+      "declared_match": true
+    },
+    {
+      "id": "cry_six_month",
+      "before": "여러 아기 소리",
+      "after": "여러 아기 소리",
+      "expected": "cry",
+      "declared_match": false
+    },
+    {
+      "id": "conversation",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "non-infant conversation",
+      "declared_match": true
+    },
+    {
+      "id": "vacuum",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "vacuum",
+      "declared_match": true
+    },
+    {
+      "id": "piano",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "music",
+      "declared_match": true
+    },
+    {
+      "id": "generic_laugh",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "speaker-unverified laughter",
+      "declared_match": true
+    },
+    {
+      "id": "babble_seven_month",
+      "before": "어린 말소리",
+      "after": "어린 말소리",
+      "expected": "babble",
+      "declared_match": false
+    },
+    {
+      "id": "laugh_quiet",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "laugh",
+      "declared_match": false
+    },
+    {
+      "id": "laugh_then_cry",
+      "before": "여러 아기 소리",
+      "after": "여러 아기 소리",
+      "expected": "mixed",
+      "declared_match": true
+    },
+    {
+      "id": "cry_then_laugh",
+      "before": "여러 아기 소리",
+      "after": "여러 아기 소리",
+      "expected": "mixed",
+      "declared_match": true
+    },
+    {
+      "id": "overlap",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "overlap",
+      "declared_match": true
+    },
+    {
+      "id": "silence",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "silence",
+      "declared_match": true
+    },
+    {
+      "id": "tone",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "tone",
+      "declared_match": true
+    },
+    {
+      "id": "noise",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "noise",
+      "declared_match": true
+    },
+    {
+      "id": "laugh_with_rumble",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "laugh with 40Hz rumble",
+      "declared_match": true
+    },
+    {
+      "id": "cry_with_dc",
+      "before": "울음",
+      "after": "울음",
+      "expected": "cry with DC offset",
+      "declared_match": true
+    },
+    {
+      "id": "rumble",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "rumble",
+      "declared_match": true
+    },
+    {
+      "id": "dc",
+      "before": "abstain",
+      "after": "abstain",
+      "expected": "dc",
+      "declared_match": true
+    }
+  ],
+  "changed_decisions": 0,
+  "strict_label_gate": "FAIL: 4 pre-existing disagreements, retained",
+  "independent_accuracy_validated": false
+}

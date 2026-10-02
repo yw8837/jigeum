@@ -78,6 +78,19 @@ def select_twenty_seconds():
     q.wait_ui('0:00.0 – 0:20.0 · 20초 선택')
 
 
+def verify_saved_record(phrase, label):
+    # A prior schema-upgrade probe and newly saved media can push the seed below
+    # the viewport. Read the actual list instead of assuming the first screen.
+    q.wait_ui('우리가 나눈 아기말')
+    for _ in range(12):
+        if any(phrase in node['text'] for node in q.nodes()):
+            q.trace(label)
+            q.screenshot(label)
+            return
+        q.swipe_up()
+    raise AssertionError('Saved record not found after bounded scrolling: ' + phrase)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--beta-apk', type=Path, required=True)
@@ -95,11 +108,12 @@ def main():
     if args.access_proof:
         prior = json.loads(args.access_proof.read_text(encoding='utf-8'))
         assert prior['installs'][0]['sha256'] == hashlib.sha256(args.beta_apk.read_bytes()).hexdigest()
-        assert prior['installs'][0]['verified'] and prior['installs'][0]['version_name'] == '0.5.8-beta'
-        assert len(prior['scenarios']) == 4 and '200MiB+1 byte' in prior['scenarios'][3]
+        assert prior['installs'][0]['verified'] and prior['installs'][0]['version_name'].endswith('-beta')
+        assert len(prior['scenarios']) >= 4 and '200MiB+1 byte' in prior['scenarios'][3]
         assert 119_000 <= prior['capture_timeline']['lower_ms'] <= 120_500
         assert prior['large_fixture_bytes'] == 200*1024*1024 and prior['oversized_fixture_bytes'] == 200*1024*1024+1
-        result['scenarios'] = list(prior['scenarios'])
+        # Re-run every media/PDF/relock step even if some passed before failure.
+        result['scenarios'] = list(prior['scenarios'][:4])
         for key in ('observed_capture_seconds', 'capture_timeline', 'abstention_message', 'large_fixture_bytes', 'oversized_fixture_bytes'):
             result[key] = prior[key]
         result['resumed_access_proof'] = dict(path=str(args.access_proof.resolve()),
@@ -161,7 +175,7 @@ def main():
             deadline = time.monotonic()+65
             while time.monotonic() < deadline:
                 messages = [n['text'] for n in q.nodes()]
-                accepted = ('선택한 구간이 거의 무음이에요.', '선택한 구간이 너무 조용해요.', '이 구간에서는 아기 소리 단서를 충분히 찾지 못했어요.')
+                accepted = ('선택한 구간이 거의 무음이에요.', '선택한 구간이 너무 조용해요.', '소리는 읽었지만 아기 발성인지', '소리가 작게 담겼고')
                 abstention = next((message for message in messages if message.startswith(accepted)), None)
                 if abstention:
                     result['abstention_message'] = abstention
@@ -200,12 +214,14 @@ def main():
         q.screenshot('beta-actual-pdf-share'); q.shell('input','keyevent','KEYCODE_BACK')
         result['scenarios'].append('beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase')
         flow.launch(); q.wait_ui('전체 기능 테스트 · 2분 촬영 · 20초 분석')
-        q.tap_text('기록'); q.wait_ui(seed['records'][0]['phrase'])
+        q.tap_text('기록'); verify_saved_record(seed['records'][0]['phrase'], 'beta-restarted-seed-preserved')
         result['scenarios'].append('cold restart retains distribution access and records without a purchase or code')
         result['installs'].append(delivery.install(args.release_apk))
         flow.launch(); q.wait_ui('무료 · 1분 촬영 · 10초 분석')
         assert not any('테스트 버전' in n['text'] for n in q.nodes())
-        q.tap_text('기록'); q.wait_ui(seed['records'][0]['phrase']); q.tap_text('장면 보기 · 내려받기')
+        q.tap_text('기록'); verify_saved_record(seed['records'][0]['phrase'], 'release-seed-preserved')
+        # Return to the newest media record after checking the older text seed.
+        flow.launch(); q.tap_text('기록'); q.tap_text('장면 보기 · 내려받기')
         q.wait_ui('앨범에 영상 저장'); q.screenshot('release-preserved-record-media')
         result['release_media'] = download_media(owned, 'release', result['beta_media']['name'])
         assert result['release_media']['sha256'] == result['beta_media']['sha256'], 'Saved beta movie changed or was lost in release update'

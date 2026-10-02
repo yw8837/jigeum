@@ -7,6 +7,8 @@ import android.media.MediaMetadataRetriever
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -15,9 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,8 +66,12 @@ internal object MomentCardRenderer {
 @Composable
 internal fun ResultMomentCard(record: Observation, clip: LocalClip?, range: ClipRange?) {
     val context = LocalContext.current
-    var image by remember(record.phrase, clip?.uri, range) { mutableStateOf<Bitmap?>(null) }
-    LaunchedEffect(record.phrase, clip?.uri, range) {
+    val fontScale = LocalConfiguration.current.fontScale
+    val height = remember(record.phrase, clip?.hasVideo, fontScale) {
+        TranslatedMedia.captionHeight(record.phrase, clip?.hasVideo == true, fontScale)
+    }
+    var image by remember(record.phrase, record.basis, record.context, clip?.uri, range, fontScale) { mutableStateOf<Bitmap?>(null) }
+    LaunchedEffect(record.phrase, record.basis, record.context, clip?.uri, range, fontScale) {
         var made: Bitmap? = null
         try {
             withContext(Dispatchers.IO) { made = MomentCardRenderer.frame(context, record, clip, range) }
@@ -71,9 +80,15 @@ internal fun ResultMomentCard(record: Observation, clip: LocalClip?, range: Clip
         catch (_: Exception) { /* The phrase remains readable even if a poster cannot be decoded. */ }
     }
     val bitmap = image
-    if (bitmap == null) Text(record.phrase, color = Ink, fontSize = 25.sp, lineHeight = 37.sp,
-        modifier = Modifier.testTag("baby-phrase"))
+    DisposableEffect(bitmap) { onDispose { bitmap?.recycle() } }
+    if (bitmap == null) Box(Modifier.fillMaxWidth().aspectRatio(720f / height), contentAlignment = Alignment.Center) {
+        Text(record.phrase, color = Ink, fontSize = 25.sp, lineHeight = 37.sp,
+            modifier = Modifier.padding(16.dp).testTag("baby-phrase"))
+    }
     else Image(bitmap.asImageBitmap(), contentDescription = null,
         modifier = Modifier.fillMaxWidth().aspectRatio(bitmap.width.toFloat()/bitmap.height).clip(RoundedCornerShape(24.dp))
-            .testTag("baby-phrase").semantics { text = AnnotatedString(record.phrase) })
+            .testTag("baby-phrase").semantics {
+                text = AnnotatedString(record.phrase)
+                stateDescription = ExpressionBasis.label(record.basis)
+            })
 }

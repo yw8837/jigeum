@@ -58,7 +58,7 @@ internal object RecordTransfer {
             }
             reader.endObject()
             require(reader.peek() == JsonToken.END_DOCUMENT)
-            require(format == FORMAT && version == 1L && age in ObservationStore.AGE_BANDS && rows != null)
+            require(format == FORMAT && version in setOf(1L, 2L) && age in ObservationStore.AGE_BANDS && rows != null)
             val plan = planMerge(existing.observations, rows, existing.importOrigins)
             return ImportPreview(rows, age!!, plan.added, plan.duplicates, plan.conflicts)
         } catch (cause: StoreException) {
@@ -71,13 +71,14 @@ internal object RecordTransfer {
     fun writeJson(output: OutputStream, snapshot: StoreSnapshot) {
         validateSnapshot(snapshot)
         val writer = JsonWriter(OutputStreamWriter(output, Charsets.UTF_8))
-        writer.beginObject().name("format").value(FORMAT).name("version").value(1L)
+        writer.beginObject().name("format").value(FORMAT).name("version").value(2L)
             .name("ageBand").value(snapshot.ageBand).name("records").beginArray()
         snapshot.observations.forEach { row ->
             writer.beginObject().name("id").value(row.id).name("sound").value(row.sound)
                 .name("context").value(row.context).name("note").value(row.note)
                 .name("phrase").value(row.phrase).name("source").value(row.source)
-                .name("modelCue").value(row.modelCue).endObject()
+                .name("modelCue").value(row.modelCue)
+                .name("basis").value(ExpressionBasis.normalize(row.basis)).endObject()
         }
         writer.endArray().endObject()
         writer.flush()
@@ -87,10 +88,10 @@ internal object RecordTransfer {
         validateSnapshot(snapshot)
         val writer = OutputStreamWriter(output, Charsets.UTF_8)
         writer.write("\uFEFF")
-        writer.write("기록번호,날짜,소리,상황,아기말,보호자메모,입력방식,모델단서\r\n")
+        writer.write("기록번호,날짜,소리,상황,아기말,보호자메모,입력방식,모델단서,표현근거\r\n")
         snapshot.observations.forEach { row ->
             val fields = listOf(row.id.toString(), Instant.ofEpochMilli(row.id).atZone(ZoneId.systemDefault()).toString(),
-                row.sound, row.context, row.phrase, row.note, row.source, row.modelCue)
+                row.sound, row.context, row.phrase, row.note, row.source, row.modelCue, ExpressionBasis.label(row.basis))
             writer.write(fields.joinToString(",") { csvCell(it) } + "\r\n")
         }
         writer.flush()
@@ -135,13 +136,15 @@ internal object RecordTransfer {
                 "note" -> strings[key] = string(reader, 1000)
                 "phrase" -> strings[key] = string(reader, 160)
                 "source" -> strings[key] = string(reader, 20)
+                "basis" -> strings[key] = string(reader, 40)
                 else -> throw IllegalArgumentException()
             }
         }
         reader.endObject()
-        require(id != null && strings.keys == setOf("sound", "context", "modelCue", "note", "phrase", "source"))
+        require(id != null && strings.keys - "basis" == setOf("sound", "context", "modelCue", "note", "phrase", "source"))
         return Observation(id, strings.getValue("sound"), strings.getValue("context"), strings.getValue("note"),
-            strings.getValue("phrase"), strings.getValue("source"), strings.getValue("modelCue"))
+            strings.getValue("phrase"), strings.getValue("source"), strings.getValue("modelCue"),
+            ExpressionBasis.normalize(strings["basis"]))
             .also(ObservationStore::validateRecord)
     }
 
@@ -158,6 +161,13 @@ internal object RecordTransfer {
             output.writeLong(row.id)
             listOf(row.sound, row.context, row.note, row.phrase, row.source, row.modelCue).forEach {
                 val encoded = it.toByteArray(Charsets.UTF_8)
+                output.writeInt(encoded.size)
+                output.write(encoded)
+            }
+            // Keep the pre-0.5.9 key for migrated rows so old relocated backups stay idempotent.
+            val basis = ExpressionBasis.normalize(row.basis)
+            if (basis != ExpressionBasis.LEGACY) {
+                val encoded = basis.toByteArray(Charsets.UTF_8)
                 output.writeInt(encoded.size)
                 output.write(encoded)
             }
@@ -180,7 +190,8 @@ internal object RecordTransfer {
         var added = 0
         var duplicates = 0
         var conflicts = 0
-        for (row in incoming) {
+        for (incomingRow in incoming) {
+            val row = incomingRow.copy(basis = ExpressionBasis.normalize(incomingRow.basis))
             ObservationStore.validateRecord(row)
             val atId = current[row.id]
             val origin = importOrigin(row)

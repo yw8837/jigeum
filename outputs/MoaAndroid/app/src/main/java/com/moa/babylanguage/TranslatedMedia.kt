@@ -157,8 +157,8 @@ internal object TranslatedMedia {
         override fun getMatrix(presentationTimeUs: Long) = matrix
     }
 
-    internal fun caption(record: Observation, video: Boolean, fontScale: Float = 1f): Bitmap {
-        val text = record.phrase.replace(Regex("\\s+"), " ").trim()
+    private fun captionBody(phrase: String, fontScale: Float): StaticLayout {
+        val text = phrase.replace(Regex("\\s+"), " ").trim()
         val bodyPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
             textSize = 56f * fontScale.coerceIn(1f, 2f)
             typeface = Typeface.create("sans-serif", Typeface.BOLD)
@@ -167,8 +167,22 @@ internal object TranslatedMedia {
             .setIncludePad(false).setLineSpacing(5f, 1f).build()
         var body = bodyLayout()
         while (body.height > 2_700 && bodyPaint.textSize > 20f) { bodyPaint.textSize -= 1f; body = bodyLayout() }
+        return body
+    }
+
+    private fun captionHeight(body: StaticLayout, video: Boolean): Int {
         val phraseTop = if (video) 708 else 390
-        val height = maxOf(960, ((phraseTop + body.height + 170 + 1) / 2) * 2)
+        return maxOf(960, ((phraseTop + body.height + 170 + 1) / 2) * 2)
+    }
+
+    /** Reserve the exact card footprint before decoding the scene, avoiding moving controls. */
+    internal fun captionHeight(phrase: String, video: Boolean, fontScale: Float = 1f): Int =
+        captionHeight(captionBody(phrase, fontScale), video)
+
+    internal fun caption(record: Observation, video: Boolean, fontScale: Float = 1f): Bitmap {
+        val text = record.phrase.replace(Regex("\\s+"), " ").trim()
+        val body = captionBody(text, fontScale)
+        val height = captionHeight(body, video)
         val bitmap = createBitmap(720, height)
         val canvas = Canvas(bitmap)
         val paper = Paint().apply { color = 0xFFFFF9F0.toInt() }
@@ -200,15 +214,15 @@ internal object TranslatedMedia {
                 canvas.drawLine(320f + i * 20f, 218f - half, 320f + i * 20f, 218f + half, wave)
             }
             draw("아가톡 · 소리로 남긴 순간", 330f, 26f, muted)
-            draw(text, 390f, bodyPaint.textSize, ink, true, body.height)
+            draw(text, 390f, body.paint.textSize, ink, true, body.height)
             draw(record.context.replace(Regex("\\s+"), " "), height - 145f, 23f, muted, maxHeight = 70)
         } else {
             draw("아가톡 · 그때의 아기말", 666f, 21f, muted)
             val sage = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFEDF3E9.toInt() }
             canvas.drawRoundRect(24f, 695f, 696f, 708f + body.height + 32f, 28f, 28f, sage)
-            draw(text, 708f, bodyPaint.textSize, ink, true, body.height)
+            draw(text, 708f, body.paint.textSize, ink, true, body.height)
         }
-        draw("소리를 바탕으로 상상한 아기말", height - 50f, 20f, muted)
+        draw(ExpressionBasis.label(record.basis), height - 50f, 20f, muted)
         return bitmap
     }
 }

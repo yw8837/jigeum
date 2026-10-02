@@ -1,0 +1,77 @@
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+WARNING: The following problems were found when resolving the SDK location:
+Where: ANDROID_SDK_ROOT environment variable. Problem: Set with empty value
+
+
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+> Task :app:compileReleaseNavigationResources UP-TO-DATE
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:mergeReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :app:processReleaseResources
+> Task :app:compileReleaseKotlin UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateReleaseLintReportModel
+> Task :app:bundleReleaseClassesToCompileJar
+> Task :app:preReleaseUnitTestBuild UP-TO-DATE
+> Task :app:generateReleaseUnitTestLintModel
+> Task :app:lintAnalyzeRelease
+> Task :app:lintAnalyzeReleaseUnitTest
+
+> Task :app:lintReportRelease
+Wrote HTML report to file:///C:/Users/최용우/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/build/reports/lint-results-release.html
+
+> Task :app:lintRelease
+> Task :app:preBetaBuild UP-TO-DATE
+> Task :app:generateBetaBuildConfig UP-TO-DATE
+> Task :app:checkBetaAarMetadata UP-TO-DATE
+> Task :app:processBetaNavigationResources UP-TO-DATE
+> Task :app:compileBetaNavigationResources UP-TO-DATE
+> Task :app:generateBetaResValues UP-TO-DATE
+> Task :app:mapBetaSourceSetPaths UP-TO-DATE
+> Task :app:generateBetaResources UP-TO-DATE
+> Task :app:mergeBetaResources UP-TO-DATE
+> Task :app:packageBetaResources UP-TO-DATE
+> Task :app:parseBetaLocalResources UP-TO-DATE
+> Task :app:createBetaCompatibleScreenManifests
+> Task :app:extractDeepLinksBeta UP-TO-DATE
+> Task :app:processBetaMainManifest UP-TO-DATE
+> Task :app:processBetaManifest
+> Task :app:processBetaManifestForPackage UP-TO-DATE
+> Task :app:processBetaResources
+> Task :app:compileBetaKotlin UP-TO-DATE
+> Task :app:javaPreCompileBeta UP-TO-DATE
+> Task :app:compileBetaJavaWithJavac UP-TO-DATE
+> Task :app:generateBetaLintReportModel
+> Task :app:bundleBetaClassesToCompileJar
+> Task :app:preBetaUnitTestBuild UP-TO-DATE
+> Task :app:generateBetaUnitTestLintModel
+> Task :app:lintAnalyzeBeta
+> Task :app:lintAnalyzeBetaUnitTest
+
+> Task :app:lintReportBeta
+Wrote HTML report to file:///C:/Users/최용우/Documents/Codex/2026-09-29/plugin-browser-openai-bundled-mention-tab/outputs/MoaAndroid/app/build/reports/lint-results-beta.html
+
+> Task :app:lintBeta
+
+BUILD SUCCESSFUL in 2m 1s
+54 actionable tasks: 20 executed, 34 up-to-date

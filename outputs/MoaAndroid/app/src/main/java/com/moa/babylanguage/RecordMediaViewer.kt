@@ -98,6 +98,7 @@ internal fun RecordMediaViewer(record: Observation, onClose: () -> Unit, onMessa
                 Text("${MemoryArtifacts.date(record.id)} · ${record.context}", color = Muted)
                 media?.let { clip -> ClipPlayerPane(clip, 0, clip.durationMs, stop, !working && !pickerPending) }
                 Text(record.phrase, color = Ink, fontSize = 19.sp)
+                Text(ExpressionBasis.label(record.basis), color = Muted, fontSize = 13.sp)
                 Text("선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.", color = Muted, fontSize = 13.sp)
                 if (working) LinearProgressIndicator(Modifier.fillMaxWidth())
                 GallerySaveButton("앨범에 영상 저장", media != null && !working && !pickerPending, { error = it }) {

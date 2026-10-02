@@ -62,8 +62,39 @@ class AccessNavigationTests {
     private fun openDraft() {
         // isDisplayed also accepts a partially clipped node. After scrolling to
         // keep-scene, bring this button fully into view before a pointer click.
-        compose.onNodeWithText("기록에 메모·수정 남기기").performScrollTo().performClick()
-        compose.waitUntil(8_000) { compose.onAllNodesWithTag("draft-phrase-editor").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText("기록에 메모·수정 남기기").performScrollTo()
+        captureDiagnostic("draft-before-click")
+        compose.onNodeWithText("기록에 메모·수정 남기기").performClick()
+        captureDiagnostic("draft-after-click")
+        try {
+            compose.waitUntil(8_000) { compose.onAllNodesWithTag("draft-phrase-editor").fetchSemanticsNodes().isNotEmpty() }
+        } catch (failure: Throwable) {
+            captureDiagnostic("draft-click-failed", screenshot = true)
+            throw failure
+        }
+    }
+
+    /** Synthetic UI only. Preserve the tree/bounds before a click and on failure for diagnosis. */
+    private fun captureDiagnostic(stage: String, screenshot: Boolean = false) {
+        val folder = File(compose.activity.getExternalFilesDir(null), "qa-access-059").apply { mkdirs() }
+        val stem = "$id-${android.os.SystemClock.uptimeMillis()}-$stage"
+        runCatching {
+            fun bounds(tag: String) = compose.onAllNodesWithTag(tag).fetchSemanticsNodes().map { it.boundsInRoot }
+            val openButton = compose.onAllNodesWithText("기록에 메모·수정 남기기").fetchSemanticsNodes().map { it.boundsInRoot }
+            val closeButton = compose.onAllNodesWithText("기록 수정 접기").fetchSemanticsNodes().map { it.boundsInRoot }
+            val summary = "$stage card=${bounds("baby-phrase")} open=$openButton close=$closeButton " +
+                "loading=${bounds("page-loading")} capture=${bounds("page-capture")} editor=${bounds("draft-phrase-editor")}"
+            android.util.Log.i("AccessNavigationQA", summary)
+            val tree = compose.onRoot(useUnmergedTree = true).printToString()
+            File(folder, "$stem.txt").writeText(summary + "\n" + tree)
+            if (screenshot) tree.chunked(3_000).forEach { android.util.Log.e("AccessNavigationQA", it) }
+        }
+        if (screenshot) runCatching {
+            InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot().let { bitmap ->
+                try { File(folder, "$stem.png").outputStream().use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) } }
+                finally { bitmap.recycle() }
+            }
+        }
     }
 
     @Test fun previewRunsVisualWithoutPurchaseAndPreservesResultAcrossRestart() {
@@ -165,7 +196,16 @@ class AccessNavigationTests {
         compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("오늘의 소중한 소리")
         compose.runOnIdle { billing.publish(false) }
         restoration.emulateSavedInstanceStateRestore()
-        compose.onNodeWithTag("draft-phrase-editor").assertTextContains("오늘의 소중한 소리")
+        captureDiagnostic("after-state-restore")
+        // JigeumApp reloads its local DB asynchronously after restoration before
+        // the preserved capture screen is composed. Await that state explicitly.
+        try {
+            compose.waitUntil(8_000) { compose.onAllNodesWithTag("draft-phrase-editor").fetchSemanticsNodes().isNotEmpty() }
+            compose.onNodeWithTag("draft-phrase-editor").assertTextContains("오늘의 소중한 소리")
+        } catch (failure: Throwable) {
+            captureDiagnostic("restore-editor-failed", screenshot = true)
+            throw failure
+        }
         click("이 문장 저장하기")
         compose.waitUntil(8_000) { compose.onAllNodesWithTag("page-timeline").fetchSemanticsNodes().isNotEmpty() }
         assertEquals("오늘의 소중한 소리", runBlocking { store.snapshot().observations.single().phrase })

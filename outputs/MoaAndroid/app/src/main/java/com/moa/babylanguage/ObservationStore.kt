@@ -20,7 +20,8 @@ internal data class Observation(
     val note: String,
     val phrase: String = "",
     val source: String = "AUDIO",
-    val modelCue: String = ""
+    val modelCue: String = "",
+    val basis: String = ExpressionBasis.LEGACY
 )
 
 internal data class StoreSnapshot(
@@ -56,7 +57,8 @@ internal class ObservationStore(context: Context,
                 if (rows.size == MAX_ROWS) throw StoreException("기록이 10,000건을 넘습니다. 저장소를 점검해 주세요.")
                 rows += Observation(
                     cursor.getLong(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6)
+                    cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),
+                    ExpressionBasis.normalize(cursor.getString(7))
                 )
             }
         }
@@ -158,7 +160,8 @@ internal class ObservationStore(context: Context,
                 while (cursor.moveToNext()) {
                     if (current.size == MAX_ROWS) throw StoreException("기록이 10,000건을 넘습니다.")
                     val row = Observation(cursor.getLong(0), cursor.getString(1), cursor.getString(2),
-                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6))
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),
+                        ExpressionBasis.normalize(cursor.getString(7)))
                     current[row.id] = row
                 }
             }
@@ -238,16 +241,16 @@ internal class ObservationStore(context: Context,
             throw StoreException("이전 기록 사본을 정리하지 못했어요. 저장 공간을 확인하고 다시 시도해 주세요.")
     }
 
-    private class Helper(context: Context, name: String) : SQLiteOpenHelper(context, name, null, 1) {
+    private class Helper(context: Context, name: String) : SQLiteOpenHelper(context, name, null, 2) {
         override fun onConfigure(db: SQLiteDatabase) {
             db.rawQuery("PRAGMA secure_delete=ON", null).use { it.moveToFirst() }
         }
         override fun onCreate(db: SQLiteDatabase) {
-            db.execSQL("CREATE TABLE observations (id INTEGER PRIMARY KEY NOT NULL, sound TEXT NOT NULL, context TEXT NOT NULL, note TEXT NOT NULL, phrase TEXT NOT NULL, source TEXT NOT NULL, model_cue TEXT NOT NULL)")
+            db.execSQL("CREATE TABLE observations (id INTEGER PRIMARY KEY NOT NULL, sound TEXT NOT NULL, context TEXT NOT NULL, note TEXT NOT NULL, phrase TEXT NOT NULL, source TEXT NOT NULL, model_cue TEXT NOT NULL, basis TEXT NOT NULL DEFAULT 'LEGACY')")
             db.execSQL("CREATE TABLE meta (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)")
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            throw StoreException("기록 저장소 버전을 자동으로 변경할 수 없어요.")
+            if (oldVersion < 2) db.execSQL("ALTER TABLE observations ADD COLUMN basis TEXT NOT NULL DEFAULT 'LEGACY'")
         }
     }
 
@@ -255,7 +258,7 @@ internal class ObservationStore(context: Context,
         internal const val MAX_ROWS = 10_000
         internal const val MAX_TIMESTAMP = 253402300799999L
         private val locks = ConcurrentHashMap<String, Mutex>()
-        private val COLUMNS = arrayOf("id", "sound", "context", "note", "phrase", "source", "model_cue")
+        private val COLUMNS = arrayOf("id", "sound", "context", "note", "phrase", "source", "model_cue", "basis")
         internal val AGE_BANDS = setOf("", "6~8개월", "9~12개월", "13~18개월")
 
         internal fun validateRecord(row: Observation) {
@@ -271,7 +274,7 @@ internal class ObservationStore(context: Context,
         private fun values(row: Observation) = ContentValues().apply {
             put("id", row.id); put("sound", row.sound); put("context", row.context)
             put("note", row.note); put("phrase", row.phrase); put("source", row.source)
-            put("model_cue", row.modelCue)
+            put("model_cue", row.modelCue); put("basis", ExpressionBasis.normalize(row.basis))
         }
 
         private fun count(db: SQLiteDatabase): Int =

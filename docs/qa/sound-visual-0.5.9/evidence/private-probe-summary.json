@@ -1,0 +1,46 @@
+{
+  "originals_uploaded": false,
+  "cases": [
+    {
+      "id": "clip_a_0",
+      "observed": "abstain",
+      "issue": "INFANT_UNCONFIRMED",
+      "basis": null,
+      "elapsed_ms": 2511,
+      "suggested": null,
+      "frames": 5,
+      "valid_single_faces": 5
+    },
+    {
+      "id": "clip_a_1",
+      "observed": "abstain",
+      "issue": "INFANT_UNCONFIRMED",
+      "basis": null,
+      "elapsed_ms": 2165,
+      "suggested": null,
+      "frames": 5,
+      "valid_single_faces": 5
+    },
+    {
+      "id": "clip_b_0",
+      "observed": "abstain",
+      "issue": "QUIET",
+      "basis": null,
+      "elapsed_ms": 2228,
+      "suggested": "0:07–0:12",
+      "frames": 5,
+      "valid_single_faces": 5
+    },
+    {
+      "id": "clip_c_0",
+      "observed": "울음",
+      "issue": null,
+      "basis": "AUDIO",
+      "elapsed_ms": 1652,
+      "suggested": null,
+      "frames": 5,
+      "valid_single_faces": 5
+    }
+  ],
+  "intent_accuracy_validated": false
+}

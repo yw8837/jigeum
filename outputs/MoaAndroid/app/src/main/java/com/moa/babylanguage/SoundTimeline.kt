@@ -9,7 +9,8 @@ internal enum class VocalEvent(val label: String, val cue: String) {
 }
 
 internal data class VocalMoment(val event: VocalEvent, val startMs: Long)
-internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), val problem: String? = null) {
+internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), val problem: String? = null,
+                                  val issue: AnalysisIssue? = null) {
     val events get() = moments.map { it.event }.distinct()
     val sound get() = events.singleOrNull()?.label ?: "여러 아기 소리"
 }
@@ -23,7 +24,7 @@ internal object SoundTimeline {
     private data class Vote(val event: VocalEvent?, val strong: Boolean = false, val conflict: Boolean = false)
 
     fun decide(audio: SoundAnalysis): SoundDecision {
-        audio.problem?.let { return SoundDecision(problem = it) }
+        audio.problem?.let { return SoundDecision(problem = it, issue = audio.issue) }
         // The fallback keeps callers with one already-aggregated observation conservative.
         val frames = audio.frames.ifEmpty { listOf(SoundFrame(0, audio.cues)) }
         val votes = frames.map { vote(it.cues) }
@@ -37,13 +38,23 @@ internal object SoundTimeline {
         }
         val conflictCount = votes.count { it.conflict }
         if (moments.isEmpty() || conflictCount >= moments.size) {
+            val backgroundDominant = frames.count { frame ->
+                val background = frame.cues.filter { it.label == "배경 소리" && it.score.isFinite() && it.score in 0f..1f }
+                    .maxOfOrNull { it.score } ?: 0f
+                val voice = frame.cues.filter { it.label != "배경 소리" && it.score.isFinite() && it.score in 0f..1f }
+                    .maxOfOrNull { it.score } ?: 0f
+                background >= .65f && background > voice * 1.25f
+            } > frames.size / 2
             return SoundDecision(problem = if (conflictCount > 0)
                 "웃음·울음이나 높은 소리가 겹쳐 한마디로 표현하기 어려워요. 다시 듣고 한 가지 소리가 또렷한 구간을 골라 주세요."
-            else "이 구간에서는 아기 소리 단서를 충분히 찾지 못했어요. 소리가 또렷한 구간을 다시 골라 주세요.")
+            else if (backgroundDominant) "음악이나 주변 소리 단서가 더 뚜렷해요. 다시 들어보고 아기 소리가 잘 들리는 구간을 골라 주세요."
+            else "소리는 읽었지만 아기 발성인지 충분히 구분하지 못했어요. 아기 소리가 맞아도 놓칠 수 있어요. 다시 듣고 짧은 구간을 골라 주세요.",
+                issue = if (conflictCount > 0) AnalysisIssue.MIXED_VOCAL else if (backgroundDominant)
+                    AnalysisIssue.BACKGROUND_DOMINANT else AnalysisIssue.INFANT_UNCONFIRMED)
         }
         // A resolved event must not erase a different, unresolved infant event elsewhere.
         if (votes.any { it.event != null && it.event !in accepted }) return SoundDecision(problem =
-            "중간에 다른 소리도 짧게 들려 한마디를 정하기 어려워요. 다시 듣고 구간을 조금 좁혀 주세요.")
+            "중간에 다른 소리도 짧게 들려 한마디를 정하기 어려워요. 다시 듣고 구간을 조금 좁혀 주세요.", issue = AnalysisIssue.MIXED_VOCAL)
         if (accepted.size == 1) {
             val event = accepted.single()
             val oppositeLabels = when (event) {
@@ -54,7 +65,7 @@ internal object SoundTimeline {
             if (frames.indices.any { index -> votes[index].event == null && frames[index].cues.any {
                     it.label in oppositeLabels && it.score.isFinite() && it.score in .65f..1f
                 } }) return SoundDecision(problem =
-                "중간에 웃음이나 울음이 함께 들려요. 한 가지 소리가 또렷한 구간을 골라 주세요.")
+                "중간에 웃음이나 울음이 함께 들려요. 한 가지 소리가 또렷한 구간을 골라 주세요.", issue = AnalysisIssue.MIXED_VOCAL)
         }
         return SoundDecision(moments = moments)
     }
