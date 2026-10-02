@@ -80,7 +80,7 @@ class FullCaptureDeviceTest {
             compose.onAllNodes(hasText("녹화 시작") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
         }
         compose.onNodeWithText("최대 2분 담고, 20초까지 골라요.").assertExists()
-        compose.onNodeWithText("녹화 시작").performScrollTo().performClick()
+        compose.onNodeWithText("녹화 시작").assertIsDisplayed().performClick()
         compose.waitUntil(130_000) {
             compose.onAllNodesWithText("어느 순간을 들어볼까요?").fetchSemanticsNodes().isNotEmpty()
         }

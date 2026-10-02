@@ -118,7 +118,12 @@ internal val PaleApricot = Color(0xFFFFEEE1)
 internal val Line = Color(0xFFE8E3D9)
 internal val White = Color(0xFFFFFFFF)
 
-private enum class Page { HOME, CAPTURE, TIMELINE, GUIDE, PRIVACY, TERMS, ALBUM, PAYWALL }
+internal fun captureAllowanceText(full: Boolean): String {
+    val limits = CaptureLimits.forAccess(full)
+    return "${limits.minutes}분 촬영 · ${limits.analysisSeconds}초 분석"
+}
+
+private enum class Page { HOME, CAPTURE, TIMELINE, GUIDE, PRIVACY, TERMS, ALBUM, PAYWALL, ABOUT }
 
 class MainActivity : ComponentActivity() {
     private var stopCaptureOnBackground: (() -> Unit)? = null
@@ -173,6 +178,7 @@ internal fun JigeumApp(
     var busy by remember { mutableStateOf(false) }
     var sharing by remember { mutableStateOf(false) }
     var privacyReturn by rememberSaveable { mutableStateOf(Page.GUIDE) }
+    var aboutReturn by rememberSaveable { mutableStateOf(Page.HOME) }
     var paywallReturn by rememberSaveable { mutableStateOf(Page.HOME) }
     var requestedFeature by rememberSaveable { mutableStateOf<AppFeature?>(null) }
     var paywallNotice by rememberSaveable { mutableStateOf<String?>(null) }
@@ -245,6 +251,7 @@ internal fun JigeumApp(
     fun goBack() {
         when (page) {
             Page.PRIVACY, Page.TERMS -> page = privacyReturn
+            Page.ABOUT -> page = aboutReturn
             Page.PAYWALL -> closePass()
             else -> page = Page.HOME
         }
@@ -276,7 +283,10 @@ internal fun JigeumApp(
                                     }
                                 } else when (page) {
                                     Page.HOME -> HomeScreen(observations,
-                                        onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE })
+                                        testDistribution = testDistribution, premium = billingState.isPremium,
+                                        onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
+                                        onPremium = { showPass(null, Page.HOME) },
+                                        onAbout = { aboutReturn = Page.HOME; page = Page.ABOUT })
                                     Page.CAPTURE -> CaptureFlow(
                                         authorizeVisual = { access.canUse(AppFeature.VISUAL_ANALYSIS) },
                                         onBack = { page = Page.HOME }, saving = busy,
@@ -339,7 +349,8 @@ internal fun JigeumApp(
                                                     onContinue = close, freeContinuationLabel = "같은 구간 소리로 계속하기", onFree = close,
                                                     onBack = close, onPrivacy = { policy = "privacy" }, onTerms = { policy = "terms" },
                                                     onReviewActivate = billingManager::activateReviewAccess,
-                                                    onReviewDeactivate = billingManager::deactivateReviewAccess)
+                                                    onReviewDeactivate = billingManager::deactivateReviewAccess,
+                                                    testDistribution = testDistribution)
                                             }
                                         })
                                     Page.TIMELINE -> TimelineScreen(observations, mediaIds,
@@ -371,6 +382,10 @@ internal fun JigeumApp(
                                             }
                                         } })
                                     Page.GUIDE -> GuideScreen(testDistribution = testDistribution,
+                                        premium = billingState.isPremium, recordCount = observations.size,
+                                        onPremium = { showPass(null, Page.GUIDE) },
+                                        onAbout = { aboutReturn = Page.GUIDE; page = Page.ABOUT },
+                                        onTerms = { privacyReturn = Page.GUIDE; page = Page.TERMS },
                                         onPrivacy = { privacyReturn = Page.GUIDE; page = Page.PRIVACY },
                                         onDeleteAll = {
                                             update({ store.deleteAll()
@@ -386,6 +401,7 @@ internal fun JigeumApp(
                                         onRestore = { showPass(null, Page.GUIDE); billingManager.restore() })
                                     Page.PRIVACY -> PrivacyPolicyScreen { goBack() }
                                     Page.TERMS -> ServiceTermsScreen { goBack() }
+                                    Page.ABOUT -> AnalysisAboutScreen(onBack = ::goBack)
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
                                         AlbumScreen(observations, testDistribution || billingState.isPremium,
                                             onPremium = { showPass(AppFeature.PDF, Page.ALBUM) }, onMessage = ::notify,
@@ -415,7 +431,8 @@ internal fun JigeumApp(
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
                                         onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
                                         onReviewActivate = billingManager::activateReviewAccess,
-                                        onReviewDeactivate = billingManager::deactivateReviewAccess)
+                                        onReviewDeactivate = billingManager::deactivateReviewAccess,
+                                        testDistribution = testDistribution)
                                 }
                             }
                         }
@@ -454,23 +471,35 @@ private fun AppNavigation(current: Page, rail: Boolean = false, onSelect: (Page)
 }
 
 @Composable
-private fun HomeScreen(
-    observations: List<Observation>, onRecord: () -> Unit, onTimeline: () -> Unit
+internal fun HomeScreen(
+    observations: List<Observation>, onRecord: () -> Unit, onTimeline: () -> Unit,
+    onPremium: () -> Unit, onAbout: () -> Unit, testDistribution: Boolean, premium: Boolean
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 24.dp)
-    ) {
+    Column(Modifier.fillMaxSize()) {
+      LazyColumn(
+        modifier = Modifier.weight(1f).fillMaxWidth(),
+        contentPadding = PaddingValues(bottom = 20.dp)
+      ) {
         item {
-            TopBar("아가톡")
+            Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("아가톡", color = Ink, fontSize = 30.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                OutlinedButton(onClick = onPremium, modifier = Modifier.heightIn(min = 48.dp).testTag("home-pass"),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Ink)) {
+                    Text(if (testDistribution) "테스트 이용 안내" else if (premium) "내 이용권" else "전체 이용권")
+                }
+            }
+            Spacer(Modifier.height(8.dp))
             Text(
                 "지금 내 기분이 그래\n아기의 소리를 듣고, 한마디로 남겨요.",
                 modifier = Modifier.padding(horizontal = 24.dp), color = Muted,
                 fontSize = 15.sp, lineHeight = 23.sp
             )
             Spacer(Modifier.height(18.dp))
-            HeroRecordCard(onRecord)
-            Spacer(Modifier.height(22.dp))
+            HeroRecordCard()
+            TextButton(onClick = onAbout, modifier = Modifier.padding(horizontal = 12.dp).heightIn(min = 48.dp).testTag("home-about")) {
+                Text("어떤 근거로 아기말을 만들까요?", color = Ink, fontSize = 13.sp)
+            }
+            Spacer(Modifier.height(6.dp))
             Row(Modifier.fillMaxWidth().padding(horizontal = 24.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("최근 번역", color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 Text("전체 보기  →", color = Muted, fontSize = 13.sp, modifier = Modifier.heightIn(min = 48.dp).clickable(onClick = onTimeline).padding(12.dp))
@@ -484,11 +513,21 @@ private fun HomeScreen(
             Spacer(Modifier.height(22.dp))
             PrivacyNote()
         }
+      }
+      // The main action stays in thumb reach, independent of recent-record length.
+      Surface(color = Cream, modifier = Modifier.fillMaxWidth()) {
+          Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp)) {
+              PrimaryButton("아기말 번역하기", onRecord)
+              Text((if (testDistribution) "전체 기능 테스트" else if (premium) "전체 이용권" else "무료") +
+                  " · " + captureAllowanceText(testDistribution || premium), color = Muted, fontSize = 12.sp,
+                  textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("home-access-summary"))
+          }
+      }
     }
 }
 
 @Composable
-private fun HeroRecordCard(onRecord: () -> Unit) {
+private fun HeroRecordCard() {
     Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         .clip(RoundedCornerShape(28.dp)).background(PaleSage).padding(24.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -499,9 +538,6 @@ private fun HeroRecordCard(onRecord: () -> Unit) {
             }
             Image(painterResource(R.drawable.hero_touch), null, contentScale = ContentScale.Fit, modifier = Modifier.size(80.dp))
         }
-        Spacer(Modifier.height(20.dp))
-        PrimaryButton("아기말 번역하기", onRecord)
-        Text("촬영·소리 분석은 무료예요", color = Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 10.dp))
     }
 }
 
@@ -666,27 +702,36 @@ private fun formatDate(timestamp: Long): String =
 
 @Composable
 private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTools: @Composable () -> Unit,
-                        onRestore: () -> Unit, testDistribution: Boolean = false) {
+                        onRestore: () -> Unit, onPremium: () -> Unit, onAbout: () -> Unit, onTerms: () -> Unit,
+                        premium: Boolean, recordCount: Int, testDistribution: Boolean = false) {
     var confirmDelete by remember { mutableStateOf(false) }
+    var tips by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+    var supportError by remember { mutableStateOf<String?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
-            TopBar("아기와 대화하는 시간", "돌봄 힌트")
-            Text("6~18개월 아기를 위한 대화 힌트예요. 소리를 맞히려 하기보다 신호에 천천히 반응해 보세요.",
-                color = Muted, fontSize = 15.sp, lineHeight = 22.sp,
-                modifier = Modifier.padding(horizontal = 24.dp))
-            Spacer(Modifier.height(25.dp))
-            GuideCard("01", "잠깐 멈추고 살펴보기", "표정, 몸짓, 주변 소리와 방금 있었던 일을 함께 살펴보세요.", PaleSage)
-            GuideCard("02", "짧게 말로 답하기", "아기가 낸 소리를 따라 하거나 지금 보이는 것을 말해 주세요.", PaleApricot)
-            GuideCard("03", "다시 반응할 시간 주기", "서두르지 않고 잠시 기다리면, 아기가 다시 소리나 몸짓으로 답할 수 있어요.", PaleSage)
-            Spacer(Modifier.height(10.dp))
-            Text("걱정되는 증상이 있거나 평소와 다른 상태가 계속되면 소아청소년과 전문가에게 상담하세요.",
-                modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
-            Spacer(Modifier.height(35.dp))
+            TopBar("돌봄 · 내 정보")
+            Column(Modifier.padding(horizontal = 24.dp)) {
+                Text(if (testDistribution) "전체 기능 테스트 중" else if (premium) "전체 이용권 사용 중" else "무료로 사용 중",
+                    color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(captureAllowanceText(testDistribution || premium) +
+                    if (testDistribution || premium) " · 표정 관찰 · PDF" else " · 결과 저장", color = Muted, fontSize = 14.sp,
+                    lineHeight = 22.sp, modifier = Modifier.padding(top = 8.dp))
+                Spacer(Modifier.height(16.dp))
+                PrimaryButton(if (testDistribution) "테스트 이용 안내" else "전체 이용권 · 결제", onPremium)
+                if (!testDistribution) TextButton(onClick = onRestore, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text("구매 복원", color = Ink)
+                }
+                Text(if (testDistribution) "이 설치본만 전체 기능이 열려 있어요. Play 테스트 참여 계정과 구매 권한은 별개예요."
+                    else "앱 회원가입은 없어요. 결제·구매 복원은 Google Play 계정 기준이에요. 비공개 테스터 등록만으로 유료 기능이 열리지는 않아요.",
+                    color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                Spacer(Modifier.height(24.dp))
+                Text("내 기록 관리", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("이 기기에 남긴 순간 ${recordCount}개", color = Muted, fontSize = 14.sp, modifier = Modifier.padding(top = 8.dp))
+            }
+            Spacer(Modifier.height(8.dp))
             dataTools()
-            if (testDistribution) Text("${BuildConfig.VERSION_NAME} · 테스트 중에는 표정 관찰과 PDF도 바로 사용할 수 있어요. 정식 버전에서는 이용권이 필요해요.",
-                color = Muted, fontSize = 13.sp, lineHeight = 20.sp, modifier = Modifier.padding(24.dp))
-            else TextButton(onClick = onRestore, modifier = Modifier.padding(horizontal = 12.dp)) { Text("구매 복원 · 이용권 관리", color = Ink) }
-            Text("내 데이터", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,
+            Text("기기 안에 보관해요", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))
             Text("번역 문장과 선택해 보관한 장면은 이 기기에 남아요. 저장한 장면은 기록에서 재생·내려받을 수 있어요. JSON·CSV에는 문장과 메모만 담겨요.",
@@ -710,6 +755,32 @@ private fun GuideScreen(onDeleteAll: () -> Unit, onPrivacy: () -> Unit, dataTool
                         } else confirmDelete = true
                     }.padding(17.dp)
             )
+            Spacer(Modifier.height(24.dp))
+            Column(Modifier.padding(horizontal = 24.dp)) {
+                Text("도움말과 문의", color = Ink, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                TextButton(onClick = onAbout, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Text("분석 원리 · 참고자료 보기", color = Ink)
+                }
+                TextButton(onClick = onTerms, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("서비스 이용 조건", color = Ink) }
+                TextButton(onClick = {
+                    supportError = null
+                    runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, "mailto:bsfire1237@gmail.com".toUri())) }
+                        .onFailure { supportError = "메일 앱을 열지 못했어요. bsfire1237@gmail.com으로 문의해 주세요." }
+                }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("문의 · bsfire1237@gmail.com", color = Ink) }
+                supportError?.let { Text(it, color = Muted, fontSize = 13.sp, lineHeight = 20.sp) }
+                Text("운영자 최용우 · ${BuildConfig.VERSION_NAME}", color = Muted, fontSize = 12.sp)
+                Spacer(Modifier.height(16.dp))
+                TextButton(onClick = { tips = !tips }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Text(if (tips) "아기와 대화하는 팁 접기" else "아기와 대화하는 팁 보기", color = Ink)
+                }
+            }
+            if (tips) {
+                GuideCard("01", "잠깐 멈추고 살펴보기", "표정, 몸짓, 주변 소리와 방금 있었던 일을 함께 살펴보세요.", PaleSage)
+                GuideCard("02", "짧게 말로 답하기", "아기가 낸 소리를 따라 하거나 지금 보이는 것을 말해 주세요.", PaleApricot)
+                GuideCard("03", "다시 반응할 시간 주기", "서두르지 않고 잠시 기다리면, 아기가 다시 소리나 몸짓으로 답할 수 있어요.", PaleSage)
+                Text("걱정되는 증상이 있거나 평소와 다른 상태가 계속되면 소아청소년과 전문가에게 상담하세요.",
+                    modifier = Modifier.padding(horizontal = 24.dp), color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
+            }
         }
     }
 }

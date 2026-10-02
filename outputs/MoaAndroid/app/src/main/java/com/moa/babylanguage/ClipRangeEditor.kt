@@ -3,6 +3,7 @@ package com.moa.babylanguage
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitHorizontalTouchSlopOrCancellation
@@ -68,6 +69,12 @@ internal object ClipRangeEdits {
         return ClipRange(current.startMs + delta, current.endMs + delta)
     }
 
+    fun center(range: ClipRange, atMs: Long, durationMs: Long, maxSelectionMs: Long): ClipRange {
+        val current = fit(range, durationMs, maxSelectionMs)
+        val target = atMs.coerceIn(0, durationMs) - current.durationMs / 2
+        return move(current, target - current.startMs, durationMs, maxSelectionMs)
+    }
+
     fun time(ms: Long) = "%d:%02d.%d".format(java.util.Locale.ROOT, ms / 60_000, ms / 1_000 % 60, ms / 100 % 10)
     fun seconds(ms: Long) = if (ms % 1_000 == 0L) "${ms / 1_000}" else "${ms / 1_000}.${ms / 100 % 10}"
 }
@@ -106,13 +113,19 @@ internal fun ClipRangeEditor(
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("${ClipRangeEdits.time(current.startMs)} – ${ClipRangeEdits.time(current.endMs)} · ${ClipRangeEdits.seconds(current.durationMs)}초",
             color = Ink, fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("selected-range"))
-        Text("양끝을 끌면 길이 조절, 가운데를 끌면 구간 이동", color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+        Text("양끝 손잡이로 시작·끝을 맞춰요.\n가운데를 끌면 선택 구간이 통째로 움직여요.", color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text("시작 ${ClipRangeEdits.time(current.startMs)}", color = Ink, fontSize = 13.sp)
+            Text("끝 ${ClipRangeEdits.time(current.endMs)}", color = Ink, fontSize = 13.sp)
+        }
 
         TimelineTrack(clip, current, maxSelectionMs, enabled, visibleStart, viewDuration, preview, ::emit)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(ClipRangeEdits.time(visibleStart), color = Muted, fontSize = 12.sp)
             Text(ClipRangeEdits.time(visibleStart + viewDuration), color = Muted, fontSize = 12.sp)
         }
+        Text("선택 영역 밖을 톡 누르면 그 순간으로 이동해요.", color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
         if (preview == null) Text("소리 파형 준비 중… 구간은 먼저 고를 수 있어요.", color = Muted, fontSize = 12.sp)
         else preview?.notice?.let { Text(it, color = Muted, fontSize = 12.sp, lineHeight = 18.sp) }
 
@@ -137,10 +150,18 @@ internal fun ClipRangeEditor(
                     onChange(ClipRangeEdits.move(initial, delta, clip.durationMs, maxSelectionMs))
                 }
             }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-            Icon(Icons.Outlined.ChevronLeft, null, Modifier.size(20.dp), tint = Ink)
-            Icon(Icons.Outlined.DragHandle, null, Modifier.padding(horizontal = 8.dp).size(20.dp), tint = Ink)
-            Text("구간 통째로 옮기기", Modifier.padding(vertical = 12.dp), color = if (enabled) Ink else Muted, fontSize = 14.sp)
-            Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp), tint = Ink)
+            IconButton(onClick = { shift(-500) }, enabled = enabled && current.startMs > 0,
+                modifier = Modifier.size(48.dp).testTag("clip-move-back")) {
+                Icon(Icons.Outlined.ChevronLeft, "선택 구간 0.5초 앞으로", tint = if (enabled && current.startMs > 0) Ink else Muted.copy(alpha = .5f))
+            }
+            Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(Icons.Outlined.DragHandle, null, Modifier.size(20.dp), tint = Ink)
+                Text("구간 통째로 옮기기", color = if (enabled) Ink else Muted, fontSize = 13.sp)
+            }
+            IconButton(onClick = { shift(500) }, enabled = enabled && current.endMs < clip.durationMs,
+                modifier = Modifier.size(48.dp).testTag("clip-move-forward")) {
+                Icon(Icons.Outlined.ChevronRight, "선택 구간 0.5초 뒤로", tint = if (enabled && current.endMs < clip.durationMs) Ink else Muted.copy(alpha = .5f))
+            }
         }
         if (clip.durationMs > 5_000) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -198,6 +219,15 @@ private fun TimelineTrack(clip: LocalClip, range: ClipRange, maxMs: Long, enable
         val trackWidth = with(density) { maxWidth.toPx() }
         fun x(ms: Long) = ((ms - viewStart).toFloat() / viewDuration * trackWidth)
         Canvas(Modifier.fillMaxSize().pointerInput(enabled, viewStart, viewDuration, maxMs) {
+            if (!enabled) return@pointerInput
+            detectTapGestures { at ->
+                val ms = viewStart + (at.x / size.width.coerceAtLeast(1) * viewDuration).roundToLong()
+                val left = (current.startMs - viewStart).toFloat() / viewDuration * size.width
+                val right = (current.endMs - viewStart).toFloat() / viewDuration * size.width
+                if (ms !in current.startMs..current.endMs && abs(at.x - left) > handleHit && abs(at.x - right) > handleHit)
+                    emit(ClipRangeEdits.center(current, ms, clip.durationMs, maxMs))
+            }
+        }.pointerInput(enabled, viewStart, viewDuration, maxMs) {
             if (!enabled) return@pointerInput
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false)
@@ -270,8 +300,10 @@ private fun TimelineTrack(clip: LocalClip, range: ClipRange, maxMs: Long, enable
                 drawRoundRect(Ink, topLeft = Offset(left, 2.dp.toPx()), size = Size(right - left, size.height - 4.dp.toPx()),
                     cornerRadius = CornerRadius(6.dp.toPx()), style = Stroke(2.dp.toPx()))
                 listOf(left, right).forEach { edge ->
-                    drawRoundRect(Ink, Offset(edge - 7.dp.toPx(), 0f), Size(14.dp.toPx(), size.height), CornerRadius(5.dp.toPx()))
-                    drawLine(Color.White, Offset(edge, size.height / 2 - 10.dp.toPx()), Offset(edge, size.height / 2 + 10.dp.toPx()), 2.dp.toPx(), StrokeCap.Round)
+                    drawRoundRect(Ink, Offset(edge - 10.dp.toPx(), 0f), Size(20.dp.toPx(), size.height), CornerRadius(5.dp.toPx()))
+                    listOf(-2.dp.toPx(), 2.dp.toPx()).forEach { bar ->
+                        drawLine(Color.White, Offset(edge + bar, size.height / 2 - 10.dp.toPx()), Offset(edge + bar, size.height / 2 + 10.dp.toPx()), 1.5.dp.toPx(), StrokeCap.Round)
+                    }
                 }
             }
         }

@@ -3,6 +3,11 @@ package com.moa.babylanguage
 import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.SemanticsActions
@@ -121,6 +126,58 @@ class ClipRangeEditorTest {
             assertTrue(selected.value.startMs > 10_000)
             assertEquals(20_000L, selected.value.endMs)
             assertTrue(selected.value.durationMs >= 1_000)
+        }
+    }
+
+    @Test fun tappingOutsideSelectionMovesWindowButPreservesItsLength() {
+        val selected = mutableStateOf(ClipRange(0, 10_000))
+        compose.setContent { MaterialTheme {
+            ClipRangeEditor(missingClip(60_000), selected.value, 10_000, true) { selected.value = it }
+        } }
+        compose.onNodeWithTag("clip-range").performTouchInput { click(Offset(width * .75f, height / 2f)) }
+        compose.runOnIdle {
+            assertTrue(selected.value.startMs >= 39_000)
+            assertEquals(10_000L, selected.value.durationMs)
+            assertTrue(selected.value.endMs <= 60_000)
+        }
+        val before = selected.value
+        compose.onNodeWithTag("clip-range").performTouchInput {
+            click(Offset(width * ((before.startMs + before.endMs) / 2f / 60_000), height / 2f))
+        }
+        compose.runOnIdle { assertEquals(before, selected.value) }
+    }
+
+    @Test fun simpleMoveButtonsPreserveLengthAndClampAtSourceEnds() {
+        val selected = mutableStateOf(ClipRange(0, 10_000))
+        compose.setContent { MaterialTheme {
+            ClipRangeEditor(missingClip(60_000), selected.value, 10_000, true) { selected.value = it }
+        } }
+        compose.onNodeWithTag("clip-move-back").assertIsNotEnabled()
+        compose.onNodeWithTag("clip-move-forward").performClick()
+        compose.runOnIdle { assertEquals(ClipRange(500, 10_500), selected.value) }
+        compose.onNodeWithTag("clip-move-back").performClick()
+        compose.runOnIdle { assertEquals(ClipRange(0, 10_000), selected.value) }
+        compose.runOnIdle { selected.value = ClipRange(50_000, 60_000) }
+        compose.onNodeWithTag("clip-move-forward").assertIsNotEnabled()
+    }
+
+    @Test fun verticalScrollOverUnselectedTimelineDoesNotMoveTheClipWindow() {
+        val selected = mutableStateOf(ClipRange(0, 10_000))
+        var scrolled = 0
+        compose.setContent { MaterialTheme {
+            val scroll = rememberScrollState()
+            scrolled = scroll.value
+            Column(Modifier.fillMaxWidth().height(500.dp).verticalScroll(scroll)) {
+                ClipRangeEditor(missingClip(60_000), selected.value, 10_000, true) { selected.value = it }
+                Spacer(Modifier.height(800.dp))
+            }
+        } }
+        compose.onNodeWithTag("clip-range").performTouchInput {
+            swipe(Offset(width * .8f, height * .9f), Offset(width * .8f, height * .1f), 400)
+        }
+        compose.runOnIdle {
+            assertEquals(ClipRange(0, 10_000), selected.value)
+            assertTrue("The parent must scroll, not merely swallow the gesture", scrolled > 0)
         }
     }
 

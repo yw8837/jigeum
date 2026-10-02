@@ -1,10 +1,26 @@
-# 0.5.6/code20 실행 안내
+# 0.5.7/code21 실행 안내
 
-전체 계측246통과/0실패/1명시제외, 갤러리15개/기존 미디어7개 포함. 서명 UI는 결과 저장 앞부분의 통과 증거와 이후 기록 중심 실행의 통과를 합쳐 검증했다. [최신 QA](qa/gallery-0.5.6/README.md)를 따른다. 새 전달 APK/AAB는 `outputs/Agattok-0.5.6-*-code20.*`. 무료/전체 시간 상한은0.5.4와 같다.
+먼저 [HANDOFF](HANDOFF.md)와 [최신 QA](qa/ux-feedback-0.5.7/README.md)를 읽는다. 관련8개 클래스62통과/0실패/0제외·최종 서명 UI7시나리오·서명 패키징 완료다. 이번 버전에서 전체 클래스를 재실행한 것은 아니며0.5.6 전체246통과/1명시제외는 이전 기준본이다.
 
-갤러리 QA: `GalleryMediaTests`15개 / `TranslatedMediaTests`7개(합성 fixture만), `outputs/QA/gallery_ui.py --preview-apk <새 test.apk> --release-apk <새 release.apk> --source <권리 확인 로컬 파일>`, 전체 `instrument.py --timeout 1500 --allow-skip com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes`. 기록 전용 `--record-only`는 같은 최종 서명 APK의 앞부분 결과 저장 증거와 저장된 기록이 있을 때만 이어가고, 앞부분 실패 결과를 통과로 덮어쓰지 않는다. Gradle/ADB는 한 명. 실제 아기자료가 없는 전용 기기만 사용한다. 원본·파생 PNG/MP4는 Git에 넣지 않는다. 기존 Media3 1.9.0 의존성·플랫폼 진단 전송 비활성화 유지.
+## 빌드·재현
 
-Play Alpha는release20 업로드·출시 저장 완료이며 공개 전화 문자 인증/저장 때문에 검토 미전송이다. [현재 상태](release/20261002/PLAY-STATUS.md). preview APK는 Play 제출 불가. 사용자폰 자동 업데이트 전환은code21 이상의 후속 versionCode 및 실제 Play 서명/설치 경로로 검증해야 한다. 공개 갤러리 정책은revision `jigeum-verifier-00005-ph7`에 반영됐으며 재배포할 필요 없다.
+- Gradle/ADB 담당자는 한 명이며 실제 아기 자료가 없는 전용 기기만 사용한다. 프로젝트별 JDK/SDK/serial·evidence 경로를 지정한다.
+- debug/androidTest/lint 빌드: `assembleDebug assembleDebugAndroidTest lintRelease`. 기존 빌드 도구·Media3 **1.8.0**·플랫폼 진단 전송 비활성화를 유지했다. 새 버전 의존성은 이번 UI 변경에 포함하지 않았다.
+- 변경 범위 계측은 `UiFeedbackTest`, `ClipRangeEditorTest`, `AccessNavigationTests`, `CaptureAccessLimitsTest`, `CaptureDeviceTest`, `FullCaptureDeviceTest`, `MemoryArtifactsTests`, `InputRequiredRegressionTest`다. 실제60/120초 촬영을 포함하며 제한900초·test별 완료·요약 수·설치 해시를 검사했다. 명령/로그는 최신 QA를 따른다.
+- 최종 서명 UI 재현: `python outputs/QA/ux_feedback_ui.py`를 실행한다. 인자 없는 하네스이며code21의preview/release APK와합성fixture 경로가기본값으로지정돼있다. 작은폰·200%글자·태블릿·실제2분 녹화·합성 무입력·release 무료 복구를 실행한다. 기존 gallery/capture 하네스는 별도 계약 재현에 사용하며 과거 UI 선택기를 현재 통과 증거로 쓰지 않는다.
+- 서명 빌드는 기존 `tools/release/build-test-apk.ps1`, `tools/release/build-play-bundle.ps1`를 사용한다. `bundlePreview`는 차단한다. 업로드키·심사코드·원본·구매 토큰·빌드 캐시는 커밋하지 않는다.
+
+## 전달·Play
+
+- 산출물: `outputs/Agattok-0.5.7-test-code21.apk`, `Agattok-0.5.7-release-code21.apk`, `Agattok-0.5.7-release-code21.aab`. 기존 산출물을 같은 이름으로 덮어쓰지 않았다.
+- 다운로드 전달본은 `아가톡 테스트/아가톡-전체기능테스트.apk` 하나이며preview21과 해시 일치한다. 이 파일은 전체120초/20초를 열지만 Play12명14일 참여를 대신하지 않는다.
+- preview21 이후 자동 정식 전환에는code22 이상 및 실제 Play 서명/설치 경로 확인이 필요하다. 같은code21 release 수동 교체는 자동 업데이트가 아니다.
+- release20은Alpha 게시 완료. release21·그룹 변경은검토 전송·자동 검사 완료·Google 검토 중이며 최신 게시 여부는 [Play 상태](release/20261002/PLAY-STATUS.md)를 따른다. 그룹 가입·Play 참여·설치는 [초대 안내](release/20261002/TESTER-INVITE.md)를 따른다. Play 테스터 참여만으로 이용권을 만들지 않는다.
+- 상품/실거래/공개 프로덕션은 보류. 현재 UI 수정으로 정책 서버를 다시 배포하지 않았다. 기존revision `jigeum-verifier-00005-ph7`을 유지한다.
+
+## 0.5.6 기준본
+
+[앨범 QA](qa/gallery-0.5.6/README.md)는전체246통과/0실패/1명시제외와 카드·기록 서명 UI의 앞부분/후반 증거를 보존한다. GalleryMediaTests15개·TranslatedMediaTests7개 및 gallery_ui.py의record-only 제약을 따른다. 이 결과를0.5.7 전체 실행으로 재사용하지 않는다.
 
 ## 0.5.4 이하 실행 안내 이력
 

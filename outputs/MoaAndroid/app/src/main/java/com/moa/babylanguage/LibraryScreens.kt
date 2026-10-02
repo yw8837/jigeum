@@ -6,6 +6,8 @@ import androidx.core.net.toUri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +16,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -218,7 +223,7 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                 Spacer(Modifier.height(24.dp))
                 Text("표지의 색을 골라요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
-                ChoiceGrid(AlbumTheme.entries.map { it.label }, theme.label) { label -> themeName = AlbumTheme.entries.first { it.label == label }.name }
+                AlbumCoverChoices(theme) { themeName = it.name }
                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(value = includeNotes,
                     role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = { includeNotes = it }),
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
@@ -260,6 +265,30 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
 }
 
 @Composable
+internal fun AlbumCoverChoices(selected: AlbumTheme, onSelect: (AlbumTheme) -> Unit) {
+    AlbumTheme.entries.chunked(2).forEach { row ->
+        Row(Modifier.fillMaxWidth().padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            row.forEach { cover ->
+                val active = selected == cover
+                Column(Modifier.weight(1f).clip(RoundedCornerShape(16.dp))
+                    .background(androidx.compose.ui.graphics.Color(cover.paper))
+                    .border(if (active) 2.dp else 1.dp, if (active) Ink else Line, RoundedCornerShape(16.dp))
+                    .selectable(selected = active, role = Role.RadioButton) { onSelect(cover) }
+                    .testTag("album-cover-${cover.name.lowercase()}").padding(16.dp)) {
+                    Text("아기말북", color = androidx.compose.ui.graphics.Color(cover.accent),
+                        fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                    Text("우리 아이의\n작은 이야기", color = Ink, fontSize = 13.sp, lineHeight = 20.sp,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp))
+                    Text(cover.label, color = Ink, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                    Text(if (active) "선택됨" else "이 표지 선택", color = Muted, fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
 internal fun PremiumScreen(
     state: BillingUiState,
     onPurchase: (BillingPlan) -> Unit,
@@ -274,7 +303,8 @@ internal fun PremiumScreen(
     onPrivacy: () -> Unit,
     onTerms: () -> Unit,
     onReviewActivate: (String) -> Unit,
-    onReviewDeactivate: () -> Unit
+    onReviewDeactivate: () -> Unit,
+    testDistribution: Boolean = false
 ) {
     val context = LocalContext.current
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -302,8 +332,8 @@ internal fun PremiumScreen(
                 if (!state.isPremium && notice != null) Text(notice, color = Muted,
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
                 Spacer(Modifier.height(18.dp))
-                if (state.isPremium) {
-                    Text(if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else "전체 이용권을 확인했어요.",
+                if (testDistribution || state.isPremium) {
+                    Text(if (testDistribution) "이 설치본은 전체 기능 테스트용이에요." else if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else "전체 이용권을 확인했어요.",
                         color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(12.dp))
                     PrimaryButton(continueLabel, onContinue)
@@ -311,13 +341,13 @@ internal fun PremiumScreen(
                 Spacer(Modifier.height(16.dp))
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(PaleSage).padding(18.dp)) {
                     Text("이용권으로 더할 수 있는 것", color = Ink, fontWeight = FontWeight.Bold)
-                    Text("최대 2분 촬영하고 20초까지 구간 선택\n같은 구간의 얼굴·입 열림 살펴보기\n세 가지 표지로 월별 아기말북 PDF 만들기",
+                    Text("최대 2분 촬영하고 20초까지 구간 선택\n같은 구간의 얼굴·입 열림 살펴보기\n네 가지 표지로 월별 아기말북 PDF 만들기",
                         color = Ink, lineHeight = 25.sp, modifier = Modifier.padding(top = 10.dp))
                     Text("같은 소리 단서에는 같은 표현을 만들어요. 소리가 충분히 이어지면 더 풀어 쓰며, 구간 길이만으로 문장을 늘리지는 않아요. 표정 관찰은 마음의 뜻을 확정하지 않아요.",
                         color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(top = 12.dp))
                 }
                 Spacer(Modifier.height(22.dp))
-                if (!state.isPremium && state.options.isNotEmpty()) {
+                if (!testDistribution && !state.isPremium && state.options.isNotEmpty()) {
                     state.options.forEach { option ->
                         val monthly = option.plan == BillingPlan.MONTHLY
                         OutlinedButton(onClick = { onPurchase(option.plan) }, enabled = state.status == BillingStatus.READY,
@@ -331,15 +361,17 @@ internal fun PremiumScreen(
                             }
                         }
                     }
-                } else if (!state.isPremium) {
-                    Text(if (processing) "이용권 정보를 확인하고 있어요" else "지금은 이용권을 확인할 수 없어요",
+                } else if (!testDistribution && !state.isPremium) {
+                    Text(if (processing) "이용권 정보를 확인하고 있어요" else "현재 결제를 준비 중이에요",
                         color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
-                    Text("Google Play 연결과 상품 정보가 확인되면 실제 가격을 보여 드려요. 무료 기능은 지금 사용할 수 있어요.",
+                    Text("Google Play 상품 정보가 확인되면 여기에서 가격과 결제 버튼을 보여 드려요. 아직 결제할 수 없으며, 무료 기능은 지금 사용할 수 있어요.",
                         color = Muted, modifier = Modifier.padding(top = 10.dp), lineHeight = 23.sp)
                 }
-                state.message?.let { Text(it, color = Muted, fontSize = 14.sp, lineHeight = 22.sp, modifier = Modifier.padding(vertical = 14.dp)) }
-                if (processing) LinearProgressIndicator(Modifier.fillMaxWidth())
-                if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
+                if (!testDistribution) {
+                    state.message?.let { Text(it, color = Muted, fontSize = 14.sp, lineHeight = 22.sp, modifier = Modifier.padding(vertical = 14.dp)) }
+                    if (processing) LinearProgressIndicator(Modifier.fillMaxWidth())
+                    if (state.status in listOf(BillingStatus.ERROR, BillingStatus.UNAVAILABLE)) TextButton(onClick = onRetry) { Text("다시 확인하기") }
+                }
                 Spacer(Modifier.height(20.dp))
                 Text("계속 무료로 쓸 수 있어요", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 Text("1분 촬영·녹음·영상 가져오기와 10초 구간의 소리 번역은 계속 무료예요. 재생·구간 선택·문장 수정과 저장·기록 보기·영상·소리와 번역을 함께 보관·내려받기·공유하는 기능, PNG 공유·JSON 백업과 복원·주간 요약도 무료예요. 이미 만든 문장과 기록도 유지돼요.",
@@ -360,7 +392,9 @@ internal fun PremiumScreen(
                 TextButton(onClick = onPrivacy) { Text("개인정보처리방침", color = Ink) }
                 Text("이용권은 결제한 Play 계정 기준이에요. 다른 가족 계정으로 자동 공유되지 않아요. 앱 삭제나 기록 삭제로 구독이 해지되지는 않아요.",
                     color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
-                ReviewAccessSection(state, onReviewActivate, onReviewDeactivate, onRetry)
+                if (testDistribution) Text("Play 비공개 테스터 등록은 구매 권한을 제공하지 않아요. 이 테스트 설치본에서만 구매 없이 2분 촬영·20초 분석·표정 관찰·PDF를 사용할 수 있어요.",
+                    color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(vertical = 12.dp))
+                else ReviewAccessSection(state, onReviewActivate, onReviewDeactivate, onRetry)
             }
         }
     }

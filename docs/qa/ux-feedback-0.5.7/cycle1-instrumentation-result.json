@@ -1,0 +1,85 @@
+{
+  "status": "fail",
+  "tests": null,
+  "passed_tests": 60,
+  "failed_tests": 1,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [
+    "Expected exactly one nonempty OK summary",
+    "Runner reported a failure or harness timeout",
+    "Discovered, started, completed and summary counts do not agree",
+    "One or more tests failed"
+  ],
+  "seconds": 525.41,
+  "exit": 0,
+  "provenance": {
+    "app_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "2915c39d8bd3d467376446bc44340ce7e47b9acf37c53be0746d7d8da67855b4",
+      "bytes": 83485979
+    },
+    "test_apk": {
+      "path": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "70cc8255e821134b8b412291cbbfea9aebeb9d3085f33579706edf36a0db13b8",
+      "bytes": 2159995
+    },
+    "git": {
+      "sha": "985aa01c1e5bebcabac8799f0a1aa3c76281ff2c",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessNavigationTests.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureAccessLimitsTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptureDeviceTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ClipRangeEditorTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/FullCaptureDeviceTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/InputRequiredRegressionTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipRangeEditor.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/LibraryScreens.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MemoryArtifacts.kt",
+        "?? docs/UX-0.5.7.md",
+        "?? docs/qa/ux-feedback-0.5.7/",
+        "?? docs/release/20261002/google-group-captcha-pending.png",
+        "?? docs/release/20261002/play-release20-testers-two.png",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/UiFeedbackTest.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AnalysisAboutScreen.kt"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~WWK3fqSEy9hP9Ze33sYPWg==/com.moa.babylanguage-ZqNXbLHxjM8rnvfV1FEfaA==/base.apk",
+      "sha256": "2915c39d8bd3d467376446bc44340ce7e47b9acf37c53be0746d7d8da67855b4",
+      "expected_sha256": "2915c39d8bd3d467376446bc44340ce7e47b9acf37c53be0746d7d8da67855b4",
+      "version_code": 21,
+      "version_name": "0.5.7",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~Y8W35qXz2n-b0pOugr6rxg==/com.moa.babylanguage.test-ntjJIQrpuhUdpAvuNoACEA==/base.apk",
+      "sha256": "70cc8255e821134b8b412291cbbfea9aebeb9d3085f33579706edf36a0db13b8",
+      "expected_sha256": "70cc8255e821134b8b412291cbbfea9aebeb9d3085f33579706edf36a0db13b8",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  },
+  "selected_classes": [
+    "UiFeedbackTest",
+    "ClipRangeEditorTest",
+    "AccessNavigationTests",
+    "CaptureAccessLimitsTest",
+    "CaptureDeviceTest",
+    "FullCaptureDeviceTest",
+    "MemoryArtifactsTests",
+    "InputRequiredRegressionTest"
+  ]
+}

@@ -23,7 +23,7 @@ class InputRequiredRegressionTest {
         }
         compose.setContent { JigeumApp(compose.activity, store, billing) }
         compose.waitUntil(8_000) { compose.onAllNodesWithText("아기말 번역하기").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithText("아기말 번역하기").performScrollTo().performClick()
+        compose.onNodeWithText("아기말 번역하기").assertIsDisplayed().performClick()
         compose.onNodeWithText("녹음 없이 직접 번역").assertDoesNotExist()
         compose.onNodeWithText("들은 것").assertDoesNotExist()
         compose.onNodeWithText("이 문장 저장하기").assertDoesNotExist()

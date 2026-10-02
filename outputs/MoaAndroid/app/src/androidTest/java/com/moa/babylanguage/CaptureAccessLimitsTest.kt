@@ -69,7 +69,7 @@ class CaptureAccessLimitsTest {
 
     private fun click(text: String) {
         val node = compose.onNodeWithText(text)
-        if (text != "이 문장 저장하기") node.performScrollTo()
+        if (!node.isDisplayed()) node.performScrollTo()
         node.performClick()
     }
 

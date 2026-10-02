@@ -51,7 +51,7 @@ class AccessNavigationTests {
     private fun waitText(text: String) { compose.waitUntil(8_000) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() } }
     private fun click(text: String) {
         val node = compose.onNodeWithText(text)
-        if (text != "이 문장 저장하기") node.performScrollTo()
+        if (!node.isDisplayed()) node.performScrollTo()
         node.performClick()
     }
     private fun visual() { compose.onNodeWithTag("visual-analysis").performScrollTo().performClick() }

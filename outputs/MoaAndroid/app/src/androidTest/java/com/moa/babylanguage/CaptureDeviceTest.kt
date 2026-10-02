@@ -39,7 +39,11 @@ class CaptureDeviceTest {
         started = true
         compose.setContent { if (visible.value) CaptureFlow({ false }, {}, false, { _, _, _ -> }, { Text("이용권") }) }
     }
-    private fun click(text: String) { compose.onNodeWithText(text).performScrollTo().performClick() }
+    private fun click(text: String) {
+        val node = compose.onNodeWithText(text)
+        if (!node.isDisplayed()) node.performScrollTo()
+        node.performClick()
+    }
     private fun waitText(text: String, timeout: Long = 12_000) {
         compose.waitUntil(timeout) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
     }

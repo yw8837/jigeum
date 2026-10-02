@@ -36,7 +36,8 @@ import kotlin.coroutines.coroutineContext
 internal enum class AlbumTheme(val label: String, val accent: Int, val paper: Int) {
     SAGE("풀빛 하루", 0xFF52714C.toInt(), 0xFFF3F7F0.toInt()),
     APRICOT("살구빛 기억", 0xFF95582F.toInt(), 0xFFFFF3E9.toInt()),
-    BLUE("하늘빛 편지", 0xFF446C80.toInt(), 0xFFF0F6F9.toInt())
+    BLUE("하늘빛 편지", 0xFF446C80.toInt(), 0xFFF0F6F9.toInt()),
+    ROSE("분홍빛 미소", 0xFF8C5360.toInt(), 0xFFFFF0F3.toInt())
 }
 
 internal fun interface ArtifactShareLauncher {

@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "scenarios": [
+    "small: lower primary action, current allowance, pass/care routing, fourth cover",
+    "font200: lower primary action, current allowance, pass/care routing, fourth cover",
+    "tablet: lower primary action, current allowance, pass/care routing, fourth cover",
+    "actual signed preview: real 120-second automatic video stop, editor and fine controls",
+    "actual model synthetic no-baby input abstains instead of producing a saved baby phrase",
+    "release-small: lower primary action, current allowance, pass/care routing, fourth cover",
+    "final signed release: free allowance restored, no stored preview entitlement"
+  ],
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~PK5GUe3caokO1vOAbEPjdg==/com.moa.babylanguage-83Fbw1farfhg-XoMuWPvGQ==/base.apk",
+      "sha256": "2db0646f9cfc8528aa5cb84748e4f95b9b25e0a54c7e3ce790a4fda328d8cedb",
+      "expected_sha256": "2db0646f9cfc8528aa5cb84748e4f95b9b25e0a54c7e3ce790a4fda328d8cedb",
+      "version_code": 21,
+      "version_name": "0.5.7-test",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~lMVz1Qh0xmmo8u7u1VofnQ==/com.moa.babylanguage-KwtSE7lyXYhlwheBgHdSCw==/base.apk",
+      "sha256": "71367dbb5551aa2767f8ec384f9efdd4165bad4d8a2f46c830563c05890e1bef",
+      "expected_sha256": "71367dbb5551aa2767f8ec384f9efdd4165bad4d8a2f46c830563c05890e1bef",
+      "version_code": 21,
+      "version_name": "0.5.7",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "infant_intent_accuracy_tested": false,
+  "actual_preview_capture_seconds": 123.78
+}

@@ -249,6 +249,45 @@ internal fun CaptureFlow(
 
     val current = clip
     val lockedResult = result
+    fun startRecording() {
+        // Permissions can change after preview preparation; recheck at the actual action.
+        prepare()
+        if (hasPermission) {
+            generation++; message = null
+            recordingLimits = liveLimits()
+            val ok = if (audioOnly) capture.startAudio(recordingLimits, ::acceptFile)
+                else cameraRecorder?.let { capture.startVideo(it, recordingLimits, ::acceptFile) } ?: false
+            if (ok) { elapsed = 0; startedAt = SystemClock.elapsedRealtime(); recording = true }
+            else message = "시작하지 못했어요. 권한이나 다른 앱의 카메라·마이크 사용을 확인해 주세요."
+        }
+    }
+    fun analyzeSelected() {
+        if (!alive.get() || current == null) return
+        val useVisual = visual && current.hasVideo
+        if (useVisual && !hasFullAccess()) { visual = false; pass = true; return }
+        val range = ClipRange(selection.start.toLong(), selection.endInclusive.toLong())
+        if (!liveLimits().allowsAnalysis(range)) { limits = liveLimits(); pass = true; return }
+        stopPlayback++; cancelAnalysis(); analyzingVisual = useVisual
+        analyzingExtended = range.durationMs > CaptureLimits.FREE.analysisMs
+        analyzing = true; message = null
+        val request = generation
+        job = scope.launch {
+            try {
+                val analyzed = withTimeout(45_000) { analyzer.analyze(context, current.uri, range, useVisual) }
+                ensureActive()
+                if (request == generation && alive.get()) {
+                    if ((useVisual && !hasFullAccess()) || !liveLimits().allowsAnalysis(range)) {
+                        visual = false; limits = liveLimits()
+                        message = "이용권 확인이 필요해요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
+                    } else { result = analyzed.interpretation; message = analyzed.problem }
+                }
+            } catch (_: TimeoutCancellationException) { if (request == generation) message = "분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요." }
+            catch (e: CancellationException) { throw e }
+            catch (_: Exception) { if (request == generation) message = "이 구간을 분석하지 못했어요. 다시 재생해 보고 다른 구간이나 파일을 골라 주세요." }
+            catch (_: LinkageError) { if (request == generation) message = "이 기기에서 분석 모델을 실행하지 못했어요." }
+            finally { if (request == generation) analyzing = false }
+        }
+    }
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             TextButton(onClick = { exit() }, enabled = !saving) { Text("닫기", color = Muted) }
@@ -267,25 +306,8 @@ internal fun CaptureFlow(
                     Icon(Icons.Outlined.Mic, null, Modifier.size(64.dp), tint = Ink)
                 }
                 if (recording || finishing) {
-                    Text("${ClipRange.clock(elapsed * 1000L)} / ${ClipRange.clock(recordingLimits.captureMs)}", color = Ink, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                     Text(if (audioOnly) "마이크로 녹음 중이에요" else "영상과 소리를 함께 녹화 중이에요", color = Muted)
-                    PrimaryButton(if (finishing) "마무리 중…" else "촬영 마치기", {
-                        finishing = true; recording = false; capture.stop()
-                    }, enabled = !finishing)
                 } else {
-                    if (!hasPermission) PrimaryButton(if (audioOnly) "마이크 허용하기" else "카메라·마이크 허용하기", { prepare() })
-                    else PrimaryButton(if (audioOnly) "녹음 시작" else if (cameraRecorder == null) "카메라 연결 중…" else "녹화 시작", {
-                        // Permissions can change after preview preparation.
-                        prepare()
-                        if (hasPermission) {
-                            generation++; message = null
-                            recordingLimits = liveLimits()
-                            val ok = if (audioOnly) capture.startAudio(recordingLimits, ::acceptFile)
-                                else cameraRecorder?.let { capture.startVideo(it, recordingLimits, ::acceptFile) } ?: false
-                            if (ok) { elapsed = 0; startedAt = SystemClock.elapsedRealtime(); recording = true }
-                            else message = "시작하지 못했어요. 권한이나 다른 앱의 카메라·마이크 사용을 확인해 주세요."
-                        }
-                    }, enabled = !selecting && (audioOnly || cameraRecorder != null))
                     if (permissionDenied) TextButton(onClick = { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.parse("package:${context.packageName}"))) }) { Text("앱 설정에서 권한 확인") }
                     if (hasPermission && !audioOnly && canSwitch) TextButton(onClick = {
@@ -327,37 +349,6 @@ internal fun CaptureFlow(
                         Switch(checked = visual, enabled = !analyzing, onCheckedChange = null)
                     }
                 }
-                if (analyzing) {
-                    LinearProgressIndicator(Modifier.fillMaxWidth())
-                    Text("선택한 구간의 ${if (visual) "소리와 표정" else "소리"}를 살펴보고 있어요…", color = Ink)
-                    TextButton(onClick = { cancelAnalysis(); message = "분석을 취소했어요. 구간을 다시 고를 수 있어요." }) { Text("분석 취소") }
-                } else PrimaryButton(if (visual && current.hasVideo) "영상 + 소리로 번역하기" else "이 구간 소리로 번역하기", {
-                    if (!alive.get()) return@PrimaryButton
-                    val useVisual = visual && current.hasVideo
-                    if (useVisual && !hasFullAccess()) { visual = false; pass = true; return@PrimaryButton }
-                    val range = ClipRange(selection.start.toLong(), selection.endInclusive.toLong())
-                    if (!liveLimits().allowsAnalysis(range)) { limits = liveLimits(); pass = true; return@PrimaryButton }
-                    stopPlayback++; cancelAnalysis(); analyzingVisual = useVisual
-                    analyzingExtended = range.durationMs > CaptureLimits.FREE.analysisMs
-                    analyzing = true; message = null
-                    val request = generation
-                    job = scope.launch {
-                        try {
-                            val analyzed = withTimeout(45_000) { analyzer.analyze(context, current.uri, range, useVisual) }
-                            ensureActive()
-                            if (request == generation && alive.get()) {
-                                if ((useVisual && !hasFullAccess()) || !liveLimits().allowsAnalysis(range)) {
-                                    visual = false; limits = liveLimits()
-                                    message = "이용권 확인이 필요해요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
-                                } else { result = analyzed.interpretation; message = analyzed.problem }
-                            }
-                        } catch (_: TimeoutCancellationException) { if (request == generation) message = "분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요." }
-                        catch (e: CancellationException) { throw e }
-                        catch (_: Exception) { if (request == generation) message = "이 구간을 분석하지 못했어요. 다시 재생해 보고 다른 구간이나 파일을 골라 주세요." }
-                        catch (_: LinkageError) { if (request == generation) message = "이 기기에서 분석 모델을 실행하지 못했어요." }
-                        finally { if (request == generation) analyzing = false }
-                    }
-                })
                 if (!analyzing) TextButton(onClick = { reset() }) { Text("다시 촬영하기", color = Muted) }
             }
             if (lockedResult != null) {
@@ -412,6 +403,31 @@ internal fun CaptureFlow(
                 Text(text, color = Ink, lineHeight = 23.sp, modifier = Modifier.fillMaxWidth()
                     .bringIntoViewRequester(messageView).background(PaleApricot, RoundedCornerShape(16.dp))
                     .padding(16.dp).testTag("capture-message"))
+            }
+        }
+        if (current == null && lockedResult == null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp).testTag("capture-action")) {
+            if (recording || finishing) {
+                Text("${ClipRange.clock(elapsed * 1000L)} / ${ClipRange.clock(recordingLimits.captureMs)}", color = Ink,
+                    fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(bottom = 8.dp))
+                PrimaryButton(if (finishing) "마무리 중…" else "촬영 마치기", {
+                    finishing = true; recording = false; capture.stop()
+                }, enabled = !finishing)
+            } else if (!hasPermission) PrimaryButton(if (audioOnly) "마이크 허용하기" else "카메라·마이크 허용하기", { prepare() }, enabled = !selecting)
+            else PrimaryButton(if (audioOnly) "녹음 시작" else if (cameraRecorder == null) "카메라 연결 중…" else "녹화 시작",
+                ::startRecording, enabled = !selecting && (audioOnly || cameraRecorder != null))
+            Text(if (testDistribution) "전체 기능 테스트 · 최대 2분 촬영 · 20초 분석" else "현재 이용 범위 · 최대 ${limits.minutes}분 촬영 · ${limits.analysisSeconds}초 분석",
+                color = Muted, fontSize = 12.sp, lineHeight = 19.sp, modifier = Modifier.padding(top = 8.dp))
+        }
+        if (current != null && lockedResult == null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp).testTag("analysis-action")) {
+            if (analyzing) {
+                LinearProgressIndicator(Modifier.fillMaxWidth())
+                Text("선택한 구간의 ${if (visual) "소리와 표정" else "소리"}를 살펴보고 있어요…", color = Ink, modifier = Modifier.padding(top = 8.dp))
+                TextButton(onClick = { cancelAnalysis(); message = "분석을 취소했어요. 구간을 다시 고를 수 있어요." }) { Text("분석 취소") }
+            } else {
+                Text("${ClipRangeEdits.time(selection.start.toLong())} – ${ClipRangeEdits.time(selection.endInclusive.toLong())} · ${ClipRangeEdits.seconds((selection.endInclusive - selection.start).toLong())}초 선택",
+                    color = Muted, fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
+                PrimaryButton(if (visual && current.hasVideo) "영상 + 소리로 번역하기" else "이 구간 소리로 번역하기", ::analyzeSelected,
+                    enabled = !selecting && !saving)
             }
         }
         if (lockedResult != null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 10.dp)) {

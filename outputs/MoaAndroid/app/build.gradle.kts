@@ -26,8 +26,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 20
-        versionName = "0.5.6"
+        versionCode = 21
+        versionName = "0.5.7"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         manifestPlaceholders["testDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

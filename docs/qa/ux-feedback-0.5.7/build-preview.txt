@@ -1,0 +1,77 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:prePreviewBuild UP-TO-DATE
+> Task :app:mergePreviewJniLibFolders UP-TO-DATE
+> Task :app:mergePreviewNativeLibs UP-TO-DATE
+> Task :app:stripPreviewDebugSymbols UP-TO-DATE
+> Task :app:extractPreviewNativeSymbolTables UP-TO-DATE
+> Task :app:mergePreviewNativeDebugMetadata NO-SOURCE
+> Task :app:checkPreviewDuplicateClasses UP-TO-DATE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generatePreviewBuildConfig
+> Task :app:checkPreviewAarMetadata UP-TO-DATE
+> Task :app:processPreviewNavigationResources UP-TO-DATE
+> Task :app:compilePreviewNavigationResources UP-TO-DATE
+> Task :app:generatePreviewResValues UP-TO-DATE
+> Task :app:mapPreviewSourceSetPaths UP-TO-DATE
+> Task :app:generatePreviewResources UP-TO-DATE
+> Task :app:mergePreviewResources UP-TO-DATE
+> Task :app:packagePreviewResources UP-TO-DATE
+> Task :app:parsePreviewLocalResources UP-TO-DATE
+> Task :app:createPreviewCompatibleScreenManifests
+> Task :app:extractDeepLinksPreview UP-TO-DATE
+> Task :app:processPreviewMainManifest
+> Task :app:processPreviewManifest
+> Task :app:processPreviewManifestForPackage
+> Task :app:processPreviewResources
+> Task :app:compilePreviewKotlin
+> Task :app:javaPreCompilePreview UP-TO-DATE
+> Task :app:compilePreviewJavaWithJavac
+> Task :app:dexBuilderPreview
+> Task :app:desugarPreviewFileDependencies UP-TO-DATE
+> Task :app:mergePreviewStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexPreview UP-TO-DATE
+> Task :app:mergeDexPreview
+> Task :app:mergePreviewArtProfile UP-TO-DATE
+> Task :app:mergePreviewGlobalSynthetics UP-TO-DATE
+> Task :app:compilePreviewArtProfile
+> Task :app:mergePreviewShaders UP-TO-DATE
+> Task :app:compilePreviewShaders NO-SOURCE
+> Task :app:generatePreviewAssets UP-TO-DATE
+> Task :app:mergePreviewAssets UP-TO-DATE
+> Task :app:compressPreviewAssets UP-TO-DATE
+> Task :app:extractPreviewVersionControlInfo UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generatePreviewLintVitalReportModel
+> Task :app:lintVitalAnalyzePreview
+> Task :app:lintVitalReportPreview
+> Task :app:lintVitalPreview
+> Task :app:processPreviewJavaRes
+> Task :app:mergePreviewJavaResource
+> Task :app:optimizePreviewResources
+> Task :app:collectPreviewDependencies UP-TO-DATE
+> Task :app:sdkPreviewDependencyData UP-TO-DATE
+> Task :app:validateSigningPreview UP-TO-DATE
+> Task :app:writePreviewAppMetadata UP-TO-DATE
+> Task :app:writePreviewSigningConfigVersions UP-TO-DATE
+> Task :app:packagePreview
+> Task :app:createPreviewApkListingFileRedirect
+> Task :app:assemblePreview
+
+BUILD SUCCESSFUL in 1m 56s
+52 actionable tasks: 20 executed, 32 up-to-date
+{
+  "purpose": "full-access-sideload-test",
+  "playSubmission": false,
+  "artifact": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\Agattok-0.5.7-test-code21.apk",
+  "bytes": 75354941,
+  "sha256": "2db0646f9cfc8528aa5cb84748e4f95b9b25e0a54c7e3ce790a4fda328d8cedb"
+}
