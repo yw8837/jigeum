@@ -65,9 +65,14 @@ def validate_bundle(bundle: dict, audio_only: bool = False, video_only: bool = F
             with wave.open(str(path), "rb") as wav:
                 if (wav.getframerate(), wav.getnchannels(), wav.getsampwidth()) != (16000, 1, 2):
                     raise ValueError("Expected 16kHz mono PCM16 WAV")
-                if abs(wav.getnframes() - duration * 16) > 1:
+                frame_count = wav.getnframes()
+                if abs(frame_count - duration * 16) > 1:
                     raise ValueError("WAV duration differs from selected interval")
-        except (OSError, wave.Error) as error:
+                # The header can describe missing PCM. One extra frame also exposes
+                # a data chunk ending in an incomplete two-byte sample.
+                if len(wav.readframes(frame_count + 1)) != frame_count * 2:
+                    raise ValueError("WAV PCM data is truncated or not frame-aligned")
+        except (OSError, EOFError, RuntimeError, wave.Error) as error:
             raise ValueError("Invalid WAV input") from error
 
 
@@ -144,9 +149,23 @@ def run_command(command: list[str], timeout: int = 120) -> subprocess.CompletedP
 
 
 def validate_perception(value: dict, duration_ms: int) -> list[str]:
-    if not isinstance(value, dict) or set(value) != {"observations", "limitations"}:
+    schema = perception_schema()
+    if not isinstance(value, dict) or set(value) != set(schema["required"]):
         return ["invalid_perception_object"]
-    return validate_result(dict(value, status="withheld", phrase="", evidence_ids=[]), duration_ms)
+    errors = validate_result(dict(value, status="withheld", phrase="", evidence_ids=[]), duration_ms)
+    observations = value["observations"]
+    observation_schema = schema["properties"]["observations"]
+    if isinstance(observations, list):
+        if not observation_schema["minItems"] <= len(observations) <= observation_schema["maxItems"]:
+            errors.append("invalid_perception_observation_count")
+        required_fields = set(observation_schema["items"]["required"])
+        if any(isinstance(observation, dict) and set(observation) != required_fields
+               for observation in observations):
+            errors.append("invalid_perception_observation_fields")
+    limitations = value["limitations"]
+    if isinstance(limitations, list) and len(limitations) > schema["properties"]["limitations"]["maxItems"]:
+        errors.append("invalid_perception_limitations_count")
+    return errors
 
 
 def perception_prompt(duration_ms: int, audio_only: bool, video_only: bool = False) -> str:

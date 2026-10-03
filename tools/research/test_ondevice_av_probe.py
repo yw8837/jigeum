@@ -88,6 +88,40 @@ class InputAndResponseTests(unittest.TestCase):
         value['observations'][0]['end_ms'] = 10001
         self.assertTrue(validate_perception(value, 10000))
 
+    def test_perception_rejects_zero_or_more_than_three_events(self):
+        for count in (0, 4):
+            value = dict(observations=[dict(id=f'o{i}', start_ms=i * 1000,
+                         end_ms=(i + 1) * 1000, audio='Tone', visual='Red field')
+                         for i in range(count)], limitations=[])
+            with self.subTest(count=count):
+                errors = validate_perception(value, 10000)
+                self.assertTrue(errors)
+                self.assertEqual(response_status(value, errors, True), 'invalid')
+
+    def test_perception_requires_exact_observation_fields(self):
+        event = self.valid()['observations'][0]
+        variants = [dict(event, confidence=.9)] + [
+            {key: value for key, value in event.items() if key != missing}
+            for missing in ('id', 'start_ms', 'end_ms', 'audio', 'visual')]
+        for observation in variants:
+            with self.subTest(fields=sorted(observation)):
+                self.assertTrue(validate_perception(
+                    dict(observations=[observation], limitations=[]), 10000))
+
+    def test_perception_rejects_invalid_or_more_than_three_limitations(self):
+        for limitations in (None, 'none', {}, [1], ['a', 'b', 'c', 'd']):
+            value = dict(observations=self.valid()['observations'], limitations=limitations)
+            with self.subTest(limitations=limitations):
+                self.assertTrue(validate_perception(value, 10000))
+
+    def test_perception_accepts_three_events_and_three_limitations(self):
+        value = dict(observations=[dict(id=f'o{i}', start_ms=i * 1000,
+                     end_ms=(i + 1) * 1000, audio='Tone', visual='Red field')
+                     for i in range(3)], limitations=['Unclear source', 'Sampled images', 'No identity'])
+        errors = validate_perception(value, 10000)
+        self.assertEqual(errors, [])
+        self.assertEqual(response_status(value, errors, True), 'observed')
+
     def test_whole_interval_requires_both_modalities_and_explicit_limits(self):
         value = dict(audio_summary="A steady tone throughout.",
                      visual_sequence="Red first, then blue.", limitations=[])
@@ -179,6 +213,48 @@ class DecoderTests(unittest.TestCase):
                         str(multi)], check=True, capture_output=True)
         with self.assertRaisesRegex(ValueError, 'Multiple audio tracks'):
             prepare_clip(multi, 0, 1000, 1, self.root / 'ambiguous-tracks')
+
+
+class BundleAudioTests(unittest.TestCase):
+    def setUp(self):
+        root = Path(__file__).resolve().parents[2] / 'work/review-standards'
+        root.mkdir(parents=True, exist_ok=True)
+        self.temp = tempfile.TemporaryDirectory(prefix='wav-validation-', dir=root)
+        self.addCleanup(self.temp.cleanup)
+        self.wav_path = Path(self.temp.name) / 'synthetic.wav'
+        with wave.open(str(self.wav_path), 'wb') as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(16000)
+            wav.writeframes(bytes(32000))
+        self.bundle = dict(duration_ms=1000, frames=[], audio=str(self.wav_path))
+
+    def test_complete_audio_only_pcm_is_accepted(self):
+        validate_bundle(self.bundle, audio_only=True)
+
+    def test_truncated_pcm_payload_is_rejected_even_with_valid_duration_header(self):
+        original = self.wav_path.read_bytes()
+        for data in (original[:44], original[:100], original[:-1]):
+            with self.subTest(file_bytes=len(data)):
+                self.wav_path.write_bytes(data)
+                with self.assertRaises(ValueError):
+                    validate_bundle(self.bundle, audio_only=True)
+
+    def test_malformed_wav_headers_raise_input_validation_error(self):
+        oversized_chunk = b'RIFF' + (12).to_bytes(4, 'little') + b'WAVEJUNK' + (100).to_bytes(4, 'little')
+        for data in (b'', b'RIFF', b'not a WAV header', oversized_chunk):
+            with self.subTest(file_bytes=len(data)):
+                self.wav_path.write_bytes(data)
+                with self.assertRaises(ValueError):
+                    validate_bundle(self.bundle, audio_only=True)
+
+    def test_pcm_data_chunk_must_contain_whole_frames(self):
+        data = bytearray(self.wav_path.read_bytes() + b'\x00')
+        data[4:8] = (len(data) - 8).to_bytes(4, 'little')
+        data[40:44] = (32001).to_bytes(4, 'little')
+        self.wav_path.write_bytes(data)
+        with self.assertRaises(ValueError):
+            validate_bundle(self.bundle, audio_only=True)
 
 
 class StorageBoundaryTests(unittest.TestCase):
