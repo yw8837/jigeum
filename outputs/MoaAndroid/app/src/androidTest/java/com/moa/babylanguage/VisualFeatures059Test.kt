@@ -143,9 +143,11 @@ class VisualFeatures059Test {
                 inspectVideo(context, Uri.fromFile(fixture), 8_000, 11_000)
             }
             assertTrue("Model initialization must work with both new options", summary.modelAvailable)
-            assertEquals(3, summary.analyzedFrames)
-            assertEquals(3, summary.frames.size)
-            assertEquals(listOf(750L, 1_500L, 2_250L), summary.frames.map { it.requestedOffsetMs })
+            assertEquals(6, summary.analyzedFrames)
+            assertEquals(6, summary.frames.size)
+            assertEquals(listOf(0L, 500L, 1000L, 1500L, 2000L, 2500L), summary.frames.map { it.requestedOffsetMs })
+            assertEquals(listOf(0L, 500L, 1000L, 1500L, 2000L, 2500L), summary.frames.map { it.presentationOffsetMs })
+            assertTrue(summary.visualEvidence().timeline!!.coversSelection)
             assertTrue("Color/tone fixture must not invent faces or features", summary.frames.all {
                 it.faceCount == 0 && !it.valid && it.mouthOpening == null &&
                     it.eyeClosure == null && it.mouthCornerLift == null

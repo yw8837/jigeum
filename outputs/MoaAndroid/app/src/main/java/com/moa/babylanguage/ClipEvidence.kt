@@ -260,13 +260,16 @@ internal object VisualExpression {
         // Multiple visible people anywhere in the selection make attribution too ambiguous.
         if (visual.frames.any { it.faceCount > 1 }) return Result(phrase, false)
         val supported = visual.frames.filter { frame ->
-            frame.valid && frame.faceCount == 1 && frame.requestedOffsetMs in 0 until range.durationMs
-        }.distinctBy { it.requestedOffsetMs }
+            frame.valid && frame.faceCount == 1 &&
+                (frame.presentationOffsetMs ?: frame.requestedOffsetMs) in 0 until range.durationMs
+        }.distinctBy { it.presentationOffsetMs ?: it.requestedOffsetMs }
         if (supported.size < 2) return Result(phrase, false)
         fun Float?.above(floor: Float) = this != null && isFinite() && this in floor..1f
         val addition = when {
             event == VocalEvent.LAUGH && supported.count { it.mouthCornerLift.above(.60f) } >= 2 -> " 웃는 얼굴로 답해줄래요?"
-            event in setOf(VocalEvent.BABBLE, VocalEvent.CHILD_VOICE) && supported.count { it.mouthOpening.above(.18f) } >= 2 -> " 입 모양도 보면서, 내 소리에 답해줄래요?"
+            event in setOf(VocalEvent.BABBLE, VocalEvent.CHILD_VOICE) &&
+                (visual.timeline == null || (visual.timeline.coversSelection && visual.timeline.mouthTransitions >= 2)) &&
+                supported.count { it.mouthOpening.above(.18f) } >= 2 -> " 입 모양도 보면서, 내 소리에 답해줄래요?"
             else -> return Result(phrase, false)
         }
         return Result(phrase + addition, true)

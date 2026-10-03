@@ -66,8 +66,8 @@ import kotlin.math.hypot
 internal enum class VisualEvidenceStatus { COMPLETE, PARTIAL, FAILED }
 
 /** A sampled image observation, not face identity, emotion or a speaking/lip-sync verdict.
- * requestedOffsetMs is relative to the selected range. MediaMetadataRetriever may
- * return a nearby frame; this value is NOT a decoded presentation timestamp.
+ * requestedOffsetMs is the cadence target; presentationOffsetMs is the actual decoded
+ * PTS relative to the selected range. Legacy observations have no actual PTS.
  * mouthOpening is inner-lip height / mouth width, measured in image pixels.
  * eyeClosure and mouthCornerLift are paired blink/smile blendshape coefficients,
  * not probabilities of sleep or happiness. Missing coefficients stay unknown. */
@@ -77,7 +77,8 @@ internal data class VisualFrameObservation(
     val valid: Boolean,
     val mouthOpening: Float? = null,
     val eyeClosure: Float? = null,
-    val mouthCornerLift: Float? = null
+    val mouthCornerLift: Float? = null,
+    val presentationOffsetMs: Long? = null
 ) {
     companion object {
         fun measure(requestedOffsetMs: Long, faces: List<List<NormalizedLandmark>>,
@@ -114,7 +115,8 @@ internal data class VisualEvidence(
     val status: VisualEvidenceStatus,
     val evidence: String,
     val notice: String? = null,
-    val frames: List<VisualFrameObservation> = emptyList()
+    val frames: List<VisualFrameObservation> = emptyList(),
+    val timeline: VisualTimelineSummary? = null
 ) {
     companion object {
         fun failed(): VisualEvidence {
@@ -133,22 +135,41 @@ internal data class VideoFrameSummary(
     val hasAudioTrack: Boolean,
     val modelAvailable: Boolean,
     val audio: VideoAudioAnalysis = VideoAudioAnalysis(VideoAudioAnalysis.Status.NO_TRACK),
-    val frames: List<VisualFrameObservation> = emptyList()
+    val frames: List<VisualFrameObservation> = emptyList(),
+    val selectionDurationMs: Long = durationSeconds * 1000L
 ) {
     fun visualEvidence(): VisualEvidence {
         if (!modelAvailable || analyzedFrames == 0) {
             return VisualEvidence.failed()
         }
-        val partial = analyzedFrames < sampleCount
+        val temporal = if (frames.any { it.presentationOffsetMs != null })
+            VisualTimeline.summarize(frames, selectionDurationMs) else null
+        val partial = analyzedFrames < sampleCount || temporal?.coversSelection == false
         val observation = if (faceFrames == 0)
             "선택 구간의 ${analyzedFrames}개 장면에서 얼굴을 찾지 못했어요. 얼굴이 잘 보이는 구간에서 다시 살펴볼 수 있어요."
         else "선택 구간 ${analyzedFrames}개 장면 중 얼굴 ${faceFrames}개 장면 · 입이 열린 장면 ${mouthOpenFrames}개를 관찰했어요. 얼굴의 주인이나 감정은 구분하지 않아요."
         val multipleFaces = frames.count { it.faceCount > 1 }
         val ambiguity = if (multipleFaces > 0)
             "${multipleFaces}개 장면에는 얼굴이 여럿 보여 한마디의 표정 단서에서 제외했어요." else null
-        val notice = if (partial) "전체 ${sampleCount}개 장면 중 ${analyzedFrames}개만 표정 관찰을 마쳤어요." else null
+        val sequence = temporal?.let { timeline ->
+            val phases = timeline.phases.mapIndexed { index, phase ->
+                "${listOf("초반", "중반", "후반")[index]}(${phase.startMs / 1000f}~${phase.endMs / 1000f}초): " +
+                    "관찰 ${phase.samples}개, 단일 얼굴 ${phase.singleFaceSamples}개, 열린 입 ${phase.openMouthSamples}개"
+            }.joinToString(" → ")
+            val changes = timeline.mouthChanges.joinToString(" → ") {
+                "${it.startMs / 1000f}~${it.endMs / 1000f}초 ${if (it.opening) "입 열림" else "입 닫힘"}"
+            }
+            listOf(phases, changes.takeIf { it.isNotEmpty() },
+                "이어진 단일 얼굴 장면의 입 변화 ${timeline.mouthTransitions}회예요. 얼굴의 주인이나 발성 여부는 확인하지 않아요.")
+                .filterNotNull().joinToString("\n")
+        }
+        val notice = when {
+            analyzedFrames < sampleCount -> "전체 ${sampleCount}개 장면 중 ${analyzedFrames}개만 표정 관찰을 마쳤어요."
+            temporal?.coversSelection == false -> "선택 구간 일부의 표정 관찰이 빠졌어요. 관찰 공백을 움직임으로 해석하지 않아요."
+            else -> null
+        }
         return VisualEvidence(if (partial) VisualEvidenceStatus.PARTIAL else VisualEvidenceStatus.COMPLETE,
-            listOfNotNull(observation, ambiguity, notice).joinToString("\n"), notice, frames)
+            listOfNotNull(observation, sequence, ambiguity, notice).joinToString("\n"), notice, frames, temporal)
     }
 
 }
@@ -190,9 +211,9 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
         if (Build.VERSION.SDK_INT < 27 && width.toLong() * height > 1920L * 1080L)
             throw IllegalArgumentException("이 기기에서는 FHD 이하의 영상을 골라 주세요.")
         val hasAudio = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) == "yes"
-        require(startMs >= 0 && endMs <= durationMs && endMs > startMs && endMs - startMs <= 30_000L)
+        require(startMs >= 0 && endMs <= durationMs && endMs > startMs && endMs - startMs <= 20_000L)
         val durationSeconds = ((endMs - startMs + 999) / 1000).toInt()
-        val sampleCount = minOf(5, maxOf(1, durationSeconds))
+        val sampleCount = ((endMs - startMs + 499) / 500).toInt()
         var faceCount = 0
         var mouthCount = 0
         var decoded = 0
@@ -202,7 +223,7 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
             FaceLandmarker.createFromOptions(context,
                 FaceLandmarker.FaceLandmarkerOptions.builder()
                     .setBaseOptions(BaseOptions.builder().setModelAssetPath("face_landmarker.task").build())
-                    .setRunningMode(RunningMode.IMAGE).setNumFaces(2)
+                    .setRunningMode(RunningMode.VIDEO).setNumFaces(2)
                     .setOutputFaceBlendshapes(true).build())
         } catch (cause: Exception) {
             android.util.Log.e("MoaFaceInit", "Video face model initialization failed", cause)
@@ -212,52 +233,32 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
             null
         }
         try {
-            for (index in 0 until sampleCount) {
+            VideoFrameDecoder.decode(context, uri, startMs, endMs) { frame ->
                 coroutineContext.ensureActive()
-                val offsetMs = ((endMs - startMs) * (index + 1)) / (sampleCount + 1)
-                val timeUs = (startMs + offsetMs) * 1000
-                observations += VisualFrameObservation(offsetMs, 0, false)
-                val frame = try {
-                    if (Build.VERSION.SDK_INT >= 27) {
-                        retriever.getScaledFrameAtTime(timeUs,
-                            MediaMetadataRetriever.OPTION_CLOSEST, 512, 512)
-                    } else retriever.getFrameAtTime(timeUs, MediaMetadataRetriever.OPTION_CLOSEST)
-                } catch (cancelled: CancellationException) { throw cancelled }
-                catch (_: Exception) { null }
-                if (frame != null) {
-                    decoded++
-                    var scaled = frame
-                    try {
-                        if (frame.width > 512 || frame.height > 512) {
-                            val ratio = 512f / maxOf(frame.width, frame.height)
-                            scaled = frame.scale(
-                                (frame.width * ratio).toInt().coerceAtLeast(1),
-                                (frame.height * ratio).toInt().coerceAtLeast(1), true)
+                decoded++
+                var observation = VisualFrameObservation(frame.requestedOffsetMs, 0, false,
+                    presentationOffsetMs = frame.presentationOffsetMs)
+                try {
+                    if (landmarker != null) {
+                        val result = BitmapImageBuilder(frame.bitmap).build().use { image ->
+                            landmarker.detectForVideo(image, frame.presentationOffsetMs)
                         }
-                        if (landmarker != null) {
-                            val result = BitmapImageBuilder(scaled).build().use { image ->
-                                landmarker.detect(image)
-                            }
-                            coroutineContext.ensureActive()
-                            analyzedFrames++
-                            val observation = VisualFrameObservation.measure(offsetMs,
-                                result.faceLandmarks(), result.faceBlendshapes().orElse(emptyList()),
-                                scaled.width, scaled.height)
-                            observations[index] = observation
-                            if (observation.faceCount > 0) faceCount++
-                            if (observation.valid && (observation.mouthOpening ?: 0f) > .12f) mouthCount++
-                        }
-                    } catch (cancelled: CancellationException) { throw cancelled }
-                    catch (_: Exception) { /* A frame may be corrupt; other frames still count. */ }
-                    finally {
-                        if (scaled !== frame && !scaled.isRecycled) scaled.recycle()
-                        if (!frame.isRecycled) frame.recycle()
+                        coroutineContext.ensureActive()
+                        analyzedFrames++
+                        observation = VisualFrameObservation.measure(frame.requestedOffsetMs,
+                            result.faceLandmarks(), result.faceBlendshapes().orElse(emptyList()),
+                            frame.bitmap.width, frame.bitmap.height)
+                            .copy(presentationOffsetMs = frame.presentationOffsetMs)
+                        if (observation.faceCount > 0) faceCount++
+                        if (observation.valid && (observation.mouthOpening ?: 0f) > .12f) mouthCount++
                     }
-                }
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { /* Keep the time gap visible, never bridge it as motion. */ }
+                observations += observation
             }
             if (decoded == 0) throw IOException("No frames decoded")
             return VideoFrameSummary(durationSeconds, sampleCount, faceCount, mouthCount,
-                analyzedFrames, hasAudio, analyzedFrames > 0, frames = observations)
+                analyzedFrames, hasAudio, analyzedFrames > 0, frames = observations, selectionDurationMs = endMs - startMs)
         } finally { landmarker?.close() }
     } finally { retriever.release() }
 }
