@@ -19,10 +19,11 @@
 - Gemma/Qwen 생성 실험은 없는 감정·욕구를 추가하거나 부자연스러운 문장을 출력했다. 호출 형식 대조에서도 실패가 남아 채택하지 않았다. [원인 검토](research/20261004-generation-failure-review.md).
 - Console에서 **0.5.9-beta/code23이 선택한 테스터에게 제공 중**임을 확인했다. 이번 변경의 새 업로드는 없다. 이전 문단의 “빠른 검사 중”은 당시 기록이며 최신 운영 상태는 [배포 준비](release/20261004/PLAY-PREP.md)를 따른다.
 - 사용자에게 검증된 영상 개선을 먼저 배포할지, 인식·생성이 준비될 때까지 함께 보류할지 범위를 확인 중이다. 확인 없이 전체 요구를 영상 개선만으로 축소해 완료 처리하지 않는다.
+- 범위 답변과 독립적으로 **0.5.10/code24 로컬 서명 후보**를 준비했다. beta23→beta24의 실제 MP4/문장/LEGACY 보존, beta/release 패키지 검사, 서명 UI7시나리오·정식 재잠금과 기존미디어 내보내기, 하네스8회귀를 통과했다. 기본 AST/ORT 제외·기존 native/model18파일 동일·lint 오류0/경고19. [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md). Play 미업로드이며 생성 품질 승격이 아니다.
 
 ## 가장 먼저 읽을 배포 기준 상태
 
-**현재 소스·서명 패키지는 0.5.9-beta/code23.** 비공개 테스트에서는 구매 없이 120초 촬영/녹음·20초 분석·200MB 가져오기·시각 관찰·PDF를 제공한다. 정식 release는 무료60초/10초/100MB와 실제 entitlement를 유지한다. [변경 계약](UX-SOUND-VISUAL-0.5.9.md) / [최신 QA](qa/sound-visual-0.5.9/README.md) / [실제 Play 상태](release/20261003/PLAY-STATUS.md).
+**현재 Play 기준본은 0.5.9-beta/code23이며 개발 브랜치의 로컬 후보는0.5.10/code24다.** 비공개 테스트에서는 구매 없이 120초 촬영/녹음·20초 분석·200MB 가져오기·시각 관찰·PDF를 제공한다. 정식 release는 무료60초/10초/100MB와 실제 entitlement를 유지한다. [변경 계약](UX-SOUND-VISUAL-0.5.9.md) / [배포 기준 QA](qa/sound-visual-0.5.9/README.md) / [실제 Play 상태](release/20261003/PLAY-STATUS.md).
 
 전체 Android 계측 **281통과/0실패/3명시제외**, 서명 행동 UI7시나리오(앞4개 동일APK 증거+뒤3개 재실행), 호스트 게이트30통과, beta/release lint 각각 오류0/기존경고20. 최종 서명 beta22→beta23 업데이트에서 기존 기록과 LEGACY 근거 표시를 확인했다. 기존 미디어가 release 재잠금 후에도 같은 SHA로 내려받아진다. 초기 전체의 실패2개·lint 오류1개·서명 하네스의 스크롤 누락과 수정/재실행 증거도 보존했다. beta23은 검토 전송을 처리했으며 Google 빠른 검사 중이다. [정확한 상태](release/20261003/PLAY-STATUS.md).
 

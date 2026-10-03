@@ -20,11 +20,17 @@
 ## 배포 전후 확인
 
 - [ ] 핵심 모델/입력/시간순 관찰 수정과 실제 회귀 근거.
-- [ ] Sol 코드 검토와 동적 QA, 남은 결함의 수정·재검증.
-- [ ] 현재 게시된code23보다 높은 versionCode, beta 전용 전체 접근·정식 권한 검사 보존.
-- [ ] 서명 beta APK/AAB·해시·서명·패키지 검사, 기존 기록·미디어 업데이트 검증.
+- [x] 현재 구현의 Sol 코드 검토와 동적 QA, 발견한 코드/하네스 결함 수정·재검증. 의미 품질 승격은 별도 미완료.
+- [x] 로컬 후보code24, beta 전용 전체 접근·정식 권한 검사 보존.
+- [x] 서명 beta APK/AAB·해시·서명·패키지 검사, 기존 기록·미디어 업데이트 검증.
 - [ ] 실제 변경에 맞는 출시 노트, 새 AAB Alpha 업로드·검토 제출.
 - [ ] Console의 게시·테스터 제공 상태 확인. 심사 중이면 완료로 보고하지 않음.
 - [ ] 커밋·푸시와 로컬/원격 SHA 및 작업 트리 확인.
 
 참여 경로는 유지한다: [테스트 그룹](https://groups.google.com/g/agattok-test/about), [Play 테스터 참여·설치](https://play.google.com/apps/testing/com.moa.babylanguage).
+
+## 로컬 준비 후 상태
+
+0.5.10/code24 후보는 `work/ondevice-av/signed-candidate24/`에 보존했다. beta AAB SHA256 `62699404facab34a7ab427fec68f96728e22b40c4705527fdea1e44dcaf7c399`. [서명 후보 QA](../../qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md)와 공개 집계를 따른다. release 비교본은 제출 대상이 아니다.
+
+검증된 영상 개선부터 배포할지 사용자 답변을 기다린다. 기본 옹알이 후보와 새 생성 모델은 활성화하지 않았고 이 파일은 배포를 승인하지 않는다. **이번 후보의 Console 초안 생성·업로드·검토 제출·게시 작업은 수행하지 않았다.**

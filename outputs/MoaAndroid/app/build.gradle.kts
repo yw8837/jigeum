@@ -36,8 +36,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 23
-        versionName = "0.5.9"
+        versionCode = 24
+        versionName = "0.5.10"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         manifestPlaceholders["testDistribution"] = "false"

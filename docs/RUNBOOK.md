@@ -1,5 +1,7 @@
 # 0.5.9-beta/code23 실행 안내
 
+개발 브랜치의 최신 로컬 후보는 **0.5.10/code24**이며 아직 배포하지 않았다. 서명·업데이트·실제 미디어 보존 검사와 현재 재현 명령은 [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md)를 따른다. 아래0.5.9는 기존 Play 기준본의 실행 기록이다.
+
 먼저 [HANDOFF](HANDOFF.md), [변경 계약](UX-SOUND-VISUAL-0.5.9.md), [최신 QA](qa/sound-visual-0.5.9/README.md)를 따른다. 전체 Android 계측281통과/0실패/3명시제외, 호스트30통과, beta/release lint 각각 오류0/기존경고20. 서명 UI와 실제 배포 상태도 최신 QA를 확인한다.
 
 ## 빌드·재현

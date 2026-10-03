@@ -1,10 +1,12 @@
-# 다음 작업 — 아가톡 0.5.9-beta/code23
+# 다음 작업 — 배포0.5.9/code23 · 로컬 후보0.5.10/code24
 
 Play 테스트 전체 기능 개방 유지. 최신 소리/영상/출처 변경과 검증 결과는 [0.5.9 QA](qa/sound-visual-0.5.9/README.md)를 따른다. 정식 정책은 무료60초/10초, 전체120초/20초 검토본이다.
 
 ## 최우선 — 최대20초 온디바이스 생성 구조
 
 최신 상태(2026-10-04): [Android AST QA](qa/ondevice-av-generation/ANDROID-AST-QA.md)의 전체322통과/제외2 이후 v2·빌드 분리의 기본116개와 연구27개, Gradle6게이트를 통과했다. [코드 검토](qa/ondevice-av-generation/REVIEW-AST-20261004.md) P2두건도 수정·검증 완료다. 에뮬레이터 오프라인 원본 평가는 회복했지만 독립 일반화·생성 품질은 미통과이므로 후보는 기본 비활성이다. 임시 입력·모델 캐시를 제거하고 환경을 복원했다. 새 비공개 테스트 업로드는 없으며 영상 개선부터 배포할지 범위 확인 답변을 기다린다. 답변 후 확정 범위의 최종 서명 beta/code24이상·업데이트 보존·Play 게시 확인을 진행한다.
+
+후속 준비: 현재 소스의 **0.5.10/code24 서명 beta APK/AAB와 release 비교본**을 로컬에서 만들고 실제23→24의 미디어/기록 보존·서명 UI7시나리오·정식 재잠금까지 확인했다. [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md). 후보는 `work/ondevice-av/signed-candidate24/`에 있으며 Play 미제출이다. 배포 범위가 그대로 확정되고 소스가 바뀌지 않으면 이 후보의 SHA를 사용한다. 인식/생성 구현이 추가되면 별도 새 검증과 versionCode 결정을 한다. 연구 빌드는 제출하지 않는다.
 
 2026-10-03 사용자는 미리 작성한 문장 선택을 넘어서 **소리·영상 흐름의 공동 해석과 새 아기말 생성**을 요구했고, **외부 전송 없는 온디바이스를 필수**로 확정했다. [설계](superpowers/specs/2026-10-03-ondevice-av-generation-design.md)에 따라 고정 Gemma4 후보를 실제 내려받아 로컬 소리+시간순 이미지 추론을 실행했다. 초기 의미 품질은 미통과이며 이후 Astra/high가 동일 원음 누락 재현, AST 음성 비교, 전체 구간 관찰 실험·Android 시간순 디코딩 개선을 진행한다. [최신 실측](research/20261003-ondevice-av-probe.md) / [실행 계획](superpowers/plans/2026-10-04-perception-recovery.md) / [QA 행렬](qa/ondevice-av-generation/PERCEPTION-QA.md). 후보 개선→Android/ARM 검증→통합·회귀→검증된 베타 패키징 순서이며, 현재0.5.9 배포 상태를 새 모델 적용 완료로 표현하지 않는다.
 
