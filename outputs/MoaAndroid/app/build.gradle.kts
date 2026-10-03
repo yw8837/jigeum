@@ -1,8 +1,18 @@
+import java.security.MessageDigest
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+// AST remains a local debug research runtime until the source/quality gates pass.
+// A normal checkout/build requires neither AST weights nor ONNX Runtime.
+val astProbeProperty = providers.gradleProperty("agattokAstProbe").orNull
+require(astProbeProperty == null || astProbeProperty in setOf("true", "false")) {
+    "agattokAstProbe must be explicitly true or false."
+}
+val astProbeEnabled = astProbeProperty == "true"
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -95,13 +105,58 @@ android {
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+    sourceSets {
+        getByName("main") {
+            java.srcDir(if (astProbeEnabled) "src/astProbe/java" else "src/noAst/java")
+            if (astProbeEnabled) assets.srcDir("src/astProbe/assets")
+        }
+        getByName("androidTest") {
+            if (astProbeEnabled) {
+                java.srcDir("src/astProbeAndroidTest/java")
+                assets.srcDir("src/astProbeAndroidTest/assets")
+            }
+        }
+    }
 }
 
 // Sideload preview remains blocked; beta is only for the authorized closed track.
 tasks.configureEach {
+    if (astProbeEnabled && listOf("release", "beta", "preview").any { name.contains(it, ignoreCase = true) }) {
+        doFirst { error("AST probe is debug-only. Remove -PagattokAstProbe=true for release, beta or preview builds.") }
+    }
     if (name == "bundlePreview" || name == "packagePreviewBundle") {
         doFirst { error("Preview is sideload-only. Use assemblePreview for testing or bundleRelease for Play.") }
     }
+}
+
+// Download/export is an explicit local preparation step, never a Gradle network action.
+// Explicit verification and debug probe packaging fail for an absent/changed model.
+// Default debug/beta/release builds have no dependency on this task or model.
+val verifyAstModel by tasks.registering {
+    val model = layout.projectDirectory.file("src/astProbe/assets/ast-dynamic-int8.onnx")
+    inputs.file(model)
+    doLast {
+        val source = model.asFile
+        require(source.isFile && source.length() == 91_134_123L) {
+            "Pinned AST model absent or wrong size. Run tools/research/setup_android_ast.py with the verified local INT8 graph."
+        }
+        val hash = MessageDigest.getInstance("SHA-256")
+        source.inputStream().use { input ->
+            val buffer = ByteArray(64 * 1024)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                hash.update(buffer, 0, count)
+            }
+        }
+        val actual = hash.digest().joinToString("") { "%02x".format(it.toInt() and 255) }
+        require(actual == "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e") {
+            "Pinned AST model SHA256 mismatch. Do not package a substituted graph."
+        }
+    }
+}
+tasks.configureEach {
+    if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
 }
 
 dependencies {
@@ -123,6 +178,9 @@ dependencies {
     implementation("androidx.media3:media3-effect:1.8.0")
     implementation("com.google.mediapipe:tasks-vision:1.0.0")
     implementation("com.google.mediapipe:tasks-audio:1.0.0")
+    // Python probe used 1.24.4; Android's official 1.24 series ends at 1.24.3.
+    // Full CPU AAR includes DynamicQuantizeLinear/MatMulInteger; no reduced operator build.
+    if (astProbeEnabled) implementation("com.microsoft.onnxruntime:onnxruntime-android:1.24.3")
     // MediaPipe requests 4.26.1; 4.27.5 patches CVE-2024-7254 while retaining the lite runtime.
     implementation("com.google.protobuf:protobuf-javalite:4.27.5")
     implementation("com.android.billingclient:billing:9.1.0")

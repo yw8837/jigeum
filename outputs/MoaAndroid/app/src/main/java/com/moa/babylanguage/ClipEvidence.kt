@@ -96,6 +96,11 @@ internal object EvidenceInterpreter {
             problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.",
             issue = AnalysisIssue.QUIET, visualEvidence = visualEvidence)
         val sound = decision.sound
+        val broadOnly = decision.moments.isEmpty() && decision.broadWindows.isNotEmpty()
+        // Whole-waveform rhythm may belong to a parent, music or another sound. A broad
+        // AST event cannot attribute those bursts, rises or pauses to the baby.
+        val vocalShape = if (broadOnly) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
+            pauses = 0, quietSpans = emptyList()) else shape
         val eligiblePhrases = when (sound) {
             "울음" -> when {
                 shape.rising -> listOf("응애… 으아앙! 내 소리 좀 들어줘요.", "으아앙… 나 여기 있어요! 잠깐 나 좀 봐줘요.", "응애! 나 여기 있어요. 내 곁에 와줄래요?")
@@ -110,8 +115,8 @@ internal object EvidenceInterpreter {
             "어린 말소리" -> listOf("내 목소리 들려요? 나도 한마디 할래요.",
                 "나도 소리 내볼래요. 잠깐 들어줄래요?", "내 얘기 들려요? 이번엔 내 차례예요.")
             else -> when {
-                shape.bursts >= 3 -> listOf("아아, 옹알옹알! 내 얘기도 들어봐요. 이번엔 내 차례예요.", "아아… 우우! 나도 얘기할래요. 내 소리에도 답해줄래요?", "옹알옹알! 또 내 소리예요. 내 얘기도 들어봐요.")
-                shape.activeFraction >= 0.65f -> listOf("옹알옹알, 내 목소리예요! 내 얘기도 들어봐요.", "아아, 우우! 나도 소리 내볼래요. 이번엔 내 차례예요.", "옹알옹알… 아직 내 얘기 남았어요! 조금 더 들어줄래요?")
+                vocalShape.bursts >= 3 -> listOf("아아, 옹알옹알! 내 얘기도 들어봐요. 이번엔 내 차례예요.", "아아… 우우! 나도 얘기할래요. 내 소리에도 답해줄래요?", "옹알옹알! 또 내 소리예요. 내 얘기도 들어봐요.")
+                vocalShape.activeFraction >= 0.65f -> listOf("옹알옹알, 내 목소리예요! 내 얘기도 들어봐요.", "아아, 우우! 나도 소리 내볼래요. 이번엔 내 차례예요.", "옹알옹알… 아직 내 얘기 남았어요! 조금 더 들어줄래요?")
                 else -> listOf("아아, 우우… 내 얘기 들려요? 나도 한마디 할래요.", "옹알… 이번엔 내 차례예요. 내 소리에도 답해줄래요?", "아아… 내 목소리 들리죠? 내 얘기도 들어봐요.")
             }
         }
@@ -120,12 +125,13 @@ internal object EvidenceInterpreter {
         val audioPhrase = phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence)
         val rhythm = when {
+            broadOnly -> "넓은 시간창에서 옹알이 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
             shape.bursts >= 3 -> "소리와 쉼이 여러 번 이어졌어요."
             shape.activeFraction >= 0.65f -> "소리가 비교적 길게 이어졌어요."
             else -> "짧게 들리는 소리를 살펴봤어요."
         }
-        val timeline = decision.moments.filterIndexed { index, moment ->
+        val timeline = if (broadOnly) broadWindowEvidence(decision.broadWindows, range) else decision.moments.filterIndexed { index, moment ->
             index == 0 || decision.moments[index - 1].event != moment.event
         }.joinToString(" → ") { "${ClipRange.clock(range.startMs + it.startMs)} 부근 ${it.event.label} 후보" }
         return ClipAnalysisResult(ClipInterpretation(combined.phrase, sound,
@@ -136,6 +142,21 @@ internal object EvidenceInterpreter {
             responseGuide(if (VocalEvent.CRY in decision.events) "울음" else sound), range.label(),
             visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
             visualEvidence?.notice, if (combined.usedVisual) "AUDIO_VISUAL" else "AUDIO"), visualEvidence = visualEvidence)
+    }
+
+    private fun broadWindowEvidence(windows: List<BabbleSupportWindow>, range: ClipRange): String {
+        // Merge overlap for readable ranges, never interpret overlapping windows as
+        // repeated utterances or as uninterrupted speech over their union.
+        val merged = mutableListOf<BabbleSupportWindow>()
+        for (window in windows.sortedBy { it.startMs }) {
+            val last = merged.lastOrNull()
+            if (last != null && window.startMs <= last.endMs) {
+                merged[merged.lastIndex] = last.copy(endMs = maxOf(last.endMs, window.endMs))
+            } else merged += window
+        }
+        return merged.joinToString(" · ") {
+            "${ClipRange.clock(range.startMs + it.startMs)}–${ClipRange.clock(range.startMs + it.endMs)} 범위 옹알이 후보"
+        } + " (범위 내 정확한 발성 위치와 지속 여부는 확인하지 않아요.)"
     }
 
     fun responseGuide(sound: String): String = if (sound == "울음")
@@ -149,6 +170,7 @@ internal object EvidenceInterpreter {
      * are bounded character expressions, not a transcript or inferred needs. */
     private fun sustainedPhrases(audio: SoundAnalysis, decision: SoundDecision,
                                  shape: AcousticShape, range: ClipRange): List<String>? {
+        if (decision.broadWindows.isNotEmpty()) return null
         if (range.durationMs <= 10_000 || !shape.activeFraction.isFinite() || shape.activeFraction < .35f) return null
         val frameStarts = audio.frames.map { it.startMs }
             .filter { it >= 0 && it < range.durationMs }.distinct().toSet()
@@ -224,11 +246,15 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 catch (_: Exception) { decodeFailed = true; null }
                 catch (_: LinkageError) { decodeFailed = true; null }
             try {
-                val audio = if (decodeFailed) SoundAnalysis(emptyList(),
+                val primaryAudio = if (decodeFailed) SoundAnalysis(emptyList(),
                     "이 파일의 소리를 읽지 못했어요. 다른 파일이나 형식으로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
                     else if (pcm == null) SoundAnalysis(emptyList(),
                     "이 영상에는 읽을 수 있는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.", issue = AnalysisIssue.NO_AUDIO)
                     else SoundAnalyzer.analyzeDetailed(context, pcm)
+                val audio = if (BabbleSupportPolicy.ENABLED && pcm != null && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
+                    val ast = AstAudioAnalyzer.analyze(context, pcm)
+                    BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)
+                } else primaryAudio
                 // Visual observation remains available on abstention, but never authorizes a phrase.
                 val shape = if (pcm != null && audio.problem == null) AcousticShape.from(pcm) else AcousticShape(0f, false, 0)
                 ensureActive()

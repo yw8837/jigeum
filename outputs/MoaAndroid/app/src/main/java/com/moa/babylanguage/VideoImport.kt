@@ -65,6 +65,10 @@ import kotlin.math.hypot
 /** A failed model run is not a completed observation, even when it has explanatory text. */
 internal enum class VisualEvidenceStatus { COMPLETE, PARTIAL, FAILED }
 
+/** Readable sampled times; the timeline itself retains integer millisecond PTS. */
+private fun visualSeconds(ms: Long): String =
+    "%.1f".format(java.util.Locale.ROOT, ms / 1000.0).trimEnd('0').trimEnd('.')
+
 /** A sampled image observation, not face identity, emotion or a speaking/lip-sync verdict.
  * requestedOffsetMs is the cadence target; presentationOffsetMs is the actual decoded
  * PTS relative to the selected range. Legacy observations have no actual PTS.
@@ -153,11 +157,11 @@ internal data class VideoFrameSummary(
             "${multipleFaces}개 장면에는 얼굴이 여럿 보여 한마디의 표정 단서에서 제외했어요." else null
         val sequence = temporal?.let { timeline ->
             val phases = timeline.phases.mapIndexed { index, phase ->
-                "${listOf("초반", "중반", "후반")[index]}(${phase.startMs / 1000f}~${phase.endMs / 1000f}초): " +
+                "${listOf("초반", "중반", "후반")[index]}(${visualSeconds(phase.startMs)}~${visualSeconds(phase.endMs)}초): " +
                     "관찰 ${phase.samples}개, 단일 얼굴 ${phase.singleFaceSamples}개, 열린 입 ${phase.openMouthSamples}개"
             }.joinToString(" → ")
             val changes = timeline.mouthChanges.joinToString(" → ") {
-                "${it.startMs / 1000f}~${it.endMs / 1000f}초 ${if (it.opening) "입 열림" else "입 닫힘"}"
+                "${visualSeconds(it.startMs)}~${visualSeconds(it.endMs)}초 ${if (it.opening) "입 열림" else "입 닫힘"}"
             }
             listOf(phases, changes.takeIf { it.isNotEmpty() },
                 "이어진 단일 얼굴 장면의 입 변화 ${timeline.mouthTransitions}회예요. 얼굴의 주인이나 발성 여부는 확인하지 않아요.")

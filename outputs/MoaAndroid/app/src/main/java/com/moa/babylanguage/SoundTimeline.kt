@@ -10,8 +10,9 @@ internal enum class VocalEvent(val label: String, val cue: String) {
 
 internal data class VocalMoment(val event: VocalEvent, val startMs: Long)
 internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), val problem: String? = null,
-                                  val issue: AnalysisIssue? = null) {
-    val events get() = moments.map { it.event }.distinct()
+                                  val issue: AnalysisIssue? = null,
+                                  val broadWindows: List<BabbleSupportWindow> = emptyList()) {
+    val events get() = (moments.map { it.event } + if (broadWindows.isEmpty()) emptyList() else listOf(VocalEvent.BABBLE)).distinct()
     val sound get() = events.singleOrNull()?.label ?: "여러 아기 소리"
 }
 
@@ -24,6 +25,17 @@ internal object SoundTimeline {
     private data class Vote(val event: VocalEvent?, val strong: Boolean = false, val conflict: Boolean = false)
 
     fun decide(audio: SoundAnalysis): SoundDecision {
+        val original = decideYamnet(audio)
+        if (original.issue !in setOf(AnalysisIssue.INFANT_UNCONFIRMED, AnalysisIssue.BACKGROUND_DOMINANT) ||
+            audio.problem != null || audio.babbleWindows.isEmpty()) return original
+        if (audio.babbleWindows.any { it.startMs < 0 || it.endMs > 20_000 || it.endMs - it.startMs !in 1_000..10_000 })
+            return original
+        // Broad AST intervals are intentionally not VocalMoments: no exact onset, frame
+        // persistence, pause attribution or repeated-baby-event count follows from them.
+        return SoundDecision(broadWindows = audio.babbleWindows)
+    }
+
+    private fun decideYamnet(audio: SoundAnalysis): SoundDecision {
         audio.problem?.let { return SoundDecision(problem = it, issue = audio.issue) }
         // The fallback keeps callers with one already-aggregated observation conservative.
         val frames = audio.frames.ifEmpty { listOf(SoundFrame(0, audio.cues)) }

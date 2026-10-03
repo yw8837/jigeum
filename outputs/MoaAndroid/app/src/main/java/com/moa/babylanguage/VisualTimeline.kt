@@ -20,15 +20,40 @@ internal object VisualTimeline {
             known.zipWithNext().map { (a, b) -> b - a } + (durationMs - known.last()) else emptyList()
         val longest = gaps.maxOrNull() ?: durationMs
         val coverage = ordered && known.isNotEmpty() && longest <= 750
-        val transitions = if (!ordered) emptyList() else frames.zipWithNext().filter { (a, b) ->
-            a.valid && b.valid && a.faceCount == 1 && b.faceCount == 1 &&
-                b.presentationOffsetMs!! - a.presentationOffsetMs!! <= 750 &&
-                a.mouthOpening != null && b.mouthOpening != null &&
-                a.mouthOpening.isFinite() && b.mouthOpening.isFinite() &&
-                ((a.mouthOpening <= .08f && b.mouthOpening >= .18f) ||
-                    (b.mouthOpening <= .08f && a.mouthOpening >= .18f))
-        }.map { (a, b) -> VisualMouthChange(a.presentationOffsetMs!!, b.presentationOffsetMs!!,
-            b.mouthOpening!! > a.mouthOpening!!) }
+        val transitions = mutableListOf<VisualMouthChange>()
+        if (ordered) {
+            var previousAt: Long? = null
+            var stableAt: Long? = null
+            var open: Boolean? = null
+            for (frame in frames) {
+                val at = frame.presentationOffsetMs!!
+                val opening = frame.mouthOpening
+                if (!frame.valid || frame.faceCount != 1 || opening == null ||
+                    !opening.isFinite() || opening < 0f) {
+                    previousAt = null; stableAt = null; open = null
+                    continue
+                }
+                if (previousAt?.let { at - it > 750 } == true) {
+                    stableAt = null; open = null
+                }
+                // Intermediate samples retain the last established state, but only
+                // while every adjacent observation is usable and close in time.
+                // The times bound observed states, not an interpolated movement.
+                val nextOpen = when {
+                    opening <= .08f -> false
+                    opening >= .18f -> true
+                    else -> null
+                }
+                if (nextOpen != null) {
+                    if (open != null && open != nextOpen) {
+                        transitions += VisualMouthChange(stableAt!!, at, nextOpen)
+                    }
+                    open = nextOpen
+                    stableAt = at
+                }
+                previousAt = at
+            }
+        }
         val phases = if (!ordered) emptyList() else (0..2).map { index ->
             val start = durationMs * index / 3
             val end = durationMs * (index + 1) / 3

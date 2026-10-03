@@ -95,6 +95,61 @@ class VideoTimelineTest {
         assertEquals(0, gap.mouthTransitions)
         assertFalse(VisualTimeline.summarize(listOf(frame(500, .3f), frame(0, .04f)), 2000).ordered)
     }
+
+    @Test fun gradualOpeningAndClosingRetainTheirOrderAndActualPts() {
+        val frames = listOf(.04f, .12f, .24f, .12f, .04f, .12f, .24f, .12f, .04f)
+            .mapIndexed { index, opening -> VisualFrameObservation(index * 500L, 1, true,
+                opening, presentationOffsetMs = index * 500L) }
+        val timeline = VisualTimeline.summarize(frames, 4500)
+        assertTrue(timeline.coversSelection)
+        assertEquals(4, timeline.mouthTransitions)
+        assertEquals(listOf(true, false, true, false), timeline.mouthChanges.map { it.opening })
+        assertEquals(listOf(0L, 1000L, 2000L, 3000L), timeline.mouthChanges.map { it.startMs })
+        assertEquals(listOf(1000L, 2000L, 3000L, 4000L), timeline.mouthChanges.map { it.endMs })
+    }
+
+    @Test fun gradualChangeResetsAfterMissingAmbiguousInvalidOrDistantSamples() {
+        fun frame(at: Long, opening: Float?, count: Int = 1, valid: Boolean = true) =
+            VisualFrameObservation(at, count, valid, opening, presentationOffsetMs = at)
+        val breaks = listOf(frame(1000, .12f, count = 0, valid = false),
+            frame(1000, .12f, count = 2, valid = false), frame(1000, null),
+            frame(1000, Float.NaN), frame(1000, .12f, valid = false))
+        for (gap in breaks) {
+            val timeline = VisualTimeline.summarize(listOf(frame(0, .04f), frame(500, .12f),
+                gap, frame(1500, .12f), frame(2000, .24f)), 2500)
+            assertEquals("Do not carry a closed state across an unusable sample", 0, timeline.mouthTransitions)
+        }
+        val distant = VisualTimeline.summarize(listOf(frame(0, .04f), frame(500, .12f),
+            frame(1500, .12f), frame(2000, .24f)), 2500)
+        assertFalse(distant.coversSelection)
+        assertEquals(0, distant.mouthTransitions)
+        val undecided = VisualTimeline.summarize(listOf(frame(0, .12f), frame(500, .24f)), 1000)
+        assertEquals("An intermediate first sample does not establish a closed mouth", 0, undecided.mouthTransitions)
+    }
+
+    @Test fun gradualMouthMotionContributesToTheExistingBabbleExpression() {
+        val range = ClipRange(0, 4500)
+        val sound = SoundAnalysis(emptyList(), frames = (0..8).map {
+            SoundFrame(it * 500L, listOf(SoundCue("옹알이 후보", .95f)))
+        })
+        val frames = listOf(.04f, .12f, .24f, .12f, .04f, .12f, .24f, .12f, .04f)
+            .mapIndexed { index, opening -> VisualFrameObservation(index * 500L, 1, true,
+                opening, presentationOffsetMs = index * 500L) }
+        val visual = VisualEvidence(VisualEvidenceStatus.COMPLETE, "시간순 관찰", frames = frames,
+            timeline = VisualTimeline.summarize(frames, range.durationMs))
+        val result = EvidenceInterpreter.interpret(sound, AcousticShape(.8f, false, 3), range, visual)
+        assertEquals("AUDIO_VISUAL", result.interpretation!!.basis)
+    }
+
+    @Test fun phaseTimeLabelsUseReadableSeconds() {
+        val frames = (0..39).map { index -> VisualFrameObservation(index * 500L, 0, false,
+            presentationOffsetMs = index * 500L) }
+        val result = VideoFrameSummary(20, 40, 0, 0, 40, false, true, frames = frames,
+            selectionDurationMs = 20_000).visualEvidence()
+        assertTrue(result.evidence.contains("초반(0~6.7초)"))
+        assertTrue(result.evidence.contains("중반(6.7~13.3초)"))
+        assertTrue(result.evidence.contains("후반(13.3~20초)"))
+    }
     @Test fun rotationIsAppliedOnceAfterDecoderCrop() = runBlocking {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val file = fixture("temporal-rotation-2.mp4")

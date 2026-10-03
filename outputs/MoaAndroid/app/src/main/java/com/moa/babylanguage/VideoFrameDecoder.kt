@@ -12,6 +12,7 @@ import android.media.MediaFormat
 import android.net.Uri
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
+import kotlin.math.roundToInt
 
 /** Select the first decoded frame at/after each cadence boundary, never repeat a sparse frame. */
 internal class VideoFrameCadence(private val startUs: Long, private val endUs: Long) {
@@ -30,6 +31,56 @@ internal class VideoFrameCadence(private val startUs: Long, private val endUs: L
 
 internal data class DecodedVideoFrame(val requestedOffsetMs: Long, val presentationOffsetMs: Long,
                                      val bitmap: Bitmap)
+
+/** Eight-bit Y'CbCr matrix/range conversion; no HDR tone mapping or wide-gamut-to-sRGB transform.
+ * MediaFormat documents Kr/Kb and full/limited component ranges. Buffer output
+ * metadata wins; unspecified/unrecognized fields fall back to container metadata,
+ * then the previous limited BT.601 behavior. No color properties are guessed from size.
+ * https://developer.android.com/reference/android/media/MediaFormat#KEY_COLOR_RANGE
+ * https://developer.android.com/reference/android/media/MediaFormat#KEY_COLOR_STANDARD */
+internal class VideoYuvColor private constructor(fullRange: Boolean, kr: Double, kb: Double) {
+    private val black = if (fullRange) 0 else 16
+    private val lumaScale = if (fullRange) 1.0 else 255.0 / 219
+    private val chromaScale = if (fullRange) 1.0 else 255.0 / 224
+    private val kg = 1 - kr - kb
+    private val redCr = 2 * (1 - kr) * chromaScale
+    private val blueCb = 2 * (1 - kb) * chromaScale
+    private val greenCb = 2 * kb * (1 - kb) / kg * chromaScale
+    private val greenCr = 2 * kr * (1 - kr) / kg * chromaScale
+
+    fun argb(y: Int, cb: Int, cr: Int): Int {
+        val luma = (y - black) * lumaScale
+        val u = cb - 128
+        val v = cr - 128
+        val r = (luma + redCr * v).roundToInt().coerceIn(0, 255)
+        val g = (luma - greenCb * u - greenCr * v).roundToInt().coerceIn(0, 255)
+        val b = (luma + blueCb * u).roundToInt().coerceIn(0, 255)
+        return (255 shl 24) or (r shl 16) or (g shl 8) or b
+    }
+
+    companion object {
+        fun fromFormats(output: MediaFormat, input: MediaFormat): VideoYuvColor {
+            fun property(key: String, known: Set<Int>, fallback: Int): Int {
+                fun read(format: MediaFormat): Int? = if (format.containsKey(key))
+                    format.getInteger(key).takeIf { it in known } else null
+                return read(output) ?: read(input) ?: fallback
+            }
+            val range = property(MediaFormat.KEY_COLOR_RANGE,
+                setOf(MediaFormat.COLOR_RANGE_FULL, MediaFormat.COLOR_RANGE_LIMITED),
+                MediaFormat.COLOR_RANGE_LIMITED)
+            val standard = property(MediaFormat.KEY_COLOR_STANDARD,
+                setOf(MediaFormat.COLOR_STANDARD_BT601_NTSC, MediaFormat.COLOR_STANDARD_BT601_PAL,
+                    MediaFormat.COLOR_STANDARD_BT709, MediaFormat.COLOR_STANDARD_BT2020),
+                MediaFormat.COLOR_STANDARD_BT601_NTSC)
+            val (kr, kb) = when (standard) {
+                MediaFormat.COLOR_STANDARD_BT709 -> .2126 to .0722
+                MediaFormat.COLOR_STANDARD_BT2020 -> .2627 to .0593
+                else -> .299 to .114
+            }
+            return VideoYuvColor(range == MediaFormat.COLOR_RANGE_FULL, kr, kb)
+        }
+    }
+}
 
 /** Sequential decoding preserves container PTS. The callback borrows a bitmap, valid only during the call. */
 internal object VideoFrameDecoder {
@@ -85,8 +136,12 @@ internal object VideoFrameDecoder {
                         if (info.size > 0 && info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG == 0) {
                             val requestMs = cadence.select(info.presentationTimeUs)
                             if (requestMs != null) {
+                                // API 21+: format for this exact buffer also handles midstream
+                                // changes, without retaining stale INFO_OUTPUT_FORMAT_CHANGED state.
+                                // https://developer.android.com/reference/android/media/MediaCodec#getOutputFormat(int)
+                                val color = VideoYuvColor.fromFormats(decoder.getOutputFormat(output), format)
                                 val bitmap = requireNotNull(decoder.getOutputImage(output)) { "Decoder has no YUV image output" }
-                                    .use { toBitmap(it, rotation) }
+                                    .use { toBitmap(it, rotation, color) }
                                 try {
                                     coroutineContext.ensureActive()
                                     observe(DecodedVideoFrame(requestMs, (info.presentationTimeUs - startMs * 1000) / 1000, bitmap))
@@ -104,7 +159,7 @@ internal object VideoFrameDecoder {
         }
     }
 
-    private fun toBitmap(image: Image, rotation: Int): Bitmap {
+    private fun toBitmap(image: Image, rotation: Int, color: VideoYuvColor): Bitmap {
         require(image.format == ImageFormat.YUV_420_888 && image.planes.size == 3)
         val crop = image.cropRect
         require(crop.width() > 0 && crop.height() > 0)
@@ -120,13 +175,8 @@ internal object VideoFrameDecoder {
         for (y in 0 until height) for (x in 0 until width) {
             val sx = crop.left + x * crop.width() / width
             val sy = crop.top + y * crop.height() / height
-            val luma = (sample(0, sx, sy) - 16).coerceAtLeast(0)
-            val u = sample(1, sx / 2, sy / 2) - 128
-            val v = sample(2, sx / 2, sy / 2) - 128
-            val r = ((298 * luma + 409 * v + 128) shr 8).coerceIn(0, 255)
-            val g = ((298 * luma - 100 * u - 208 * v + 128) shr 8).coerceIn(0, 255)
-            val b = ((298 * luma + 516 * u + 128) shr 8).coerceIn(0, 255)
-            pixels[y * width + x] = (255 shl 24) or (r shl 16) or (g shl 8) or b
+            pixels[y * width + x] = color.argb(sample(0, sx, sy),
+                sample(1, sx / 2, sy / 2), sample(2, sx / 2, sy / 2))
         }
         val original = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888)
         if (rotation % 360 == 0) return original
