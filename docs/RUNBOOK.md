@@ -1,3 +1,21 @@
+# 0.5.13/code27 음성 변환 개선 — 비공개 검토 제출
+
+최신 실행 증거는 [0.5.13 QA](qa/audio-resampling-0.5.13/README.md)를 먼저 읽는다.
+고정 패키지는 ignored `work/model-specialization-20261005/`의 `Agattok-0.5.13-beta-code27.apk/.aab`다.
+정식 정책 비교용 release 사본은 같은 폴더에 있으나 Play 제출 대상이 아니다.
+
+- 제품 변경: `BoundedPcmResampler`의 anti-alias FIR, EOF 길이, PCM 유한성, native16kHz 보존.
+- 실제 Android48개와 서명26→27 기록/MP4 보존, beta/release package 및 lint, 최종 UI7·약국 UI를 통과했다.
+- 2026-10-05 03:27 KST 비공개 Alpha 검토 제출. 최종 제공 여부는 위 QA 문서를 따른다. 중복 업로드하지 않는다.
+- 정식 전환은 게시된 beta27보다 높은 code28 이상과 실제 Play 서명/업데이트 경로 검증이 필요하다.
+- 명시적 beta AST 빌드: `tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 경로>`.
+- Gemma/EfficientAT/GTCRN 연구 실행기는 제품에 포함하지 않는다. 선택한 아기 구간을 외부로 전송하지 않는다.
+- QA 담당자는 한 명이다. 이 실행은 `AgattokAudio27` / `emulator-5556`에 한정했고 시험 후 둘 다 정리했다.
+
+아래는 이전 실행 당시 기록이다. 최신 버전·상태는 HANDOFF와 위 QA 문서를 우선한다.
+
+---
+
 # 0.5.11/code25 로컬 후보 실행 안내
 
 최신 사본은 `work/ast-beta-package-03/`이고 Play 미제출이다. [최종 QA](qa/ondevice-av-generation/AST-BETA-PACKAGE-QA.md)를 먼저 읽는다.
