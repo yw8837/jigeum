@@ -2,6 +2,18 @@
 
 갱신: **2026-10-04** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 최신 후속 — 독립 평가 계약과 20초 QA 경로
+
+[최소 AV 평가 계약](research/20261004-av-evaluation-contract.md)은 소리 종류/누락 회복과 얼굴별 발성 연결을 분리한다.
+[Rollins/Providence 조사](research/20261004-labeled-av-data.md)에서는 연령·실제 AV·전사 설명을 확인했으나
+등록이 필요한 개별 transcript/media나 독립 정답셋을 확보하지는 못했다. 후보 모델 재추론·제품 채택은 없다.
+
+평가 도구에 남아 있던 host 15초 제한/device 15초 ClipRange 제한을 수정했다.
+[20초 평가 도구 QA](qa/ondevice-av-generation/PUBLIC-AUDIO-20S-QA.md): host46개, Android 계약5개,
+실제20초/320,000samples/마지막frame19.5초와 hash 일치, 잘못된 입력4종 거부를 확인했다.
+Astra 검토에서 발견한 MODEL_FAILURE의 정상보류 오집계도 수정했다. beta24 복원·기존44파일SHA일치·임시run정리·종료 완료다.
+**제품 main/모델/임계값 변경과 Play 업로드는 없다.** 이번 결과를 옹알이 인식 회복이나 생성 품질 통과로 해석하지 않는다.
+
 ### 최신 실측 — S25 Ultra Gemma 연구 실행
 
 사용자가 연결한 S25 Ultra(API36)에서 별도 연구 APK로 Gemma를 실제 실행했다.
