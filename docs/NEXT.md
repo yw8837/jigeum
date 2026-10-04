@@ -19,6 +19,12 @@ native GPU 실행은 가능하지만20초 전체43.29초·thermal3·취소6.63�
 사용자에게 실측 실패를 알리고 검증된 **Gemma 미포함 code24 영상 개선본만 먼저 베타 업데이트할지** 질문했다.
 답변 전에는 기존 beta23을 유지한다. 선배포하더라도 소리·영상 생성의 전체 목표는 미완료로 남는다.
 
+**새 근거가 있는 다음 음성 후보:** [SpeechMaturity artifact](research/20261004-speech-maturity-artifacts.md)의
+학습된5-way head와 복수 encoder가 실제 공개돼 있다. [실행 구조 검토](research/20261004-speech-maturity-runtime-review.md)를 따라
+고정된 최소 checkpoint의 안전한 키/shape 검사부터 진행한다. 공식 학습 recipe를 그대로 실행하거나 기존 환경을 무조건 downgrade하지 않는다.
+약0.576초 입력 계약·padding·batch1·전체 구간의 시간 보존을 먼저 검증하며, 알려진 개발 사례의 결과를 독립 정확도로 세지 않는다.
+새 후보는 소리 분류에 대한 근거이며 Gemma의 의미/발열 실패나 영상 문장 생성을 해결한 것은 아니다. 상용 배포 조건·Android 실행은 별도 미확정이다.
+
 최신 상태(2026-10-04): [Android AST QA](qa/ondevice-av-generation/ANDROID-AST-QA.md)의 전체322통과/제외2 이후 v2·빌드 분리의 기본116개와 연구27개, Gradle6게이트를 통과했다. [코드 검토](qa/ondevice-av-generation/REVIEW-AST-20261004.md) P2두건도 수정·검증 완료다. 에뮬레이터 오프라인 원본 평가는 회복했지만 독립 일반화·생성 품질은 미통과이므로 후보는 기본 비활성이다. 임시 입력·모델 캐시를 제거하고 환경을 복원했다. 새 비공개 테스트 업로드는 없으며 영상 개선부터 배포할지 범위 확인 답변을 기다린다. 답변 후 확정 범위의 최종 서명 beta/code24이상·업데이트 보존·Play 게시 확인을 진행한다.
 
 후속 준비: 현재 소스의 **0.5.10/code24 서명 beta APK/AAB와 release 비교본**을 로컬에서 만들고 실제23→24의 미디어/기록 보존·서명 UI7시나리오·정식 재잠금까지 확인했다. [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md). 후보는 `work/ondevice-av/signed-candidate24/`에 있으며 Play 미제출이다. 배포 범위가 그대로 확정되고 소스가 바뀌지 않으면 이 후보의 SHA를 사용한다. 인식/생성 구현이 추가되면 별도 새 검증과 versionCode 결정을 한다. 연구 빌드는 제출하지 않는다.
