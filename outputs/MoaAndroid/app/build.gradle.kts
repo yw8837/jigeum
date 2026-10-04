@@ -19,6 +19,13 @@ require(astStandaloneProperty == null || astStandaloneProperty in setOf("true", 
 }
 val astStandaloneEnabled = astStandaloneProperty == "true"
 require(!astStandaloneEnabled || astProbeEnabled) { "AST standalone requires agattokAstProbe=true." }
+val astCandidateProperty = providers.gradleProperty("agattokAstCandidate").orNull
+require(astCandidateProperty == null || astCandidateProperty in setOf("true", "false")) {
+    "agattokAstCandidate must be explicitly true or false."
+}
+val astCandidateEnabled = astCandidateProperty == "true"
+require(!astCandidateEnabled || astProbeEnabled) { "AST candidate requires agattokAstProbe=true." }
+require(!(astCandidateEnabled && astStandaloneEnabled)) { "AST candidate and standalone are mutually exclusive." }
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -46,6 +53,7 @@ android {
         versionName = "0.5.10"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
+        buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
         manifestPlaceholders["testDistribution"] = "false"
         manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -70,6 +78,16 @@ android {
     buildTypes {
         getByName("debug") {
             if (astStandaloneEnabled) applicationIdSuffix = ".astprobe"
+            if (astCandidateEnabled) {
+                applicationIdSuffix = ".astcandidate"
+                versionNameSuffix = "-astcandidate"
+                buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "true")
+                buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
+                buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
+                buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
+                manifestPlaceholders["testDistribution"] = "true"
+                manifestPlaceholders["closedTestDistribution"] = "true"
+            }
         }
         release {
             // MediaPipe 1.0.0 relies on protobuf fields and JNI bindings that
@@ -118,6 +136,9 @@ android {
         if (astStandaloneEnabled) {
             getByName("debug").manifest.srcFile("src/astStandalone/AndroidManifest.xml")
         }
+        if (astCandidateEnabled) {
+            getByName("debug").manifest.srcFile("src/astCandidate/AndroidManifest.xml")
+        }
         getByName("main") {
             java.srcDir(if (astProbeEnabled) "src/astProbe/java" else "src/noAst/java")
             if (astProbeEnabled) assets.srcDir("src/astProbe/assets")
@@ -133,6 +154,9 @@ android {
 
 // Sideload preview remains blocked; beta is only for the authorized closed track.
 tasks.configureEach {
+    if (astCandidateEnabled && (name == "bundleDebug" || name == "packageDebugBundle")) {
+        doFirst { error("AST integrated candidate is local APK-only; bundles and Play upload are prohibited.") }
+    }
     if (astProbeEnabled && listOf("release", "beta", "preview").any { name.contains(it, ignoreCase = true) }) {
         doFirst { error("AST probe is debug-only. Remove -PagattokAstProbe=true for release, beta or preview builds.") }
     }

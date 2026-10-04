@@ -4,12 +4,20 @@ Play 테스트 전체 기능 개방 유지. 최신 소리/영상/출처 변경�
 
 ## 최우선 — 최대20초 온디바이스 생성 구조
 
-**현재 이어갈 한 단계:** [실제 Android 33입력 비교](qa/ondevice-av-generation/AST-PUBLIC-PAIRED-QA.md)를 완료했다.
+**현재 이어갈 한 단계:** [실제 앱 통합 후보 QA](qa/ondevice-av-generation/AST-INTEGRATED-CANDIDATE-QA.md)를 완료했다.
+별도 `.astcandidate`에서 실제 DeviceClipAnalyzer의 약국10/20초회복·시각20/40개·실UI취소/재분석·기록회귀86개를 확인했다.
+기본빌드에는AST가 없고 beta/release는 그대로다. 후보property/권한/업로드차단7개도 확인했다.
+현재 실폰이 ADB/USB장치목록에 없어 **다음 실행은 실제ARM 속도·발열·취소/복구와 후보채택판단**이다.
+고정후보는 `work/ast-integrated-candidate-01/run-02/app.apk`/`test.apk`, 원본있는known계측은명시동의된로컬기기에서만사용한다.
+이전S25요청의 합성점검 범위는 아래standalone고정사본으로 먼저검사한다. 사용자앱을덮어쓰거나QA도구의제품package상수를그대로쓰지않는다.
+에뮬레이터9.296/15.477초를폰성능으로옮기지않고,소리영상공동생성·감정욕구추론목표는미완료로유지한다.
+
+앞서 [실제 Android 33입력 비교](qa/ondevice-av-generation/AST-PUBLIC-PAIRED-QA.md)를 완료했다.
 기존 승인12개/보류21개 유지, 추가승인0·손실0이다. 알려진 약국 회복은 별도 유지하며 일반 정확도로 확대하지 않는다.
 기존 AST-only11개의 전후 미확인은 이번 실제 pair로 보완됐다. 같은33개를 반복하거나 임계값을 조정하지 않는다.
-다음은 **고정 모델·런타임을 포함하는 명시적 통합 후보 빌드와 실제 DeviceClipAnalyzer 호출 경로 준비**다.
+이후 **고정 모델·런타임을 포함하는 명시적 통합 후보 빌드와 실제 DeviceClipAnalyzer 호출 경로 준비**를 위 QA로 완료했다.
 현재 기본 `src/noAst`와 연구 beta/release 차단 때문에 ENABLED만 true로 바꾸는 것으로는 동작하지 않는다.
-후보에서20초 오프라인·UI취소/복구·기록미디어보존을 확인하고, ARM실측 후 제한적 채택을 결정한다.
+후보에서20초 오프라인·UI취소/복구·기록미디어보존을 확인했으며, ARM실측 후 제한적 채택을 결정한다.
 TV의 영아 재생음과 독립 일반화 품질은 이번 공개대조로 입증하지 못했다.
 
 [독립 점검 APK](qa/ondevice-av-generation/AST-DEVICE-PROBE-QA.md)는 에뮬레이터에서 설치·10/20초 측정·취소/복구·정리를 통과했다.

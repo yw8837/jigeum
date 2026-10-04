@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="com.android.vending.BILLING" tools:node="remove" />
+    <application android:label="아가톡 AST 통합 후보" tools:replace="android:label">
+        <activity android:name="com.moa.babylanguage.MainActivity"
+            android:label="아가톡 AST 후보" tools:replace="android:label" />
+    </application>
+</manifest>

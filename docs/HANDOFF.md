@@ -2,6 +2,19 @@
 
 갱신: **2026-10-04** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 최신 후속 — 실제 앱 AST 통합 후보와 UI 회귀
+
+[통합 후보 QA](qa/ondevice-av-generation/AST-INTEGRATED-CANDIDATE-QA.md)를 완료했다.
+명시적 `agattokAstProbe=true` + `agattokAstCandidate=true`로 별도 `.astcandidate` debug APK를 만든다.
+실제 `DeviceClipAnalyzer` 경로에서 알려진 약국 원본10/20초가 옹알이로 회복했고, 시간순 영상20/40개가 전체 구간을 덮었다.
+에뮬레이터 전체분석9.296/15.477초이며 휴대폰 성능·독립 정확도·전체AV생성 통과가 아니다.
+실제 화면의20초분석 취소/다음분석·입력SHA보존과 기존native/UI접근/저장/앨범/타임라인 등86개계측을 확인했다.
+첫 실행의JUnit반환형·합성무음구간 선택이라는 테스트 결함2건은 수정 후 해당5개 재실행으로 검증했다.
+배포/속성금지7개와 기본 APK의 AST/ORT부재·3flagfalse를 실물검사했다. 기본beta/release와 정책임계값은 그대로다.
+고정 후보사본은 ignored `work/ast-integrated-candidate-01/run-02/`다. 후보패키지/PID·에뮬레이터·격리QA state를 정리했다.
+**S25는 이번 ADB/USB장치목록에 없어 ARM실측 미완료.** 원본외부전송·제품앱변경·새Play업로드 없음.
+다음은 실제 기기에서 고정 후보/별도 점검 APK의 속도·발열·취소를 확인하고 제한적 채택을 판단하는 단계다.
+
 ### 최신 후속 — 실제 Android의 33입력 전후 비교
 
 [공개·합성 paired QA](qa/ondevice-av-generation/AST-PUBLIC-PAIRED-QA.md)에서 기존22개와
