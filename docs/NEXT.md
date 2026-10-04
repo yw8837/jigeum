@@ -9,6 +9,10 @@ native GPU 실행은 가능하지만20초 전체43.29초·thermal3·취소6.63�
 시험 후 ADB 연결이 끊겼으나 사용자 디버깅 재활성화 후 연구 패키지/모델 정리를 완료하고 제품 버전 불변을 확인했다.
 같은 프로세스/제품 UI 검증·32비트 지원·독립 관찰 품질을 실제로 통과하기 전 Gemma를 배포하지 않는다.
 
+후속 원천 조사: [Gemma 파일/SDK 결함](research/20261004-gemma-runtime-triage.md), [대안 모델](research/20261004-compact-av-candidates.md).
+현재 실패에 맞는 upstream 수정이나 바로 이식할 대안을 확보하지 못했다. 조사 자체를 새 인식 개선으로 세지 않는다.
+같은 실패 prompt/sampler를 반복해 우연한 성공을 찾거나 확인하지 못한 모델을 완성 경로로 약속하지 않는다.
+
 최신 상태(2026-10-04): [Android AST QA](qa/ondevice-av-generation/ANDROID-AST-QA.md)의 전체322통과/제외2 이후 v2·빌드 분리의 기본116개와 연구27개, Gradle6게이트를 통과했다. [코드 검토](qa/ondevice-av-generation/REVIEW-AST-20261004.md) P2두건도 수정·검증 완료다. 에뮬레이터 오프라인 원본 평가는 회복했지만 독립 일반화·생성 품질은 미통과이므로 후보는 기본 비활성이다. 임시 입력·모델 캐시를 제거하고 환경을 복원했다. 새 비공개 테스트 업로드는 없으며 영상 개선부터 배포할지 범위 확인 답변을 기다린다. 답변 후 확정 범위의 최종 서명 beta/code24이상·업데이트 보존·Play 게시 확인을 진행한다.
 
 후속 준비: 현재 소스의 **0.5.10/code24 서명 beta APK/AAB와 release 비교본**을 로컬에서 만들고 실제23→24의 미디어/기록 보존·서명 UI7시나리오·정식 재잠금까지 확인했다. [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md). 후보는 `work/ondevice-av/signed-candidate24/`에 있으며 Play 미제출이다. 배포 범위가 그대로 확정되고 소스가 바뀌지 않으면 이 후보의 SHA를 사용한다. 인식/생성 구현이 추가되면 별도 새 검증과 versionCode 결정을 한다. 연구 빌드는 제출하지 않는다.
