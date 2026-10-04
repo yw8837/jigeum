@@ -12,7 +12,8 @@
 
 ## 파일과 검증 해시
 
-저장소: `spoglab/w2v2-pro-sm`  
+저장소: `spoglab/w2v2-pro-sm`
+
 고정 revision: `9aac676c2b29c42d580b862a0294bc3807788847`
 
 | HF 상대 경로 | 실제 bytes | 로컬 SHA256 = 고정 LFS SHA256 |
