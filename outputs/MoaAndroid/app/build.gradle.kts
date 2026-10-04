@@ -13,6 +13,12 @@ require(astProbeProperty == null || astProbeProperty in setOf("true", "false")) 
     "agattokAstProbe must be explicitly true or false."
 }
 val astProbeEnabled = astProbeProperty == "true"
+val astStandaloneProperty = providers.gradleProperty("agattokAstStandalone").orNull
+require(astStandaloneProperty == null || astStandaloneProperty in setOf("true", "false")) {
+    "agattokAstStandalone must be explicitly true or false."
+}
+val astStandaloneEnabled = astStandaloneProperty == "true"
+require(!astStandaloneEnabled || astProbeEnabled) { "AST standalone requires agattokAstProbe=true." }
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -62,6 +68,9 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            if (astStandaloneEnabled) applicationIdSuffix = ".astprobe"
+        }
         release {
             // MediaPipe 1.0.0 relies on protobuf fields and JNI bindings that
             // fail in an R8-minified release. Keep release behavior identical
@@ -106,6 +115,9 @@ android {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
     sourceSets {
+        if (astStandaloneEnabled) {
+            getByName("debug").manifest.srcFile("src/astStandalone/AndroidManifest.xml")
+        }
         getByName("main") {
             java.srcDir(if (astProbeEnabled) "src/astProbe/java" else "src/noAst/java")
             if (astProbeEnabled) assets.srcDir("src/astProbe/assets")

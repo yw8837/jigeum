@@ -2,6 +2,25 @@
 
 갱신: **2026-10-04** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 최신 후속 — AST 제한적 개선 재평가와 분리된 기기 점검
+
+[변화 감사](research/20261004-ast-delta-audit.md)는 기존 실제 판정 기록만 집계했다.
+약국 1원본의 10초·20초가 후보에서 옹알이로 회복한 사실과 다른 원본의 보류 지속을 구분했다.
+공개 11원본·30창은 결합 baseline이 없어 unknown이며, 새 오인 0건으로 해석하지 않는다.
+[Astra 채택 기준 보완](research/20261004-ast-adoption-recheck.md)에 따라 독립 양성 미확보만으로
+알려진 회복까지 무효화하지 않고, 추가 승인 오인·실제 기기 비용을 비교하여 제한적 채택을 판단한다.
+제품 비활성·일반 정확도 미입증·새 AV 문장 생성 미완료 상태는 유지한다.
+
+[분리된 AST 점검 QA](qa/ondevice-av-generation/AST-DEVICE-PROBE-QA.md): 정확한 별도 package와
+권한 제거, APK 사본/설치 SHA 검증, 실패 시 두 연구 패키지 정리를 구현했다.
+host 12개와 delta 감사 10개 통과, 에뮬레이터의 benchmark 1개(10/20/20초)·취소/복구 2개 실행·정리를 완료했다.
+S25 USB 디버깅 활성화 안내 후에도 이번 ADB에는 폰이 없어 재연결을 요청했다. **AST ARM 실측은 아직 없다.**
+기존 Gemma 실측을 대신 쓰지 않는다. `work/ast-device-probe/emulator-run-02/`의 고정 APK 사본이 실폰 점검 입력이다.
+
+[추가 후보 조사](research/20261004-additional-vocal-candidates.md)에서는 ChildVox 실제 공개 head와
+상업 사용 금지 고지, VTC 실제 checkpoint·도메인·권리 미확인, SMD 라벨 schema·인증 요구를 확인했다.
+신규 가중치/음원 다운로드·추론은 수행하지 않았다. 새 모델 채택이나 배포 완료 보고가 아니다.
+
 ### 최신 후속 — 독립 평가 계약과 20초 QA 경로
 
 [최소 AV 평가 계약](research/20261004-av-evaluation-contract.md)은 소리 종류/누락 회복과 얼굴별 발성 연결을 분리한다.
