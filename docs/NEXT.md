@@ -4,16 +4,18 @@ Play 테스트 전체 기능 개방 유지. 최신 소리/영상/출처 변경�
 
 ## 최우선 — 최대20초 온디바이스 생성 구조
 
-**현재 이어갈 한 단계:** [AST 채택 기준 보완](research/20261004-ast-adoption-recheck.md)에 따라
-이미 확인한 약국 회복을 인정하고, 고정 v2의 추가 승인 오인과 기기 부담을 검증한다.
-[기존 기록 감사](research/20261004-ast-delta-audit.md)에서 public AST-only 11원본은 결합 baseline이 없어 unknown이다.
-같은 입력의 실제 YAMNet baseline/candidate 쌍을 확보해 성인·TV·음악·무음과 기존 승인 보존을 확인한다.
-임계값 재조정이나 신규 독립 양성의 절대 개수만을 채택/전면 중단 기준으로 삼지 않는다.
+**현재 이어갈 한 단계:** [실제 Android 33입력 비교](qa/ondevice-av-generation/AST-PUBLIC-PAIRED-QA.md)를 완료했다.
+기존 승인12개/보류21개 유지, 추가승인0·손실0이다. 알려진 약국 회복은 별도 유지하며 일반 정확도로 확대하지 않는다.
+기존 AST-only11개의 전후 미확인은 이번 실제 pair로 보완됐다. 같은33개를 반복하거나 임계값을 조정하지 않는다.
+다음은 **고정 모델·런타임을 포함하는 명시적 통합 후보 빌드와 실제 DeviceClipAnalyzer 호출 경로 준비**다.
+현재 기본 `src/noAst`와 연구 beta/release 차단 때문에 ENABLED만 true로 바꾸는 것으로는 동작하지 않는다.
+후보에서20초 오프라인·UI취소/복구·기록미디어보존을 확인하고, ARM실측 후 제한적 채택을 결정한다.
+TV의 영아 재생음과 독립 일반화 품질은 이번 공개대조로 입증하지 못했다.
 
 [독립 점검 APK](qa/ondevice-av-generation/AST-DEVICE-PROBE-QA.md)는 에뮬레이터에서 설치·10/20초 측정·취소/복구·정리를 통과했다.
 S25는 현재 USB 미연결로 사용자에게 재연결을 요청한 상태다. 연결되면 `emulator-run-02`의 고정 사본으로
 실제 ARM 시간/PSS/thermal과 제품 설치 정보 불변을 측정한다. ADB/Gradle은 부모 한 명만 사용한다.
-실폰 부재 중에도 위 paired 음성 평가 준비는 가능하다. 동일한 연결 질문을 반복하지 않는다.
+실폰 부재 중에도 위 통합 후보 준비·에뮬레이터 회귀는 가능하다. 동일한 연결 질문을 반복하지 않는다.
 
 후속 완료: [독립 사건/화자 평가 계약](research/20261004-av-evaluation-contract.md)과
 [공개 AV corpus 조사](research/20261004-labeled-av-data.md)를 작성했다. 공개 설명까지 확인했으며 정답셋/원본은 미확보다.
