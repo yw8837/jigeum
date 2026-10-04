@@ -48,9 +48,21 @@ RAM 감시가 Windows launcher를 표본으로 삼아 실제 torch 메모리 제
 **합성 tone20/20창을 Non-Canonical로 출력하고 공개 웃음/옹알이에도 범주 혼동이 있어 현재 재구성 경로의 제품 채택은 보류한다.**
 exit0·자손 정리 완료는 실행 증거이며 유료 품질·발성 누락 회복 증거가 아니다. 전체85.784초, raw Job committed peak3,100,946,432bytes는
 PC 실측이고 Android 성능이 아니다. 같은 원본의 겹치는 구간·합성 자료를 포함하므로425창/16출처그룹을 독립 정확도 분모로 쓰지 않는다.
-다음은 같은 고정 비민감 입력의 원저자 runtime 기준 hidden/logits를 확보해 재구성 차이를 대조하는 한 단계다.
-근거 없이 창·임계값을 조정해 반복하지 않는다. 원저자 모델 전체의 성능 실패로 확정하지도 않는다.
+[공식 계산 본문 대조](research/20261004-speech-maturity-native-reference.md)도 완료했다. Fairseq0.12.2/HF4.45.2/저자 계산 본문을
+현재 torch에서 실행한 제한 참조와 기존 재구성의 비민감2입력×8tensor가 사전 원소별 허용오차를 통과했다.
+최대 logit 차이는9.54e-7이며 합성 tone의 Non-Canonical 분류가 양쪽에서 재현됐다. 전체 저자 환경이나18구간 전체 parity는 아니다.
+이 반례를 계산 이식 오류로 설명할 근거가 약해졌고, 같은 입력의 창·임계값을 조정해 반복하지 않는다.
 제품/Play 변경 없음, AST 비활성 유지, 상용 포함·재배포 조건·Android·영상/욕구 생성은 미확정이다.
+
+이어 [TalkNet-ASD 조사](research/20261004-active-speaker-candidate.md)와 [공식 CPU 경로 검토](research/20261004-talknet-runtime-review.md)를 진행했다.
+공식 공개 checkpoint63,227,827bytes의 제한 로딩을 거쳐487키 전체를 CPU 컨테이너에 strict 복원했고,
+1초 합성 feature의 finite raw logit/시간축 및 잘못된 입력10건 거부를 통과했다. forward0.222초·Job committed peak 약1.05GB는 PC 수치다.
+이 모델은 입 움직임과 소리의 시간 정합성 후보이며 영아 발성·감정·욕구·문장 생성 모델이 아니다.
+후속 [실제 AV 네 조건 비교](research/20261004-talknet-av-comparison.md)도 실행했다. 공식 S3FD 얼굴250frame 전처리,
+고정MFCC와249frame/4조건 추론을 통과했지만 원음보다500ms 지연 조건의 점수가 높아 정합성 근거를 얻지 못했다.
+음성에 대한 반응은 있으나 독립 발성 주체/event 라벨이 없어 채택을 보류한다. PC에서얼굴전처리68초·각TalkNet추론약2초다.
+다음은 아기발성/보호자만발성/무음입움직임의 사건·화자 라벨을 모델 점수와 독립적으로 확보하는 한 단계다.
+소리주인 구분과누락회복을검증하기전제품에연결하지않으며threshold/offset/window를이번점수에맞춰반복조정하지않는다.
 
 ### 최신 대화 보완 — 배포 범위와 Gemma 기대 차이
 

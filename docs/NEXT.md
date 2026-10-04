@@ -27,10 +27,19 @@ native GPU 실행은 가능하지만20초 전체43.29초·thermal3·취소6.63�
 **18구간425창 원음 비교는 실행됐지만 현재 경로의 제품 채택은 보류한다.** 합성 tone을 발성으로 분류했고
 공개 웃음/옹알이에도 혼동이 남았다. [고정 비교 결과·한계](research/20261004-speech-maturity-comparison.md).
 
-다음 한 단계는 같은 고정 비민감 PCM에 대해 **원저자 runtime의 LL4300/ASR hidden·최종 logits 기준 출력**을 확보하여
-재구성 차이를 대조하는 것이다. 코드·전처리·checkpoint·pooling noise 처리·허용 오차를 비교 전에 고정한다.
-기준이 없으면 후보를 보류하며 결과를 보고 임계값·창 길이·입력 gain을 바꾸는 재실험은 하지 않는다.
-공식 학습 recipe의fit을 호출하거나 기존 환경을 downgrade하지 않는다. 실제 프로세스 트리 제한을 검증한 새 실행기를 사용한다.
+[공식 계산 본문 대조](research/20261004-speech-maturity-native-reference.md)는 완료했다. Fairseq/HF/저자 계산 본문을
+현재 torch에서 실행한 제한 참조와2입력×8tensor가 사전 허용오차를 통과했고 tone 오분류도 양쪽에서 재현됐다.
+저자 전체 환경·18구간 전체 parity는 아니지만 이 반례를 단순 이식 오류로 설명할 근거는 약해졌다.
+결과를 보고 임계값·창 길이·입력 gain을 바꾸는 재실험은 하지 않는다. 기존 환경 downgrade도 없다.
+TalkNet [후보 조사](research/20261004-active-speaker-candidate.md)와
+[소스 검토](research/20261004-talknet-runtime-review.md)를 거쳐487키 strict 복원·1초 합성 feature 추론·입력오류10개 거부를 통과했다.
+이어 [실제 AV 비교](research/20261004-talknet-av-comparison.md)까지완료했다. 고정MFCC/112crop/25fps로
+원음·무음·±500ms 네조건을시험했으나지연조건이원정렬보다높아제품채택근거는얻지못했다.
+**다음은 점수와독립적인 사건·발성주체 라벨 평가 묶음**이다. 아기발성, 보호자만발성,
+무음입움직임/무음을구분하며불명확하면unknown으로남긴다. 이미본원본은known case로분리한다.
+새사건을포함한고정pipeline1회평가로누락회복과보호자음성오귀속을함께확인한다.
+현재임계값/offset/window를이번점수에맞춰반복하지않는다. PC얼굴전처리에약68초가걸렸으며
+Android 성능·감정/욕구 생성 검증은별도다. 자손 전체를 제한하는 Windows Job 실행기를 유지한다.
 기존 launcher 메모리 값을 실제 torch RAM으로 해석하지 않는다. 두 실행의 raw Job committed 값도 휴대폰 RAM이 아니다.
 새 후보는 소리 분류 연구이며 Gemma의 의미/발열·영상 문장 생성 목표는 여전히 미완료다. 상용 배포 조건·Android 실행도 미확정이다.
 

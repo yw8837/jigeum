@@ -94,12 +94,14 @@ raw peak는 Windows Job committed accounting이며 RSS·VRAM이나 실제 휴대
 - **핵심 품질 / Astra high:** 제품 보완 활성화 부적합. 가중치431키 복원과 동일seed 반복은 원저자 runtime 수치 parity가 아니다.
   현재 부정적 결과를 무시하거나 임계값·창 길이 변경으로 같은 사례를 반복해서 채택하지 않는다.
 
-## 다음 한 단계
+## 후속 계산 대조 완료
 
-추가 모델 실행 전에 **원저자 runtime에서 같은 고정 비민감 PCM의 기준 출력**을 확보해야 한다.
-코드·checkpoint·전처리와 LL4300 층별 hidden/ASR hidden/최종 logits, pooling noise 처리와
-사전 허용 오차를 고정해 한 번 비교한다. 이것이 재구성 오류와 후보의 한계를 구분할 다음 근거다.
-기준 출력이 없으면 이 후보를 보류한다. 이 단계가 통과해도 의도·영상 결합 생성이나 제품 개선 완료는 아니다.
+[공식 계산 본문 대조](20261004-speech-maturity-native-reference.md)에서 고정 tone500/cry500 입력의
+LL4300 층별 hidden·ASR hidden·pooling·logits를 대조했다. Fairseq0.12.2/HF4.45.2/저자 계산 본문을 현재 torch에서
+실행한 제한 참조이며 저자 전체 환경 재현은 아니다. 두 입력의8개tensor 모두 사전 원소별 기준을 통과했다.
+최대 logit 차이9.54e-7, tone의 Non-Canonical 및 cry의 Crying top1도 양쪽에서 같다.
+이 tone 반례를 LL→HF 계산 이식 오류로 설명할 근거가 약해졌다. 이번2입력의 동등성을18구간 전체로 확대하지 않는다.
+제품 채택 보류를 유지하며 임계값·창 길이 변경이나 같은18구간 재실행을 하지 않는다. AV 주체 동기화 후보는 별도 후속 연구다.
 
 ## 재현·정리
 
