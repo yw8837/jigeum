@@ -139,7 +139,9 @@ internal object AstAudioAnalyzer {
     internal class NativeRunGuard(job: Job, deadline: Long) : AutoCloseable {
         val options = OrtSession.RunOptions()
         private var closed = false
-        private val monitor = watchdog.scheduleAtFixedRate({
+        // Check the original absolute deadline without replaying missed polls after
+        // Android resumes a cached process. The owner still closes native handles.
+        private val monitor = watchdog.scheduleWithFixedDelay({
             synchronized(this) {
                 if (!closed && (!job.isActive || System.nanoTime() >= deadline)) {
                     try { options.setTerminate(true) } catch (_: Exception) { /* owner reports run failure */ }

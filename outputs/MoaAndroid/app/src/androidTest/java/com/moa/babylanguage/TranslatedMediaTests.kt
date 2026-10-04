@@ -102,6 +102,75 @@ class TranslatedMediaTests {
         try { assertTrue(Color.red(frame.getPixel(10,10)) > 225) } finally { frame.recycle() }
     }
 
+    @Test fun videoWithoutAudioKeepsSceneCaptionAndSelectedDurationWithoutAddingAudio() = runBlocking {
+        val original = input("media-quadrants.mp4")
+        val silent = File(context.cacheDir, "$token-video-only.mp4").also { files += it }
+        val extractor = MediaExtractor()
+        val muxer = MediaMuxer(silent.path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+        try {
+            extractor.setDataSource(original.ownedFile!!.path)
+            val track = (0 until extractor.trackCount).first {
+                extractor.getTrackFormat(it).getString("mime")!!.startsWith("video/")
+            }
+            extractor.selectTrack(track)
+            val out = muxer.addTrack(extractor.getTrackFormat(track))
+            muxer.start()
+            val bytes = ByteBuffer.allocate(1024 * 1024)
+            val info = MediaCodec.BufferInfo()
+            while (true) {
+                bytes.clear()
+                val size = extractor.readSampleData(bytes, 0)
+                if (size < 0) break
+                info.set(0, size, extractor.sampleTime, extractor.sampleFlags)
+                muxer.writeSampleData(out, bytes, info)
+                extractor.advance()
+            }
+            muxer.stop()
+        } finally { muxer.release(); extractor.release() }
+
+        fun assertVideoOnly(file: File) {
+            val tracks = MediaExtractor()
+            try {
+                tracks.setDataSource(file.path)
+                val mimes = (0 until tracks.trackCount).map { tracks.getTrackFormat(it).getString("mime")!! }
+                assertEquals("one video track must be retained", 1, mimes.count { it.startsWith("video/") })
+                assertFalse("audio must not be manufactured", mimes.any { it.startsWith("audio/") })
+            } finally { tracks.release() }
+        }
+        assertVideoOnly(silent)
+        val source = CaptureFiles.inspect(context, Uri.fromFile(silent), silent, CaptureLimits.FULL)
+        assertTrue(source.hasVideo)
+        val range = ClipRange(123, 2_123)
+        val output = TranslatedMedia.render(context, source, range, record()).also { files += it }
+        assertVideoOnly(output)
+        val before = MediaMetadataRetriever()
+        val after = MediaMetadataRetriever()
+        try {
+            before.setDataSource(silent.path)
+            after.setDataSource(output.path)
+            val duration = after.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+            assertTrue("duration=$duration expected=2000", kotlin.math.abs(duration - range.durationMs) < 150)
+            val originalFrame = before.getFrameAtTime((range.startMs + 500) * 1000, MediaMetadataRetriever.OPTION_CLOSEST)!!
+            val frame = after.getFrameAtTime(500_000, MediaMetadataRetriever.OPTION_CLOSEST)!!
+            try {
+                assertEquals(720, frame.width)
+                assertTrue(frame.height in 960..4096)
+                val scale = minOf(720f / originalFrame.width, 640f / originalFrame.height)
+                val width = originalFrame.width * scale; val height = originalFrame.height * scale
+                for (y in listOf(.25f, .75f)) for (x in listOf(.25f, .75f)) {
+                    val wanted = originalFrame.getPixel((originalFrame.width * x).toInt(), (originalFrame.height * y).toInt())
+                    val actual = frame.getPixel(((720 - width) / 2 + width * x).toInt(), ((640 - height) / 2 + height * y).toInt())
+                    assertTrue("scene red", kotlin.math.abs(Color.red(wanted) - Color.red(actual)) < 35)
+                    assertTrue("scene green", kotlin.math.abs(Color.green(wanted) - Color.green(actual)) < 35)
+                    assertTrue("scene blue", kotlin.math.abs(Color.blue(wanted) - Color.blue(actual)) < 35)
+                }
+                var ink = 0
+                for (y in 708..888) for (x in 48..672) if (Color.red(frame.getPixel(x, y)) < 140) ink++
+                assertTrue("caption pixels present", ink > 400)
+            } finally { originalFrame.recycle(); frame.recycle() }
+        } finally { before.release(); after.release() }
+    }
+
     @Test fun extremeCaptionFitsAndLeavesSceneTransparent() {
         for (text in listOf("가".repeat(160), "안녕😀\n".repeat(25), "W".repeat(160))) {
             for (video in listOf(true,false)) {

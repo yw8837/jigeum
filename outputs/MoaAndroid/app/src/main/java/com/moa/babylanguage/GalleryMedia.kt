@@ -32,6 +32,7 @@ internal object GalleryMedia {
     private val lock = Mutex()
     private fun journal(context: Context) = context.getSharedPreferences("gallery-pending", Context.MODE_PRIVATE)
     // Synchronous commit on IO is required before the next MediaStore mutation or crash boundary.
+    // Both journal operations need commit's Boolean; KTX edit returns Unit.
     @SuppressLint("ApplySharedPref")
     private fun remember(context: Context, token: String, uri: Uri?, legacy: File?, written: Boolean) {
         check(journal(context).edit().putString(token, JSONObject().put("uri",uri?.toString() ?: "")

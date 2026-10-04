@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-// AST remains a local debug research runtime until the source/quality gates pass.
+// AST is explicit opt-in for local debug research or the validated beta candidate.
 // A normal checkout/build requires neither AST weights nor ONNX Runtime.
 val astProbeProperty = providers.gradleProperty("agattokAstProbe").orNull
 require(astProbeProperty == null || astProbeProperty in setOf("true", "false")) {
@@ -26,6 +26,15 @@ require(astCandidateProperty == null || astCandidateProperty in setOf("true", "f
 val astCandidateEnabled = astCandidateProperty == "true"
 require(!astCandidateEnabled || astProbeEnabled) { "AST candidate requires agattokAstProbe=true." }
 require(!(astCandidateEnabled && astStandaloneEnabled)) { "AST candidate and standalone are mutually exclusive." }
+val astBetaProperty = providers.gradleProperty("agattokAstBeta").orNull
+require(astBetaProperty == null || astBetaProperty in setOf("true", "false")) {
+    "agattokAstBeta must be explicitly true or false."
+}
+val astBetaEnabled = astBetaProperty == "true"
+require(!astBetaEnabled || !(astProbeEnabled || astStandaloneEnabled || astCandidateEnabled)) {
+    "AST beta cannot be mixed with AST probe, standalone or candidate research flags."
+}
+val astRuntimeEnabled = astProbeEnabled || astBetaEnabled
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -49,11 +58,12 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 24
-        versionName = "0.5.10"
+        versionCode = 25
+        versionName = "0.5.11"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
+        buildConfigField("boolean", "AST_BABBLE_SUPPORT", "false")
         manifestPlaceholders["testDistribution"] = "false"
         manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -116,6 +126,7 @@ android {
             matchingFallbacks += listOf("release")
             versionNameSuffix = "-beta"
             buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
+            buildConfigField("boolean", "AST_BABBLE_SUPPORT", astBetaEnabled.toString())
             buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
             buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
             manifestPlaceholders["testDistribution"] = "true"
@@ -127,7 +138,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true; buildConfig = true }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -140,14 +150,39 @@ android {
             getByName("debug").manifest.srcFile("src/astCandidate/AndroidManifest.xml")
         }
         getByName("main") {
-            java.srcDir(if (astProbeEnabled) "src/astProbe/java" else "src/noAst/java")
-            if (astProbeEnabled) assets.srcDir("src/astProbe/assets")
+            java.srcDir(if (astRuntimeEnabled) "src/astProbe/java" else "src/noAst/java")
+            if (astRuntimeEnabled) assets.srcDir("src/astProbe/assets")
         }
         getByName("androidTest") {
             if (astProbeEnabled) {
                 java.srcDir("src/astProbeAndroidTest/java")
                 assets.srcDir("src/astProbeAndroidTest/assets")
             }
+        }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
+// Runtime source selection is per invocation; reject mixed graphs before any task
+// runs so another variant cannot package AST with an inactive product flag.
+gradle.taskGraph.whenReady {
+    if (astBetaEnabled) {
+        // These beta tasks handle native debug metadata, not the debug variant.
+        val betaNativeMetadataTasks = setOf("stripBetaDebugSymbols", "mergeBetaNativeDebugMetadata")
+        val forbidden = allTasks.filter { task ->
+            task.project == project && task.name !in betaNativeMetadataTasks &&
+                listOf("debug", "release", "preview").any {
+                    task.name.contains(it, ignoreCase = true)
+                }
+        }
+        require(forbidden.isEmpty()) {
+            "AST beta is beta-only. Remove -PagattokAstBeta=true for debug, release or preview tasks: " +
+                forbidden.joinToString { it.path }
         }
     }
 }
@@ -166,7 +201,7 @@ tasks.configureEach {
 }
 
 // Download/export is an explicit local preparation step, never a Gradle network action.
-// Explicit verification and debug probe packaging fail for an absent/changed model.
+// Explicit verification and opted-in packaging fail for an absent/changed model.
 // Default debug/beta/release builds have no dependency on this task or model.
 val verifyAstModel by tasks.registering {
     val model = layout.projectDirectory.file("src/astProbe/assets/ast-dynamic-int8.onnx")
@@ -193,38 +228,40 @@ val verifyAstModel by tasks.registering {
 }
 tasks.configureEach {
     if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
+    if (astBetaEnabled && name == "mergeBetaAssets") dependsOn(verifyAstModel)
 }
 
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2025.08.01")
     val cameraXVersion = "1.6.2"
     implementation(composeBom)
-    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
+    // Lifecycle 2.11 Compose artifacts require AGP 9.2; keep the compatible 2.9 line.
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
     implementation("androidx.camera:camera-core:$cameraXVersion")
     implementation("androidx.camera:camera-camera2:$cameraXVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraXVersion")
     implementation("androidx.camera:camera-view:$cameraXVersion")
     implementation("androidx.camera:camera-video:$cameraXVersion")
-    implementation("androidx.media3:media3-transformer:1.8.0")
-    implementation("androidx.media3:media3-effect:1.8.0")
+    implementation("androidx.media3:media3-transformer:1.11.1")
+    implementation("androidx.media3:media3-effect:1.11.1")
     implementation("com.google.mediapipe:tasks-vision:1.0.0")
     implementation("com.google.mediapipe:tasks-audio:1.0.0")
     // Python probe used 1.24.4; Android's official 1.24 series ends at 1.24.3.
     // Full CPU AAR includes DynamicQuantizeLinear/MatMulInteger; no reduced operator build.
-    if (astProbeEnabled) implementation("com.microsoft.onnxruntime:onnxruntime-android:1.24.3")
-    // MediaPipe requests 4.26.1; 4.27.5 patches CVE-2024-7254 while retaining the lite runtime.
-    implementation("com.google.protobuf:protobuf-javalite:4.27.5")
+    if (astRuntimeEnabled) implementation("com.microsoft.onnxruntime:onnxruntime-android:1.24.3")
+    // Newer 4.x runtime supports the older MediaPipe gencode; keep parser/model regression coverage.
+    implementation("com.google.protobuf:protobuf-javalite:4.36.2")
     implementation("com.android.billingclient:billing:9.1.0")
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     androidTestImplementation(composeBom)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
 }

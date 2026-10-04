@@ -251,7 +251,8 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                     else if (pcm == null) SoundAnalysis(emptyList(),
                     "이 영상에는 읽을 수 있는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.", issue = AnalysisIssue.NO_AUDIO)
                     else SoundAnalyzer.analyzeDetailed(context, pcm)
-                val audio = if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE) &&
+                val audio = if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE ||
+                    BuildConfig.AST_BABBLE_SUPPORT) &&
                     pcm != null && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
                     val ast = AstAudioAnalyzer.analyze(context, pcm)
                     BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)

@@ -1,3 +1,19 @@
+# 0.5.11/code25 로컬 후보 실행 안내
+
+최신 사본은 `work/ast-beta-package-03/`이고 Play 미제출이다. [최종 QA](qa/ondevice-av-generation/AST-BETA-PACKAGE-QA.md)를 먼저 읽는다.
+고정 AST 파일은 Git에 넣지 않는다. 기존 `tools/research/setup_android_ast.py --model <고정 SHA와 일치하는 로컬 ONNX>`로 준비한다.
+일반 빌드는 AST가 없으며, 베타 후보는 `tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 beta-code25.aab>`로 만든다.
+속성은 정확한 true/false만 허용한다. AST beta와 debug/release/preview 또는 연구 속성을 혼합하지 않는다.
+정식 정책 비교용 release는 `-Purpose paid-candidate`이며 AST switch를 쓰지 않는다. 비교용 release AAB는 Play에 제출하지 않는다.
+
+`verify_ast_payload.py`의 present/absent 검사와 `check_package.py`의 서명·배포 표시·정렬 검사를 함께 수행한다.
+최종 dex 플래그·실제 서명 업데이트·기록/MP4 보존은 별도 확인한다. 모델·native·서명 검사는 서로를 대신하지 않는다.
+Media3 1.11.1 / Activity1.13.0 / Lifecycle2.9.4 / protobuf4.36.2를 사용한다. 아래1.8.0 등은 이전 실행 이력이다.
+정식 전환은 실제 게시된 beta보다 높은 versionCode와 Play 서명/업데이트 경로 확인이 필요하다.
+이 후보를 게시한다면 이후 정식 전환에는 code26 이상이 필요하다. 베타에 자체 만료는 없고 정식 entitlement 검사는 유지한다.
+
+---
+
 # 0.5.9-beta/code23 실행 안내
 
 개발 브랜치의 최신 로컬 후보는 **0.5.10/code24**이며 아직 배포하지 않았다. 서명·업데이트·실제 미디어 보존 검사와 현재 재현 명령은 [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md)를 따른다. 아래0.5.9는 기존 Play 기준본의 실행 기록이다.

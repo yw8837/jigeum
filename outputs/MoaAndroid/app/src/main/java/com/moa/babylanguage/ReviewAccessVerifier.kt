@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.core.content.edit
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -84,6 +85,7 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
     private val installationId: String? = preferences.getString("installation_id", null)
         ?.takeIf { it.matches(Regex("[0-9a-fA-F-]{36}")) } ?: run {
         val generated = UUID.randomUUID().toString()
+        // Use the ID only after a successful durable write; KTX edit returns Unit.
         if (preferences.edit().putString("installation_id", generated).commit()) generated else null
     }
     private val credentials = installationId?.let { ReviewCredentialStore(context, it, preferences) }
@@ -97,9 +99,15 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
     }
 
     private fun clearGrant(removeCredential: Boolean = false) {
-        preferences.edit().remove("entitlement").remove("cache_version")
-            .remove("received_wall").remove("received_elapsed").remove("boot_count")
-            .apply { if (removeCredential) remove("credential") }.commit()
+        // Revocation stays synchronous across the following key-deletion/crash boundary.
+        preferences.edit(commit = true) {
+            remove("entitlement")
+            remove("cache_version")
+            remove("received_wall")
+            remove("received_elapsed")
+            remove("boot_count")
+            if (removeCredential) remove("credential")
+        }
     }
 
     override fun cachedExpiryMs(): Long? {
@@ -130,6 +138,7 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
         val anchor = EntitlementClockAnchor(ENTITLEMENT_CACHE_VERSION, now.wall, now.elapsed, now.boot)
         if (remaining(envelope, anchor, now) == null) return false
         val encrypted = runCatching { credentials?.encrypt(code) }.getOrNull() ?: return false
+        // Acceptance must return commit's success Boolean; KTX edit returns Unit.
         return preferences.edit().putString("entitlement", envelope).putString("credential", encrypted)
             .putInt("cache_version", anchor.version).putLong("received_wall", anchor.receivedAtWallMs)
             .putLong("received_elapsed", anchor.receivedAtElapsedMs).putInt("boot_count", anchor.bootCount).commit()

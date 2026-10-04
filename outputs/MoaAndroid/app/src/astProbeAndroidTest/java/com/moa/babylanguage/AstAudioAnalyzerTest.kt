@@ -138,6 +138,36 @@ class AstAudioAnalyzerTest {
         }
     }
 
+    @Test fun expiredDeadlineTerminatesNativeRunWithoutCancellingJob() = runBlocking {
+        val model = AstModelStore.resolve(context) {}
+        val environment = OrtEnvironment.getEnvironment()
+        OrtSession.SessionOptions().use { options ->
+            options.setIntraOpNumThreads(1)
+            environment.createSession(model.absolutePath, options).use { session ->
+                val features = AstFeatures.extract(AstFeaturesTest.synthetic(1000, "tone"))
+                OnnxTensor.createTensor(environment, FloatBuffer.wrap(features), longArrayOf(1, 1024, 128)).use { input ->
+                    val job = Job()
+                    AstAudioAnalyzer.NativeRunGuard(job, System.nanoTime() - 1).use { guard ->
+                        val run = async(Dispatchers.Default) {
+                            runCatching {
+                                while (true) session.run(mapOf("input_values" to input), guard.options).use {}
+                            }
+                        }
+                        val failed = withTimeout(10_000) { run.await() }
+                        assertNotNull("Expired absolute deadline must terminate native inference", failed.exceptionOrNull())
+                        assertTrue("Deadline must not cancel its caller's job", job.isActive)
+                    }
+                    OrtSession.RunOptions().use { fresh ->
+                        session.run(mapOf("input_values" to input), fresh).use { result ->
+                            assertEquals(527, (result.get(0) as OnnxTensor).floatBuffer.remaining())
+                        }
+                    }
+                    job.cancel()
+                }
+            }
+        }
+    }
+
     @Test fun concurrentAnalysisHasOneOwnerAndKeepsTwentySecondCoverage() = runBlocking {
         withTimeout(150_000) {
             val first = async { AstAudioAnalyzer.analyze(context, AstFeaturesTest.synthetic(10000, "silence")) }

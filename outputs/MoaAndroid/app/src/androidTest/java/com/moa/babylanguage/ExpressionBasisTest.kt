@@ -79,7 +79,7 @@ class ExpressionBasisTest {
                 db.execSQL("CREATE TABLE observations (id INTEGER PRIMARY KEY NOT NULL, sound TEXT NOT NULL, context TEXT NOT NULL, note TEXT NOT NULL, phrase TEXT NOT NULL, source TEXT NOT NULL, model_cue TEXT NOT NULL)")
                 db.execSQL("CREATE TABLE meta (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)")
                 val old = row()
-                db.execSQL("INSERT INTO observations VALUES(?,?,?,?,?,?,?)", arrayOf(old.id, old.sound, old.context, old.note, old.phrase, old.source, old.modelCue))
+                db.execSQL("INSERT INTO observations VALUES(?,?,?,?,?,?,?)", arrayOf<Any>(old.id, old.sound, old.context, old.note, old.phrase, old.source, old.modelCue))
                 db.execSQL("INSERT INTO meta VALUES('migration_v1','done')")
                 db.version = 1
             }

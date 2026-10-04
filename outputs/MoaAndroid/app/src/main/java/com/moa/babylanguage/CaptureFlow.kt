@@ -21,6 +21,7 @@ import androidx.camera.video.QualitySelector
 import androidx.camera.video.Recorder
 import androidx.camera.video.VideoCapture
 import androidx.camera.view.PreviewView
+import androidx.core.net.toUri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -319,7 +320,7 @@ internal fun CaptureFlow(
                     Text(if (audioOnly) "마이크로 녹음 중이에요" else "영상과 소리를 함께 녹화 중이에요", color = Muted)
                 } else {
                     if (permissionDenied) TextButton(onClick = { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:${context.packageName}"))) }) { Text("앱 설정에서 권한 확인") }
+                        "package:${context.packageName}".toUri())) }) { Text("앱 설정에서 권한 확인") }
                     if (hasPermission && !audioOnly && canSwitch) TextButton(onClick = {
                         cameraRecorder = null; facing = if (facing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
                     }) { Text("카메라 전환") }

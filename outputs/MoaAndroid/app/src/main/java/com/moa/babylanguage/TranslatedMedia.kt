@@ -81,6 +81,9 @@ internal object TranslatedMedia {
         require(range.startMs >= 0 && range.endMs <= clip.durationMs && range.durationMs in 1_000..30_000)
         ObservationStore.validateRecord(record)
         val folder = File(context.cacheDir, "media-render").apply { check(isDirectory || mkdirs()) }
+        // Keep the bounded render plus headroom within immediate free space.
+        // Allocatable bytes are not free without allocation/cache eviction, which
+        // a readiness check must not perform on the caregiver's behalf.
         check(folder.usableSpace > MAX_BYTES + 16L * 1024 * 1024) { "영상으로 남길 공간이 부족해요. 공간을 확보하거나 문장만 저장해 주세요." }
         val token = UUID.randomUUID().toString()
         val output = File(folder, "$token.mp4")
@@ -94,19 +97,23 @@ internal object TranslatedMedia {
             val source = MediaItem.Builder().setUri(clip.uri).setClippingConfiguration(
                 MediaItem.ClippingConfiguration.Builder().setStartPositionMs(range.startMs)
                     .setEndPositionMs(range.endMs).build()).build()
-            val composition = if (clip.hasVideo) {
+            val startExport: (Transformer) -> Unit
+            if (clip.hasVideo) {
                 val effects = listOf(SceneLayout(overlay.height), OverlayEffect(listOf(BitmapOverlay.createStaticBitmapOverlay(overlay))))
                 val movie = EditedMediaItem.Builder(source).setEffects(Effects(emptyList(), effects)).build()
-                Composition.Builder(EditedMediaItemSequence.Builder(listOf(movie)).build()).build()
+                // Single-item start infers the source tracks; a video without audio
+                // must not gain the silence synthesized by an explicit audio sequence.
+                startExport = { transformer -> transformer.start(movie, output.absolutePath) }
             } else {
                 withContext(Dispatchers.IO) { image.outputStream().use { check(overlay.compress(Bitmap.CompressFormat.PNG, 100, it)) } }
                 val card = EditedMediaItem.Builder(MediaItem.Builder().setUri(Uri.fromFile(image))
                     .setImageDurationMs(range.durationMs).build()).setFrameRate(24).build()
                 val audio = EditedMediaItem.Builder(source).setRemoveVideo(true).build()
-                Composition.Builder(EditedMediaItemSequence.Builder(listOf(card)).build(),
-                    EditedMediaItemSequence.Builder(listOf(audio)).build()).build()
+                val composition = Composition.Builder(EditedMediaItemSequence.withVideoFrom(listOf(card)),
+                    EditedMediaItemSequence.withAudioFrom(listOf(audio))).build()
+                startExport = { transformer -> transformer.start(composition, output.absolutePath) }
             }
-            withTimeout(120_000) { export(context, composition, output) }
+            withTimeout(120_000) { export(context, startExport) }
             coroutineContext.ensureActive()
             check(output.length() in 1..MAX_BYTES) { "영상 파일을 완성하지 못했어요. 문장만 저장하거나 다시 시도해 주세요." }
             completed = true
@@ -120,7 +127,7 @@ internal object TranslatedMedia {
         }
     }
 
-    private suspend fun export(context: Context, composition: Composition, file: File) = withContext(Dispatchers.Main.immediate) {
+    private suspend fun export(context: Context, startExport: (Transformer) -> Unit) = withContext(Dispatchers.Main.immediate) {
         var transformer: Transformer? = null
         try {
             suspendCancellableCoroutine<Unit> { continuation ->
@@ -136,7 +143,7 @@ internal object TranslatedMedia {
                                 IllegalStateException("이 기기에서 번역 영상을 만들지 못했어요. 문장만 저장하거나 다른 파일로 다시 시도해 주세요.", exportException))
                         }
                     }).build()
-                transformer!!.start(composition, file.absolutePath)
+                startExport(transformer!!)
             }
         } finally {
             // Transformer and its GL/codec resources must be released on its application looper,
