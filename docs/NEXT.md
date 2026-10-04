@@ -22,11 +22,17 @@ native GPU 실행은 가능하지만20초 전체43.29초·thermal3·취소6.63�
 **새 근거가 있는 다음 음성 후보:** [SpeechMaturity artifact](research/20261004-speech-maturity-artifacts.md)의
 학습된5-way head와 복수 encoder가 실제 공개돼 있다. [실행 구조 검토](research/20261004-speech-maturity-runtime-review.md)를 따라
 고정된 최소 3개 checkpoint의 크기/SHA·제한 로딩·키/shape/유한성 검사를 마쳤다. [실행 증거](research/20261004-speech-maturity-checkpoint-audit.md).
-**다음은 LL4300 cfg의 안전한 확보와 전체 키/전처리 매핑**이다. 3개 파일에 cfg는 없으므로 base 기본값을 추측해 추론하지 않는다.
-향후 실행 하네스는 실제 프로세스 트리의 메모리·종료를 관리해야 한다. 이번 Windows launcher 메모리 표본을 실제 torch RAM으로 쓰지 않는다.
-공식 학습 recipe를 그대로 실행하거나 기존 환경을 무조건 downgrade하지 않는다.
-약0.576초 입력 계약·padding·batch1·전체 구간의 시간 보존을 먼저 검증하며, 알려진 개발 사례의 결과를 독립 정확도로 세지 않는다.
-새 후보는 소리 분류에 대한 근거이며 Gemma의 의미/발열 실패나 영상 문장 생성을 해결한 것은 아니다. 상용 배포 조건·Android 실행은 별도 미확정이다.
+후속 [cfg확보/431키 복원/합성 검증](research/20261004-speech-maturity-reconstruction.md)과
+[실제 프로세스 트리 실행기](qa/ondevice-av-generation/BOUNDED-PROCESS-QA.md)를 완료했다.
+**18구간425창 원음 비교는 실행됐지만 현재 경로의 제품 채택은 보류한다.** 합성 tone을 발성으로 분류했고
+공개 웃음/옹알이에도 혼동이 남았다. [고정 비교 결과·한계](research/20261004-speech-maturity-comparison.md).
+
+다음 한 단계는 같은 고정 비민감 PCM에 대해 **원저자 runtime의 LL4300/ASR hidden·최종 logits 기준 출력**을 확보하여
+재구성 차이를 대조하는 것이다. 코드·전처리·checkpoint·pooling noise 처리·허용 오차를 비교 전에 고정한다.
+기준이 없으면 후보를 보류하며 결과를 보고 임계값·창 길이·입력 gain을 바꾸는 재실험은 하지 않는다.
+공식 학습 recipe의fit을 호출하거나 기존 환경을 downgrade하지 않는다. 실제 프로세스 트리 제한을 검증한 새 실행기를 사용한다.
+기존 launcher 메모리 값을 실제 torch RAM으로 해석하지 않는다. 두 실행의 raw Job committed 값도 휴대폰 RAM이 아니다.
+새 후보는 소리 분류 연구이며 Gemma의 의미/발열·영상 문장 생성 목표는 여전히 미완료다. 상용 배포 조건·Android 실행도 미확정이다.
 
 최신 상태(2026-10-04): [Android AST QA](qa/ondevice-av-generation/ANDROID-AST-QA.md)의 전체322통과/제외2 이후 v2·빌드 분리의 기본116개와 연구27개, Gradle6게이트를 통과했다. [코드 검토](qa/ondevice-av-generation/REVIEW-AST-20261004.md) P2두건도 수정·검증 완료다. 에뮬레이터 오프라인 원본 평가는 회복했지만 독립 일반화·생성 품질은 미통과이므로 후보는 기본 비활성이다. 임시 입력·모델 캐시를 제거하고 환경을 복원했다. 새 비공개 테스트 업로드는 없으며 영상 개선부터 배포할지 범위 확인 답변을 기다린다. 답변 후 확정 범위의 최종 서명 beta/code24이상·업데이트 보존·Play 게시 확인을 진행한다.
 

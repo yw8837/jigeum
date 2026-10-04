@@ -39,7 +39,18 @@ Play 업로드는 없으며 code24의 제품 QA를 Gemma 통과로 재해석하�
 실제로 받아 크기/SHA·제한 로딩·키/shape·유한성을 확인했다. head 9개·LL4300과 ASR 각 211개 tensor이며 설정 cfg는 없다.
 [가중치 감사](research/20261004-speech-maturity-checkpoint-audit.md)의 통과는 파일 검사에 한정된다.
 RAM 감시가 Windows launcher를 표본으로 삼아 실제 torch 메모리 제한·자식 종료를 검증하지 못했으므로 성능 통과로 세지 않는다.
-다음은 LL4300 설정을 안전하게 확보하고 완전한 매핑을 확인하는 단계다. 실제 원음 추론·제품 활성화는 하지 않았으며 상용 모델 포함·재배포 조건도 미확정이다.
+후속 [설정·재구성](research/20261004-speech-maturity-reconstruction.md)에서 bootstrap cfg를 비실행 pickle opcode로 확인하고
+431키 전체 strict 복원·합성 출력·반복 일치·잘못된 입력3개 거절을 통과했다. 기존 감사의 부정확한 메모리 증거는 소급 수정하지 않는다.
+새 [Windows 실행기](qa/ondevice-av-generation/BOUNDED-PROCESS-QA.md)는 Job 전체 자손·메모리 한도·timeout·로그 상한을 다루며
+부모의 독립10회귀도 통과했다. 모델/원본/Git 경계를 유지하고 기존 환경의 설치·downgrade는 하지 않았다.
+
+이어 [원음18구간/425창 비교](research/20261004-speech-maturity-comparison.md)를 끝까지 실행했다.
+**합성 tone20/20창을 Non-Canonical로 출력하고 공개 웃음/옹알이에도 범주 혼동이 있어 현재 재구성 경로의 제품 채택은 보류한다.**
+exit0·자손 정리 완료는 실행 증거이며 유료 품질·발성 누락 회복 증거가 아니다. 전체85.784초, raw Job committed peak3,100,946,432bytes는
+PC 실측이고 Android 성능이 아니다. 같은 원본의 겹치는 구간·합성 자료를 포함하므로425창/16출처그룹을 독립 정확도 분모로 쓰지 않는다.
+다음은 같은 고정 비민감 입력의 원저자 runtime 기준 hidden/logits를 확보해 재구성 차이를 대조하는 한 단계다.
+근거 없이 창·임계값을 조정해 반복하지 않는다. 원저자 모델 전체의 성능 실패로 확정하지도 않는다.
+제품/Play 변경 없음, AST 비활성 유지, 상용 포함·재배포 조건·Android·영상/욕구 생성은 미확정이다.
 
 ### 최신 대화 보완 — 배포 범위와 Gemma 기대 차이
 
