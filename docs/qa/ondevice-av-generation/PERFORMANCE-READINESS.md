@@ -1,6 +1,7 @@
 # Gemma 탑재 전 성능 준비 상태
 
-2026-10-04. 현재 소스 `4012d42` 기준의 실행 경로 검토다. 신규 Android 성능 시험이나 Gemma 통합 완료 보고가 아니다.
+2026-10-04. 소스 `4012d42` 기준 실행 경로 검토에 같은 날 S25 연구 실행 결과를 보완했다.
+실측 원문은 [S25 QA](S25-GEMMA-20261004.md)다. 제품 Gemma 통합 완료 보고가 아니다.
 
 ## 사용자 요구
 
@@ -32,6 +33,13 @@ PC 실행 시간을 Android에 그대로 적용하지 않는다. 동시에 기�
 
 ## 현재 판단
 
-Gemma는 배포 후보에 포함되어 있지 않다. 품질·성능 양쪽이 미통과이며, Android 실기기 성능을 입증하는 자료가 없다. 현재 코드24의 서명/보존/동작 QA를 Gemma에 재사용하지 않는다. 사용자 기종은 답변받았고 현재 `adb devices -l`의 기기 목록은 비어 있다. 실제 휴대폰에 연결하거나 분석을 실행하지 않았다. 이 문서 작성만으로 새 구현이나 시험이 완료되지 않는다.
+Gemma는 배포 후보에 포함되어 있지 않다. 별도 연구 APK로 S25에서 실제 추론했지만 품질·성능 양쪽이 미통과다.
+GPU AV10초14.82초/AV20초30.93초 추론, runner 전체32.79초/43.29초,
+20초 뒤 thermal3, 취소 terminal6.63초 지연을 확인했다. 이 시간에 앱 MP4 디코딩은 포함하지 않는다.
+단회/순차 실행이므로 p95·다른 기기·배터리 영향으로 일반화하지 않는다.
+현재 코드24의 서명/보존/동작 QA를 Gemma에 재사용하지 않는다.
 
-공식 LiteRT-LM 고정commit `5e58e9a0aef7abf7091207a8b1d1063a1c800f08`의 [Kotlin 안내](https://github.com/google-ai-edge/LiteRT-LM/blob/5e58e9a0aef7abf7091207a8b1d1063a1c800f08/docs/api/kotlin/getting_started.md)를 읽어 CPU/GPU backend와 GPU용 선택적 native-library 선언을 확인했다. 이것만으로 모든 기기 지원을 입증하지 않는다. 소스 트리의 prebuilt Android 경로는 arm64/x86_64이며 배포 AAR의 ABI/minSdk는 이 확인에서 검사하지 않았다. 현재 앱의 `minSdk=26`을 임의로 올리지 않았다.
+공식 LiteRT-LM 고정commit `5e58e9a0aef7abf7091207a8b1d1063a1c800f08`의 [Kotlin 안내](https://github.com/google-ai-edge/LiteRT-LM/blob/5e58e9a0aef7abf7091207a8b1d1063a1c800f08/docs/api/kotlin/getting_started.md)를 읽어 CPU/GPU backend와 GPU용 선택적 native-library 선언을 확인했다.
+후속 실제0.17.1 AAR 검사에서 minSdk24, arm64-v8a/x86_64만 확인했다.
+기존 beta24 APK는 armeabi-v7a/x86도 포함하므로 SDK를 그대로 전면 대체하면 기존32비트 지원을 잃는다.
+현재 제품 앱의 `minSdk=26`·ABI·의존성을 변경하지 않았다. 기종명을 제한하지 않고 지원 범위를 유지하려는 요구는 아직 미해결이다.
