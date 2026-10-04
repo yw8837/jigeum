@@ -21,7 +21,10 @@ native GPU 실행은 가능하지만20초 전체43.29초·thermal3·취소6.63�
 
 **새 근거가 있는 다음 음성 후보:** [SpeechMaturity artifact](research/20261004-speech-maturity-artifacts.md)의
 학습된5-way head와 복수 encoder가 실제 공개돼 있다. [실행 구조 검토](research/20261004-speech-maturity-runtime-review.md)를 따라
-고정된 최소 checkpoint의 안전한 키/shape 검사부터 진행한다. 공식 학습 recipe를 그대로 실행하거나 기존 환경을 무조건 downgrade하지 않는다.
+고정된 최소 3개 checkpoint의 크기/SHA·제한 로딩·키/shape/유한성 검사를 마쳤다. [실행 증거](research/20261004-speech-maturity-checkpoint-audit.md).
+**다음은 LL4300 cfg의 안전한 확보와 전체 키/전처리 매핑**이다. 3개 파일에 cfg는 없으므로 base 기본값을 추측해 추론하지 않는다.
+향후 실행 하네스는 실제 프로세스 트리의 메모리·종료를 관리해야 한다. 이번 Windows launcher 메모리 표본을 실제 torch RAM으로 쓰지 않는다.
+공식 학습 recipe를 그대로 실행하거나 기존 환경을 무조건 downgrade하지 않는다.
 약0.576초 입력 계약·padding·batch1·전체 구간의 시간 보존을 먼저 검증하며, 알려진 개발 사례의 결과를 독립 정확도로 세지 않는다.
 새 후보는 소리 분류에 대한 근거이며 Gemma의 의미/발열 실패나 영상 문장 생성을 해결한 것은 아니다. 상용 배포 조건·Android 실행은 별도 미확정이다.
 

@@ -35,8 +35,11 @@ Play 업로드는 없으며 code24의 제품 QA를 Gemma 통과로 재해석하�
 5-way 학습 분류 head와 encoder 가중치를 확인했다. 옹알이 두 종류·웃음·울음·기타의 **음성 분류 후보**이며
 영상·욕구·문장 생성 모델은 아니다. 약0.576초 학습 입력과 복수 encoder, 공식 recipe의 학습/평가 의존성이 있어
 10/20초를 단일 입력으로 넣거나 공개 파일 존재만으로 바로 Android에 탑재하지 않는다.
-고정 소스의 [실행 구조 검토](research/20261004-speech-maturity-runtime-review.md)에 따라 최소 가중치·키/shape부터 검증한다.
-상용 모델 포함·재배포 조건은 미확정이다. 이번 source 조사에서 가중치 다운로드·추론·제품 활성화는 하지 않았다.
+고정 소스의 [실행 구조 검토](research/20261004-speech-maturity-runtime-review.md) 뒤 최소 3개 가중치(총 758,308,213 bytes)를
+실제로 받아 크기/SHA·제한 로딩·키/shape·유한성을 확인했다. head 9개·LL4300과 ASR 각 211개 tensor이며 설정 cfg는 없다.
+[가중치 감사](research/20261004-speech-maturity-checkpoint-audit.md)의 통과는 파일 검사에 한정된다.
+RAM 감시가 Windows launcher를 표본으로 삼아 실제 torch 메모리 제한·자식 종료를 검증하지 못했으므로 성능 통과로 세지 않는다.
+다음은 LL4300 설정을 안전하게 확보하고 완전한 매핑을 확인하는 단계다. 실제 원음 추론·제품 활성화는 하지 않았으며 상용 모델 포함·재배포 조건도 미확정이다.
 
 ### 최신 대화 보완 — 배포 범위와 Gemma 기대 차이
 
