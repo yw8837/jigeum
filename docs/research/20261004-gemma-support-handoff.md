@@ -98,6 +98,26 @@ WAV는 고정된 ffmpeg ISFT 태그만 들어 있음을 검사한 뒤 **원래 �
 
 ## 외부 발송 경계
 
+### 2026-10-05 게시 완료
+
+사용자가 `진행해`로 공개 문의 게시를 승인했다. `yw8837` 계정으로
+[LiteRT-LM #3851](https://github.com/google-ai-edge/LiteRT-LM/issues/3851)을 생성했고,
+[검증된 ZIP](https://github.com/user-attachments/files/33028198/gemma-upstream-support-20261005.zip)을 직접 첨부했다.
+텍스트형 대체 배포는 [공개 Gist](https://gist.github.com/yw8837/b903da7dc067d2bd1a7a4349d3c46a08)이며
+ZIP의 Base64와 원래 크기/SHA를 확인하고 복원하는 작은 helper, 설명만 포함한다.
+CLI로 게시한 뒤 사용자 브라우저 로그인에 맞춰 직접 첨부를 추가했다.
+
+로그인/인증 없이 실제 ZIP을 다운로드하여 684,537 bytes와 위 SHA가 원본과 같음을 확인했다.
+승인된 문의 본문은 첨부 안내 외 동일하고, 확인 당시 이슈 open/댓글0이었다.
+게시 시각은 2026-10-05 00:22:07 KST(원천 2026-10-04T15:22:07Z)다.
+증거는 ignored `work/gemma-upstream-publish-20261005/{attachment-receipt.json,publication-receipt.json,ISSUE-PUBLISHED.md}`.
+새 추론/폰 변경/아기 자료 전송/Play 배포는 하지 않았다.
+
+이후 사용자 범위 재확인에 따라 이번 앱 수정은 잡음 처리·아기 소리 인식 누락에 집중한다.
+공개 문의 응답이 독립적인 기존 분석기 수정을 막는 조건은 아니다.
+
+아래는 게시 전의 권한 경계를 기록한 것이다.
+
 기술문의 자료는 로컬에서 검증·보관한다. Google AI Edge/LiteRT-LM 저장소에 issue를 작성하는 것은
 외부 메시지 발송이므로 사용자의 명시적인 발송 승인이 필요하다. 일반 조사·앱 배포 승인을
 외부 기술문의 발송 승인으로 확대하지 않는다. 준비된 초안·첨부 목록을 보여준 뒤 최종 확인한다.

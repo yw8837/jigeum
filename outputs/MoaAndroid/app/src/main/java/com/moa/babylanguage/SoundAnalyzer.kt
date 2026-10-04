@@ -50,7 +50,7 @@ object SoundAnalyzer {
             return@withLock SoundAnalysis(emptyList(), "소리 데이터를 읽지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
         val cleaned = AudioCleanup.filter(pcm)
         try {
-            val rms = kotlin.math.sqrt(cleaned.sumOf { it.toDouble() * it } / cleaned.size)
+            val rms = AudioCleanup.strongestSecondRms(cleaned)
             if (!rms.isFinite() || rms < 0.003) return@withLock SoundAnalysis(emptyList(),
                 "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.", issue = AnalysisIssue.SILENCE)
             val options = AudioClassifier.AudioClassifierOptions.builder()

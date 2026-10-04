@@ -266,7 +266,7 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 if (pcm != null && audio.problem == null && result.interpretation == null) {
                     val cleaned = AudioCleanup.filter(pcm)
                     try {
-                        val rms = sqrt(cleaned.sumOf { it.toDouble() * it } / cleaned.size)
+                        val rms = AudioCleanup.strongestSecondRms(cleaned)
                         val quiet = result.issue == AnalysisIssue.INFANT_UNCONFIRMED && rms < .012
                         result.copy(problem = if (quiet) "소리가 작게 담겼고 아기 발성 단서를 충분히 찾지 못했어요. 선택 구간을 다시 듣고, 다음 촬영은 조금 가까이에서 해주세요." else result.problem,
                             issue = if (quiet) AnalysisIssue.QUIET else result.issue,

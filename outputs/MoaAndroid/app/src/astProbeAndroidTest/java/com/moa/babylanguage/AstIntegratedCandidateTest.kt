@@ -16,6 +16,11 @@ import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import kotlin.math.PI
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /** Explicit local integration tests. Test doubles exist only in androidTest. */
 class AstIntegratedCandidateTest {
@@ -28,6 +33,57 @@ class AstIntegratedCandidateTest {
     private fun tone(): File = File.createTempFile("ast-integrated-tone-", ".mp4", context.cacheDir).also { target ->
         instrumentation.context.assets.open("tone44-mono.mp4").use { source ->
             target.outputStream().use { source.copyTo(it) }
+        }
+    }
+
+    @Test fun sparseSyntheticSoundsNeverBecomeInfantEventsThroughTheWholePipeline() = runBlocking<Unit> {
+        optIn()
+        assertEquals("com.moa.babylanguage.astcandidate", context.packageName)
+        val sparseTone = FloatArray(320_000) { i ->
+            val tone = if (i >= 288_000) sqrt(2.0) * .006 * sin(2 * PI * 997 * i / 16_000) else 0.0
+            (tone + .004 * sin(2 * PI * 40 * i / 16_000)).toFloat()
+        }
+        val click = FloatArray(320_000).also { it[160_000] = .8f }
+        for (pcm in listOf(sparseTone, click)) {
+            val file = File.createTempFile("ast-presence-control-", ".wav", context.cacheDir)
+            try {
+                val bytes = ByteBuffer.allocate(44 + pcm.size * 2).order(ByteOrder.LITTLE_ENDIAN)
+                bytes.put("RIFF".toByteArray()).putInt(36 + pcm.size * 2).put("WAVEfmt ".toByteArray())
+                bytes.putInt(16).putShort(1.toShort()).putShort(1.toShort()).putInt(16_000)
+                bytes.putInt(32_000).putShort(2.toShort()).putShort(16.toShort())
+                bytes.put("data".toByteArray()).putInt(pcm.size * 2)
+                pcm.forEach { bytes.putShort((it * 32_767).toInt().toShort()) }
+                file.writeBytes(bytes.array())
+                val before = MessageDigest.getInstance("SHA-256").digest(file.readBytes())
+                // AST errors deliberately fall back in production. Require actual successful
+                // measurements here so a failed native run cannot masquerade as safe abstention.
+                val decoded = VideoAudioDecoder.decode(context, Uri.fromFile(file), 0, 20_000)!!
+                try {
+                    assertEquals(320_000, decoded.size)
+                    val baseline = SoundAnalyzer.analyzeDetailed(context, decoded)
+                    assertNull(baseline.problem)
+                    assertTrue(BabbleSupportPolicy.shouldAnalyze(baseline))
+                    val ast = withTimeout(45_000) { AstAudioAnalyzer.analyze(context, decoded) }
+                    assertNull("AST failure is not a successful negative control", ast.problem)
+                    assertEquals(listOf(0L to 10_000L, 5_000L to 15_000L, 10_000L to 20_000L),
+                        ast.windows.map { it.startMs to it.endMs })
+                    val candidate = BabbleSupportPolicy.attachCandidate(baseline, ast, 20_000)
+                    assertTrue(candidate.babbleWindows.isEmpty())
+                    assertNull(EvidenceInterpreter.interpret(candidate, AcousticShape.from(decoded),
+                        ClipRange(0, 20_000)).interpretation)
+                } finally { decoded.fill(0f) }
+                val result = withTimeout(45_000) {
+                    DeviceClipAnalyzer.analyze(context, Uri.fromFile(file), ClipRange(0, 20_000), false)
+                }
+                assertNotEquals(AnalysisIssue.INVALID_AUDIO, result.issue)
+                assertNotEquals(AnalysisIssue.MODEL_FAILURE, result.issue)
+                assertNotEquals(AnalysisIssue.SILENCE, result.issue)
+                assertNotEquals(AnalysisIssue.NO_AUDIO, result.issue)
+                assertNotEquals(AnalysisIssue.TOO_SHORT, result.issue)
+                assertNull("Presence alone must not create a baby phrase through AST", result.interpretation)
+                assertNotNull(result.problem)
+                assertArrayEquals(before, MessageDigest.getInstance("SHA-256").digest(file.readBytes()))
+            } finally { pcm.fill(0f); file.delete() }
         }
     }
 
