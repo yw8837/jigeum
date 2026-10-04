@@ -6,6 +6,7 @@ import tempfile
 import unittest
 import wave
 import subprocess
+import sys
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -13,6 +14,41 @@ import gemma_android_probe as probe
 
 
 class ProbeContractTest(unittest.TestCase):
+    def test_visual_budget_reaches_prepared_plan_without_changing_media(self):
+        from PIL import Image
+        repo = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory(prefix="gemma-budget-", dir=repo / "work") as directory:
+            root = Path(directory)
+            original = probe.prepare_input(None, root / "source", "text")
+            source = root / "source"
+            Image.new("RGB", (16, 16), (200, 10, 30)).save(source / "one.png")
+            original["audio"] = str(source / "audio.wav")
+            original["frames"] = [{"offset_ms": 0, "path": str(source / "one.png")}]
+            bundle = source / "bundle.json"
+            bundle.write_text(json.dumps(original), encoding="utf-8")
+            before = hashlib.sha256((source / "audio.wav").read_bytes()).hexdigest()
+            result = subprocess.run([sys.executable, str(Path(probe.__file__).resolve()),
+                                     "--prepare-only", "--mode", "av", "--bundle", str(bundle),
+                                     "--output", str(root / "run"), "--run-id", "budget140",
+                                     "--visual-token-budget", "140"], capture_output=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+            plan = json.loads((root / "run" / "plan.json").read_text(encoding="utf-8"))
+            self.assertEqual(plan["visual_token_budget"], 140)
+            self.assertEqual((plan["duration_ms"], plan["frame_count"]), (1000, 1))
+            self.assertEqual(hashlib.sha256((root / "run" / "input" / "audio.wav").read_bytes()).hexdigest(), before)
+
+    def test_visual_budget_wrong_mode_or_unsupported_value_creates_no_output(self):
+        repo = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory(prefix="gemma-budget-", dir=repo / "work") as directory:
+            for index, (mode, budget) in enumerate((("text", "70"), ("av", "560"), ("av", "-1"), ("av", "71"))):
+                target = Path(directory) / str(index)
+                result = subprocess.run([sys.executable, str(Path(probe.__file__).resolve()),
+                                         "--prepare-only", "--mode", mode, "--output", str(target),
+                                         "--run-id", "invalid", "--visual-token-budget", budget],
+                                        capture_output=True, timeout=30)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse(target.exists())
+
     def test_run_ids_cannot_escape_private_result_directory(self):
         self.assertEqual(probe.run_id("s25_cpu_10s-01"), "s25_cpu_10s-01")
         for value in ("", "../x", "x/y", "x;id", "a" * 41):
@@ -43,6 +79,14 @@ class ProbeContractTest(unittest.TestCase):
                       {"response_bytes": 0}, {"status": "failed"}):
             with self.subTest(patch=patch), self.assertRaises(ValueError):
                 probe.validate_result({**valid, **patch}, "run01")
+
+    def test_result_from_another_visual_budget_cannot_validate_comparison(self):
+        result = dict(run_id="budget140", status="completed", cleanup_complete=True,
+                      inference_ms=10, response_bytes=20, visual_token_budget=140)
+        self.assertEqual(probe.validate_result(result, "budget140", 140), "completed")
+        for wrong in (None, True, 0, 70, 280, "140"):
+            with self.subTest(wrong=wrong), self.assertRaisesRegex(ValueError, "Visual budget"):
+                probe.validate_result({**result, "visual_token_budget": wrong}, "budget140", 140)
 
     def test_cancel_is_not_counted_as_completed_inference(self):
         result = dict(run_id="run01", status="cancelled", cleanup_complete=True,

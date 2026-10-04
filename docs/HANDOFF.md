@@ -2,6 +2,22 @@
 
 갱신: **2026-10-05** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 진행 중 — 0.5.13/code27 음성 변환 개선
+
+[후속 실행 결과](research/20261005-noise-model-comparison.md)와
+[0.5.13 QA](qa/audio-resampling-0.5.13/README.md)를 따른다.
+EfficientAT 33+2조건과 GTCRN의 같은 원음/처리음 AST 33+2조건을 실제 실행했으나,
+알려진 옹알이를 약화시키는 등 교체 근거가 부족해 제품에 넣지 않았다.
+별도 Gemma 실행기에 visual budget을 구현했으며 host17개/debug build를 통과했다.
+S25가 연결되지 않아 70/140/280 새 실측은 미완료다.
+
+대신 제품 PCM 변환에서 anti-alias 필터 누락과 Infinity 검증 순서 결함을 재현·수정했다.
+새 streaming resampler의 Android 9개, 실제 codec/cleanup/presence 18개,
+실제 약국10/20초·취소/UI/시간축21개를 통과했다. 총48개/실패·제외0이다.
+약국의 기존 옹알이 회복이 유지됐으며 에뮬레이터 전체 AV 처리4.534/8.926초였다.
+일반 정확도나 실폰 성능 개선으로 확대하지 않는다. 현재 서명 패키지·업데이트 보존·배포 검증 중이다.
+아래 beta26이 마지막 확인된 실제 배포본이며 새 code27을 아직 게시 완료로 보고하지 않는다.
+
 ### 현재 상태 — 0.5.12-beta/code26 비공개 테스트 게시 완료
 
 [최신 QA](qa/audio-presence-0.5.12/README.md)와 [자료 조사·적용 결정](research/20261005-reference-review-decision.md)을 먼저 읽는다.

@@ -39,11 +39,15 @@ def validate_apk_permissions(text):
         raise ValueError("The research APK must not have Internet permission")
 
 
-def validate_result(value, expected_id):
+def validate_result(value, expected_id, expected_visual_budget=None):
     if not isinstance(value, dict) or value.get("run_id") != run_id(expected_id):
         raise ValueError("Missing or stale terminal result")
     if value.get("cleanup_complete") is not True:
         raise ValueError("Native cleanup not confirmed")
+    if expected_visual_budget is not None and (
+            type(value.get("visual_token_budget")) is not int or
+            value["visual_token_budget"] != expected_visual_budget):
+        raise ValueError("Visual budget differs from requested experiment")
     status = value.get("status")
     if status == "completed":
         if (not isinstance(value.get("inference_ms"), (int, float)) or
@@ -66,7 +70,7 @@ def public_summary(value):
     allowed = {"run_id", "status", "cleanup_complete", "inference_ms", "response_bytes",
                "load_ms", "verify_model_ms", "first_token_ms", "first_token_metric", "peak_pss_kb",
                "thermal_before", "thermal_after", "device_model", "device_api", "device_abi",
-               "cancel_requested", "error_kind"}
+               "cancel_requested", "error_kind", "visual_token_budget", "max_vision_token_budget"}
     return {k: v for k, v in value.items() if k in allowed and
             (isinstance(v, (str, int, float, bool)) or v is None)}
 
@@ -212,7 +216,8 @@ def device_run(args, destination, plan):
         options = {"run_id": identity, "mode": args.mode, "backend": args.backend,
                    "vision_backend": args.vision_backend, "context_tokens": args.context_tokens,
                    "output_tokens": args.output_tokens, "cancel_after_ms": args.cancel_after_ms,
-                   "video_only": str(args.video_only).lower(), "media_order": args.media_order}
+                   "video_only": str(args.video_only).lower(), "media_order": args.media_order,
+                   "visual_token_budget": args.visual_token_budget}
         for key, value in options.items():
             instrument += ["-e", key, str(value)]
         instrument += [RUNNER]
@@ -226,7 +231,7 @@ def device_run(args, destination, plan):
         raw = command(adb + ["exec-out", "run-as", PACKAGE, "cat", f"files/results/{identity}.json"])
         (destination / "result-private.json").write_bytes(raw)
         result = json.loads(raw)
-        validate_result(result, identity)
+        validate_result(result, identity, args.visual_token_budget)
         response = command(adb + ["exec-out", "run-as", PACKAGE, "cat", f"files/results/{identity}-response.txt"])
         (destination / "response-private.txt").write_bytes(response)
         verify_response(result, response)
@@ -267,6 +272,8 @@ def main():
     parser.add_argument("--vision-backend", choices=["cpu", "gpu"], default="gpu")
     parser.add_argument("--context-tokens", type=int, choices=[4096, 8192, 16384], default=4096)
     parser.add_argument("--output-tokens", type=int, default=120)
+    parser.add_argument("--visual-token-budget", type=int, choices=[0, 70, 140, 280], default=0,
+                        help="0 preserves SDK default; explicit budgets require AV and the pinned model")
     parser.add_argument("--cancel-after-ms", type=int, default=0)
     parser.add_argument("--video-only", action="store_true")
     parser.add_argument("--media-order", choices=["legacy", "recommended"], default="legacy")
@@ -277,6 +284,8 @@ def main():
         parser.error("Output/cancel/timeout limits invalid")
     if args.video_only and args.mode != "av":
         parser.error("video-only is only valid in AV mode")
+    if args.visual_token_budget and args.mode != "av":
+        parser.error("Explicit visual token budget requires AV mode")
     destination = Path(args.output).resolve()
     validate_output_path(destination)
     if destination.exists():
@@ -286,6 +295,7 @@ def main():
     plan = {"run_id": identity, "mode": args.mode, "duration_ms": bundle["duration_ms"],
             "frame_count": len(bundle["frames"]), "backend": args.backend,
             "context_tokens": args.context_tokens, "output_tokens": args.output_tokens,
+            "visual_token_budget": args.visual_token_budget,
             "cancel_after_ms": args.cancel_after_ms, "media_order": args.media_order,
             "quality_validated": False, "android_executed": False}
     (destination / "plan.json").write_text(json.dumps(plan, indent=2), encoding="utf-8")

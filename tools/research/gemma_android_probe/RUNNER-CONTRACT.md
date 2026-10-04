@@ -37,6 +37,13 @@ vision_backend=gpu|cpu defaults gpu. context_tokens accepts only4096/8192/16384 
 output_tokens is1..700 (default700). cancel_after_ms is0..10000 (default0 disables cancellation).
 video_only=true|false defaults false and is allowed only in av mode.
 media_order=legacy|recommended defaults legacy. Other values fail validation.
+visual_token_budget=0|70|140|280 defaults0 (SDK default). An explicit nonzero value is
+valid only in AV mode; other values fail before model/native access. The pinned model's
+capability maximum is checked before engine creation. The experimental SDK flag is set
+before Engine construction and restored after native cleanup, including failures/cancellation.
+The parent requires the terminal result to echo the requested budget before accepting a comparison.
+This changes neither source PCM nor frame pixels, count, offsets or coverage. It changes
+the SDK's visual representation budget; actual detail preservation and latency need native tests.
 
 The launcher places the pinned model at app-private `files/model.litertlm` and a UTF8 JSON
 at `files/input/bundle.json`:

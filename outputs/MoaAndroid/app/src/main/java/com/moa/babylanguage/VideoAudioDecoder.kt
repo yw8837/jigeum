@@ -10,7 +10,6 @@ import android.os.SystemClock
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.coroutines.coroutineContext
 import kotlin.math.sqrt
@@ -215,54 +214,5 @@ internal object VideoAudioDecoder {
     }
 }
 
-private class UnsupportedAudioException : Exception()
+internal class UnsupportedAudioException : Exception()
 private class DecodeTimeoutException : Exception()
-
-/** Small streaming resampler, preserving at most ten seconds of mono 16 kHz PCM. */
-internal class BoundedPcmResampler(maxSamples: Int = 160_000) {
-    private val output = FloatArray(maxSamples)
-    var size: Int = 0
-        private set
-    private var sourceFrame = 0L
-    private var previous = 0f
-
-    fun add(buffer: ByteBuffer, sampleRate: Int, channels: Int, encoding: Int) {
-        val bytesPerSample = when (encoding) {
-            AudioFormat.ENCODING_PCM_16BIT -> 2
-            AudioFormat.ENCODING_PCM_FLOAT -> 4
-            else -> throw UnsupportedAudioException()
-        }
-        val frameBytes = bytesPerSample * channels
-        if (buffer.remaining() % frameBytes != 0) throw UnsupportedAudioException()
-        while (buffer.remaining() >= frameBytes && size < output.size) {
-            var value = 0f
-            repeat(channels) {
-                value += if (encoding == AudioFormat.ENCODING_PCM_16BIT)
-                    buffer.short / 32768f else buffer.float
-            }
-            value = (value / channels).coerceIn(-1f, 1f)
-            if (!value.isFinite()) throw UnsupportedAudioException()
-            if (sourceFrame == 0L) {
-                output[size++] = value
-            } else {
-                // Interpolate at destination sample positions across each source frame pair.
-                while (size < output.size && size.toLong() * sampleRate <= sourceFrame * 16_000L) {
-                    val position = size.toLong() * sampleRate - (sourceFrame - 1) * 16_000L
-                    val fraction = position.toFloat() / 16_000f
-                    output[size++] = previous + (value - previous) * fraction
-                }
-            }
-            previous = value
-            sourceFrame++
-        }
-    }
-
-    fun copyResult(): FloatArray = output.copyOf(size).also { output.fill(0f) }
-
-    fun clear() {
-        output.fill(0f)
-        size = 0
-        sourceFrame = 0L
-        previous = 0f
-    }
-}

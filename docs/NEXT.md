@@ -1,3 +1,14 @@
+# 진행 중 — 0.5.13/code27 음성 변환 개선
+
+[0.5.13 QA](qa/audio-resampling-0.5.13/README.md)의 Android48개와 연구 host27개를 통과했다.
+고주파 접힘·EOS·유한성 검증을 수정하고 기존 약국 옹알이 회복을 보존했다.
+다음은 최종 서명 beta/release 검사 → code26에서27로 기록/MP4 보존 → 최종 UI → 비공개Alpha 업로드/게시다.
+[모델 비교](research/20261005-noise-model-comparison.md)의 EfficientAT/GTCRN은 실행 완료·채택 보류다.
+같은 소리의 임계값을 반복 완화하거나 현재 반례가 있는 후보를 배포하지 않는다.
+Gemma visual budget 실행기는 구현됐지만 실제 S25가 미연결이므로 새 속도/발열/의미 비교는 남았다.
+
+이하 beta26 완료 및 이전 계획은 당시 기록이다. 최신 상태는 HANDOFF와0.5.13 QA를 우선한다.
+
 # 현재 배포 — 0.5.12-beta/code26 비공개 테스트 제공 완료
 
 Play 테스트 전체 기능 개방 유지. 최신 인식 수정·배포 검증은 [0.5.12 QA](qa/audio-presence-0.5.12/README.md), 기본 출처/저장 계약은 [0.5.9 QA](qa/sound-visual-0.5.9/README.md)를 따른다. 정식 정책은 무료60초/10초, 전체120초/20초다.
@@ -17,6 +28,10 @@ Gemma/새 문장 생성은 미탑재이며 이번 누락 개선의 완료 조건
 
 다음 모델 비교는 EfficientAT mn04·GTCRN의 **같은 독립 원음 전후 누락/새 오인/발성 보존**부터 설계한다.
 문헌상 점수나 모델 파일 존재를 제품 품질로 대신하지 않는다. 공급권리·Android실측·holdout을 먼저 확인한다.
+
+후속 [Gemma 경량화·특화 검토](research/20261005-gemma-specialization-feasibility.md)는 문헌·구현 조사다.
+Android 시각 토큰 예산 조절은 새로 확인한 비용 최적화 후보이며, 의미 오류 해결이나 제품 탑재로
+보고하지 않는다. PLE/encoder 제거·LoRA·pruning/증류는 서로 다른 작업이고 기존 AV 미통과 판단을 해소하지 않는다.
 
 아래는 이전 단계 기록이다. 선배포 미확정·Play미업로드·기술문의 승인대기 표현은 당시 상태이며
 최신 사용자 승인과0.5.12 QA의 실제 배포 기록이 우선한다.

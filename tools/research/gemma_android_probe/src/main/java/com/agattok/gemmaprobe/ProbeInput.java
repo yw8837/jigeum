@@ -18,7 +18,7 @@ import java.util.zip.CRC32;
 /** All validation runs before any SDK/native initialization. No caller-selected absolute paths. */
 final class ProbeInput {
     String runId, mode, backend, visionBackend, mediaOrder, prompt;
-    int contextTokens, outputTokens, cancelAfterMs, durationMs;
+    int contextTokens, outputTokens, cancelAfterMs, durationMs, visualTokenBudget;
     boolean videoOnly;
     File model, audio;
     final List<File> frames = new ArrayList<>();
@@ -37,6 +37,10 @@ final class ProbeInput {
         in.contextTokens = integerArg(args, "context_tokens", "4096", 4096, 16384);
         require(in.contextTokens == 4096 || in.contextTokens == 8192 || in.contextTokens == 16384);
         in.outputTokens = integerArg(args, "output_tokens", "700", 1, 700);
+        in.visualTokenBudget = integerArg(args, "visual_token_budget", "0", 0, 280);
+        require(in.visualTokenBudget == 0 || in.visualTokenBudget == 70
+            || in.visualTokenBudget == 140 || in.visualTokenBudget == 280);
+        require(in.visualTokenBudget == 0 || in.mode.equals("av"));
         in.cancelAfterMs = integerArg(args, "cancel_after_ms", "0", 0, 10000);
         in.model = child(files, "model.litertlm");
         File input = child(files, "input");

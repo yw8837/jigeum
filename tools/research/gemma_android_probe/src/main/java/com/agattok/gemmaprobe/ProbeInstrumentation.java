@@ -46,6 +46,8 @@ public final class ProbeInstrumentation extends Instrumentation {
         StringBuilder response = new StringBuilder();
         File results = null;
         boolean cleanup = true;
+        Integer previousVisualBudget = null;
+        boolean visualBudgetChanged = false;
         long wallStart = now(), inferenceStart = -1, inferenceEnd = -1;
         try {
             put(result, "schema_version", 1);
@@ -76,6 +78,7 @@ public final class ProbeInstrumentation extends Instrumentation {
             put(result, "audio_backend", "cpu");
             put(result, "context_tokens", input.contextTokens);
             put(result, "output_tokens_limit", input.outputTokens);
+            put(result, "visual_token_budget", input.visualTokenBudget);
             put(result, "duration_ms", input.durationMs);
             put(result, "frame_count", input.frames.size());
             put(result, "media_order", input.mediaOrder);
@@ -105,8 +108,14 @@ public final class ProbeInstrumentation extends Instrumentation {
                 put(result, "capabilities", modal);
                 put(result, "supports_thinking", caps.supportsThinking());
                 put(result, "supports_function_calling", caps.supportsFunctionCalling());
-                put(result, "max_vision_token_budget", caps.maxVisionTokenBudget());
+                Integer maximumVisualBudget = caps.maxVisionTokenBudget();
+                put(result, "max_vision_token_budget", maximumVisualBudget);
+                ProbeInput.require(input.visualTokenBudget == 0 || (maximumVisualBudget != null
+                    && input.visualTokenBudget <= maximumVisualBudget));
             } finally { put(result, "capabilities_ms", millisSince(capabilitiesStart)); }
+            previousVisualBudget = ExperimentalFlags.INSTANCE.getVisualTokenBudget();
+            ExperimentalFlags.INSTANCE.setVisualTokenBudget(input.visualTokenBudget == 0 ? null : input.visualTokenBudget);
+            visualBudgetChanged = true;
             stage = "engine_initialization";
             long loadStart = now();
             try {
@@ -214,6 +223,7 @@ public final class ProbeInstrumentation extends Instrumentation {
             if (engine != null) {
                 try { engine.close(); } catch (Throwable failure) { cleanup = false; put(result, "engine_close_error", failure.getClass().getSimpleName()); }
             }
+            if (visualBudgetChanged) ExperimentalFlags.INSTANCE.setVisualTokenBudget(previousVisualBudget);
             put(result, "cleanup_ms", millisSince(cleanupStart));
             put(result, "cleanup_complete", cleanup);
             if (!cleanup || cancelError.get() != null) status = "failed";
