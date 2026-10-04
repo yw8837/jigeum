@@ -2,6 +2,20 @@
 
 갱신: **2026-10-04** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 최신 후속 — S25 AST 실측 완료 범위와 남은 화면 검사
+
+[S25 AST QA](qa/ondevice-av-generation/S25-AST-20261004.md)에서 합성 입력으로 실제 ARM 측정을 완료했다.
+별도 점검 앱의 AST 10초/20초/반복20초는 **3.122/6.686/5.213초**, 최고 PSS 표본은 약502–506MiB,
+전후 thermal은 모두0이었다. benchmark1개·native취소/복구2개와 실제 앱 경로3개가 통과했다.
+S25의 첫 UI 검사는 잠금·SLEEP 상태에서 Compose 화면을 찾지 못해 실패했고, 분석기 호출은0회였다.
+추가 전체 AV 검사 전에 USB가 끊겼으며 현재 재연결을 요청했다. **S25 전체 AV/UI는 아직 미검증**이다.
+새 합성 `visual=true` 검사1개는 에뮬레이터에서10/20초를7.495/11.149초에 처리하고,
+시간순20/40개 관찰·범위·입력 보존·tone 보류·정리를 확인했다. 휴대폰 속도나 의미 정확도 근거가 아니다.
+기존 제품 beta23의 설치 정보는 두 실기기 실행 전후 동일했고, 임시 앱/test는 모두 제거했다.
+AST 연구 패키지의 ONNX Runtime 공식 고지 누락을 보완했다. 고지3개 외 manifest/dex/model/native는 동일하다.
+기본 beta/release에는 여전히 AST가 없다. S25 UI와 전체20초 예산을 확인한 뒤 명시적 제품용 beta 후보를 구현한다.
+전체 AV 이해·새 아기말/감정·욕구 생성과 Play 배포는 미완료다. 아래 ARM 미측정 표현은 각 이전 실행 당시의 기록이다.
+
 ### 최신 후속 — 실제 앱 AST 통합 후보와 UI 회귀
 
 [통합 후보 QA](qa/ondevice-av-generation/AST-INTEGRATED-CANDIDATE-QA.md)를 완료했다.
