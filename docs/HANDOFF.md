@@ -1,6 +1,15 @@
 # 협업 인수인계 — 아가톡
 
-갱신: **2026-10-04** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
+갱신: **2026-10-05** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
+
+### 후속 진단 — Gemma 기술문의 자료 준비 완료, 미발송
+
+[지원 자료](research/20261004-gemma-support-handoff.md)에 기존 S25 합성 10/20초 실패를 위한
+로컬 ZIP·영문 초안을 준비했다. 원래 WAV/PCM/단색 PNG/prompt/시간순서를 보존했고 실제 아기 자료는 없다.
+내보내기 검사 10통과/1skip(호스트 symlink 권한), 실제 Windows junction 거부 검사 통과,
+전달 폴더의 입력 준비와 독립 Android debug 빌드 exit0를 확인했다. 이번에 ADB/모델 추론은 실행하지 않았다.
+공개 issue 발송은 명시 승인 전이며 아직 외부에 보내지 않았다. 이 준비는 생성 품질 개선이나 SDK 결함 입증이 아니다.
+아래 AST beta25와 Play 상태는 그대로다. 같은 Gemma/S25 실행을 근거 없이 반복하지 않는다.
 
 ### 현재 상태 — AST beta25 로컬 검증 완료, Play 미제출
 
