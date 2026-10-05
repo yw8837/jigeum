@@ -2,6 +2,18 @@
 
 갱신: **2026-10-05** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 후속 조사 — 사용자가 추가 테스트하는 동안 새 엔진 비교
+
+[시간축 모델 조사·실측](research/20261005-temporal-model-followup.md) 및
+[영아 전문 모델 원문·권리 확인](research/20261005-infant-specialist-followup.md)을 추가했다.
+새 EfficientSED3개를 기존 공개·합성33+알려진약국10/20초에 실제CPU실행했다.
+20.3MB `fmn10+tf-256_advanced-kd-weak-strong`에서 약국의 국소 옹알이 단서를 확인해
+후속 비교1순위로 정했다. 작은3.6/6.6MB버전의 약국 단서는 약했다.
+이는 기존AST가 이미 보완한 알려진자료이며 **새 실패 회복/일반 정확도/Android 성능 입증이 아니다.**
+새 임계값·제품모델·APK·배포 변경은 없다. 다음은 새 실패·비아기대조 및 모바일export/실측이다.
+영아전문 새 논문은 exact weights·사용권·아기웃음 범위가 부족했고 BabyHuBERT의 현재 공개고지에
+상업사용금지를 확인했다. 아기자료는 로컬에만 두었다. 아래code28이 제품·배포 기준이다.
+
 ### 최신 — 0.5.14-beta/code28 실제 짧은 발성 누락 보완
 
 [0.5.14 QA](qa/audio-window-0.5.14/README.md)와 [구현 계약](UX-SOUND-PHASE-0.5.14.md)을 따른다.

@@ -1,5 +1,11 @@
 # 다음 단계 — 0.5.14-beta/code28와 새 실패 입력
 
+추가 조사 요청에 따라 [EfficientSED3개 실제 비교](research/20261005-temporal-model-followup.md)와
+[영아전문 후속 조사](research/20261005-infant-specialist-followup.md)를 완료했다.
+새 비교1순위는20.3MB fmn10+TF advanced-KD다. 알려진약국에서옹알이시간단서가있지만
+새실패회복/제품승인/Android검증은아니다. 새피드백이오면현재YAMNet+AST와같은원음으로대조하고,
+모바일export/양자화parity와실기기성능을확인한다. 이번조사로제품code28을변경하거나재배포하지않았다.
+
 최신 [0.5.14 QA](qa/audio-window-0.5.14/README.md)의 실제 37조건 비교와 Android53개,
 서명 업데이트·기록/영상 보존·짧은 실패 안내 검증을 완료했다. 재현된 짧은 울음 누락2조건이 회복됐고
 기존33조건·약국10/20초는 유지됐다. 일반 옹알이 정확도 개선으로 확대하지 않는다.
