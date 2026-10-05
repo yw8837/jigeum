@@ -1,3 +1,21 @@
+# 다음 단계 — 0.5.15 표현 개선 후 인식 후보의 실제 모바일 검증
+
+[0.5.15 QA](qa/expression-0.5.15/README.md)에 코드·검증·제출 상태를 기록했다.
+code29 검토 제출 완료,Google 빠른 검사 진행 중이다. 이전 code28은10월5일16:22에 게시됐다.
+
+1. code29 검토 결과와 실제 테스터 제공 상태를 확인한다. 같은 AAB를 중복 제출하지 않는다.
+2. 사용자 최신 실패 입력이 오면 버전/원음/구간별로 기존 YAMNet+AST와 새 후보를 비교한다.
+   알려진 약국이나 같은 원음의 여러 창을 새 정확도 표본으로 세지 않는다.
+3. [EfficientSED export](research/20261005-efficientsed-mobile-export.md)의20.3MB float ONNX에
+   동일한 Android mel 전처리를 연결하고,mel/출력 수치·10/20초 ARM 성능·취소·새 오인을 검증한다.
+   현재는 합성 CPU 그래프 이식만 통과했다. 새 모델을 이번 code29에 넣지 않았다.
+4. [욕구 표현 근거](research/20261005-infant-needs-expression-evidence.md)에 따라 배고픔/졸림/놀이
+   라벨·행동 맥락·독립 아이 평가를 확보한다. 울음이나 옹알이 라벨만으로 욕구를 임의 출력하지 않는다.
+5. 잔여 `C:/MoaAVD/AgattokExpression29.avd`는 자동 승인 검토가 삭제를 차단했다.
+   실행/등록은 종료·제거돼 있고 수동 정리가 남았다. 동일 삭제를 우회 재시도하지 않는다.
+
+표현의 폭·관찰 순서 개선과 새 인식률/욕구 정확도를 혼동하지 않는다. 아래는 이전 단계 이력이다.
+
 # 다음 단계 — 0.5.14-beta/code28와 새 실패 입력
 
 추가 조사 요청에 따라 [EfficientSED3개 실제 비교](research/20261005-temporal-model-followup.md)와
