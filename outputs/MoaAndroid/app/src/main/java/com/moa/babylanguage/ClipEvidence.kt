@@ -101,28 +101,11 @@ internal object EvidenceInterpreter {
         // AST event cannot attribute those bursts, rises or pauses to the baby.
         val vocalShape = if (broadOnly) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
             pauses = 0, quietSpans = emptyList()) else shape
-        val eligiblePhrases = when (sound) {
-            "울음" -> when {
-                shape.rising -> listOf("응애… 으아앙! 내 소리 좀 들어줘요.", "으아앙… 나 여기 있어요! 잠깐 나 좀 봐줘요.", "응애! 나 여기 있어요. 내 곁에 와줄래요?")
-                shape.activeFraction >= 0.65f -> listOf("으앙, 으앙… 나 여기 있어요. 잠깐 내 곁에 있어줘요.", "응애, 응애… 내 소리 들리죠? 토닥토닥 해줄래요?", "으앙… 아직 내 소리 들리죠? 부드럽게 말 걸어주세요.")
-                shape.bursts >= 3 -> listOf("응애… 또 응애. 내 소리 좀 들어줘요.", "으앙… 내 목소리 들려요? 잠깐 나 좀 봐줘요.", "응애… 응애… 나 여기 있어요. 잠깐만 곁에 있어줘요.")
-                else -> listOf("응애… 나 여기 있어요. 잠깐 나 좀 봐줘요.", "으앙… 내 소리 들리죠? 잠깐 나한테 와줄래요?", "응애… 여기 좀 봐줘요. 내 곁에 있어줄래요?")
-            }
-            "아기 웃음" -> if (shape.bursts >= 3) listOf("히히, 헤헤! 내 웃음 들려요? 나랑 같이 웃어요.", "까르르! 또 웃음이 나왔어요. 같이 웃어줄래요?", "히히! 웃음이 자꾸 나요. 나랑 눈 맞추고 웃어요.")
-                else listOf("헤헤! 나도 웃음이 나요. 같이 웃어요.", "히히, 웃음이 나왔어요! 나랑 눈 맞춰줄래요?", "헤헤, 내 웃음 들리죠? 나랑 같이 웃어줄래요?")
-            "여러 아기 소리" -> listOf("내 소리 좀 들어줘요. 잠깐 곁에 있어줄래요?",
-                "나 여기 있어요. 내 목소리에도 귀 기울여줘요.", "잠깐 나를 봐줘요. 내 소리, 들려요?")
-            "어린 말소리" -> listOf("내 목소리 들려요? 나도 한마디 할래요.",
-                "나도 소리 내볼래요. 잠깐 들어줄래요?", "내 얘기 들려요? 이번엔 내 차례예요.")
-            else -> when {
-                vocalShape.bursts >= 3 -> listOf("아아, 옹알옹알! 내 얘기도 들어봐요. 이번엔 내 차례예요.", "아아… 우우! 나도 얘기할래요. 내 소리에도 답해줄래요?", "옹알옹알! 또 내 소리예요. 내 얘기도 들어봐요.")
-                vocalShape.activeFraction >= 0.65f -> listOf("옹알옹알, 내 목소리예요! 내 얘기도 들어봐요.", "아아, 우우! 나도 소리 내볼래요. 이번엔 내 차례예요.", "옹알옹알… 아직 내 얘기 남았어요! 조금 더 들어줄래요?")
-                else -> listOf("아아, 우우… 내 얘기 들려요? 나도 한마디 할래요.", "옹알… 이번엔 내 차례예요. 내 소리에도 답해줄래요?", "아아… 내 목소리 들리죠? 내 얘기도 들어봐요.")
-            }
-        }
+        val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape)
         val longPhrases = sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
-        val audioPhrase = phrases[Math.floorMod(shape.wordingKey, phrases.size)]
+        val audioPhrase = BabyExpression.orderedPhrase(decision, range, shape.wordingKey)
+            ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence)
         val rhythm = when {
             broadOnly -> "넓은 시간창에서 옹알이 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
@@ -191,43 +174,7 @@ internal object EvidenceInterpreter {
                 orderedStarts.lastOrNull { it < gap.startMs } in supportedStarts &&
                 orderedStarts.firstOrNull { it >= gap.endMs } in supportedStarts
         }
-        return when (decision.events.singleOrNull()) {
-            VocalEvent.LAUGH -> if (withPause) listOf(
-                "히히! 잠깐 쉬었다가… 또 웃음이 나와요. 까르르, 나랑 같이 웃어줄래요?",
-                "헤헤, 웃음이 나요! 조금 쉬고 또 히히. 내 웃음 들리죠? 같이 웃어요.")
-            else listOf(
-                "헤헤, 웃음이 자꾸 나와요! 히히, 또 웃었네. 나랑 눈 맞추고 같이 웃어줄래요?",
-                "히히, 헤헤! 웃음이 계속 이어져요. 또 웃음이 나왔네. 내 얼굴 보면서 같이 웃어요!")
-            VocalEvent.CRY -> when {
-                withPause -> listOf(
-                    "응애… 조금 쉬었다가 또 으앙. 내 목소리 들리죠? 잠깐 곁에서 토닥토닥 해줄래요?",
-                    "으앙… 잠깐 조용해졌다가 또 소리가 나왔어요. 응애, 내 곁에 있어줘요. 부드럽게 말 걸어줄래요?")
-                shape.rising -> listOf(
-                    "응애… 으아앙! 소리가 점점 커졌네. 나 여기 있어요. 잠깐 내 곁에 있어줄래요?",
-                    "으앙… 으아앙! 점점 더 크게 소리가 나와요. 내 얘기도 들어줘요. 곁에서 부드럽게 말 걸어줄래요?")
-                else -> listOf(
-                    "으앙, 으앙… 내 목소리 계속 들리죠? 아직 으아앙… 나 여기 있어요. 곁에서 부드럽게 말 걸어줄래요?",
-                    "응애, 응애… 소리가 자꾸 이어져요. 내 얘기도 조금 더 들어줘요. 잠깐 곁에서 토닥토닥 해줄래요?")
-            }
-            VocalEvent.BABBLE -> if (withPause) listOf(
-                "아아, 우우… 잠깐 쉬었다가 또 얘기할래요. 옹알옹알! 내 얘기 아직 안 끝났어요. 조금 더 들어줄래요?",
-                "옹알옹알, 내 얘기 들어봐요! 조금 쉬고… 아아, 우우. 다시 내 차례예요. 내 소리가 끝나면 답해줄래요?")
-            else listOf(
-                "아아, 우우… 내 얘기 아직 안 끝났어요! 옹알옹알, 또 내 소리예요. 조금 더 들어줄래요? 다 듣고 나면 답해주세요.",
-                "옹알옹알, 나도 할 얘기가 많아요! 아아, 우우… 아직 내 차례예요. 끝까지 듣고 나면 내 소리에 답해줄래요?")
-            VocalEvent.CHILD_VOICE -> if (withPause) listOf(
-                "내 얘기 들려요? 잠깐 쉬었다가 다시 얘기할래요. 아직 내 차례예요. 다 듣고 나면 이번엔 답해줄래요?",
-                "나도 소리 내볼래요. 조금 쉬고, 또 내 목소리예요! 끝까지 들어주고 나면 같이 얘기해요.")
-            else listOf(
-                "내 목소리 들리죠? 나도 할 얘기가 많아요. 조금 더 들어줘요. 내 소리가 끝나면 답해줄래요?",
-                "나도 한마디, 또 한마디 할래요. 내 얘기 아직 안 끝났어요! 조금 더 들어주고 나한테도 답해주세요.")
-            null -> if (withPause) listOf(
-                "내 얘기 들어봐요. 잠깐 쉬고… 다시 내 차례예요. 이렇게도, 저렇게도 소리 내볼래요. 끝까지 들어줄래요?",
-                "내 소리 조금 더 들어줘요. 잠깐 쉬고… 또 소리를 내봐요. 이랬다가 저랬다가, 내 소리도 여러 가지예요.")
-            else listOf(
-                "나 여기 있어요. 이렇게도, 저렇게도 소리 내볼래요. 내 얘기 아직 남았어요. 조금만 더 들어줄래요?",
-                "아직 내 차례예요. 이 소리도, 저 소리도 내볼래요. 내 얘기 조금 더 들어줘요. 다 듣고 나면 답해줄래요?")
-        }
+        return BabyExpression.variants(decision.events.singleOrNull(), shape, sustained = true, withPause = withPause)
     }
 
 }
