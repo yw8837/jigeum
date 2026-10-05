@@ -246,17 +246,17 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 catch (_: Exception) { decodeFailed = true; null }
                 catch (_: LinkageError) { decodeFailed = true; null }
             try {
-                val primaryAudio = if (decodeFailed) SoundAnalysis(emptyList(),
+                val audio = if (decodeFailed) SoundAnalysis(emptyList(),
                     "이 파일의 소리를 읽지 못했어요. 다른 파일이나 형식으로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
                     else if (pcm == null) SoundAnalysis(emptyList(),
                     "이 영상에는 읽을 수 있는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.", issue = AnalysisIssue.NO_AUDIO)
-                    else SoundAnalyzer.analyzeDetailed(context, pcm)
-                val audio = if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE ||
-                    BuildConfig.AST_BABBLE_SUPPORT) &&
-                    pcm != null && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
-                    val ast = AstAudioAnalyzer.analyze(context, pcm)
-                    BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)
-                } else primaryAudio
+                    else SoundAnalyzer.analyzeWithSupport(context, pcm) { primaryAudio ->
+                        if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE ||
+                            BuildConfig.AST_BABBLE_SUPPORT) && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
+                            val ast = AstAudioAnalyzer.analyze(context, pcm)
+                            BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)
+                        } else primaryAudio
+                    }
                 // Visual observation remains available on abstention, but never authorizes a phrase.
                 val shape = if (pcm != null && audio.problem == null) AcousticShape.from(pcm) else AcousticShape(0f, false, 0)
                 ensureActive()
@@ -268,7 +268,7 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                     try {
                         val rms = AudioCleanup.strongestSecondRms(cleaned)
                         val quiet = result.issue == AnalysisIssue.INFANT_UNCONFIRMED && rms < .012
-                        result.copy(problem = if (quiet) "소리가 작게 담겼고 아기 발성 단서를 충분히 찾지 못했어요. 선택 구간을 다시 듣고, 다음 촬영은 조금 가까이에서 해주세요." else result.problem,
+                        result.copy(problem = if (quiet) "소리가 작게 담겼어요. 아기 가까이에서 다시 찍어 보세요." else result.problem,
                             issue = if (quiet) AnalysisIssue.QUIET else result.issue,
                             suggestedRange = AudibleRange.suggest(cleaned, range))
                     } finally { cleaned.fill(0f) }

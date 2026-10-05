@@ -19,7 +19,8 @@ class AstPublicAudioProbeTest {
         val args = InstrumentationRegistry.getArguments()
         assumeTrue("Explicit standalone public AST probe only", args.getString("ast_public_probe") == "true")
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        check(context.packageName == "com.moa.babylanguage.astprobe")
+        val phaseProbe = args.getString("sound_phase_probe") == "true"
+        check(context.packageName == if (phaseProbe) "com.moa.babylanguage.astcandidate" else "com.moa.babylanguage.astprobe")
         check(!BabbleSupportPolicy.ENABLED) { "Production candidate must remain disabled" }
         val runId = args.getString("sound_probe_run_id") ?: error("Missing run ID")
         require(runId.matches(Regex("[a-f0-9]{32}"))) { "Invalid run ID" }
@@ -93,6 +94,21 @@ class AstPublicAudioProbeTest {
                         EvidenceInterpreter.interpret(candidate, shape, decoded.range)))
                         .put("supported_windows", candidate.babbleWindows.size)
                         .put("status", "measured")
+                    if (phaseProbe) {
+                        stage = "phase_recovery"
+                        val phaseStarted = SystemClock.elapsedRealtime()
+                        val recovered = SoundAnalyzer.analyzeWithSupport(context, pcm) { fresh ->
+                            check(fresh == baseline) { "Baseline changed for identical PCM" }
+                            if (BabbleSupportPolicy.shouldAnalyze(fresh))
+                                BabbleSupportPolicy.attachCandidate(fresh, ast, decoded.range.durationMs) else fresh
+                        }
+                        PublicAudioProbeContract.requireCompletedAnalysis(recovered)
+                        requireBaselineFrames(recovered, decoded.range.durationMs)
+                        row.put("phase", observation(recovered,
+                            EvidenceInterpreter.interpret(recovered, shape, decoded.range)))
+                            .put("phase_ms_excluding_ast", SystemClock.elapsedRealtime() - phaseStarted)
+                        check(PublicAudioProbeContract.sha256(bytes) == entry.getString("pcm_sha256"))
+                    }
                     measuredCount++
                     report.put("measured_count", measuredCount)
                 } catch (error: Throwable) {

@@ -175,7 +175,7 @@ def main():
             deadline = time.monotonic()+65
             while time.monotonic() < deadline:
                 messages = [n['text'] for n in q.nodes()]
-                accepted = ('선택한 구간이 거의 무음이에요.', '선택한 구간이 너무 조용해요.', '소리는 읽었지만 아기 발성인지', '소리가 작게 담겼고')
+                accepted = ('선택한 구간이 거의 무음이에요.', '선택한 구간이 너무 조용해요.', '아기 소리인지 구분하기 어려워요.', '소리가 작게 담겼어요.')
                 abstention = next((message for message in messages if message.startswith(accepted)), None)
                 if abstention:
                     result['abstention_message'] = abstention

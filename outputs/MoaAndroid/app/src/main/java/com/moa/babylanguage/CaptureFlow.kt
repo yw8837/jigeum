@@ -419,7 +419,12 @@ internal fun CaptureFlow(
             }
             if (lockedResult == null && current != null && !analyzing) {
                 withheldAnalysis?.visualEvidence?.let { observation ->
-                    Text(observation.evidence, color = Muted, fontSize = 13.sp, lineHeight = 21.sp,
+                    var showObservation by remember(withheldAnalysis) { mutableStateOf(false) }
+                    TextButton(onClick = { showObservation = !showObservation },
+                        modifier = Modifier.testTag("toggle-withheld-evidence")) {
+                        Text(if (showObservation) "살펴본 장면 접기" else "살펴본 장면 보기")
+                    }
+                    if (showObservation) Text(observation.evidence, color = Muted, fontSize = 13.sp, lineHeight = 21.sp,
                         modifier = Modifier.testTag("withheld-visual-evidence"))
                 }
                 withheldAnalysis?.suggestedRange?.let { suggested ->

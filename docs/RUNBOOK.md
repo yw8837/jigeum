@@ -1,4 +1,20 @@
-# 0.5.13/code27 음성 변환 개선 — 비공개 검토 제출
+# 0.5.14/code28 짧은 발성 보완
+
+최신 [QA](qa/audio-window-0.5.14/README.md), [구현 계약](UX-SOUND-PHASE-0.5.14.md)을 따른다.
+고정 산출물은 ignored `work/sound-phase-20261005/Agattok-0.5.14-beta-code28.apk/.aab`다.
+`tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 경로>`로
+검증된 beta만 만든다. 비교용 정식 release AAB는 Play에 제출하지 않는다.
+baseline 조사 API `SoundAnalyzer.analyzeDetailed`는 유지했고, 제품만 `analyzeWithSupport`에서
+기본 YAMNet→기존 AST→미확정 추가 창 순으로 실행한다. 기준값을 낮추거나 겹친 창을 합산하지 않는다.
+
+이번 계측53, 실제37조건, 서명27→28 기록/영상 보존, 실패 화면2배율과 최종 약국 UI를 검증했다.
+새 에뮬레이터가 필요하면 독립 이름을 사용한다. `AgattokPhase28`은 시험 후 삭제됐으며
+기존 `C:/MoaAVD/MoaQA35`나 사용자 기기에 같은 정리 명령을 적용하지 않는다.
+실제 Play 상태는 QA 배포 기록을 보고, 동일 code28을 중복 업로드하지 않는다.
+
+---
+
+# 이전 0.5.13/code27 음성 변환 개선 — 비공개 검토 제출
 
 최신 실행 증거는 [0.5.13 QA](qa/audio-resampling-0.5.13/README.md)를 먼저 읽는다.
 고정 패키지는 ignored `work/model-specialization-20261005/`의 `Agattok-0.5.13-beta-code27.apk/.aab`다.
