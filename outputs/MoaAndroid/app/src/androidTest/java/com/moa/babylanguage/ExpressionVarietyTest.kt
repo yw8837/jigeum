@@ -67,6 +67,29 @@ class ExpressionVarietyTest {
         assertEquals(stable, other)
     }
 
+    @Test fun childSpeechNeverBecomesBabblingInAnOrderedExpression() {
+        for (other in listOf("울음", "아기 웃음 후보")) for (reverse in listOf(false, true)) {
+            val speech = List(3) { "어린 말소리 후보" }
+            val event = List(3) { other }
+            val audio = recording(if (reverse) event + speech else speech + event)
+            val text = phrase(audio)
+            assertTrue(text, text.contains("말소리"))
+            assertFalse(text, text.contains("옹알"))
+        }
+        val threeRuns = recording(List(3) { "어린 말소리 후보" } + List(3) { "옹알이 후보" } + List(3) { "아기 웃음 후보" })
+        assertEquals("내 소리가 여러 모습으로 나왔어요. 한 가지 마음으로 정하지 말고 천천히 함께해 주세요.", phrase(threeRuns))
+    }
+
+    @Test fun anIgnoredConflictingSourceFrameCannotDisappearFromTheSequence() {
+        val clean = recording(listOf("울음", "울음", "아기 웃음 후보", "아기 웃음 후보"))
+        for (at in listOf(975L, 1_500L)) {
+            val frames = (clean.frames + SoundFrame(at, cue("울음") + cue("아기 웃음 후보"))).sortedBy { it.startMs }
+            val audio = SoundAnalysis(emptyList(), frames = frames)
+            assertNull(SoundTimeline.decide(audio).problem)
+            assertEquals("내 소리가 여러 모습으로 나왔어요. 한 가지 마음으로 정하지 말고 천천히 함께해 주세요.", phrase(audio))
+        }
+    }
+
     @Test fun allKeysAreBoundedStableAndNeverTurnNoiseIntoWords() {
         val keys = listOf(Int.MIN_VALUE, -1, 0, 1, 99, Int.MAX_VALUE)
         for (label in listOf("울음", "아기 웃음 후보", "옹알이 후보")) for (key in keys) {

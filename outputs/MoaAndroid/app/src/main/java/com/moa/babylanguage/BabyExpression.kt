@@ -82,20 +82,25 @@ internal object BabyExpression {
     /** Only two stable, adjacent runs establish a simple order. Do not turn an
      * aggregate/broad label, alternating guesses or duplicated timestamps into a story.
      * This describes observed sound order, never a change of mood or its cause. */
-    fun orderedPhrase(decision: SoundDecision, range: ClipRange, wordingKey: Int): String? {
+    fun orderedPhrase(audio: SoundAnalysis, decision: SoundDecision, range: ClipRange, wordingKey: Int): String? {
         if (decision.problem != null || decision.broadWindows.isNotEmpty() || decision.events.size < 2) return null
         val moments = decision.moments
         if (moments.any { it.startMs !in 0 until range.durationMs } ||
             moments.zipWithNext().any { (a, b) -> b.startMs - a.startMs !in 1..1_500 }) return null
-        fun kind(event: VocalEvent) = if (event == VocalEvent.CHILD_VOICE) VocalEvent.BABBLE else event
+        // Retain the original timeline: a dropped conflict/duplicate observation must
+        // not disappear into an apparently uninterrupted two-stage sequence.
+        val sourceTimes = audio.frames.map { it.startMs }
+        if (sourceTimes.isEmpty() || sourceTimes.any { it !in 0 until range.durationMs } ||
+            sourceTimes.zipWithNext().any { (a, b) -> b <= a } ||
+            sourceTimes.filter { it in moments.first().startMs..moments.last().startMs } != moments.map { it.startMs }) return null
         val runs = mutableListOf<MutableList<VocalMoment>>()
         for (moment in moments) {
-            if (runs.isEmpty() || kind(runs.last().last().event) != kind(moment.event)) runs += mutableListOf(moment)
+            if (runs.isEmpty() || runs.last().last().event != moment.event) runs += mutableListOf(moment)
             else runs.last().add(moment)
         }
         if (runs.size != 2 || runs.any { it.size < 2 || it.last().startMs - it.first().startMs < 900 }) return null
-        val first = kind(runs[0][0].event)
-        val last = kind(runs[1][0].event)
+        val first = runs[0][0].event
+        val last = runs[1][0].event
         val openings = when (first to last) {
             VocalEvent.BABBLE to VocalEvent.LAUGH -> listOf("옹알옹알 얘기하다가 웃음이 나왔어요.", "옹알이 뒤에는 웃음으로 한마디 보탰어요.")
             VocalEvent.LAUGH to VocalEvent.BABBLE -> listOf("웃음 뒤에 옹알옹알, 나만의 말을 보태요.", "웃음으로 인사하고 옹알이로 얘기를 건네요.")
@@ -103,6 +108,10 @@ internal object BabyExpression {
             VocalEvent.BABBLE to VocalEvent.CRY -> listOf("옹알옹알 하다가 울음이 나왔어요.", "옹알이 뒤에는 울음이 나왔네요.")
             VocalEvent.CRY to VocalEvent.LAUGH -> listOf("울음 소리 뒤에 웃음 소리도 나왔어요.", "울음도 나왔는데, 뒤에는 웃음이 나왔네요.")
             VocalEvent.LAUGH to VocalEvent.CRY -> listOf("웃음 소리 뒤에 울음이 나왔어요.", "웃음도 나왔는데, 뒤에는 울음이 나왔네요.")
+            VocalEvent.CHILD_VOICE to VocalEvent.LAUGH -> listOf("말소리 뒤에 웃음이 나왔어요.", "말소리로 인사하고 웃음도 보탰어요.")
+            VocalEvent.LAUGH to VocalEvent.CHILD_VOICE -> listOf("웃음 뒤에는 말소리로 얘기를 보태요.", "웃음으로 인사하고 말소리를 건네요.")
+            VocalEvent.CRY to VocalEvent.CHILD_VOICE -> listOf("울음 뒤에 말소리로 한마디 보탰어요.", "울음 뒤에는 말소리를 꺼내 봤어요.")
+            VocalEvent.CHILD_VOICE to VocalEvent.CRY -> listOf("말소리 뒤에 울음이 나왔어요.", "말소리를 내다가 울음도 나왔네요.")
             else -> return null
         }
         val endings = when {
