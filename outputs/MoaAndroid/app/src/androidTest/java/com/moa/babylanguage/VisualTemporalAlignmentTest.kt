@@ -134,4 +134,21 @@ class VisualTemporalAlignmentTest {
         assertTrue(first.evidence.contains("48~49초 입꼬리"))
         assertEquals(first, EvidenceInterpreter.interpret(audio, shape, selection, visual).interpretation)
     }
+    @Test fun mouthRatioAboveOriginalUpperBoundCannotCreateVisualBasis() {
+        val frames = visual(mouth = { if (it == 500L || it == 1_500L) 1.2f else .04f })
+        assertEquals("AUDIO", result(sound(0L to "옹알이 후보", 975L to "옹알이 후보",
+            1_950L to "옹알이 후보"), frames).basis)
+    }
+    @Test fun unalignedAudioCannotClaimTemporalVisualCorrespondence() {
+        val audio = sound(0L to "아기 웃음 후보", 975L to "아기 웃음 후보")
+        val frames = visual(smile = { .8f })
+        val plain = EvidenceInterpreter.interpret(audio, shape, range).interpretation!!
+        val output = EvidenceInterpreter.interpret(audio, shape, range, frames,
+            audioTimelineAligned = false).interpretation!!
+        assertEquals("AUDIO", output.basis)
+        assertEquals(plain.phrase, output.phrase)
+        assertFalse(output.evidence.contains("같은 시간대"))
+        assertEquals(frames, EvidenceInterpreter.interpret(audio, shape, range, frames,
+            audioTimelineAligned = false).visualEvidence)
+    }
 }

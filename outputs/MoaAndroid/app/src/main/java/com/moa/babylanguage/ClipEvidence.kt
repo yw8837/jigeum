@@ -88,7 +88,7 @@ internal object EvidenceInterpreter {
     // Conservative product gate, NOT a measured confidence/accuracy percentage.
     // Generic adult laughter/speech and a face alone cannot create a baby phrase.
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
-                  visualEvidence: VisualEvidence? = null): ClipAnalysisResult {
+                  visualEvidence: VisualEvidence? = null, audioTimelineAligned: Boolean = true): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
         val decision = SoundTimeline.decide(audio, range.durationMs)
         decision.problem?.let { return ClipAnalysisResult(problem = it, issue = decision.issue, visualEvidence = visualEvidence) }
@@ -106,7 +106,7 @@ internal object EvidenceInterpreter {
         val phrases = longPhrases ?: eligiblePhrases
         val audioPhrase = BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey)
             ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
-        val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence)
+        val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence, audioTimelineAligned)
         val rhythm = when {
             broadOnly -> "넓은 시간창에서 옹알이 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
@@ -190,10 +190,11 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
     override suspend fun analyze(context: Context, uri: Uri, range: ClipRange, visual: Boolean): ClipAnalysisResult =
         withContext(Dispatchers.Default) {
             var decodeFailed = false
-            val pcm = try { VideoAudioDecoder.decode(context, uri, range.startMs, range.endMs) }
+            val decoded = try { VideoAudioDecoder.decodeWithTiming(context, uri, range.startMs, range.endMs) }
                 catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
                 catch (_: Exception) { decodeFailed = true; null }
                 catch (_: LinkageError) { decodeFailed = true; null }
+            val pcm = decoded?.samples
             try {
                 val audio = if (decodeFailed) SoundAnalysis(emptyList(),
                     "이 파일의 소리를 읽지 못했어요. 다른 파일이나 형식으로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
@@ -211,7 +212,8 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 ensureActive()
                 val frames = if (visual) inspectVideoEvidence(context, uri, range.startMs, range.endMs) else null
                 ensureActive()
-                val result = EvidenceInterpreter.interpret(audio, shape, range, frames)
+                val result = EvidenceInterpreter.interpret(audio, shape, range, frames,
+                    audioTimelineAligned = decoded?.selectionTimelineAligned == true)
                 if (pcm != null && audio.problem == null && result.interpretation == null) {
                     val cleaned = AudioCleanup.filter(pcm)
                     try {
@@ -231,9 +233,11 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
  * Wording asks for a response; it never attributes the visible person's action to the baby. */
 internal object VisualExpression {
     data class Result(val phrase: String, val usedVisual: Boolean, val evidence: String = "")
-    fun combine(phrase: String, decision: SoundDecision, range: ClipRange, visual: VisualEvidence?): Result {
+    fun combine(phrase: String, decision: SoundDecision, range: ClipRange, visual: VisualEvidence?,
+                audioTimelineAligned: Boolean = true): Result {
         if (visual == null || visual.status == VisualEvidenceStatus.FAILED || decision.problem != null) return Result(phrase, false)
         if (visual.frames.any { it.presentationOffsetMs != null }) {
+            if (!audioTimelineAligned) return Result(phrase, false)
             val matches = VisualSoundAlignment.find(decision, visual.frames, range.durationMs)
             if (matches.isEmpty()) return Result(phrase, false)
             val cues = matches.map { it.cue }.distinct()

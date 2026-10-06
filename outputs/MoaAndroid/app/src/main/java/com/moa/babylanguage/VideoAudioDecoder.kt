@@ -34,6 +34,7 @@ internal data class VideoAudioAnalysis(
 }
 
 internal object VideoAudioDecoder {
+    internal data class DecodedAudio(val samples: FloatArray, val selectionTimelineAligned: Boolean)
     private const val OUTPUT_RATE = 16_000
     private const val MAX_ENCODED_BYTES = 12 * 1024 * 1024L
     private const val MAX_SOURCE_BYTES = 200L * 1024L * 1024L
@@ -77,18 +78,22 @@ internal object VideoAudioDecoder {
         }
     }
 
-    internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? = decodeLock.withLock {
+    internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? =
+        decodeWithTiming(context, uri, startMs, endMs)?.samples
+
+    internal suspend fun decodeWithTiming(context: Context, uri: Uri, startMs: Long, endMs: Long): DecodedAudio? = decodeLock.withLock {
         require(startMs >= 0 && endMs <= 120_500 && endMs - startMs in 1_000..30_000)
         decodeOne(context, uri, startMs * 1000, endMs * 1000)
     }
 
-    private suspend fun decodeOne(context: Context, uri: Uri, startUs: Long, endUs: Long): FloatArray? {
+    private suspend fun decodeOne(context: Context, uri: Uri, startUs: Long, endUs: Long): DecodedAudio? {
         val deadline = SystemClock.elapsedRealtime() + DECODE_DEADLINE_MS
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         var codecStarted = false
         val maxOutput = ((endUs - startUs) * OUTPUT_RATE / 1_000_000).toInt()
         val resampler = BoundedPcmResampler(maxOutput)
+        val timing = AudioTimestampAudit(startUs)
         try {
             coroutineContext.ensureActive()
             val sourceSize = context.contentResolver.openFileDescriptor(uri, "r")
@@ -190,6 +195,7 @@ internal object VideoAudioDecoder {
                                 val skip = (((startUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
                                 val keepUntil = (((endUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
                                 if (keepUntil > skip) {
+                                    timing.observe(outputInfo.presentationTimeUs, skip, keepUntil - skip, rate)
                                     buffer.position(start + skip * frameBytes)
                                     buffer.limit(start + keepUntil * frameBytes)
                                     resampler.add(buffer.slice().order(ByteOrder.LITTLE_ENDIAN), rate, channels, pcmEncoding)
@@ -202,7 +208,7 @@ internal object VideoAudioDecoder {
                     }
                 }
             }
-            return resampler.copyResult()
+            return DecodedAudio(resampler.copyResult(), timing.aligned)
         } finally {
             resampler.clear()
             if (codec != null) {

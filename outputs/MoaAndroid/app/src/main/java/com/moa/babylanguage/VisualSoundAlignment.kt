@@ -19,7 +19,7 @@ internal object VisualSoundAlignment {
         if (!VisualTimeline.summarize(frames, durationMs).ordered) return emptyList()
 
         fun usable(frame: VisualFrameObservation) = frame.valid && frame.faceCount == 1 &&
-            frame.mouthOpening?.let { it.isFinite() && it >= 0f } == true
+            frame.mouthOpening?.let { it.isFinite() && it in 0f..1f } == true
         fun supported(at: Long, events: Set<VocalEvent>) = moments.any {
             it.event in events && at >= it.startMs && at - it.startMs < WINDOW_MS
         }
