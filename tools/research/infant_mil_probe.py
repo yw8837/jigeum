@@ -62,17 +62,18 @@ def loss_and_gradient(bags,labels,weights,w,b,penalty):
     return loss+.5*penalty*float(w@w),gw,gb
 
 
-def fit_mil(bags,labels,weights,penalty):
+def fit_mil(bags,labels,weights,penalty,dimension=1024):
     import numpy as np
-    if (not bags or labels.shape!=(len(bags),) or weights.shape!=(len(bags),)
+    if (type(dimension) is not int or dimension not in (768,1024)
+            or not bags or labels.shape!=(len(bags),) or weights.shape!=(len(bags),)
             or set(labels.tolist())!={0.,1.} or not np.isfinite(weights).all() or np.any(weights<=0)
             or abs(float(weights.sum())-1)>1e-10 or penalty not in PENALTIES):
         raise ValueError('Invalid MIL training domain')
     for x,durations in bags:
-        if x.ndim!=2 or x.shape[1]!=1024 or not np.isfinite(x).all():
+        if x.ndim!=2 or x.shape[1]!=dimension or not np.isfinite(x).all():
             raise ValueError('Invalid MIL training features')
         bag_logit_and_attention(np.zeros(len(x)),durations)
-    w=np.zeros(1024,np.float64); b=0.
+    w=np.zeros(dimension,np.float64); b=0.
     mw=vw=np.zeros_like(w); mb=vb=0.
     for step in range(1,301):
         loss,gw,gb=loss_and_gradient(bags,labels,weights,w,b,penalty)
@@ -87,7 +88,7 @@ def fit_mil(bags,labels,weights,penalty):
     return w,b
 
 
-def select(bags,cases):
+def select(bags,cases,dimension=1024):
     import numpy as np
     if len(bags)!=len(cases):
         raise ValueError('MIL source and bag counts differ')
@@ -96,7 +97,7 @@ def select(bags,cases):
     for penalty in PENALTIES:
         details=[]
         for source,train,held in folds(cases):
-            w,b=fit_mil([bags[i] for i in train],labels[train],presence_weights([cases[i] for i in train]),penalty)
+            w,b=fit_mil([bags[i] for i in train],labels[train],presence_weights([cases[i] for i in train]),penalty,dimension)
             losses=[]
             for i in held:
                 x,durations=bags[i]

@@ -1,5 +1,21 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — AST768 bag 학습 비교 종료, 새 공개 음원 확보
+
+[AST MIL 사전 계약](research/20261007-ast-mil-contract.md)/[실제 결과](research/20261007-ast-mil-results.md):
+고정public35/43span의train-only18source로새769param head를동결했다.
+validation14·retained3·public33의clip/span지원변화0, 기존약국회복2는유지해도새개선0이라미채택이다.
+같은학습방식을반복하지않는다. [한정도구QA](qa/ast-mil-20261007.md)는고유11unit/CLI5조건·
+실제timeout/recovery·dirty/head/model보존·scopedstateclear를확인했다.
+첫512MiB QA설정의memory-limit실패는보존했고2GiB실제loadstall/2.003928초timeout후회복했다.
+
+[새공개2source 취득](research/20261007-new-infant-audio-review-acquisition.md)은MP3한세트667,032B,
+전체decode1.341/97.5184375초·고유11unit/CLI4/자손0이다. 실제청취/사건정답/학습승인0.
+blocked/null을유지한다. [weak연구와사건정답경계](research/20261007-weak-presence-training-boundary.md)를따라
+별도사전whole-recording caption-bag 계약을검토하며, 기존loader/held/사용자자료학습경계를완화하지않는다.
+제품0.5.18-beta/code32·새APK/AAB/Playupload0·ADB실폰0·전체goal active.
+약국회복frozen Android후보와실제ARMgate는그대로다. 독립리뷰결과는후속기록을따른다.
+
 ### 최신 — 기존51조건의 누락 원인 분리, 점수 진단 재생 완료
 
 [사전 계약](research/20261007-presence-context-replay-contract.md)과
