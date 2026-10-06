@@ -1,5 +1,10 @@
 # 다음 단계 — 2026-10-06 결과 동선 개선과 Android 이식 이후
 
+후속: **code30은10월6일11:08 게시/선택테스터제공을 직접 확인했다.** 아래 검토제출중 표기는 당시 이력이다.
+[새 보존 누락 원음 비교](research/20261006-efficientsed-retained-failure-screen.md)는 제품 채택을 뒷받침하지 못했다.
+같은 원음3구간 추론을 반복하거나 관찰용0.5를 제품 임계값으로 쓰지 않는다.
+인식 개선은 새 영아 사건/비아기 반례 및 [시간축 평가 계약](research/20261006-efficientsed-temporal-contract.md)부터 잇는다.
+
 [0.5.16 QA](qa/result-navigation-0.5.16/README.md)의 최종 서명·업데이트·제출 상태를 먼저 확인한다.
 결과 재진입 UX와 EfficientSED의 Android 전처리 수치 이식은 구현했다. 아래 과거의 이식 예정은 이력이다.
 
