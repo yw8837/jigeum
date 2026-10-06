@@ -30,6 +30,13 @@ class FixedWindowEvidenceTest(unittest.TestCase):
         short = [window(0, 2000, Babbling=.8), window(2000, 4000, **{'Baby laughter': .3})]
         self.assertFalse(probe.candidate_summary(short, baseline)['positive_not_product_acceptance'])
 
+    def test_conflict_in_other_context_length_blocks_positive_variant(self):
+        variants = [dict(seconds=2, windows=[window(0, 2000, Babbling=.8)]),
+                    dict(seconds=4, windows=[window(0, 4000, Television=.3)])]
+        result = probe.summarize_variants(variants, [window(0, 10000)])
+        self.assertTrue(all(v['summary']['whole_selection_blocked'] for v in result))
+        self.assertFalse(any(v['summary']['positive_not_product_acceptance'] for v in result))
+
     def test_adult_speech_or_child_speech_alone_is_not_positive_babble(self):
         self.assertFalse(probe.candidate_summary([window(0, 2000, **{'Child speech, kid speaking': .99})], [])['positive_not_product_acceptance'])
 

@@ -51,6 +51,13 @@ def candidate_summary(windows, base_windows):
                 positive_not_product_acceptance=bool(supported) and not blocked)
 
 
+def summarize_variants(variants, baseline):
+    """All new contexts share the selection-wide contrary guard from the spec."""
+    all_short = [w for variant in variants for w in variant['windows']]
+    return [dict(**variant, summary=candidate_summary(variant['windows'], baseline + all_short))
+            for variant in variants]
+
+
 def worker(args):
     def denied(*unused, **kw):
         raise RuntimeError('Network prohibited during local AST ablation')
@@ -113,7 +120,8 @@ def worker(args):
                    baseline_windows=base, baseline=candidate_summary(base, []), variants=[])
         for seconds in (2, 4):
             windows = measure(pcm, short_ranges(len(pcm), seconds * 16000))
-            row['variants'].append(dict(seconds=seconds, windows=windows, summary=candidate_summary(windows, base)))
+            row['variants'].append(dict(seconds=seconds, windows=windows))
+        row['variants'] = summarize_variants(row['variants'], base)
         if digest(file) != entry['pcm_sha256']:
             raise ValueError('Input changed during inference')
         row['elapsed_seconds'] = time.monotonic()-before

@@ -34,7 +34,11 @@ PretrainedSED는 [원천 계약](20261006-new-infant-engine-next-experiment.md)�
 - 입력의 바이트·SHA·16kHz mono float32·유한성·진폭·표본수·길이를 검증했다.
   추론 후 PCM 해시도 동일하다. 보존 PCM 검증이며 사라진 원본의 디코더를 다시 실행한 것이 아니다.
 - AST 보조 harness의 고정 위치·invalid length·전체선택 TV·추가창 웃음·하위감정·child speech 단독
-  반례6검사는 실패/skip0으로 통과했다. 소리 모델 정확도 검사는 아니다.
+  반례 및 다른 창 길이의 충돌 공유7검사는 실패/skip0으로 통과했다. 소리 모델 정확도 검사는 아니다.
+- 최초 runner는 각 창 길이의 새 충돌만 해당 variant와 baseline에 적용했다. 독립 Spec 검토가
+  실행 전 계약의 **모든 새 짧은 창** 공유 요구와 차이를 지적해,2초/4초 전체 충돌을 공유하도록 고쳤다.
+  기존23회 full scores로 요약만 재생했고3구간 모두 변경0이었다. 새 모델 추론0회이며 기존 원시 결과를 덮어쓰지 않았다.
+  `work/ast-short-context-20261006/cross-context-guard-replay.json`에 전후 runner/score hash와 요약을 보존했다.
 
 ## 다음 실제 비교
 

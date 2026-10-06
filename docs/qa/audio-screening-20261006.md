@@ -14,7 +14,7 @@
 | ID/의도·사용자 모델 | 준비·명령/하네스 | 기대 신호 | 실제 | 수정·근거 | 정리 |
 |---|---|---|---|---|---|
 | B1 정상 연구 입력 | 기존 보존3구간, AST runner / PretrainedSED runner | 고정 hash·finite·shape·완료·원음 불변 | 각각 exit0, 23창/3구간 및3구간 완료 | `retained-run01`의 private scores/process | 자손0, 원음 보존 |
-| B2 숨은 충돌 | `test_ast_short_window_probe.py` 6조건 | TV/웃음 및 하위감정 충돌, child speech 단독은 AST 양성으로 승격 안함 | 고유6검사 pass/skip0 | 코드 변경 후 최종 동일6검사 통과 | 임시 입력 없음 |
+| B2 숨은 충돌 | `test_ast_short_window_probe.py` 7조건 | TV/웃음 및 하위감정 충돌, child speech 단독과 다른 창 길이 충돌은 AST 양성으로 승격 안함 | 최종 고유7검사 pass/skip0 | 독립 Spec 지적 수정·기존 scores 요약 재생3/변경0·추론0 | 임시 입력 없음 |
 | A1 손상 PCM·입력 작성자 | 실제 AST CLI에 잘못된 SHA manifest | nonzero, hash 오류, 성공파일 없음 | exit1, 기대 거부, 자손0 | `audio_screening_qa.py` / `final01/ast_bad_hash.log`·worker log | 합성 fixture 폴더 보존* |
 | A2 NaN·입력 작성자 | 실제 PretrainedSED validate CLI, 올바른 hash의 NaN PCM | finite 오류가 정상 보류로 숨겨지지 않음 | exit1, 기대 거부, classifier 미실행, 자손0 | `final01/sed_nonfinite.log`·worker log | 합성 fixture 보존* |
 | A3 traversal·악성 manifest | 실제 AST CLI, id=`../signal` | 잘못된 ID를 읽기 전에 거부 | exit1, ID 오류, 성공파일 없음, 자손0 | `final01/ast_traversal.log` | 합성 fixture 보존* |
@@ -30,7 +30,7 @@
 - PretrainedSED: 연구 EfficientAT Python으로 `tools/research/pretrainedsed_probe.py`
   `--assets work/pretrainedsed-20261006 --corpus work/sed-followup-20261006/retained-corpus`
   `--output work/pretrainedsed-20261006/retained-run01` — exit0, Job180초/4GiB.
-- `python -m unittest discover -s tools/research -p test_ast_short_window_probe.py -v` — exit0,6검사.
+- `python -m unittest discover -s tools/research -p test_ast_short_window_probe.py -v` — 최종 exit0,7검사.
 - `tools/research/audio_screening_qa.py --output work/audio-screening-qa-20261006/final01`
   `--ast-python <고정 AST Python> --sed-python <고정 EfficientAT Python>` — exit0,5/5 기대 거부.
   각 CLI60초 제한, 실제 worker의 Job과 자손 정리 결과까지 검사한다.
@@ -40,6 +40,10 @@
 ## 발견·수정
 
 제품 결함을 발견했다고 주장할 결과는 없다. fixed false/NaN/hash/stale guard는 기대대로 동작했다.
+독립 Spec 검토의 P2는 AST2초/4초간 전역 충돌 가드 미공유였다. 전체 새창을 공유하는
+`summarize_variants`로 수정하고 양성2초+TV4초 반례를 추가했다. 기존23회 추론의 full scores를
+실제로 재생해3구간 모두 요약 변경0을 확인했다. 추가 모델 추론은0이고 초기 결과는 보존했다.
+Standards 필수수정0/비차단 네트워크 차단 중복1은 유지보수 제안으로 남긴다.
 초기 smoke도5/5 통과했으며 lifecycle을 고정한 최종5조건을 추가 실행했다. 이를10개 고유 검사로 세지 않는다.
 state helper가 처음 write의 `success`, read의 상태본문/`exists`, clear의 `cleared`를 같은 schema로 취급해
 실제 CLI 성공을 harness 오류로 표시했다. action별 schema로 수정했고 최종 read exit0/existsfalse를 확인했다.
@@ -54,7 +58,7 @@ state helper가 처음 write의 `success`, read의 상태본문/`exists`, clear�
 이 정리 제한을 숨기고 UltraQA 완료로 보고하지 않는다. 모델 품질 목표도 아직 달성되지 않았다.
 
 **ULTRAQA BLOCKED: cleanup — 명명된 합성 fixture 폴더 삭제가 정책 검토에서 차단됨.**
-기능검사6+실제 거부5는 통과했으며 인식 후보 조사·실험은 별도 활성 목표로 계속 진행한다.
+기능검사7+실제 거부5는 통과했으며 인식 후보 조사·실험은 별도 활성 목표로 계속 진행한다.
 다음 정리는 삭제 권한/정책 상태를 확인한 뒤 동일 명명 대상을 처리한다.
 
 ## 증거

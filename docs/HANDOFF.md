@@ -2,6 +2,21 @@
 
 갱신: **2026-10-06** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 — 사용자가 인식·맥락 개선의 지속 실행을 재확정
+
+정리나 UX 배포로 연구를 끝내지 않는다. [실제 후속 비교](research/20261006-short-context-and-pretrainedsed-results.md)에서
+현재 AST의 고정2초/4초 맥락23추론과 별도 PretrainedSED447-way 시간축 모델을 보존3구간에 실행했다.
+누락 두 구간은 두 방식 모두 회복 근거를 주지 못해 제품에 넣지 않았다. 두 구간은 한 원본의 겹치는 개발 자료다.
+새 원본 정답 없이 점수를 낮춰 성공으로 만들거나 같은 비교를 반복하지 않는다.
+다음 미실행 후보 PANNs Cnn10의 공식25,237,595B checkpoint/CC BY4.0/527-way head를 확인하고 별도 로컬 비교를 준비 중이다.
+Gemma·PretrainedSED·PANNs를 제품에 탑재했다는 뜻이 아니다. 현재 제품은 아래code32의YAMNet+AST+MediaPipe다.
+
+연구도구 [QA](qa/audio-screening-20261006.md)는 고유단위7+실제CLI거부5를 통과했다.
+독립 Spec 검토의 창길이 간 전역충돌미공유P2를 수정했고 기존3구간 요약 재생의 변화0/추론0을 확인했다.
+합성fixture10폴더 삭제는 자동검토가 차단해 남아 있고 이 정리 한정 UltraQA BLOCKED다.
+worker자손0·격리state부재는 확인했다. 앱 성능 개선·새 배포·전체 목표 완료로 보고하지 않는다.
+조사·모델 비교·측정 이득이 있는 변경의 적용/AndroidQA/비공개 업데이트는 **활성 목표로 계속 진행**한다.
+
 ### 후속 — 완료된 실험 용량 정리
 
 사용자 요청과 두 임시 AVD의 명시적 삭제 승인 후 [정리 결과](qa/storage-cleanup-20261006.md)를 완료했다.
