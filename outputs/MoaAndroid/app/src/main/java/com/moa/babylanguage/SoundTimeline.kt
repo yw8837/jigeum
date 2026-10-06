@@ -14,6 +14,7 @@ internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), 
                                   val broadWindows: List<BabbleSupportWindow> = emptyList()) {
     val events get() = (moments.map { it.event } + if (broadWindows.isEmpty()) emptyList() else listOf(VocalEvent.BABBLE)).distinct()
     val sound get() = events.singleOrNull()?.label ?: "여러 아기 소리"
+    val neutralOnly get() = events.isNotEmpty() && events.all { it == VocalEvent.BABBLE || it == VocalEvent.CHILD_VOICE }
 }
 
 /** Event observations only. Scores are uncalibrated multilabel outputs, not intent probabilities.
@@ -32,8 +33,8 @@ internal object SoundTimeline {
                 cue.score.isFinite() && cue.score in INFANT_FLOOR..1f
         }
 
-    fun decide(audio: SoundAnalysis): SoundDecision {
-        val original = decideYamnet(audio)
+    fun decide(audio: SoundAnalysis, durationMs: Long = 30_000): SoundDecision {
+        val original = decideYamnet(audio, durationMs)
         if (original.issue !in setOf(AnalysisIssue.INFANT_UNCONFIRMED, AnalysisIssue.BACKGROUND_DOMINANT) ||
             audio.problem != null || audio.babbleWindows.isEmpty()) return original
         if (audio.babbleWindows.any { it.startMs < 0 || it.endMs > 20_000 || it.endMs - it.startMs !in 1_000..10_000 })
@@ -43,18 +44,19 @@ internal object SoundTimeline {
         return SoundDecision(broadWindows = audio.babbleWindows)
     }
 
-    private fun decideYamnet(audio: SoundAnalysis): SoundDecision {
+    private fun decideYamnet(audio: SoundAnalysis, durationMs: Long): SoundDecision {
         audio.problem?.let { return SoundDecision(problem = it, issue = audio.issue) }
         // The fallback keeps callers with one already-aggregated observation conservative.
         val frames = audio.frames.ifEmpty { listOf(SoundFrame(0, audio.cues)) }
         val votes = frames.map { vote(it.cues) }
+        val neutralSupport = neutralContinuity(frames, votes, durationMs)
         val accepted = VocalEvent.entries.filter { event ->
             if (event == VocalEvent.CHILD_VOICE) votes.count { it.event == event } >= 3
             else votes.any { it.event == event && it.strong } ||
                 votes.zipWithNext().any { (a, b) -> a.event == event && b.event == event }
         }.toSet()
         val moments = votes.mapIndexedNotNull { index, vote ->
-            vote.event?.takeIf { it in accepted }?.let { VocalMoment(it, frames[index].startMs) }
+            vote.event?.takeIf { it in accepted || index in neutralSupport }?.let { VocalMoment(it, frames[index].startMs) }
         }
         val conflictCount = votes.count { it.conflict }
         if (moments.isEmpty() || conflictCount >= moments.size) {
@@ -73,14 +75,14 @@ internal object SoundTimeline {
                     AnalysisIssue.BACKGROUND_DOMINANT else AnalysisIssue.INFANT_UNCONFIRMED)
         }
         // A resolved event must not erase a different, unresolved infant event elsewhere.
-        if (votes.any { it.event != null && it.event !in accepted }) return SoundDecision(problem =
+        if (votes.indices.any { votes[it].event != null && votes[it].event !in accepted && it !in neutralSupport }) return SoundDecision(problem =
             "서로 다른 소리가 들려요. 구간을 조금 줄여 보세요.", issue = AnalysisIssue.MIXED_VOCAL)
-        if (accepted.size == 1) {
-            val event = accepted.single()
-            val oppositeLabels = when (event) {
+        val observedEvents = moments.map { it.event }.toSet()
+        if (observedEvents.size == 1 || observedEvents.all { it in neutralEvents }) {
+            val oppositeLabels = when (observedEvents.singleOrNull()) {
                 VocalEvent.CRY -> setOf("아기 웃음 후보", "웃음(화자 미확인)")
                 VocalEvent.LAUGH -> setOf("울음", "울음(화자 미확인)")
-                VocalEvent.BABBLE, VocalEvent.CHILD_VOICE -> setOf("울음", "울음(화자 미확인)", "아기 웃음 후보", "웃음(화자 미확인)")
+                VocalEvent.BABBLE, VocalEvent.CHILD_VOICE, null -> setOf("울음", "울음(화자 미확인)", "아기 웃음 후보", "웃음(화자 미확인)")
             }
             if (frames.indices.any { index -> votes[index].event == null && frames[index].cues.any {
                     it.label in oppositeLabels && it.score.isFinite() && it.score in .65f..1f
@@ -88,6 +90,29 @@ internal object SoundTimeline {
                 "다른 발성 단서가 함께 보여요. 다른 구간으로 다시 해보세요.", issue = AnalysisIssue.MIXED_VOCAL)
         }
         return SoundDecision(moments = moments)
+    }
+
+    /** Neutral labels may fluctuate within one audible run. Require at least the
+     * child-voice count on distinct, adjacent non-overlapping windows. Keep each
+     * original label; generic speech, conflicts and distant spikes cannot fill a gap. */
+    private fun neutralContinuity(frames: List<SoundFrame>, votes: List<Vote>, durationMs: Long): Set<Int> {
+        val supported = mutableSetOf<Int>()
+        val run = mutableListOf<Int>()
+        fun finish() {
+            if (run.size >= 3 && frames[run.last()].startMs - frames[run.first()].startMs >= 1_800 &&
+                run.map { votes[it].event }.distinct().size >= 2) supported.addAll(run)
+            run.clear()
+        }
+        for (index in votes.indices) {
+            if (votes[index].event !in neutralEvents || frames[index].startMs !in 0 until durationMs) {
+                finish()
+                continue
+            }
+            if (run.isNotEmpty() && frames[index].startMs - frames[run.last()].startMs !in 900..1_500) finish()
+            run += index
+        }
+        finish()
+        return supported
     }
 
     private fun vote(cues: List<SoundCue>): Vote {

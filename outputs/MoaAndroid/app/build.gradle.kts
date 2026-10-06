@@ -58,8 +58,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 30
-        versionName = "0.5.16"
+        versionCode = 31
+        versionName = "0.5.17"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")

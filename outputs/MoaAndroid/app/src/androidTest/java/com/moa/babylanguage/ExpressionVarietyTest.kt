@@ -77,7 +77,9 @@ class ExpressionVarietyTest {
             assertFalse(text, text.contains("옹알"))
         }
         val threeRuns = recording(List(3) { "어린 말소리 후보" } + List(3) { "옹알이 후보" } + List(3) { "아기 웃음 후보" })
-        assertEquals("내 소리가 여러 모습으로 나왔어요. 한 가지 마음으로 정하지 말고 천천히 함께해 주세요.", phrase(threeRuns))
+        val text = phrase(threeRuns)
+        assertTrue(text, text.indexOf("말소리") >= 0 && text.indexOf("옹알") > text.indexOf("말소리") &&
+            text.indexOf("웃음") > text.indexOf("옹알"))
     }
 
     @Test fun anIgnoredConflictingSourceFrameCannotDisappearFromTheSequence() {

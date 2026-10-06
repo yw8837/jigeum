@@ -90,7 +90,7 @@ internal object EvidenceInterpreter {
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
                   visualEvidence: VisualEvidence? = null): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
-        val decision = SoundTimeline.decide(audio)
+        val decision = SoundTimeline.decide(audio, range.durationMs)
         decision.problem?.let { return ClipAnalysisResult(problem = it, issue = decision.issue, visualEvidence = visualEvidence) }
         if (!shape.activeFraction.isFinite() || shape.activeFraction < 0.04f) return ClipAnalysisResult(
             problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.",
@@ -101,7 +101,7 @@ internal object EvidenceInterpreter {
         // AST event cannot attribute those bursts, rises or pauses to the baby.
         val vocalShape = if (broadOnly) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
             pauses = 0, quietSpans = emptyList()) else shape
-        val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape)
+        val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape, neutralOnly = decision.neutralOnly)
         val longPhrases = sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
         val audioPhrase = BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey)
@@ -174,7 +174,8 @@ internal object EvidenceInterpreter {
                 orderedStarts.lastOrNull { it < gap.startMs } in supportedStarts &&
                 orderedStarts.firstOrNull { it >= gap.endMs } in supportedStarts
         }
-        return BabyExpression.variants(decision.events.singleOrNull(), shape, sustained = true, withPause = withPause)
+        return BabyExpression.variants(decision.events.singleOrNull(), shape, sustained = true, withPause = withPause,
+            neutralOnly = decision.neutralOnly)
     }
 
 }

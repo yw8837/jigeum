@@ -53,10 +53,20 @@ internal object BabyExpression {
         "내 소리를 하나로 설명하기는 어렵네요. 곁에서 편안하게 함께해 주세요.",
         "다양한 소리가 나왔어요. 내 반응을 살피며 천천히 말을 걸어줄래요?"
     )
+    private val neutral = listOf(
+        "작은 목소리로 내 말을 건네요. 서툴러도 다정하게 답해 주세요.",
+        "이런 소리도 저런 소리도 만들어 봐요. 우리 한마디씩 주고받아 볼까요?",
+        "나만의 말로 대화에 끼고 싶어요. 내 소리에 천천히 답해 줄래요?",
+        "목소리로 이야기를 건네 봐요. 눈을 맞추고 내 차례를 기다려 주세요.",
+        "말은 아직 서툴지만 소리로 인사할게요. 반가운 한마디로 답해 주세요.",
+        "내 방식으로 작은 수다를 건네요. 우리 번갈아 목소리로 놀아요.",
+        "소리를 만들어 보는 중이에요. 내 목소리를 한번 흉내 내줄래요?",
+        "나도 한마디 보태 볼래요. 무슨 말인지 서두르지 말고 다정하게 받아 주세요."
+    )
 
     fun variants(event: VocalEvent?, shape: AcousticShape, sustained: Boolean = false,
-                 withPause: Boolean = false): List<String> {
-        val base = when (event) {
+                 withPause: Boolean = false, neutralOnly: Boolean = false): List<String> {
+        val base = if (neutralOnly && event == null) neutral else when (event) {
             VocalEvent.CRY -> crying
             VocalEvent.LAUGH -> laughing
             VocalEvent.BABBLE -> babbling
@@ -79,7 +89,7 @@ internal object BabyExpression {
         return ordered.map { continuation + it + ending }
     }
 
-    /** Only two stable, adjacent runs establish a simple order. Do not turn an
+    /** Two to four stable, adjacent runs establish a simple order. Do not turn an
      * aggregate/broad label, alternating guesses or duplicated timestamps into a story.
      * This describes observed sound order, never a change of mood or its cause. */
     fun orderedPhrase(audio: SoundAnalysis, decision: SoundDecision, range: ClipRange, wordingKey: Int): String? {
@@ -98,10 +108,17 @@ internal object BabyExpression {
             if (runs.isEmpty() || runs.last().last().event != moment.event) runs += mutableListOf(moment)
             else runs.last().add(moment)
         }
-        if (runs.size != 2 || runs.any { it.size < 2 || it.last().startMs - it.first().startMs < 900 }) return null
+        if (runs.size !in 2..4 || decision.neutralOnly ||
+            runs.any { it.size < 2 || it.last().startMs - it.first().startMs < 900 }) return null
         val first = runs[0][0].event
         val last = runs[1][0].event
-        val openings = when (first to last) {
+        val openings = if (runs.size > 2) {
+            val sounds = runs.map { run ->
+                if (run[0].event == VocalEvent.CHILD_VOICE) "말소리" else run[0].event.label
+            }
+            listOf("${sounds.first()} 소리 뒤에 ${sounds.drop(1).joinToString(", 이어서 ")} 소리도 나왔어요.",
+                "${sounds.joinToString(", 다음에는 ")} 소리로 한마디씩 보탰어요.")
+        } else when (first to last) {
             VocalEvent.BABBLE to VocalEvent.LAUGH -> listOf("옹알옹알 얘기하다가 웃음이 나왔어요.", "옹알이 뒤에는 웃음으로 한마디 보탰어요.")
             VocalEvent.LAUGH to VocalEvent.BABBLE -> listOf("웃음 뒤에 옹알옹알, 나만의 말을 보태요.", "웃음으로 인사하고 옹알이로 얘기를 건네요.")
             VocalEvent.CRY to VocalEvent.BABBLE -> listOf("울음 뒤에 옹알옹알, 내 소리를 보태 봤어요.", "울음 뒤에는 옹알이로 나만의 말을 꺼냈어요.")
