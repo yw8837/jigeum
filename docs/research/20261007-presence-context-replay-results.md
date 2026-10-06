@@ -73,8 +73,10 @@ Spec P2 두건(전용출력root미강제·사전중단/dirty검사부족)을보�
 
 ## 보존과 정리
 
-ignored `work/presence-context-replay-20261007/`에 작은4run 로그/결과와 QA 증거만 보존했다.
-QA 전후 관측은7파일8,572B→43파일139,581B이며 시작은 run01/02 뒤 실제관측값이다.
+ignored `work/presence-context-replay-20261007/`에 현재작은5run(run01–05) 로그/결과와 QA 증거를보존했다.
+초기QA(run04까지)의전후관측은7파일8,572B→43파일139,581B이며시작은run01/02뒤실제관측값이다.
 원래 시작값이나 누락된 첫 lifecycle을 소급 만들지 않았다. snapshot 자체쓰기 전 수치다.
 이번3 synthetic fixture와새pyc2개34,494B는 exact경로 검증 후 제거했다. scoped state부재·worker0이다.
+후속run05/qa-review까지의실제관측은46파일145,778B→120파일226,790B다.
+후속timeout/dirty synthetic준비·marker·문서5파일도exact경로검사후제거했다. 별도scoped state부재다.
 과거publicMP3/빌드/PCM 삭제정책 차단은 유지하며 우회하지 않았다. 새대형산출물0이다.

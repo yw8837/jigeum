@@ -19,6 +19,8 @@ source가중복된연구조건을정확도분모로쓰지않는다. 감정guard�
 제품0.5.18-beta/code32·새APK/AAB/Play제출0·ADB실폰0이다. 전체goal active.
 다음은기존held와겹치지않는영아train source/사건검수·감정귀속계약과동결후보의실제ARM gate다.
 [새CC0 source2조사](research/20261007-next-infant-training-source.md)의현재학습승인은0이며사건검수부터진행한다.
+[독립두축검토](qa/presence-context-replay-code-review-20261007.md)는Spec P2두건해소/새필수0,
+Standards현재보존run수량P3를5run으로정정했다. 인식률·제품회복·배포완료로보고하지않는다.
 
 ### 최신 — 추가 공개3음성/Android8조건 평가, 감정충돌의 보류 원인 확인
 
