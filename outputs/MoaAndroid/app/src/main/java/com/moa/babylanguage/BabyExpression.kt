@@ -98,7 +98,7 @@ internal object BabyExpression {
         if (moments.any { it.startMs !in 0 until range.durationMs } ||
             moments.zipWithNext().any { (a, b) -> b.startMs - a.startMs !in 1..1_500 }) return null
         // Retain the original timeline: a dropped conflict/duplicate observation must
-        // not disappear into an apparently uninterrupted two-stage sequence.
+        // not disappear into an apparently uninterrupted sequence.
         val sourceTimes = audio.frames.map { it.startMs }
         if (sourceTimes.isEmpty() || sourceTimes.any { it !in 0 until range.durationMs } ||
             sourceTimes.zipWithNext().any { (a, b) -> b <= a } ||
@@ -108,16 +108,23 @@ internal object BabyExpression {
             if (runs.isEmpty() || runs.last().last().event != moment.event) runs += mutableListOf(moment)
             else runs.last().add(moment)
         }
+        // Babble/child-speech switches may be label uncertainty in one neutral vocalization.
+        // They do not by themselves establish a behavioral change, even in long runs.
         if (runs.size !in 2..4 || decision.neutralOnly ||
             runs.any { it.size < 2 || it.last().startMs - it.first().startMs < 900 }) return null
         val first = runs[0][0].event
-        val last = runs[1][0].event
+        val last = runs.last().first().event
         val openings = if (runs.size > 2) {
             val sounds = runs.map { run ->
-                if (run[0].event == VocalEvent.CHILD_VOICE) "말소리" else run[0].event.label
+                when (run[0].event) {
+                    VocalEvent.CRY -> "울음 소리"
+                    VocalEvent.LAUGH -> "웃음 소리"
+                    VocalEvent.BABBLE -> "옹알이"
+                    VocalEvent.CHILD_VOICE -> "말소리"
+                }
             }
-            listOf("${sounds.first()} 소리 뒤에 ${sounds.drop(1).joinToString(", 이어서 ")} 소리도 나왔어요.",
-                "${sounds.joinToString(", 다음에는 ")} 소리로 한마디씩 보탰어요.")
+            listOf("${sounds.first()} 뒤에 ${sounds.drop(1).joinToString(", 이어서 ")}도 나왔어요.",
+                "${sounds.joinToString(", 다음에는 ")}로 한마디씩 보탰어요.")
         } else when (first to last) {
             VocalEvent.BABBLE to VocalEvent.LAUGH -> listOf("옹알옹알 얘기하다가 웃음이 나왔어요.", "옹알이 뒤에는 웃음으로 한마디 보탰어요.")
             VocalEvent.LAUGH to VocalEvent.BABBLE -> listOf("웃음 뒤에 옹알옹알, 나만의 말을 보태요.", "웃음으로 인사하고 옹알이로 얘기를 건네요.")

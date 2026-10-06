@@ -90,4 +90,32 @@ class VocalContinuityRegressionTest {
             assertFalse(text, text.contains("뒤에") || text.contains("하다가") || text.contains("이어서"))
         }
     }
+    @Test fun threeRunEndingFollowsTheFinalObservedSound() {
+        val neutralEndings = listOf(" 나랑 한마디씩 주고받아 볼까요?", " 내 소리를 한번 흉내 내줄래요?",
+            " 다정한 말로 인사를 건네주세요.", " 우리 목소리로 놀이해요.")
+        val laughEndings = listOf(" 우리 같이 웃으며 놀아요!", " 눈을 맞추고 웃어줄래요?",
+            " 내 웃음에 미소로 답해 주세요!", " 나랑 마주 보고 재미있게 놀아요.")
+        for ((labels, endings) in listOf(
+            listOf("옹알이 후보", "아기 웃음 후보", "어린 말소리 후보") to neutralEndings,
+            listOf("옹알이 후보", "어린 말소리 후보", "아기 웃음 후보") to laughEndings)) {
+            val frames = labels.flatMap { label -> List(3) { label } }
+                .mapIndexed { index, label -> frame(index * 975L, label, .85f) }
+            for (key in 0..7) {
+                val phrase = EvidenceInterpreter.interpret(SoundAnalysis(emptyList(), frames = frames),
+                    shape.copy(wordingKey = key), range).interpretation!!.phrase
+                assertTrue(phrase, endings.any { phrase.endsWith(it) })
+            }
+        }
+    }
+
+    @Test fun neutralLabelChangesDoNotInventAChangeInBehavior() {
+        val frames = (List(3) { "어린 말소리 후보" } + List(3) { "옹알이 후보" } +
+            List(3) { "어린 말소리 후보" }).mapIndexed { index, label -> frame(index * 975L, label, .85f) }
+        val interpretation = result(frames).interpretation!!
+        assertEquals(setOf(VocalEvent.CHILD_VOICE, VocalEvent.BABBLE),
+            SoundTimeline.decide(SoundAnalysis(emptyList(), frames = frames)).events.toSet())
+        assertFalse(interpretation.phrase, listOf("뒤에", "이어서", "하다가", "울음", "슬퍼")
+            .any { interpretation.phrase.contains(it) })
+    }
+
 }
