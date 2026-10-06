@@ -37,4 +37,11 @@ class AudioTimestampAuditTest {
         rounding.observe(20, 0, 480, 48000)
         assertTrue(rounding.aligned)
     }
+    @Test fun oneSampleGapsCannotAccumulateIntoClockDrift() {
+        for (offset in listOf(-125L, 125L)) {
+            val timing = AudioTimestampAudit(0)
+            repeat(1000) { index -> timing.observe(index * (20_000L + offset), 0, 160, 8000) }
+            assertFalse("Cumulative drift $offset us per buffer", timing.aligned)
+        }
+    }
 }
