@@ -1,5 +1,28 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — 추가 공개3음성/Android8조건 평가, 감정충돌의 보류 원인 확인
+
+[고정 비교 결과](research/20261007-public-infant-followup-results.md)와
+[한정 QA](qa/public-infant-followup-20261007.md)를 읽는다. 새 CC0 음성3파일을 취득하고
+점수를 보기 전에 정한 첫/중간/끝14창을 동결 head로 평가했다. 3파일 모두 지원창이 있지만,
+caption-only/사건 groundtruth0·학습/calibration0이며 인식률이나 새가족 검증으로 세지 않는다.
+기존 동결 연구APK/test에서 동일5선택+기존성인대화/피아노/성인웃음3대조를 실제 비교했다.
+기존 한마디3 및 대조3 full observation/문장 exact보존, **새public선택에서 새한마디 회복0**이다.
+9개월tail의head .9544/.9353·같은창RMS .03991도 기존 YAMNet 울음충돌 guard에서 보류됐다.
+음량만의 문제가 아님을 확인했으며, 감정충돌을 neutral로 바꾸는 위험 때문에 단일source에맞춰 완화하지 않았다.
+
+고유unit14/실제CLI6거부/Android계측1pass·8측정·실패/skip0, 시작/종료 용량을 실제 기록했다.
+첫 Remotion FFmpeg muxer 실패는 기존fullFFmpeg와 취득 전 capability검사로 수정했고,
+실패원음은 hash검증 후 reuse해 재다운로드0이다. QA상태 read/clear schema하네스오류도 수정했다.
+이번 중복publicMP3 3파일2,190,312B 정리는 자동정책검토가 차단해 **QA cleanup BLOCKED**다.
+삭제/우회0·현재public사본2세트 유지·연구앱2/UUIDruntime 제거·공용AVD실행 종료/폴더보존·격리state부재다.
+[ACLEW/BabbleCor 원문 후속](research/20261007-babble-event-label-next.md)은 사건라벨경로를 확인했지만
+exactEAF/음원·상업허락은 아직 미확보다.
+
+제품0.5.18-beta/code32 유지·새APK/AAB/Play제출0·ADB실폰0이다. 아래 약국회복 후보는 유지한다.
+다음은 발성존재/감정충돌을 구분할 표현·시간정렬 계약과 S25 ARM proof다.
+ARM·서명/업데이트·독립검토 gate 뒤 새code≥33 beta로 진행한다. 전체goal은 active다.
+
 ### 최신 — 영아 발성 보완의 베타 적용 준비, 실폰 검증 대기
 
 연구 후보에서 약국의 놓친 발성이 회복된 뒤, 이번에는 이를 **명시적으로 베타에 연결할 옵션**을 준비했다.

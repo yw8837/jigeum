@@ -66,10 +66,12 @@ def sources(path):
     return rows
 
 
-def acquire(args,rows):
+def acquire(args,rows, *, source_sha=SOURCES_SHA, max_bytes=2*1024**2):
+    if type(max_bytes) is not int or not 1 <= max_bytes <= 3*1024**2:
+        raise ValueError('Public preview byte cap must be an integer within 3MiB')
     opener=urllib.request.build_opener(NoRedirects()); records=[]
     for row in rows:
-        data=verified_reuse(args.reuse,row); reused=data is not None
+        data=verified_reuse(args.reuse,row,max_bytes=max_bytes); reused=data is not None
         if data is None:
             print(json.dumps(dict(acquiring_public_id=row['id'])),flush=True)
             request=urllib.request.Request(row['preview_url'],headers={'User-Agent':'Agattok-local-research/1.0'})
@@ -77,15 +79,15 @@ def acquire(args,rows):
                 if (response.status!=200 or response.url!=row['preview_url']
                         or response.headers.get_content_type() not in ('audio/mpeg','application/octet-stream')):
                     raise ValueError('Exact public MP3 response differs')
-                data=response.read(2*1024**2+1)
-        if not 1<=len(data)<=2*1024**2: raise ValueError('Extra preview exceeds size cap')
+                data=response.read(max_bytes+1)
+        if not 1<=len(data)<=max_bytes: raise ValueError('Extra preview exceeds size cap')
         path=args.output/(row['id']+'.mp3')
         with path.open('xb') as stream: stream.write(data)
         records.append(dict(row,bytes=len(data),sha256=digest(path),reused_previous_preview=reused,
                             original_wav_flac=False,audio_review_completed=False))
-        write(args.output/'acquisition-progress.json',dict(status='partial',files=records,source_sha256=SOURCES_SHA,
+        write(args.output/'acquisition-progress.json',dict(status='partial',files=records,source_sha256=source_sha,
             training=False,private_media_read=False))
-    write(args.output/'acquisition.json',dict(files=records,source_sha256=SOURCES_SHA,training=False,private_media_read=False))
+    write(args.output/'acquisition.json',dict(files=records,source_sha256=source_sha,training=False,private_media_read=False))
     return records
 
 

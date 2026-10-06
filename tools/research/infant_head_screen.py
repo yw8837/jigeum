@@ -114,7 +114,7 @@ class NoRedirects(urllib.request.HTTPRedirectHandler):
         raise ValueError('Public preview redirect prohibited')
 
 
-def verified_reuse(reuse_root, row):
+def verified_reuse(reuse_root, row, *, max_bytes=2*1024**2):
     if reuse_root is None:
         return None
     snapshot=reuse_root/'acquisition.json'
@@ -125,7 +125,7 @@ def verified_reuse(reuse_root, row):
         return None
     path=reuse_root/(row['id']+'.mp3')
     item=previous[0]
-    if (len(previous)!=1 or path.is_symlink() or not 1<=path.stat().st_size<=2*1024**2
+    if (len(previous)!=1 or path.is_symlink() or not 1<=path.stat().st_size<=max_bytes
             or path.stat().st_size!=item['bytes'] or digest(path)!=item['sha256']):
         raise ValueError('Reused preview differs from earlier snapshot')
     if (item.get('preview_url') or item.get('url')) != row['preview_url']:

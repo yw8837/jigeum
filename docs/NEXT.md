@@ -1,5 +1,19 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+### 추가 공개자료 평가 후 — 감정충돌과 실제ARM
+
+- [결과](research/20261007-public-infant-followup-results.md): 동결 head의 public3/14창 반응을 확인했고,
+  actual Android public5선택+기존3대조에서 기존승인/대조 exact보존·새public회복0을 확인했다.
+  9개월tail은 head/RMS 통과 뒤 기존 YAMNet 울음충돌 guard로 보류된다.
+- 이 하나의 caption-only clip에 맞춰 임계값/충돌 보호를 낮추지 않는다. 발성존재 단서와 감정단서를
+  분리하는 표현계약·시간정렬/성인감정혼합 반례 검토를 다음 분석으로 삼는다. 사용자자료 학습0 유지.
+- 실제ARM proof가 아직 없으므로 beta패키징/업로드 gate는 유지한다. ADB실폰0/새Play제출0/code32 그대로다.
+  필요한 frozen research APK/test는 기존 final 한세트를 재사용하며 새대형모델을 받지 않는다.
+- [QA](qa/public-infant-followup-20261007.md)는 행동검사 통과/중복publicMP3정리 자동정책차단으로 cleanup BLOCKED다.
+  중복3개2.19MB는 남기고 우회하지 않는다. state/연구앱/runtime/이번AVD실행은 정리했다.
+- [사건라벨 후속](research/20261007-babble-event-label-next.md)의 ACLEW tutorial/GoldStandard metadata를
+  정확 enum/timeunit·권리까지 확인한다. 접근 제한 원음/labels를 허락 없이 취득하지 않는다.
+
 ### 현재 실행점 — 준비된 후보의 실제 ARM 검증
 
 베타 적용 옵션/패키징 검사는 준비됐다. [계약](research/20261007-infant-presence-beta-prep-contract.md) /
