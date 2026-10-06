@@ -6,7 +6,9 @@
   broad단서부족25, highpresence+감정context보류8이다. 원model추론/신규회복/앱반영0,
   [한정metadata QA](qa/presence-context-replay-20261007.md)만완료다. 전체goal active.
 - broad검출25에는학습양성7clip/4source/40.7초라는결손이있다. 새자연영아source/사건검수·성인/TV/호흡반례를
-  확보하며기존held/eval을train으로옮기지않는다. 현재새source원문조사를병행한다.
+  확보하며기존held/eval을train으로옮기지않는다. [새2source 원문조사](research/20261007-next-infant-training-source.md)는
+  18개월9437/12개월244237의현재CC0/preview를고정했다. 현재원음/사건검수/학습승인0·blocked/null이다.
+  다음은점수노출전원음검수/권리·생활잡음/파생관계확인이고caption을자동사건정답으로학습하지않는다.
 - 감정context8에는발성존재와감정/화자귀속분리가필요하다. 기존neutralOnly에추가generic창을넣거나
   단일tail에맞춰guard를없애지않는다. sidecar는진단이며제품한마디승인이아니다.
 - 이미약국의회복을확인한후보는기존동결pair로실제ARM을검증한다. 현재ADB실폰0/베타미반영.

@@ -58,6 +58,19 @@ AST 감정/TV와 YAMNet 감정 단서는 선택 전체에서 flag로 남으며 �
 제품은 **0.5.18-beta/code32**다. 이번 APK/AAB/Play 업로드0, 새 베타 적용0이다.
 연구 진단이나 메타데이터 QA를 인식률 향상·배포 완료로 보고하지 않는다. 전체 goal은 active다.
 
+## 독립 검토 후 수정
+
+Spec P2 두건(전용출력root미강제·사전중단/dirty검사부족)을보완했다. 전용root 밖의다른ignored
+연구경로를mkdir전거부하고실제dirty문서보존·replay-load hang/timeout→새실행복구를검사했다.
+최종run05는51진단18/25/8, exit0/.378788초/자손0이다. source6pin/원input3SHA불변,
+고유unit16/.011초·거부CLI6통과다. 초기timeout harness설정오류2는실제hang성공으로세지않았다.
+종전3cycle COMPLETE는미충족항목이있던선언으로정정했고최종한정QA는5cycle에완료했다.
+
+[후속 학습source 조사](20261007-next-infant-training-source.md)는기존train/held와이름·ownerID가
+겹치지않는18개월babbling/12개월coo-gurgle의CC0 caption후보2그룹을찾았다.
+원음/자연성/사건검수·학습승인0이며blocked/null을유지한다. 98.858초metadata를양성발성시간으로세지않는다.
+이들을자동정답으로학습하지않고소리구간/생활잡음/연기·재생과같은확인조건을먼저채운다.
+
 ## 보존과 정리
 
 ignored `work/presence-context-replay-20261007/`에 작은4run 로그/결과와 QA 증거만 보존했다.

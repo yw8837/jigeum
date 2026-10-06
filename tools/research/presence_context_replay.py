@@ -30,6 +30,7 @@ REQUIRED = set(EMOTIONS) | {'Television', 'Babbling', 'Child speech, kid speakin
 YAM_FLOORS = {'울음': .35, '아기 웃음 후보': .35, '울음(화자 미확인)': .65,
               '웃음(화자 미확인)': .65, '비명(화자 미확인)': .65}
 MAX_BYTES = 8 * 1024**2
+EVIDENCE_ROOT = ROOT / 'work/presence-context-replay-20261007'
 CODE_FILES = ('tools/research/presence_context_replay.py', 'tools/research/infant_head_screen.py',
               'tools/research/ast_device_benchmark.py', 'tools/research/ondevice_av_probe.py',
               'outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/InfantVoiceSupportPolicy.kt',
@@ -38,6 +39,12 @@ CODE_FILES = ('tools/research/presence_context_replay.py', 'tools/research/infan
 
 def code_pins():
     return {name: digest(ROOT / name) for name in CODE_FILES}
+
+
+def validate_replay_output(path):
+    validate_output_path(path)
+    if not path.resolve().is_relative_to(EVIDENCE_ROOT.resolve()) or path.resolve() == EVIDENCE_ROOT.resolve():
+        raise ValueError('Replay output must be a new directory below its dedicated evidence root')
 
 
 def canonical_sha(value):
@@ -239,7 +246,7 @@ def main():
     parser.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
     output = args.output.resolve()
-    validate_output_path(output)
+    validate_replay_output(output)
     offline()
     if args.worker:
         if (not output.is_dir() or not (output / 'storage-start.json').is_file() or

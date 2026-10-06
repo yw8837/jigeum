@@ -68,7 +68,36 @@ temporaryfixture3개와pyc2개34,494B를exact경로검사후삭제했고기존�
 8held는새회복이아니며소리속성분류/욕구·영상/화자정확도검증0, 이번실폰/새beta업데이트0이다.
 run01parentprocess최종metric미기록과최초lifecycle누락은원래실패이력으로남긴다.
 
-**ULTRAQA COMPLETE: scoped metadata replay goal met after 3 cycles.**
-run04는cycle3에sourcepin을추가한최종재생이며새실패cycle이아니다.
+독립검토전에는3cycle COMPLETE로표시했지만R5/R6의사전범위가충분히검사되지않았다.
+**그완료선언을정정한다.** 아래추가검증전까지사전계약전체완료로보면안된다.
+
+## 독립 P2 수정과 실제 중단/복구 검증
+
+Spec P2 두건을수정했다. 첫째,출력을공용ignored work전체가아닌전용evidence root하위새폴더로제한했다.
+실제 `work/replay-unrelated-forbidden` CLI는mkdir전exit1/전용root오류로거부됐고폴더가생성되지않았다.
+둘째,R5의거부는외부/기존output에적용하고dirty트리는타작업을보존한다는계약을명확히했다.
+읽기전용진단이공용worktree의dirty변경을전부거부하도록바꾸지않았다.
+
+이후실제untracked synthetic문서를만들고그대로둔채새run05를실행했다.
+문서SHA와전후`git status --porcelain`의`??`가같았다. 원input3SHA도보존됐다.
+run05는기존51진단18/25/8을그대로재생했으며exit0/.378788초/58,073,088B/자손0이다.
+
+실제replay `load`에5초지연을주입하고1초Jobtimeout을검사했다.
+초기inline코드quote오류와sys.argv변경후잘못된marker경로라는harness설정실패2건은
+hang진입전exit1로끝났다. 실패로그를보존했고실제timeout성공으로세지않았다.
+수정후cycle5에서load진입marker=true, **1.004256초/termination=timeout/exit1/자손0**, 완료results없음을확인했다.
+그후위run05가정상완료해동일진단의중단뒤복구를실행했다. 모델/native취소측정이아니다.
+
+최종고유unit은**16통과/.011초**이며`qa-review/unit-cycle5-resume.log`에전체로그를보존했다.
+이전15/.007초는당시터미널출력이었고별도로그저장이누락된검증한계가있었다.
+최종16로그가이를대체하되과거15로그가존재했다고소급하지않는다.
+실제고유거부CLI는기존5+전용root1=6개다. 새dirty/timeout/복구는별도행동검사다.
+
+cycle4–5의evidence는`qa-review/`이다. synthetic timeout 준비/marker 및dirty문서5파일은
+정확한경로검사후제거했다. 이번격리state clear뒤existsfalse·입력pin/원고정run04보존이다.
+원범위밖publicMP3/빌드/PCM삭제차단을해제하거나우회하지않았다.
+
+**ULTRAQA COMPLETE: scoped metadata replay goal met after 5 cycles.**
+최대5cycle의마지막cycle내setup오류수정후실제목표행동을검사했다.
 완료범위는명시한metadata계약/CLI/정리다. 이전단계cleanup BLOCKED와ARM·부모goal은해소되지않았다.
 전체goal은active이며동결발성후보실폰검증과새source/감정귀속검토를이어간다.

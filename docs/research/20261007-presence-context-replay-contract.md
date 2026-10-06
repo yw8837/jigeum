@@ -45,9 +45,17 @@
 | R2 | malformed/NaN/missing/duplicate JSON | in-memory unit·실제 CLI duplicate/hash 오류 | 거부·완료 산출물 없음 | unit/CLI log; 작은 exact fixture 정리 |
 | R3 | 누락창/잘못된시각/행수/run/model | in-memory schema mutation | partial/fake success 거부 | unit; 원자료 수정0 |
 | R4 | 큰 다른창 RMS·웃음/울음/TV score | pure sidecar unit | 같은창audibility·contextflag 유지·문장 null | unit; 음향 반례로 보고하지 않음 |
-| R5 | stale output/외부경로/더러운트리 | 실제 CLI·Git status | 취득/변경 전 거부·타작업 보존 | sentinel/hash·Git |
+| R5 | stale output/외부경로/더러운트리 | 실제 CLI·Git status | 외부/기존 output은 변경 전 거부·더러운트리의 타작업은 보존 | sentinel/hash·Git |
 | R6 | bounded process/중단·거짓성공 | Job60초256MiB/1MiB·strict completion | exit/count/pin/자손0·완료 전 최종pin | process/QA log |
 | R7 | local QA lifecycle | scoped OMX CLI state | write/read/clear/부재·repo state 보존 | state json·전후 용량 |
 
 최대5cycle·동일실패3회 중지. 최대3입력/각8MiB이며 child timeout60초다.
 이 replay의QA는 metadata 계약 검증이며 native Android 재실행·아기 감정/화자 정확도 검증이 아니다.
+
+## 독립 검토 후 계약 명확화
+
+R5의거부는외부/기존output에적용한다. 다른작업자와같은worktree를쓰는읽기전용진단은
+dirty트리자체를거부하지않고기존변경을보존한다. 추가untracked sentinel의hash/Git상태로검사한다.
+독립Spec P2에따라공용ignored work를허용하던출력검사를전용evidence root하위로좁혔다.
+R6의중단은실제replay-load진입에시간지연을주입해Jobtimeout/자손0/완료산출물없음과
+새실행복구를검사한다. 실제model/native취소·휴대폰발열을시험하는것은아니다.

@@ -187,6 +187,14 @@ class PresenceContextReplayTests(unittest.TestCase):
                 patch.object(probe, 'digest', return_value='a'*64), self.assertRaises(ValueError):
             probe.replay()
 
+    def test_other_ignored_research_roots_cannot_receive_replay_output(self):
+        with patch.object(probe, 'validate_output_path'):
+            probe.validate_replay_output(probe.EVIDENCE_ROOT/'new-run')
+            for path in (probe.ROOT/'work/other-research/new-run', probe.EVIDENCE_ROOT,
+                         probe.EVIDENCE_ROOT/'../other-research/new-run'):
+                with self.subTest(path=path), self.assertRaises(ValueError):
+                    probe.validate_replay_output(path)
+
 
 if __name__ == '__main__':
     unittest.main()

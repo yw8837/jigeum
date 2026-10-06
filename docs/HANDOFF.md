@@ -11,10 +11,14 @@ source가중복된연구조건을정확도분모로쓰지않는다. 감정guard�
 별도sidecar경계를확인했다. 실제반례/사건검수전에감정혼합한마디를채택하지않는다.
 
 고유unit15/.007초·실제CLI5거부·최종run04 Job.356479초/자손0·원input3/code6pin을검사했다.
+독립Spec P2두건을추가수정했다. 전용evidence root밖거부·dirty문서보존·실제load hang/timeout/새실행복구다.
+최종unit16/.011초의전체로그·고유거부CLI6·run05 .378788초/자손0·같은51진단을보존했다.
+미충족항목이있던3cycle COMPLETE는정정했고한정metadata QA는최대5cycle의마지막에완료했다.
 첫PCM올림/절삭가정·parentserializer실패를수정하고실패/lifecycle누락은그대로공개했다.
 이번fixture3/pyc2·격리state/worker는정리했고작은QA증거만남겼다. 과거삭제차단은우회하지않았다.
 제품0.5.18-beta/code32·새APK/AAB/Play제출0·ADB실폰0이다. 전체goal active.
 다음은기존held와겹치지않는영아train source/사건검수·감정귀속계약과동결후보의실제ARM gate다.
+[새CC0 source2조사](research/20261007-next-infant-training-source.md)의현재학습승인은0이며사건검수부터진행한다.
 
 ### 최신 — 추가 공개3음성/Android8조건 평가, 감정충돌의 보류 원인 확인
 
