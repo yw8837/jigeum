@@ -10,7 +10,8 @@
 실제 native61·저장/구간/기록 회귀80, 실제 MP4의10/20초 AV·UI취소재개가 통과했다. 기존 graph/encoder 재사용,
 추가3076B head만 사용한다. caption으로 기존 범위를 늘려 문장을 바꾸던 회귀를 수정하고 전체 재비교했다.
 [별도 ARM 계약](research/20261007-caption-arm-contract.md)에 맞춘 명시caption mode·새APK/test pins·
-매창 native 출력 검사와 기존 proof/에뮬레이터 실제 거부를 준비했다. 호스트 고유27unit 통과다.
+매창 native 출력 검사와 기존 proof/에뮬레이터 실제 거부를 준비했다. 호스트 고유27unit 통과다. [최종 독립review](qa/caption-android-code-review-20261007.md)는
+Spec/Standards 필수각0이다.
 컴파일은5회 모두 Gradleexit0 뒤 owned JVM orphan_cleanup이며 깨끗한 runner exit로 보고하지 않는다.
 
 필요한 현재 연구APK/test 한세트는 `work/caption-android-20261007/final/`에 보존했다. 연구앱/test 제거,

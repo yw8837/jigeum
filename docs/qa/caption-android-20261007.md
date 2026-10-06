@@ -76,7 +76,9 @@ Initial independent Spec and Standards review of9b5b0cb…7ffe2d8 each found0new
 mandatory source findings. Standards suggested outer scratch-wipe finally on asset
 read interruption; the scratch contains bounded public frozen weights, not private
 PCM, and this optional uniform-cleanup suggestion was not adopted in this scope.
-Final evidence/new proof changes are submitted for the followup two-axis review.
+Final [independent followup review](caption-android-code-review-20261007.md) of
+9b5b0cb…d5b6cdd found0mandatory findings on both Spec and Standards axes.
+The frozen APK archive also confirms exactly one unchangedgraph and3076B head.
 
 ## Cleanup and residual risk
 
@@ -110,6 +112,6 @@ is kept for the next actual ARM step; the pinned previous pair remains for prove
 Prior rejected cleanup targets remain unchanged; no further large model/source downloads.
 
 ULTRAQA COMPLETE: limited research-runtime and ARM-proof-preparation goal met after2cycles.
-Final independent review is tracked separately. Actual physical ARM, beta flag/payload
+Final independent review is complete for this scope. Actual physical ARM, beta flag/payload
 connection, signing/update regression and Play submission remain uncompleted;
 overall improvement/apply/beta goal is active.
