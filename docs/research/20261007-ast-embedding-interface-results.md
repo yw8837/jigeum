@@ -4,6 +4,11 @@
 **6입력의기존527logits가모두exact동일(차이0)이고FLOAT[1,768]표현이반환됐다.**
 학습/영아구별/의도정답/Android/제품변경/새베타배포는없다. 전체개선goal은active다.
 
+독립Spec의P3는계약상별도stable sigmoid검사에대한직접기록누락이었다.
+실제첫실행은finite527logits exact동일성만직접확인했다. 동일logits와동일결정적sigmoid의
+동일성은수학적도출이며별도실행으로보고하지않는다. 계약·이보고서에그범위를명시했다.
+Standards필수0/실행wrapper중복비차단제안1이다. 원음재추론이나새품질검사는하지않았다.
+
 실제입력은합성silence1초/tone10초/sweep2초와기존public113221(27724sample),184432(160000),
 256684(155909)다. 첫10초PCM16/16k/mono를기존frontend에넣었고padding/gain/DCfilter를추가하지않았다.
 public원음SHA·source35snapshot·원자산전후SHA를검사했다. 사용자자료접근/전송0.

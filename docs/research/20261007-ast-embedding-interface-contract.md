@@ -11,8 +11,10 @@
 - 먼저합성1초silence/10초tone/2초sweep. 이어이미취득한publicID113221/184432/256684만
   exactsource35snapshot/acquisition bytesSHA를검사해첫10초mono16kPCM16으로decode.
   1초미만이면거부하며waveformpadding/gain/DCfilter를추가하지않는다.
-- 기존frontendextract/padding-before-normalize를사용한다. 527logits모두**exact equality**와
-  안정sigmoid동일성을요구하며불일치시gate완화없음/결과보존. FLOAT[1,768]/finite도요구한다.
+- 기존frontendextract/padding-before-normalize를사용한다. 527logits모두**exact equality**를요구하며
+  불일치시gate완화없음/결과보존. 동일한결정적안정sigmoid를적용하면동일성이도출된다.
+  첫preflight에서는sigmoid를별도로실행·기록하지않았다. 초기계약의별도sigmoid검사문구를이실제범위로수정한다.
+  FLOAT[1,768]/finite도요구한다.
   전체AST를원본·파생각각1회씩실행하는것은interface parity연구용이며제품추론2회구조가아니다.
 - 실제각case모델시간·inputSHA·원모델전후SHA·runner/frontendSHA·메모리측정.
   두session연구메모리를한session제품비용으로보고하지않는다.

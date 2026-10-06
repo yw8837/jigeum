@@ -34,3 +34,17 @@ binaryP2 보고보완은완료됐으나관측누락자체는이력으로남긴�
 두축모두코드/문서/공개CV·실행·QA metadata검토다. private score/event와원음재추론없음.
 새AST interface/extra-source는위고정diff검토에서제외했으며이문서를그검증으로소급사용하지않는다.
 연구검토통과가영아정확도/Android/제품배포승인을뜻하지않는다.
+
+## AST interface: 849e1ed…5f867b5
+
+### Spec
+
+部分요구1(P3): 별도stable sigmoid검사를계약에적었으나코드와기록은logits exact동일성만직접검사했다.
+logits동일성자체는맞고동일sigmoid결과도도출되지만별도실행검사로보고할수없다.
+첫실행의범위를결과/계약에명시해보완했다. 숫자/원음재추론·새성능승인은없다.
+
+### Standards
+
+필수위반0/실행wrapper중복비차단제안1. 모델권리BSD3/원자산pin·메모리output추가,
+6공개/합성입력·private0·run종료와CLI4/unit2·전후storage와preflight한정을확인했다.
+두축모두실제private자료나embedding수치재추론검토는아니다.
