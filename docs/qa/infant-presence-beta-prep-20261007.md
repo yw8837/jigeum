@@ -4,6 +4,7 @@
 목표는 동결 연구 모델의 beta 옵션·실폰 검증/패키징 경로를 준비하고,
 검증 누락·잘못된 변형·거짓 성공이 최종 beta를 만들지 못하도록 실제 명령으로 확인하는 것이다.
 실제 아기 정확도/새 beta 배포/실폰 성능 완료가 이 QA의 성공 조건은 아니다.
+[독립 두 축 검토 및 보고 정정](infant-presence-beta-prep-code-review-20261007.md)을 함께 읽는다.
 
 ## Scenario matrix
 
@@ -62,6 +63,10 @@ Git에는소스/문서만, keys·원음·특징·캐시·모델/생성물은올�
 이는 폴더 논리 크기·현재 여유이며 삭제로 회수한 공간이 아니다.
 다음 실제 ARM runner는 시작·종료의 소유 run 폴더/드라이브 여유를 자동 기록하도록 수정했다.
 실폰 실행이 완료된 것처럼 보고하거나 과거 시작 관측을 소급 복원하지 않는다.
+후속 storage assertions를 포함한 runner15를 다시 실행한 실제 출력은
+`snapshot-runner-15.log`(20:15:09UTC,15통과/.086초)에 별도로 남겼다.
+두 reviewer가 이를 직접 확인했다. 고유 검사15이며 앞15와 중복 합산하지 않는다.
+감사 후 격리 state를 blocked/activefalse로 다시 기록하고 read→clear·실제 부재를 확인했다.
 
 ## Residual risks / next
 

@@ -1,5 +1,25 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+### 현재 실행점 — 준비된 후보의 실제 ARM 검증
+
+베타 적용 옵션/패키징 검사는 준비됐다. [계약](research/20261007-infant-presence-beta-prep-contract.md) / 
+[QA와 기록 누락](qa/infant-presence-beta-prep-20261007.md).
+현재 ADB 물리 기기0, 실제ARM 성공 proof0, 새beta 패키지/Play 업로드0이다.
+code32를 다시 올리거나 에뮬레이터/mocked unit을 실폰 증거로 쓰지 않는다.
+
+1. S25가 연결되면 보존 `work/infant-presence-android-20261007/final/`의 연구 APK/test 한세트로
+   `tools/research/ast_device_benchmark.py --infant-presence-candidate`를 실행한다.
+   serial/adb/apkanalyzer/apk/test-apk/output을 명시한다. 새 output은 기존 디렉터리를 덮어쓰지 않는다.
+2. 10/20/20초 실제 속도·sampled PSS·thermal·native 취소/재개·기존 앱 설치 보존·연구앱 정리를 검사한다.
+   새 runner는 시작/종료 용량도 기록한다. 실제 실패면 원인 수정 후 해당 위험을 다시 검사한다.
+3. 실제통과 후 versionCode>32로 새beta를 만들고 `-InfantPresenceSupport -AstBabbleSupport`
+   및 real `-InfantArmProof -ProofPython`을 공식 builder에 전달한다. directGradle도 같은 proof를 요구한다.
+4. 서명·최종 archive/compiled flag·기존 beta 업데이트/로컬 기록·저장/취소 회귀·독립 검토 뒤
+   Play 비공개 테스트에 새beta만 제출한다. 일반 정확도/욕구 생성의 완료로 해석하지 않는다.
+
+이번 준비 시작 용량은 미기록이며 소급 복원하지 않는다. 전 단계 삭제 차단도 남아 있다.
+추가 공개 source는 metadata 검토만 완료했고 사건 청취 정답/훈련 승인으로 바꾸지 않는다.
+
 ### 최신 — 연구 Android에서 약국 누락의 한마디 회복, ARM gate로 진행
 
 [실제 Android 결과](research/20261007-infant-presence-android-results.md): 기존 AST에 동결769parameter head를 붙인
