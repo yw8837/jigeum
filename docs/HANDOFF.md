@@ -1,5 +1,21 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — 기존51조건의 누락 원인 분리, 점수 진단 재생 완료
+
+[사전 계약](research/20261007-presence-context-replay-contract.md)과
+[결과](research/20261007-presence-context-replay-results.md)/[한정 QA](qa/presence-context-replay-20261007.md)를 읽는다.
+기존 실제Android보고서3개의51조건에서이미생성된출력18(이전약국회복2포함)을보존했다.
+보류25는broad단서부족, 보류8은highpresence+감정context다. **새추론/회복/제품변경0**이며
+source가중복된연구조건을정확도분모로쓰지않는다. 감정guard를없애거나neutral문장으로승격하지않았다.
+[원문검토](research/20261007-infant-presence-emotion-separation-evidence.md)는화자/감정귀속의한계와
+별도sidecar경계를확인했다. 실제반례/사건검수전에감정혼합한마디를채택하지않는다.
+
+고유unit15/.007초·실제CLI5거부·최종run04 Job.356479초/자손0·원input3/code6pin을검사했다.
+첫PCM올림/절삭가정·parentserializer실패를수정하고실패/lifecycle누락은그대로공개했다.
+이번fixture3/pyc2·격리state/worker는정리했고작은QA증거만남겼다. 과거삭제차단은우회하지않았다.
+제품0.5.18-beta/code32·새APK/AAB/Play제출0·ADB실폰0이다. 전체goal active.
+다음은기존held와겹치지않는영아train source/사건검수·감정귀속계약과동결후보의실제ARM gate다.
+
 ### 최신 — 추가 공개3음성/Android8조건 평가, 감정충돌의 보류 원인 확인
 
 후속 독립검토의Spec P2(점수누락window완료허용)와Standards P2(현재MP3보존수량)를수정했다.

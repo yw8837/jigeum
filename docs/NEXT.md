@@ -1,5 +1,17 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+### 원인별 후속 — 51조건 점수 재생 뒤
+
+- [결과](research/20261007-presence-context-replay-results.md): 이미기록된출력18보존,
+  broad단서부족25, highpresence+감정context보류8이다. 원model추론/신규회복/앱반영0,
+  [한정metadata QA](qa/presence-context-replay-20261007.md)만완료다. 전체goal active.
+- broad검출25에는학습양성7clip/4source/40.7초라는결손이있다. 새자연영아source/사건검수·성인/TV/호흡반례를
+  확보하며기존held/eval을train으로옮기지않는다. 현재새source원문조사를병행한다.
+- 감정context8에는발성존재와감정/화자귀속분리가필요하다. 기존neutralOnly에추가generic창을넣거나
+  단일tail에맞춰guard를없애지않는다. sidecar는진단이며제품한마디승인이아니다.
+- 이미약국의회복을확인한후보는기존동결pair로실제ARM을검증한다. 현재ADB실폰0/베타미반영.
+  새대형model/APK를쌓지않고실기기·서명update/권한QA후code>32의closedbeta로진행한다.
+
 ### 추가 공개자료 평가 후 — 감정충돌과 실제ARM
 
 - [결과](research/20261007-public-infant-followup-results.md): 동결 head의 public3/14창 반응을 확인했고,
