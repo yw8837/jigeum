@@ -16,7 +16,7 @@
 | B5 | stale/거짓pass/partial/skip·주입 | sharedgate9unit·CLI부재/에뮬레이터·로그재파싱 | 거부/실패/증거분리 | 9unit통과 | final-gate.log | tempfixture자동정리 |
 | B6 | 잘못된목적/옵션/proof | 실제PowerShell builder6조건 | signing/build이전거부 | 6조건/1unit통과 | final-powershell.log | destination미생성 |
 | B7 | 기존probe 보존/기기혼동·취소후복구실패 | probe15unit·candidate전체simulatedroute | 정확연구package·완전로그·cleanup | 15통과; 전체경로는mock | final-runner.log | 가상성공proof임시삭제 |
-| B8 | dirtyworktree/timeout/상태잔존 | boundedGradle·OMX uniquecwd | 타작업보존·child0·state부재 | 10Job전부cleanuptrue/child0·stateclear | gradle-results/state-final-clear | 이번state부재확인 |
+| B8 | dirtyworktree/timeout/상태잔존·용량 | boundedGradle·OMX uniquecwd | 타작업보존·child0·state부재·전후용량 | 10Job전부cleanuptrue/child0·stateclear, 시작용량누락 | gradle-results/state-final-clear/storage-end | 이번state부재·종료용량확인 |
 
 LLM prompt/사용자 입력 실행 경로가 없어 injection은 JSON/file boundary·가짜OK·옵션의 잘못된 값으로 다룬다.
 실행/반복은 시간 제한이 있고 임시 unit 자료만 쓴다. 성공 fixtures는 실제 ARM 증거로 보존하지 않는다.
@@ -55,6 +55,14 @@ Git에는소스/문서만, keys·원음·특징·캐시·모델/생성물은올�
 전단계app/build/hostclasses/controlledPCM삭제의자동검토차단은그대로다. **우회삭제0**,
 이번측정을파일정리회수량으로보고하지않는다. 전단계cleanupBLOCKED는소급완료하지않는다.
 
+독립 Standards 검토에서 RUNBOOK246의 **시작 용량 관측 누락(P2)**을 확인했다.
+이번 실행 시작 값을 저장하지 못했고, 과거 종료/중간 값을 시작값으로 대신하지 않는다.
+실제 종료 snapshot `storage-end.json`은 2026-10-06 20:12:35 UTC에 준비 evidence 폴더
+29파일/34,560 logical bytes, C 여유68,357,656,576B를 기록했다. snapshot 파일 쓰기 전 수치다.
+이는 폴더 논리 크기·현재 여유이며 삭제로 회수한 공간이 아니다.
+다음 실제 ARM runner는 시작·종료의 소유 run 폴더/드라이브 여유를 자동 기록하도록 수정했다.
+실폰 실행이 완료된 것처럼 보고하거나 과거 시작 관측을 소급 복원하지 않는다.
+
 ## Residual risks / next
 
 이검사는workflowproof다. 의도적인파일위조를막는서명된기기attestation이아니고,
@@ -62,6 +70,8 @@ Git에는소스/문서만, keys·원음·특징·캐시·모델/생성물은올�
 실제ARM·약국원MP4·새자연옹알이사건정답·TV/흉내/혼합오인·일반정확도·욕구번역은미완료다.
 추가공개두파일조사는권리/preview경로확인이며청취·추론·새source확보는0이다.
 
-**ULTRAQA COMPLETE: beta preparation behavior met after 1 cycle.**
-한정된준비gate만통과했으며전체goal은active다. code32이후새beta패키징/업로드없음.
+**ULTRAQA BLOCKED: initial storage snapshot was not recorded.**
+Owner는 메인의 실행 기록이다. 시작 관측은 복원할 수 없어 보고 누락을 공개했다.
+행동 검사는 통과했지만 이 실행의 전후 용량 증거는 미완전하다. 전체 goal은 active다.
+code32 이후 새 beta 패키징/업로드는 없다.
 다음은S25실측→독립검토→새codebeta서명/업데이트보존→Play비공개검토제출이다.

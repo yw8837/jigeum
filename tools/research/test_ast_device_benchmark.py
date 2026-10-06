@@ -108,6 +108,11 @@ class AstDeviceProbeTest(unittest.TestCase):
             self.assertEqual(0, code)
             cleanup.assert_called_once_with([str((root / 'adb').resolve()), '-s', 'fixture-only'], probe.CANDIDATE_PACKAGE)
             self.assertTrue(json.loads((out / 'result.json').read_text())['arm_gate_passed'])
+            report = json.loads((out / 'result.json').read_text())
+            self.assertEqual(0, report['storage_before']['folder_logical_bytes'])
+            self.assertGreater(report['storage_after']['file_count'], 0)
+            self.assertGreater(report['storage_after']['drive_free_bytes'], 0)
+            self.assertEqual([], list(out.glob('.frozen-apks-*')))
 
     def test_only_standalone_package_and_test_target_are_allowed(self):
         probe.validate_manifest(manifest())

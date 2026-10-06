@@ -114,6 +114,14 @@ def installed(adb, package):
     return 'package:' + package in rows
 
 
+def storage_snapshot(directory):
+    """Measure only this fresh owned run directory, never user media or caches."""
+    files = [path for path in directory.rglob('*') if path.is_file() and not path.is_symlink()]
+    return {'measured_at': datetime.now(timezone.utc).isoformat(), 'scope': str(directory),
+            'file_count': len(files), 'folder_logical_bytes': sum(path.stat().st_size for path in files),
+            'drive_free_bytes': shutil.disk_usage(directory).free}
+
+
 def production_snapshot(adb):
     if not installed(adb, PRODUCTION):
         return {'installed': False}
@@ -183,10 +191,12 @@ def main(argv=None):
     test_package = package + '.test'
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
+    storage_before = storage_snapshot(out)
     frozen = tempfile.TemporaryDirectory(prefix='.frozen-apks-', dir=out)
     adb = [str(args.adb.resolve()), '-s', args.serial]
     run_id = uuid.uuid4().hex
     result = {'run_id': run_id, 'status': 'fail', 'quality_validated': False, 'stage': 'apk_preflight'}
+    result['storage_before'] = storage_before
     touched = False
     before = None
     try:
@@ -276,6 +286,10 @@ def main(argv=None):
                 result['status'] = 'fail'
         except OSError as error:
             result.update(status='fail', frozen_apk_copies_removed=False, frozen_copy_cleanup_error=str(error))
+        try:
+            result['storage_after'] = storage_snapshot(out)
+        except OSError as error:
+            result.update(status='fail', storage_measurement_error=str(error))
         result['completed_at'] = datetime.now(timezone.utc).isoformat()
         if infant and result['status'] == 'pass':
             try:
