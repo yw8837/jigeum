@@ -60,3 +60,33 @@ floatgraph는Norm원인/후속adapter진단용활성4.54MB하나만유지한다.
 증거: `work/vtc1-20261006/export01/{report.json,process.json,export.log}`, `norm-diagnostic01.json`,
 `graph-parity01/{report-private.json,process.json,diagnostic.log}`, `graph-guards01/{report.json,cleanup.json}`.
 원음·개별점수·가중치·graph는Git에넣지않는다. source/pin/runner/합성fixture계약만공유한다.
+
+## 독립 검토의 실행 이력 보완
+
+`62e7de4...124f06c` 독립검토에서 Standards P2 하나를 받았다. 실행 후 추가한 guard/metadata를
+당시 실행에도 있었다고 소급해서 확인하지 않는다. 기존 report는 그대로 보존한다.
+
+- export01의 실제 runner SHA는 `fbd56c8547c227371dc5e00bb4966213004bea34b17ba043ff958753cae920f9`다.
+  `124f06c`의 `vtc1_export.py` SHA는 `c4101a572f9706e4cdf9a8d7ed238df6347283b09abac57ee4d3c23cb619325a`다.
+  첫 실행 후 완료성 검사 함수와 row의 `finite` 필드를 추가했다. 첫 report에는 `finite`가 없다.
+  앞서 기록한 수치·shape/range 검사와 무음 실패는 당시 runner의 결과이며,
+  최종 runner SHA의 export 실행 검증이라고 보고하지 않는다. 단위 gate4개는 추가 guard를 검사한 별도 증거다.
+- graph-parity01의 실제 runner SHA는 `275a8fc8d04a2f3db1b207200059e35884a411bb972be27844e15b04c6024903`다.
+  `124f06c`의 `vtc1_graph_parity.py` SHA는 `8ab38dcdce374d1a2767e5cce57712bf59bcba4d9da33c96f0be500d7080c605`다.
+  첫 실행 후 기록된 runtime의 비교와 `recorded_reference_runtime`/`historical_python_recorded` 표시를 추가했다.
+  당시 report에는 두 필드가 없고 원래 Torch score의 Python도 미기록이다.
+  보존된 모든 열의 수치 비교 결과를 최종 runtime guard가 당시 실행됐다는 증거로 확대하지 않는다.
+  원음 재추론이나 report 덮어쓰기는 하지 않았다.
+
+## 최적화 수준 진단 — 설정 변경으로 무음 차이 해결 안 됨
+
+원래 graph의 disabled/basic/extended/all 네 ORT 최적화 수준을 합성 세 입력에서 한 번 비교했다.
+이 설정 비교는 기존 graph의 수치 문제 진단이며 새로운 아기 인식 사례를 추가하지 않는다.
+모든 수준에서 무음 `.05574977398`, tone `.000456266105`, noise `1.1974771e-7`로 동일했다.
+최적화 수준을 낮추는 방법은 이 차이의 해결책이 아니다. raw floatgate 실패는 계속 유지한다.
+Torch 합성forward3/ORT12/원음0, exit0/3.651초/peak1,271,590,912B/3GiB/자손0이다.
+graph의 디스크 복사·새 다운로드·제품 변경은 없다. 다음은 저에너지 창의 불안정성과
+실제 Android 전처리에 대한 별도 행동 계약이며, raw graph가 통과했다고 바꾸지 않는다.
+
+증거: ignored `work/vtc1-20261006/diagnose_ort_optimizations.py` 및
+`norm-optimization01/{report.json,process.json,diagnostic.log}`.

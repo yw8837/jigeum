@@ -37,3 +37,24 @@ Standards는 이전제안해소/새규칙위반0/새휴리스틱0, Spec은 P2해
 개별사건을열거나독립재계산하지않았으며delta는허용된집계metadata와고정code에서확인한범위다.
 Standards 최초필수0/제안1→수정후0, Spec 최초필수1→수정후미해결0이다.
 [실제QA/실패이력](vtc1-20261007.md)을 따른다. 전체 앱 개선·제품배포 완료로 닫지 않는다.
+
+## 후속 graph 검토 — 고정 62e7de4...124f06c
+
+### Standards
+
+P2 하나: 실제 export01/graph-parity01의 runner SHA와 최종 runner SHA가 다르고,
+추가 guard/metadata 필드가 실행 report에 없다는 이력을 문서에 명시하지 않았다.
+[graph 계약](../research/20261007-vtc1-graph-contract.md)의 source 변경 기록 요구에 해당한다.
+원음 비교 수치 자체를 무효라고 판단한 지적은 아니다. 최종 SHA의 실행 증거로 확대하면 안 된다.
+
+해결: graph 계약에 두 실행의 전체 runner SHA, 최종 SHA, 나중에 추가한 finite/완료성 함수와
+recorded runtime 검사/필드를 구분해 기록했다. 원문 report는 덮어쓰지 않고 원음 재추론도 하지 않았다.
+이번 문서 보완의 재검토는 후속 기록을 따른다. 새로운 휴리스틱 제안은0이다.
+
+### Spec
+
+필수지적0: 모든5열5e-4·실패nonzero/보존·원래시간좌표/균등평균·ORT49창/원Torch재추론0·
+무음실패유지·제품/Android/권리미검증을 확인했다. 당시 report에 없는 나중 guard의 소급 검증은 하지 않았다.
+
+검토자는 허용된 집계 metadata만 읽었고 원음/PCM/개별scores/events 열람·추론·수정·Git 조작은 하지 않았다.
+issue-tracker 문서는 없으며 기존 local spec/AGENTS/RUNBOOK를 사용했다.
