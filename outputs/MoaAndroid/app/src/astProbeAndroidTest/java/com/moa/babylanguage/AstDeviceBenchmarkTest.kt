@@ -19,9 +19,12 @@ import java.util.concurrent.atomic.AtomicLong
 class AstDeviceBenchmarkTest {
     @Test fun measureSyntheticTenAndTwentySecondCalls() = runBlocking<Unit> {
         val args = InstrumentationRegistry.getArguments()
-        assumeTrue("Explicit standalone benchmark only", args.getString("ast_device_probe") == "true")
+        val infantProbe = args.getString("ast_infant_device_probe") == "true"
+        assumeTrue("Explicit offline benchmark only", args.getString("ast_device_probe") == "true" || infantProbe)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        check(context.packageName == "com.moa.babylanguage.astprobe")
+        if (infantProbe) check(context.packageName == "com.moa.babylanguage.astcandidate" &&
+            BuildConfig.AST_INTEGRATED_CANDIDATE && BuildConfig.AST_INFANT_PRESENCE)
+        else check(context.packageName == "com.moa.babylanguage.astprobe" && !BuildConfig.AST_INFANT_PRESENCE)
         val runId = args.getString("ast_device_run_id") ?: error("Missing run ID")
         require(runId.matches(Regex("[a-f0-9]{32}")))
         val directory = File(context.filesDir, "qa-ast-device").apply { check(isDirectory || mkdirs()) }
@@ -33,7 +36,7 @@ class AstDeviceBenchmarkTest {
         val result = JSONObject().put("run_id", runId).put("status", "running")
             .put("model_sha256", AstModelStore.SHA256).put("device_model", Build.MODEL)
             .put("api", Build.VERSION.SDK_INT).put("abi", Build.SUPPORTED_ABIS.first())
-            .put("synthetic_only", true).put("cases", rows)
+            .put("synthetic_only", true).put("infant_presence_candidate", infantProbe).put("cases", rows)
         try {
             for ((index, duration) in listOf(10000, 20000, 20000).withIndex()) {
                 val beforeThermal = thermal()
@@ -75,6 +78,10 @@ class AstDeviceBenchmarkTest {
                     AstAudioAnalyzer.windowRanges(duration * 16).map { it.first * 1000L / 16000 to it.second * 1000L / 16000 }) {
                     "Incomplete selected interval"
                 }
+                if (infantProbe) check(analyzed.windows.all { window ->
+                    window.infantPresence?.let { it.isFinite() && it in 0f..1f } == true &&
+                        window.strongestSecondRms?.let { it.isFinite() && it in 0.0..1.0 } == true
+                }) { "Candidate outputs missing from actual native run" }
                 check(afterThermal < PowerManager.THERMAL_STATUS_SEVERE) { "Device reached severe thermal status" }
             }
             result.put("status", "completed")

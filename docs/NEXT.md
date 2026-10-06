@@ -1,5 +1,24 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+### 최신 — 연구 Android에서 약국 누락의 한마디 회복, ARM gate로 진행
+
+[실제 Android 결과](research/20261007-infant-presence-android-results.md): 기존 AST에 동결769parameter head를 붙인
+연구 후보에서 같은약국원본의 겹친두10초 모두 general발성 한마디가 회복됐다. 공개33 새generic지원0,
+기존phase승인13 observation/문장 exact보존·추가quiet/click/adult/music7조건 새지원0이다.
+원527logits/threshold 유지·같은창RMS≥.003·shifted승인 후 보완·graph증가4,474B다. 일반정확도/욕구판정으로 보고하지 않는다.
+실제 decoder(WAV변환)3조건·별도기존원본MP4 10/20초 AV·UI취소재개·저장/구간/기록 회귀도 검사했다.
+약국 원MP4는 현재확보되지 않아 WAV회복을 원본영상회복으로 부르지 않는다.
+
+**다음 실제 실행은 S25 ARM10/20초 속도·PSS·발열·native취소재개 확인**이다. 현재 ADB에는MoaQA35만 있다.
+필요한 최신 연구APK/test 한세트를 `work/infant-presence-android-20261007/final/`에보존하고 중간build/소유fixture를정리한다.
+후속 [평가source 조사](research/20261007-next-infant-head-validation.md)는5파일 후보/새exactID1·자연6–18개월검증0,
+학습blocked/approvednull을유지하며 새자료와 blind사건검수를 준비한다. 사용자원음/특징 외부전송·학습0이다.
+
+**제품beta에는 아직 미적용/미배포**다. code32를재업로드하지않는다. 2026-10-07 04:33KST Play게시개요는code32 검토중이었다.
+ARM·독립review·서명/업데이트 gate후 유효변경만 새code beta로 반영하고 일반정확도나정식출시로 보고하지 않는다.
+아래 연구Android 연결 예정·기기0은 선행 시점의 이력이다. 전체goal은active로계속한다.
+
+
 **현재 다음 실행은 연구Android 후보 연결이다.** [추가source실측](research/20261007-extra-babble-evaluation-results.md)은
 10개705KB·4/9weakcaption지원(웃음/dada포함)/grandpa반례지원0·나머지5보류·unknown age/naturalness를보존했다.
 새source를학습/threshold선택에넣지않았다. source/domain 일반정확도 승인이아니다.

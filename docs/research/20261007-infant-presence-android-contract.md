@@ -1,6 +1,6 @@
 # Android 동결 AST infant-presence 후보 계약
 
-2026-10-07. 제품 기준 `102a326` / 0.5.18 code32. 연구용 debug 후보부터 구현한다.
+2026-10-07. 연구 fixedpoint `102a326` / 제품소스 `a8a3c18` / 0.5.18 code32. 연구용 debug 후보부터 구현한다.
 
 ## 범위와 고정 입력
 
@@ -9,7 +9,7 @@
 - 원 AST 527 logits와 입력을 보존한 graph다. 새 presence score ≥ .8은 미보정 support 기준이며 정확도 확률이 아니다.
 - 공개 train21/18source(영아7clip/4source/40.7초)의 caption-weak head다. 약국 두 구간은 동일 원본의 겹치는 개발 자료다. extra9의5누락을 보존한다.
 - `agattokInfantPresenceCandidate=true`는 `agattokAstProbe=true`, `agattokAstCandidate=true`를 모두 요구한다. APK 전용·별도 package, beta/release/preview/bundle 금지.
-- 후보는 기존 AST graph asset을 덮지 않는다. 후보 APK에는 선택된 graph 하나와 기존 notice만 포함한다. 새 모델 다운로드 없음.
+- 후보는 기존 AST graph asset을 덮지 않는다. 후보 APK에는 선택된 graph 하나와 기존 ORT notice·head 변경/학습 attribution notice를 포함한다. 새 모델 다운로드 없음.
 
 ## 판정과 표현
 
