@@ -1,5 +1,25 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — frozen pair의 실제 추가 지원, 연구 Android 연결 진행
+
+[wholebag/pair 결과](research/20261007-caption-wholebag-results.md): exact2 공개 음원의
+전체11span을 사용한 작은 head를 동결했다. validation caption지원2/4→3/4지만
+기존 약국 첫 창을 잃어 단독 교체는 제외했다. 두 동결 head의 보완 비교에서는
+기존 약국 지원을 유지했고 추가 공개9caption영아 입력의 지원4/9→7/9,
+cartoon-grandpa는 계속 미지원이었다. 사건/나이/가족 검수·독립 정확도·욕구 번역을 입증한 수치는 아니다.
+
+[도구 QA](qa/caption-wholebag-dual-20261007.md)의 독립 검토에서 부분 결과 내용 검사와
+후속 cycle lifecycle 누락을 찾아 수정했다. 실제5report 재감사·8false-completion 주입,
+고유12unit과 새 scoped cycle4 complete/clear/부재를 확인했다. 원 추론의 소스 pins는 보존했다.
+새 소스의 추론 재실행으로 보고하지 않는다. [추가 엔진 조사](research/20261007-next-small-infant-engine-followup.md)는
+이번 공개 metadata 검색 범위에서 새 채택 후보0이며 모든 모델의 부재를 뜻하지 않는다.
+
+다음 실제 단계는 [연구 Android 계약](research/20261007-caption-android-contract.md)의
+기존 AST768 특징 재사용 +3076B 보완 head다. 새 encoder/graph/LLM 다운로드 없이 debug 연구에서만
+연결 중이며 실제 앱경로/기존승인/반례·ARM·독립 검토 전 beta에 넣지 않는다.
+제품0.5.18-beta/code32 유지·Play 새 제출0·마지막 실제 폰 ADB0, 전체goal active.
+아래 wholebag 아직0은 선행 계약 시점의 이력이다.
+
 ### 최신 — AST768 bag 학습 비교 종료, 새 공개 음원 확보
 
 후속 [독립 리뷰](qa/ast-mil-code-review-20261007.md)에서 Spec P2 직접worker 덮어쓰기와 Standards P3 commit순서를수정했다.

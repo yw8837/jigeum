@@ -219,6 +219,7 @@ def fit(args):
 
 
 def verify_head(args):
+    import numpy as np
     meta = read_report(args.head / 'fit.json')
     selection = read_report(args.head / 'selection.json')
     path = args.head / 'head-ast-presence-public.npz'
@@ -229,13 +230,76 @@ def verify_head(args):
             or meta['train_cases'] != 23 or meta['training_sources'] != 20
             or meta['private_training'] is not False or meta['product_changed'] is not False):
         raise ValueError('Frozen caption research head differs')
+    with np.load(path,allow_pickle=False) as archive:
+        w,b=archive['weights'],archive['bias']
+        if (w.shape!=(768,) or b.shape!=() or w.dtype!=np.float32 or b.dtype!=np.float32
+                or not np.isfinite(w).all() or not np.isfinite(b)):
+            raise ValueError('Frozen caption head tensor invalid')
 
 
 def provenance():
     from ast_mil_probe import provenance as previous
     return dict(previous(), **{name: digest(ROOT / 'tools/research' / name) for name in
-        ('ast_caption_wholebag_probe.py', 'public_infant_review_acquire.py',
+        ('ast_caption_wholebag_probe.py', 'ast_caption_completion.py', 'public_infant_review_acquire.py',
          'bounded_process.py', 'ondevice_av_probe.py', 'efficientat_probe.py')})
+
+
+def validate_artifact(args):
+    from ast_caption_completion import case_ids, flags, frames, scalar
+    metadata = {'features':'features.json', 'fit':'fit.json', 'evaluate':'evaluation-local.json'}[args.mode]
+    report = read_report(args.output / metadata)
+    flags(report,dict(product_changed=False))
+    if args.mode == 'features':
+        source_rows=extra_sources(EXPERIMENT)
+        rows=case_ids(report,EXTRA)
+        flags(report,dict(experiment_id=EXPERIMENT,training=False,event_ground_truth=False,raw_files_created=0,
+            acquisition_sha256=ACQUISITION_SHA,levels_sha256=LEVELS_SHA,source_snapshot_sha256=EXTRA_SOURCE_SHA,
+            model_sha256=MODEL_SHA,runtime=RUNTIME))
+        if digest(args.output/'features-extra.npz') != report.get('features_sha256'):
+            raise ValueError('Feature archive does not match report')
+        for source,row in zip(source_rows,rows):
+            if any(row.get(k)!=v or type(row.get(k)) is not type(v) for k,v in source.items()):
+                raise ValueError('Feature source/review state differs')
+            flags(row,dict(actual_pcm_samples=EXTRA[row['id']][0],audio_sha256=EXTRA[row['id']][1],
+                experimental_use_authorized=True,canonical_training_authorized=False,
+                feature_input_scope='whole_recording',research_use='whole_recording_caption_weak_bag',weak_caption_target=1.))
+            frames(row['frames'],row['actual_pcm_samples'],scored=False)
+    elif args.mode == 'fit':
+        _,old,_=validate_feature_inputs(args)
+        extra=read_report(args.extra_features/'features.json')['cases']
+        expected=old+extra;rows=case_ids(report,[r['id'] for r in expected])
+        flags(report,dict(train_cases=23,validation_cases=14,training_sources=20,parameters=769,fp32_parameter_bytes=3076,
+            caption_weak_research_training_used=True,canonical_training_authorized=False,private_training=False,
+            calibrated_probability=False,quality_validated=False,android_validated=False,experiment_id=EXPERIMENT,
+            model_sha256=MODEL_SHA,source_snapshot_sha256=SOURCE_SHA,extra_source_sha256=EXTRA_SOURCE_SHA))
+        verify_head(type('HeadArgs',(),dict(head=args.output,head_sha=digest(args.output/'head-ast-presence-public.npz')))())
+        selection=read_report(args.output/'selection.json')
+        flags(report['configuration'],dict(dimension=768,steps=300,lr=.03,l2=selection['selected_penalty'],
+            threshold=.8,margin=.4,pooling='whole_bag_actual_sample_weighted_log_mean_exp',temperature=1.,normalization='span_L2_only'))
+        if selection['selected_penalty'] not in (.0001,.001,.01):raise ValueError('Unprescribed head selection')
+        if report.get('extra_review_states') != [{k:row[k] for k in ('id','training_blocked','approved_training_label',
+                'audio_review_completed','event_ground_truth')} for row in extra]:raise ValueError('Extra review states differ')
+        for row,source in zip(rows,expected):
+            flags(row,dict(role=source.get('role') if row['id'] not in EXTRA else 'train',
+                weak_class=source.get('weak_class') if row['id'] not in EXTRA else 'infant_vocal',sourcegroup=source['sourcegroup']))
+            scalar(row.get('infant_score'));scalar(row.get('float32_absolute_error'),0.,5e-5)
+            from infant_presence_probe import supported
+            if row.get('infant_support') is not supported(row['infant_score']):raise ValueError('Bag support differs')
+            frames(row.get('spans'),source['actual_pcm_samples'])
+            attention=row.get('attention')
+            if not isinstance(attention,list) or len(attention)!=sum(f['rms']>=.003 for f in row['spans']):
+                raise ValueError('Bag attention/eligible spans incomplete')
+            if abs(sum(scalar(v) for v in attention)-1)>1e-6:raise ValueError('Bag attention sum differs')
+    else:
+        from efficientat_probe import load_corpus
+        expected=load_corpus(args.corpus);rows=case_ids(report,[r['id'] for r in expected])
+        flags(report,dict(head_sha256=args.head_sha,corpus_manifest_sha256=digest(args.corpus/'manifest.json'),training=False,
+            private_data_evaluation_only=True,actual_infant_event_timing_validated=False,quality_validated=False,android_validated=False))
+        for source,row in zip(expected,rows):
+            flags(row,dict(duration_ms=source['duration_ms'],pcm_sha256=source['pcm_sha256']))
+            frames(row.get('spans'),(args.corpus/(row['id']+'.f32')).stat().st_size//4)
+            if row.get('any_supported_span') is not any(f['infant_support'] for f in row['spans']):
+                raise ValueError('Evaluation summary contradicts spans')
 
 
 def verify_completion(args, pins):
@@ -246,6 +310,7 @@ def verify_completion(args, pins):
             or provenance() != pins or done.get('product_changed') is not False
             or done.get('artifact_metadata_sha256') != digest(args.output / metadata)):
         raise ValueError('Caption completion provenance or artifact differs')
+    validate_artifact(args)
 
 
 def run_worker(args):

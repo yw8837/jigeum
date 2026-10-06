@@ -9,11 +9,30 @@ import numpy as np
 
 from ast_caption_wholebag_probe import (
     EXPERIMENT, EVIDENCE_ROOT, EXTRA, whole_spans, validate_whole, whole_bag,
-    extra_sources, claim_worker, output_path, provenance, span_scores, verify_completion, RUNTIME, digest,
+    extra_sources, claim_worker, output_path, provenance, span_scores, verify_completion, validate_artifact, RUNTIME, digest, ROOT,
 )
 
 
 class WholeCaptionGuards(unittest.TestCase):
+    def test_exact_feature_report_rejects_partial_cases_flags_and_coverage(self):
+        original=ROOT/'work/ast-caption-wholebag-20261007/features01'
+        report=json.loads((original/'features.json').read_text())
+        with tempfile.TemporaryDirectory() as folder:
+            out=Path(folder);args=SimpleNamespace(output=out,mode='features')
+            (out/'features-extra.npz').write_bytes((original/'features-extra.npz').read_bytes())
+            def check(value):
+                (out/'features.json').write_text(json.dumps(value),encoding='utf-8')
+                validate_artifact(args)
+            check(report)
+            for condition in ('empty','missing-scalar','missing-flag','partial-coverage','wrong-summary'):
+                bad=json.loads(json.dumps(report))
+                if condition=='empty':bad['cases']=[]
+                elif condition=='missing-scalar':del bad['cases'][0]['frames'][0]['rms']
+                elif condition=='missing-flag':del bad['event_ground_truth']
+                elif condition=='partial-coverage':bad['cases'][1]['frames'].pop()
+                else:bad['cases'][0]['training_blocked']=False
+                with self.assertRaises((ValueError,KeyError)):check(bad)
+
     def test_completed_text_cannot_approve_missing_or_changed_artifact(self):
         with tempfile.TemporaryDirectory() as folder:
             out = Path(folder); args = SimpleNamespace(output=out, mode='features')
@@ -22,7 +41,7 @@ class WholeCaptionGuards(unittest.TestCase):
             done = dict(status='completed',mode='features',runtime=RUNTIME,experiment_id=EXPERIMENT,
                 source_code_sha256=pins,product_changed=False,artifact_metadata_sha256=digest(artifact))
             (out/'completion.json').write_text(json.dumps(done), encoding='utf-8')
-            verify_completion(args,pins)
+            with self.assertRaises(ValueError): verify_completion(args,pins)
             artifact.write_text('{"cases": ["changed"]}', encoding='utf-8')
             with self.assertRaises(ValueError): verify_completion(args,pins)
             artifact.unlink()

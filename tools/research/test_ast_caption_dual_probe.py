@@ -1,9 +1,29 @@
 import unittest
+import json
+from pathlib import Path
+import tempfile
 import numpy as np
-from ast_caption_dual_probe import head_pair,output_path,EVIDENCE_ROOT
+from ast_caption_dual_probe import head_pair,output_path,EVIDENCE_ROOT,validate_artifact
 
 
 class DualHeadGuards(unittest.TestCase):
+    def test_completed_report_content_rejects_partial_scalar_flag_and_summary(self):
+        report=json.loads((EVIDENCE_ROOT/'extra01/evaluation.json').read_text())
+        with tempfile.TemporaryDirectory() as folder:
+            out=Path(folder)
+            def check(value):
+                (out/'evaluation.json').write_text(json.dumps(value),encoding='utf-8')
+                validate_artifact(out)
+            check(report)
+            for condition in ('empty','missing-scalar','missing-flag','partial-coverage','wrong-summary'):
+                bad=json.loads(json.dumps(report))
+                if condition=='empty':bad['cases']=[]
+                elif condition=='missing-scalar':del bad['cases'][0]['spans'][0]['caption_score']
+                elif condition=='missing-flag':del bad['product_changed']
+                elif condition=='partial-coverage':bad['cases'][0]['spans']=[]
+                else:bad['cases'][0]['paired_any']=False
+                with self.assertRaises((ValueError,KeyError)):check(bad)
+
     def test_additive_support_preserves_old_and_adds_only_same_window_new(self):
         vector=np.zeros(768);vector[0]=1
         old=np.zeros(768);old[0]=2;new=np.zeros(768);new[0]=-2

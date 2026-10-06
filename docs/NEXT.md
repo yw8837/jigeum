@@ -470,3 +470,16 @@ Android 성능·감정/욕구 생성 검증은별도다. 자손 전체를 제한
 ## 지속 계약
 
 기존 기록/백업/서명 키/이용권 검증 유지. `hasCurrentEntitlement()`를 실제 실행 전/중/후 검사. 테스트 대역은 androidTest. Gradle/ADB 한 담당자. 커밋/푸시 후 로컬·원격SHA와 작업 트리 확인. 원본·토큰·키·빌드캐시는 커밋하지 않는다.
+# 현재 다음 단계 — frozen pair의 실제 Android 확인
+
+2026-10-07. [실측 결과](research/20261007-caption-wholebag-results.md)와
+[연구 계약](research/20261007-caption-android-contract.md)을 먼저 읽는다.
+단독 새 head는 약국 회귀로 제외했다. 현재 비교 대상은 기존 graph/원527출력/기존head를 보존하고
+기존768vector에3076B frozen supplemental head만 계산하는 debug 연구다.
+추가 공개9caption지원4/9→7/9는 일반 정확도나 실제 앱 한마디의 검증이 아니다.
+
+실제 앱 decoder/20초 중첩/native취소/기존약국·기존승인·성인/음악/무음 반례와 새입력부터 확인한다.
+ARM은 현재 미연결이며 연구APK/test와 동작 변경의 새 proof가 필요하다. 기존APK proof를 재사용하지 않는다.
+통과 후만 새versionCode>32 beta 패키지/서명업데이트/독립검토/실제 비공개 제출로 진행한다.
+제품0.5.18-beta/code32·새Play제출0, 전체goal active. 아래는 이전 실험 당시의 다음 단계다.
+

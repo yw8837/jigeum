@@ -71,6 +71,24 @@ def provenance():
         ('ast_caption_dual_probe.py','ast_infant_head_graph.py','extra_babble_evaluation.py')})
 
 
+def validate_artifact(output):
+    from ast_caption_completion import case_ids, flags, frames
+    report=read_report(output/'evaluation.json');expected=verify_inputs()
+    rows=case_ids(report,[r['id'] for r in expected])
+    flags(report,dict(base_head_sha256=digest(BASE_HEAD/'head-ast-presence-public.npz'),caption_head_sha256=CAPTION_SHA,
+        model_sha256=CANDIDATE_SHA,acquisition_sha256=ACQUISITION_SHA,scope='ADDITIVE_BROAD_PRESENCE_DIAGNOSTIC',
+        threshold=.8,margin=.4,correlated_heads=True,calibrated_probability=False,new_raw_files=0,
+        training=False,product_authorization=False,quality_validated=False,android_validated=False,product_changed=False))
+    for source,row in zip(expected,rows):
+        if any(row.get(k)!=v or type(row.get(k)) is not type(v) for k,v in source.items()):
+            raise ValueError('Dual source/review state differs')
+        if row.get('event_ground_truth') is not False:raise ValueError('Caption-only event boundary differs')
+        frames(row.get('spans'),row.get('actual_pcm_samples'),dual=True)
+        for name in ('base','caption','paired'):
+            if row.get(name+'_any') is not any(f[name+'_support'] for f in row['spans']):
+                raise ValueError('Dual summary contradicts span supports')
+
+
 def worker(args):
     offline()
     import numpy as np
@@ -160,8 +178,10 @@ def main():
         raise SystemExit('Dual head evaluation failed')
     done=read_report(args.output/'completion.json')
     if (done['status']!='completed' or done['runtime']!=RUNTIME or done['source_code_sha256']!=pins
-            or provenance()!=pins or done['evaluation_sha256']!=digest(args.output/'evaluation.json')):
+            or provenance()!=pins or done['evaluation_sha256']!=digest(args.output/'evaluation.json')
+            or done.get('product_changed') is not False):
         raise SystemExit('Dual completion provenance differs')
+    validate_artifact(args.output)
     print('Dual public evaluation completed; product_authorization=false')
 
 

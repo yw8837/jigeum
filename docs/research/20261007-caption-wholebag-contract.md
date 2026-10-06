@@ -61,5 +61,6 @@ network금지/Job180초·feature/eval3GiB/fit2GiB,새encoder/LLM/modeldownload0.
 |W7|용량전후/새copy|실제snapshot·새raw파일0·이전삭제차단우회0|필요한head/features/log만|
 
 최대5cycle/같은실패3회stop. 로컬검토snapshot 고정→두축독립review·필수수정→검증뒤원격push한다.
-현재는 사전 계약만 작성했으며 새2source 특징 추출/학습/평가는 아직0이다. 전체goal active를유지한다.
+이 계약 작성 당시에는 새2source 특징 추출/학습/평가가0이었다.
+이후 실행·단독 회귀와 보완 비교는 [실측 결과](20261007-caption-wholebag-results.md)를 따른다. 전체goal active를유지한다.
 이계약의weak-only허용은새자료사건학습/제품품질승인으로전파하지않는다.
