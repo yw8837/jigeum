@@ -20,8 +20,10 @@ def main():
     variant.add_argument('--mil',action='store_true')
     variant.add_argument('--ast',action='store_true')
     variant.add_argument('--ast-head',action='store_true')
+    variant.add_argument('--ast-head-graph',action='store_true')
     parser.add_argument('--media',type=Path)
     parser.add_argument('--ffmpeg',type=Path)
+    parser.add_argument('--corpus',type=Path)
     args=parser.parse_args()
     out=args.output.resolve()
     validate_output_path(out)
@@ -36,10 +38,12 @@ def main():
     if any(path.exists() for path in (wrong,outside,missing)):
         raise ValueError('Expected nonexistent rejection targets')
     binary=args.presence or args.mil or args.ast_head
-    if args.ast and (args.media is None or args.ffmpeg is None):
+    if (args.ast or args.ast_head_graph) and (args.media is None or args.ffmpeg is None):
         parser.error('AST guards require media and ffmpeg')
-    script=('ast_infant_head_probe.py' if args.ast_head else ('ast_embedding_interface.py' if args.ast else
-            ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py'))))
+    if args.ast_head_graph and args.corpus is None:
+        parser.error('AST graph guards require corpus')
+    script=('ast_infant_head_graph.py' if args.ast_head_graph else ('ast_infant_head_probe.py' if args.ast_head else ('ast_embedding_interface.py' if args.ast else
+            ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py')))))
     common=[sys.executable,'-B',str(ROOT/'tools/research'/script)]
     cases=[dict(id='wrong-source-sha',expected='Source snapshot hash',target=wrong,
                argv=[*(['fit','--features',str(out)] if binary else ['acquire']),
@@ -50,9 +54,11 @@ def main():
                argv=['evaluate','--head',str(head),'--corpus',str(out),'--output',str(outside)]),
            dict(id='missing-arguments',expected='Missing required presence mode arguments' if binary else 'Missing required mode arguments',target=missing,
                argv=['evaluate','--output',str(missing)])]
-    if args.ast:
+    if args.ast or args.ast_head_graph:
         options=['--sources',str(sources),'--sources-sha',sha,'--media',str(args.media.resolve()),
                  '--ffmpeg',str(args.ffmpeg.resolve())]
+        if args.ast_head_graph:
+            options+=['--head',str(head),'--corpus',str(args.corpus.resolve())]
         cases=[dict(id='wrong-source-sha',expected='Fixed AST interface source SHA',target=wrong,
                     argv=[*options[:3],'0'*64,*options[4:],'--output',str(wrong)]),
                dict(id='stale-head-output',expected='FileExistsError',target=head,

@@ -1,5 +1,14 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+**다음 실제 실행:** [추가9clip/3source 평가 계약](research/20261007-extra-babble-evaluation-contract.md)에
+따른평가전용취득·동결head비교. blocked를학습승인으로바꾸지않고 unknown age/naturalness·분모를보존한다.
+새head의 [ONNX 연결](research/20261007-ast-infant-head-graph-results.md)은10조건/12span첫통과,
+원527logits0차이/score≤6.77e-8/추가4,474B·model후보한개만보존했다.
+합성20초중첩은Android/실제영아20초가아니다. 새source/반례후실제Android후보전체경로·ARM으로이어간다.
+modelcandidate `work/infant-head-20261007/ast-head-graph01/ast-infant-presence-candidate.onnx`,
+SHA `4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a`.
+기존originalasset유지·새beta없음/code32이후미배포/goal active. 아래 '다음ONNX연결'은 선행실측 당시 이력.
+
 현재 첫 정보 이득은 [AST768 head 실측](research/20261007-ast-infant-head-results.md)이다.
 약국 누락2구간 broad support를 처음 회복했지만 같은 원본 overlap이며 일반정확도/제품승인 아니다.
 negative10/기존33대조 오인0·영아held2/4; 다른울음/짧은babble 미통과를 보존한다.

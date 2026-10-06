@@ -2,6 +2,20 @@
 
 갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 — 작은 head의 ONNX 후보 연결까지 첫 통과
+
+[ONNX 그래프 첫 검사](research/20261007-ast-infant-head-graph-results.md): 기존527logits 차이0,
+새head/NumPy 차이≤6.77e-8·약국 두10초broad support 보존. 추가4,474B이며 새LLM/download없음.
+기존852node/weight/input/logits의bytes보존 unit2·실제CLI4/4·Job22.782초3GiB/자손0이다.
+합성20초의0–10/5–15/10–20중첩3창도 검사했으나 Android/실제아기20초·일반정확도 승인은 아니다.
+후속후보model한개91.14MB는 ignored ast-head-graph01에만 유지하고 제품asset은 그대로다.
+
+다음은 [추가9clip/3uploader 평가](research/20261007-extra-babble-evaluation-contract.md):
+current CC0/BY·preview확인, 자연영아/6–18개월 검증0·학습blocked 유지/평가전용.
+gipsyGA의cartoon-grandpa gibberish는 추가약한반례이며 TV/news/아기흉내 정답으로 부르지 않는다.
+이후 기존엔진 보완과 Android/ARM전체경로·회귀·취소·메모리·독립review 후 유효변경만beta.
+제품0.5.18/code32 유지·새앱적용/배포없음. 전체goal active.
+
 ### 활성 후속 — 기존 AST의 작은 head에서 첫 약국 누락 단서 회복
 
 [AST768 head 실제 비교](research/20261007-ast-infant-head-results.md)를 실행했다.
