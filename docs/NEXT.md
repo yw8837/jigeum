@@ -10,7 +10,8 @@
 약국 원MP4는 현재확보되지 않아 WAV회복을 원본영상회복으로 부르지 않는다.
 
 **다음 실제 실행은 S25 ARM10/20초 속도·PSS·발열·native취소재개 확인**이다. 현재 ADB에는MoaQA35만 있다.
-필요한 최신 연구APK/test 한세트를 `work/infant-presence-android-20261007/final/`에보존하고 중간build/소유fixture를정리한다.
+필요한 최신 연구APK/test 한세트를 `work/infant-presence-android-20261007/final/`에보존했다. 연구앱/테스트앱·AVD실행은종료했다.
+중간app/build·hostclasses·controlledPCM 일괄삭제는자동검토가차단해남아있고우회하지않았다. 격리state는clear/부재확인했다.
 후속 [평가source 조사](research/20261007-next-infant-head-validation.md)는5파일 후보/새exactID1·자연6–18개월검증0,
 학습blocked/approvednull을유지하며 새자료와 blind사건검수를 준비한다. 사용자원음/특징 외부전송·학습0이다.
 

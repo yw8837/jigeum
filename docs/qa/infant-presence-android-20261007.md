@@ -17,10 +17,10 @@
 
 | ID | 의도 | 사용자/공격 | Setup | 명령/하네스 | 기대 | 실제 | 수정 | 증거 | 정리 |
 |---|---|---|---|---|---|---|---|---|---|
-| I1 | 일반 발성 보완 | .8 경계·NaN·null·범위 | pure Kotlin / native | host.py / native02 | subtype·onset·리듬 발명0 | host42 / Android56 pass | 전용window/finite/같은창RMS | host-policy03/native02 | 소유classes 제거 예정 |
+| I1 | 일반 발성 보완 | .8 경계·NaN·null·범위 | pure Kotlin / native | host.py / native02 | subtype·onset·리듬 발명0 | host42 / Android56 pass | 전용window/finite/같은창RMS | host-policy03/native02 | 소유classes 삭제 차단 |
 | I2 | 오인·기존 승인 보존 | 감정/TV 전창 충돌·기존승인 | native / 실제PCM36 | run_device.py pcm04 | 기존phase 결과 exact보존 | 기존승인13 exact / 공개33 새generic0 / 약국2 회복 | shifted승인 후 general 보완 | pcm04 safe-summary | UUID copy 부재/원본 불변 |
-| I3 | 모델/설정·배포 혼입 | 잘못된Boolean·의존flag·forbidden variants | Gradle/APK | flags.py / verify_ast_payload | 후보 APK만·단일pin | 7/7실제거부 / archive pass / 잘못된모드2거부 | generated Sync / flag 보호 | flags01/archive01 | child0/build정리 예정 |
-| I4 | 낮은 소리의 잘못된 승인 | quiet창+성인/음악 tail·click/DC/tone | synthetic+기존public control7 | run_controlled.py pcm05 | 새general/한마디0 | 7조건 새지원0 / 중첩3창 정상 | perwindowRMS 및 기존입력 기준 | pcm05 safe-summary | runtime부재·소유PCM 후정리 |
+| I3 | 모델/설정·배포 혼입 | 잘못된Boolean·의존flag·forbidden variants | Gradle/APK | flags.py / verify_ast_payload | 후보 APK만·단일pin | 7/7실제거부 / archive pass / 잘못된모드2거부 | generated Sync / flag 보호 | flags01/archive01 | child0/build삭제 차단 |
+| I4 | 낮은 소리의 잘못된 승인 | quiet창+성인/음악 tail·click/DC/tone | synthetic+기존public control7 | run_controlled.py pcm05 | 새general/한마디0 | 7조건 새지원0 / 중첩3창 정상 | perwindowRMS 및 기존입력 기준 | pcm05 safe-summary | runtime부재·소유PCM 삭제 차단 |
 | I5 | native 실패·취소·재개 | corrupt/missingmodel·시간초과·동시실행 | 실제ORT/store/UI | native02 / ui01 | 실패보류·취소 후 새run | 56pass·실제20초 UI 취소/다음완료 | 기존mutex/deadline/zeroing 유지 | native02/ui01 | 임시input/modelpartial 정리 |
 | I6 | 실제 decoder·AV·저장/구간 | 보존음성3·기존MP4 10/20·취소 | actualDeviceClipAnalyzer/Compose | decoder01 / av01 / regression01 | 한마디·시각시간·기록보존 | decoder3회복/보존·AV2보존·80pass | QUIET 중복gate general한정 수정 | decoder01/av01/regression01 | WAV/UUID copy 제거 |
 | I7 | 거짓성공·stale·입력주입 | fakeOK·누락/skip·잘못된manifest/pins | strict parser / owned unit | test_qa_gates / extra_evaluation unit | exit/terminal/count 검증 | parser30pass / finalpins3pass | 종료metadata 검사·과거보고정정 | tool출력/해당source | 임시unit fixture 자동정리 |
@@ -95,6 +95,15 @@ synthetic10/20/20 AST측정은5.103/6.089/5.103초, process sampledPSSpeak514792
 
 각UUID runtimecopy·임시WAV·fixture와benchmark runtimereport는실행후제거/부재확인했다. 원음/PCM pin은불변이다.
 Job build05/06/07·negative7 모두종료/자손0/cleanuptrue였다. 최신app/test 한세트만final에보존한다.
-소유classes/controlledPCM/중간appbuild·테스트앱과이번AVD실행·격리OMX state는최종정리예정이다.
+연구앱/테스트앱 uninstall Success·정확package 부재를확인했고 이번AVD실행은종료했다. AVD폴더는보존했다.
+중간app/build·hostclasses3폴더·새controlledPCM7파일의일괄삭제는실행도구의자동승인검토가차단했다.
+구체이유는`blocked by policy` 외반환되지않았으며 해당삭제명령은시작되지않았다. 대체도구로우회하지않았다.
+이생성파일들은남아있으며 이한정QA의cleanup은BLOCKED다. 최신final app/test한세트의SHA는보존했다.
 사용자원본/기존0.2.1·0.3.0/직전배포final/공용AVD폴더/키/무관dirty변경은보존한다.
-현재 lifecycle adversarial-e2e이며정리완료후한정QA 상태를별도로확인한다. 전체goal을complete로표시하지않는다.
+격리state는cycle2/blocked/activefalse 기록→read확인→clear→실제파일부재를확인했다.
+clear응답은success필드가아니라cleared=true였다. 첫wrapper assertion schema실패후원응답과부재를재검증하고
+scratch helper를수정했다. CLI삭제는이미성공했으며 처음schema실패를앱결함으로세지않는다.
+정리후C여유68,188,336,128B(약63.50GiB)를읽었다. 삭제가차단돼파일정리회수량을주장하지않는다.
+**ULTRAQA BLOCKED: owned generated-directory cleanup rejected by automatic approval review.**
+Owner는메인/실행정책이며 다음안전단계는명시대상의허용된정리다. ARM/새beta는별도미완료gate다.
+전체goal은active로유지하고complete로표시하지않는다.
