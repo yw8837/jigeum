@@ -4,6 +4,15 @@
 
 ### 활성 후속 — 작은 공개 head의 실제 실패와 다음 학습 방식
 
+[기존AST 768표현 인터페이스](research/20261007-ast-embedding-interface-results.md)는첫6입력에서
+원래527logits exact동일/표현반환을확인했다. 메모리에서output선언만추가/새encoderfile·다운로드없음,
+public특징18.5KB·단위2/실제CLI거부4·자손0/전후용량기록이다. **아직head학습·영아성능·Android승인아님**.
+다음은이representation의공개source분리head비교다. 10초표현을975ms사건으로해석하지않는다.
+[추가옹알이9clip/3source 감사](research/20261007-extra-babble-source-audit.md)는currentpage/허락/preview경로를확인했으나
+월령·자연아기발성·변조미검수/학습blocked이며기존held를재할당하지않는다. 원음취득도아직없다.
+[두축리뷰](qa/infant-head-mil-code-review-20261007.md)는binarySpec0/Standards P2보고보완,
+MILSpec0/새Standards필수0이다. 과거시작용량관측누락은숨기지않고남겼다.
+
 후속 [시간창 MIL35](research/20261007-infant-mil-results.md)도 실제 train-only sourceCV/validation/private3/public33을 실행했다.
 첫누락0/후속.975단일·성인비명2.925초오인이라 미탑재다. 평균pooling만바꿔해결됐다고보고하지않는다.
 [새representation 조사](research/20261007-next-infant-representation-evidence.md)는새0.81MB옹알이전문head를찾았지만

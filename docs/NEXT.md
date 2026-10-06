@@ -1,5 +1,13 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+우선 다음실행은 [AST768 인터페이스 첫통과](research/20261007-ast-embedding-interface-results.md)를기반으로
+**현재AST+작은768head의공개source분리학습·반례/기존누락비교**다. 새encoder다운로드없음.
+원본527logits계약/실제길이·padding/시간span·고정source/학습선택·private평가전용을별도계약후실행한다.
+현재head학습없음·Android미검증·새beta없음/code32이후미배포다. 첫6입력은품질시험아니다.
+[새9옹알이source 감사](research/20261007-extra-babble-source-audit.md)는페이지/허락/주소만확인됐고
+자연발성/월령/변조미검수·trainingblocked이므로원음검수없이승인라벨로바꾸지않는다.
+이후신호가있는후보만오인/기존승인보존·모바일전체QA·독립리뷰·비공개업데이트한다.
+
 최신[시간창MIL35](research/20261007-infant-mil-results.md)도첫누락미회복/새성인비명오인잔존으로미탑재다.
 다음은[새representation·자료결손](research/20261007-next-infant-representation-evidence.md)의새dev옹알이source검수와
 현재앱AST representation에tinyhead를붙일수있는지검토다. 계약·실제출처를고정한후처음비교한다.
