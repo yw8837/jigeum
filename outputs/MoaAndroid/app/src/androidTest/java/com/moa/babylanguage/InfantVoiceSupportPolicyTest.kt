@@ -13,6 +13,31 @@ class InfantVoiceSupportPolicyTest {
     private fun apply(vararg windows: AstAudioWindow, audio: SoundAnalysis = unresolved, duration: Long = 10_000) =
         InfantVoiceSupportPolicy.attachCandidate(audio, AstAudioAnalysis(windows.toList()), duration)
 
+    @Test fun supplementalHeadCanAddSameWindowSupportWithoutRemovingBase() {
+        assertEquals(1, apply(window(.7f).copy(captionPresence = .8f)).infantVoiceWindows.size)
+        assertEquals(1, apply(window(.8f).copy(captionPresence = .7f)).infantVoiceWindows.size)
+        assertEquals(unresolved, apply(window(.7f).copy(captionPresence = .799999f)))
+        assertEquals(unresolved, apply(window(.7f).copy(captionPresence = .99f, strongestSecondRms = .002)))
+        assertEquals(unresolved, apply(window(.7f, extra = arrayOf("Laughter" to .3f)).copy(captionPresence = .99f)))
+        for (value in listOf(Float.NaN, Float.POSITIVE_INFINITY, -.01f, 1.01f))
+            assertEquals(unresolved, apply(window(.7f).copy(captionPresence = value)))
+        assertEquals(1, apply(window(.8f).copy(captionPresence = null)).infantVoiceWindows.size)
+        // A new score cannot replace a missing base output or an existing accepted observation.
+        assertEquals(unresolved, apply(window(null).copy(captionPresence = .99f)))
+        val original = SoundAnalysis(listOf(SoundCue("아기 웃음 후보", .9f)))
+        assertEquals(original, apply(window(.7f).copy(captionPresence = .99f), audio = original))
+    }
+
+    @Test fun baseHeadRangesAndExistingPhraseWinBeforeSupplementalRanges() {
+        val windows = arrayOf(window(.9f),window(.7f,5_000,15_000),window(.7f,10_000,20_000))
+        val prior = apply(*windows,duration=20_000)
+        val supplemented = apply(*windows.map { it.copy(captionPresence=.99f) }.toTypedArray(),duration=20_000)
+        assertEquals(prior,supplemented)
+        val shape = AcousticShape(.1f,false,0,strongestSecondRms=.01)
+        assertEquals(EvidenceInterpreter.interpret(prior,shape,ClipRange(0,20_000)),
+            EvidenceInterpreter.interpret(supplemented,shape,ClipRange(0,20_000)))
+    }
+
     @Test fun frozenBoundaryAddsGeneralPresenceWithoutEmotionBabbleOrMoments() {
         assertEquals(unresolved, apply(window(.799999f)))
         val audio = apply(window())

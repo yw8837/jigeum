@@ -4,6 +4,7 @@ work/
 outputs/MoaAndroid/app/src/astProbe/assets/ast-dynamic-int8.onnx
 outputs/MoaAndroid/app/src/astProbe/assets/ast-*.partial
 outputs/MoaAndroid/app/src/infantPresence/assets/*.onnx
+outputs/MoaAndroid/app/src/infantCaption/assets/*.f32
 .serena/
 **/.gradle/
 **/.kotlin/

@@ -118,6 +118,13 @@ class AstPublicAudioProbeTest {
                             pcm.size / 16L) else recovered
                         row.put("prior_phase", observation(recovered,
                             EvidenceInterpreter.interpret(recovered, shape, decoded.range)))
+                        if (infantProbe) {
+                            val originalHead = ast.copy(windows = ast.windows.map { it.copy(captionPresence = null) })
+                            val originalPresence = InfantVoiceSupportPolicy.attachCandidate(recovered, originalHead,
+                                pcm.size / 16L)
+                            row.put("prior_presence", observation(originalPresence,
+                                EvidenceInterpreter.interpret(originalPresence, shape, decoded.range)))
+                        }
                         row.put("phase", observation(supplemented,
                             EvidenceInterpreter.interpret(supplemented, shape, decoded.range)))
                             .put("phase_ms_excluding_ast", SystemClock.elapsedRealtime() - phaseStarted)
@@ -188,6 +195,9 @@ class AstPublicAudioProbeTest {
             window.infantPresence?.let { it.isFinite() && it in 0f..1f } == true &&
                 window.strongestSecondRms?.let { it.isFinite() && it in 0.0..1.0 } == true
         }) { "Missing or invalid infant presence score" }
+        if (BuildConfig.AST_INFANT_CAPTION) check(ast.windows.all { window ->
+            window.captionPresence?.let { it.isFinite() && it in 0f..1f } == true
+        }) { "Missing or invalid supplemental caption score" }
     }
 
     private fun cueJson(cues: List<SoundCue>) = JSONArray(cues.map {
@@ -218,6 +228,7 @@ class AstPublicAudioProbeTest {
         .put("windows", JSONArray(ast.windows.map { window ->
             JSONObject().put("start_ms", window.startMs).put("end_ms", window.endMs)
                 .put("infant_presence", window.infantPresence?.toDouble() ?: JSONObject.NULL)
+                .put("caption_presence", window.captionPresence?.toDouble() ?: JSONObject.NULL)
                 .put("strongest_second_rms", window.strongestSecondRms ?: JSONObject.NULL)
                 .put("scores", JSONObject().apply {
                     for (label in RELATED) window.scores[label]?.let { put(label, it.toDouble()) }
@@ -228,8 +239,8 @@ class AstPublicAudioProbeTest {
 
     @Test fun missingAstCoverageAndRuntimeFailureAreRejected() {
         val scores = (RELATED + (1..527).map { "synthetic_$it" }).take(527).associateWith { 0f }
-        val complete = AstAudioAnalysis(listOf(AstAudioWindow(0, 10000, scores, .1f, .01),
-            AstAudioWindow(5000, 15000, scores, .1f, .01), AstAudioWindow(10000, 20000, scores, .1f, .01)))
+        val complete = AstAudioAnalysis(listOf(AstAudioWindow(0, 10000, scores, .1f, .01, .1f),
+            AstAudioWindow(5000, 15000, scores, .1f, .01, .1f), AstAudioWindow(10000, 20000, scores, .1f, .01, .1f)))
         requireCompleteAst(complete, 320000)
         for (invalid in listOf(complete.copy(windows = complete.windows.take(2)),
             complete.copy(problem = "synthetic failure"))) {

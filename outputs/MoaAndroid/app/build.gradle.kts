@@ -34,6 +34,14 @@ val infantPresenceEnabled = infantPresenceProperty == "true"
 require(!infantPresenceEnabled || (astProbeEnabled && astCandidateEnabled)) {
     "Infant presence is local integrated research only; requires AST probe and candidate."
 }
+val infantCaptionProperty = providers.gradleProperty("agattokInfantCaptionCandidate").orNull
+require(infantCaptionProperty == null || infantCaptionProperty in setOf("true", "false")) {
+    "agattokInfantCaptionCandidate must be explicitly true or false."
+}
+val infantCaptionEnabled = infantCaptionProperty == "true"
+require(!infantCaptionEnabled || infantPresenceEnabled) {
+    "Caption head is debug research only and requires the infant-presence candidate."
+}
 val astBetaProperty = providers.gradleProperty("agattokAstBeta").orNull
 require(astBetaProperty == null || astBetaProperty in setOf("true", "false")) {
     "agattokAstBeta must be explicitly true or false."
@@ -81,6 +89,7 @@ android {
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
         buildConfigField("boolean", "AST_BABBLE_SUPPORT", "false")
         buildConfigField("boolean", "AST_INFANT_PRESENCE", "false")
+        buildConfigField("boolean", "AST_INFANT_CAPTION", "false")
         manifestPlaceholders["testDistribution"] = "false"
         manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -110,6 +119,7 @@ android {
                 versionNameSuffix = "-astcandidate"
                 buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "true")
                 buildConfigField("boolean", "AST_INFANT_PRESENCE", infantPresenceEnabled.toString())
+                buildConfigField("boolean", "AST_INFANT_CAPTION", infantCaptionEnabled.toString())
                 buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
                 buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
                 buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
@@ -254,7 +264,24 @@ val stageInfantPresenceAssets by tasks.registering(Sync::class) {
     dependsOn(verifyAstModel)
     from("src/astProbe/assets") { exclude("ast-dynamic-int8.onnx", "AST_MODEL_NOTICE.txt", "*.partial") }
     from("src/infantPresence/assets") { include("ast-infant-presence-candidate.onnx", "AST_MODEL_NOTICE.txt") }
+    if (infantCaptionEnabled) {
+        dependsOn("verifyInfantCaptionHead")
+        from("src/infantCaption/assets") { include("ast-caption-presence.f32", "AST_CAPTION_NOTICE.txt") }
+    }
     into(infantPresenceAssets)
+}
+val verifyInfantCaptionHead by tasks.registering {
+    val asset = layout.projectDirectory.file("src/infantCaption/assets/ast-caption-presence.f32")
+    inputs.file(asset)
+    doLast {
+        val source = asset.asFile
+        require(source.isFile && source.length() == 3076L) { "Frozen caption head absent or wrong size." }
+        val hash = MessageDigest.getInstance("SHA-256").digest(source.readBytes())
+            .joinToString("") { "%02x".format(it.toInt() and 255) }
+        require(hash == "979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1") {
+            "Frozen caption head SHA mismatch."
+        }
+    }
 }
 // Operational ARM proof is checked on every packaging invocation, not cached.
 // It cannot establish population accuracy or guarantee every device's performance.

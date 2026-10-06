@@ -21,13 +21,18 @@ internal object InfantVoiceSupportPolicy {
         if (ast.windows.map { it.startMs to it.endMs } != expected || ast.windows.any { window ->
                 !window.scores.keys.containsAll(contrary) || window.scores.values.any { !it.isFinite() || it !in 0f..1f } ||
                     window.infantPresence?.let { !it.isFinite() || it !in 0f..1f } != false ||
+                    window.captionPresence?.let { !it.isFinite() || it !in 0f..1f } == true ||
                     window.strongestSecondRms?.let { !it.isFinite() || it !in 0.0..1.0 } != false
             }) return audio
         if (ast.windows.any { window -> contrary.any { window.scores.getValue(it) >= .30f } }) return audio
         // Audibility must be in the same broad window, not an unrelated louder
         // parent/music segment elsewhere. Reuse the existing input-silence floor.
-        val supported = ast.windows.filter { it.infantPresence!! >= .80f && it.strongestSecondRms!! >= .003 }
-            .map { InfantVoiceSupportWindow(it.startMs, it.endMs) }
+        val audible = ast.windows.filter { it.strongestSecondRms!! >= .003 }
+        val original = audible.filter { it.infantPresence!! >= .80f }
+        // Preserve an already sufficient base-head range set. Extra ranges can
+        // otherwise change deterministic phrases on previously accepted clips.
+        val selected = if (original.isNotEmpty()) original else audible.filter { (it.captionPresence ?: 0f) >= .80f }
+        val supported = selected.map { InfantVoiceSupportWindow(it.startMs, it.endMs) }
         return if (supported.isEmpty()) audio else audio.copy(infantVoiceWindows = supported)
     }
 }
