@@ -15,7 +15,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('sources','head','output'):
         parser.add_argument('--'+name,type=Path,required=True)
-    parser.add_argument('--presence',action='store_true')
+    variant=parser.add_mutually_exclusive_group()
+    variant.add_argument('--presence',action='store_true')
+    variant.add_argument('--mil',action='store_true')
     args=parser.parse_args()
     out=args.output.resolve()
     validate_output_path(out)
@@ -29,16 +31,17 @@ def main():
     missing=out/'missing-args-must-not-exist'
     if any(path.exists() for path in (wrong,outside,missing)):
         raise ValueError('Expected nonexistent rejection targets')
-    script='infant_presence_probe.py' if args.presence else 'infant_head_screen.py'
+    binary=args.presence or args.mil
+    script='infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py')
     common=[sys.executable,'-B',str(ROOT/'tools/research'/script)]
     cases=[dict(id='wrong-source-sha',expected='Source snapshot hash',target=wrong,
-               argv=[*(['fit','--features',str(out)] if args.presence else ['acquire']),
+               argv=[*(['fit','--features',str(out)] if binary else ['acquire']),
                      '--sources',str(sources),'--sources-sha','0'*64,'--output',str(wrong)]),
            dict(id='stale-head-output',expected='FileExistsError',target=head,
                argv=['fit','--sources',str(sources),'--sources-sha',sha,'--features',str(out),'--output',str(head)]),
            dict(id='outside-output',expected='Private outputs',target=outside,
                argv=['evaluate','--head',str(head),'--corpus',str(out),'--output',str(outside)]),
-           dict(id='missing-arguments',expected='Missing required presence mode arguments' if args.presence else 'Missing required mode arguments',target=missing,
+           dict(id='missing-arguments',expected='Missing required presence mode arguments' if binary else 'Missing required mode arguments',target=missing,
                argv=['evaluate','--output',str(missing)])]
     (out/'matrix-before.json').write_text(json.dumps([dict(id=c['id'],expected=c['expected']) for c in cases],indent=2),encoding='utf-8')
     env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')

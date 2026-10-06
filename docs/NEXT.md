@@ -1,5 +1,11 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+최신[시간창MIL35](research/20261007-infant-mil-results.md)도첫누락미회복/새성인비명오인잔존으로미탑재다.
+다음은[새representation·자료결손](research/20261007-next-infant-representation-evidence.md)의새dev옹알이source검수와
+현재앱AST representation에tinyhead를붙일수있는지검토다. 계약·실제출처를고정한후처음비교한다.
+대형LLM나만능교체로확대하지않는다. 기존제품/threshold유지·private평가전용·영아held재할당금지.
+MILQA26unit/4CLI/3run 종료·이번state부재·전후용량 기록은인식개선입증으로보고하지않는다.
+
 최신은 [binary35 실측](research/20261007-infant-presence-results.md)이다. 前23head/CV도최초누락을회복못했고
 성인웃음오인이남았다. binary35는기존웃음오인을줄였지만영아validation4미검출·새비명오인이라미탑재다.
 다음은고정공개35의시간창별weak multiple-instance 학습과별도영아source확장/작은representation 권리·입력계약조사다.

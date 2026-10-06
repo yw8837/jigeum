@@ -55,3 +55,15 @@ clear는 실제응답`cleared:true`/exit0이었다. 처음wrapper가write용`suc
 
 **ULTRAQA COMPLETE: 연구 도구의 재현·입력 보호·종료·보존 목표를1cycle로 충족.**
 제품품질실패와기존VTC cleanup BLOCKED는그대로다. 전체앱개선목표는계속active다.
+
+## 독립 리뷰와 기록 누락 보완
+
+고정diff `b40b251…686c6b2`의Spec필수0, Standards필수1(P2)/선택적중복제안1이었다.
+Spec은source18fold/CV값·실행pin/종료/학습경계를확인했으나private점수를독립재추론하지않았다.
+Standards P2는 RUNBOOK의 실험 시작/종료 용량 기록 누락이다. **이번 시작 관측값은 없다.**
+이 누락을 이후 시작 snapshot으로 소급해소하거나 추정값으로 채우지 않는다.
+종료·정리후 실측은 `storage-before-mil01.json`: 연구폴더6,543,648B/197file,
+C여유77,443,268,608B다. 이 값에 제거3,126,690B를 더한9,670,338B는 다른 파일 변화가
+없다고 가정한 산술 값이며 시작/정리직전 실측이 아니다. 두 값을 대신 보고하지 않는다.
+필수 보완인 누락명시·종료관측연결을 적용했다. 다음 MIL은 실행 전 snapshot을 남겼다.
+Adam중복은 계산오류없는 비차단판단이므로 이번실행근거를바꾸는 refactor는하지않았다.

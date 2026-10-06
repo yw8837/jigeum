@@ -4,6 +4,14 @@
 
 ### 활성 후속 — 작은 공개 head의 실제 실패와 다음 학습 방식
 
+후속 [시간창 MIL35](research/20261007-infant-mil-results.md)도 실제 train-only sourceCV/validation/private3/public33을 실행했다.
+첫누락0/후속.975단일·성인비명2.925초오인이라 미탑재다. 평균pooling만바꿔해결됐다고보고하지않는다.
+[새representation 조사](research/20261007-next-infant-representation-evidence.md)는새0.81MB옹알이전문head를찾았지만
+raw입력·normalizer·weights/openSMILE상업권 미해결이다. exact-age공개자료의train확장여지도작아새devsource검수를시작했다.
+[MIL 연구QA](qa/infant-mil-20261007.md)고유26unit/실제CLI4/원음3run자손0/이번state부재/전후용량기록이다.
+binary35 시작용량기록누락은Standards P2로명시하고종료실측을연결했다. MIL기록으로소급대체하지않았다.
+다음은새공개옹알이source취득전허락검수·기존AST에작은head를붙일입력계약이다. 새대형weight를받지않는다.
+
 [첫23 weakhead](research/20261007-infant-head-first-results.md)는 약국 첫 누락 support0이었다.
 [훈련source 내 L2선택](research/20261007-infant-head-source-cv-results.md)은 희소 .975초만 남겼고
 성인웃음2개에 새 연속오인이 생겨 미채택했다. 이번 [성인비언어12+binary35 실측](research/20261007-infant-presence-results.md)은
