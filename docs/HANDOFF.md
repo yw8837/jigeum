@@ -2,6 +2,12 @@
 
 ### 최신 — AST768 bag 학습 비교 종료, 새 공개 음원 확보
 
+후속 [독립 리뷰](qa/ast-mil-code-review-20261007.md)에서 Spec P2 직접worker 덮어쓰기와 Standards P3 commit순서를수정했다.
+freshparent/단일claim/terminal보존 후 실제fit02·retained02·고유unit13/CLI7·3cycle QA를 확인했다.
+수정 뒤 두축 새필수0. 원run pins는보존했고새원음/largeweight/제품변경은0이다.
+다음 실행은 [별도wholebag 사전계약](research/20261007-caption-wholebag-contract.md)의 exact2source전체coverage·
+23train/20uploader weakbag 비교 구현이다. 현재 이계약의새추출/학습/평가는0이며미검수blocked/null은그대로다.
+
 [AST MIL 사전 계약](research/20261007-ast-mil-contract.md)/[실제 결과](research/20261007-ast-mil-results.md):
 고정public35/43span의train-only18source로새769param head를동결했다.
 validation14·retained3·public33의clip/span지원변화0, 기존약국회복2는유지해도새개선0이라미채택이다.
@@ -14,7 +20,7 @@ validation14·retained3·public33의clip/span지원변화0, 기존약국회복2�
 blocked/null을유지한다. [weak연구와사건정답경계](research/20261007-weak-presence-training-boundary.md)를따라
 별도사전whole-recording caption-bag 계약을검토하며, 기존loader/held/사용자자료학습경계를완화하지않는다.
 제품0.5.18-beta/code32·새APK/AAB/Playupload0·ADB실폰0·전체goal active.
-약국회복frozen Android후보와실제ARMgate는그대로다. 독립리뷰결과는후속기록을따른다.
+약국회복frozen Android후보와실제ARMgate는그대로다. 독립리뷰결과는위후속기록을따른다.
 
 ### 최신 — 기존51조건의 누락 원인 분리, 점수 진단 재생 완료
 

@@ -6,7 +6,8 @@
   추가동일학습/threshold튜닝을하지않는다. 기존약국회복후보와ARMgate는유지한다.
 - [취득완료2source](research/20261007-new-infant-audio-review-acquisition.md)의blocked/null/미검수는그대로다.
   [연구경계](research/20261007-weak-presence-training-boundary.md)에따라exact2ID/권리/역할/실험ID allowlist와
-  전체97.518초coverage·tail/padding·bag당noisy caption loss·source분할/반례를사전고정한별도계약을작성한다.
+  전체97.518초coverage·tail/padding·bag당noisy caption loss·source분할/반례의
+  [별도사전계약](research/20261007-caption-wholebag-contract.md)을작성했다. 다음은그exact실험의구현/실제비교다.
   원caption을실제사건정답으로쓰거나first20초에존재target을상속하지않는다. 사용자자료/held는학습금지다.
 - 의미있는새신호가나오면원발성·감정guard/화자미확인·실제Android/ARM을분리해검증한다.
   제품0.5.18/code32·새beta/Playupload0. 실제ARMproof없이패키징gate를우회하지않는다.
