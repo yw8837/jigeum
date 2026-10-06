@@ -4,6 +4,21 @@
 
 ## 1. 현재 상태와 이번 용도
 
+### 부모 작업자의 후속 실행 전 고정
+
+이후 실행기 `extra_babble_evaluation.py`는 fixed9에 current BY4의gipsyGA128479를 더한10개만
+평가 전용으로 취득한다. 원래source JSON의 train 후보designation을 읽어 학습에 넣지 않는다.
+모두training_blocked/approvedlabelnull을 유지하며저작권·caption만확인된약한자료다.
+원음2MiB/file, 공식CDN exactID/redirect금지/20초HTTPtimeout, 완전히받은파일마다SHA progress기록,
+필요시그기록과URL/bytes/SHA가맞는파일만재사용한다. deleted393504는취득하지않는다.
+취득후 network를금지하고 FFmpeg는 file/pipe·mp3 format만허용한다. PCM16/mono16k첫20초,
+비중첩10초span/끝1초padding과actualRMS를유지한다.
+새동결ONNX SHA `4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a`
+91,138,597B를한CPU4session으로실행, quiet미추론·score/NumPy≤5e-5·判定일치검사.
+Job180초3GiB/자손0/runtime·sourceCodeSHA·source/head/model전후SHA·전후용량기록.
+10clip의broad support/quiet/decode누락과3개영아captionuploader/1개grandpa-captionuploader묶음을모두보고한다.
+이결과는일반영아정확도나태그만있는wjoojoo의실제아기정답검증이아니다. 사용자자료접근0·학습0·제품적용0.
+
 **상업 사용을 허용하는 개별 CC0/BY grant와 공식 preview 경로가 있는 공개 후보 9개, 서로 다른 metadata 업로더 그룹 3개를 확보했다.** 기존 public33·positive train/held·다른 기존 held 그룹과 알려진 업로더/alias/clip ID 겹침은 0이다. 확인 범위와 exact ID 누락 한계는 기존 감사에 남아 있다. 실제 자연 아기 발성·화자·가족·6~18개월을 검증한 source는 **0**이다. 따라서 독립 영아 세 가족의 검증 요건은 아직 충족하지 않는다.
 
 현재 9개 모두 `not_downloaded_not_listened`, `training_blocked=true`, `approved_training_label=null`이며 event start/end·audio bytes/SHA·verified family/age가 없다. 이번 계약은 **동결한 head의 향후 weak caption 평가 후보**로 한정한다. 현재 실행 결과는 0개다. 원음 취득·청취 검수·평가 실행은 별도 후속 범위에서 진행하고 실제 로그를 남겨야 한다.

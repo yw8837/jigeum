@@ -2,6 +2,20 @@
 
 갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 현재 후속 — 별도3source 첫 평가 완료, 연구Android 연결 단계
+
+[extra9+grandpa반례 첫실측](research/20261007-extra-babble-evaluation-results.md): 취득/decode10/10,
+705KB/13span·Job56.001초/자손0. 영아caption9 중4파일지원(웃음1/babble+crinkle1/dada2),
+세uploader각한파일이상지원·grandpa-gibberish.073보류. 나머지5누락/unknown age/naturalness·tags-only를보존했다.
+일반옹알이정확도4/9나세가족검증이아니다. 학습·calibration0/blockedtrue·approvednull 유지.
+단위2·실제CLI4/4·전후용량, 새MP3한세트만보존/새모델download없음이다.
+[head/graph 독립 두축 리뷰](qa/ast-infant-head-code-review-20261007.md)는 각각hard0/Spec0·중복제안1.
+
+다음은 연구Android 후보의 generic infant presence 연결이다. 새head를Babbling/cry/laugh/욕구로치환하지않고,
+기존YAMNet/AST 승인은유지·추가보완으로본다. 실제누락10초·중첩20초·전체AV/취소/메모리·ARM 후유효변경만beta.
+ADB readonly 확인당시연결기기0. 필요단계까지연구/기존공용QA를진행하고실폰성능을추정하지않는다.
+제품0.5.18/code32 유지·새앱적용/배포없음/전체goal active. 아래 'extra미취득'은선행감사시점 이력이다.
+
 ### 활성 — 작은 head의 ONNX 후보 연결까지 첫 통과
 
 [ONNX 그래프 첫 검사](research/20261007-ast-infant-head-graph-results.md): 기존527logits 차이0,

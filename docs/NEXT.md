@@ -1,5 +1,13 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+**현재 다음 실행은 연구Android 후보 연결이다.** [추가source실측](research/20261007-extra-babble-evaluation-results.md)은
+10개705KB·4/9weakcaption지원(웃음/dada포함)/grandpa반례지원0·나머지5보류·unknown age/naturalness를보존했다.
+새source를학습/threshold선택에넣지않았다. source/domain 일반정확도 승인이아니다.
+동결head를범용영아발성단서로연결하고기존YAMNet/AST 승인보존/기존label 그대로,
+실제누락전체경로·10/20초중첩/AV·취소·메모리·ARM을검사한다. genericpresence를Babbling으로치환금지.
+head/graph모두제품미탑재·code32유지·전체goalactive. ADB마지막readonly기기0이라휴대폰성능미측정.
+아래 '다음extra평가'는선행graph시점의계획이며첫평가실행은완료됐다.
+
 **다음 실제 실행:** [추가9clip/3source 평가 계약](research/20261007-extra-babble-evaluation-contract.md)에
 따른평가전용취득·동결head비교. blocked를학습승인으로바꾸지않고 unknown age/naturalness·분모를보존한다.
 새head의 [ONNX 연결](research/20261007-ast-infant-head-graph-results.md)은10조건/12span첫통과,

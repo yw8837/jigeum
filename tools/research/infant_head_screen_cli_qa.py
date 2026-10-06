@@ -21,9 +21,11 @@ def main():
     variant.add_argument('--ast',action='store_true')
     variant.add_argument('--ast-head',action='store_true')
     variant.add_argument('--ast-head-graph',action='store_true')
+    variant.add_argument('--extra-eval',action='store_true')
     parser.add_argument('--media',type=Path)
     parser.add_argument('--ffmpeg',type=Path)
     parser.add_argument('--corpus',type=Path)
+    parser.add_argument('--model',type=Path)
     args=parser.parse_args()
     out=args.output.resolve()
     validate_output_path(out)
@@ -42,8 +44,10 @@ def main():
         parser.error('AST guards require media and ffmpeg')
     if args.ast_head_graph and args.corpus is None:
         parser.error('AST graph guards require corpus')
-    script=('ast_infant_head_graph.py' if args.ast_head_graph else ('ast_infant_head_probe.py' if args.ast_head else ('ast_embedding_interface.py' if args.ast else
-            ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py')))))
+    if args.extra_eval and (args.model is None or args.ffmpeg is None):
+        parser.error('Extra guards require model and ffmpeg')
+    script=('extra_babble_evaluation.py' if args.extra_eval else ('ast_infant_head_graph.py' if args.ast_head_graph else ('ast_infant_head_probe.py' if args.ast_head else ('ast_embedding_interface.py' if args.ast else
+            ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py'))))))
     common=[sys.executable,'-B',str(ROOT/'tools/research'/script)]
     cases=[dict(id='wrong-source-sha',expected='Source snapshot hash',target=wrong,
                argv=[*(['fit','--features',str(out)] if binary else ['acquire']),
@@ -70,6 +74,17 @@ def main():
     if args.ast_head:
         cases[0]['expected']='Fixed AST head source SHA differs'
         cases[3]['expected']='Missing required AST head mode arguments'
+    if args.extra_eval:
+        options=['--sources',str(sources),'--model',str(args.model.resolve()),'--head',str(head),
+                 '--ffmpeg',str(args.ffmpeg.resolve())]
+        cases=[dict(id='wrong-source-sha',expected='Fixed extra source metadata differs',target=wrong,
+                    argv=[options[0],str(head/'fit.json'),*options[2:],'--output',str(wrong)]),
+               dict(id='stale-head-output',expected='FileExistsError',target=head,
+                    argv=[*options,'--output',str(head)]),
+               dict(id='outside-output',expected='Private outputs',target=outside,
+                    argv=[*options,'--output',str(outside)]),
+               dict(id='missing-arguments',expected='following arguments are required',target=missing,
+                    argv=['--output',str(missing)])]
     (out/'matrix-before.json').write_text(json.dumps([dict(id=c['id'],expected=c['expected']) for c in cases],indent=2),encoding='utf-8')
     env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
     env.pop('OMX_ROOT',None)
