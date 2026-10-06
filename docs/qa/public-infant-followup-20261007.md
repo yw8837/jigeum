@@ -85,3 +85,19 @@ Androidrun은start0B/end5files726,938B/Cfree68,295,266,304B였다.
 **ULTRAQA BLOCKED: duplicate public-preview cleanup was rejected by automatic policy review.**
 행동검사는cycle2에통과했고,추가Android판정은보존검사를통과했다.정리경계가남아전체QA완료로표시하지않는다.
 다음실행은실제ARM proof와감정충돌의안전한표현계약검토다.전체goal은active다.
+
+## 독립 검토 후 수정·별도 재감사
+
+고정 `6511377…2f3b252` Spec에서 점수가 없는window도완료로허용하는P2를확인했다.
+`validate_case_results`로rawRMS/quiet/real_samples/score/support/parity/original8scores의
+존재·유한성·범위·정합 및case요약을확인하도록수정했다.정상testfixture도실제scoring필드를갖도록수정했다.
+Standards의현재publicMP3수량P2는현재2세트/향후한세트목표로결과문서를정정했다.
+비차단pins구성중복은`capture_pins`로정리했다.
+
+후속`scalar-review02`는고유unit15통과/.386초,실제run02 cases3/14창을새스칼라validator로read-only확인했다.
+실제결과copy에서필수field7종을하나씩뺀7조건은모두거부했다.첫동일감사`scalar-review01`은15pass/.379초다.
+기존run02evaluation SHA불변·원래9codepins보존,추론/다운로드/앱변경0이다.
+과거run02를수정코드로다시추론한것처럼보고하지않는다.전체completion의원래codepins는고정2f3b252와일치한다.
+이번후속은그원자료의case/scalar결손재감사이며별도새host품질시험이아니다.
+각scalar-review폴더의start/endstorage와현재validatorSHA/result/unitlog를기록했다.
+전체QA의중복원음삭제BLOCKED/ARM·배포미완료는그대로다.

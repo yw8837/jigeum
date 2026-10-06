@@ -156,8 +156,10 @@ class PublicFollowupGuards(unittest.TestCase):
                     quality_validated=False, product_changed=False, android_validated=False, cases=[])
         for source in probe.sources():
             done['cases'].append(dict(source, decoded_total_samples=16000, selected_ranges=[[0, 16000]],
-                windows=[dict(selection_index=0, start_sample=0, end_sample=16000)],
-                event_ground_truth=False, android_pipeline_executed=False))
+                windows=[dict(selection_index=0, start_sample=0, end_sample=16000, real_samples=16000,
+                    raw_rms=.01, quiet=False, infant_score=.9, infant_support=True, head_max_absolute_error=0.,
+                    original_ast_scores={name: .1 for name in probe.MONITORED})],
+                any_supported_window=True, event_ground_truth=False, android_pipeline_executed=False))
         with patch.object(probe, 'verify_pins', return_value={}), patch.object(probe, 'digest', return_value='sha'):
             probe.validate_completion(done, None, None)
             edits = [('status', 'partial'), ('decoded_cases', 2), ('training', True),
@@ -167,11 +169,43 @@ class PublicFollowupGuards(unittest.TestCase):
                 changed[key] = value
                 with self.subTest(key=key), self.assertRaises(ValueError):
                     probe.validate_completion(changed, None, None)
+            window_edits = [('raw_rms', None), ('raw_rms', float('nan')), ('quiet', True),
+                            ('real_samples', 0), ('infant_score', float('inf')), ('infant_score', True),
+                            ('infant_support', False), ('head_max_absolute_error', 1.),
+                            ('original_ast_scores', {}), ('original_ast_scores', {name: float('nan') for name in probe.MONITORED})]
+            for key, value in window_edits:
+                changed = copy.deepcopy(done)
+                changed['cases'][0]['windows'][0][key] = value
+                with self.subTest(window_key=key), self.assertRaises(ValueError):
+                    probe.validate_completion(changed, None, None)
+            for key in done['cases'][0]['windows'][0]:
+                changed = copy.deepcopy(done)
+                del changed['cases'][0]['windows'][0][key]
+                with self.subTest(missing_key=key), self.assertRaises((ValueError, KeyError)):
+                    probe.validate_completion(changed, None, None)
+            changed = copy.deepcopy(done)
+            changed['cases'][0]['any_supported_window'] = False
+            with self.assertRaises(ValueError):
+                probe.validate_completion(changed, None, None)
             for key, value in [('windows', []), ('selected_ranges', [[0, 16001]]), ('event_ground_truth', True)]:
                 changed = copy.deepcopy(done)
                 changed['cases'][0][key] = value
                 with self.subTest(key=key), self.assertRaises(ValueError):
                     probe.validate_completion(changed, None, None)
+
+    def test_quiet_window_requires_explicit_nulls_and_false_support(self):
+        cases = []
+        for source in probe.sources():
+            cases.append(dict(source, decoded_total_samples=16000, selected_ranges=[[0, 16000]],
+                windows=[dict(selection_index=0, start_sample=0, end_sample=16000, real_samples=16000,
+                    raw_rms=0., quiet=True, infant_score=None, infant_support=False, original_ast_scores=None)],
+                any_supported_window=False, event_ground_truth=False, android_pipeline_executed=False))
+        probe.validate_case_results(cases)
+        for key in ('infant_score', 'infant_support', 'original_ast_scores'):
+            changed = copy.deepcopy(cases)
+            del changed[0]['windows'][0][key]
+            with self.subTest(missing=key), self.assertRaises(ValueError):
+                probe.validate_case_results(changed)
 
 
 if __name__ == '__main__':

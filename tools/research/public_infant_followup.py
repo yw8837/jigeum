@@ -3,6 +3,7 @@ import argparse
 from dataclasses import asdict
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -91,11 +92,15 @@ def validate_ffmpeg(path):
         raise ValueError('FFmpeg must expose the s16le PCM output muxer before acquisition')
 
 
-def verify_pins(args, before):
-    actual = dict(model=digest(args.model), head=digest(args.head / 'head-ast-presence-public.npz'),
+def capture_pins(args):
+    return dict(model=digest(args.model), head=digest(args.head / 'head-ast-presence-public.npz'),
                   fit=digest(args.head / 'fit.json'), labels=digest(LABELS),
                   sources=hashlib.sha256(json.dumps(SOURCE_ROWS, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
                   ffmpeg=digest(args.ffmpeg))
+
+
+def verify_pins(args, before):
+    actual = capture_pins(args)
     if actual != before or actual['model'] != CANDIDATE_SHA or actual['head'] != HEAD_SHA or actual['sources'] != SOURCE_SHA:
         raise ValueError('Frozen followup input provenance changed')
     return actual
@@ -125,14 +130,7 @@ def observe_window(session, block, names, w, b):
             value.fill(0)
 
 
-def validate_completion(done, args, pins):
-    if (done.get('status') != 'completed' or done.get('requested_cases') != 3 or done.get('decoded_cases') != 3 or
-            done.get('runtime') != RUNTIME or done.get('pins') != verify_pins(args, pins) or
-            done.get('source_code_sha256') != {name: digest(ROOT / 'tools/research' / name) for name in CODE_FILES} or
-            any(done.get(key) is not False for key in ('training', 'calibration', 'private_media_read',
-                'strong_ground_truth', 'quality_validated', 'product_changed', 'android_validated'))):
-        raise ValueError('Incomplete or changed followup output')
-    cases = done.get('cases', [])
+def validate_case_results(cases):
     if [row.get('id') for row in cases] != [row['id'] for row in sources()]:
         raise ValueError('Followup source cases missing or reordered')
     for case, source in zip(cases, sources()):
@@ -147,13 +145,44 @@ def validate_completion(done, args, pins):
         if (actual != expected or case.get('event_ground_truth') is not False or
                 case.get('android_pipeline_executed') is not False):
             raise ValueError('Followup windows or evidence scope differs')
+        for row in case['windows']:
+            rms = row.get('raw_rms')
+            if (type(rms) not in (int, float) or not math.isfinite(rms) or not 0 <= rms <= 1 or
+                    row.get('quiet') is not (rms < .003) or
+                    type(row.get('real_samples')) is not int or row['real_samples'] != row['end_sample']-row['start_sample']):
+                raise ValueError('Followup audibility/sample evidence missing or invalid')
+            value = row.get('infant_score')
+            if row['quiet']:
+                if ('infant_score' not in row or value is not None or row.get('infant_support') is not False or
+                        'original_ast_scores' not in row or row['original_ast_scores'] is not None):
+                    raise ValueError('Quiet followup window has missing evidence or support')
+            else:
+                error = row.get('head_max_absolute_error')
+                ast = row.get('original_ast_scores')
+                if (type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 1 or
+                        row.get('infant_support') is not supported(value) or
+                        type(error) not in (int, float) or not math.isfinite(error) or not 0 <= error <= 5e-5 or
+                        not isinstance(ast, dict) or set(ast) != set(MONITORED) or
+                        any(type(v) not in (int, float) or not math.isfinite(v) or not 0 <= v <= 1 for v in ast.values())):
+                    raise ValueError('Followup classifier/parity evidence missing or invalid')
+        if case.get('any_supported_window') is not any(row['infant_support'] for row in case['windows']):
+            raise ValueError('Followup case support summary differs')
+
+
+def validate_completion(done, args, pins):
+    if (done.get('status') != 'completed' or done.get('requested_cases') != 3 or done.get('decoded_cases') != 3 or
+            done.get('runtime') != RUNTIME or done.get('pins') != verify_pins(args, pins) or
+            done.get('source_code_sha256') != {name: digest(ROOT / 'tools/research' / name) for name in CODE_FILES} or
+            any(done.get(key) is not False for key in ('training', 'calibration', 'private_media_read',
+                'strong_ground_truth', 'quality_validated', 'product_changed', 'android_validated'))):
+        raise ValueError('Incomplete or changed followup output')
+    validate_case_results(done.get('cases', []))
 
 
 def worker(args):
     rows = sources()
     w, b = frozen_head(args.head)
-    pins = dict(model=digest(args.model), head=digest(args.head / 'head-ast-presence-public.npz'),
-                fit=digest(args.head / 'fit.json'), labels=digest(LABELS), sources=SOURCE_SHA, ffmpeg=digest(args.ffmpeg))
+    pins = capture_pins(args)
     verify_pins(args, pins)
     records = acquire(args, rows, source_sha=SOURCE_SHA, max_bytes=3*1024**2)
     offline()
@@ -217,8 +246,7 @@ def main(argv=None):
     validate_ffmpeg(args.ffmpeg)
     if args.worker:
         worker(args); return 0
-    pins = dict(model=digest(args.model), head=digest(args.head / 'head-ast-presence-public.npz'),
-                fit=digest(args.head / 'fit.json'), labels=digest(LABELS), sources=SOURCE_SHA, ffmpeg=digest(args.ffmpeg))
+    pins = capture_pins(args)
     verify_pins(args, pins)
     args.output.mkdir(parents=True, exist_ok=False)
     write(args.output / 'storage-start.json', storage_snapshot(args.output))

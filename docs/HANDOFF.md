@@ -2,6 +2,10 @@
 
 ### 최신 — 추가 공개3음성/Android8조건 평가, 감정충돌의 보류 원인 확인
 
+후속 독립검토의Spec P2(점수누락window완료허용)와Standards P2(현재MP3보존수량)를수정했다.
+고유unit15/.386초·실제기존3case14창스칼라재감사·필수field7종누락거부가통과했다.
+원run02/9codepins는그대로이며추론재실행0이다.상세는QA의독립검토후수정절을읽는다.
+
 [고정 비교 결과](research/20261007-public-infant-followup-results.md)와
 [한정 QA](qa/public-infant-followup-20261007.md)를 읽는다. 새 CC0 음성3파일을 취득하고
 점수를 보기 전에 정한 첫/중간/끝14창을 동결 head로 평가했다. 3파일 모두 지원창이 있지만,
@@ -18,6 +22,8 @@ caption-only/사건 groundtruth0·학습/calibration0이며 인식률이나 새�
 삭제/우회0·현재public사본2세트 유지·연구앱2/UUIDruntime 제거·공용AVD실행 종료/폴더보존·격리state부재다.
 [ACLEW/BabbleCor 원문 후속](research/20261007-babble-event-label-next.md)은 사건라벨경로를 확인했지만
 exactEAF/음원·상업허락은 아직 미확보다.
+[실제template목록후속](research/20261007-aclew-annotation-schema.md)은EAF/audio basename·08–18mos
+폴더metadata를고정했지만enum/timeunit/권리를확보하지못했다.새사건정답으로쓰지않는다.
 
 제품0.5.18-beta/code32 유지·새APK/AAB/Play제출0·ADB실폰0이다. 아래 약국회복 후보는 유지한다.
 다음은 발성존재/감정충돌을 구분할 표현·시간정렬 계약과 S25 ARM proof다.
