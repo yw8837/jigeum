@@ -117,3 +117,7 @@ Console의 `검토 중인 변경사항`에 `0.5.18-beta (32) - visual timing`을
 증거는 ignored `work/visual-alignment-20261006/play-submitted.txt`, `play-submitted.png`,
 `play-warnings32.txt`, `state-complete-read.json`, `state-absent.json`이다.
 같은code32를 중복 업로드하지 않는다. 공개 프로덕션/상품/실제 거래는 보류한다.
+
+후속: 사용자의 용량 정리 요청과 명시적 승인 후 임시 Navigation30/Expression29 AVD를 제거했다.
+위 QA 당시 보존 상태는 이력이다. 최종code32/직전code31·실행 근거는 보존했으며
+[2026-10-06 정리 기록](../storage-cleanup-20261006.md)의 현재 경로·재빌드 방침을 따른다.
