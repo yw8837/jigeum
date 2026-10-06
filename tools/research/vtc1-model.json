@@ -32,6 +32,7 @@
   "pyannote_revision": "85b84bc7ee3f44f1f112397f615873f348517541",
   "core_revision": "1be2248ec6f36b8564c46267c0d257884a1258a7",
   "runtime": {
+    "python": "3.13.14",
     "torch": "2.11.0+cpu",
     "numpy": "2.5.2"
   }

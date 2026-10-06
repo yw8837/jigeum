@@ -13,6 +13,7 @@ import math
 import numbers
 import os
 from pathlib import Path
+import platform
 import sys
 from types import ModuleType, SimpleNamespace
 from typing import Callable, Iterable, Iterator, List, NamedTuple, Optional, Tuple, Union
@@ -181,7 +182,7 @@ def worker(args):
         raise ValueError('Duplicate case IDs across corpora')
     import numpy as np
     import torch
-    if dict(torch=torch.__version__, numpy=np.__version__) != pin['runtime']:
+    if dict(python=platform.python_version(), torch=torch.__version__, numpy=np.__version__) != pin['runtime']:
         raise ValueError('Runtime does not match research pin')
     torch.set_num_threads(4)
     torch.manual_seed(17)

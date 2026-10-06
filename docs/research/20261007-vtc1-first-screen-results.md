@@ -75,3 +75,10 @@ train task/classes와 weight 옆 구 task명의 차이를 명시적으로 검사
 로컬 증거: `work/vtc1-20261006/{retained-run01,public-run01,validation03,validation04}/process.json`,
 `retained-events01-private.json`, `public-events01-private.json`, `qa01/report.json`, `qa01/cleanup.json`,
 `supervisor-qa01/`, `state-read-response.json`.
+
+## 독립 검토 후 보완
+
+[두 축 검토](../qa/vtc1-code-review-20261007.md)에서 Python pin 누락P2와 replay 입력·자원 제한 제안을 받았다.
+Python pin/현재runtime검사를 추가하고 replay JSON/domain/duplicate-key/stale/Job60초·1GiB를 보완했다.
+기존원음추론0회로3+33case를재생해사건변화0을확인했다. 기존score의Python미기록상태는소급변경하지않는다.
+validation05와temporal/native15·추가hostileCLI5통과/이번fixture·state정리다. 일반성능이득으로합산하지않는다.

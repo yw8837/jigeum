@@ -5,7 +5,7 @@ import unittest
 import warnings
 
 import numpy as np
-from vtc1_events import case_events, native_core, supported_grid
+from vtc1_events import case_events, native_core, supported_grid, validate_manifest
 from vtc1_probe import LABELS, ONSET, verify_sources, PIN
 
 ASSETS = Path(__file__).resolve().parents[2]/'work/vtc1-20261006'
@@ -99,6 +99,18 @@ class VtcTemporalTest(unittest.TestCase):
             self.assertEqual(len(events), 1)
             self.assertGreaterEqual(events[0]['start_ms'], 0)
             self.assertLessEqual(events[0]['end_ms'], 1000)
+
+    def test_array_domain_rejects_bool_float_negative_and_oversize(self):
+        for value in (True,16000.0,-1,320001,10**12):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError,'samples outside'):
+                supported_grid(value,self.ns)
+
+    def test_manifest_rejects_traversal_and_duplicate(self):
+        entry = dict(id='valid',pcm_samples=16000,pcm_bytes=64000,duration_ms=1000,
+            sample_rate_hz=16000,channels=1,encoding='float32le',pcm_sha256='0'*64)
+        for entries in ([entry,entry],[dict(entry,id='../valid')]):
+            with self.assertRaisesRegex(ValueError,'ID invalid'):
+                validate_manifest(entries)
 
 
 if __name__ == '__main__':
