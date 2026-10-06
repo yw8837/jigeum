@@ -1,0 +1,38 @@
+{
+  "source_files": {
+    "source/vtc/README.md": "219647f9f0d617c91924da23fddb47a58051c2c65fc2c68facae3efa6ae48ce0",
+    "source/vtc/docs/disclaimer.md": "35a41a6055002e9cc72a7dc9fe8b2311a3a199054b6c91848335ecdb9b2d8302",
+    "source/vtc/model/config.yml": "fdeb103508b042540963f5e7ef543f5ff8b7fed3c3852c8d583673307ebce0e3",
+    "source/vtc/model/train/X.SpeakerDiarization.BBT2_LeaveOneDomainOut_paido.train/weights/specs.yml": "40b6c3bb39179b90ffbb61aed3ea22bf543b44fa895410c90a5291f58bf58d5b",
+    "source/vtc/model/train/X.SpeakerDiarization.BBT2_LeaveOneDomainOut_paido.train/validate_average_detection_fscore/X.SpeakerDiarization.BBT2_LeaveOneDomainOut_paido.development/params.yml": "f5a0a5b65f7d21e9da27bd8fc7dcaed668e94f8f2db9c25a859e062aa43a77a8",
+    "source/pyannote/LICENSE": "c6e4a9657fb261c467f40acdd2cc3f4aea9ac6ac8ae14ca0d31aae4107276a13",
+    "source/pyannote/pyannote/audio/models/models.py": "e37f600894d200343ad71c905c774595328a09b7866fbcb23a651f980485ff3b",
+    "source/pyannote/pyannote/audio/models/sincnet.py": "e82034ce08d0feb482ac930a331e866a441c8eb271cbcb75fa3c9e86d51bac11",
+    "source/pyannote/pyannote/audio/train/model.py": "1a39dd9ec22270cb64f2fedc240f2f2e9cdeb75bd9171d1174fa446ebb02b24a",
+    "source/pyannote/pyannote/audio/train/task.py": "cf6b0764e4c32d323bc99ffbcbe176b2a67568035b9177350763156c47d75132",
+    "source/pyannote/pyannote/audio/features/base.py": "ff70d4c7cec747198e0b52a6b155d04196d7df1681659381c95b9d07c688c11a",
+    "source/pyannote/pyannote/audio/features/utils.py": "a6b188915e39333c41223395b2241d1184fe72dd388fa67e81e8c2165c3ee66f",
+    "source/pyannote/pyannote/audio/features/pretrained.py": "8fbf74dc5713a67676db369719884cd3259e06dd692022f6fd6141d1d317af06",
+    "source/pyannote/pyannote/audio/applications/config.py": "a049f4faa30cf62668d89d5a0f5db924119fbcadc800282d34665f5cbe894da5",
+    "source/pyannote/pyannote/audio/applications/labels_detection.py": "8c75d6d40dfdf72cbfa83e5b05928338ef4141d0bc02724d56c3d5f5eacc3633",
+    "source/core/pyannote/core/segment.py": "a9838e9972b4837c9a0f6e3ceb26616beb8c831f0cd4797690b7acdf15397456",
+    "source/core/pyannote/core/feature.py": "192ab07503c72fd81223ba8a96076923592fc61dcd140b49633d69c34c477573",
+    "source/core/LICENSE": "c1509124e929c7764871add4622d7d13ec44b3795a741f9b9206cba41a1a411c",
+    "source/vtc/model/train/X.SpeakerDiarization.BBT2_LeaveOneDomainOut_paido.train/specs.yml": "0d81b0e621c64281c63310c30d327367367f18362bda8e22b5046cae43319ca5",
+    "source/pyannote/pyannote/audio/utils/signal.py": "8b802041989f39d3475d4194b4b6f5c8bbdf1baff8e6ad20fa5c88ad06d4b6e2"
+  },
+  "weight": {
+    "size": 4532569,
+    "sha256": "8514e96c8e049abd9ffc75c816b6aff51df09507b3ec7ac1c800fd366408286c",
+    "git_blob_sha1": "649293f96345748da846ecbdd46538838f1fae25",
+    "url": "https://raw.githubusercontent.com/MarvinLvn/voice-type-classifier/9731a9aad21a85d7bc660193386de94f2fb19f76/model/train/X.SpeakerDiarization.BBT2_LeaveOneDomainOut_paido.train/weights/0100.pt",
+    "name": "0100.pt"
+  },
+  "vtc_revision": "9731a9aad21a85d7bc660193386de94f2fb19f76",
+  "pyannote_revision": "85b84bc7ee3f44f1f112397f615873f348517541",
+  "core_revision": "1be2248ec6f36b8564c46267c0d257884a1258a7",
+  "runtime": {
+    "torch": "2.11.0+cpu",
+    "numpy": "2.5.2"
+  }
+}

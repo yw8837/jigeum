@@ -1,5 +1,11 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+0. [VTC1첫실측](research/20261007-vtc1-first-screen-results.md)에서누락원본의두겹치는구간에아이신호가남았다.
+   기존후보를반복하지말고VTC의원문시간축/후처리·피아노오인·기존규칙결합·내부graph이식/모바일비용을계속검증한다.
+   [weight권리](research/20261007-vtc1-distribution-rights.md)는미확정이고공식문의초안은미발송/승인대기다.
+   새로운source/영아정답/TV/원래승인보존·실기기와권리를확보하기전제품에넣지않는다.
+   source/pin/결과는보존하고진행중인4.53MBweight만유지한다. 연구QA완료를앱개선목표완료로닫지않는다.
+
 1. [PANNs Cnn10 실제실행](research/20261006-panns-cnn10-contract.md)도회복근거미확보로종료했다.
    AST2초/4초·PretrainedSED의 [완료한 실행](research/20261006-short-context-and-pretrainedsed-results.md)과함께같은3구간반복을하지않는다.
    다음미검증후보는영아발성task를학습한공개head/다른representation의정확weights·권리·추론계약부터확인한다.

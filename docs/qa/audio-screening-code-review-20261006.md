@@ -33,7 +33,7 @@ Standards: 필수0/비차단1. Spec: 최초필수1→수정후미해결0. 축별
 이는 연구 코드 검토다. 독립 영아 정답·일반 인식률·실폰 속도·새 베타의 품질 승인을 입증하지 않는다.
 정리 차단은 [연구 QA](audio-screening-20261006.md)에 별도로 남아 있고 활성 개선 목표는 계속 진행한다.
 
-## 후속 — PANNs固定 비교
+## 후속 — PANNs 고정 비교
 
 별도고정diff `3b0e1ad...e51fde5`를같은두축에분리검토했다. Standards필수0/휴리스틱0,
 Spec필수0이었다. source/weight/frontend/runtimepin·byte-identical계수·normwise수치gate·

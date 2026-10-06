@@ -2,6 +2,22 @@
 
 갱신: **2026-10-06** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 — VTC1에서 기존 누락의 아이 목소리 신호를 처음 확인
+
+10월7일후속 [실측](research/20261007-vtc1-first-screen-results.md)을추가했다.
+일반AudioSet모델과다른4.53MB영아화자VTC1의첫retained3구간/2원본에서,
+한원본의겹치는두누락구간모두아이신호가남았고원래후처리로도활성구간이확인됐다.
+사전계약대로공개33조건을처음비교했다. 성인대화·청소기·무음/잡음대조의child활성0,
+피아노child오인/일부baby기술자료누락이있어단독승인이나정확도개선으로보고하지않는다.
+원래source/2초/.5hop/균등평균/threshold/0.1초후처리를고정했다.
+실제loadertrain/specs와시간coverage를감사했고추가원음추론없이기록점수에원문Binarize를적용했다.
+[연구QA](qa/vtc1-20261007.md)13시간축검사+Job10검사+실제거부5통과/이번fixture와state정리다.
+[권리조사](research/20261007-vtc1-distribution-rights.md)에서weight배포권은미확정이다.
+[문의초안](research/20261007-vtc1-license-request-draft.md)을준비하고외부게시승인을질문했으며아직미발송이다.
+다음은내부graph이식/모바일비용·기존음악충돌결합·새source/TV/영아평가이며4.53MB후보weight만활성유지한다.
+VTC는제품미탑재,code32이후새앱변경/배포없음이다. 일반품질·욕구번역·실폰승인을뜻하지않는다.
+조사에서멈추지않고유효이득·오인방지·사용권·AndroidQA·독립review·beta업데이트까지계속한다.
+
 ### 활성 — 사용자가 인식·맥락 개선의 지속 실행을 재확정
 
 정리나 UX 배포로 연구를 끝내지 않는다. [실제 후속 비교](research/20261006-short-context-and-pretrainedsed-results.md)에서
