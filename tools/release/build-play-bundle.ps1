@@ -4,11 +4,26 @@ param(
     [string]$JavaHome = $env:JAVA_HOME,
     [string]$AndroidSdk = $env:ANDROID_HOME,
     [Parameter(Mandatory = $true)][string]$Destination,
-    [switch]$AstBabbleSupport
+    [switch]$AstBabbleSupport,
+    [switch]$InfantPresenceSupport,
+    [string]$InfantArmProof,
+    [string]$ProofPython
 )
 $ErrorActionPreference = 'Stop'
 if ($AstBabbleSupport -and $Purpose -ne 'closed-test') {
     throw 'AST babble support is valid only for closed-test beta candidates.'
+}
+if ($InfantPresenceSupport) {
+    if ($Purpose -ne 'closed-test' -or -not $AstBabbleSupport) {
+        throw 'Infant presence requires closed-test and AstBabbleSupport.'
+    }
+    if (-not $InfantArmProof -or -not $ProofPython) { throw 'Provide actual ARM proof and ProofPython.' }
+    $InfantArmProof = [IO.Path]::GetFullPath($InfantArmProof)
+    $ProofPython = [IO.Path]::GetFullPath($ProofPython)
+    & $ProofPython (Join-Path $PSScriptRoot 'verify_infant_presence_arm.py') $InfantArmProof
+    if ($LASTEXITCODE -ne 0) { throw 'Infant presence ARM proof rejected; no signing or build started.' }
+} elseif ($InfantArmProof -or $ProofPython) {
+    throw 'ARM proof arguments require InfantPresenceSupport.'
 }
 if (-not $JavaHome -or -not $AndroidSdk) { throw 'Set JAVA_HOME and ANDROID_HOME or pass their paths.' }
 if (Test-Path -LiteralPath $Destination) { throw 'Destination already exists; preserve the old artifact.' }
@@ -51,6 +66,9 @@ try {
         $variant = if ($Purpose -eq 'closed-test') { 'Beta' } else { 'Release' }
         $gradleArguments = @(":app:bundle$variant", ":app:assemble$variant", '--max-workers=1', '--console=plain', '--no-daemon')
         if ($AstBabbleSupport) { $gradleArguments += '-PagattokAstBeta=true' }
+        if ($InfantPresenceSupport) {
+            $gradleArguments += @('-PagattokInfantPresenceBeta=true', "-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
+        }
         & ./gradlew.bat @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }

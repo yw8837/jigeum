@@ -39,10 +39,17 @@ require(astBetaProperty == null || astBetaProperty in setOf("true", "false")) {
     "agattokAstBeta must be explicitly true or false."
 }
 val astBetaEnabled = astBetaProperty == "true"
+val infantPresenceBetaProperty = providers.gradleProperty("agattokInfantPresenceBeta").orNull
+require(infantPresenceBetaProperty == null || infantPresenceBetaProperty in setOf("true", "false")) {
+    "agattokInfantPresenceBeta must be explicitly true or false."
+}
+val infantPresenceBetaEnabled = infantPresenceBetaProperty == "true"
+require(!infantPresenceBetaEnabled || astBetaEnabled) { "Infant presence beta requires agattokAstBeta=true." }
 require(!astBetaEnabled || !(astProbeEnabled || astStandaloneEnabled || astCandidateEnabled)) {
     "AST beta cannot be mixed with AST probe, standalone or candidate research flags."
 }
 val astRuntimeEnabled = astProbeEnabled || astBetaEnabled
+val infantPresenceModelEnabled = infantPresenceEnabled || infantPresenceBetaEnabled
 val infantPresenceAssets = layout.buildDirectory.dir("generated/infantPresenceAssets")
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
@@ -138,6 +145,7 @@ android {
             versionNameSuffix = "-beta"
             buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
             buildConfigField("boolean", "AST_BABBLE_SUPPORT", astBetaEnabled.toString())
+            buildConfigField("boolean", "AST_INFANT_PRESENCE", infantPresenceBetaEnabled.toString())
             buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
             buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
             manifestPlaceholders["testDistribution"] = "true"
@@ -163,7 +171,7 @@ android {
         getByName("main") {
             java.srcDir(if (astRuntimeEnabled) "src/astProbe/java" else "src/noAst/java")
             if (astRuntimeEnabled) {
-                assets.srcDir(if (infantPresenceEnabled) infantPresenceAssets else "src/astProbe/assets")
+                assets.srcDir(if (infantPresenceModelEnabled) infantPresenceAssets else "src/astProbe/assets")
             }
         }
         getByName("androidTest") {
@@ -217,12 +225,12 @@ tasks.configureEach {
 // Explicit verification and opted-in packaging fail for an absent/changed model.
 // Default debug/beta/release builds have no dependency on this task or model.
 val verifyAstModel by tasks.registering {
-    val model = layout.projectDirectory.file(if (infantPresenceEnabled)
+    val model = layout.projectDirectory.file(if (infantPresenceModelEnabled)
         "src/infantPresence/assets/ast-infant-presence-candidate.onnx" else "src/astProbe/assets/ast-dynamic-int8.onnx")
     inputs.file(model)
     doLast {
         val source = model.asFile
-        require(source.isFile && source.length() == if (infantPresenceEnabled) 91_138_597L else 91_134_123L) {
+        require(source.isFile && source.length() == if (infantPresenceModelEnabled) 91_138_597L else 91_134_123L) {
             "Pinned AST model absent or wrong size. Run tools/research/setup_android_ast.py with the verified local INT8 graph."
         }
         val hash = MessageDigest.getInstance("SHA-256")
@@ -235,7 +243,7 @@ val verifyAstModel by tasks.registering {
             }
         }
         val actual = hash.digest().joinToString("") { "%02x".format(it.toInt() and 255) }
-        val expected = if (infantPresenceEnabled) "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a"
+        val expected = if (infantPresenceModelEnabled) "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a"
             else "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e"
         require(actual == expected) {
             "Pinned AST model SHA256 mismatch. Do not package a substituted graph."
@@ -248,10 +256,28 @@ val stageInfantPresenceAssets by tasks.registering(Sync::class) {
     from("src/infantPresence/assets") { include("ast-infant-presence-candidate.onnx", "AST_MODEL_NOTICE.txt") }
     into(infantPresenceAssets)
 }
+// Operational ARM proof is checked on every packaging invocation, not cached.
+// It cannot establish population accuracy or guarantee every device's performance.
+val verifyInfantPresenceArm by tasks.registering(Exec::class) {
+    doFirst {
+        val proof = providers.gradleProperty("agattokInfantArmProof").orNull
+        val python = providers.gradleProperty("agattokProofPython").orNull
+        require(!proof.isNullOrBlank() && !python.isNullOrBlank()) {
+            "Infant presence beta packaging requires actual ARM proof and agattokProofPython."
+        }
+        require((android.defaultConfig.versionCode ?: 0) > 32) {
+            "Validated infant presence beta requires a new versionCode above 32; do not re-upload code32."
+        }
+        commandLine(python, rootProject.file("../../tools/release/verify_infant_presence_arm.py").absolutePath, proof)
+    }
+}
 tasks.configureEach {
     if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
     if (infantPresenceEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(stageInfantPresenceAssets)
     if (astBetaEnabled && name == "mergeBetaAssets") dependsOn(verifyAstModel)
+    if (infantPresenceBetaEnabled && name == "mergeBetaAssets") {
+        dependsOn(stageInfantPresenceAssets, verifyInfantPresenceArm)
+    }
 }
 
 dependencies {

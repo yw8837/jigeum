@@ -28,6 +28,87 @@ def measurement():
 
 
 class AstDeviceProbeTest(unittest.TestCase):
+    def test_candidate_has_separate_manifest_and_measurement_optin(self):
+        xml = manifest().replace(probe.PACKAGE, probe.CANDIDATE_PACKAGE).replace('enabled="false"', 'enabled="true"')
+        probe.validate_manifest(xml, infant_presence=True)
+        with self.assertRaises(ValueError): probe.validate_manifest(xml)
+        for permission in ('android.permission.INTERNET', 'com.android.vending.BILLING'):
+            bad = xml.replace('</manifest>', f'<uses-permission android:name="{permission}" /></manifest>')
+            with self.assertRaises(ValueError): probe.validate_manifest(bad, infant_presence=True)
+        data = measurement(); data.update(model_sha256=probe.CANDIDATE_SHA, infant_presence_candidate=True)
+        probe.validate_measurement(data, 'a' * 32, infant_presence=True)
+        with self.assertRaises(ValueError): probe.validate_measurement(data, 'a' * 32)
+        data['infant_presence_candidate'] = False
+        with self.assertRaises(ValueError): probe.validate_measurement(data, 'a' * 32, infant_presence=True)
+
+    def test_physical_arm_check_rejects_emulator_nonarm_and_old_api(self):
+        values = {'ro.kernel.qemu': '', 'ro.boot.qemu': '0', 'ro.product.cpu.abi': 'arm64-v8a',
+                  'ro.product.model': 'TEST_FIXTURE_ONLY', 'ro.build.version.sdk': '36'}
+        def read(argv): return values[argv[-1]].encode()
+        with patch.object(probe, 'command', side_effect=read):
+            self.assertEqual(values, probe.physical_arm_device(['adb'], 'physical-fixture'))
+            with self.assertRaises(ValueError): probe.physical_arm_device(['adb'], 'emulator-5554')
+            for key, bad in [('ro.kernel.qemu', '1'), ('ro.boot.qemu', '1'), ('ro.product.cpu.abi', 'x86_64'),
+                             ('ro.build.version.sdk', '25'), ('ro.product.model', '')]:
+                old = values[key]; values[key] = bad
+                with self.subTest(key=key), self.assertRaises(ValueError): probe.physical_arm_device(['adb'], 'physical-fixture')
+                values[key] = old
+
+    def test_candidate_runner_full_simulated_route_targets_only_research_package(self):
+        # All device operations are mocked; no persistent ARM success proof is produced.
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); app = root / 'app.apk'; test = root / 'test.apk'; out = root / 'evidence'
+            app.write_bytes(b'fictional app'); test.write_bytes(b'fictional test')
+            provenance = {'app_apk': dict(sha256=probe.CANDIDATE_APK_SHA, bytes=265353775),
+                          'test_apk': dict(sha256=probe.CANDIDATE_TEST_SHA, bytes=2765526)}
+            device = {'ro.kernel.qemu': '', 'ro.boot.qemu': '0', 'ro.product.cpu.abi': 'arm64-v8a',
+                      'ro.product.model': 'FICTIONAL_TEST_ONLY', 'ro.build.version.sdk': '36'}
+            actual_run_id = []
+            def call(argv, **kwargs):
+                if 'manifest' in argv:
+                    return manifest(Path(argv[-1]).name == 'probe-test.apk').replace(probe.PACKAGE, probe.CANDIDATE_PACKAGE).encode()
+                if 'get-state' in argv: return b'device'
+                if 'get-current-user' in argv: return b'0'
+                if 'getprop' in argv: return device[argv[-1]].encode()
+                if 'install' in argv: return b'Success'
+                if 'exec-out' in argv:
+                    data = measurement(); data.update(run_id=actual_run_id[0], model_sha256=probe.CANDIDATE_SHA,
+                        infant_presence_candidate=True, abi='arm64-v8a', device_model='FICTIONAL_TEST_ONLY', api=36)
+                    return json.dumps(data).encode()
+                raise AssertionError('Unexpected operation: ' + repr(argv))
+            def instrument(argv, **kwargs):
+                classes = argv[argv.index('class') + 1]
+                if 'AstDeviceBenchmarkTest' in classes:
+                    self.assertIn('ast_infant_device_probe', argv)
+                    actual_run_id.append(argv[argv.index('ast_device_run_id') + 1])
+                    identities = [('com.moa.babylanguage.AstDeviceBenchmarkTest', 'measureSyntheticTenAndTwentySecondCalls')]
+                else:
+                    identities = [(s.split('#')[0], s.split('#')[1]) for s in classes.split(',')]
+                lines = []
+                for index, (cls, name) in enumerate(identities, 1):
+                    for status in (1, 0):
+                        lines += [f'INSTRUMENTATION_STATUS: class={cls}', f'INSTRUMENTATION_STATUS: test={name}',
+                            f'INSTRUMENTATION_STATUS: numtests={len(identities)}', f'INSTRUMENTATION_STATUS: current={index}',
+                            f'INSTRUMENTATION_STATUS_CODE: {status}']
+                self.assertEqual(probe.CANDIDATE_PACKAGE + '.test/androidx.test.runner.AndroidJUnitRunner', argv[-1])
+                raw = '\n'.join(lines + [f'OK ({len(identities)} tests)', 'INSTRUMENTATION_CODE: -1', ''])
+                return subprocess.CompletedProcess(argv, 0, raw.encode(), b'')
+            def installed_proof(adb, package, digest, require_version):
+                wanted = probe.CANDIDATE_TEST_SHA if package.endswith('.test') else probe.CANDIDATE_APK_SHA
+                return dict(package=package, verified=True, sha256=wanted, expected_sha256=wanted, errors=[])
+            with patch.object(probe, 'command', side_effect=call), \
+                 patch.object(probe, 'local_provenance', return_value=provenance), \
+                 patch.object(probe, 'installed', return_value=False), \
+                 patch.object(probe, 'production_snapshot', return_value={'installed': False}), \
+                 patch.object(probe, 'installed_provenance', side_effect=installed_proof), \
+                 patch.object(probe.subprocess, 'run', side_effect=instrument), \
+                 patch.object(probe, 'stop_and_remove') as cleanup:
+                code = probe.main(['--serial', 'fixture-only', '--adb', str(root / 'adb'), '--apkanalyzer', str(root / 'apkanalyzer'),
+                    '--apk', str(app), '--test-apk', str(test), '--output', str(out), '--infant-presence-candidate'])
+            self.assertEqual(0, code)
+            cleanup.assert_called_once_with([str((root / 'adb').resolve()), '-s', 'fixture-only'], probe.CANDIDATE_PACKAGE)
+            self.assertTrue(json.loads((out / 'result.json').read_text())['arm_gate_passed'])
+
     def test_only_standalone_package_and_test_target_are_allowed(self):
         probe.validate_manifest(manifest())
         probe.validate_manifest(manifest(True), test=True)
