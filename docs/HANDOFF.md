@@ -2,6 +2,27 @@
 
 갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 후속 — 기존 AST의 작은 head에서 첫 약국 누락 단서 회복
+
+[AST768 head 실제 비교](research/20261007-ast-infant-head-results.md)를 실행했다.
+공개 train21/18source만 학습·선택하고 head 동결 후 validation14/retained3/public33을 검사했다.
+기존 약국 두10초 구간의 broad score .8198/.9400이 고정 기준을 처음 통과했다.
+동일 원본의 겹치는 개발 구간이며 실제975ms 사건·일반인식률·욕구 정답을 입증한 것은 아니다.
+영아held2/4 support·negative10/10 보류, 기존33의 성인/음악/무음 대조 새support0이다.
+다른 울음/짧은옹알이는 새head가 놓쳐 기존엔진 보완형으로 검사해야 한다.
+
+기존 AST527 logits는 공개35/43span 모두 exact/차이0, head769param/FP323076B다.
+새encoder 다운로드·모델file 저장0, [연구QA](qa/ast-infant-head-20261007.md)는 unit33/실제CLI4/정상4run 자손0이다.
+고정코드 두축 리뷰는 Spec필수0/Standards규칙위반0·setup중복 비차단1.
+[라벨 원문 조사](research/20261007-infant-head-label-evidence.md)는 public 양성4source/40.7초의 결손과
+UIUC의고정정규화 미확보·VocalBaby imputer/openSMILE 권리 보류를 구체화했다.
+
+다음은 동결된 head의 ONNX 통합·기존logits/새score parity와 별도source 평가,
+실제 Android20초 중첩3창·기존수용 보존·취소/메모리/ARM·전체경로다.
+이 연구의20초 비중첩2span을 제품3창 검증으로 보고하지 않는다.
+현재 제품0.5.18/code32 이후 새 앱 적용/배포는 없다. 전체goal active.
+아래의 'head 미학습'은 선행 인터페이스 검사 당시 이력이다.
+
 ### 활성 후속 — 작은 공개 head의 실제 실패와 다음 학습 방식
 
 [기존AST 768표현 인터페이스](research/20261007-ast-embedding-interface-results.md)는첫6입력에서

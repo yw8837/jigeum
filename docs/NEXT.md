@@ -1,5 +1,14 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+현재 첫 정보 이득은 [AST768 head 실측](research/20261007-ast-infant-head-results.md)이다.
+약국 누락2구간 broad support를 처음 회복했지만 같은 원본 overlap이며 일반정확도/제품승인 아니다.
+negative10/기존33대조 오인0·영아held2/4; 다른울음/짧은babble 미통과를 보존한다.
+다음 실행은 동결769param head의 ONNX 연결/원527logits·새score parity, 별도source 평가다.
+그 후 Android0–10/5–15/10–20초·기존엔진 보완/수용보존·ARM·취소·메모리·독립review로 진행한다.
+연구의20초 비중첩2span을 product 중첩3창 검증으로 치환하지 않는다.
+새blocked9개는 임의train승인 금지. 제품code32 유지/새배포없음, 전체goal active.
+아래 인터페이스 미학습 설명은 이전 검사 당시 이력이다.
+
 우선 다음실행은 [AST768 인터페이스 첫통과](research/20261007-ast-embedding-interface-results.md)를기반으로
 **현재AST+작은768head의공개source분리학습·반례/기존누락비교**다. 새encoder다운로드없음.
 원본527logits계약/실제길이·padding/시간span·고정source/학습선택·private평가전용을별도계약후실행한다.
