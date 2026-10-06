@@ -5,6 +5,7 @@
 후속 독립검토의Spec P2(점수누락window완료허용)와Standards P2(현재MP3보존수량)를수정했다.
 고유unit15/.386초·실제기존3case14창스칼라재감사·필수field7종누락거부가통과했다.
 원run02/9codepins는그대로이며추론재실행0이다.상세는QA의독립검토후수정절을읽는다.
+[수정 후 독립 두 축 검토](qa/public-infant-followup-code-review-20261007.md)는Spec/Standards 새필수지적각0이다.
 
 [고정 비교 결과](research/20261007-public-infant-followup-results.md)와
 [한정 QA](qa/public-infant-followup-20261007.md)를 읽는다. 새 CC0 음성3파일을 취득하고
