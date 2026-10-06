@@ -37,14 +37,14 @@ def presence_weights(cases):
     return result
 
 
-def fit_binary(x,labels,weights,penalty):
+def fit_binary(x,labels,weights,penalty,dimension=1024):
     import numpy as np
-    if (x.shape!=(len(labels),1024) or labels.shape!=(len(x),) or weights.shape!=(len(x),)
+    if (dimension not in (768,1024) or x.shape!=(len(labels),dimension) or labels.shape!=(len(x),) or weights.shape!=(len(x),)
             or not np.isfinite(x).all() or not np.isfinite(weights).all()
             or np.any(weights<=0) or abs(float(weights.sum())-1)>1e-10
             or set(labels.tolist())!={0.,1.} or penalty not in PENALTIES):
         raise ValueError('Invalid binary training domain')
-    w=np.zeros(1024,np.float64)
+    w=np.zeros(dimension,np.float64)
     b=0.
     mw=vw=np.zeros_like(w)
     mb=vb=0.
@@ -63,16 +63,16 @@ def fit_binary(x,labels,weights,penalty):
     return w,b
 
 
-def select(x,cases):
+def select(x,cases,dimension=1024):
     import numpy as np
-    if x.shape!=(len(cases),1024) or not np.isfinite(x).all():
+    if dimension not in (768,1024) or x.shape!=(len(cases),dimension) or not np.isfinite(x).all():
         raise ValueError('Invalid training-only presence feature matrix')
     labels=np.asarray([float(c['weak_class']=='infant_vocal') for c in cases])
     rows=[]
     for penalty in PENALTIES:
         details=[]
         for source,train,held in folds(cases):
-            w,b=fit_binary(x[train],labels[train],presence_weights([cases[i] for i in train]),penalty)
+            w,b=fit_binary(x[train],labels[train],presence_weights([cases[i] for i in train]),penalty,dimension)
             logits=x[held]@w+b
             loss=float(np.mean(np.logaddexp(0,logits)-labels[held]*logits))
             if not np.isfinite(loss):

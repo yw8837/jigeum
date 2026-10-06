@@ -19,6 +19,7 @@ def main():
     variant.add_argument('--presence',action='store_true')
     variant.add_argument('--mil',action='store_true')
     variant.add_argument('--ast',action='store_true')
+    variant.add_argument('--ast-head',action='store_true')
     parser.add_argument('--media',type=Path)
     parser.add_argument('--ffmpeg',type=Path)
     args=parser.parse_args()
@@ -34,10 +35,11 @@ def main():
     missing=out/'missing-args-must-not-exist'
     if any(path.exists() for path in (wrong,outside,missing)):
         raise ValueError('Expected nonexistent rejection targets')
-    binary=args.presence or args.mil
+    binary=args.presence or args.mil or args.ast_head
     if args.ast and (args.media is None or args.ffmpeg is None):
         parser.error('AST guards require media and ffmpeg')
-    script='ast_embedding_interface.py' if args.ast else ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py'))
+    script=('ast_infant_head_probe.py' if args.ast_head else ('ast_embedding_interface.py' if args.ast else
+            ('infant_mil_probe.py' if args.mil else ('infant_presence_probe.py' if binary else 'infant_head_screen.py'))))
     common=[sys.executable,'-B',str(ROOT/'tools/research'/script)]
     cases=[dict(id='wrong-source-sha',expected='Source snapshot hash',target=wrong,
                argv=[*(['fit','--features',str(out)] if binary else ['acquire']),
@@ -59,6 +61,9 @@ def main():
                     argv=[*options,'--output',str(outside)]),
                dict(id='missing-arguments',expected='following arguments are required',target=missing,
                     argv=['--output',str(missing)])]
+    if args.ast_head:
+        cases[0]['expected']='Fixed AST head source SHA differs'
+        cases[3]['expected']='Missing required AST head mode arguments'
     (out/'matrix-before.json').write_text(json.dumps([dict(id=c['id'],expected=c['expected']) for c in cases],indent=2),encoding='utf-8')
     env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
     env.pop('OMX_ROOT',None)

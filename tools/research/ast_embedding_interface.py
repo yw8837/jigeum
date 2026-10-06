@@ -51,6 +51,43 @@ def compare(original,modified):
     return error
 
 
+class AstRepresentation:
+    """Two CPU sessions for research parity; never a product cost measurement."""
+    def __init__(self):
+        import onnx
+        import onnxruntime as ort
+        verify_model(MODEL,dict(size_bytes=91134123,sha256=MODEL_SHA))
+        graph=onnx.load(str(MODEL),load_external_data=False)
+        if (len(graph.graph.node)!=852 or [v.name for v in graph.graph.output]!=['logits']
+                or any(t.external_data for t in graph.graph.initializer)
+                or not any(EMBEDDING in n.output for n in graph.graph.node)):
+            raise ValueError('Fixed AST graph interface differs')
+        graph.graph.output.append(onnx.helper.make_tensor_value_info(EMBEDDING,onnx.TensorProto.FLOAT,[1,768]))
+        onnx.checker.check_model(graph)
+        memory=graph.SerializeToString()
+        self.memory_sha256=hashlib.sha256(memory).hexdigest()
+        self.memory_bytes=len(memory)
+        options=ort.SessionOptions()
+        options.intra_op_num_threads=4; options.inter_op_num_threads=1
+        options.execution_mode=ort.ExecutionMode.ORT_SEQUENTIAL; options.enable_mem_pattern=False
+        self.baseline=ort.InferenceSession(str(MODEL),sess_options=options,providers=['CPUExecutionProvider'])
+        self.exposed=ort.InferenceSession(memory,sess_options=options,providers=['CPUExecutionProvider'])
+        if (self.baseline.get_inputs()[0].shape!=[1,1024,128] or self.exposed.get_inputs()[0].shape!=[1,1024,128]
+                or [v.name for v in self.baseline.get_outputs()]!=['logits']
+                or [v.name for v in self.exposed.get_outputs()]!=['logits',EMBEDDING]):
+            raise ValueError('Unexpected AST sessions')
+
+    def infer(self,pcm):
+        import numpy as np
+        features=extract(pcm)[None]
+        old=self.baseline.run(['logits'],{'input_values':features})[0]
+        new,embedding=self.exposed.run(['logits',EMBEDDING],{'input_values':features})
+        error=compare(old,new)
+        if embedding.shape!=(1,768) or embedding.dtype!=np.float32 or not np.isfinite(embedding).all():
+            raise ValueError('Invalid AST representation')
+        return embedding[0],error
+
+
 def worker(args):
     offline()
     import numpy as np
