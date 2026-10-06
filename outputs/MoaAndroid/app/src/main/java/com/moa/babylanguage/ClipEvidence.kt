@@ -120,7 +120,8 @@ internal object EvidenceInterpreter {
         return ClipAnalysisResult(ClipInterpretation(combined.phrase, sound,
             "${range.label()}에서 $sound 후보를 찾았어요. $rhythm\n$timeline" +
                 (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
-                (if (combined.usedVisual) "\n화면의 입 모양을 함께 보고 답을 청하는 표현을 더했어요. 소리와 얼굴의 주인이 같거나 동시에 움직였는지는 확인하지 않아요." else "") +
+                (if (combined.usedVisual) "\n" + combined.evidence +
+                    "\n화면의 입 모양을 함께 보고 답을 청하는 표현을 더했어요. 소리와 얼굴의 주인이 같거나 동시에 움직였는지는 확인하지 않아요." else "") +
                 "\n일반 소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
             responseGuide(if (VocalEvent.CRY in decision.events) "울음" else sound), range.label(),
             visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
@@ -229,9 +230,27 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
  * Frames are sparse observations of the selection, not synchronized speaking evidence.
  * Wording asks for a response; it never attributes the visible person's action to the baby. */
 internal object VisualExpression {
-    data class Result(val phrase: String, val usedVisual: Boolean)
+    data class Result(val phrase: String, val usedVisual: Boolean, val evidence: String = "")
     fun combine(phrase: String, decision: SoundDecision, range: ClipRange, visual: VisualEvidence?): Result {
         if (visual == null || visual.status == VisualEvidenceStatus.FAILED || decision.problem != null) return Result(phrase, false)
+        if (visual.frames.any { it.presentationOffsetMs != null }) {
+            val matches = VisualSoundAlignment.find(decision, visual.frames, range.durationMs)
+            if (matches.isEmpty()) return Result(phrase, false)
+            val cues = matches.map { it.cue }.distinct()
+            val addition = when {
+                cues.size > 1 -> " 얼굴도 마주 보면서 내 소리에 답해줄래요?"
+                cues.single() == VisualSoundAlignment.Cue.CORNERS -> " 웃는 얼굴로 답해줄래요?"
+                else -> " 입 모양도 보면서, 내 소리에 답해줄래요?"
+            }
+            fun seconds(at: Long) = "%.1f".format(java.util.Locale.ROOT, (range.startMs + at) / 1000.0)
+                .trimEnd('0').trimEnd('.')
+            val evidence = matches.joinToString(" · ") {
+                "${seconds(it.startMs)}~${seconds(it.endMs)}초 ${it.cue.label}"
+            } + "을 같은 시간대의 소리 후보 창과 함께 살펴봤어요. 정확한 발성 시점·입술 동기는 확인하지 않아요."
+            return Result(phrase + addition, true, evidence)
+        }
+        // Legacy observations lack decoded PTS. Preserve their old request-only
+        // display rule, without manufacturing temporal correspondence evidence.
         val event = decision.events.singleOrNull() ?: return Result(phrase, false)
         // Multiple visible people anywhere in the selection make attribution too ambiguous.
         if (visual.frames.any { it.faceCount > 1 }) return Result(phrase, false)
