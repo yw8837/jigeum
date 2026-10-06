@@ -15,13 +15,16 @@ class DualHeadGuards(unittest.TestCase):
                 (out/'evaluation.json').write_text(json.dumps(value),encoding='utf-8')
                 validate_artifact(out)
             check(report)
-            for condition in ('empty','missing-scalar','missing-flag','partial-coverage','wrong-summary'):
+            for condition in ('empty','missing-scalar','missing-flag','partial-coverage','wrong-summary','over20s'):
                 bad=json.loads(json.dumps(report))
                 if condition=='empty':bad['cases']=[]
                 elif condition=='missing-scalar':del bad['cases'][0]['spans'][0]['caption_score']
                 elif condition=='missing-flag':del bad['product_changed']
                 elif condition=='partial-coverage':bad['cases'][0]['spans']=[]
-                else:bad['cases'][0]['paired_any']=False
+                elif condition=='wrong-summary':bad['cases'][0]['paired_any']=False
+                else:
+                    case=bad['cases'][0];case['actual_pcm_samples']=480000
+                    frame=case['spans'][0];case['spans']=[dict(frame,start_sample=i*160000,real_samples=160000,padded_samples=0) for i in range(3)]
                 with self.assertRaises((ValueError,KeyError)):check(bad)
 
     def test_additive_support_preserves_old_and_adds_only_same_window_new(self):

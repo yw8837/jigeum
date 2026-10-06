@@ -14,6 +14,31 @@ from ast_caption_wholebag_probe import (
 
 
 class WholeCaptionGuards(unittest.TestCase):
+    def test_digest_matching_forged_selection_cannot_approve_head(self):
+        from ast_caption_wholebag_probe import verify_head
+        original=ROOT/'work/ast-caption-wholebag-20261007/fit01'
+        metadata=json.loads((original/'fit.json').read_text())
+        selection=json.loads((original/'selection.json').read_text())
+        with tempfile.TemporaryDirectory() as folder:
+            out=Path(folder);(out/'head-ast-presence-public.npz').write_bytes((original/'head-ast-presence-public.npz').read_bytes())
+            def check(value):
+                (out/'selection.json').write_text(json.dumps(value),encoding='utf-8')
+                meta=dict(metadata,selection_sha256=digest(out/'selection.json'))
+                (out/'fit.json').write_text(json.dumps(meta),encoding='utf-8')
+                verify_head(SimpleNamespace(head=out,head_sha=metadata['head_sha256']))
+            check(selection)
+            for condition in ('grid','ids','validation','private','fold','split','loss','choice'):
+                bad=json.loads(json.dumps(selection))
+                if condition=='grid':del bad['source_cv']
+                elif condition=='ids':del bad['train_ids']
+                elif condition=='validation':bad['validation_features_read']=True
+                elif condition=='private':bad['private_features_read']=True
+                elif condition=='fold':bad['source_cv'][0]['folds'].pop()
+                elif condition=='split':bad['source_cv'][0]['folds'][0]['train_ids']=bad['train_ids']
+                elif condition=='loss':del bad['source_cv'][0]['folds'][0]['negative_log_likelihood']
+                else:bad['selected_penalty']=.01
+                with self.assertRaises((ValueError,KeyError)):check(bad)
+
     def test_exact_feature_report_rejects_partial_cases_flags_and_coverage(self):
         original=ROOT/'work/ast-caption-wholebag-20261007/features01'
         report=json.loads((original/'features.json').read_text())

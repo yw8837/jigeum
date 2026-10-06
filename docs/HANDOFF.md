@@ -9,8 +9,9 @@
 cartoon-grandpa는 계속 미지원이었다. 사건/나이/가족 검수·독립 정확도·욕구 번역을 입증한 수치는 아니다.
 
 [도구 QA](qa/caption-wholebag-dual-20261007.md)의 독립 검토에서 부분 결과 내용 검사와
-후속 cycle lifecycle 누락을 찾아 수정했다. 실제5report 재감사·8false-completion 주입,
-고유12unit과 새 scoped cycle4 complete/clear/부재를 확인했다. 원 추론의 소스 pins는 보존했다.
+후속 cycle lifecycle 누락을 찾아 수정했다. 선택CV/누출 플래그·최대20초 경계까지 보완했다.
+실제5report 재감사·8false-completion 주입, 최종 고유13unit과 scoped cycle5 complete/clear/부재를 확인했다.
+원 추론의 소스 pins는 보존했다.
 새 소스의 추론 재실행으로 보고하지 않는다. [추가 엔진 조사](research/20261007-next-small-infant-engine-followup.md)는
 이번 공개 metadata 검색 범위에서 새 채택 후보0이며 모든 모델의 부재를 뜻하지 않는다.
 

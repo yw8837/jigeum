@@ -66,6 +66,17 @@ false-completion injections, five report content audit and new storage snapshots
 are in `qa/review-cycle4/`. Prior state/read and inference records remain unchanged.
 Both original scoped states and the followup state are absent.
 
-**ULTRAQA COMPLETE: Goal met after 4 cycles** applies only to this CLI protocol scope.
+Spec's second review found two remaining content boundaries: source-CV/train-only
+selection evidence and dual's maximum20s report range. Added exact23train/20source
+IDs, three grids/all folds and source separation, finite losses/macro consistency,
+minimum/tie selection and false validation/private-read flags. `verify_head` checks
+this selection too. Dual frames now reject >320,000 actual samples. New tests reject
+eight digest-matching selection mutations and a consistent30s/3span dual report.
+
+Final cycle5 independently records the full CLI lifecycle and clear/read absence;
+wholebag9/.447s and pair4/.780s unit logs and five original report content reaudit
+are in `qa/review-cycle5/`. No model forward/refit occurred. Original and cycle4
+records remain preserved. **ULTRAQA COMPLETE: Goal met after 5 cycles** applies only
+to this CLI protocol scope.
 Caption-only gains, correlated scores, absent event truth and missing Android/ARM
 proof remain. The overall product improvement/deployment goal stays active.

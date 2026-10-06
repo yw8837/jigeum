@@ -230,6 +230,8 @@ def verify_head(args):
             or meta['train_cases'] != 23 or meta['training_sources'] != 20
             or meta['private_training'] is not False or meta['product_changed'] is not False):
         raise ValueError('Frozen caption research head differs')
+    from ast_caption_completion import training_selection
+    training_selection(selection,[row for row in meta['cases'] if row.get('role')=='train'])
     with np.load(path,allow_pickle=False) as archive:
         w,b=archive['weights'],archive['bias']
         if (w.shape!=(768,) or b.shape!=() or w.dtype!=np.float32 or b.dtype!=np.float32

@@ -24,6 +24,37 @@ def case_ids(report, expected):
     return rows
 
 
+def training_selection(report, training):
+    flags(report,dict(validation_features_read=False,private_features_read=False))
+    ids=[row['id'] for row in training];groups=sorted({row['sourcegroup'] for row in training})
+    if len(ids)!=23 or len(set(ids))!=23 or len(groups)!=20 or report.get('train_ids')!=ids:
+        raise ValueError('Training selection IDs/partition missing')
+    grids=report.get('source_cv')
+    if not isinstance(grids,list) or [g.get('penalty') for g in grids]!=[.0001,.001,.01]:
+        raise ValueError('Prescribed selection grid missing')
+    for grid in grids:
+        folds=grid.get('folds')
+        if not isinstance(folds,list) or [fold.get('sourcegroup') for fold in folds]!=groups:
+            raise ValueError('Incomplete source-CV folds')
+        for fold,group in zip(folds,groups):
+            held=[row for row in training if row['sourcegroup']==group]
+            if (fold.get('held_ids')!=[row['id'] for row in held]
+                    or fold.get('train_ids')!=[row['id'] for row in training if row['sourcegroup']!=group]
+                    or fold.get('held_weak_classes')!=sorted({row['weak_class'] for row in held})):
+                raise ValueError('CV train/held source separation differs')
+            scalar(fold.get('negative_log_likelihood'),0.,float('inf'))
+        losses=[fold['negative_log_likelihood'] for fold in folds]
+        if abs(scalar(grid.get('source_macro_nll'),0.,float('inf'))-sum(losses)/20)>1e-12:
+            raise ValueError('Source macro loss contradicts folds')
+        for label in ('infant_vocal','adult_vocal','other_or_uncertain'):
+            values=[fold['negative_log_likelihood'] for fold in folds if label in fold['held_weak_classes']]
+            macro=grid.get('class_macro_nll',{}).get(label)
+            if not values or abs(scalar(macro,0.,float('inf'))-sum(values)/len(values))>1e-12:
+                raise ValueError('Class macro loss missing or contradictory')
+    chosen=min(grids,key=lambda row:(row['source_macro_nll'],-row['penalty']))['penalty']
+    if report.get('selected_penalty')!=chosen:raise ValueError('Selection does not match prescribed CV minimum')
+
+
 def score_frame(row, score_name='infant_score', support_name='infant_support'):
     quiet=scalar(row.get('rms')) < .003
     if row.get('quiet') is not quiet:
@@ -38,7 +69,7 @@ def score_frame(row, score_name='infant_score', support_name='infant_support'):
 
 
 def frames(rows, samples, *, scored=True, dual=False):
-    if type(samples) is not int or not 1 <= samples <= 1920000 or not isinstance(rows,list):
+    if type(samples) is not int or not 1 <= samples <= (320000 if dual else 1920000) or not isinstance(rows,list):
         raise ValueError('Report sample/frames missing')
     if len(rows)!=(samples+159999)//160000:
         raise ValueError('Incomplete whole-recording coverage')
