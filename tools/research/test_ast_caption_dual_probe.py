@@ -1,0 +1,34 @@
+import unittest
+import numpy as np
+from ast_caption_dual_probe import head_pair,output_path,EVIDENCE_ROOT
+
+
+class DualHeadGuards(unittest.TestCase):
+    def test_additive_support_preserves_old_and_adds_only_same_window_new(self):
+        vector=np.zeros(768);vector[0]=1
+        old=np.zeros(768);old[0]=2;new=np.zeros(768);new[0]=-2
+        a=head_pair(vector,old,0.,new,0.,.1)
+        self.assertTrue(a['base_support']);self.assertFalse(a['caption_support']);self.assertTrue(a['paired_support'])
+        b=head_pair(vector,new,0.,old,0.,.1)
+        self.assertFalse(b['base_support']);self.assertTrue(b['caption_support']);self.assertTrue(b['paired_support'])
+        c=head_pair(vector,new,0.,new,0.,.1)
+        self.assertFalse(c['paired_support'])
+        self.assertNotIn('combined_probability',a)
+
+    def test_quiet_invalid_and_frame_geometry_do_not_authorize(self):
+        old=np.zeros(768);old[0]=10;vector=np.ones(768)
+        quiet=head_pair(None,old,10.,old,10.,.002)
+        self.assertFalse(quiet['paired_support']);self.assertIsNone(quiet['base_score'])
+        for rms in (np.nan,-1.,1.01):
+            with self.assertRaises(ValueError):head_pair(vector,old,0.,old,0.,rms)
+        for bad in (np.zeros(768),np.ones(769),np.ones(768)*np.nan):
+            with self.assertRaises(ValueError):head_pair(bad,old,0.,old,0.,.1)
+        self.assertNotIn('onset',quiet)
+
+    def test_output_dedicated_boundary(self):
+        output_path((EVIDENCE_ROOT/'future').resolve())
+        for path in (EVIDENCE_ROOT,EVIDENCE_ROOT.parent/'outside'):
+            with self.assertRaises(ValueError):output_path(path.resolve())
+
+
+if __name__=='__main__':unittest.main()
