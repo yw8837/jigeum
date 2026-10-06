@@ -315,7 +315,7 @@ class ResultNavigationTest {
         compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
         clickTag("capture-back"); awaitTag("selected-range")
         compose.onNodeWithTag("clip-video-preview").assertExists()
-        compose.onNodeWithTag("clip-play").assertTextContains("영상 함께 보기")
+        compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 듣기 · 영상 함께 보기")
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
         assertContentStartsAtTop()
     }
