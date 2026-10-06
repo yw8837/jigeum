@@ -58,3 +58,19 @@ recorded runtime 검사/필드를 구분해 기록했다. 원문 report는 덮�
 
 검토자는 허용된 집계 metadata만 읽었고 원음/PCM/개별scores/events 열람·추론·수정·Git 조작은 하지 않았다.
 issue-tracker 문서는 없으며 기존 local spec/AGENTS/RUNBOOK를 사용했다.
+
+## 최종 public/preview 후속 — 고정 15b86c9...351a927
+
+기존 두 검토자를 재사용했다. Standards 문서규칙 위반0/비차단 possible Duplicated Code1,
+Spec actionable0. DC/80Hz 필터의 subsecond 구현 중복은 계산결함으로 판단되지 않았고
+현재 fixed3preview의 최대13.3초가 기존20초 입력한계를 넘지 않는다.
+새 source를 쓰는 후속은 첫20초 decode를 계약에 명시했다.
+
+두 축은 interface03의 fixedsource SHA·int8복원·overshoot8개·실제길이/padding·521score차이0,
+public33의 최대오차.000354439·570classifier/66skip·child활성22전후변화0을 허용된 집계metadata에서 확인했다.
+취득runner의 이전SHA를 후속feature SHA와 구분하며 첫dtype/codec실패를 소급통과로 바꾸지 않는다.
+실제CLI거부4와 fixture3개3,065B cleanup BLOCKED도 확인했다. 해당 차단을 우회하지 않았다.
+검토자는 원음/PCM·개별score/event·embedding배열/새추론·수정·Git·빌드/ADB를 수행하지 않았다.
+rawgraph/상업권리/일반품질/Android/제품승인은 계속 false이며 앱0.5.18/code32 미변경이다.
+
+최종 두 축: Standards 필수0/제안1, Spec 필수0. 작은 head 첫 개발비교는 별도 후속이다.
