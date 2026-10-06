@@ -29,6 +29,12 @@ CANDIDATE_PACKAGE = 'com.moa.babylanguage.astcandidate'
 CANDIDATE_SHA = '4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a'
 CANDIDATE_APK_SHA = '77b20be46ecef6e302515d63bde12f4c378a8eeb50ea829fb455d0271a61624e'
 CANDIDATE_TEST_SHA = '3dea96314dbb0fe8daafecbdfed051e8a9d7b72ed774a2c02c590027bb184159'
+CAPTION_APK_SHA = '069badfcd44fe7fff4e52b654dc4b019c7f8006dc2f2d5bc6197be05620b387a'
+# Separate frozen build05 pair; old candidate pins remain unchanged.
+CAPTION_TEST_SHA = 'dc05f37363e2f3a68b8dcef4e502b7eb7ee0b851cf4e7433cd50470d1bfc1922'
+CAPTION_APK_BYTES = 265359219
+CAPTION_TEST_BYTES = 2770840
+CAPTION_HEAD_SHA = '979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1'
 ANDROID = '{http://schemas.android.com/apk/res/android}'
 PROHIBITED = {'android.permission.INTERNET', 'android.permission.RECORD_AUDIO',
               'android.permission.CAMERA', 'android.permission.WRITE_EXTERNAL_STORAGE',
@@ -60,12 +66,19 @@ def validate_manifest(xml: str, *, test=False, infant_presence=False):
     return {'package': expected, 'permissions': sorted(permissions)}
 
 
-def validate_measurement(value, run_id, *, infant_presence=False):
+def validate_measurement(value, run_id, *, infant_presence=False, infant_caption=False):
+    if infant_caption and not infant_presence:
+        raise ValueError('Caption benchmark requires the integrated presence runtime')
     model_sha = CANDIDATE_SHA if infant_presence else MODEL_SHA
     if (value.get('run_id') != run_id or value.get('status') != 'completed' or
             value.get('synthetic_only') is not True or value.get('model_sha256') != model_sha or
             (infant_presence and value.get('infant_presence_candidate') is not True)):
         raise ValueError('Stale, failed or unexpected benchmark result')
+    if infant_caption and (value.get('infant_caption_candidate') is not True or
+                           value.get('caption_head_sha256') != CAPTION_HEAD_SHA):
+        raise ValueError('Actual frozen caption runtime evidence required')
+    if not infant_caption and value.get('infant_caption_candidate') is True:
+        raise ValueError('Caption measurement cannot approve an older runtime')
     cases = value.get('cases')
     if not isinstance(cases, list) or len(cases) != 3:
         raise ValueError('Missing measurement cases')
@@ -78,6 +91,10 @@ def validate_measurement(value, run_id, *, infant_presence=False):
             expected += [{'start_ms': 5000, 'end_ms': 15000}, {'start_ms': 10000, 'end_ms': 20000}]
         if row.get('windows') != expected:
             raise ValueError('Incomplete interval coverage')
+        if infant_caption and (type(row.get('caption_native_windows')) is not int or
+                               row['caption_native_windows'] != len(expected) or
+                               row.get('caption_scores_finite') is not True):
+            raise ValueError('Missing caption native outputs')
         if any(not isinstance(w, dict) or set(w) != {'start_ms', 'end_ms'} or
                any(type(w[k]) is not int for k in ('start_ms', 'end_ms')) for w in row['windows']):
             raise ValueError('Invalid window schema')
@@ -183,10 +200,14 @@ def main(argv=None):
     parser.add_argument('--apk', type=Path, required=True)
     parser.add_argument('--test-apk', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--infant-presence-candidate', action='store_true',
+    candidates = parser.add_mutually_exclusive_group()
+    candidates.add_argument('--infant-presence-candidate', action='store_true',
                         help='Measure the pinned integrated candidate on a physical ARM phone, not an emulator.')
+    candidates.add_argument('--infant-caption-candidate', action='store_true',
+                            help='Measure the separately pinned frozen-pair caption runtime on physical ARM.')
     args = parser.parse_args(argv)
-    infant = args.infant_presence_candidate
+    caption = args.infant_caption_candidate
+    infant = args.infant_presence_candidate or caption
     package = CANDIDATE_PACKAGE if infant else PACKAGE
     test_package = package + '.test'
     out = args.output.resolve()
@@ -208,9 +229,11 @@ def main(argv=None):
             result[key + '_manifest'] = validate_manifest(xml, test=is_test, infant_presence=infant)
         result['provenance'] = local_provenance(app_apk, test_apk, ROOT)
         if infant:
-            for role, expected in [('app_apk', CANDIDATE_APK_SHA), ('test_apk', CANDIDATE_TEST_SHA)]:
+            pins = [('app_apk', CAPTION_APK_SHA if caption else CANDIDATE_APK_SHA),
+                    ('test_apk', CAPTION_TEST_SHA if caption else CANDIDATE_TEST_SHA)]
+            for role, expected in pins:
                 if result['provenance'][role]['sha256'] != expected:
-                    raise ValueError('Use the exact reviewed infant-presence APK/test pair')
+                    raise ValueError('Use the exact reviewed APK/test pair for the selected candidate')
         result['stage'] = 'device_preflight'
         if command(adb + ['get-state']).strip() != b'device':
             raise RuntimeError('Requested device is not available')
@@ -237,7 +260,8 @@ def main(argv=None):
         # Benchmark first: native recovery checks must not warm the measured cold call.
         groups = [
             ('benchmark', PRODUCTION + '.AstDeviceBenchmarkTest',
-             ['-e', 'ast_infant_device_probe' if infant else 'ast_device_probe', 'true', '-e', 'ast_device_run_id', run_id]),
+             ['-e', 'ast_infant_caption_device_probe' if caption else
+                    'ast_infant_device_probe' if infant else 'ast_device_probe', 'true', '-e', 'ast_device_run_id', run_id]),
             ('recovery', ','.join(PRODUCTION + '.AstAudioAnalyzerTest#' + name for name in (
                 'analyzerCancellationReleasesOwnerAndSubsequentRunSucceeds',
                 'cancellingNativeRunTerminatesAndFreshRunOptionsResume')), []),
@@ -254,7 +278,7 @@ def main(argv=None):
                 raise RuntimeError('Instrumentation did not pass: ' + name)
             if name == 'benchmark':
                 data = command(adb + ['exec-out', 'run-as', package, 'cat', 'files/qa-ast-device/' + run_id + '.json'])
-                value = validate_measurement(json.loads(data), run_id, infant_presence=infant)
+                value = validate_measurement(json.loads(data), run_id, infant_presence=infant, infant_caption=caption)
                 (out / 'measurement.json').write_bytes(data)
                 result['measurement'] = value
         result['status'] = 'pass'
@@ -295,7 +319,7 @@ def main(argv=None):
             try:
                 sys.path.insert(0, str(ROOT / 'tools/release'))
                 from verify_infant_presence_arm import verify
-                verify(result, out)
+                verify(result, out, infant_caption=True) if caption else verify(result, out)
                 result['arm_gate_passed'] = True
             except Exception as error:
                 result.update(status='fail', arm_gate_passed=False, arm_gate_error=str(error))

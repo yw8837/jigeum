@@ -1,5 +1,24 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — Android 후보의 추가 지원 확인, 새 실기기 검증 준비 완료
+
+[연구 Android QA](qa/caption-android-20261007.md): 고정53조건에서 기존 presence 후보18출력→caption pair20출력,
+기존18의 관찰/문장과 이전 제품 phase 승인14가 모두 exact 보존됐다. 공개416677/416635에서2추가출력이며
+실제 사건/화자 정답·일반 인식률·욕구 번역 정확도는 아니다. 짧은416635의 실제.56초와1초 padding을 구분했다.
+약국 retained3 지원·quiet/adult/music 등의7controls·grandpa 미지원도 유지됐다.
+
+실제 native61·저장/구간/기록 회귀80, 실제 MP4의10/20초 AV·UI취소재개가 통과했다. 기존 graph/encoder 재사용,
+추가3076B head만 사용한다. caption으로 기존 범위를 늘려 문장을 바꾸던 회귀를 수정하고 전체 재비교했다.
+[별도 ARM 계약](research/20261007-caption-arm-contract.md)에 맞춘 명시caption mode·새APK/test pins·
+매창 native 출력 검사와 기존 proof/에뮬레이터 실제 거부를 준비했다. 호스트 고유27unit 통과다.
+컴파일은5회 모두 Gradleexit0 뒤 owned JVM orphan_cleanup이며 깨끗한 runner exit로 보고하지 않는다.
+
+필요한 현재 연구APK/test 한세트는 `work/caption-android-20261007/final/`에 보존했다. 연구앱/test 제거,
+이번 UUID/원본hash 보존, 공용AVD 실행 종료/폴더 유지, scoped cycle2 complete/clear/부재를 확인했다.
+과거 자동 삭제차단은 우회하지 않았다. **실제ARM 미실행·제품0.5.18-beta/code32 유지·새Play 제출0**이다.
+현재 caption은 debug 전용이며 베타용 연결은 ARM 이후에 한다. 마지막 ADB 물리기기0·전체goal active.
+아래 최신 제목들은 선행 실행의 이력이며 현재 다음 단계는 새caption pair의 실제휴대폰 성능검증이다.
+
 ### 최신 — frozen pair의 실제 추가 지원, 연구 Android 연결 진행
 
 [wholebag/pair 결과](research/20261007-caption-wholebag-results.md): exact2 공개 음원의

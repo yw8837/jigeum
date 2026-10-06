@@ -28,6 +28,25 @@ def measurement():
 
 
 class AstDeviceProbeTest(unittest.TestCase):
+    def test_caption_requires_its_own_mode_head_pin_and_all_native_windows(self):
+        data = measurement()
+        data.update(model_sha256=probe.CANDIDATE_SHA, infant_presence_candidate=True,
+                    infant_caption_candidate=True, caption_head_sha256=probe.CAPTION_HEAD_SHA)
+        for row in data['cases']:
+            row.update(caption_native_windows=len(row['windows']), caption_scores_finite=True)
+        probe.validate_measurement(data, 'a' * 32, infant_presence=True, infant_caption=True)
+        with self.assertRaises(ValueError): probe.validate_measurement(data, 'a' * 32, infant_presence=True)
+        with self.assertRaises(ValueError): probe.validate_measurement(data, 'a' * 32, infant_caption=True)
+        mutations = [lambda d: d.pop('infant_caption_candidate'),
+                     lambda d: d.update(caption_head_sha256='0' * 64),
+                     lambda d: d['cases'][1].update(caption_native_windows=2),
+                     lambda d: d['cases'][0].update(caption_native_windows=True),
+                     lambda d: d['cases'][0].update(caption_scores_finite=False)]
+        for mutate in mutations:
+            bad = copy.deepcopy(data); mutate(bad)
+            with self.assertRaises(ValueError):
+                probe.validate_measurement(bad, 'a' * 32, infant_presence=True, infant_caption=True)
+
     def test_candidate_has_separate_manifest_and_measurement_optin(self):
         xml = manifest().replace(probe.PACKAGE, probe.CANDIDATE_PACKAGE).replace('enabled="false"', 'enabled="true"')
         probe.validate_manifest(xml, infant_presence=True)

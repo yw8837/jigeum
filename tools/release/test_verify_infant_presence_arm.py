@@ -65,6 +65,33 @@ class ArmGateTest(unittest.TestCase):
         result = gate.verify(self.value, self.directory, now=NOW)
         self.assertFalse(result['general_accuracy_validated'])
 
+    def test_caption_gate_cannot_accept_original_runtime_proof(self):
+        with self.assertRaises(ValueError):
+            gate.verify(self.value, self.directory, now=NOW, infant_caption=True)
+
+    def test_caption_fixture_needs_exact_new_artifacts_and_native_evidence(self):
+        value = copy.deepcopy(self.value)
+        for role, digest, size in [('app', gate.CAPTION_APK_SHA, gate.CAPTION_APK_BYTES),
+                                  ('test', gate.CAPTION_TEST_SHA, gate.CAPTION_TEST_BYTES)]:
+            value['provenance'][role + '_apk'] = dict(sha256=digest, bytes=size)
+            value[role + '_installed'].update(sha256=digest, expected_sha256=digest)
+        from ast_device_benchmark import CAPTION_HEAD_SHA
+        value['measurement'].update(infant_caption_candidate=True, caption_head_sha256=CAPTION_HEAD_SHA)
+        for phase in ('before', 'after'):
+            value['storage_' + phase] = dict(scope=str(self.directory.resolve()), measured_at=NOW.isoformat(),
+                                            file_count=0 if phase == 'before' else 2,
+                                            folder_logical_bytes=0 if phase == 'before' else 128, drive_free_bytes=1024)
+        for row in value['measurement']['cases']:
+            row.update(caption_native_windows=len(row['windows']), caption_scores_finite=True)
+        gate.verify(value, self.directory, now=NOW, infant_caption=True)
+        with self.assertRaises(ValueError): gate.verify(value, self.directory, now=NOW)
+        bad = copy.deepcopy(value); bad.pop('storage_before')
+        with self.assertRaises(ValueError): gate.verify(bad, self.directory, now=NOW, infant_caption=True)
+        bad = copy.deepcopy(value); bad['storage_after']['scope'] = str(self.directory / 'unrelated')
+        with self.assertRaises(ValueError): gate.verify(bad, self.directory, now=NOW, infant_caption=True)
+        value['measurement']['cases'][1]['caption_native_windows'] = 2
+        with self.assertRaises(ValueError): gate.verify(value, self.directory, now=NOW, infant_caption=True)
+
     def reject(self, mutations):
         for change in mutations:
             value = copy.deepcopy(self.value); change(value)

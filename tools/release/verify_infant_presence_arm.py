@@ -13,7 +13,9 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/research'))
 from ast_device_benchmark import (CANDIDATE_APK_SHA, CANDIDATE_TEST_SHA,
-                                  CANDIDATE_PACKAGE, validate_measurement)
+                                  CANDIDATE_PACKAGE, validate_measurement,
+                                  CAPTION_APK_SHA, CAPTION_TEST_SHA,
+                                  CAPTION_APK_BYTES, CAPTION_TEST_BYTES)
 
 MAX_BYTES = 128 * 1024
 MAX_AST_MS = 30_000  # Leaves headroom within the existing 45-second analysis limit.
@@ -41,7 +43,7 @@ def read_proof(path):
                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite JSON')))
 
 
-def verify(value, directory, *, now=None):
+def verify(value, directory, *, now=None, infant_caption=False):
     if not isinstance(value, dict):
         raise ValueError('Require a JSON object')
     run_id = value.get('run_id')
@@ -57,6 +59,21 @@ def verify(value, directory, *, now=None):
     now = now or datetime.now(timezone.utc)
     if completed.tzinfo is None or not now - timedelta(days=7) <= completed <= now + timedelta(minutes=5):
         raise ValueError('Stale, undated or future-dated physical measurement')
+    if infant_caption:
+        for key in ('storage_before', 'storage_after'):
+            storage = value.get(key, {})
+            if (storage.get('scope') != str(directory.resolve()) or
+                    any(type(storage.get(field)) is not int or storage[field] < 0
+                        for field in ('file_count', 'folder_logical_bytes')) or
+                    type(storage.get('drive_free_bytes')) is not int or storage['drive_free_bytes'] <= 0):
+                raise ValueError('Missing owned-folder or drive storage measurement')
+            measured = datetime.fromisoformat(storage.get('measured_at', ''))
+            if measured.tzinfo is None or not completed - timedelta(hours=1) <= measured <= completed:
+                raise ValueError('Storage measurement time is outside this bounded run')
+        if value['storage_before']['file_count'] != 0 or value['storage_before']['folder_logical_bytes'] != 0:
+            raise ValueError('Caption proof must start in a fresh owned folder')
+        if value['storage_after']['file_count'] < 2 or value['storage_after']['folder_logical_bytes'] < 1:
+            raise ValueError('Caption proof must retain its measurement evidence')
     device = value.get('physical_device', {})
     if (device.get('ro.kernel.qemu') not in ('', '0') or device.get('ro.boot.qemu') not in ('', '0') or
             device.get('ro.product.cpu.abi') not in ('arm64-v8a', 'armeabi-v7a') or
@@ -72,8 +89,12 @@ def verify(value, directory, *, now=None):
             not isinstance(h, str) or not re.fullmatch('[a-f0-9]{64}', h) for h in before['apk_hashes']) or
             any(not before.get(k) for k in ('versionCode', 'versionName', 'lastUpdateTime'))):
         raise ValueError('Incomplete production install snapshot')
-    for role, digest, size in [('app', CANDIDATE_APK_SHA, 265_353_775),
-                               ('test', CANDIDATE_TEST_SHA, 2_765_526)]:
+    artifacts = ([('app', CAPTION_APK_SHA, CAPTION_APK_BYTES), ('test', CAPTION_TEST_SHA, CAPTION_TEST_BYTES)]
+                 if infant_caption else [('app', CANDIDATE_APK_SHA, 265_353_775),
+                                         ('test', CANDIDATE_TEST_SHA, 2_765_526)])
+    for role, digest, size in artifacts:
+        if not re.fullmatch('[a-f0-9]{64}', digest) or size < 1:
+            raise ValueError('Selected candidate APK/test pair is not frozen')
         artifact = value.get('provenance', {}).get(role + '_apk', {})
         installed = value.get(role + '_installed', {})
         expected_package = CANDIDATE_PACKAGE + ('.test' if role == 'test' else '')
@@ -82,7 +103,8 @@ def verify(value, directory, *, now=None):
                 installed.get('expected_sha256') != digest or installed.get('package') != expected_package or
                 installed.get('errors') != []):
             raise ValueError('Exact reviewed and installed APK/test provenance required')
-    measurement = validate_measurement(value.get('measurement', {}), run_id, infant_presence=True)
+    measurement = validate_measurement(value.get('measurement', {}), run_id,
+                                       infant_presence=True, infant_caption=infant_caption)
     if (measurement.get('abi') != device['ro.product.cpu.abi'] or
             measurement.get('device_model') != device['ro.product.model'] or
             type(measurement.get('api')) is not int or measurement['api'] != int(api_text)):
@@ -120,9 +142,11 @@ def verify(value, directory, *, now=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('proof', type=Path)
+    parser.add_argument('--infant-caption-candidate', action='store_true')
     args = parser.parse_args(argv)
     try:
-        print(json.dumps(verify(read_proof(args.proof), args.proof.resolve().parent)))
+        print(json.dumps(verify(read_proof(args.proof), args.proof.resolve().parent,
+                                infant_caption=args.infant_caption_candidate)))
         return 0
     except (ValueError, TypeError, KeyError, AttributeError, OSError) as error:
         print(json.dumps({'status': 'fail', 'error': str(error)}))

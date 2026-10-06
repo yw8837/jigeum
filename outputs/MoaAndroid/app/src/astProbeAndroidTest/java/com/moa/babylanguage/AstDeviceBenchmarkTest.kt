@@ -19,12 +19,14 @@ import java.util.concurrent.atomic.AtomicLong
 class AstDeviceBenchmarkTest {
     @Test fun measureSyntheticTenAndTwentySecondCalls() = runBlocking<Unit> {
         val args = InstrumentationRegistry.getArguments()
-        val infantProbe = args.getString("ast_infant_device_probe") == "true"
+        val captionProbe = args.getString("ast_infant_caption_device_probe") == "true"
+        val infantProbe = args.getString("ast_infant_device_probe") == "true" || captionProbe
         assumeTrue("Explicit offline benchmark only", args.getString("ast_device_probe") == "true" || infantProbe)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         if (infantProbe) check(context.packageName == "com.moa.babylanguage.astcandidate" &&
             BuildConfig.AST_INTEGRATED_CANDIDATE && BuildConfig.AST_INFANT_PRESENCE)
         else check(context.packageName == "com.moa.babylanguage.astprobe" && !BuildConfig.AST_INFANT_PRESENCE)
+        check(BuildConfig.AST_INFANT_CAPTION == captionProbe) { "Benchmark mode must match the installed caption runtime" }
         val runId = args.getString("ast_device_run_id") ?: error("Missing run ID")
         require(runId.matches(Regex("[a-f0-9]{32}")))
         val directory = File(context.filesDir, "qa-ast-device").apply { check(isDirectory || mkdirs()) }
@@ -37,6 +39,8 @@ class AstDeviceBenchmarkTest {
             .put("model_sha256", AstModelStore.SHA256).put("device_model", Build.MODEL)
             .put("api", Build.VERSION.SDK_INT).put("abi", Build.SUPPORTED_ABIS.first())
             .put("synthetic_only", true).put("infant_presence_candidate", infantProbe).put("cases", rows)
+            .put("infant_caption_candidate", captionProbe)
+            .put("caption_head_sha256", if (captionProbe) InfantCaptionHead.SHA256 else JSONObject.NULL)
         try {
             for ((index, duration) in listOf(10000, 20000, 20000).withIndex()) {
                 val beforeThermal = thermal()
@@ -71,6 +75,14 @@ class AstDeviceBenchmarkTest {
                     .put("windows", JSONArray(analyzed.windows.map {
                         JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
                     }))
+                if (captionProbe) {
+                    val finiteScores = analyzed.windows.all { window ->
+                        window.captionPresence?.let { it.isFinite() && it in 0f..1f } == true
+                    }
+                    row.put("caption_native_windows", analyzed.windows.count { it.captionPresence != null })
+                        .put("caption_scores_finite", finiteScores)
+                    check(finiteScores) { "Caption output missing from actual native run" }
+                }
                 rows.put(row)
                 output.writeText(result.toString(2))
                 check(analyzed.problem == null) { "AST analysis failed: ${analyzed.problem}" }

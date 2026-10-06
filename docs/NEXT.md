@@ -1,5 +1,25 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+### 최신 다음 실행 — frozen caption pair의 실제 ARM 측정
+
+연구 Android 후보는 고정53조건에서 기존18출력 보존+2추가출력을 확인했다.
+[결과/QA](qa/caption-android-20261007.md), [새ARM계약](research/20261007-caption-arm-contract.md)을 읽는다.
+실제폰0/새beta0/code32유지이며 기존head APK proof로 이번 caption runtime을 승인하지 않는다.
+
+1. 물리기기가 연결되면 JDK21/JAVA_HOME과 전용serial을 지정하고 현재
+   `work/caption-android-20261007/final/caption-app.apk` 및 `caption-test.apk`를 사용한다.
+   `tools/research/ast_device_benchmark.py --infant-caption-candidate`에 explicit
+   `--serial --adb --apkanalyzer --apk --test-apk --output`을 전달한다. 새 output만 허용한다.
+   사용자 영상/기록 대신 합성10/20/20초, 실제 native 취소/재개·PSS·발열·기존 설치 보존·정리를 확인한다.
+2. 통과한 fresh proof를 별도로 재검증·독립 검토한 뒤 caption beta flag와 builder/payload verifier를 연결한다.
+   현재 debug caption flag는beta에 쓰면 거부된다. 제품versionCode>32와 서명/기존beta업데이트 보존을 검사한다.
+3. 승인된 beta AAB만 실제 Play 비공개 테스트에 새버전으로 제출하고 상태를 확인한다.
+   source captions/겹치는 샘플 지원을 독립 일반정확도·배고픔/졸림 판정으로 바꾸지 않는다.
+4. 이득이 남아 있어도 성능·오인·기존 승인 보존에 실패하면 수정하고 해당 위험만 재검증한다.
+   이전 실패후보 반복·사용자 학습·큰LLM다운로드·과거삭제차단 우회는 하지 않는다.
+
+아래 다음 실행들은 이전 단계의 이력이다. 최신고정 pair와mode는 위 경로를 따른다.
+
 ### 다음 실행 — 새 공개 source의 별도 weak bag 가설
 
 - [AST768 MIL](research/20261007-ast-mil-results.md)은실제validation14/retained3/public33 지원변화0으로미채택한다.
