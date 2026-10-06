@@ -32,3 +32,12 @@ PretrainedSED의 실제 고정source14파일과 weight 크기/SHA도 일치했�
 Standards: 필수0/비차단1. Spec: 최초필수1→수정후미해결0. 축별 결과를 서로 대신하지 않는다.
 이는 연구 코드 검토다. 독립 영아 정답·일반 인식률·실폰 속도·새 베타의 품질 승인을 입증하지 않는다.
 정리 차단은 [연구 QA](audio-screening-20261006.md)에 별도로 남아 있고 활성 개선 목표는 계속 진행한다.
+
+## 후속 — PANNs固定 비교
+
+별도고정diff `3b0e1ad...e51fde5`를같은두축에분리검토했다. Standards필수0/휴리스틱0,
+Spec필수0이었다. source/weight/frontend/runtimepin·byte-identical계수·normwise수치gate·
+safe load/527head·반례입력계약·Job정리·36입력무결성/실제3구간구분·제품미채택을확인했다.
+Spec은실제validation/retained메타데이터의module digest/출력head/자원·자손0과문서수치일치를확인했고,
+원음/개별scores를읽거나추론하지않았다. Standards는고정source와문서계약을검토했다.
+새아기인식정답/제품교체/실폰성능승인으로보고하지않는다.

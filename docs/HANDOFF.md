@@ -18,7 +18,8 @@ Gemma·PretrainedSED·PANNs를 제품에 탑재했다는 뜻이 아니다. 현�
 독립 Spec 검토의 창길이 간 전역충돌미공유P2를 수정했고 기존3구간 요약 재생의 변화0/추론0을 확인했다.
 합성fixture10폴더 삭제는 자동검토가 차단해 남아 있고 이 정리 한정 UltraQA BLOCKED다.
 worker자손0·격리state부재는 확인했다. 앱 성능 개선·새 배포·전체 목표 완료로 보고하지 않는다.
-종료된PretrainedSED공개가중치15.5MB는개별file로경로/SHA검증후제거했다. source/pin/results/원음은보존했다.
+종료된PretrainedSED/PANNs공개가중치합계40.8MB는개별file로경로/SHA검증후제거했다. source/pin/results/원음은보존했다.
+PANNs독립Standards/Spec검토도필수지적0이었다. source/dependencies는작은계열후속/재현에필요한범위로보존한다.
 조사·모델 비교·측정 이득이 있는 변경의 적용/AndroidQA/비공개 업데이트는 **활성 목표로 계속 진행**한다.
 
 ### 후속 — 완료된 실험 용량 정리

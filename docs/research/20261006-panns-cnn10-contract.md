@@ -62,7 +62,9 @@ cleanuptrue/남은자손0. PC초기화·frontend참조·manifest감사를포함�
 `tools/research/panns_probe.py --assets work/panns-cnn10-20261006`
 `--corpus work/sed-followup-20261006/retained-corpus --output <새 ignored run폴더>`.
 별도 고정runtime으로 실행하고, 완료된`retained-run01`은 다시 덮어쓰거나 반복하지 않는다.
-source/dependencies/weight는 이 연구 전용이며 결정/검토 후 정리대상이다.
+독립 두축검토는Standards0/Spec0 필수지적이었다. 이후종료된Cnn10가중치25.2MB를개별file의
+경로/SHA검증후제거했다. 재현시공식URL로복원하고같은hash를검사한다.
+source/dependencies는 작은계열후속/재현용이며새공유환경이아니다. 불필요해지면명명범위로정리한다.
 공용Python/SDK/Gradle캐시·제품assets·원본·기존f32는 변경하지 않는다.
 
 비공개 증거: `work/panns-cnn10-20261006/validate-final02/validation-private.json`,
