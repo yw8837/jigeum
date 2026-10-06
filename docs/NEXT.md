@@ -2,7 +2,7 @@
 
 ### 현재 실행점 — 준비된 후보의 실제 ARM 검증
 
-베타 적용 옵션/패키징 검사는 준비됐다. [계약](research/20261007-infant-presence-beta-prep-contract.md) / 
+베타 적용 옵션/패키징 검사는 준비됐다. [계약](research/20261007-infant-presence-beta-prep-contract.md) /
 [QA와 기록 누락](qa/infant-presence-beta-prep-20261007.md).
 현재 ADB 물리 기기0, 실제ARM 성공 proof0, 새beta 패키지/Play 업로드0이다.
 code32를 다시 올리거나 에뮬레이터/mocked unit을 실폰 증거로 쓰지 않는다.
