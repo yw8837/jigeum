@@ -1,7 +1,8 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
-1. PANNs Cnn10의 공식 source/weight/frontend와 연구 runtime을 고정해 기존 누락3구간을 실제 host 비교한다.
-   현재 AST2초/4초와 PretrainedSED의 회복 미입증 결과는 [완료한 실행](research/20261006-short-context-and-pretrainedsed-results.md)을 읽고 반복하지 않는다.
+1. [PANNs Cnn10 실제실행](research/20261006-panns-cnn10-contract.md)도회복근거미확보로종료했다.
+   AST2초/4초·PretrainedSED의 [완료한 실행](research/20261006-short-context-and-pretrainedsed-results.md)과함께같은3구간반복을하지않는다.
+   다음미검증후보는영아발성task를학습한공개head/다른representation의정확weights·권리·추론계약부터확인한다.
 2. 신호가 확인된 새 후보는 영아·성인·TV·재생 반례에서 사전 고정 판정을 비교한다. 점수 완화/사후 창 탐색으로 성공을 만들지 않는다.
    새 source/family 정답과 기존 회귀를 분리하며, 부모가 알려 준 실제 상황은 추론 입력으로 넣지 않고 분석 후 채점한다.
 3. 비교 이득과 기존 수용 보존이 확인된 변경만 온디바이스 적용·Android 전체경로·취소/시간/메모리·두 축 리뷰·비공개beta로 이어간다.

@@ -8,13 +8,17 @@
 현재 AST의 고정2초/4초 맥락23추론과 별도 PretrainedSED447-way 시간축 모델을 보존3구간에 실행했다.
 누락 두 구간은 두 방식 모두 회복 근거를 주지 못해 제품에 넣지 않았다. 두 구간은 한 원본의 겹치는 개발 자료다.
 새 원본 정답 없이 점수를 낮춰 성공으로 만들거나 같은 비교를 반복하지 않는다.
-다음 미실행 후보 PANNs Cnn10의 공식25,237,595B checkpoint/CC BY4.0/527-way head를 확인하고 별도 로컬 비교를 준비 중이다.
+이어 [PANNs Cnn10](research/20261006-panns-cnn10-contract.md)의 공식25,237,595B checkpoint/CC BY4.0/527-way head를
+실제로고정하고 같은3구간에서처음실행했다. 역시누락두구간의단서가약해채택하지않았다.
+고정runtime/byte-identicalfrontend/수치참조/36입력무결성을검증했고 실제품질비교는3구간이다.
+모델의일괄교체·사후threshold조정은하지않는다. 다음은다른영아task학습representation/실제사용권/weights계약이다.
 Gemma·PretrainedSED·PANNs를 제품에 탑재했다는 뜻이 아니다. 현재 제품은 아래code32의YAMNet+AST+MediaPipe다.
 
 연구도구 [QA](qa/audio-screening-20261006.md)는 고유단위7+실제CLI거부5를 통과했다.
 독립 Spec 검토의 창길이 간 전역충돌미공유P2를 수정했고 기존3구간 요약 재생의 변화0/추론0을 확인했다.
 합성fixture10폴더 삭제는 자동검토가 차단해 남아 있고 이 정리 한정 UltraQA BLOCKED다.
 worker자손0·격리state부재는 확인했다. 앱 성능 개선·새 배포·전체 목표 완료로 보고하지 않는다.
+종료된PretrainedSED공개가중치15.5MB는개별file로경로/SHA검증후제거했다. source/pin/results/원음은보존했다.
 조사·모델 비교·측정 이득이 있는 변경의 적용/AndroidQA/비공개 업데이트는 **활성 목표로 계속 진행**한다.
 
 ### 후속 — 완료된 실험 용량 정리
