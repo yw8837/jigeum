@@ -1,6 +1,11 @@
 import unittest
+import tempfile
+import json
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 import numpy as np
-from ast_mil_probe import ast_bag, score_bag, validate_output, EVIDENCE_ROOT
+from ast_mil_probe import ast_bag, score_bag, validate_output, EVIDENCE_ROOT, claim_worker, provenance
 from infant_mil_probe import fit_mil, select, loss_and_gradient, bag_logit_and_attention
 from infant_presence_probe import fit_binary, sigmoid
 from ast_infant_head_probe import spans
@@ -71,6 +76,30 @@ class AstMILGuards(unittest.TestCase):
         validate_output((EVIDENCE_ROOT/'future-run').resolve())
         for path in (EVIDENCE_ROOT, EVIDENCE_ROOT.parent/'elsewhere', EVIDENCE_ROOT/'..'/'elsewhere'):
             with self.assertRaises(ValueError): validate_output(path.resolve())
+
+    def test_worker_requires_parent_pin_and_exclusive_claim(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output=Path(folder); args=SimpleNamespace(output=output, mode='fit')
+            with patch.dict('os.environ', {}, clear=True):
+                with self.assertRaises(ValueError): claim_worker(args)
+            launch=dict(token='test-only',output=str(output),mode='fit',source_code_sha256=provenance())
+            (output/'launch.json').write_text(json.dumps(launch),encoding='utf-8')
+            with patch.dict('os.environ', {'AGATTOK_AST_MIL_WORKER_TOKEN':'wrong'}, clear=True):
+                with self.assertRaises(ValueError): claim_worker(args)
+            with patch.dict('os.environ', {'AGATTOK_AST_MIL_WORKER_TOKEN':'test-only'}, clear=True):
+                claim_worker(args)
+                with self.assertRaises(FileExistsError): claim_worker(args)
+
+    def test_worker_preserves_terminal_outputs_even_with_launch_token(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output=Path(folder); args=SimpleNamespace(output=output, mode='fit')
+            launch=dict(token='test-only',output=str(output),mode='fit',source_code_sha256=provenance())
+            (output/'launch.json').write_text(json.dumps(launch),encoding='utf-8')
+            (output/'fit.json').write_text('preserve',encoding='utf-8')
+            with patch.dict('os.environ', {'AGATTOK_AST_MIL_WORKER_TOKEN':'test-only'}, clear=True):
+                with self.assertRaises(ValueError): claim_worker(args)
+            self.assertEqual((output/'fit.json').read_text(),'preserve')
+            self.assertFalse((output/'worker-claim.json').exists())
 
 
 if __name__ == '__main__': unittest.main()

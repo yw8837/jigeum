@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import platform
 import sys
+import uuid
 
 from ast_infant_head_probe import (
     ROOT, RUNTIME, SOURCE_SHA, MODEL_SHA, MODEL, normalized, validate_representations,
@@ -127,6 +128,24 @@ def validate_output(path):
         raise ValueError('AST MIL output must stay inside dedicated evidence root')
 
 
+def claim_worker(args):
+    """Only a fresh bounded parent's single worker may write this run."""
+    token = os.environ.get('AGATTOK_AST_MIL_WORKER_TOKEN')
+    launch_path = args.output / 'launch.json'
+    if not token or not launch_path.is_file():
+        raise ValueError('Direct AST MIL worker invocation prohibited')
+    launch = read_report(launch_path)
+    if (launch.get('token') != token or launch.get('output') != str(args.output)
+            or launch.get('mode') != args.mode or launch.get('source_code_sha256') != provenance()):
+        raise ValueError('AST MIL worker launch provenance differs')
+    terminal = ('selection.json', 'fit.json', 'evaluation-local.json', 'completion.json',
+                'process.json', 'head-ast-presence-public.npz')
+    if any((args.output / name).exists() for name in terminal):
+        raise ValueError('Existing AST MIL terminal output must be preserved')
+    with (args.output / 'worker-claim.json').open('x', encoding='utf-8') as handle:
+        handle.write(str(os.getpid()))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('mode', choices=('fit', 'evaluate'))
@@ -144,15 +163,22 @@ def main():
     required = ('sources', 'sources_sha', 'features') if args.mode == 'fit' else ('head', 'corpus')
     if any(getattr(args, name) is None for name in required):
         raise SystemExit('Missing AST MIL mode arguments')
-    if args.mode == 'fit':
-        validate_feature_inputs(args)
     if args.worker:
+        claim_worker(args)
+        if args.mode == 'fit':
+            validate_feature_inputs(args)
         worker(args)
         return
+    if args.mode == 'fit':
+        validate_feature_inputs(args)
     pins = provenance()
     args.output.mkdir(parents=True, exist_ok=False)
+    launch = dict(token=uuid.uuid4().hex, output=str(args.output), mode=args.mode,
+                  source_code_sha256=pins)
+    write(args.output / 'launch.json', launch)
     from bounded_process import run_bounded
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+    env['AGATTOK_AST_MIL_WORKER_TOKEN'] = launch['token']
     env.pop('OMX_ROOT', None)
     env.pop('OMX_STATE_ROOT', None)
     argv = [sys.executable, '-B', str(Path(__file__).resolve()), args.mode,

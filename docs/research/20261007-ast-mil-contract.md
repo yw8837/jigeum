@@ -36,4 +36,6 @@
 
 최대5 QA cycle/동일실패3회에서 한정 QA를 중단하고 원인을 기록한다.
 제품·ARM 검증·Play update는 별도 gate다. 이 실행을 새 아기 정답/일반정확도/유료품질로 계산하지 않는다.
-Spec/Standards 두 축 독립 리뷰 뒤 commit/push하며 전체 goal은 계속 active다.
+로컬 검토 snapshot을 고정하고 Spec/Standards 두 축 독립 리뷰·필수 수정을 마친 뒤 원격 push한다.
+전체 goal은 계속 active다. 최초 '리뷰 뒤 commit/push' 표현은 snapshot을 만드는 실제 절차와 달라
+독립 Standards P3에서 지적됐고 이 문장으로 정정했다.
