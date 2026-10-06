@@ -280,9 +280,10 @@ def softmax(logits):
     return exp/exp.sum(axis=-1,keepdims=True)
 
 
-def train_linear(x,labels,weights):
+def train_linear(x,labels,weights,penalty=.01):
     import numpy as np
-    if x.shape!=(len(labels),1024) or not np.isfinite(x).all():
+    if (x.shape!=(len(labels),1024) or not np.isfinite(x).all()
+            or penalty not in (.0001,.001,.01)):
         raise ValueError('Invalid train features')
     y=np.eye(3,dtype=np.float64)[labels]
     w=np.zeros((1024,3),np.float64)
@@ -292,7 +293,7 @@ def train_linear(x,labels,weights):
     for step in range(1,301):
         probs=softmax(x@w+b)
         grad=(probs-y)*weights[:,None]
-        gw=x.T@grad+.01*w
+        gw=x.T@grad+penalty*w
         gb=grad.sum(axis=0)
         mw=.9*mw+.1*gw
         vw=.999*vw+.001*gw**2
