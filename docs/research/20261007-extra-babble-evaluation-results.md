@@ -45,7 +45,10 @@ HTTP는공식exactCDN/redirect금지/2MiB/file/20초timeout, 완전히취득한�
 하나의PC ORT session 비용이다. Android/휴대폰속도·발열·전체AV 품질 측정으로 보고하지 않는다.
 
 실행code SHA `9be67b327419144baf380fcb511b2eecbe7d0e3261730e5076d58dfa273561a7`,
-completion의추가5개source SHA/runtime·원metadata/head/model전후hash 일치.
+completion의추가5개source SHA/runtime·metadata 시작pin 검사·head/model 종료 재검사를 확인했다.
+독립 Standards 리뷰에서 당시 metadata 종료hash가 별도 실측되지 않았음을 발견했다.
+현재 metadata는 원pin과 일치하나 과거 종료 관측을 대신하지 않는다. 후속 코드에 종료metadata 재hash를
+추가했으며, 기존56.001초 실행을 이 새코드로 수행한 것으로 소급하지 않는다. 수치 재추론은 하지 않았다.
 단위2/실제CLI4거부는exit0; fixedID/source-role/승인label/CC NC/evilURL/틀린SHA를거부,
 CLI stale/outside/missing/다른source파일에서기존head불변·새output/fixture0을확인했다.
 이는 **평가 실행의 preflight**이며 새 전체UltraQA/Android QA 완료는 아니다.

@@ -12,7 +12,7 @@ internal object VisualSoundAlignment {
     private val neutral = setOf(VocalEvent.BABBLE, VocalEvent.CHILD_VOICE)
 
     fun find(decision: SoundDecision, frames: List<VisualFrameObservation>, durationMs: Long): List<Match> {
-        if (decision.problem != null || decision.broadWindows.isNotEmpty() || frames.any { it.faceCount > 1 }) return emptyList()
+        if (decision.problem != null || decision.broadOnly || frames.any { it.faceCount > 1 }) return emptyList()
         val moments = decision.moments
         if (moments.isEmpty() || moments.any { it.startMs !in 0 until durationMs } ||
             moments.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return emptyList()

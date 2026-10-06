@@ -22,14 +22,16 @@ internal data class ClipRange(val startMs: Long, val endMs: Long) {
 internal data class AcousticPause(val startMs: Long, val endMs: Long)
 internal data class AcousticShape(val activeFraction: Float, val rising: Boolean, val bursts: Int,
                                   val wordingKey: Int = 0, val pauses: Int = 0,
-                                  val quietSpans: List<AcousticPause> = emptyList()) {
+                                  val quietSpans: List<AcousticPause> = emptyList(),
+                                  val strongestSecondRms: Double = 0.0) {
     companion object {
         fun from(pcm: FloatArray): AcousticShape {
             // Match the model's analysis filter. Removed hum/DC must not describe
             // an infant's volume or rhythm. Playback and the wording key use raw PCM.
             val cleaned = AudioCleanup.filter(pcm)
-            val energy = try {
-                (cleaned.indices step 1600).map { start ->
+            val (strongestSecondRms, energy) = try {
+                val level = AudioCleanup.strongestSecondRms(cleaned)
+                level to (cleaned.indices step 1600).map { start ->
                     val end = minOf(start + 1600, cleaned.size)
                     var sum = 0.0
                     for (i in start until end) sum += cleaned[i].toDouble() * cleaned[i]
@@ -64,7 +66,7 @@ internal data class AcousticShape(val activeFraction: Float, val rising: Boolean
             var wordingKey = 17
             for (i in pcm.indices step 160) wordingKey = wordingKey * 31 + (pcm[i] * 32767).toInt()
             return AcousticShape(active.count { it }.toFloat() / active.size.coerceAtLeast(1),
-                first > 0.003 && last > first * 1.8, bursts, wordingKey, pauses, quietSpans)
+                first > 0.003 && last > first * 1.8, bursts, wordingKey, pauses, quietSpans, strongestSecondRms)
         }
     }
 }
@@ -92,29 +94,39 @@ internal object EvidenceInterpreter {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
         val decision = SoundTimeline.decide(audio, range.durationMs)
         decision.problem?.let { return ClipAnalysisResult(problem = it, issue = decision.issue, visualEvidence = visualEvidence) }
-        if (!shape.activeFraction.isFinite() || shape.activeFraction < 0.04f) return ClipAnalysisResult(
+        // The existing input-silence gate measures the strongest second, while the
+        // activity fraction is whole-scene energy. General presence has no localized
+        // event rhythm; do not discard its audible clue with a second scene-level gate.
+        // Reuse the unchanged .003 input floor, never lower model or infant thresholds.
+        val audibleGeneralPresence = decision.infantVoiceWindows.isNotEmpty() &&
+            shape.strongestSecondRms.isFinite() && shape.strongestSecondRms in .003..1.0
+        if (!shape.activeFraction.isFinite() || (shape.activeFraction < 0.04f && !audibleGeneralPresence)) return ClipAnalysisResult(
             problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.",
             issue = AnalysisIssue.QUIET, visualEvidence = visualEvidence)
         val sound = decision.sound
-        val broadOnly = decision.moments.isEmpty() && decision.broadWindows.isNotEmpty()
+        val broadOnly = decision.broadOnly
         // Whole-waveform rhythm may belong to a parent, music or another sound. A broad
         // AST event cannot attribute those bursts, rises or pauses to the baby.
         val vocalShape = if (broadOnly) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
             pauses = 0, quietSpans = emptyList()) else shape
-        val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape, neutralOnly = decision.neutralOnly)
+        val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape, neutralOnly = decision.neutralOnly,
+            infantPresence = decision.infantVoiceWindows.isNotEmpty())
         val longPhrases = sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
         val audioPhrase = BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey)
             ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence, audioTimelineAligned)
         val rhythm = when {
-            broadOnly -> "넓은 시간창에서 옹알이 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
+            broadOnly -> "넓은 시간창에서 ${if (decision.infantVoiceWindows.isEmpty()) "옹알이" else "아기 발성"} 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
             shape.bursts >= 3 -> "소리와 쉼이 여러 번 이어졌어요."
             shape.activeFraction >= 0.65f -> "소리가 비교적 길게 이어졌어요."
             else -> "짧게 들리는 소리를 살펴봤어요."
         }
-        val timeline = if (broadOnly) broadWindowEvidence(decision.broadWindows, range) else decision.moments.filterIndexed { index, moment ->
+        val timeline = if (broadOnly) broadWindowEvidence(
+            if (decision.infantVoiceWindows.isEmpty()) decision.broadWindows else decision.infantVoiceWindows.map {
+                BabbleSupportWindow(it.startMs, it.endMs) }, range,
+            if (decision.infantVoiceWindows.isEmpty()) "옹알이" else "아기 발성") else decision.moments.filterIndexed { index, moment ->
             index == 0 || decision.moments[index - 1].event != moment.event
         }.joinToString(" → ") { "${ClipRange.clock(range.startMs + it.startMs)} 부근 ${it.event.label} 후보" }
         return ClipAnalysisResult(ClipInterpretation(combined.phrase, sound,
@@ -122,13 +134,13 @@ internal object EvidenceInterpreter {
                 (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
                 (if (combined.usedVisual) "\n" + combined.evidence +
                     "\n화면의 입 모양을 함께 보고 답을 청하는 표현을 더했어요. 소리와 얼굴의 주인이 같거나 동시에 움직였는지는 확인하지 않아요." else "") +
-                "\n일반 소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
+                "\n소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요.",
             responseGuide(if (VocalEvent.CRY in decision.events) "울음" else sound), range.label(),
             visualEvidence != null && visualEvidence.status != VisualEvidenceStatus.FAILED,
             visualEvidence?.notice, if (combined.usedVisual) "AUDIO_VISUAL" else "AUDIO"), visualEvidence = visualEvidence)
     }
 
-    private fun broadWindowEvidence(windows: List<BabbleSupportWindow>, range: ClipRange): String {
+    private fun broadWindowEvidence(windows: List<BabbleSupportWindow>, range: ClipRange, label: String): String {
         // Merge overlap for readable ranges, never interpret overlapping windows as
         // repeated utterances or as uninterrupted speech over their union.
         val merged = mutableListOf<BabbleSupportWindow>()
@@ -139,7 +151,7 @@ internal object EvidenceInterpreter {
             } else merged += window
         }
         return merged.joinToString(" · ") {
-            "${ClipRange.clock(range.startMs + it.startMs)}–${ClipRange.clock(range.startMs + it.endMs)} 범위 옹알이 후보"
+            "${ClipRange.clock(range.startMs + it.startMs)}–${ClipRange.clock(range.startMs + it.endMs)} 범위 $label 후보"
         } + " (범위 내 정확한 발성 위치와 지속 여부는 확인하지 않아요.)"
     }
 
@@ -154,7 +166,7 @@ internal object EvidenceInterpreter {
      * are bounded character expressions, not a transcript or inferred needs. */
     private fun sustainedPhrases(audio: SoundAnalysis, decision: SoundDecision,
                                  shape: AcousticShape, range: ClipRange): List<String>? {
-        if (decision.broadWindows.isNotEmpty()) return null
+        if (decision.broadOnly) return null
         if (range.durationMs <= 10_000 || !shape.activeFraction.isFinite() || shape.activeFraction < .35f) return null
         val frameStarts = audio.frames.map { it.startMs }
             .filter { it >= 0 && it < range.durationMs }.distinct().toSet()
@@ -196,6 +208,7 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 catch (_: LinkageError) { decodeFailed = true; null }
             val pcm = decoded?.samples
             try {
+                var astForPresence: AstAudioAnalysis? = null
                 val audio = if (decodeFailed) SoundAnalysis(emptyList(),
                     "이 파일의 소리를 읽지 못했어요. 다른 파일이나 형식으로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
                     else if (pcm == null) SoundAnalysis(emptyList(),
@@ -204,8 +217,14 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                         if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE ||
                             BuildConfig.AST_BABBLE_SUPPORT) && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
                             val ast = AstAudioAnalyzer.analyze(context, pcm)
+                            if (BuildConfig.AST_INFANT_PRESENCE) astForPresence = ast
                             BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)
                         } else primaryAudio
+                    }.let { recovered ->
+                        // Preserve established AST and shifted YAMNet approvals first.
+                        // General presence is the last supplement and reuses the same run.
+                        if (astForPresence != null) InfantVoiceSupportPolicy.attachCandidate(recovered,
+                            astForPresence!!, pcm.size / 16L) else recovered
                     }
                 // Visual observation remains available on abstention, but never authorizes a phrase.
                 val shape = if (pcm != null && audio.problem == null) AcousticShape.from(pcm) else AcousticShape(0f, false, 0)

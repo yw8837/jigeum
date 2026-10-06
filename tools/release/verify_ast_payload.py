@@ -17,9 +17,14 @@ NOTICES = {
     'ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt': '0e07b95f3a8d6230037707c5c4a2b554d12c4cb67369669ac255635528ffcee2',
 }
 ABIS = {'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'}
+CANDIDATE_MODEL = 'ast-infant-presence-candidate.onnx'
+CANDIDATE_SIZE = 91_138_597
+CANDIDATE_SHA = '4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a'
 
 
-def verify(path: Path, expected: str) -> dict:
+def verify(path: Path, expected: str, model_variant: str = 'base') -> dict:
+    if model_variant not in {'base', 'infant-candidate'}:
+        raise ValueError('Unknown model variant')
     if expected not in {'present', 'absent'} or path.suffix.lower() not in {'.apk', '.aab'}:
         raise ValueError('Require present/absent and an APK/AAB')
     prefix = 'base/' if path.suffix.lower() == '.aab' else ''
@@ -36,13 +41,18 @@ def verify(path: Path, expected: str) -> dict:
             if relevant:
                 raise ValueError('Unexpected AST/ORT payload: ' + ', '.join(relevant))
             return {'status': 'pass', 'expected': expected, 'archive': str(path), 'payload_entries': []}
-        model = prefix + 'assets/' + MODEL
+        model_name, model_size, model_sha = ((CANDIDATE_MODEL, CANDIDATE_SIZE, CANDIDATE_SHA)
+            if model_variant == 'infant-candidate' else (MODEL, MODEL_SIZE, MODEL_SHA))
+        model = prefix + 'assets/' + model_name
+        models = {name for name in relevant if name.endswith('.onnx')}
+        if models != {model}:
+            raise ValueError('Require exactly the selected AST graph, without duplicate or substituted model')
         if model not in names:
             raise ValueError('Pinned AST model is missing')
-        if archive.getinfo(model).file_size != MODEL_SIZE:
+        if archive.getinfo(model).file_size != model_size:
             raise ValueError('Pinned AST model size mismatch')
         with archive.open(model) as stream:
-            if hashlib.file_digest(stream, 'sha256').hexdigest() != MODEL_SHA:
+            if hashlib.file_digest(stream, 'sha256').hexdigest() != model_sha:
                 raise ValueError('Pinned AST model hash mismatch')
         for name, wanted in NOTICES.items():
             if hashlib.sha256(archive.read(prefix + 'assets/' + name)).hexdigest() != wanted:
@@ -56,16 +66,17 @@ def verify(path: Path, expected: str) -> dict:
         if found_native != wanted_native:
             raise ValueError('ORT ABI payload differs from the pinned full Android AAR')
     return {'status': 'pass', 'expected': expected, 'archive': str(path),
-            'model_sha256': MODEL_SHA, 'abis': sorted(ABIS), 'payload_entries': relevant}
+            'model_sha256': model_sha, 'model_variant': model_variant, 'abis': sorted(ABIS), 'payload_entries': relevant}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('archive', type=Path)
     parser.add_argument('--expect', choices=['present', 'absent'], required=True)
+    parser.add_argument('--model-variant', choices=['base', 'infant-candidate'], default='base')
     args = parser.parse_args()
     try:
-        report = verify(args.archive, args.expect)
+        report = verify(args.archive, args.expect, args.model_variant)
     except (ValueError, KeyError, OSError, zipfile.BadZipFile) as error:
         print(json.dumps({'status': 'fail', 'error': str(error)}))
         raise SystemExit(1)

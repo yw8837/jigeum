@@ -19,7 +19,8 @@ enum class AnalysisIssue { NO_AUDIO, TOO_SHORT, INVALID_AUDIO, SILENCE, QUIET,
 data class SoundAnalysis(val cues: List<SoundCue>, val problem: String? = null,
                          val frames: List<SoundFrame> = emptyList(),
                          val issue: AnalysisIssue? = null,
-                         val babbleWindows: List<BabbleSupportWindow> = emptyList())
+                         val babbleWindows: List<BabbleSupportWindow> = emptyList(),
+                         val infantVoiceWindows: List<InfantVoiceSupportWindow> = emptyList())
 
 /** YAMNet recognizes general sound events. These are suggestions, never interpretations of needs. */
 object SoundAnalyzer {

@@ -26,6 +26,14 @@ require(astCandidateProperty == null || astCandidateProperty in setOf("true", "f
 val astCandidateEnabled = astCandidateProperty == "true"
 require(!astCandidateEnabled || astProbeEnabled) { "AST candidate requires agattokAstProbe=true." }
 require(!(astCandidateEnabled && astStandaloneEnabled)) { "AST candidate and standalone are mutually exclusive." }
+val infantPresenceProperty = providers.gradleProperty("agattokInfantPresenceCandidate").orNull
+require(infantPresenceProperty == null || infantPresenceProperty in setOf("true", "false")) {
+    "agattokInfantPresenceCandidate must be explicitly true or false."
+}
+val infantPresenceEnabled = infantPresenceProperty == "true"
+require(!infantPresenceEnabled || (astProbeEnabled && astCandidateEnabled)) {
+    "Infant presence is local integrated research only; requires AST probe and candidate."
+}
 val astBetaProperty = providers.gradleProperty("agattokAstBeta").orNull
 require(astBetaProperty == null || astBetaProperty in setOf("true", "false")) {
     "agattokAstBeta must be explicitly true or false."
@@ -35,6 +43,7 @@ require(!astBetaEnabled || !(astProbeEnabled || astStandaloneEnabled || astCandi
     "AST beta cannot be mixed with AST probe, standalone or candidate research flags."
 }
 val astRuntimeEnabled = astProbeEnabled || astBetaEnabled
+val infantPresenceAssets = layout.buildDirectory.dir("generated/infantPresenceAssets")
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -64,6 +73,7 @@ android {
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
         buildConfigField("boolean", "AST_BABBLE_SUPPORT", "false")
+        buildConfigField("boolean", "AST_INFANT_PRESENCE", "false")
         manifestPlaceholders["testDistribution"] = "false"
         manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -92,6 +102,7 @@ android {
                 applicationIdSuffix = ".astcandidate"
                 versionNameSuffix = "-astcandidate"
                 buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "true")
+                buildConfigField("boolean", "AST_INFANT_PRESENCE", infantPresenceEnabled.toString())
                 buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
                 buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
                 buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
@@ -151,7 +162,9 @@ android {
         }
         getByName("main") {
             java.srcDir(if (astRuntimeEnabled) "src/astProbe/java" else "src/noAst/java")
-            if (astRuntimeEnabled) assets.srcDir("src/astProbe/assets")
+            if (astRuntimeEnabled) {
+                assets.srcDir(if (infantPresenceEnabled) infantPresenceAssets else "src/astProbe/assets")
+            }
         }
         getByName("androidTest") {
             if (astProbeEnabled) {
@@ -204,11 +217,12 @@ tasks.configureEach {
 // Explicit verification and opted-in packaging fail for an absent/changed model.
 // Default debug/beta/release builds have no dependency on this task or model.
 val verifyAstModel by tasks.registering {
-    val model = layout.projectDirectory.file("src/astProbe/assets/ast-dynamic-int8.onnx")
+    val model = layout.projectDirectory.file(if (infantPresenceEnabled)
+        "src/infantPresence/assets/ast-infant-presence-candidate.onnx" else "src/astProbe/assets/ast-dynamic-int8.onnx")
     inputs.file(model)
     doLast {
         val source = model.asFile
-        require(source.isFile && source.length() == 91_134_123L) {
+        require(source.isFile && source.length() == if (infantPresenceEnabled) 91_138_597L else 91_134_123L) {
             "Pinned AST model absent or wrong size. Run tools/research/setup_android_ast.py with the verified local INT8 graph."
         }
         val hash = MessageDigest.getInstance("SHA-256")
@@ -221,13 +235,22 @@ val verifyAstModel by tasks.registering {
             }
         }
         val actual = hash.digest().joinToString("") { "%02x".format(it.toInt() and 255) }
-        require(actual == "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e") {
+        val expected = if (infantPresenceEnabled) "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a"
+            else "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e"
+        require(actual == expected) {
             "Pinned AST model SHA256 mismatch. Do not package a substituted graph."
         }
     }
 }
+val stageInfantPresenceAssets by tasks.registering(Sync::class) {
+    dependsOn(verifyAstModel)
+    from("src/astProbe/assets") { exclude("ast-dynamic-int8.onnx", "AST_MODEL_NOTICE.txt", "*.partial") }
+    from("src/infantPresence/assets") { include("ast-infant-presence-candidate.onnx", "AST_MODEL_NOTICE.txt") }
+    into(infantPresenceAssets)
+}
 tasks.configureEach {
     if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
+    if (infantPresenceEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(stageInfantPresenceAssets)
     if (astBetaEnabled && name == "mergeBetaAssets") dependsOn(verifyAstModel)
 }
 

@@ -3,6 +3,16 @@ package com.moa.babylanguage
 /** Authored character expressions after sound acceptance, not a desire classifier or transcript.
  * Wording keys only pick surface variants. They must never pick a hunger/sleep/pain hypothesis. */
 internal object BabyExpression {
+    private val infantVoice = listOf(
+        "작은 목소리로 인사를 건네요. 눈을 맞추고 다정하게 답해 줄래요?",
+        "내 소리에 귀 기울여 주세요. 무슨 뜻인지 서두르지 말고 함께해요.",
+        "나만의 소리로 한마디 보태요. 편안한 목소리로 말을 걸어주세요.",
+        "말은 아직 서툴러요. 내 반응을 살피며 천천히 답해 주세요.",
+        "내 방식으로 소리를 내봤어요. 곁에서 다정하게 받아 줄래요?",
+        "작은 목소리를 건네요. 눈을 맞추고 함께 이야기해요.",
+        "내 소리에 한마디 답해줄래요? 편안하게 기다려 주세요.",
+        "소리로 인사를 보태요. 부드럽게 말을 걸며 함께해 주세요."
+    )
     private val crying = listOf(
         "말로 다 못하겠어요. 토닥토닥, 다정하게 달래줄래요?",
         "포근하게 나를 안아줄래요? 서두르지 말고 천천히 함께해 주세요.",
@@ -65,7 +75,9 @@ internal object BabyExpression {
     )
 
     fun variants(event: VocalEvent?, shape: AcousticShape, sustained: Boolean = false,
-                 withPause: Boolean = false, neutralOnly: Boolean = false): List<String> {
+                 withPause: Boolean = false, neutralOnly: Boolean = false, infantPresence: Boolean = false): List<String> {
+        // General presence cannot identify cry, laugh, babbling, rhythm or a desire.
+        if (infantPresence) return infantVoice
         val base = if (neutralOnly && event == null) neutral else when (event) {
             VocalEvent.CRY -> crying
             VocalEvent.LAUGH -> laughing
@@ -93,7 +105,7 @@ internal object BabyExpression {
      * aggregate/broad label, alternating guesses or duplicated timestamps into a story.
      * This describes observed sound order, never a change of mood or its cause. */
     fun orderedPhrase(audio: SoundAnalysis, decision: SoundDecision, range: ClipRange, wordingKey: Int): String? {
-        if (decision.problem != null || decision.broadWindows.isNotEmpty() || decision.events.size < 2) return null
+        if (decision.problem != null || decision.broadOnly || decision.events.size < 2) return null
         val moments = decision.moments
         if (moments.any { it.startMs !in 0 until range.durationMs } ||
             moments.zipWithNext().any { (a, b) -> b.startMs - a.startMs !in 1..1_500 }) return null

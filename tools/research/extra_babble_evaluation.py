@@ -25,6 +25,14 @@ IDS=('416677','416681','416635','416702','259609','254454','254455','254465','25
 CANDIDATE_SHA='4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a'
 
 
+def verify_final_pins(source_path, model_path, head_directory):
+    actual = dict(source=digest(source_path), model=digest(model_path),
+                  head=digest(head_directory/'head-ast-presence-public.npz'))
+    if actual != dict(source=SOURCES_SHA, model=CANDIDATE_SHA, head=HEAD_SHA):
+        raise ValueError('Extra frozen evaluation metadata/model/head changed')
+    return actual
+
+
 def sources(path):
     if path.is_symlink() or not 1<=path.stat().st_size<=2*1024**2 or digest(path)!=SOURCES_SHA:
         raise ValueError('Fixed extra source metadata differs')
@@ -119,10 +127,9 @@ def worker(args):
         cases.append(dict(row,actual_samples=len(pcm),spans=frames,
             any_supported_span=any(f['infant_support'] for f in frames),
             quiet_only=all(f['quiet'] for f in frames),event_ground_truth=False))
-    if digest(args.model)!=CANDIDATE_SHA or digest(args.head/'head-ast-presence-public.npz')!=HEAD_SHA:
-        raise ValueError('Extra frozen evaluation model/head changed')
+    final_pins = verify_final_pins(args.sources, args.model, args.head)
     write(args.output/'evaluation.json',dict(requested_cases=10,decoded_cases=len(cases),cases=cases,
-        source_sha256=SOURCES_SHA,head_sha256=HEAD_SHA,model_sha256=CANDIDATE_SHA,runtime=actual,
+        source_sha256=final_pins['source'],head_sha256=final_pins['head'],model_sha256=final_pins['model'],runtime=actual,
         training=False,calibration=False,private_media_read=False,strong_ground_truth=False,
         quality_validated=False,android_validated=False,product_changed=False))
     files=('extra_babble_evaluation.py','ast_infant_head_graph.py','ast_infant_head_probe.py',

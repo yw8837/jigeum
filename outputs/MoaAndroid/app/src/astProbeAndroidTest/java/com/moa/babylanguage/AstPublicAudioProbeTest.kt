@@ -20,6 +20,8 @@ class AstPublicAudioProbeTest {
         assumeTrue("Explicit standalone public AST probe only", args.getString("ast_public_probe") == "true")
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val phaseProbe = args.getString("sound_phase_probe") == "true"
+        val infantProbe = args.getString("infant_presence_probe") == "true"
+        check(!infantProbe || (phaseProbe && BuildConfig.AST_INFANT_PRESENCE))
         check(context.packageName == if (phaseProbe) "com.moa.babylanguage.astcandidate" else "com.moa.babylanguage.astprobe")
         check(!BabbleSupportPolicy.ENABLED) { "Production candidate must remain disabled" }
         val runId = args.getString("sound_probe_run_id") ?: error("Missing run ID")
@@ -35,6 +37,7 @@ class AstPublicAudioProbeTest {
             .put("model_sha256", AstModelStore.SHA256).put("quality_validated", false)
             .put("evaluation_opt_in", true).put("production_babble_policy_enabled", false)
             .put("candidate_attached_explicitly_for_evaluation", true)
+            .put("infant_presence_evaluated", infantProbe)
             .put("ast_evaluated_even_when_yamnet_not_eligible", true)
             .put("status", "running").put("completed", false)
             .put("case_count", 0).put("measured_count", 0).put("cases", rows)
@@ -80,6 +83,8 @@ class AstPublicAudioProbeTest {
                     requireBaselineFrames(baseline, decoded.range.durationMs)
                     row.put("yamnet_ms", SystemClock.elapsedRealtime() - baseStarted)
                     val shape = AcousticShape.from(pcm)
+                    row.put("scene_active_fraction", shape.activeFraction.toDouble())
+                        .put("cleaned_strongest_second_rms", shape.strongestSecondRms)
                     row.put("base", observation(baseline,
                         EvidenceInterpreter.interpret(baseline, shape, decoded.range)))
                         .put("eligible", BabbleSupportPolicy.shouldAnalyze(baseline))
@@ -89,10 +94,15 @@ class AstPublicAudioProbeTest {
                     row.put("ast_ms", SystemClock.elapsedRealtime() - astStarted).put("ast", astJson(ast))
                     requireCompleteAst(ast, pcm.size)
                     stage = "candidate_policy"
-                    val candidate = BabbleSupportPolicy.attachCandidate(baseline, ast, decoded.range.durationMs)
+                    fun attach(fresh: SoundAnalysis): SoundAnalysis {
+                        val babble = BabbleSupportPolicy.attachCandidate(fresh, ast, decoded.range.durationMs)
+                        return if (infantProbe) InfantVoiceSupportPolicy.attachCandidate(babble, ast, decoded.range.durationMs) else babble
+                    }
+                    val candidate = attach(baseline)
                     row.put("candidate", observation(candidate,
                         EvidenceInterpreter.interpret(candidate, shape, decoded.range)))
                         .put("supported_windows", candidate.babbleWindows.size)
+                        .put("infant_presence_windows", candidate.infantVoiceWindows.size)
                         .put("status", "measured")
                     if (phaseProbe) {
                         stage = "phase_recovery"
@@ -104,8 +114,12 @@ class AstPublicAudioProbeTest {
                         }
                         PublicAudioProbeContract.requireCompletedAnalysis(recovered)
                         requireBaselineFrames(recovered, decoded.range.durationMs)
-                        row.put("phase", observation(recovered,
+                        val supplemented = if (infantProbe) InfantVoiceSupportPolicy.attachCandidate(recovered, ast,
+                            pcm.size / 16L) else recovered
+                        row.put("prior_phase", observation(recovered,
                             EvidenceInterpreter.interpret(recovered, shape, decoded.range)))
+                        row.put("phase", observation(supplemented,
+                            EvidenceInterpreter.interpret(supplemented, shape, decoded.range)))
                             .put("phase_ms_excluding_ast", SystemClock.elapsedRealtime() - phaseStarted)
                         check(PublicAudioProbeContract.sha256(bytes) == entry.getString("pcm_sha256"))
                     }
@@ -170,6 +184,10 @@ class AstPublicAudioProbeTest {
         check(ast.windows.map { it.startMs to it.endMs } == expected) { "Incomplete AST selected interval" }
         check(ast.windows.all { it.scores.size == 527 && it.scores.keys.containsAll(RELATED) &&
             it.scores.values.all { value -> value.isFinite() && value in 0f..1f } }) { "Invalid AST scores" }
+        if (BuildConfig.AST_INFANT_PRESENCE) check(ast.windows.all { window ->
+            window.infantPresence?.let { it.isFinite() && it in 0f..1f } == true &&
+                window.strongestSecondRms?.let { it.isFinite() && it in 0.0..1.0 } == true
+        }) { "Missing or invalid infant presence score" }
     }
 
     private fun cueJson(cues: List<SoundCue>) = JSONArray(cues.map {
@@ -184,10 +202,13 @@ class AstPublicAudioProbeTest {
             .put("events", JSONArray(decision.events.map { it.name }))
             .put("has_interpretation", interpreted.interpretation != null)
             .put("sound", interpreted.interpretation?.sound ?: JSONObject.NULL)
+            .put("phrase", interpreted.interpretation?.phrase ?: JSONObject.NULL)
             .put("frame_starts_ms", JSONArray(audio.frames.map { it.startMs }))
             .put("cues", cueJson(audio.cues)).put("frames", JSONArray(audio.frames.map {
                 JSONObject().put("start_ms", it.startMs).put("cues", cueJson(it.cues))
             })).put("broad_windows", JSONArray(decision.broadWindows.map {
+                JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
+            })).put("infant_presence_windows", JSONArray(decision.infantVoiceWindows.map {
                 JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
             }))
     }
@@ -196,6 +217,8 @@ class AstPublicAudioProbeTest {
         .put("problem", ast.problem ?: JSONObject.NULL).put("returned_windows", ast.windows.size)
         .put("windows", JSONArray(ast.windows.map { window ->
             JSONObject().put("start_ms", window.startMs).put("end_ms", window.endMs)
+                .put("infant_presence", window.infantPresence?.toDouble() ?: JSONObject.NULL)
+                .put("strongest_second_rms", window.strongestSecondRms ?: JSONObject.NULL)
                 .put("scores", JSONObject().apply {
                     for (label in RELATED) window.scores[label]?.let { put(label, it.toDouble()) }
                 }).put("top", JSONArray(window.scores.entries.sortedByDescending { it.value }.take(10).map {
@@ -205,8 +228,8 @@ class AstPublicAudioProbeTest {
 
     @Test fun missingAstCoverageAndRuntimeFailureAreRejected() {
         val scores = (RELATED + (1..527).map { "synthetic_$it" }).take(527).associateWith { 0f }
-        val complete = AstAudioAnalysis(listOf(AstAudioWindow(0, 10000, scores),
-            AstAudioWindow(5000, 15000, scores), AstAudioWindow(10000, 20000, scores)))
+        val complete = AstAudioAnalysis(listOf(AstAudioWindow(0, 10000, scores, .1f, .01),
+            AstAudioWindow(5000, 15000, scores, .1f, .01), AstAudioWindow(10000, 20000, scores, .1f, .01)))
         requireCompleteAst(complete, 320000)
         for (invalid in listOf(complete.copy(windows = complete.windows.take(2)),
             complete.copy(problem = "synthetic failure"))) {

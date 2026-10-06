@@ -11,10 +11,13 @@ internal enum class VocalEvent(val label: String, val cue: String) {
 internal data class VocalMoment(val event: VocalEvent, val startMs: Long)
 internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), val problem: String? = null,
                                   val issue: AnalysisIssue? = null,
-                                  val broadWindows: List<BabbleSupportWindow> = emptyList()) {
+                                  val broadWindows: List<BabbleSupportWindow> = emptyList(),
+                                  val infantVoiceWindows: List<InfantVoiceSupportWindow> = emptyList()) {
+    val broadOnly get() = moments.isEmpty() && (broadWindows.isNotEmpty() || infantVoiceWindows.isNotEmpty())
     val events get() = (moments.map { it.event } + if (broadWindows.isEmpty()) emptyList() else listOf(VocalEvent.BABBLE)).distinct()
-    val sound get() = events.singleOrNull()?.label ?: "여러 아기 소리"
-    val neutralOnly get() = events.isNotEmpty() && events.all { it == VocalEvent.BABBLE || it == VocalEvent.CHILD_VOICE }
+    val sound get() = if (infantVoiceWindows.isNotEmpty() && events.isEmpty()) "아기 발성" else events.singleOrNull()?.label ?: "여러 아기 소리"
+    val neutralOnly get() = (events.isNotEmpty() && events.all { it == VocalEvent.BABBLE || it == VocalEvent.CHILD_VOICE }) ||
+        (infantVoiceWindows.isNotEmpty() && events.isEmpty())
 }
 
 /** Event observations only. Scores are uncalibrated multilabel outputs, not intent probabilities.
@@ -36,7 +39,13 @@ internal object SoundTimeline {
     fun decide(audio: SoundAnalysis, durationMs: Long = 30_000): SoundDecision {
         val original = decideYamnet(audio, durationMs)
         if (original.issue !in setOf(AnalysisIssue.INFANT_UNCONFIRMED, AnalysisIssue.BACKGROUND_DOMINANT) ||
-            audio.problem != null || audio.babbleWindows.isEmpty()) return original
+            audio.problem != null) return original
+        if (audio.babbleWindows.isEmpty()) {
+            if (audio.infantVoiceWindows.isEmpty() || durationMs < 1_000 || audio.infantVoiceWindows.any {
+                    it.startMs < 0 || it.endMs > minOf(durationMs, 20_000) || it.endMs - it.startMs !in 1_000..10_000
+                } || audio.infantVoiceWindows.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return original
+            return SoundDecision(infantVoiceWindows = audio.infantVoiceWindows)
+        }
         if (audio.babbleWindows.any { it.startMs < 0 || it.endMs > 20_000 || it.endMs - it.startMs !in 1_000..10_000 })
             return original
         // Broad AST intervals are intentionally not VocalMoments: no exact onset, frame

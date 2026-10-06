@@ -66,19 +66,37 @@ internal object AstAudioAnalyzer {
                         for ((start, end) in windowRanges(rawPcm.size)) {
                             checkActive()
                             val slice = rawPcm.copyOfRange(start, end)
-                            val features = try { AstFeatures.extract(slice, ::checkActive) } finally { slice.fill(0f) }
-                            val logits = try {
+                            var windowLevel: Double? = null
+                            val features = try {
+                                if (BuildConfig.AST_INFANT_PRESENCE) {
+                                    val cleaned = AudioCleanup.filter(slice)
+                                    try { windowLevel = AudioCleanup.strongestSecondRms(cleaned) }
+                                    finally { cleaned.fill(0f) }
+                                }
+                                checkActive()
+                                AstFeatures.extract(slice, ::checkActive)
+                            } finally { slice.fill(0f) }
+                            val (logits, presence) = try {
                                 val buffer = ByteBuffer.allocateDirect(features.size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer()
                                 buffer.put(features).rewind()
                                 try { OnnxTensor.createTensor(environment, buffer, longArrayOf(1, 1024, 128)).use { input ->
                                     NativeRunGuard(job, deadline).use { guard ->
-                                        session.run(mapOf("input_values" to input), setOf("logits"), guard.options).use { result ->
+                                        val outputs = if (BuildConfig.AST_INFANT_PRESENCE) setOf("logits", "infant_presence") else setOf("logits")
+                                        session.run(mapOf("input_values" to input), outputs, guard.options).use { result ->
                                             checkActive()
                                             val output = result.get("logits").orElseThrow { IllegalStateException("AST output missing") } as? OnnxTensor
                                                 ?: error("AST output is not a tensor")
                                             val values = output.floatBuffer
                                             check(values.remaining() == 527) { "AST output length mismatch" }
-                                            FloatArray(527).also { values.get(it) }
+                                            val presenceScore = if (BuildConfig.AST_INFANT_PRESENCE) {
+                                                val tensor = result.get("infant_presence").orElseThrow {
+                                                    IllegalStateException("AST infant output missing") } as? OnnxTensor
+                                                    ?: error("AST infant output is not a tensor")
+                                                val scores = tensor.floatBuffer
+                                                check(scores.remaining() == 1) { "AST infant output length mismatch" }
+                                                scores.get().also { check(it.isFinite() && it in 0f..1f) { "AST infant output invalid" } }
+                                            } else null
+                                            FloatArray(527).also { values.get(it) } to presenceScore
                                         }
                                     }
                                 } } finally {
@@ -88,7 +106,7 @@ internal object AstAudioAnalyzer {
                             } finally { features.fill(0f) }
                             checkActive()
                             val scores = try { scoresFromLogits(logits) } finally { logits.fill(0f) }
-                            windows += AstAudioWindow(start * 1000L / 16000, end * 1000L / 16000, scores)
+                            windows += AstAudioWindow(start * 1000L / 16000, end * 1000L / 16000, scores, presence, windowLevel)
                         }
                         checkActive()
                         AstAudioAnalysis(windows)
@@ -127,11 +145,20 @@ internal object AstAudioAnalyzer {
     }
 
     private fun validateGraph(session: OrtSession) {
-        check(session.inputNames == setOf("input_values") && session.outputNames == setOf("logits"))
+        val expectedOutputs = if (BuildConfig.AST_INFANT_PRESENCE) setOf("logits", "infant_presence",
+            "/source/classifier/layernorm/LayerNormalization_output_0") else setOf("logits")
+        check(session.inputNames == setOf("input_values") && session.outputNames == expectedOutputs)
         val input = session.inputInfo.getValue("input_values").info as? TensorInfo ?: error("AST input invalid")
         val output = session.outputInfo.getValue("logits").info as? TensorInfo ?: error("AST output invalid")
         check(input.type == OnnxJavaType.FLOAT && input.shape.contentEquals(longArrayOf(1, 1024, 128)))
         check(output.type == OnnxJavaType.FLOAT && output.shape.contentEquals(longArrayOf(1, 527)))
+        if (BuildConfig.AST_INFANT_PRESENCE) {
+            val presence = session.outputInfo.getValue("infant_presence").info as? TensorInfo ?: error("AST infant output invalid")
+            val embedding = session.outputInfo.getValue("/source/classifier/layernorm/LayerNormalization_output_0").info as? TensorInfo
+                ?: error("AST representation output invalid")
+            check(presence.type == OnnxJavaType.FLOAT && presence.shape.contentEquals(longArrayOf(1, 1)))
+            check(embedding.type == OnnxJavaType.FLOAT && embedding.shape.contentEquals(longArrayOf(1, 768)))
+        }
     }
 
     /** The monitor only sets terminate. The inference owner closes handles after run returns.

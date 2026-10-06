@@ -58,7 +58,9 @@ class AstAudioAnalyzerTest {
     @Test fun syntheticInt8OrtLogitsMatchHostRuntimeGolden() {
         val testContext = InstrumentationRegistry.getInstrumentation().context
         val golden = JSONObject(testContext.assets.open("ast-int8-logits-golden.json").bufferedReader().use { it.readText() })
-        assertEquals(AstModelStore.SHA256, golden.getString("model_sha256"))
+        // The frozen infant head leaves all original logits unchanged. This golden
+        // describes the base logits; the model store separately pins selected bytes.
+        assertEquals(AstModelStore.BASE_SHA256, golden.getString("model_sha256"))
         val environment = OrtEnvironment.getEnvironment()
         val model = AstModelStore.resolve(context) {}
         OrtSession.SessionOptions().use { options ->

@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch
 import copy
 from extra_babble_evaluation import sources,ROOT
+from extra_babble_evaluation import verify_final_pins,SOURCES_SHA,CANDIDATE_SHA,HEAD_SHA
 
 
 class ExtraSourceGuards(unittest.TestCase):
@@ -29,6 +30,17 @@ class ExtraSourceGuards(unittest.TestCase):
             changed=copy.deepcopy(raw); changed['files'][0][field]=value
             with patch('extra_babble_evaluation.read_report',return_value=changed):
                 with self.assertRaises(ValueError): sources(self.path)
+
+    def test_metadata_drift_after_acquisition_prevents_completion(self):
+        from pathlib import Path
+        model=Path('model.onnx');head=Path('head')
+        pins={self.path:SOURCES_SHA,model:CANDIDATE_SHA,head/'head-ast-presence-public.npz':HEAD_SHA}
+        with patch('extra_babble_evaluation.digest',side_effect=pins.__getitem__):
+            self.assertEqual(verify_final_pins(self.path,model,head)['source'],SOURCES_SHA)
+        for changed in pins:
+            drift=dict(pins);drift[changed]='0'*64
+            with patch('extra_babble_evaluation.digest',side_effect=drift.__getitem__):
+                with self.assertRaises(ValueError): verify_final_pins(self.path,model,head)
 
 
 if __name__=='__main__': unittest.main()

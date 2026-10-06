@@ -33,12 +33,12 @@ internal object SoundPhaseRecovery {
     }
 
     fun shouldRetry(audio: SoundAnalysis): Boolean = audio.problem == null &&
-        audio.babbleWindows.isEmpty() && audio.frames.isNotEmpty() &&
+        audio.babbleWindows.isEmpty() && audio.infantVoiceWindows.isEmpty() && audio.frames.isNotEmpty() &&
         !SoundTimeline.hasInfantCandidate(audio) &&
         SoundTimeline.decide(audio).issue in recoverable
 
     fun choose(original: SoundAnalysis, shifted: SoundAnalysis): SoundAnalysis {
-        if (!shouldRetry(original) || shifted.problem != null || shifted.babbleWindows.isNotEmpty() ||
+        if (!shouldRetry(original) || shifted.problem != null || shifted.babbleWindows.isNotEmpty() || shifted.infantVoiceWindows.isNotEmpty() ||
             shifted.frames.isEmpty() || shifted.frames.first().startMs != OFFSET_SAMPLES / 16L ||
             shifted.frames.zipWithNext().any { (a, b) -> b.startMs - a.startMs < FRAME_MS }) return original
         // Persistence is tested on the second phase alone, whose windows do not overlap.

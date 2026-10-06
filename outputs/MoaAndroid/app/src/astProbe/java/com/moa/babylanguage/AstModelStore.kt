@@ -11,9 +11,12 @@ import java.security.MessageDigest
 
 /** Only immutable bundled model bytes are copied; no audio is written or uploaded. */
 internal object AstModelStore {
-    const val ASSET = "ast-dynamic-int8.onnx"
-    const val SIZE = 91_134_123L
-    const val SHA256 = "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e"
+    const val BASE_SHA256 = "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e"
+    val ASSET = if (BuildConfig.AST_INFANT_PRESENCE) "ast-infant-presence-candidate.onnx" else "ast-dynamic-int8.onnx"
+    val SIZE = if (BuildConfig.AST_INFANT_PRESENCE) 91_138_597L else 91_134_123L
+    val SHA256 = if (BuildConfig.AST_INFANT_PRESENCE)
+        "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a"
+        else BASE_SHA256
 
     // Called only while AstAudioAnalyzer's process-wide mutex is held.
     fun resolve(context: Context, checkActive: () -> Unit): File {

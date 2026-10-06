@@ -3,6 +3,7 @@ work/
 # Verified local AST derivative; preparation helper pins size and SHA256.
 outputs/MoaAndroid/app/src/astProbe/assets/ast-dynamic-int8.onnx
 outputs/MoaAndroid/app/src/astProbe/assets/ast-*.partial
+outputs/MoaAndroid/app/src/infantPresence/assets/*.onnx
 .serena/
 **/.gradle/
 **/.kotlin/
