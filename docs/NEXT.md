@@ -1,5 +1,13 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+최신은 [binary35 실측](research/20261007-infant-presence-results.md)이다. 前23head/CV도최초누락을회복못했고
+성인웃음오인이남았다. binary35는기존웃음오인을줄였지만영아validation4미검출·새비명오인이라미탑재다.
+다음은고정공개35의시간창별weak multiple-instance 학습과별도영아source확장/작은representation 권리·입력계약조사다.
+같은private평균head를반복하거나threshold를낮추지않는다. private자료는평가전용이다.
+연구QA21unit/실제4CLI/worker0/이번stateclear와중복실패MP3 3.13MB정리는제품품질목표와구분한다.
+0.5.18/code32이후새앱배포없음/전체goal active. 다음신호가있는후보만오인보존·Android·독립검토·beta에이어간다.
+아래단계는선행실험이력으로본다.
+
 가장 최신 실행은 [VTC 필터·quiet창 제외](research/20261007-vtc1-guarded-contract.md)와
 [기존encoder의 작은head 인터페이스](research/20261007-infant-head-preview-interface.md)다.
 두 누락의 아이 신호는 필터 후에도 유지됐고 모든5열 backend 동등성은36조건에서 통과했다.

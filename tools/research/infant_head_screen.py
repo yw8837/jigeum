@@ -23,6 +23,9 @@ TRAIN = (('113220','113221','113223','46963','47371','377237','8157'),
          ('184432','168494','87680','122204'), ('256684','412332','148628','410616'))
 VALIDATION = (('18274','18277','18276','18273'),('241477','17643'),('51319','118659'))
 IDS = tuple(item for group in TRAIN + VALIDATION for item in group)
+EXTRA_ADULT_TRAIN = ('92388','277549','119459','254869','319537','219663')
+EXTRA_ADULT_VALIDATION = ('42841','134720','238819','384213','336537','353291')
+EXTENDED_IDS = IDS + EXTRA_ADULT_TRAIN + EXTRA_ADULT_VALIDATION
 RUNTIME = dict(python='3.12.14', numpy='2.5.3', litert='2.2.0', flatbuffers='25.12.19')
 
 
@@ -45,6 +48,10 @@ def runtime():
 
 
 def expected_role(identity):
+    if identity in EXTRA_ADULT_TRAIN:
+        return 'train','adult_vocal'
+    if identity in EXTRA_ADULT_VALIDATION:
+        return 'validation','adult_vocal'
     for role, groups in (('train',TRAIN),('validation',VALIDATION)):
         for label, group in enumerate(groups):
             if identity in group:
@@ -60,8 +67,9 @@ def allowed_license(value):
 
 
 def validate_sources(rows):
-    if not isinstance(rows,list) or len(rows) != len(IDS):
-        raise ValueError('Expected exact 23 source rows (47370 excluded)')
+    if not isinstance(rows,list) or len(rows) not in (len(IDS),len(EXTENDED_IDS)):
+        raise ValueError('Expected exact pinned 23 or 35 source rows (47370 excluded)')
+    expected_ids=IDS if len(rows)==len(IDS) else EXTENDED_IDS
     seen = set()
     for row in rows:
         identity = row.get('id')
@@ -80,13 +88,13 @@ def validate_sources(rows):
                 or row.get('training_blocked') or not isinstance(row.get('sourcegroup'),str)
                 or not 1 <= len(row['sourcegroup']) <= 200):
             raise ValueError('Source role/weak class/provenance boundary differs')
-    if seen != set(IDS):
+    if seen != set(expected_ids):
         raise ValueError('Missing source ID')
     train_sources = {row['sourcegroup'] for row in rows if row['role']=='train'}
     validation_sources = {row['sourcegroup'] for row in rows if row['role']=='validation'}
     if train_sources & validation_sources:
         raise ValueError('Training and validation sources overlap')
-    return sorted(rows,key=lambda row:IDS.index(row['id']))
+    return sorted(rows,key=lambda row:expected_ids.index(row['id']))
 
 
 def read_sources(path, expected_sha):
@@ -106,22 +114,34 @@ class NoRedirects(urllib.request.HTTPRedirectHandler):
         raise ValueError('Public preview redirect prohibited')
 
 
+def verified_reuse(reuse_root, row):
+    if reuse_root is None:
+        return None
+    snapshot=reuse_root/'acquisition.json'
+    if not snapshot.exists():
+        snapshot=reuse_root/'acquisition-progress.json'
+    previous=[r for r in read_report(snapshot)['files'] if r['id']==row['id']]
+    if not previous:
+        return None
+    path=reuse_root/(row['id']+'.mp3')
+    item=previous[0]
+    if (len(previous)!=1 or path.is_symlink() or not 1<=path.stat().st_size<=2*1024**2
+            or path.stat().st_size!=item['bytes'] or digest(path)!=item['sha256']):
+        raise ValueError('Reused preview differs from earlier snapshot')
+    if (item.get('preview_url') or item.get('url')) != row['preview_url']:
+        raise ValueError('Reused preview URL differs')
+    return path.read_bytes()
+
+
 def acquire(args):
     rows = read_sources(args.sources,args.sources_sha)
     opener = urllib.request.build_opener(NoRedirects())
     result = []
     for row in rows:
-        reuse = args.reuse / (row['id']+'.mp3') if args.reuse else None
-        previous = []
-        if reuse and reuse.exists():
-            previous = [r for r in read_report(args.reuse/'acquisition.json')['files'] if r['id']==row['id']]
-        if previous:
-            if len(previous)!=1 or reuse.is_symlink() or digest(reuse)!=previous[0]['sha256']:
-                raise ValueError('Reused preview differs from earlier snapshot')
-            data = reuse.read_bytes()
-            if previous[0]['url'] != row['preview_url']:
-                raise ValueError('Reused preview URL differs')
-        else:
+        data = verified_reuse(args.reuse,row)
+        reused = data is not None
+        if data is None:
+            print(json.dumps(dict(acquiring_public_id=row['id'])),flush=True)
             request = urllib.request.Request(row['preview_url'],headers={'User-Agent':'Agattok-local-research/1.0'})
             with opener.open(request,timeout=20) as response:
                 if (response.status!=200 or response.url!=row['preview_url']
@@ -133,8 +153,12 @@ def acquire(args):
         path = args.output/(row['id']+'.mp3')
         with path.open('xb') as stream:
             stream.write(data)
-        result.append(dict(row,bytes=len(data),sha256=digest(path),reused_previous_preview=bool(previous),
+        result.append(dict(row,bytes=len(data),sha256=digest(path),reused_previous_preview=reused,
                            lossy_preview_not_fsd_pcm=True,audio_review_completed=False))
+        # A failed network response is never reusable. Only fully written, hashed files enter progress.
+        write(args.output/'acquisition-progress.json',dict(files=result,status='partial',
+              source_snapshot_sha256=args.sources_sha,runner_sha256=digest(Path(__file__)),
+              training=False,private_media_read=False))
     write(args.output/'acquisition.json',dict(files=result,source_snapshot_sha256=args.sources_sha,
           runner_sha256=digest(Path(__file__)),training=False,private_media_read=False))
 
@@ -197,7 +221,7 @@ def public_features(args):
     import numpy as np
     sources=read_sources(args.sources,args.sources_sha)
     acquired=read_report(args.media/'acquisition.json')
-    if acquired['source_snapshot_sha256']!=args.sources_sha or [r['id'] for r in acquired['files']]!=list(IDS):
+    if acquired['source_snapshot_sha256']!=args.sources_sha or [r['id'] for r in acquired['files']]!=[r['id'] for r in sources]:
         raise ValueError('Acquisition differs')
     encoder=FixedEncoder()
     arrays={}
@@ -320,7 +344,7 @@ def fit(args):
     if metadata['source_snapshot_sha256']!=args.sources_sha or digest(path)!=metadata['features_sha256']:
         raise ValueError('Features provenance differs')
     cases=metadata['cases']
-    if [c['id'] for c in cases]!=list(IDS):
+    if [c['id'] for c in cases]!=[r['id'] for r in sources]:
         raise ValueError('Feature cases differ')
     for c,s in zip(cases,sources):
         if (c['role'],c['weak_class'],c['sourcegroup'])!=(s['role'],s['provisionalclass'],s['sourcegroup']):
@@ -360,7 +384,7 @@ def fit(args):
                 matrix[CLASSES.index(row['weak_class']),CLASSES.index(row['predicted'])]+=1
         confusion[role]=matrix.tolist()
     write(args.output/'fit.json',dict(cases=rows,confusion_weak_caption_only=confusion,
-        classes=CLASSES,train_ids=[c['id'] for c in train],train_cases=len(train),validation_cases=8,
+        classes=CLASSES,train_ids=[c['id'] for c in train],train_cases=len(train),validation_cases=len(cases)-len(train),
         parameters=3075,fp32_parameter_bytes=12300,head_sha256=digest(args.output/'head-weak-public.npz'),
         features_report_sha256=digest(args.features/'features.json'),source_snapshot_sha256=args.sources_sha,
         configuration=dict(steps=300,lr=.03,l2=.01,initialization='zero',normalization='clip_L2_only',

@@ -1,14 +1,16 @@
 """Synthetic guards for the fixed weak head; no real media or network."""
 import copy
 import unittest
+import tempfile
+from pathlib import Path
 import numpy as np
-from infant_head_screen import (IDS,CLASSES,expected_role,validate_sources,normalize,pooled,
-                                source_weights,train_linear,softmax,supports)
+from infant_head_screen import (ROOT,IDS,EXTENDED_IDS,CLASSES,expected_role,validate_sources,normalize,pooled,
+                                source_weights,train_linear,softmax,supports,verified_reuse,write,digest)
 
 
-def sources():
+def sources(ids=IDS):
     rows=[]
-    for identity in IDS:
+    for identity in ids:
         role,label=expected_role(identity)
         rows.append(dict(id=identity,role=role,provisionalclass=label,
             preview_url=f'https://cdn.freesound.org/previews/{int(identity)//1000}/{identity}_123-lq.mp3',
@@ -19,6 +21,34 @@ def sources():
 
 
 class InfantHeadGuards(unittest.TestCase):
+    def test_extended35_exact_roles_and_partial_extra_rejected(self):
+        rows=sources(EXTENDED_IDS)
+        self.assertEqual(len(validate_sources(rows)),35)
+        for wrong in (rows[:-1],rows+[rows[-1]],rows[:23]+rows[24:]):
+            with self.assertRaises(ValueError):
+                validate_sources(wrong)
+        rows[-1]['role']='train'
+        with self.assertRaises(ValueError):
+            validate_sources(rows)
+
+    def test_reuse_current_legacy_partial_hash_and_unknown_not_accepted(self):
+        with tempfile.TemporaryDirectory(prefix='head-reuse-unit-',dir=ROOT/'work') as taskdir:
+            root=Path(taskdir)
+            row=sources()[0]
+            path=root/(row['id']+'.mp3')
+            path.write_bytes(b'unit-public-placeholder')
+            item=dict(id=row['id'],url=row['preview_url'],bytes=path.stat().st_size,sha256=digest(path))
+            write(root/'acquisition-progress.json',dict(files=[item],status='partial'))
+            self.assertEqual(verified_reuse(root,row),path.read_bytes())
+            self.assertIsNone(verified_reuse(root,sources()[1]))
+            item['preview_url']=item['url']
+            item['url']='https://freesound.org/people/example/sounds/113220/'
+            write(root/'acquisition.json',dict(files=[item]))
+            self.assertEqual(verified_reuse(root,row),path.read_bytes())
+            path.write_bytes(b'changed')
+            with self.assertRaises(ValueError):
+                verified_reuse(root,row)
+
     def test_exact_ids_license_url_and_injection_description(self):
         self.assertEqual(len(validate_sources(sources())),23)
         for field,value in (('id','../123'),('preview_url','https://example.com/a.mp3'),

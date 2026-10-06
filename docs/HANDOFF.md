@@ -2,6 +2,19 @@
 
 갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 후속 — 작은 공개 head의 실제 실패와 다음 학습 방식
+
+[첫23 weakhead](research/20261007-infant-head-first-results.md)는 약국 첫 누락 support0이었다.
+[훈련source 내 L2선택](research/20261007-infant-head-source-cv-results.md)은 희소 .975초만 남겼고
+성인웃음2개에 새 연속오인이 생겨 미채택했다. 이번 [성인비언어12+binary35 실측](research/20261007-infant-presence-results.md)은
+해당웃음2오인0이지만 첫누락0/후속.975초단일, 영아validation4support0/성인비명3.9초오인이라 역시제품미탑재다.
+원본·현재product엔진·threshold를바꾸거나사용자자료를훈련에넣지않았다. 현재제품은 여전히0.5.18/code32.
+[연구도구QA](qa/infant-presence-20261007.md)는고유21unit/실제CLI거부4/5정상run자손0,
+격리state부재/중복실패MP3 55개3.13MB정리다. 취득timeout2회/후속feature setup실패와state응답schema복구도보존했다.
+다음은clip평균이짧은아기발성을지우는지확인하는weak multiple-instance 시간창학습과영아source확장이다.
+ready영아representation·정확weights·상업권 원문조사도계속한다. 유효이득·오인회귀·Android·독립review 후에만beta로적용한다.
+전체goal은active이며도구QA나연구문서를앱개선완료로보고하지않는다.
+
 ### 활성 후속 — 누락 단서 보존·작은 자체 head의 실행 경로
 
 사용자의 ‘유의미한 결과까지 계속’ 지시를 유지한다. VTC rawgraph의 무음 실패는 그대로 보존했으며,

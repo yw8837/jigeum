@@ -15,6 +15,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('sources','head','output'):
         parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--presence',action='store_true')
     args=parser.parse_args()
     out=args.output.resolve()
     validate_output_path(out)
@@ -28,14 +29,16 @@ def main():
     missing=out/'missing-args-must-not-exist'
     if any(path.exists() for path in (wrong,outside,missing)):
         raise ValueError('Expected nonexistent rejection targets')
-    common=[sys.executable,'-B',str(ROOT/'tools/research/infant_head_screen.py')]
+    script='infant_presence_probe.py' if args.presence else 'infant_head_screen.py'
+    common=[sys.executable,'-B',str(ROOT/'tools/research'/script)]
     cases=[dict(id='wrong-source-sha',expected='Source snapshot hash',target=wrong,
-               argv=['acquire','--sources',str(sources),'--sources-sha','0'*64,'--output',str(wrong)]),
+               argv=[*(['fit','--features',str(out)] if args.presence else ['acquire']),
+                     '--sources',str(sources),'--sources-sha','0'*64,'--output',str(wrong)]),
            dict(id='stale-head-output',expected='FileExistsError',target=head,
                argv=['fit','--sources',str(sources),'--sources-sha',sha,'--features',str(out),'--output',str(head)]),
            dict(id='outside-output',expected='Private outputs',target=outside,
                argv=['evaluate','--head',str(head),'--corpus',str(out),'--output',str(outside)]),
-           dict(id='missing-arguments',expected='Missing required mode arguments',target=missing,
+           dict(id='missing-arguments',expected='Missing required presence mode arguments' if args.presence else 'Missing required mode arguments',target=missing,
                argv=['evaluate','--output',str(missing)])]
     (out/'matrix-before.json').write_text(json.dumps([dict(id=c['id'],expected=c['expected']) for c in cases],indent=2),encoding='utf-8')
     env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
@@ -52,6 +55,7 @@ def main():
         rows.append(dict(id=case['id'],exit_code=result.returncode,expected_signal_present=case['expected'] in log,
             old_head_unchanged=before==after,new_output_absent=absent,passed=passed))
     report=dict(status='pass' if all(row['passed'] for row in rows) else 'fail',cases=rows,
+        runner=script,
         classifier_forwards=0,network_requests=0,new_fixture_files=0,old_head_before=before,
         preserved_existing_blocked_fixtures=True)
     (out/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8')

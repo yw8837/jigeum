@@ -67,7 +67,7 @@ def worker(args):
             or metadata['source_snapshot_sha256']!=args.sources_sha):
         raise ValueError('Fixed feature archive/provenance differs')
     cases=metadata['cases']
-    if [c['id'] for c in cases]!=list(IDS):
+    if [c['id'] for c in cases]!=[r['id'] for r in sources]:
         raise ValueError('Fixed cases differ')
     for c,s in zip(cases,sources):
         if (c['role'],c['weak_class'],c['sourcegroup'])!=(s['role'],s['provisionalclass'],s['sourcegroup']):
@@ -103,7 +103,7 @@ def worker(args):
                 matrix[CLASSES.index(row['weak_class']),CLASSES.index(row['predicted'])]+=1
         confusion[role]=matrix.tolist()
     write(args.output/'fit.json',dict(cases=rows,confusion_weak_caption_only=confusion,classes=CLASSES,
-        train_ids=[c['id'] for c in train],train_cases=15,validation_cases=8,parameters=3075,
+        train_ids=[c['id'] for c in train],train_cases=len(train),validation_cases=len(cases)-len(train),parameters=3075,
         head_sha256=digest(args.output/'head-weak-public.npz'),source_snapshot_sha256=args.sources_sha,
         configuration=dict(steps=300,lr=.03,l2=chosen,initialization='zero',normalization='clip_L2_only',
             class_source_clip_balanced=True,infant_threshold=.8,margin=.4,selection='train_source_cv_macro_nll'),
