@@ -1,6 +1,6 @@
 # 협업 인수인계 — 아가톡
 
-갱신: **2026-10-06** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
+갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
 ### 활성 — VTC1에서 기존 누락의 아이 목소리 신호를 처음 확인
 
@@ -17,6 +17,15 @@
 다음은내부graph이식/모바일비용·기존음악충돌결합·새source/TV/영아평가이며4.53MB후보weight만활성유지한다.
 VTC는제품미탑재,code32이후새앱변경/배포없음이다. 일반품질·욕구번역·실폰승인을뜻하지않는다.
 조사에서멈추지않고유효이득·오인방지·사용권·AndroidQA·독립review·beta업데이트까지계속한다.
+
+후속 [두축review](qa/vtc1-code-review-20261007.md)의PythonpinP2·replay자원제안을수정했다.
+현재runtime과과거Python미기록을구분하고JSON/domain/stale/Job60초1GiB를강화했다.
+재검토미해결0, temporal/native15+Job10+실제거부총10, 기존3+33event재생변경0/원음재추론0이다.
+[내부ONNX변환](research/20261007-vtc1-graph-contract.md)은4.54MB이며완전무음의수치차이로floatgate실패했다.
+같은graph의실제3구간/ORT49창은원Torch기록과maxerror1.59e-5로일치했으나전체변환승인으로바꾸지않는다.
+무음/정규화원인·모바일비용·사용권과상업권명확한작은head대안조사를계속한다.
+VTC원weight+floatgraph각하나(합계약9.1MB)만활성후속용으로유지하며변형fixture/격리state는제거했다.
+VTC/graph미탑재·code32이후새배포없음이고전체목표는active다.
 
 ### 활성 — 사용자가 인식·맥락 개선의 지속 실행을 재확정
 

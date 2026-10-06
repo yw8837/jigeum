@@ -31,5 +31,9 @@ stale output/evidence 거부와 Job60초/1GiB를 추가했다.
 기존3+33case의사건재생변화0/추가추론0을 확인했다.
 다른작업의삭제차단대상을유지하며이번metadatafixture만개별제거했다.
 
-수정 고정 diff로 두 축 재검토를 요청한다. 재검토 전 미해결0으로 보고하지 않는다.
+수정 고정 `6c5a525...62e7de4`를 두 축에 재검토했다.
+Standards는 이전제안해소/새규칙위반0/새휴리스틱0, Spec은 P2해소/새필수0이었다.
+두검토자는현재pin/runtime검사·과거Python미기록분리·JSON/domain/Job·QA거부/정리metadata를확인했다.
+개별사건을열거나독립재계산하지않았으며delta는허용된집계metadata와고정code에서확인한범위다.
+Standards 최초필수0/제안1→수정후0, Spec 최초필수1→수정후미해결0이다.
 [실제QA/실패이력](vtc1-20261007.md)을 따른다. 전체 앱 개선·제품배포 완료로 닫지 않는다.

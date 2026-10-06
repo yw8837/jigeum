@@ -5,6 +5,9 @@
    [weight권리](research/20261007-vtc1-distribution-rights.md)는미확정이고공식문의초안은미발송/승인대기다.
    새로운source/영아정답/TV/원래승인보존·실기기와권리를확보하기전제품에넣지않는다.
    source/pin/결과는보존하고진행중인4.53MBweight만유지한다. 연구QA완료를앱개선목표완료로닫지않는다.
+   [ONNX후속](research/20261007-vtc1-graph-contract.md)은실제3구간의수치가일치했으나무음gate실패가남았다.
+   활성4.54MBgraph는정규화진단용이다. 원래gate를완화하지않고kernel차이/기존무음guard와새오인을검토한다.
+   원weight문의는승인대기/미발송이다. 상업권명확한작은taskhead/공개data대안조사도재개했다.
 
 1. [PANNs Cnn10 실제실행](research/20261006-panns-cnn10-contract.md)도회복근거미확보로종료했다.
    AST2초/4초·PretrainedSED의 [완료한 실행](research/20261006-short-context-and-pretrainedsed-results.md)과함께같은3구간반복을하지않는다.
