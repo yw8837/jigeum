@@ -416,7 +416,8 @@ internal fun CaptureFlow(
                 }
             }
             if (current != null) {
-                ClipPlayerPane(current, selection.start.toLong(), selection.endInclusive.toLong(), stopPlayback, enabled = !analyzing && !navigationLocked)
+                ClipPlayerPane(current, selection.start.toLong(), selection.endInclusive.toLong(), stopPlayback,
+                    enabled = !analyzing && !navigationLocked, showPreview = lockedResult == null)
             }
             if (lockedResult == null && current != null) {
                 Text("어느 순간을 들어볼까요?", color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
@@ -555,7 +556,7 @@ internal fun CaptureFlow(
         if (current != null && lockedResult == null) Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp).testTag("analysis-action")) {
             if (analyzing) {
                 LinearProgressIndicator(Modifier.fillMaxWidth())
-                Text("선택한 구간의 ${if (visual) "소리와 표정" else "소리"}를 살펴보고 있어요…", color = Ink, modifier = Modifier.padding(top = 8.dp))
+                Text("선택한 구간의 ${if (visual) "소리와 표정을" else "소리를"} 살펴보고 있어요…", color = Ink, modifier = Modifier.padding(top = 8.dp))
                 TextButton(onClick = { cancelAnalysis(); message = "분석을 취소했어요. 구간을 다시 고를 수 있어요." }) { Text("분석 취소") }
             } else {
                 Text("${ClipRangeEdits.time(selection.start.toLong())} – ${ClipRangeEdits.time(selection.endInclusive.toLong())} · ${ClipRangeEdits.seconds((selection.endInclusive - selection.start).toLong())}초 선택",
@@ -620,27 +621,34 @@ private fun CameraRecordingPreview(facing: Int, onReady: (Recorder, Boolean) -> 
 }
 
 @Composable
-internal fun ClipPlayerPane(clip: LocalClip, startMs: Long, endMs: Long, stopSignal: Int = 0, enabled: Boolean = true) {
+internal fun ClipPlayerPane(clip: LocalClip, startMs: Long, endMs: Long, stopSignal: Int = 0, enabled: Boolean = true,
+                            showPreview: Boolean = true) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val player = remember(clip.uri) { MediaPlayer() }
     var prepared by remember(clip.uri) { mutableStateOf(false) }
     var playing by remember(clip.uri) { mutableStateOf(false) }
     var pendingPlay by remember(clip.uri) { mutableStateOf(false) }
+    var seekReady by remember(clip.uri) { mutableStateOf(false) }
+    var surfaceReady by remember(clip.uri) { mutableStateOf(false) }
+    val playerAlive = remember(player) { AtomicBoolean(true) }
     var position by remember(clip.uri) { mutableLongStateOf(startMs) }
     var error by remember(clip.uri) { mutableStateOf<String?>(null) }
     val bounds by rememberUpdatedState(startMs..endMs)
     val canPlay by rememberUpdatedState(enabled)
+    fun startWhenReady() {
+        if (playerAlive.get() && pendingPlay && canPlay && seekReady && (!clip.hasVideo || surfaceReady)) {
+            pendingPlay = false
+            runCatching { player.start(); playing = true }.onFailure { error = "재생을 시작하지 못했어요." }
+        }
+    }
     DisposableEffect(player) {
         var disposed = false
         player.setOnPreparedListener { if (!disposed) { prepared = true; it.seekTo(bounds.first, MediaPlayer.SEEK_CLOSEST) } }
-        player.setOnErrorListener { _, _, _ -> if (!disposed) { error = "이 파일은 재생하지 못했어요. 다른 파일을 골라 주세요."; playing = false }; true }
-        player.setOnCompletionListener { if (!disposed) playing = false }
+        player.setOnErrorListener { _, _, _ -> if (!disposed) { error = "이 파일은 재생하지 못했어요. 다른 파일을 골라 주세요."; pendingPlay = false; playing = false }; true }
+        player.setOnCompletionListener { if (!disposed) { pendingPlay = false; playing = false } }
         player.setOnSeekCompleteListener {
-            if (!disposed && pendingPlay && canPlay) {
-                pendingPlay = false
-                runCatching { it.start(); playing = true }.onFailure { error = "재생을 시작하지 못했어요." }
-            }
+            if (!disposed) { seekReady = true; startWhenReady() }
         }
         runCatching { player.setDataSource(context, clip.uri); player.prepareAsync() }.onFailure { error = "파일을 재생하지 못했어요." }
         val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_STOP) {
@@ -650,7 +658,7 @@ internal fun ClipPlayerPane(clip: LocalClip, startMs: Long, endMs: Long, stopSig
             playing = false
         } }
         lifecycle.addObserver(observer)
-        onDispose { disposed = true; lifecycle.removeObserver(observer); player.release() }
+        onDispose { disposed = true; playerAlive.set(false); lifecycle.removeObserver(observer); player.release() }
     }
     LaunchedEffect(startMs, endMs, stopSignal, enabled) {
         pendingPlay = false
@@ -664,26 +672,38 @@ internal fun ClipPlayerPane(clip: LocalClip, startMs: Long, endMs: Long, stopSig
             delay(40)
         }
     }
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        if (clip.hasVideo) Box(Modifier.fillMaxWidth().height(240.dp).clip(RoundedCornerShape(20.dp)).background(Ink), contentAlignment = Alignment.Center) {
+    Column(Modifier.testTag("clip-player-pane"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        if (clip.hasVideo && (showPreview || playing || pendingPlay)) Box(Modifier.fillMaxWidth().height(240.dp).clip(RoundedCornerShape(20.dp)).background(Ink)
+            .testTag("clip-video-preview"), contentAlignment = Alignment.Center) {
         AndroidView(factory = {
             SurfaceView(it).apply { holder.addCallback(object : SurfaceHolder.Callback {
-                override fun surfaceCreated(holder: SurfaceHolder) { runCatching { player.setDisplay(holder) } }
+                override fun surfaceCreated(holder: SurfaceHolder) {
+                    if (playerAlive.get()) runCatching {
+                        player.setDisplay(holder); surfaceReady = true; startWhenReady()
+                    }.onFailure { pendingPlay = false; playing = false; error = "영상을 재생하지 못했어요." }
+                }
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) = Unit
-                override fun surfaceDestroyed(holder: SurfaceHolder) { runCatching { player.setDisplay(null) } }
+                override fun surfaceDestroyed(holder: SurfaceHolder) {
+                    surfaceReady = false
+                    if (playerAlive.get()) runCatching { player.setDisplay(null) }
+                }
             }) }
         }, modifier = Modifier.aspectRatio(clip.aspectRatio, matchHeightConstraintsFirst = clip.aspectRatio < 1f).fillMaxSize())
         }
-        else Row(Modifier.fillMaxWidth().background(PaleSage, RoundedCornerShape(20.dp)).padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+        else if (showPreview) Row(Modifier.fillMaxWidth().background(PaleSage, RoundedCornerShape(20.dp)).padding(20.dp)
+            .testTag("clip-audio-preview"), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Outlined.Mic, null, tint = Ink); Spacer(Modifier.width(12.dp)); Text("녹음한 소리", color = Ink)
         }
         OutlinedButton(onClick = {
             if (prepared) runCatching {
                 if (playing || pendingPlay) { pendingPlay = false; if (player.isPlaying) player.pause(); playing = false }
-                else { pendingPlay = true; player.seekTo(startMs, MediaPlayer.SEEK_CLOSEST) }
+                else { seekReady = false; pendingPlay = true; player.seekTo(startMs, MediaPlayer.SEEK_CLOSEST) }
             }.onFailure { error = "재생을 시작하지 못했어요." }
         }, enabled = prepared && error == null && enabled, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("clip-play")) {
-            Text(if (playing) "재생 멈추기 · ${ClipRange.clock(position)}" else "선택 구간 다시 듣기${if (clip.hasVideo) " · 영상 함께 보기" else ""}")
+            Text(if (playing) "재생 멈추기 · ${ClipRange.clock(position)}"
+                else if (!showPreview && clip.hasVideo) "선택 구간 다시 보기·듣기"
+                else if (!showPreview) "선택 구간 원음 다시 듣기"
+                else "선택 구간 다시 듣기${if (clip.hasVideo) " · 영상 함께 보기" else ""}")
         }
         error?.let { Text(it, color = Ink, fontSize = 13.sp) }
     }

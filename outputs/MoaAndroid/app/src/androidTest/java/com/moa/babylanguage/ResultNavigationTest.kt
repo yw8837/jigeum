@@ -290,6 +290,36 @@ class ResultNavigationTest {
         compose.onNodeWithTag("result-other-range-fixed").assertIsDisplayed()
     }
 
+    @Test fun resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview() {
+        start()
+        compose.onNodeWithTag("clip-video-preview").assertExists()
+        compose.onAllNodesWithTag("clip-play").assertCountEquals(1)
+        chooseRange(8_000f, 11_000f)
+        analyze()
+        compose.onNodeWithTag("clip-video-preview").assertDoesNotExist()
+        compose.onNodeWithTag("clip-audio-preview").assertDoesNotExist()
+        compose.onAllNodesWithTag("baby-phrase").assertCountEquals(1)
+        compose.onAllNodesWithTag("clip-play").assertCountEquals(1)
+        compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
+        compose.waitUntil(8_000) { compose.onAllNodes(hasTestTag("clip-play") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+        clickTag("clip-play")
+        awaitTag("clip-video-preview")
+        compose.waitUntil(8_000) { compose.onAllNodesWithText("재생 멈추기", substring = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("clip-video-preview").assertExists()
+        clickTag("clip-play")
+        compose.onNodeWithTag("clip-video-preview").assertDoesNotExist()
+        compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
+        clickTag("clip-play")
+        compose.waitUntil(8_000) { compose.onAllNodesWithText("재생 멈추기", substring = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(8_000) { compose.onAllNodesWithTag("clip-video-preview").fetchSemanticsNodes().isEmpty() }
+        compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
+        clickTag("capture-back"); awaitTag("selected-range")
+        compose.onNodeWithTag("clip-video-preview").assertExists()
+        compose.onNodeWithTag("clip-play").assertTextContains("영상 함께 보기")
+        compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
+        assertContentStartsAtTop()
+    }
+
     @Test fun shortLandscapeKeepsResultAndRangeActionsReachable() = shortLandscape(1f)
 
     @Test fun shortLandscapeAtDoubleFontKeepsResultAndRangeActionsReachable() = shortLandscape(2f)
