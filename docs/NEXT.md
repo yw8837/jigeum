@@ -6,6 +6,11 @@
 [결과/QA](qa/caption-android-20261007.md), [새ARM계약](research/20261007-caption-arm-contract.md)을 읽는다.
 실제폰0/새beta0/code32유지이며 기존head APK proof로 이번 caption runtime을 승인하지 않는다.
 
+연결 재점검: ADB 목록·무선 debugging mDNS는 비어 있고, Windows PnP에는 S25의
+Bluetooth만 있으며 Samsung USB/Android ADB 인터페이스0이다. 데이터 USB 케이블 연결,
+휴대폰 잠금 해제·USB 디버깅 허용 뒤 같은 fresh caption 시험을 진행한다. 드라이버 재설치나
+다른 기기 연결을 임의로 실행하지 않는다. 현재 코드 변경 없이 재연결이 필요한 상태다.
+
 1. 물리기기가 연결되면 JDK21/JAVA_HOME과 전용serial을 지정하고 현재
    `work/caption-android-20261007/final/caption-app.apk` 및 `caption-test.apk`를 사용한다.
    `tools/research/ast_device_benchmark.py --infant-caption-candidate`에 explicit
