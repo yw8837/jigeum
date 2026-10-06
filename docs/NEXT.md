@@ -1,5 +1,17 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
+가장 최신 실행은 [VTC 필터·quiet창 제외](research/20261007-vtc1-guarded-contract.md)와
+[기존encoder의 작은head 인터페이스](research/20261007-infant-head-preview-interface.md)다.
+두 누락의 아이 신호는 필터 후에도 유지됐고 모든5열 backend 동등성은36조건에서 통과했다.
+rawgraph 무음 실패·피아노 오인·사용권·Android 미검증은 그대로다. 같은 최적화 수준 비교를 다시 돌리지 않는다.
+[FSD source 감사](research/20261007-permissive-infant-voice-next.md)의 잠정 train58/보류27은
+원음/사건/가족 정답을 검수한 데이터가 아니다. 다음 실행은 public subset의 합법적 취득과
+라벨·혼합·원천 연결 확인, 기존encoder+작은head의 source 분리 비교다.
+원음/feature는 온디바이스이며 사용자자료 학습 금지, 기존public33은 회귀용이다.
+3publicpreview130,565B와 특징4,166B만 진행중 준비로 유지한다. 새encoder weight를 받지 않았다.
+새guarded QA의3fixture3,065B 정리는 자동검토차단으로 남겼고 우회하지 않는다. 격리state는 clear됐다.
+연구검증을 제품에 반영했다고 보고하지 말고 code32 이후 새 배포는 아직 없다고 명시한다.
+
 0. [VTC1첫실측](research/20261007-vtc1-first-screen-results.md)에서누락원본의두겹치는구간에아이신호가남았다.
    기존후보를반복하지말고VTC의원문시간축/후처리·피아노오인·기존규칙결합·내부graph이식/모바일비용을계속검증한다.
    [weight권리](research/20261007-vtc1-distribution-rights.md)는미확정이고공식문의초안은미발송/승인대기다.

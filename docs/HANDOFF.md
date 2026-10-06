@@ -2,6 +2,29 @@
 
 갱신: **2026-10-07** · 저장소: [yw8837/jigeum](https://github.com/yw8837/jigeum)
 
+### 활성 후속 — 누락 단서 보존·작은 자체 head의 실행 경로
+
+사용자의 ‘유의미한 결과까지 계속’ 지시를 유지한다. VTC rawgraph의 무음 실패는 그대로 보존했으며,
+별도 [필터·quiet 창 제외 계약](research/20261007-vtc1-guarded-contract.md)을 처음 실행했다.
+앱과 같은 DC/80Hz 식 뒤에도 한 원본의 두 누락 구간에 아이 단서 약2.140/.651초가 남았다.
+retained3/public33 모두 Torch/ORT 전열5e-4 안에서 일치했지만, **피아노 child 오인은 남고 일반 정확도는 미입증**이다.
+[연구 QA](qa/vtc1-guarded-20261007.md)의 단위6·실제CLI거부4는 통과했다. 새fixture3파일3,065B 삭제는
+자동검토에서 차단돼 해당 UltraQA는 cleanup BLOCKED이며 state는 정리했다. 다른 도구로 우회하지 않았다.
+독립 두 축은 요구/규칙 지적0이며 과거 graph 실행 SHA와 후속 guard SHA의 보고 누락P2도 해소했다.
+
+상업 허락이 명확한 [FSD 출처 감사](research/20261007-permissive-infant-voice-next.md)를 실제 manifest로 만들었다.
+아기 후보46와 성인/기타39를 source 기준으로 잠정 train58/보류27로 나눴다.
+이는 원음·사건 검수 완료나 family 독립 test가 아니다. 성인 흉내·합성·리믹스 누출을 발견해 분리했고
+현재 공개33과 출처가 겹치는 양성 source는 기존33을 독립 test로 쓰지 못하게 명시했다.
+사용자 원본/특징은 학습·calibration·augmentation에 넣지 않는다.
+
+[공개preview3·embedding 인터페이스](research/20261007-infant-head-preview-interface.md)는 실제 실행했다.
+기존 YAMNet의1024 특징을 메모리에서 추가 output으로 꺼내도16창의 모든521 score 차이0이었다.
+새encoder 다운로드/파일/제품변경은 없고, publicmp3 총130,565B·로컬특징4,166B만 다음 단계용으로 유지한다.
+초기dtype/코덱실패는 보존해 수정했고 pure unit4도 통과했다. 아직 작은head **학습·품질·Android 검증은 하지 않았다**.
+다음은 합법적 subset 취득·실제소리/혼합 검수·source 분리 head 비교와 VTC 기존 음악/성인 반례 결합이다.
+VTC 사용권 문의는 계속 미발송/기존 승인 질문의 답 대기다. 제품은 여전히0.5.18/code32이며 새beta를 배포하지 않았다.
+
 ### 활성 — VTC1에서 기존 누락의 아이 목소리 신호를 처음 확인
 
 10월7일후속 [실측](research/20261007-vtc1-first-screen-results.md)을추가했다.

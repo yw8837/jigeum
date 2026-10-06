@@ -207,3 +207,78 @@ eval에는 별도 보류 가능한 월령 설명도 있다: BoilingSand `50665,5
 현재 완료한 것은 **허락 대상 공개 index, 원문 출처 감사, 30/16개 잠정 출처 분할 계약, preview URL 확인**이다.
 
 다음 단계의 완료는 원음 취득 및 로컬 검수를 거쳐 license·중복·발성 사건·나이 주장·출처 그룹을 검수하고 `approved_training_label`을 채운 상태다. 이 단계가 끝나야 실제 학습 corpus와 calibration/test 범위를 결정할 수 있다. `source-audit.json`의 해당 값은 현재 모두 null이며 `not_acquired_not_reviewed`다. 일반 영아 품질 개선과 출시 판단은 이후 독립 평가 결과가 필요하다.
+
+## 10. 후속: 성인·악기·기계음 negative 출처 감사
+
+같은 공식 메타데이터 archive를 다시 메모리에서 읽고 bytes/MD5/SHA256 세 값을 모두 확인했다. 2절의 고정값과 일치한다. 이 단계도 원음·preview·가중치 취득, 학습·추론·연락·Git 작업 없이 수행했다.
+
+산출물: [negative-source-audit.json](../../work/infant-head-20261007/negative-source-audit.json). **성인 발성 잠정 후보 10업로더/21clip + 음악·기계음 등 기타 후보 10업로더/18clip = 20업로더/39clip**이다. 출처당 최대 3clip, 전체 negative 최대 60clip이라는 상한 안에서 선택했다. 파생 관계를 보수적으로 묶으면 분할 그룹은 19개다.
+
+이 목록은 실제 성인 나이나 영아 발성 부재를 검증한 정답 corpus가 아니다. 성인 후보는 Female/Male raw 라벨과 본인 목소리 녹음이라는 설명을 함께 확인한 자료다. 나이 숫자는 명시하지 않아 manifest의 `adult_age_verified`는 false다. 모든 `approved_training_label`, 원음 hash, event 시각은 null이다.
+
+### 기존 평가 자료 및 영아 출처 제외
+
+기존 `work/ast-public-paired-01/corpus/manifest.json`의 **33행 metadata만** 읽었다. PCM은 읽지 않았다. 모든 `author`와 `source_group`을 제외 목록에 넣고, 명시된 Freesound 원음 ID 및 manifest 자체 SHA256을 보존했다. negative에서는 동일 clip뿐 아니라 해당 업로더의 다른 모든 라벨도 제외한다.
+
+제외한 기존 공개자료 author는 `the_yura,reinsamba,keplar,Precipice_6,Erdie,simo170075,miguel2613,RutgerMuller,Rvgerxini,moxobna,Islabonita`다. 다른 source group 이름과 파생 그룹도 JSON에 보존했다. 영아 계획의 `NoiseCollector,reinsamba,Fugazi80,levinj,Corsica_S` 및 알려진 별칭 `tim.kahn`의 **모든 라벨**도 negative에서 제외한다. 제목에 아기라는 단어가 없는 성인/악기 라벨이어도 이 업로더는 negative로 가져오지 않는다.
+
+**5절의 positive 계획에는 기존 public33과 같은 NoiseCollector/reinsamba 출처의 새 clip이 있다.** 기존 public33 PCM 자체를 학습에 넣지 않는다. 새 clip으로 head를 학습하면 public33은 출처가 겹치는 회귀 자료이며 독립 일반화 test로 보고할 수 없다. 잠정 Corsica_S 보류 그룹과 public33 회귀 결과는 분리해서 보고한다. 사용자 원본과 그 segment/feature는 계속 학습·calibration·augmentation 금지, 평가 전용·외부 업로드 금지다.
+
+### 성인 본인 발성 후보: 10업로더 / 21clip
+
+모든 source ID는 `FSD50K:dev:{아래 업로더}`다. CC0/BY 파일별 허락과 원문 전문·원작자 URL은 JSON에 저장했다.
+
+| 업로더 / 역할 | 전체 clip ID | 원문 근거와 처리 |
+|---|---|---|
+| unfa / train 잠정 | `184432,215682,170641` | “me saying”, Zoom H2. 215682는 자기 곡 Spoken/Static에서 나온 동일 출처. 실제 배경 음악·겹침은 미청취 |
+| JarAxe / train 잠정 | `223521,223527` | “My voice”; 억양·drill instructor 역할 연기. 성인 나이는 미검증 |
+| dobroide / train 잠정 | `122204` | “me saying goodbye in Spanish”, 마이크/프리앰프/레코더 설명 |
+| AlienXXX / train 잠정 | `168494,168514,168560` | “Recorded myself saying”, Zoom H1, Audacity noise reduction. walkie-talkie 가공 후보는 이번 선택에서 제외 |
+| flogman / train 잠정 | `87680,87681,87682` | “recording my voice saying”, Zoom H2, 모음·문장 |
+| kb7clx / train 잠정 | `341756` | “Me saying the word testing” |
+| 11linda / train 잠정 | `339268,234034,234035` | “my samples/my voice”, voice work 설명. 10개 중 직접 녹음 근거가 가장 약한 generic caption이며 장비·나이 미상 |
+| Reitanna / source 보류 잠정 | `242661,241477,242688` | “I recorded my voice” while playing games, 반응·웃음. 게임 소리·겹침은 검수 전 |
+| kwahmah_02 / source 보류 잠정 | `261588` | “me saying attention”, 컴퓨터 내장 마이크. luffy와 source-wide 파생 연결을 보수적으로 묶음 |
+| TwistedLemon / source 보류 잠정 | `17643` | “recording of me congratulating”, bedroom/장비/no processing 설명 |
+
+Female raw 라벨 후보는 11linda와 Reitanna에 집중되어 있으며 균형 잡힌 성인 음성 표본이라고 보고하지 않는다. 여러 단어·짧은 모음·비명/웃음도 포함하므로 raw speech 파일 전체를 하나의 깨끗한 발성 event로 확정하지 않는다.
+
+### 기타 후보: 악기 5업로더 + 기계음 5업로더 / 18clip
+
+| 업로더 / 역할 | 전체 clip ID | exact raw 라벨과 원문 근거 |
+|---|---|---|
+| bergice / train 잠정 | `268259,268254,268255` | Electric_guitar; Gibson Les Paul/P90→Ableton, minor processing |
+| kubriel / train 잠정 | `266476,266463,266469` | Bass_guitar/Guitar, 일부 Electric_guitar; 아버지가 만든 자기 bass guitar의 note sample. 같은 녹음 그룹 |
+| xtrgamr / train 잠정 | `256684` | Piano; “me playing a piano”, iPhone Voice Memos, clipped |
+| clemza / train 잠정 | `412332` | Piano; prepared piano, AT2020 |
+| marvman / source 보류 잠정 | `51319,36237,38459` | Electric_guitar/Steel_guitar_and_slide_guitar/Acoustic_guitar; 본인 연주, 잘라낸 slide 자료와 reverb/noise reduction |
+| conleec / train 잠정 | `274460,148628` | Engine_starting; 본인 van/차량 녹음과 장비. 274460은 앞뒤 dialog가 있어 경계·겹침 검수 필요 |
+| tutenchwimse / train 잠정 | `410616` | Sewing_machine/Light_engine_(high_frequency); SONY PCM-D50 |
+| xxqmanxx / train 잠정 | `147019` | Drill/Power_tool; “let the drill go”; 설명이 짧고 장비·녹음 provenance 미상 |
+| Kyster / source 보류 잠정 | `118659,186916` | 118659 Chainsaw: 자기 chainsaw/레코더 설명. 186916 Speech_synthesizer: Gespeaker/eSpeak로 생성한 목소리, 실제 성인 발성 정답으로 사용하지 않음 |
+| luffy / source 보류 잠정 | `17301` | Mechanical_fan; “My stove's fan/vent/blower”, 끄는 click. kwahmah_02와 linked source group |
+
+Speech_synthesizer의 설명도 별도로 검토했다. Borys_Kozielski의 Hawking/Pink Floyd 관련 quote, Jagadamba의 Audacity robotic countdown, newagesoup의 Apple PlainTalk, CommanderRobot의 본인 pitch 변조, irrlicht의 ZX Spectrum/Kecal, an2netto의 짧은 caption 등을 자연 성인 발성 정답으로 가져오지 않았다. Kyster의 186916만 기존 보류 그룹의 **합성 confuser 잠정 후보**로 추가했다. renderer/voice의 권리는 별도 검수 전이며 합성 음성 학습 표본은 아직 배정하지 않았다.
+
+### 재게시·리믹스 연결 검사와 분할
+
+선택된 20업로더의 **모든 raw 라벨·license·official split**의 설명에서 Freesound `/people/.../sounds/...` 링크를 조사했다. 38행에 명시적 음원 링크가 있었다. 선택 39clip 자체에는 다른 Freesound sound를 인용하는 링크가 없었다. 선택 업로더 설명에서 제외 명단의 업로더로 직접 연결된 행은 발견하지 못했다. 이 수량은 명시된 링크 검사 결과이며 미기재 재사용·별칭·공통 원천·음향 중복의 부재 증명이 아니다.
+
+구체 연결: kwahmah_02의 **`269476`**은 luffy **`3536`**을 더 짧고 깨끗하게 편집했다고 명시한다. 두 clip은 이번 39clip에 포함하지 않았지만 출처 분리를 보수적으로 유지하려고 kwahmah_02와 luffy를 **`FSD50K:dev:linked:kwahmah_02+luffy`** 하나로 묶고 둘 다 보류 역할로 뒀다. JSON에는 이 연결과 source-wide 링크 38행의 원문·원천 ID를 보존했다. unfa 215682의 자기 곡 링크는 같은 unfa 그룹에 유지했다.
+
+| 잠정 분할 | adult_vocal 후보 | other_or_uncertain 후보 | 합계 | 보수적 source 그룹 |
+|---|---:|---:|---:|---:|
+| train_candidate_provisional | 16 | 12 | 28 | 14 |
+| source_heldout_provisional_not_familytest | 5 | 6 | 11 | 5 |
+
+앞의 positive 계획과 합치면 **학습 쪽 후보 58개(영아 30/성인 16/기타 12), 보류 쪽 후보 27개(영아 16/성인 5/기타 6)**라는 로컬 검수 대상 목록이 된다. 이것은 실제 취득·청취·학습 결과가 아니다. threshold나 변경 선택에 보류 자료를 쓰면 validation이라고 보고하고 최종 독립 test는 추가로 확보해야 한다.
+
+### 공식 preview URL 3개 확인
+
+다음 세 원작자 페이지의 Jina 본문과 공식 HTML `data-mp3` 속성만 확인했다. preview body를 GET/HEAD·다운로드·디코딩하지 않았다.
+
+- [Reitanna 241477](https://freesound.org/people/Reitanna/sounds/241477/): `https://cdn.freesound.org/previews/241/241477_950925-lq.mp3`
+- [AlienXXX 168494](https://freesound.org/people/AlienXXX/sounds/168494/): `https://cdn.freesound.org/previews/168/168494_97763-lq.mp3`
+- [conleec 148628](https://freesound.org/people/conleec/sounds/148628/): `https://cdn.freesound.org/previews/148/148628_221578-lq.mp3`
+
+이 URL은 공개 청취 사본 준비 경로다. 실제 접속·PCM 원본 취득·음질·입력 bytes/hash는 확인하지 않았다. 7절의 영아 preview 세 개로 부모 에이전트가 하는 subset interface 검증과도 구분한다.
