@@ -60,7 +60,7 @@ snapshot, not exact reclaimed bytes. Phone production installation was not touch
 |U3|Local actual AV and navigation/cancel|known_ui.py|selected10s analysis, result/back/picker/capture cancellation|PASS signed-known-final; observed broad AST cue; UI wait25.384s on2-core emulator|No save, local copy removed, original SHA unchanged|
 |R1|Independent Spec/Standards review|code-review|No mandatory remaining issue|PASS source and final resumed evidence; mandatory0each|Read-only|
 |D1|Disk/process state|scoped lifecycle snapshots|Owned disposable copies removed, AVD preserved|PASS cleanup-result.json + new complete/clear/absent|Old scope stopped/clear/absent; shared AVD retained|
-|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state|SUBMISSION ACCEPTED: code33 in review section; quick checks still running, not yet observed available|Screenshot/state saved; existing track/settings preserved|
+|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state|SUBMISSION ACCEPTED: quick checks ended; exact code33 remains under Google review, not yet observed available|Screenshot/state saved; existing track/settings preserved|
 
 Physical proof and research behavior results: [ARM](caption-arm-20261007.md),
 [Android](caption-android-20261007.md). Synthetic performance and caption support
@@ -144,6 +144,17 @@ Evidence: `work/caption-beta-resume-20261007/play-code33-review.jpg` and
 `play-code33-state.txt`. Existing opt-in URL remains
 https://play.google.com/apps/testing/com.moa.babylanguage .
 Actual Play split installation/new33availability is pending external review.
+
+### Subsequent live observation: quick checks ended
+
+The live Console progressed76→81→91%, then removed the quick-check indicator and
+displayed `변경사항을 검토 중입니다. 앱을 검토하는 과정에서 추가 문제가 발견될 수도 있습니다.`
+The exact code33 Alpha row remains under `검토 중인 변경사항`; no submission-blocking
+error is shown. This proves the transition to Google review, not approval or tester
+availability. Saved `play-code33-in-review.jpg` and `.txt` beside the submission proof.
+Existing heartbeat33 checks at15minute intervals; no duplicate automation/upload was
+created. Local/remote `e8d5688c26feee7034aae224e9ea69169e2c7ade` and clean tree were
+confirmed before this status-only documentation update.
 
 ## Package identity
 
