@@ -138,6 +138,75 @@
   },
   "play_available_version_code": 33,
   "candidate_version_code": 34,
-  "signed_upgrade_pending": true,
-  "closed_policy_pending": true
+  "signed_upgrade_pending": false,
+  "closed_policy_pending": false,
+  "signed_upgrade": {
+    "status": "pass",
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true,
+    "owned_external_files_removed": true,
+    "media_sha256": "284b98d279c82501f22b512eb4f46025e284f0d6b6a54be92709ce88643192fe",
+    "duration_seconds": "10.000000"
+  },
+  "closed_policy": {
+    "status": "pass",
+    "scenarios": [
+      "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+      "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+      "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase",
+      "cold restart retains distribution access and records without a purchase or code",
+      "same-key release update restores 60/10/100, visual/PDF gates and preserves records/media"
+    ],
+    "capture_timeline": {
+      "end_label": "1:59.6",
+      "lower_ms": 119600,
+      "precision_ms": 100
+    },
+    "cleanup": {
+      "owned_external_files_removed": true,
+      "large_local_files_removed": true,
+      "raw_downloaded_media_removed": true,
+      "display_restored": true,
+      "font_restored": true,
+      "errors": []
+    },
+    "media_sha256": "2bd8f762f006a4731276eb656fbc0cc9114e8079e66dfa566e60fc9464e8a045"
+  },
+  "known_navigation": {
+    "status": "pass",
+    "range_ms": [
+      0,
+      10000
+    ],
+    "known_development_case": true,
+    "accuracy_test": false,
+    "broad_babble_evidence": true,
+    "saved_record": false,
+    "same_range_return": true,
+    "os_picker_cancel_preserves_result": true,
+    "new_capture_cancel_preserves_result": true,
+    "remote_copy_absent": true,
+    "source_unchanged": true
+  },
+  "cleanup": {
+    "status": "pass",
+    "owned_install_removed": true,
+    "emulator_disconnected": true,
+    "shared_avd_preserved": true,
+    "large_fixtures_absent": true,
+    "duplicate_logical_bytes_removed": 804857502.0,
+    "drive_free_bytes": 95618437120,
+    "current_and_previous_final_preserved": true
+  },
+  "local_qa": {
+    "status": "pass",
+    "cycles": 2,
+    "lifecycle_complete_and_cleared": true,
+    "independent_spec_mandatory_findings": 0,
+    "independent_standards_mandatory_findings": 0,
+    "play34_submitted": false
+  }
 }

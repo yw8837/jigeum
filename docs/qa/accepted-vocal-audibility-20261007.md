@@ -78,13 +78,13 @@ candidate01에서 실제 대조했으며 최종 서명 빌드는 별도 통과�
 
 | ID | 입력/사용자 행동 | 기대 | 실행/증거 | 정리 |
 |---|---|---|---|---|
-| N1 | 조용한 승인창/다른 시간의 큰 소리/잘못된 수치·시간/기존 충돌 | 해당창 근거만 허용, 기존 거부 보존 | 새 native 검사 예정 | 연구앱 제거 |
-| R1 | 동결된 기존53조건 | 기존20출력 및 보류 관찰·문장 보존 | paired-audibility01 진행 | UUID 입력 제거 |
-| B1 | 서명 beta34 및 비교 release34 | 서명/모델 payload/권한 flag 정확 | 공식 빌더·실제 패키지 검사 예정 | 최종 한 세트 |
-| U1 | 서명33→34 업데이트 | 실제 기록·MP4 hash 보존 | signed_media_upgrade 예정 | 소유 파일 제거 |
-| U2 | beta 전체 기능/정식 재잠금 | 120/20/200·PDF 및 release 60/10/100 | 기존 closed_test_ui 예정 | 크기 fixture·설정 복구 |
-| U3 | 실제 선택 영상 분석 후 다른 구간·취소 | 결과·돌아가기·취소 정상 | known_ui 예정 | 원본 hash/기기 사본 제거 |
-| U4 | 같은 작은 옹알이를 AAC 영상으로 가져와15초 선택 | 서명33의QUIET→서명34의옹알이 결과 | signed_recovery 예정; codec 영향도 확인 | 공개원본 보존·생성MP4 제거 |
+| N1 | 조용한 승인창/다른 시간의 큰 소리/잘못된 수치·시간/기존 충돌 | 해당창 근거만 허용, 기존 거부 보존 | PASS native100/0skip | 연구앱 제거 |
+| R1 | 동결된 기존53조건 | 기존20출력 및 보류 관찰·문장 보존 | PASS paired-audibility01 exact53 | UUID 입력 제거 |
+| B1 | 서명 beta34 및 비교 release34 | 서명/모델 payload/권한 flag 정확 | PASS clean 빌드·실제4패키지 | 최종 한 세트 |
+| U1 | 서명33→34 업데이트 | 실제 기록·MP4 hash 보존 | PASS signed-upgrade-final | 소유 파일 제거 |
+| U2 | beta 전체 기능/정식 재잠금 | 120/20/200·PDF 및 release 60/10/100 | PASS signed-closed-final 7시나리오 | 크기 fixture·설정 복구 |
+| U3 | 실제 선택 영상 분석 후 다른 구간·취소 | 결과·돌아가기·취소 정상 | PASS signed-known-final | 원본 hash/기기 사본 제거 |
+| U4 | 같은 작은 옹알이를 AAC 영상으로 가져와15초 선택 | 서명33의QUIET→서명34의옹알이 결과 | PASS signed-recovery02; 실제화면 확인 | 공개원본 보존·생성MP4 제거 |
 | D1 | 현재 소스·QA 푸시 후 기존 Alpha | 새 code34만 제출, 실제 상태 확인 | 미실행 | 이전+현재 배포본 보존 |
 
 새 모델·추가 native graph·head 변경은 없다. 기존 S25 proof는 동일 AST 추론의
@@ -136,3 +136,53 @@ UI 대기20.806/30.007초는 후자가 관찰근거를 펼치고 찾는 시간�
 원본 hash 보존을 확인했다. `code33.png`, `code34.png`, `result.json`을 보존한다.
 기록을 저장하지 않은 이 소유 QA 설치는 hash 확인 후 제거해,33→34 미디어
 보존 검사를 별도 시작한다. 사용자 폰이나 기존 사용자 데이터를 초기화하지 않았다.
+
+### 서명33→34 기록·미디어 보존
+
+`signed-upgrade-final`: exit0/223.45초.33에서 실제 저장한10.000000초 MP4의
+audio/video stream과932978B·SHA256
+`284b98d279c82501f22b512eb4f46025e284f0d6b6a54be92709ce88643192fe`가
+34에서도 동일하다. 구형 기록의 텍스트·LEGACY 출처와 beta 전체 접근이 유지됐다.
+이 업데이트 검사 사이에 데이터 초기화는 없었다. 소유 외부 파일은 제거됐다.
+Play split 설치 증거가 아닌 실제 같은키 서명 APK 업데이트 검사다.
+
+### 전체 정책·실제 저장 검사
+
+`signed-closed-final`: exit0/610.22초, 전체7시나리오를 이번 서명본으로 새로 실행했다.
+작은화면/200%글꼴·실제1:59.6촬영·20초 무음보류·정확200MiB/+1byte 경계,
+실제 분석·MP4 저장·PDF content URI/chooser·재시작이 통과했다. 이어서 비교용
+release34에서60/10/100·시각/PDF 제한 및 기존 기록의 무료 내보내기를 확인했다.
+새10초 audio/video MP4는 beta/release에서 같은932978B/SHA
+`2bd8f762f006a4731276eb656fbc0cc9114e8079e66dfa566e60fc9464e8a045`다.
+대형로컬/외부fixture 제거·디스플레이/글꼴 복원 모두true, cleanup errors0이다.
+
+후속 독립Spec/Standards는 실제28/53JSON·native 원문100·서명 회복 화면·기록/MP4
+보존과 source hash를 재대조해 새필수0을 보고했다. 당시 진행 중인 정책/내비게이션을
+완료로 계산하지 않았으며, 최종 실행과 배포 상태는 별도 근거로 확인한다.
+
+### 실제 영상 내비게이션·정리
+
+`signed-known-final`은 PASS다. 기존 로컬 영상의 실제10초 AV 분석에서 옹알이
+근거와 저장 버튼을 확인했고, 같은 구간으로 돌아가기·OS 파일 선택 취소·새 촬영
+취소가 결과를 보존했다. UI 대기20.887초는2core 에뮬레이터 값이며 S25 속도가 아니다.
+이 검사에서는 새 기록을 저장하지 않았다. 원본 hash 보존·기기 복사본 제거를 확인했다.
+
+소유 code34 QA 설치의 정확한 APK hash를 확인한 뒤 설치/XML을 제거하고 에뮬레이터
+연결 종료를 확인했다. 공용MoaQA35 폴더·사용자 폰은 보존했다. 생성한 대형fixture는
+남아 있지 않다. 최종 code34와 직전 code33 배포본을 보존하고, 생성 build/outputs
+내 중복APK/AAB6개804857502B를 경로 검사 후 제거했다. free95618437120B는 시스템
+스냅샷이며 정확한 물리 회수량으로 주장하지 않는다. 과거 삭제 거부 대상은 재시도하지 않았다.
+
+소스 commit `7ffc6a3bd277a34b48e56912ca58d3e9eca25392`는 origin의 같은 브랜치와
+SHA 일치를 확인했다. 이 후속 QA 문서 갱신은 최종 검토 뒤 별도 커밋·푸시한다.
+아직 Play34 제출/제공을 완료로 계산하지 않는다.
+
+## 최종 로컬 QA 결론
+
+마지막 정책·내비게이션·정리 원문을 독립Spec/Standards가 다시 검토했고 필수 지적은
+각0이다. scope2의 complete(active=false) CLI read를 저장한 후 clear/read 부재를
+확인했다. **ULTRAQA COMPLETE: Goal met after 2 cycles**는 위 로컬 적용·회귀·서명·
+업데이트/정책 QA 범위다. cycle1의 부팅 직후 파일복사 실패는 그대로 보존한다.
+PDF는 실제 생성·content URI·공유 chooser까지 검증했으며 외부 PDF 앱 검수로
+확대하지 않는다. 실제 Play split 설치와 모든 휴대폰 성능은 별도 미검증이다.
+Google 검토/테스터 제공은 아래 후속 외부 상태로만 기록한다.
