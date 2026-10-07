@@ -1,0 +1,143 @@
+{
+  "scope": "quiet accepted vocal audibility; fixed development inputs, not general accuracy",
+  "comparison": {
+    "status": "pass",
+    "conditions": 28,
+    "input_hashes_equal": true,
+    "old_outputs_preserved": [
+      "cry_original",
+      "laugh_original",
+      "babble_seven_month_original"
+    ],
+    "recovered": [
+      "babble_seven_month_rms6",
+      "babble_seven_month_rms9"
+    ],
+    "remaining_quiet": [
+      "cry_rms6",
+      "cry_rms9"
+    ],
+    "control_outputs": [],
+    "general_accuracy_validated": false,
+    "retained_regression": {
+      "conditions": 53,
+      "outputs": 20,
+      "all_observations_exact": true
+    }
+  },
+  "native": {
+    "status": "pass",
+    "tests": 100,
+    "passed_tests": 100,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 10.12,
+    "exit": 0
+  },
+  "signed_recovery": {
+    "status": "pass",
+    "source_sha256": "74ebc6171a6efe241ce994ae69dac087a1d5a64076438d41c39d9c247cfc58ef",
+    "attenuated_pcm_sha256": "8fc115843382ab5f2d17a664eac79fc0a47be208d3bbd4ba5e0ad6e40941a25c",
+    "general_accuracy_validated": false,
+    "rows": [
+      {
+        "version": 33,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "93bdf6de8ca211b4779ea131c2ee4e2cdca564e3acfb36dfedbc73849a4341af",
+          "expected_sha256": "93bdf6de8ca211b4779ea131c2ee4e2cdca564e3acfb36dfedbc73849a4341af",
+          "version_code": 33,
+          "version_name": "0.5.19-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "QUIET",
+        "ui_seconds": 20.806
+      },
+      {
+        "version": 34,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "expected_sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "version_code": 34,
+          "version_name": "0.5.20-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "BABBLE_RESULT",
+        "ui_seconds": 30.007
+      }
+    ],
+    "movie_sha256": "0fc5fcb7107dea543525cac9ae524381ed9c02c8b8d44f2f0f59992d51b3b4d3",
+    "local_movie_removed": true,
+    "remote_movie_removed": true,
+    "source_unchanged": true
+  },
+  "builds": {
+    "beta": {
+      "root_pid": 31336,
+      "exit_code": 0,
+      "elapsed_seconds": 165.514486,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 5291859968,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5510,
+      "output_truncated": false
+    },
+    "release": {
+      "root_pid": 39408,
+      "exit_code": 0,
+      "elapsed_seconds": 119.026515,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 4579282944,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5213,
+      "output_truncated": false
+    }
+  },
+  "source_sha256": {
+    "AudioCleanup.kt": "a31c172b1fc80469a26f30110edbbeeed2e9d587f44fb732ef36afc7592d7c9d",
+    "SoundAnalyzer.kt": "bd4dce2454be94152327d39f10bd54d87df102b2302808ba17bd6f16af1af548",
+    "SoundTimeline.kt": "f725180428e8ff2a701af8603d171dc08fd86c50ae81de279a56a297af9cb4b9",
+    "BabbleSupportPolicy.kt": "935698426697b7cbbda0dfd98e803c31d2182d0b239b714c321ebd5a8fe46f26",
+    "ClipEvidence.kt": "6960cd5bf4f9057538845bd154a5d9f6cd5c7d9afa2f7faf57ec3aaaee9983cb"
+  },
+  "packages": {
+    "beta": {
+      "Agattok-0.5.20-beta-code34.apk": {
+        "bytes": 255163379,
+        "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e"
+      },
+      "Agattok-0.5.20-beta-code34.aab": {
+        "bytes": 160195341,
+        "sha256": "172df8f28cd2ac503bbb7b6e4c4c4f34a9df18b349549b4ee75313addbd0ec25"
+      }
+    },
+    "release": {
+      "Agattok-0.5.20-release-code34.apk": {
+        "bytes": 75364843,
+        "sha256": "e4615f0d459f03384406fd841b70407f255ff10bf2672d0bb34558ef171a2c11"
+      },
+      "Agattok-0.5.20-release-code34.aab": {
+        "bytes": 46718695,
+        "sha256": "54f90822c16fe4134066351f5dcf061d046f8c2d272a1a2d73f87d3d700ce0f2"
+      }
+    }
+  },
+  "play_available_version_code": 33,
+  "candidate_version_code": 34,
+  "signed_upgrade_pending": true,
+  "closed_policy_pending": true
+}
