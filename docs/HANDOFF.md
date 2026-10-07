@@ -9,6 +9,9 @@
 [제출 증거](qa/accepted-vocal-audibility-20261007/play-review.md)를 보존했다.
 지원 기기 감소0, 설치112MB/이전 대비1.32KB, 기존 진단파일 권고2개/차단오류0이다.
 기존 자동화33을 code34 승인 확인으로 갱신했다. 게시 확인·문서 푸시·목표 감사가 남는다.
+21:41 KST 실제 새로고침에서도34 검토 중이다. 동일 외부승인 대기가 세 goal턴에
+지속되어 goal은 `blocked`로 기록했고 자동화33 ACTIVE/15분은 유지한다.
+코드/QA의 실패나 사용자 조치 필요 상태가 아니며 Google 상태 변화 후 이어 처리한다.
 
 사용자가 beta33 이후에도 유의미한 개선까지 지속하도록 요청했다.
 [고정 재현 계약](research/20261007-accepted-vocal-audibility-contract.md)의 실제28조건에서

@@ -215,7 +215,7 @@
     "track": "Alpha",
     "review_requested_at": "2026-10-07T21:25:49+09:00",
     "observed_state": "in_review_changes",
-    "last_observed_at": "2026-10-07T21:38:17+09:00",
+    "last_observed_at": "2026-10-07T21:41:05+09:00",
     "pre_review_checks_complete": true,
     "available_to_testers_confirmed": false,
     "last_confirmed_available_version_code": 33,
@@ -227,6 +227,8 @@
     "testers_changed": false,
     "monitor_automation_id": "33",
     "monitor_status": "ACTIVE",
+    "goal_status": "blocked",
+    "goal_blocker": "Google approval and exact code34 Alpha availability pending; local requirements complete",
     "evidence": "play-review.md"
   }
 }
