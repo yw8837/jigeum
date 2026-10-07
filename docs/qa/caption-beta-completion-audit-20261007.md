@@ -1,4 +1,4 @@
-# Beta33 objective audit — external availability still pending
+# Beta33 objective audit — availability confirmed; subsequent tester request pending
 
 2026-10-07 KST. This is a current-evidence audit, not another test execution.
 The objective remains on-device vocalization/context improvement, fixed comparison
@@ -19,12 +19,15 @@ No accuracy percentage or infant intent truth is inferred from caption metadata.
 | Required regressions and review | Actual native61/regression80 result files and `caption-beta-code-review-20261007.md` | Native61 and regression80 pass/0skip. Independent Spec and Standards final mandatory findings0 each. Initial5cycle stop and later1cycle resumption remain distinct. |
 | Disposable storage/process cleanup | Actual `work/caption-beta-resume-20261007/cleanup-result.json` | Owned QA app/XML removed; emulator disconnected; large fixtures absent; shared AVD retained. Free-space snapshot is not exact reclaimed bytes. Prior rejected deletion not retried. |
 | Git delivery | Actual `git rev-parse HEAD`, `git ls-remote origin refs/heads/codex/ondevice-av-probe`, porcelain | Both `e8d5688c26feee7034aae224e9ea69169e2c7ade`, clean before this audit/status documentation. The next documentation commit must also be pushed/verified. |
-| Closed-beta submission | Actual Play publishing DOM/screenshot | Only code33 beta submitted to Alpha. Quick checks ended and exact release remains under Google review. No new blocking error. |
-| Actual new-beta availability | Play publishing DOM | **NOT ACHIEVED YET.** Review is pending. Do not mark the overall goal complete or claim testers have33. |
+| Closed-beta submission | Actual Play publishing DOM/screenshot | Only code33 beta submitted to Alpha; Google approved and published it. |
+| Actual new-beta availability | Actual Alpha DOM/screenshot, `play-code33-available.{jpg,txt}` | **PROVEN.** Exact33 latest release is available to selected testers; Console publication2026-10-07 19:08 KST. |
+| Subsequent user request: Zardu testers | Current publishing DOM and `zardu-testers-20261007.md` | CSV imported, provider33accounts and existing4members+old2list selected/saved/submitted. The tester-selection change is separately under Google review. |
 
-Google transition evidence is
-`work/caption-beta-resume-20261007/play-code33-in-review.{jpg,txt}`.
-Heartbeat automation33 already exists; keep its unchanged-state notifications quiet.
-Once Alpha explicitly shows33available to selected testers, save that evidence,
-update these current-state documents, push/verify and end the review monitor.
+Google review and availability evidence is retained in
+`work/caption-beta-resume-20261007/play-code33-{in-review,available}.{jpg,txt}`.
+The original beta-delivery gate is now satisfied. The additional user-requested
+tester setup still needs published eligibility. Heartbeat33 follows that remaining
+registration state; do not duplicate the monitor or claim vendor-account access.
+Once registration is published, verify the preserved selections, finish the
+documentation push and pause the monitor before completing the overall work.
 No re-upload, approval bypass, production release or fresh model download is needed.

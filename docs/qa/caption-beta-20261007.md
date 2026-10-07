@@ -60,7 +60,7 @@ snapshot, not exact reclaimed bytes. Phone production installation was not touch
 |U3|Local actual AV and navigation/cancel|known_ui.py|selected10s analysis, result/back/picker/capture cancellation|PASS signed-known-final; observed broad AST cue; UI wait25.384s on2-core emulator|No save, local copy removed, original SHA unchanged|
 |R1|Independent Spec/Standards review|code-review|No mandatory remaining issue|PASS source and final resumed evidence; mandatory0each|Read-only|
 |D1|Disk/process state|scoped lifecycle snapshots|Owned disposable copies removed, AVD preserved|PASS cleanup-result.json + new complete/clear/absent|Old scope stopped/clear/absent; shared AVD retained|
-|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state|SUBMISSION ACCEPTED: quick checks ended; exact code33 remains under Google review, not yet observed available|Screenshot/state saved; existing track/settings preserved|
+|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state and tester availability|PASS: Alpha shows exact33 as latest release, available to selected testers; posted2026-10-07 19:08 KST|play-code33-available.jpg/.txt; no production submission|
 
 Physical proof and research behavior results: [ARM](caption-arm-20261007.md),
 [Android](caption-android-20261007.md). Synthetic performance and caption support
@@ -143,7 +143,8 @@ and account permissions were not changed.
 Evidence: `work/caption-beta-resume-20261007/play-code33-review.jpg` and
 `play-code33-state.txt`. Existing opt-in URL remains
 https://play.google.com/apps/testing/com.moa.babylanguage .
-Actual Play split installation/new33availability is pending external review.
+Actual Play split installation has not been performed by this agent. New33availability
+was subsequently confirmed as recorded below.
 
 ### Subsequent live observation: quick checks ended
 
@@ -155,6 +156,19 @@ availability. Saved `play-code33-in-review.jpg` and `.txt` beside the submission
 Existing heartbeat33 checks at15minute intervals; no duplicate automation/upload was
 created. Local/remote `e8d5688c26feee7034aae224e9ea69169e2c7ade` and clean tree were
 confirmed before this status-only documentation update.
+
+### Confirmed external availability
+
+On2026-10-07 the actual Alpha track showed `최신 출시 버전: 0.5.19-beta (33) - infant vocal support`
+and `선택한 테스터에게 제공됩니다. 버전 코드 1개 게시일: 10월 7일 오후 7:08`.
+Saved `work/caption-beta-resume-20261007/play-code33-available.jpg` and `.txt`.
+The operator's existing Play account also opened the actual app page with an install
+control and October7 update date. No remote installation was initiated.
+This satisfies external beta availability, not an actual Play split-install test.
+
+Afterward the user requested Zardu's paid tester registration. Its separate
+tester-selection change is under review; do not conflate that pending change with
+the already published code33. See [registration record](zardu-testers-20261007.md).
 
 ## Package identity
 
