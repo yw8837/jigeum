@@ -1,7 +1,9 @@
-# 인식 후 음량 보류 개선 — 진행 중
+# 인식 후 음량 보류 개선 — 로컬 QA 완료·Alpha 검토 요청
 
 2026-10-07 KST. [사전 계약](../research/20261007-accepted-vocal-audibility-contract.md).
-현재 Play는0.5.19-beta/code33이며 아래 후보는 아직 배포하지 않았다.
+최신 상태:0.5.20-beta/code34 검토요청 완료, Google 사전 검사·게시 확인 대기다.
+마지막 실제 제공 확인 버전은33이다. 아래 본문은 단계별 실행 이력이며
+최신 상태는 마지막 Google Play 절과 [완료 감사](accepted-vocal-audibility-20261007/completion-audit.md)를 따른다.
 
 ## 재현·진단
 
@@ -85,7 +87,7 @@ candidate01에서 실제 대조했으며 최종 서명 빌드는 별도 통과�
 | U2 | beta 전체 기능/정식 재잠금 | 120/20/200·PDF 및 release 60/10/100 | PASS signed-closed-final 7시나리오 | 크기 fixture·설정 복구 |
 | U3 | 실제 선택 영상 분석 후 다른 구간·취소 | 결과·돌아가기·취소 정상 | PASS signed-known-final | 원본 hash/기기 사본 제거 |
 | U4 | 같은 작은 옹알이를 AAC 영상으로 가져와15초 선택 | 서명33의QUIET→서명34의옹알이 결과 | PASS signed-recovery02; 실제화면 확인 | 공개원본 보존·생성MP4 제거 |
-| D1 | 현재 소스·QA 푸시 후 기존 Alpha | 새 code34만 제출, 실제 상태 확인 | 미실행 | 이전+현재 배포본 보존 |
+| D1 | 현재 소스·QA 푸시 후 기존 Alpha | 새 code34만 제출, 실제 상태 확인 | 검토요청 완료/빠른 검사중, 실제제공 미확인 | 이전+현재 배포본 보존 |
 
 새 모델·추가 native graph·head 변경은 없다. 기존 S25 proof는 동일 AST 추론의
 성능 근거이며 이번 후처리까지 실폰에서 재측정한 것으로 보고하지 않는다.
