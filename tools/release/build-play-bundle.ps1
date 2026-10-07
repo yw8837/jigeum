@@ -6,12 +6,16 @@ param(
     [Parameter(Mandatory = $true)][string]$Destination,
     [switch]$AstBabbleSupport,
     [switch]$InfantPresenceSupport,
+    [switch]$InfantCaptionSupport,
     [string]$InfantArmProof,
     [string]$ProofPython
 )
 $ErrorActionPreference = 'Stop'
 if ($AstBabbleSupport -and $Purpose -ne 'closed-test') {
     throw 'AST babble support is valid only for closed-test beta candidates.'
+}
+if ($InfantCaptionSupport -and (-not $InfantPresenceSupport -or -not $AstBabbleSupport -or $Purpose -ne 'closed-test')) {
+    throw 'Caption support requires closed-test, AstBabbleSupport and InfantPresenceSupport.'
 }
 if ($InfantPresenceSupport) {
     if ($Purpose -ne 'closed-test' -or -not $AstBabbleSupport) {
@@ -20,7 +24,9 @@ if ($InfantPresenceSupport) {
     if (-not $InfantArmProof -or -not $ProofPython) { throw 'Provide actual ARM proof and ProofPython.' }
     $InfantArmProof = [IO.Path]::GetFullPath($InfantArmProof)
     $ProofPython = [IO.Path]::GetFullPath($ProofPython)
-    & $ProofPython (Join-Path $PSScriptRoot 'verify_infant_presence_arm.py') $InfantArmProof
+    $proofArguments = @((Join-Path $PSScriptRoot 'verify_infant_presence_arm.py'), $InfantArmProof)
+    if ($InfantCaptionSupport) { $proofArguments += '--infant-caption-candidate' }
+    & $ProofPython @proofArguments
     if ($LASTEXITCODE -ne 0) { throw 'Infant presence ARM proof rejected; no signing or build started.' }
 } elseif ($InfantArmProof -or $ProofPython) {
     throw 'ARM proof arguments require InfantPresenceSupport.'
@@ -69,6 +75,7 @@ try {
         if ($InfantPresenceSupport) {
             $gradleArguments += @('-PagattokInfantPresenceBeta=true', "-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
         }
+        if ($InfantCaptionSupport) { $gradleArguments += '-PagattokInfantCaptionBeta=true' }
         & ./gradlew.bat @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }

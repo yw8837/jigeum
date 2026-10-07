@@ -9,4 +9,6 @@ https://freesound.org/people/Rodcencko/sounds/9437/ (Rodcencko, CC0)
 https://freesound.org/people/Sauron974/sounds/244237/ (Sauron974, CC0)
 https://creativecommons.org/publicdomain/zero/1.0/
 Audio event/speaker/age truth has not been independently reviewed. No user media
-or features were used to train, calibrate or augment this head. Research debug only.
+or features were used to train, calibrate or augment this head. Enabled only in
+explicit research builds and the physically verified closed-test beta; disabled
+in the default and production release builds.

@@ -107,7 +107,9 @@ def main():
                   infant_intent_accuracy_tested=False, fixture='the_yura CC0 cry + plain-color video')
     if args.access_proof:
         prior = json.loads(args.access_proof.read_text(encoding='utf-8'))
-        assert prior['installs'][0]['sha256'] == hashlib.sha256(args.beta_apk.read_bytes()).hexdigest()
+        with args.beta_apk.open('rb') as source:
+            beta_hash = hashlib.file_digest(source, 'sha256').hexdigest()
+        assert prior['installs'][0]['sha256'] == beta_hash
         assert prior['installs'][0]['verified'] and prior['installs'][0]['version_name'].endswith('-beta')
         assert len(prior['scenarios']) >= 4 and '200MiB+1 byte' in prior['scenarios'][3]
         assert 119_000 <= prior['capture_timeline']['lower_ms'] <= 120_500
@@ -127,7 +129,8 @@ def main():
     seed_path.write_text(json.dumps(seed, ensure_ascii=False), encoding='utf-8')
     large = q.RUN / 'large-fixture.mp4'
     oversized = q.RUN / 'oversized-fixture.mp4'
-    for target, target_size in ((large, 200*1024*1024), (oversized, 200*1024*1024+1)):
+    size_fixtures = ((large, 200*1024*1024),) if args.access_proof else ((large, 200*1024*1024), (oversized, 200*1024*1024+1))
+    for target, target_size in size_fixtures:
         shutil.copyfile(args.cry_video, target)
         original_size = target.stat().st_size
         assert original_size + 8 < target_size
@@ -140,7 +143,8 @@ def main():
         assert result['installs'][-1]['version_name'].endswith('-beta')
         for permission in ('android.permission.CAMERA', 'android.permission.RECORD_AUDIO'):
             q.shell('pm', 'grant', q.PACKAGE, permission)
-        for path, remote in ((seed_path, owned[0]), (args.cry_video, owned[1]), (large, owned[2]), (oversized, owned[3])):
+        uploads = ((seed_path, owned[0]), (args.cry_video, owned[1])) if args.access_proof else ((seed_path, owned[0]), (args.cry_video, owned[1]), (large, owned[2]), (oversized, owned[3]))
+        for path, remote in uploads:
             q.adb('push', str(path), remote, timeout=60)
         flow.launch(); q.tap_text('돌봄'); q.tap_text('백업 파일 가져오기')
         delivery.choose_file(Path(owned[0]).name); q.wait_ui('기록을 합칠까요?'); q.tap_text('기록 합치기')
@@ -196,7 +200,15 @@ def main():
             result['scenarios'].append('beta imports valid exact 200MiB video and rejects 200MiB+1 byte')
         delivery.import_video(Path(owned[1]).name)
         q.tap_text('영상 + 소리로 번역하기'); q.wait_ui('장면과 함께 저장하기', seconds=65)
-        q.tap_text('어떤 소리를 들었나요?'); q.wait_ui('얼굴을 찾지 못했어요')
+        q.tap_text('어떤 소리를 들었나요?')
+        # Expanding the evidence does not auto-scroll the result list. Keep the
+        # actual no-face assertion, but read below the current viewport.
+        for _ in range(12):
+            if any('얼굴을 찾지 못했어요' in node['text'] for node in q.nodes()):
+                break
+            q.swipe_up()
+        else:
+            raise AssertionError('Expanded no-face evidence not reachable after bounded scrolling')
         q.screenshot('beta-actual-visual-result'); q.trace('beta-actual-visual-result')
         q.tap_text('장면과 함께 저장하기'); q.wait_ui('우리가 나눈 아기말', seconds=45)
         q.tap_text('장면 보기 · 내려받기'); q.wait_ui('그때의 아기말')
@@ -229,6 +241,11 @@ def main():
         q.wait_ui('쌓인 아기말을 한 권으로'); q.screenshot('release-pdf-relocked')
         delivery.import_video(Path(owned[1]).name); flow.visual_switch()
         q.wait_ui('지금의 표정도 함께 살펴봐요'); q.screenshot('release-visual-relocked')
+        if args.access_proof:
+            # This exact large-input beta test already passed. Keep the same
+            # bytes for the release refusal, but avoid filling guest page cache
+            # before the remaining real model/media/PDF checks.
+            q.adb('push', str(large), owned[2], timeout=60)
         flow.launch(); q.tap_text('아기말 번역하기'); q.tap_text('저장된 영상 가져오기')
         delivery.choose_file(Path(owned[2]).name)
         q.wait_ui('100MB'); assert not any(n['text']=='어느 순간을 들어볼까요?' for n in q.nodes())
@@ -238,26 +255,38 @@ def main():
         result['scenarios'].append('same-key release update restores 60/10/100, visual/PDF gates and preserves records/media')
         result['status'] = 'pass'
     except Exception as error:
-        result['status']='fail'; result['error']=str(error); q.screenshot('beta-ui-failure'); q.trace('beta-ui-failure')
+        result['status']='fail'; result['error']=str(error)
+        try:
+            q.screenshot('beta-ui-failure'); q.trace('beta-ui-failure')
+        except Exception as capture_error:
+            result['failure_capture_error'] = str(capture_error)
         raise
     finally:
-        q.shell('am','force-stop',q.PACKAGE)
-        q.restore_display(display)
-        if font == 'null': q.shell('settings','delete','system','font_scale')
-        else: q.shell('settings','put','system','font_scale',font)
-        q.shell('rm','-f',*owned)
+        cleanup_errors = []
+        try:
+            q.shell('am','force-stop',q.PACKAGE)
+            q.restore_display(display)
+            if font == 'null': q.shell('settings','delete','system','font_scale')
+            else: q.shell('settings','put','system','font_scale',font)
+            q.shell('rm','-f',*owned)
+            remaining = [path for path in owned if q.shell('test', '-e', path, check=False).returncode == 0]
+            assert not remaining, 'Owned external fixtures survived cleanup: ' + str(remaining)
+            assert q.display_settings() == display, 'Display settings were not restored'
+            assert q.shell('settings', 'get', 'system', 'font_scale').stdout.decode().strip() == font, 'Font scale was not restored'
+        except Exception as cleanup_error:
+            cleanup_errors.append(str(cleanup_error))
         large.unlink(missing_ok=True)
         oversized.unlink(missing_ok=True)
         for label in ('beta', 'release'):
             (q.RUN / (label + '-media.mp4')).unlink(missing_ok=True)
-        remaining = [path for path in owned if q.shell('test', '-e', path, check=False).returncode == 0]
-        assert not remaining, 'Owned external fixtures survived cleanup: ' + str(remaining)
-        assert q.display_settings() == display, 'Display settings were not restored'
-        assert q.shell('settings', 'get', 'system', 'font_scale').stdout.decode().strip() == font, 'Font scale was not restored'
-        result['cleanup'] = dict(owned_external_files_removed=True, large_local_files_removed=True,
-                                 raw_downloaded_media_removed=True, display_restored=True, font_restored=True)
+        result['cleanup'] = dict(owned_external_files_removed=not cleanup_errors, large_local_files_removed=True,
+                                 raw_downloaded_media_removed=True, display_restored=not cleanup_errors,
+                                 font_restored=not cleanup_errors, errors=cleanup_errors)
+        if cleanup_errors:
+            result['status'] = 'fail'
         (q.RUN/'closed-test-ui-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2), encoding='utf-8')
         print(json.dumps(result,ensure_ascii=False),flush=True)
+        assert not cleanup_errors, 'Device cleanup incomplete: ' + str(cleanup_errors)
 
 
 if __name__ == '__main__': main()

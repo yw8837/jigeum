@@ -16,6 +16,8 @@ class BundleOptionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='agattok-options-') as temp:
             destination = Path(temp) / 'never-created-beta-code33.aab'
             cases = [
+                (['-Purpose', 'closed-test', '-InfantCaptionSupport'], 'Caption support requires'),
+                (['-Purpose', 'closed-test', '-AstBabbleSupport', '-InfantCaptionSupport'], 'Caption support requires'),
                 (['-Purpose', 'internal', '-InfantPresenceSupport'], 'requires closed-test and AstBabbleSupport'),
                 (['-Purpose', 'closed-test', '-InfantPresenceSupport'], 'requires closed-test and AstBabbleSupport'),
                 (['-Purpose', 'closed-test', '-AstBabbleSupport', '-InfantPresenceSupport'], 'Provide actual ARM proof'),

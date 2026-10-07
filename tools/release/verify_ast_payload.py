@@ -20,10 +20,12 @@ ABIS = {'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'}
 CANDIDATE_MODEL = 'ast-infant-presence-candidate.onnx'
 CANDIDATE_SIZE = 91_138_597
 CANDIDATE_SHA = '4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a'
+CAPTION_HEAD = 'ast-caption-presence.f32'
+CAPTION_HEAD_SHA = '979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1'
 
 
 def verify(path: Path, expected: str, model_variant: str = 'base') -> dict:
-    if model_variant not in {'base', 'infant-candidate'}:
+    if model_variant not in {'base', 'infant-candidate', 'infant-caption'}:
         raise ValueError('Unknown model variant')
     if expected not in {'present', 'absent'} or path.suffix.lower() not in {'.apk', '.aab'}:
         raise ValueError('Require present/absent and an APK/AAB')
@@ -42,7 +44,7 @@ def verify(path: Path, expected: str, model_variant: str = 'base') -> dict:
                 raise ValueError('Unexpected AST/ORT payload: ' + ', '.join(relevant))
             return {'status': 'pass', 'expected': expected, 'archive': str(path), 'payload_entries': []}
         model_name, model_size, model_sha = ((CANDIDATE_MODEL, CANDIDATE_SIZE, CANDIDATE_SHA)
-            if model_variant == 'infant-candidate' else (MODEL, MODEL_SIZE, MODEL_SHA))
+            if model_variant in {'infant-candidate', 'infant-caption'} else (MODEL, MODEL_SIZE, MODEL_SHA))
         model = prefix + 'assets/' + model_name
         models = {name for name in relevant if name.endswith('.onnx')}
         if models != {model}:
@@ -54,6 +56,17 @@ def verify(path: Path, expected: str, model_variant: str = 'base') -> dict:
         with archive.open(model) as stream:
             if hashlib.file_digest(stream, 'sha256').hexdigest() != model_sha:
                 raise ValueError('Pinned AST model hash mismatch')
+        caption = prefix + 'assets/' + CAPTION_HEAD
+        caption_notice = prefix + 'assets/AST_CAPTION_NOTICE.txt'
+        if model_variant == 'infant-caption':
+            if caption not in names or archive.getinfo(caption).file_size != 3076:
+                raise ValueError('Frozen caption head missing or wrong size')
+            if hashlib.sha256(archive.read(caption)).hexdigest() != CAPTION_HEAD_SHA:
+                raise ValueError('Frozen caption head SHA mismatch')
+            if caption_notice not in names or not archive.read(caption_notice).strip():
+                raise ValueError('Caption source notice missing')
+        elif caption in names or caption_notice in names:
+            raise ValueError('Unexpected caption payload for the selected model variant')
         for name, wanted in NOTICES.items():
             if hashlib.sha256(archive.read(prefix + 'assets/' + name)).hexdigest() != wanted:
                 raise ValueError('Upstream notice differs: ' + name)
@@ -73,7 +86,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('archive', type=Path)
     parser.add_argument('--expect', choices=['present', 'absent'], required=True)
-    parser.add_argument('--model-variant', choices=['base', 'infant-candidate'], default='base')
+    parser.add_argument('--model-variant', choices=['base', 'infant-candidate', 'infant-caption'], default='base')
     args = parser.parse_args()
     try:
         report = verify(args.archive, args.expect, args.model_variant)

@@ -53,11 +53,20 @@ require(infantPresenceBetaProperty == null || infantPresenceBetaProperty in setO
 }
 val infantPresenceBetaEnabled = infantPresenceBetaProperty == "true"
 require(!infantPresenceBetaEnabled || astBetaEnabled) { "Infant presence beta requires agattokAstBeta=true." }
+val infantCaptionBetaProperty = providers.gradleProperty("agattokInfantCaptionBeta").orNull
+require(infantCaptionBetaProperty == null || infantCaptionBetaProperty in setOf("true", "false")) {
+    "agattokInfantCaptionBeta must be explicitly true or false."
+}
+val infantCaptionBetaEnabled = infantCaptionBetaProperty == "true"
+require(!infantCaptionBetaEnabled || infantPresenceBetaEnabled) {
+    "Caption beta requires agattokInfantPresenceBeta=true and its own physical ARM proof."
+}
 require(!astBetaEnabled || !(astProbeEnabled || astStandaloneEnabled || astCandidateEnabled)) {
     "AST beta cannot be mixed with AST probe, standalone or candidate research flags."
 }
 val astRuntimeEnabled = astProbeEnabled || astBetaEnabled
 val infantPresenceModelEnabled = infantPresenceEnabled || infantPresenceBetaEnabled
+val infantCaptionRuntimeEnabled = infantCaptionEnabled || infantCaptionBetaEnabled
 val infantPresenceAssets = layout.buildDirectory.dir("generated/infantPresenceAssets")
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
@@ -82,8 +91,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 32
-        versionName = "0.5.18"
+        versionCode = 33
+        versionName = "0.5.19"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
@@ -156,6 +165,7 @@ android {
             buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "true")
             buildConfigField("boolean", "AST_BABBLE_SUPPORT", astBetaEnabled.toString())
             buildConfigField("boolean", "AST_INFANT_PRESENCE", infantPresenceBetaEnabled.toString())
+            buildConfigField("boolean", "AST_INFANT_CAPTION", infantCaptionBetaEnabled.toString())
             buildConfigField("String", "PLAY_VERIFY_URL", "\"\"")
             buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", "\"\"")
             manifestPlaceholders["testDistribution"] = "true"
@@ -264,7 +274,7 @@ val stageInfantPresenceAssets by tasks.registering(Sync::class) {
     dependsOn(verifyAstModel)
     from("src/astProbe/assets") { exclude("ast-dynamic-int8.onnx", "AST_MODEL_NOTICE.txt", "*.partial") }
     from("src/infantPresence/assets") { include("ast-infant-presence-candidate.onnx", "AST_MODEL_NOTICE.txt") }
-    if (infantCaptionEnabled) {
+    if (infantCaptionRuntimeEnabled) {
         dependsOn("verifyInfantCaptionHead")
         from("src/infantCaption/assets") { include("ast-caption-presence.f32", "AST_CAPTION_NOTICE.txt") }
     }
@@ -295,10 +305,17 @@ val verifyInfantPresenceArm by tasks.registering(Exec::class) {
         require((android.defaultConfig.versionCode ?: 0) > 32) {
             "Validated infant presence beta requires a new versionCode above 32; do not re-upload code32."
         }
-        commandLine(python, rootProject.file("../../tools/release/verify_infant_presence_arm.py").absolutePath, proof)
+        val args = mutableListOf(python, rootProject.file("../../tools/release/verify_infant_presence_arm.py").absolutePath, proof)
+        if (infantCaptionBetaEnabled) args += "--infant-caption-candidate"
+        commandLine(args)
     }
 }
 tasks.configureEach {
+    // AGP's lint model flattens generated source directories and does not retain
+    // a FileCollection builtBy relationship. Declare its producer explicitly.
+    if (infantPresenceModelEnabled && name.contains("lint", ignoreCase = true)) {
+        dependsOn(stageInfantPresenceAssets)
+    }
     if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
     if (infantPresenceEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(stageInfantPresenceAssets)
     if (astBetaEnabled && name == "mergeBetaAssets") dependsOn(verifyAstModel)

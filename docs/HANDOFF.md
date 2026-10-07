@@ -1,5 +1,28 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — S25·0.5.19/code33 QA·독립 검토 완료, Alpha 제출 준비
+
+[실제 S25 측정](qa/caption-arm-20261007.md)은 합성10/20/20초 AST 단계
+2.486/6.300/6.157초, Android thermal0 유지, 취소/복구까지 통과했다.
+휴대폰의 별도 연구앱/임시 파일을 제거했고 기존 설치는 보존했다. 폰 연결은 현재 필요 없다.
+[beta 계약](research/20261007-caption-beta-contract.md)에 따라 명시caption beta만 연결했다.
+정식release는 해당옵션false·추가payload없음을 실제APK/AAB/DEX에서 검증했다.
+
+[0.5.19 QA](qa/caption-beta-20261007.md): beta/release 서명빌드 clean exit0,
+실제32→33 기록·10초MP4 해시 보존, 실제10초 AV와 다음구간/선택·촬영취소 통과.
+작은화면/200%글꼴, 실제1:59.4촬영·20초무음보류,200MiB/+1byte 경계도 통과했다.
+초기 에뮬레이터 연결소실·Android System UI ANR로5cycle중단 이력은 보존했다.
+사용자 PC재부팅 후 별도scope1cycle에서 나머지실행을 exit0/404.67초로 통과했다.
+관찰근거스크롤·실제영상저장/무료내보내기·PDF공유·재시작·정식60/10/100/시각/PDF재잠금 확인.
+10초 audio+video MP4가 beta→release에서 동일SHA였고 소유QA설치/임시파일/에뮬레이터를 정리했다.
+공용AVD폴더는 유지했다. [독립최종검토](qa/caption-beta-code-review-20261007.md)는
+Spec/Standards새필수각0이며 새scope complete/clear/부재를 확인했다. Git푸시 후 beta AAB를 제출한다.
+
+최종파일은 `work/caption-beta-20261007/final/` 한 세트다. **Play 새업로드0**이며
+Console에서 **0.5.18-beta/code32가 선택한 테스터에게 제공 중**임을 확인했다.
+연구 고정53조건의18→20출력은 기존관찰 보존과 제한된 추가지원이며 일반인식률/욕구정확도가 아니다.
+아래 ‘ARM미실행/code32유지’ 등은 선행 시점 이력이다. 현재 미완료는 푸시·새Play제출이다.
+
 ### 최신 — Android 후보의 추가 지원 확인, 새 실기기 검증 준비 완료
 
 [연구 Android QA](qa/caption-android-20261007.md): 고정53조건에서 기존 presence 후보18출력→caption pair20출력,
