@@ -1,6 +1,6 @@
 # 활성 다음 단계 — 의미 있는 인식·맥락 개선까지 지속
 
-### 현재 다음 실행 — code33 최종 증거 검토·푸시·Alpha 제출
+### 현재 다음 실행 — Google 검토 후 code33 테스터 제공 확인
 
 S25 caption ARM·clean 서명빌드·패키지검사·32→33 기록/미디어 보존은 완료됐다.
 상태와 실패를 [caption beta QA](qa/caption-beta-20261007.md)에서 확인한다.
@@ -9,9 +9,9 @@ S25 caption ARM·clean 서명빌드·패키지검사·32→33 기록/미디어 �
 영상/소리10초 MP4 hash보존·PDF·재시작·정식제한까지 확인했고 소유QA설치/실행도 정리했다.
 
 1. 독립 Spec/Standards최종필수각0·새scope complete/clear/부재 완료. 검증을 불필요하게 반복하지 않는다.
-2. 소스·QA문서 커밋/푸시, local/remote SHA를 확인한다.
-3. beta0.5.19/code33 AAB만 Alpha에 업로드·검토 제출한다.
-   현재 code32 제공 중이며33은 미제출이다. 비교release AAB는 제출하지 않는다.
+2. 소스·QA문서 `7dae68a`푸시·local/remote SHA일치, beta33 AAB업로드·검토전송 완료.
+3. 게시개요의 빠른 검사/검토 상태가 실제 바뀌면Alpha33테스터제공을 확인한다.
+   현재33은검토중이며 제공완료로 보고하지 않는다. 비교release AAB는 제출하지 않는다.
 4. 소유 임시파일/실행만 정리하고 공용MoaQA35폴더·원본·기준산출물은 보존한다.
 
 아래 ARM 대기 단계는 과거 이력이다.

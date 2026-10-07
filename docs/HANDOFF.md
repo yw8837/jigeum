@@ -1,6 +1,6 @@
 # 협업 인수인계 — 아가톡
 
-### 최신 — S25·0.5.19/code33 QA·독립 검토 완료, Alpha 제출 준비
+### 최신 — 0.5.19/code33 Alpha 검토 제출 접수, Google 빠른 검사 진행 중
 
 [실제 S25 측정](qa/caption-arm-20261007.md)은 합성10/20/20초 AST 단계
 2.486/6.300/6.157초, Android thermal0 유지, 취소/복구까지 통과했다.
@@ -16,12 +16,14 @@
 관찰근거스크롤·실제영상저장/무료내보내기·PDF공유·재시작·정식60/10/100/시각/PDF재잠금 확인.
 10초 audio+video MP4가 beta→release에서 동일SHA였고 소유QA설치/임시파일/에뮬레이터를 정리했다.
 공용AVD폴더는 유지했다. [독립최종검토](qa/caption-beta-code-review-20261007.md)는
-Spec/Standards새필수각0이며 새scope complete/clear/부재를 확인했다. Git푸시 후 beta AAB를 제출한다.
+Spec/Standards새필수각0이며 새scope complete/clear/부재를 확인했다.
+소스/QA `7dae68a`푸시와 local/remote SHA일치를 확인했고 beta AAB만 실제Alpha에 제출했다.
 
-최종파일은 `work/caption-beta-20261007/final/` 한 세트다. **Play 새업로드0**이며
-Console에서 **0.5.18-beta/code32가 선택한 테스터에게 제공 중**임을 확인했다.
+최종파일은 `work/caption-beta-20261007/final/` 한 세트다. **Play beta33업로드/검토전송 완료**이며
+Console의 **검토 중인 변경사항/빠른 검사 실행 중**에33행을 확인했다. 승인/테스터제공은 아직 미확인이다.
+지원기기감소0, Play설치112MB/증가14KB, 가독화파일·native기호 권고2개/제출차단오류0이다.
 연구 고정53조건의18→20출력은 기존관찰 보존과 제한된 추가지원이며 일반인식률/욕구정확도가 아니다.
-아래 ‘ARM미실행/code32유지’ 등은 선행 시점 이력이다. 현재 미완료는 푸시·새Play제출이다.
+아래 ‘ARM미실행/code32유지’ 등은 선행 시점 이력이다. 현재 대기는Google검사/검토 후33테스터제공확인이다.
 
 ### 최신 — Android 후보의 추가 지원 확인, 새 실기기 검증 준비 완료
 

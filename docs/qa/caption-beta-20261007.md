@@ -60,7 +60,7 @@ snapshot, not exact reclaimed bytes. Phone production installation was not touch
 |U3|Local actual AV and navigation/cancel|known_ui.py|selected10s analysis, result/back/picker/capture cancellation|PASS signed-known-final; observed broad AST cue; UI wait25.384s on2-core emulator|No save, local copy removed, original SHA unchanged|
 |R1|Independent Spec/Standards review|code-review|No mandatory remaining issue|PASS source and final resumed evidence; mandatory0each|Read-only|
 |D1|Disk/process state|scoped lifecycle snapshots|Owned disposable copies removed, AVD preserved|PASS cleanup-result.json + new complete/clear/absent|Old scope stopped/clear/absent; shared AVD retained|
-|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state|NOT SUBMITTED; observed Alpha still serves code32 to selected testers|No new browser mutation|
+|X1|Only final beta AAB to Alpha|Play Console UI|Actual submitted review state|SUBMISSION ACCEPTED: code33 in review section; quick checks still running, not yet observed available|Screenshot/state saved; existing track/settings preserved|
 
 Physical proof and research behavior results: [ARM](caption-arm-20261007.md),
 [Android](caption-android-20261007.md). Synthetic performance and caption support
@@ -119,8 +119,31 @@ evidence. Both independent axes accepted the final evidence with0mandatory findi
 The fresh scoped lifecycle is complete/clear/read-absent: **ULTRAQA COMPLETE:
 Goal met after1resumed cycle**, following the separately preserved initial5cycle
 stop. This completion covers local signed QA, not external Play deployment.
-Next submit only the beta AAB to Alpha. Do not repeat passed checks without cause.
+Only the beta AAB has now been submitted to Alpha. Do not repeat passed checks without cause.
 The comparison release AAB is never a Play deliverable.
+
+## Actual Play submission
+
+Source/QA commit `7dae68a7204ce7e62f507ebe213d5dcc7b772577` was pushed to
+`origin/codex/ondevice-av-probe`; exact local/remote SHA and clean worktree verified.
+Using the existing Yeolmae app/Alpha track, uploaded only the pinned160193654B
+beta AAB, release13, `0.5.19-beta (33) - infant vocal support`. Saved the Korean
+release notes and sent the single Alpha change for review. The Console then
+displayed `검토 중인 변경사항` and the exact33release row. Quick checks were still
+running (up to14minutes); this does not yet prove review completion or tester
+availability. Managed publishing was already disabled; no setting was changed.
+
+Actual review screen: phone11301/tablet6408 supported devices, lost0/new0;
+new install112MB, previous-release delta14KB. Two advisory warnings remain:
+no deobfuscation mapping and native debug symbols. No blocking error was displayed.
+The earlier notification about Fragment1.1.0 explicitly named old code27; it was
+not described as a newly resolved code33 issue. Production, products, tester lists
+and account permissions were not changed.
+
+Evidence: `work/caption-beta-resume-20261007/play-code33-review.jpg` and
+`play-code33-state.txt`. Existing opt-in URL remains
+https://play.google.com/apps/testing/com.moa.babylanguage .
+Actual Play split installation/new33availability is pending external review.
 
 ## Package identity
 
