@@ -1,5 +1,20 @@
 # 협업 인수인계 — 아가톡
 
+### 최신 — beta34 Alpha 제공 확인, 업체 설치 완료 소식 수신
+
+2026-10-07 22:14 KST 실제 Alpha에서 **0.5.20-beta/code34 — 선택한 테스터에게 제공됩니다**를
+확인했다. Console 게시일은 **2026-10-07 22:06 KST**다. 게시 개요의 검토 항목도 해소됐다.
+기존 Zardu33·그룹회원4·원래2명 목록이 모두 선택된 상태이며 변경하지 않았다.
+[배포 증거](qa/accepted-vocal-audibility-20261007/play-review.md)를 저장했다.
+이 기록의 커밋·푸시·SHA 대조 뒤 승인 확인 자동화33을 일시중지하고 목표 완료 감사를 마친다.
+
+사용자는 이어서 “테스터가 다 깔았대”라고 전달했다. **업체 설치 완료의 사용자 전달**로
+기록한다. 실제 계정별 설치/버전·opt-in 날짜·12명 연속14일은 직접 확인한 것이 아니다.
+먼저 설치한 기기는 기존 [Play 페이지](https://play.google.com/store/apps/details?id=com.moa.babylanguage)에서
+code34 업데이트를 받는다. [웹 참여 링크](https://play.google.com/apps/testing/com.moa.babylanguage)는 동일하다.
+기존 테스트 트랙을 유지하며 정식 출시/실제 결제/다른트랙 변경은 하지 않았다.
+아래 검토·blocked 표현은 게시 전 이력이다.
+
 ### 최신 진행 — 작은 옹알이2조건 회복, beta34 Alpha 검토 요청 완료
 
 2026-10-07 21:25 KST에 **0.5.20-beta/code34**를 기존 Alpha에 검토 요청했다.

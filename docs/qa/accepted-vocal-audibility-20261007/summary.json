@@ -136,7 +136,7 @@
       }
     }
   },
-  "play_available_version_code": 33,
+  "play_available_version_code": 34,
   "candidate_version_code": 34,
   "signed_upgrade_pending": false,
   "closed_policy_pending": false,
@@ -214,11 +214,12 @@
     "version_name": "0.5.20-beta",
     "track": "Alpha",
     "review_requested_at": "2026-10-07T21:25:49+09:00",
-    "observed_state": "in_review_changes",
-    "last_observed_at": "2026-10-07T21:41:05+09:00",
+    "observed_state": "available_to_selected_testers",
+    "published_at": "2026-10-07T22:06:00+09:00",
+    "last_observed_at": "2026-10-07T22:14:12+09:00",
     "pre_review_checks_complete": true,
-    "available_to_testers_confirmed": false,
-    "last_confirmed_available_version_code": 33,
+    "available_to_testers_confirmed": true,
+    "last_confirmed_available_version_code": 34,
     "blocking_errors": 0,
     "advisories": ["missing_deobfuscation_file", "missing_native_debug_symbols"],
     "supported_devices_removed": 0,
@@ -227,8 +228,10 @@
     "testers_changed": false,
     "monitor_automation_id": "33",
     "monitor_status": "ACTIVE",
-    "goal_status": "blocked",
-    "goal_blocker": "Google approval and exact code34 Alpha availability pending; local requirements complete",
+    "approval_blocker_resolved": true,
+    "tester_lists_preserved": [{"name":"Zardu 20260802","count":33},{"name":"existing group members 20261007","count":4},{"name":"original closed testers","count":2}],
+    "vendor_installation_report": "User relayed that all testers installed; not independently verified per account or version",
+    "twelve_testers_continuous_fourteen_days_verified": false,
     "evidence": "play-review.md"
   }
 }

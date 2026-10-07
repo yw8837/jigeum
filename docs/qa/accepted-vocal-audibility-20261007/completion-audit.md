@@ -1,4 +1,12 @@
-# beta34 목표 완료 감사 — Google 게시 확인 대기
+# beta34 목표 완료 감사 — Google 게시 확인
+
+## 최신 — 22:14 KST 마지막 외부 요건 충족
+
+정확한code34의Alpha상태가 **선택한 테스터에게 제공됩니다**, 게시일22:06KST임을
+확인했다. 이전의Google승인대기조건은해소됐다. 기존테스터세목록33/4/2선택도보존됐다.
+작은게시화면과원DOM을저장했다. 사용자전달의업체설치완료도기록하되직접계정검증과구분한다.
+이기록의푸시·SHA대조·자동화일시중지만마치면이목표의필수작업은남지않는다.
+이하blocked/active는당시시점의이력이다. 인식한계는아래원문대로유지한다.
 
 ## 최신 — 21:41 KST 외부 승인 대기
 
@@ -38,7 +46,7 @@ code34의 Google 승인·제공 미확인은 제출 턴(21:25), 감사/사전검
 | QA lifecycle·실패 보존 | qa/2-complete-read.json·2-clear.log·후속CLI부재, failure01와 research runner 이력 | 통과.2cycle 완료/clear. 부팅직후 복사 실패·orphan_cleanup 이력 보존 |
 | 용량 관리 | cleanup-result/duplicate-artifact-cleanup 및 삭제6경로의 현재 부재 | 통과.804857502B 중복삭제, 최종/직전파일·공용AVD 유지 |
 | Git 공유 | f8f890c local/remote exact 및 clean tree | 통과. 아래 감사 후속문서도 푸시 필요 |
-| 기존 Alpha 업데이트 | 게시개요 exact34 검토 요청, 21:38 사전검사 종료·검토 중 | **미완료. 실제 선택테스터 제공을 아직 확인하지 못함** |
+| 기존 Alpha 업데이트 | 게시개요검토해소·Alpha exact34 선택테스터제공·22:06게시/22:14관찰 | **통과. 실제 게시와 기존테스터선택 보존 확인** |
 
 재대조의 작은 기계 판독 결과는 `work/accepted-vocal-audibility-20261007/completion-audit-check.json`이다.
 실제53관찰을 비교했으며 `comparison.json`의 pass 문구만 신뢰하지 않았다.
@@ -55,8 +63,8 @@ code34의 Google 승인·제공 미확인은 제출 턴(21:25), 감사/사전검
   완료 판정에 포함하지 않는다. 현재 목표의 실측 회복은 동일원본2감쇠조건과 실제앱 비교다.
 - code34 실폰 재측정·모든 기기 성능·Play split 설치·업체12명14일 참여는 미검증이다.
 
-## 남은 외부 완료 요건
+## 외부 완료 요건의 처리 순서
 
 정확한34가 기존Alpha의 선택테스터에게 제공됨 → 실제화면 저장 →
 QA/HANDOFF/NEXT/summary/이감사문서 갱신·푸시·SHA대조 → 자동화33 일시중지.
-이 요건이 모두 증명되기 전 goal complete는 호출하지 않는다.
+앞의 제공·화면저장은완료됐고 후속기록푸시/자동화정리후goal complete를호출한다.

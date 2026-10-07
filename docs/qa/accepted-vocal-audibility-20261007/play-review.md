@@ -1,5 +1,27 @@
 # beta34 Alpha 검토 요청 증거
 
+## 최신 — code34 선택테스터 제공 확인
+
+2026-10-07 22:14:12 KST Alpha의 최신출시가 `0.5.20-beta (34) - quiet vocal fix`이고
+**선택한 테스터에게 제공됩니다**를 확인했다. Console 게시일은 **10월7일 오후10:06**이다.
+게시 개요의 검토 항목이 해소되고 앱업데이트 게시 알림도 표시됐다.
+실제 version34의 Alpha 상태를 판정 근거로 사용한다.
+
+![code34 Alpha 선택 테스터에게 제공됨](play-code34-available.jpg)
+
+테스터 탭에서 Zardu33명·기존그룹회원4명·원래비공개2명 모두 선택됨을 읽었다.
+이 수치는 겹칠 수 있으며 고유인원으로 합하지 않는다. 설정을 변경하지 않았다.
+원 DOM은 work 범위의 `play/code34-available.txt`, `play/code34-testers.txt`에 보존한다.
+
+- 설치/업데이트: https://play.google.com/store/apps/details?id=com.moa.babylanguage
+- 웹 참여: https://play.google.com/apps/testing/com.moa.babylanguage
+
+사용자가“테스터가 다 깔았대”라고전달했다. 업체설치완료의사용자전달로기록하며,
+개별테스터의설치버전·opt-in시작일·연속14일은직접검증하지않았다.
+승인 확인 목적은 달성됐으며 증거푸시후 자동화33을 일시중지한다.
+
+아래는 게시 전의 검토 이력이다.
+
 ## 최신 — 사전 검사 종료, Google 검토 중
 
 2026-10-07 21:38:17 KST: 사전 검사 진행 표시가 사라지고 `변경사항을 검토 중입니다`로
