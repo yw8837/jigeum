@@ -207,6 +207,25 @@
     "lifecycle_complete_and_cleared": true,
     "independent_spec_mandatory_findings": 0,
     "independent_standards_mandatory_findings": 0,
-    "play34_submitted": false
+    "play34_submitted": true
+  },
+  "play": {
+    "version_code": 34,
+    "version_name": "0.5.20-beta",
+    "track": "Alpha",
+    "review_requested_at": "2026-10-07T21:25:49+09:00",
+    "observed_state": "in_review_changes_with_pre_review_checks_running",
+    "pre_review_checks_complete": false,
+    "available_to_testers_confirmed": false,
+    "last_confirmed_available_version_code": 33,
+    "blocking_errors": 0,
+    "advisories": ["missing_deobfuscation_file", "missing_native_debug_symbols"],
+    "supported_devices_removed": 0,
+    "reference_install_mb": 112,
+    "reference_install_delta_kb": 1.32,
+    "testers_changed": false,
+    "monitor_automation_id": "33",
+    "monitor_status": "ACTIVE",
+    "evidence": "play-review.md"
   }
 }
