@@ -87,20 +87,45 @@ internal data class ClipAnalysisResult(val interpretation: ClipInterpretation? =
     val suggestedRange: ClipRange? = null)
 
 internal object EvidenceInterpreter {
+    /** A scene-level activity ratio is not a second sound classifier. For quiet
+     * accepted input, repeat the unchanged event/persistence rules using only
+     * audible model windows. Other speakers elsewhere cannot lend their volume.
+     * This does not prove which person produced sound inside a model window. */
+    private fun acceptedAudibleDecision(audio: SoundAnalysis, original: SoundDecision,
+                                        durationMs: Long): SoundDecision? {
+        fun audible(rms: Double?) = rms != null && rms.isFinite() && rms in .003..1.0
+        if (original.broadWindows.isNotEmpty()) {
+            return original.takeIf { it.broadWindows.all { window ->
+                window.startMs >= 0 && window.endMs <= durationMs &&
+                    window.endMs - window.startMs in 1_000..10_000 && audible(window.strongestSecondRms)
+            } }
+        }
+        if (original.moments.isEmpty() || audio.frames.isEmpty() ||
+            audio.frames.any { it.startMs !in 0 until durationMs } ||
+            audio.frames.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return null
+        val measured = audio.copy(cues = emptyList(),
+            frames = audio.frames.map { it.copy(cues = if (audible(it.windowRms)) it.cues else emptyList()) },
+            babbleWindows = emptyList(), infantVoiceWindows = emptyList())
+        val decision = SoundTimeline.decide(measured, durationMs)
+        return decision.takeIf { it.problem == null && it.events.toSet() == original.events.toSet() }
+    }
+
     // Conservative product gate, NOT a measured confidence/accuracy percentage.
     // Generic adult laughter/speech and a face alone cannot create a baby phrase.
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
                   visualEvidence: VisualEvidence? = null, audioTimelineAligned: Boolean = true): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
-        val decision = SoundTimeline.decide(audio, range.durationMs)
-        decision.problem?.let { return ClipAnalysisResult(problem = it, issue = decision.issue, visualEvidence = visualEvidence) }
+        val originalDecision = SoundTimeline.decide(audio, range.durationMs)
+        originalDecision.problem?.let { return ClipAnalysisResult(problem = it, issue = originalDecision.issue, visualEvidence = visualEvidence) }
         // The existing input-silence gate measures the strongest second, while the
         // activity fraction is whole-scene energy. General presence has no localized
         // event rhythm; do not discard its audible clue with a second scene-level gate.
         // Reuse the unchanged .003 input floor, never lower model or infant thresholds.
-        val audibleGeneralPresence = decision.infantVoiceWindows.isNotEmpty() &&
-            shape.strongestSecondRms.isFinite() && shape.strongestSecondRms in .003..1.0
-        if (!shape.activeFraction.isFinite() || (shape.activeFraction < 0.04f && !audibleGeneralPresence)) return ClipAnalysisResult(
+        val audibleInput = shape.strongestSecondRms.isFinite() && shape.strongestSecondRms in .003..1.0
+        val audibleGeneralPresence = originalDecision.infantVoiceWindows.isNotEmpty() && audibleInput
+        val decision = if (shape.activeFraction >= .04f || audibleGeneralPresence) originalDecision else
+            if (audibleInput) acceptedAudibleDecision(audio, originalDecision, range.durationMs) else null
+        if (!shape.activeFraction.isFinite() || shape.activeFraction !in 0f..1f || decision == null) return ClipAnalysisResult(
             problem = "선택한 구간이 너무 조용해요. 다시 들어보고 아기 소리가 있는 구간을 골라 주세요.",
             issue = AnalysisIssue.QUIET, visualEvidence = visualEvidence)
         val sound = decision.sound

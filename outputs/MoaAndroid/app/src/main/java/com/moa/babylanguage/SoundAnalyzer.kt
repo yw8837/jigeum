@@ -75,10 +75,12 @@ object SoundAnalyzer {
                     val audio = AudioData.create(format, samples.size)
                     audio.load(samples)
                     val frames = classifier.classify(audio).classificationResults().map { frame ->
-                        SoundFrame(offsetMs + frame.timestampMs().orElseThrow { IllegalStateException("Missing audio timestamp") },
+                        val localStartMs = frame.timestampMs().orElseThrow { IllegalStateException("Missing audio timestamp") }
+                        SoundFrame(offsetMs + localStartMs,
                             frame.classifications().flatMap { it.categories() }
                                 .mapNotNull { category -> cueLabel(category.categoryName())?.let { SoundCue(it, category.score()) } }
-                                .groupBy { it.label }.map { (label, scores) -> SoundCue(label, scores.maxOf { it.score }) })
+                                .groupBy { it.label }.map { (label, scores) -> SoundCue(label, scores.maxOf { it.score }) },
+                            AudioCleanup.classifierWindowRms(samples, localStartMs))
                     }
                     val cues = frames.flatMap { it.cues }.groupBy { it.label }.map { (label, list) ->
                         SoundCue(label, list.maxOf { it.score })

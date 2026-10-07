@@ -32,6 +32,18 @@ class AudioPresenceRegressionTest {
         val source = pcm.copyOf()
         val audio = SoundAnalyzer.analyzeDetailed(context, pcm)
         assertArrayEquals("$name: analysis must preserve the selected source PCM", source, pcm, 0f)
+        val cleaned = AudioCleanup.filter(pcm)
+        try {
+            for (frame in audio.frames) {
+                // Actual native timestamps select the matching original PCM window.
+                // Accumulate independently of the product helper and include padding.
+                val start = frame.startMs.toInt() * 16
+                val end = minOf(start + 15_600, cleaned.size)
+                val energy = (start until end).sumOf { cleaned[it].toDouble() * cleaned[it] }
+                assertNotNull("$name: measured frame level missing", frame.windowRms)
+                assertEquals(sqrt(energy / 15_600), frame.windowRms!!, 1e-10)
+            }
+        } finally { cleaned.fill(0f) }
         assertNotEquals("$name: a model failure is not a measured abstention", AnalysisIssue.MODEL_FAILURE, audio.issue)
         assertNoInfantApproval(name, audio)
         return audio

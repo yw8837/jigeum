@@ -1,7 +1,7 @@
 package com.moa.babylanguage
 
 /** A broad classification interval; neither an onset nor continuous baby activity. */
-data class BabbleSupportWindow(val startMs: Long, val endMs: Long)
+data class BabbleSupportWindow(val startMs: Long, val endMs: Long, val strongestSecondRms: Double? = null)
 
 internal object BabbleSupportPolicy {
     // Candidate v2 adds independent laughter/cry subclasses to the v1 conflict guard.
@@ -50,7 +50,7 @@ internal object BabbleSupportPolicy {
             val contrary = contraryLabels.maxOf { window.scores.getValue(it) }
             (babble >= .30f || (babble >= .10f && child >= .30f)) &&
                 !(contrary >= .10f && contrary >= babble * .60f)
-        }.map { BabbleSupportWindow(it.startMs, it.endMs) }.distinct().sortedBy { it.startMs }
+        }.map { BabbleSupportWindow(it.startMs, it.endMs, it.strongestSecondRms) }.distinct().sortedBy { it.startMs }
         return original.copy(babbleWindows = supported)
     }
 }

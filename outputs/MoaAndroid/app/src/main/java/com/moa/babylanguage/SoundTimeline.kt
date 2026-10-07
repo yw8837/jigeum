@@ -1,7 +1,7 @@
 package com.moa.babylanguage
 
 /** Window start comes from MediaPipe, not an assumed Keras hop length. */
-data class SoundFrame(val startMs: Long, val cues: List<SoundCue>)
+data class SoundFrame(val startMs: Long, val cues: List<SoundCue>, val windowRms: Double? = null)
 
 internal enum class VocalEvent(val label: String, val cue: String) {
     CRY("울음", "울음"), LAUGH("아기 웃음", "아기 웃음 후보"), BABBLE("옹알이", "옹알이 후보"),

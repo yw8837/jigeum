@@ -216,8 +216,10 @@ class AstPublicAudioProbeTest {
             .put("frame_starts_ms", JSONArray(audio.frames.map { it.startMs }))
             .put("cues", cueJson(audio.cues)).put("frames", JSONArray(audio.frames.map {
                 JSONObject().put("start_ms", it.startMs).put("cues", cueJson(it.cues))
+                    .put("window_rms", it.windowRms ?: JSONObject.NULL)
             })).put("broad_windows", JSONArray(decision.broadWindows.map {
                 JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
+                    .put("strongest_second_rms", it.strongestSecondRms ?: JSONObject.NULL)
             })).put("infant_presence_windows", JSONArray(decision.infantVoiceWindows.map {
                 JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
             }))
