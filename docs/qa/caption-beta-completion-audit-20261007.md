@@ -1,4 +1,4 @@
-# Beta33 objective audit — availability confirmed; subsequent tester request pending
+# Beta33 objective audit — beta and tester registration published
 
 2026-10-07 KST. This is a current-evidence audit, not another test execution.
 The objective remains on-device vocalization/context improvement, fixed comparison
@@ -18,16 +18,19 @@ No accuracy percentage or infant intent truth is inferred from caption metadata.
 | Access, actual save/share, restart, production gates | Actual `work/caption-beta-resume-20261007/signed-remaining01/{process-result,closed-test-ui-result}.json` | PASS exit0/404.67s. First4groups explicitly inherited with proof hash; remaining3 executed. Beta/release free exported MP4 same SHA; PDF chooser; full beta restart; release60/10/100/visual/PDF gates preserved. |
 | Required regressions and review | Actual native61/regression80 result files and `caption-beta-code-review-20261007.md` | Native61 and regression80 pass/0skip. Independent Spec and Standards final mandatory findings0 each. Initial5cycle stop and later1cycle resumption remain distinct. |
 | Disposable storage/process cleanup | Actual `work/caption-beta-resume-20261007/cleanup-result.json` | Owned QA app/XML removed; emulator disconnected; large fixtures absent; shared AVD retained. Free-space snapshot is not exact reclaimed bytes. Prior rejected deletion not retried. |
-| Git delivery | Actual `git rev-parse HEAD`, `git ls-remote origin refs/heads/codex/ondevice-av-probe`, porcelain | Both `e8d5688c26feee7034aae224e9ea69169e2c7ade`, clean before this audit/status documentation. The next documentation commit must also be pushed/verified. |
+| Git delivery | Actual `git rev-parse HEAD`, previous remote verification, porcelain | Baseline `190d5ed68424c40f6db3fe8abd84a22ec2a94ca6`, clean before this approval documentation. This documentation commit must also be pushed and its local/remote SHA compared before completion. |
 | Closed-beta submission | Actual Play publishing DOM/screenshot | Only code33 beta submitted to Alpha; Google approved and published it. |
 | Actual new-beta availability | Actual Alpha DOM/screenshot, `play-code33-available.{jpg,txt}` | **PROVEN.** Exact33 latest release is available to selected testers; Console publication2026-10-07 19:08 KST. |
-| Subsequent user request: Zardu testers | Current publishing DOM and `zardu-testers-20261007.md` | CSV imported, provider33accounts and existing4members+old2list selected/saved/submitted. The tester-selection change is separately under Google review. |
+| Subsequent user request: Zardu testers | Actual publishing, submission13 detail and Alpha tester DOM/screenshots; `zardu-testers-20261007.md` | **PROVEN.** Submission13 tester-only change released2026-10-07 19:28 KST. Three lists remain selected with33/4/2members. Counts overlap; vendor-account participation and installation are not claimed. |
 
 Google review and availability evidence is retained in
 `work/caption-beta-resume-20261007/play-code33-{in-review,available}.{jpg,txt}`.
-The original beta-delivery gate is now satisfied. The additional user-requested
-tester setup still needs published eligibility. Heartbeat33 follows that remaining
-registration state; do not duplicate the monitor or claim vendor-account access.
-Once registration is published, verify the preserved selections, finish the
-documentation push and pause the monitor before completing the overall work.
+The original beta-delivery gate and the additional tester-setup publication gate
+are now satisfied. Fresh approval evidence is retained in
+`work/zardu-testers-20261007/{publishing-approved,submission13-released,testers-approved}.{jpg,txt}`.
+At19:38 KST the exact tester-only submission and all preserved selections were
+checked. The remaining completion actions are this documentation commit/push,
+local/remote SHA comparison, pausing existing heartbeat33 and handing the links
+to the user. These do not establish vendor login/install,12continuous testers
+for14days, production approval or independent baby-intent accuracy.
 No re-upload, approval bypass, production release or fresh model download is needed.
