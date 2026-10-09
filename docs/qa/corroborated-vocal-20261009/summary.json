@@ -704,7 +704,11 @@
     "install_size": "112MB",
     "install_size_delta": "1.92KB",
     "automation_id": "33",
-    "automation_status": "ACTIVE",
+    "automation_status": "PAUSED",
+    "availability_git_commit": "ba80920b7bce26649ea1620e2be6e70136043d14",
+    "availability_git_remote_equal": true,
+    "availability_git_clean": true,
+    "overall_improvement_goal_complete": false,
     "evidence": "play-review.md"
   },
   "artifact_hashes_reverified": true,
