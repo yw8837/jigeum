@@ -29,4 +29,8 @@ actual model inference와 기록해시·오류를 확인한다. 실패 시 thres
 현재 laugh_rms6는 결정단계에서이미미승인이라3단독설명은아니다.
 
 ## 결과
-진행 중. 이 문서는 제품 개선/배포 완료를 뜻하지 않는다.
+실제 Android 모델로 사전 고정한 28조건을 실행했다. 회복은 0조건이며,
+`laugh_rms6`는 INFANT_UNCONFIRMED에서 MIXED_VOCAL로 바뀌었다.
+성인/잡음 대조의 신규 출력은 없었다. 음량 gain은 제품에 넣지 않았다.
+기존 필터·임계값·모델을 유지하고 [발성 존재 보완 계약](20261009-corroborated-vocal-contract.md)으로 이어갔다.
+원시 실행 근거는 `work/quiet-gain-20261009/`에 보존한다.
