@@ -31,9 +31,13 @@ internal object InfantVoiceSupportPolicy {
     fun attachCandidate(audio: SoundAnalysis, ast: AstAudioAnalysis, durationMs: Long): SoundAnalysis {
         if (SoundTimeline.decide(audio, durationMs).problem == null ||
             audio.infantVoiceWindows.isNotEmpty() ||
-            ast.problem != null || durationMs !in 1_000..20_000 || ast.windows.isEmpty()) return audio
+            durationMs !in 1_000..20_000) return audio
         val unopposed = BabbleSupportPolicy.shouldAnalyze(audio)
         if (!unopposed && !shouldCorroborate(audio, durationMs)) return audio
+        if (ast.problem != null) return if (unopposed) audio else audio.copy(
+            problem = "소리 보완 분석을 마치지 못했어요. 잠시 후 다시 시도해 주세요.",
+            issue = AnalysisIssue.MODEL_FAILURE)
+        if (ast.windows.isEmpty()) return audio
         val expected = if (durationMs <= 10_000) listOf(0L to durationMs) else {
             val starts = (0L..durationMs - 10_000 step 5_000).toMutableList()
             if (starts.last() != durationMs - 10_000) starts += durationMs - 10_000
@@ -49,7 +53,8 @@ internal object InfantVoiceSupportPolicy {
         if (!unopposed) {
             val anchors = infantFrames(audio)
             fun contains(window: AstAudioWindow, frame: SoundFrame) =
-                frame.startMs >= window.startMs && minOf(frame.startMs + 975, durationMs) <= window.endMs
+                frame.startMs >= window.startMs &&
+                    minOf(frame.startMs + SoundPhaseRecovery.FRAME_MS, durationMs) <= window.endMs
             // Both heads share an encoder: agreement is a conservative consistency
             // check, not independent proof. Never borrow identity or level from elsewhere.
             val supported = ast.windows.filter { window ->

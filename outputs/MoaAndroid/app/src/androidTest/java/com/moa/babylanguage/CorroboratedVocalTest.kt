@@ -80,6 +80,19 @@ class CorroboratedVocalTest {
         assertEquals(failed, apply(failed))
     }
 
+    @Test fun aFailedNewCorroborationIsNotReportedAsMissingInfantVoice() {
+        val failed = InfantVoiceSupportPolicy.attachCandidate(audio(),
+            AstAudioAnalysis(emptyList(), "synthetic native failure"), 10_000)
+        val result = EvidenceInterpreter.interpret(failed,
+            AcousticShape(.5f, false, 0, strongestSecondRms=.02), ClipRange(0,10_000))
+        assertEquals(AnalysisIssue.MODEL_FAILURE, result.issue)
+        assertNull(result.interpretation)
+        assertFalse(result.problem!!.contains("아기 소리인지"))
+        val accepted = SoundAnalysis(listOf(SoundCue("울음", .9f)))
+        assertEquals(accepted, InfantVoiceSupportPolicy.attachCandidate(accepted,
+            AstAudioAnalysis(emptyList(), "synthetic native failure"), 10_000))
+    }
+
     @Test fun fullCoverageEmotionAndTelevisionVetoRemainMandatory() {
         for (label in ast().scores.keys) {
             val conflict = ast(10_000,20_000).copy(scores = ast().scores + (label to .30f))
