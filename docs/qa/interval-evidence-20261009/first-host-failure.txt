@@ -10,4 +10,3 @@ org.junit.ComparisonFailure: expected:<AUDIO[]> but was:<AUDIO[_VISUAL]>
 
 FAILURES!!!
 Tests run: 47,  Failures: 1
-
