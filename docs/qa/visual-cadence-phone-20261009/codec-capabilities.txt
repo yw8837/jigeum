@@ -1,0 +1,2 @@
+--------- beginning of main
+10-09 19:56:59.358 17020 17088 I JigeumVideoTest: decoder=c2.qti.avc.decoder; 64x64=false; 320x320=true

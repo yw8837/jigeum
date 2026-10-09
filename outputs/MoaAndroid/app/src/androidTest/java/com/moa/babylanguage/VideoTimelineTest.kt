@@ -173,7 +173,9 @@ class VideoTimelineTest {
 
     @Test fun cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain() = runBlocking {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val file = fixture("temporal-red-blue-20.mp4")
+        // Keep the same H.264/PTS sequence at a phone-supported size. The 64px
+        // color fixture can fail hardware configure before cancellation is reached.
+        val file = fixture("temporal-red-blue-device-20.mp4")
         var borrowed: android.graphics.Bitmap? = null
         try {
             try {
@@ -192,6 +194,16 @@ class VideoTimelineTest {
             }
             assertEquals(5, frames)
         } finally { file.delete() }
+    }
+
+    @Test fun cancellationFixtureHasSupportedHardwareDimensions() {
+        val decoder = android.media.MediaCodec.createDecoderByType("video/avc")
+        try {
+            val caps = decoder.codecInfo.getCapabilitiesForType("video/avc").videoCapabilities
+            android.util.Log.i("JigeumVideoTest", "decoder=${decoder.name}; " +
+                "64x64=${caps.isSizeSupported(64, 64)}; 320x320=${caps.isSizeSupported(320, 320)}")
+            assertTrue("Cancellation fixture must reach the decoder callback", caps.isSizeSupported(320, 320))
+        } finally { decoder.release() }
     }
 
     @Test fun temporalEvidenceNeedsActualChangesToAffectBabbleExpression() {
