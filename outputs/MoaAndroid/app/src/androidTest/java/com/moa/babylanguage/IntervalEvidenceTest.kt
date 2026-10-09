@@ -58,6 +58,15 @@ class IntervalEvidenceTest {
         val audio = mixed().copy(frames = listOf(child(0), child(975), child(1950), conflict(2925), conflict(3900)))
         assertTrue(SoundTimeline.partialObservation(audio, 10_000)!!.partial)
     }
+    @Test fun overlappingUnresolvedDifferentSoundCannotBeDiscardedAsASeparatePhase() {
+        for (cues in listOf(listOf(SoundCue("웃음(화자 미확인)", .8f)),
+            listOf(SoundCue("울음", .5f)))) {
+            val audio = SoundAnalysis(emptyList(), frames = listOf(voice(0), voice(975), SoundFrame(1500, cues, .05)))
+            assertEquals(AnalysisIssue.MIXED_VOCAL, SoundTimeline.decide(audio, 10_000).issue)
+            assertNull(SoundTimeline.partialObservation(audio, 10_000))
+            assertNull(interpret(audio, visual()).interpretation)
+        }
+    }
     @Test fun existingOutputAndAudioFailuresArePreserved() {
         val accepted = SoundAnalysis(emptyList(), frames = listOf(voice(0), voice(975)))
         assertNull(SoundTimeline.partialObservation(accepted, 10_000))

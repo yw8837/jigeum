@@ -55,12 +55,12 @@ internal object SoundTimeline {
             val end = minOf(frame.startMs + SoundPhaseRecovery.FRAME_MS, durationMs)
             // A shifted window may overlap a conflicting observation. It cannot
             // borrow that time as clean evidence merely because its own vote passed.
-            val overlapsConflict = frames.indices.any { other ->
-                votes[other].conflict && frames[other].startMs < end &&
+            val overlapsUnresolved = frames.indices.any { other ->
+                other != index && votes[other].event != votes[index].event && frames[other].startMs < end &&
                     frames[other].startMs + SoundPhaseRecovery.FRAME_MS > frame.startMs
             }
             if (votes[index].event == null || frame.windowRms!! < .003 ||
-                end - frame.startMs < SoundPhaseRecovery.FRAME_MS || overlapsConflict) {
+                end - frame.startMs < SoundPhaseRecovery.FRAME_MS || overlapsUnresolved) {
                 finish(); continue
             }
             if (run.isNotEmpty() && (votes[run.last()].event != votes[index].event ||

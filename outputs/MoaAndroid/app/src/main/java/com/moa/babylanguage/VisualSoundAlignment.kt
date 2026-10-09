@@ -65,9 +65,7 @@ internal object VisualSoundAlignment {
 
         val mouthRun = mutableListOf<VisualFrameObservation>()
         fun finishMouth() {
-            if (mouthRun.count { it.mouthOpening!! >= .18f } >= 2 &&
-                mouthRun.last().presentationOffsetMs!! - mouthRun.first().presentationOffsetMs!! >= 1_000L &&
-                VisualTimeline.summarize(mouthRun, durationMs).mouthTransitions >= 2) {
+            if (hasSustainedMouthChanges(mouthRun, durationMs)) {
                 matches += Match(mouthRun.first().presentationOffsetMs!!,
                     mouthRun.last().presentationOffsetMs!!, Cue.MOUTH)
             }
@@ -89,6 +87,11 @@ internal object VisualSoundAlignment {
         return matches.sortedBy { it.startMs }
     }
 
+    private fun hasSustainedMouthChanges(run: List<VisualFrameObservation>, durationMs: Long): Boolean =
+        run.size >= 2 && run.last().presentationOffsetMs!! - run.first().presentationOffsetMs!! >= 1_000L &&
+            run.count { it.mouthOpening!! >= .18f } >= 2 &&
+            VisualTimeline.summarize(run, durationMs).mouthTransitions >= 2
+
     /** Co-observation inside one accepted broad window, never precise AV alignment.
      * Do not merge windows into continuous speech or let movements bridge a gap. */
     private fun broadMouthObservations(decision: SoundDecision, frames: List<VisualFrameObservation>,
@@ -102,9 +105,7 @@ internal object VisualSoundAlignment {
         val matches = mutableListOf<Match>()
         val run = mutableListOf<VisualFrameObservation>()
         fun finish() {
-            if (run.size >= 2 && run.last().presentationOffsetMs!! - run.first().presentationOffsetMs!! >= 1_000 &&
-                run.count { it.mouthOpening!! >= .18f } >= 2 &&
-                VisualTimeline.summarize(run, durationMs).mouthTransitions >= 2) {
+            if (hasSustainedMouthChanges(run, durationMs)) {
                 matches += Match(run.first().presentationOffsetMs!!, run.last().presentationOffsetMs!!, Cue.MOUTH)
             }
             run.clear()
