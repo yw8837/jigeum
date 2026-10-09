@@ -1,0 +1,193 @@
+{
+  "status": "pass",
+  "variants": {
+    "beta": {
+      "package": {
+        "status": "pass",
+        "distribution_checked": "beta",
+        "backup_domains_excluded_in_both_modes": [
+          "database",
+          "device_database",
+          "device_file",
+          "device_root",
+          "device_sharedpref",
+          "external",
+          "file",
+          "root",
+          "sharedpref"
+        ],
+        "compiled_apk_has_internet_permission": true,
+        "allowBackup": false,
+        "fullBackupContent": false,
+        "baseline_comparison": {
+          "status": "pass",
+          "files_compared": 26,
+          "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-beta-code35.apk"
+        },
+        "aab_checked": true,
+        "aab_unsigned": false,
+        "physical_OEM_transfer_tested": false,
+        "apk_sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4",
+        "aab_distribution": {
+          "package": "com.moa.babylanguage",
+          "version_code": 36,
+          "version_name": "0.5.22-beta",
+          "test_distribution": true,
+          "closed_test_distribution": true
+        },
+        "aab_sha256": "f160674fa45947adaa8adceefefb4777d8dca0264e21fcc645a5d463a0a00ab3"
+      },
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-beta-code36.apk",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "assets/AST_CAPTION_NOTICE.txt",
+            "assets/AST_MODEL_NOTICE.txt",
+            "assets/ONNX_RUNTIME_LICENSE.txt",
+            "assets/ONNX_RUNTIME_NOTICE.txt",
+            "assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "assets/ast-caption-presence.f32",
+            "assets/ast-infant-presence-candidate.onnx",
+            "lib/arm64-v8a/libonnxruntime.so",
+            "lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "lib/armeabi-v7a/libonnxruntime.so",
+            "lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "lib/x86/libonnxruntime.so",
+            "lib/x86/libonnxruntime4j_jni.so",
+            "lib/x86_64/libonnxruntime.so",
+            "lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        },
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-beta-code36.aab",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "base/assets/AST_CAPTION_NOTICE.txt",
+            "base/assets/AST_MODEL_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_LICENSE.txt",
+            "base/assets/ONNX_RUNTIME_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "base/assets/ast-caption-presence.f32",
+            "base/assets/ast-infant-presence-candidate.onnx",
+            "base/lib/arm64-v8a/libonnxruntime.so",
+            "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "base/lib/armeabi-v7a/libonnxruntime.so",
+            "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "base/lib/x86/libonnxruntime.so",
+            "base/lib/x86/libonnxruntime4j_jni.so",
+            "base/lib/x86_64/libonnxruntime.so",
+            "base/lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        }
+      ],
+      "flags": {
+        "AST_INFANT_CAPTION": true,
+        "AST_INFANT_PRESENCE": true,
+        "AST_BABBLE_SUPPORT": true,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": true,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "files": {
+        "Agattok-0.5.22-beta-code36.apk": {
+          "bytes": 255163375,
+          "sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4"
+        },
+        "Agattok-0.5.22-beta-code36.aab": {
+          "bytes": 160196569,
+          "sha256": "f160674fa45947adaa8adceefefb4777d8dca0264e21fcc645a5d463a0a00ab3"
+        }
+      }
+    },
+    "release": {
+      "package": {
+        "status": "pass",
+        "distribution_checked": "release",
+        "backup_domains_excluded_in_both_modes": [
+          "database",
+          "device_database",
+          "device_file",
+          "device_root",
+          "device_sharedpref",
+          "external",
+          "file",
+          "root",
+          "sharedpref"
+        ],
+        "compiled_apk_has_internet_permission": true,
+        "allowBackup": false,
+        "fullBackupContent": false,
+        "baseline_comparison": {
+          "status": "pass",
+          "files_compared": 18,
+          "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-release-code35.apk"
+        },
+        "aab_checked": true,
+        "aab_unsigned": false,
+        "physical_OEM_transfer_tested": false,
+        "apk_sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96",
+        "aab_distribution": {
+          "package": "com.moa.babylanguage",
+          "version_code": 36,
+          "version_name": "0.5.22",
+          "test_distribution": false,
+          "closed_test_distribution": false
+        },
+        "aab_sha256": "e4f44e67809b8ea844a17ec3b92ad22777fb75d19eec276d4cce9bd10d6c82b2"
+      },
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-release-code36.apk",
+          "payload_entries": []
+        },
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-release-code36.aab",
+          "payload_entries": []
+        }
+      ],
+      "flags": {
+        "AST_INFANT_CAPTION": false,
+        "AST_INFANT_PRESENCE": false,
+        "AST_BABBLE_SUPPORT": false,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": false,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "files": {
+        "Agattok-0.5.22-release-code36.apk": {
+          "bytes": 75381227,
+          "sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96"
+        },
+        "Agattok-0.5.22-release-code36.aab": {
+          "bytes": 46720778,
+          "sha256": "e4f44e67809b8ea844a17ec3b92ad22777fb75d19eec276d4cce9bd10d6c82b2"
+        }
+      }
+    }
+  }
+}

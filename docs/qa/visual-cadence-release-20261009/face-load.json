@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "physical_device": false,
+  "quality_validated": false,
+  "fixture": {
+    "description": "previous 10s JPEG25fps/PCM repeated twice, re-encoded; NOT original MP4",
+    "sha256": "dcddc6e158de553d73719b44264a627473870174abfddb5b149fa43524756f77",
+    "bytes": 12064600
+  },
+  "cases": [
+    {
+      "id": "face10",
+      "elapsed_ms": 14549.0578,
+      "observations": 50,
+      "single_face": 50,
+      "visual_ms": 6461.3668,
+      "max_stage_pss_bytes": 254825472,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "face20",
+      "elapsed_ms": 19950.7181,
+      "observations": 100,
+      "single_face": 99,
+      "visual_ms": 13053.4314,
+      "max_stage_pss_bytes": 260823040,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "repeat20",
+      "elapsed_ms": 17425.5781,
+      "observations": 100,
+      "single_face": 99,
+      "visual_ms": 11292.6921,
+      "max_stage_pss_bytes": 258993152,
+      "timeline_ordered": true,
+      "covers_selection": true
+    }
+  ],
+  "cleanup_errors": [],
+  "local_derived_removed": true,
+  "originals_unchanged": true,
+  "production_unchanged": true
+}
