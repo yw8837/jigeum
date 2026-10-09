@@ -1,0 +1,30 @@
+{
+  "status": "pass",
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "legacy_text_preserved": true,
+  "media_bytes_preserved": true,
+  "beta_full_access_retained": true,
+  "owned_external_files_removed": true,
+  "old_media": {
+    "name": "아가톡-1791549917766.mp4",
+    "bytes": 932978,
+    "sha256": "c67b2c1995b6fbedb0bbab2137763a94a4f8ff86fa32edcad061b2f7ab5496a9",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_media": {
+    "name": "아가톡-1791549917766.mp4",
+    "bytes": 932978,
+    "sha256": "c67b2c1995b6fbedb0bbab2137763a94a4f8ff86fa32edcad061b2f7ab5496a9",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  }
+}

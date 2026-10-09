@@ -1,0 +1,58 @@
+{
+  "version_name": "0.5.23-beta",
+  "version_code": 37,
+  "scope": "Partial neutral vocal observations and broad audio/visual co-observation",
+  "general_accuracy_validated": false,
+  "speaker_identity_or_lip_sync_validated": false,
+  "new_physical_performance_measured": false,
+  "host_tests": 48,
+  "android_test_groups": [
+    94,
+    84,
+    1
+  ],
+  "test_groups_overlap": true,
+  "replay": {
+    "conditions": 84,
+    "old_outputs": 36,
+    "new_outputs": 38,
+    "unchanged_conditions": 81,
+    "new_partial_conditions": 2,
+    "visual_added_conditions": 1
+  },
+  "actual_android_comparison": {
+    "status": "pass",
+    "same_source_conditions": 53,
+    "existing_outputs_preserved": 26,
+    "new_partial_results": [
+      "laugh_babble",
+      "extra_254454"
+    ],
+    "negative_new_outputs": 0,
+    "model_observations_exact": true,
+    "general_accuracy_validated": false
+  },
+  "code_review": {
+    "spec_mandatory": 0,
+    "standards_mandatory": 0,
+    "standards_optional": 0
+  },
+  "artifacts": {
+    "Agattok-0.5.23-beta-code37.apk": {
+      "bytes": 255179763,
+      "sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88"
+    },
+    "Agattok-0.5.23-beta-code37.aab": {
+      "bytes": 160200230,
+      "sha256": "d27dc2601626a81cf1f2f4ff3aa0bc33ac7a4e706c050a7c9a1e888aaab14372"
+    }
+  },
+  "release_status": "local_product_qa_passed_pending_play_submission",
+  "play_offered_version_code": 36,
+  "cleanup_status": "owned_device_and_media_cleaned_build_deletion_blocked",
+  "older_cleanup_policy_blocks_preserved": true,
+  "signed_upgrade_passed": true,
+  "signed_beta_and_release_policy_smoke_passed": true,
+  "ultraqa_status": "BLOCKED: temporary build deletion rejected by automatic policy",
+  "ultraqa_cycles": 2
+}

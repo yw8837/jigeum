@@ -1,0 +1,45 @@
+{
+  "status": "pass",
+  "source_sha256": "e99a178a1666d1d21a4e24216b9067e90c33ec865f9b4f779fe47df5e283e9d9",
+  "attenuated_pcm_sha256": "e99a178a1666d1d21a4e24216b9067e90c33ec865f9b4f779fe47df5e283e9d9",
+  "general_accuracy_validated": false,
+  "rows": [
+    {
+      "version": 36,
+      "install": {
+        "package": "com.moa.babylanguage",
+        "base_apk": "/data/app/~~9D-6ZBBsvqxt70m2bZFvtA==/com.moa.babylanguage-eoxksvmqfgGPCyjdaXoQug==/base.apk",
+        "sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4",
+        "expected_sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4",
+        "version_code": 36,
+        "version_name": "0.5.22-beta",
+        "verified": true,
+        "errors": []
+      },
+      "observed": "ABSTAINED",
+      "ui_seconds": 18.414
+    },
+    {
+      "version": 37,
+      "install": {
+        "package": "com.moa.babylanguage",
+        "base_apk": "/data/app/~~Nppz9pY11mZmRwrMOomfNg==/com.moa.babylanguage-xJM2oT3TWsHBAm9tBtB71Q==/base.apk",
+        "sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+        "expected_sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+        "version_code": 37,
+        "version_name": "0.5.23-beta",
+        "verified": true,
+        "errors": []
+      },
+      "observed": "PARTIAL_INFANT_VOICE_RESULT",
+      "ui_seconds": 22.609
+    }
+  ],
+  "movie_sha256": "9f61675f276c4debf05ab9af853993b9adab6c763a89a89d6885b1848393db11",
+  "local_movie_removed": true,
+  "remote_movie_removed": true,
+  "source_unchanged": true,
+  "source_file_seconds": 15,
+  "selected_interval_seconds": 10,
+  "selected_interval_note": "Default first 10 seconds; verified in candidate UI evidence"
+}

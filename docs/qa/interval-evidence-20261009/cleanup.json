@@ -1,0 +1,25 @@
+{
+  "new_research_build_status": "blocked_by_automatic_policy",
+  "new_research_build_path": "work/interval-evidence-20261009/build",
+  "new_research_build_bytes": 968764561.0,
+  "older_cleanup_policy_blocks_preserved": true,
+  "cleanup_policy_bypass_attempted": false,
+  "device_cleanup": {
+    "owned_avd": "MoaQA35",
+    "physical_device_modified": false,
+    "shared_avd_deleted": false,
+    "test_app_version": 37,
+    "uninstalled": [
+      "com.moa.babylanguage"
+    ],
+    "absent_research_packages": [
+      "com.moa.babylanguage",
+      "com.moa.babylanguage.astcandidate",
+      "com.moa.babylanguage.astcandidate.test"
+    ],
+    "status": "pass",
+    "owned_external_files_removed": true,
+    "emulator_stopped": true,
+    "free_disk_bytes_after": 54779625472
+  }
+}
