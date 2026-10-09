@@ -113,7 +113,7 @@
       "native_debug_symbols_absent"
     ],
     "automation_id": "33",
-    "automation_status": "ACTIVE",
+    "automation_status": "PAUSED",
     "evidence": [
       "play-preflight.txt",
       "play-submitted.txt",
@@ -126,7 +126,9 @@
       "play-available.png",
       "play-publishing-complete.txt",
       "play-release-complete.txt"
-    ]
+    ],
+    "availability_evidence_commit": "069cc7bd4a111b0659b1eb06c5539647d7c762e4",
+    "availability_evidence_push_sha_matched": true
   },
   "qa_lifecycle": {
     "status": "blocked_cleanup_policy",
@@ -134,5 +136,17 @@
     "product_verification_passed": true,
     "state_cleared_and_absence_verified": true,
     "next_step": "Await explicit path confirmation for app/build cleanup; do not bypass policy rejection"
+  },
+  "completion_audit": {
+    "alpha_update_available": true,
+    "overall_recognition_goal_completed": false,
+    "remaining": [
+      "physical_device_performance",
+      "audio_rejection_and_visual_linkage",
+      "broader_general_accuracy_and_intent_validation",
+      "policy_blocked_build_cleanup"
+    ],
+    "no_new_build_or_adb": true,
+    "tester_installation_or_continuous_14_days_verified": false
   }
 }
