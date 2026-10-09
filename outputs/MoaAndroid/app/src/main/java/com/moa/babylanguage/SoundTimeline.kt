@@ -38,7 +38,9 @@ internal object SoundTimeline {
 
     fun decide(audio: SoundAnalysis, durationMs: Long = 30_000): SoundDecision {
         val original = decideYamnet(audio, durationMs)
-        if (original.issue !in setOf(AnalysisIssue.INFANT_UNCONFIRMED, AnalysisIssue.BACKGROUND_DOMINANT) ||
+        val corroboratedUncertainty = original.issue == AnalysisIssue.MIXED_VOCAL &&
+            audio.infantVoiceWindows.isNotEmpty() && audio.infantVoiceWindows.all { it.kindUncertain }
+        if ((!corroboratedUncertainty && original.issue !in setOf(AnalysisIssue.INFANT_UNCONFIRMED, AnalysisIssue.BACKGROUND_DOMINANT)) ||
             audio.problem != null) return original
         if (audio.babbleWindows.isEmpty()) {
             if (audio.infantVoiceWindows.isEmpty() || durationMs < 1_000 || audio.infantVoiceWindows.any {

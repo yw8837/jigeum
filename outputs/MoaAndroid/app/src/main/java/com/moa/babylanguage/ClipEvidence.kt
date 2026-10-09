@@ -156,6 +156,8 @@ internal object EvidenceInterpreter {
         }.joinToString(" → ") { "${ClipRange.clock(range.startMs + it.startMs)} 부근 ${it.event.label} 후보" }
         return ClipAnalysisResult(ClipInterpretation(combined.phrase, sound,
             "${range.label()}에서 $sound 후보를 찾았어요. $rhythm\n$timeline" +
+                (if (decision.infantVoiceWindows.any { it.kindUncertain })
+                    "\n아기 발성 단서는 있지만, 웃음·울음·옹알이 중 어느 소리인지는 구분하지 않았어요." else "") +
                 (visualEvidence?.let { "\n${it.evidence}" } ?: "") +
                 (if (combined.usedVisual) "\n" + combined.evidence +
                     "\n화면의 입 모양을 함께 보고 답을 청하는 표현을 더했어요. 소리와 얼굴의 주인이 같거나 동시에 움직였는지는 확인하지 않아요." else "") +
@@ -240,7 +242,9 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                     "이 영상에는 읽을 수 있는 소리가 없어요. 아기 소리가 담긴 영상이나 녹음을 골라 주세요.", issue = AnalysisIssue.NO_AUDIO)
                     else SoundAnalyzer.analyzeWithSupport(context, pcm) { primaryAudio ->
                         if ((BabbleSupportPolicy.ENABLED || BuildConfig.AST_INTEGRATED_CANDIDATE ||
-                            BuildConfig.AST_BABBLE_SUPPORT) && BabbleSupportPolicy.shouldAnalyze(primaryAudio)) {
+                            BuildConfig.AST_BABBLE_SUPPORT) && (BabbleSupportPolicy.shouldAnalyze(primaryAudio) ||
+                            (BuildConfig.AST_INFANT_PRESENCE &&
+                                InfantVoiceSupportPolicy.shouldCorroborate(primaryAudio, pcm.size / 16L)))) {
                             val ast = AstAudioAnalyzer.analyze(context, pcm)
                             if (BuildConfig.AST_INFANT_PRESENCE) astForPresence = ast
                             BabbleSupportPolicy.attachCandidate(primaryAudio, ast, pcm.size / 16L)
