@@ -60,7 +60,7 @@
   "play_submission_confirmed_kst": "2026-10-09T22:01:00+09:00",
   "tester_availability_confirmed": true,
   "automation_id": "33",
-  "automation_status": "ACTIVE",
+  "automation_status": "PAUSED",
   "automation_interval_minutes": 15,
   "unsupported_devices_delta": 0,
   "new_install_mb": 112,
@@ -70,5 +70,8 @@
   "play_published_kst": "2026-10-09T23:28:00+09:00",
   "play_availability_confirmed_kst": "2026-10-09T23:32:00+09:00",
   "publishing_pending_changes_cleared": true,
-  "automation_pause_pending": true
+  "automation_pause_pending": false,
+  "availability_evidence_commit": "6c8c7b18107d5d4ad444101a4e7d3ef81f53b92a",
+  "availability_evidence_push_verified": true,
+  "long_term_accuracy_goal_complete": false
 }
