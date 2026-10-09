@@ -1,0 +1,52 @@
+{
+  "version": "0.5.24-beta",
+  "version_code": 38,
+  "baseline": "e16f448",
+  "source_commit": "76b5f3d",
+  "version_commit": "b2ef9c1",
+  "status": "performance_gate_open",
+  "host_tests": 59,
+  "android_tests": 104,
+  "actual_conditions": 53,
+  "actual_outputs_before": 28,
+  "actual_outputs_after": 29,
+  "policy_conditions": 84,
+  "policy_outputs_before": 38,
+  "policy_outputs_after": 39,
+  "existing_outputs_exact": true,
+  "new_control_outputs": 0,
+  "new_context_condition": "mayra_context",
+  "new_observation_range_ms": [
+    0,
+    10000
+  ],
+  "selected_range_ms": [
+    0,
+    20000
+  ],
+  "general_accuracy_validated": false,
+  "needs_accuracy_validated": false,
+  "physical_device_performance_validated": false,
+  "play_status": "not_submitted",
+  "cleanup": {
+    "removed_packages": 31,
+    "recovered_bytes": 3987062784,
+    "primary_apk_aab_blocked": 80,
+    "primary_blocked_bytes": 4938573523,
+    "retired_talknet_weights_blocked": 2,
+    "retired_talknet_blocked_bytes": 153072208,
+    "owned_qa_apps_removed": 3,
+    "emulator_stop_requested": true,
+    "temporary_media_removed": true,
+    "emulator_absent_verified": true,
+    "free_bytes_at_final_check": 35154526208,
+    "free_space_not_all_attributed_to_cleanup": true
+  },
+  "beta_aab_sha256": "563dc52e4f865c97b9626c784cfcb508eaafbbda28b506851acc3c7532eef8a0",
+  "signed_upgrade": "pass",
+  "signed20_repeat": "pass_twice_and_saved",
+  "initial_signed20_timeout": true,
+  "timeout_root_cause_resolved": false,
+  "signed_smoke": "pass",
+  "qa_status": "blocked_performance_gate_and_cleanup_policy"
+}

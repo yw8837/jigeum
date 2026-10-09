@@ -1,0 +1,28 @@
+{
+  "mode": "native",
+  "run_id": "3c75ba09e6ca424f857e439fc18da607",
+  "status": "pass",
+  "quality_validated": false,
+  "production_before": {
+    "installed": false
+  },
+  "execution": {
+    "status": "pass",
+    "tests": 104,
+    "passed_tests": 104,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 34.46,
+    "exit": 0
+  },
+  "originals_unchanged": true,
+  "production_after": {
+    "installed": false
+  },
+  "production_install_unchanged": true
+}

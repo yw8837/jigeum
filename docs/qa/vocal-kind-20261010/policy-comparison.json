@@ -1,0 +1,30 @@
+{
+  "cases": 84,
+  "baseline_outputs": 38,
+  "candidate_outputs": 39,
+  "existing_outputs_exact": true,
+  "changed": [
+    {
+      "id": "regression_mayra_context",
+      "before": {
+        "id": "regression_mayra_context",
+        "output": false,
+        "sound": "",
+        "basis": "",
+        "issue": "MIXED_VOCAL",
+        "phrase": "",
+        "evidence": ""
+      },
+      "after": {
+        "id": "regression_mayra_context",
+        "output": true,
+        "sound": "아기 발성",
+        "basis": "AUDIO",
+        "issue": "",
+        "phrase": "작은 목소리로 인사를 건네요. 눈을 맞추고 다정하게 답해 줄래요?",
+        "evidence": "0:00–0:20에서 아기 발성 후보를 찾았어요. 일부 시간창에서 아기 발성 단서를 찾았어요. 나머지는 소리 종류를 구분하지 못했어요. 반복 횟수나 전체 구간의 마음으로 해석하지 않았어요.\n0:00–0:10 범위 아기 발성 후보 (범위 내 정확한 발성 위치와 지속 여부는 확인하지 않아요.)\n아기 발성 단서는 있지만, 웃음·울음·옹알이 중 어느 소리인지는 구분하지 않았어요.\n소리 모델의 관찰을 아이 시점으로 풀어 쓴 표현이에요. 아기 신원이나 배고픔·졸림의 원인은 확인할 수 없어요."
+      }
+    }
+  ],
+  "new_control_outputs": 0
+}
