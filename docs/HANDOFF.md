@@ -2,6 +2,11 @@
 
 ### 최신 — 2026-10-10 생성물 정리 / code38 로컬 후보, Play 제출 보류
 
+후속사용자가82파일·3build삭제와관리자실행을명시재승인했다. 대상검사/82파일독점읽기성공,
+관련실행0·표본소유사용자FullControl확인후표준삭제재시도도CreateProcess전
+`blocked by policy`로차단됐다. 삭제0·전체현존재확인. 상세규칙미제공, 관리자상승/타도구우회없음.
+[재승인진단](qa/storage-cleanup-20261010-renewed-authorization.json). 사용자승인부족이아니다.
+
 사용자의 불필요 생성물 정리 요청에 따라 종료 APK/AAB31개(표시3.754GiB)를 삭제했고,
 실제삭제전후 회수는3.71GiB다. [정리보고서](qa/storage-cleanup-20261010.md).
 원래체크아웃80패키지4.599GiB, 종료TalkNet가중치2개146MiB 및 기존3개build삭제는
