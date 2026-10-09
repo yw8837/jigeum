@@ -26,7 +26,7 @@ code34 기준으로 종류 미확정/혼합 발성의 불필요한 보류를 줄
 |P7|서명 업데이트/기록·MP4|`run_ui.py upgrade retry02`|34→35에서 데이터 동일|exit0/204.73초, 문장·LEGACY 출처·10초 audio+video MP4 SHA 동일|초기 downgrade 설정 오류 보존, 소유 외부파일 제거|
 |P8|beta/release 패키지와 접근|`build_signed.py beta/release 01`, `verify_final.py`, `run_ui.py closed final`|beta전체/정식 재잠금/서명|빌드·패키지·실제7시나리오 통과(exit0/565.42초)|DEX·APK/AAB·서명·백업 제외·beta→release 미디어hash 보존|
 |P9|불완전 실행·skip·stale·dirty·저장공간|종료상태/count/hash와 lifecycle 점검|실패를 성공으로 집계하지 않음|2cycle complete/clear/부재, 소유 QA 정리 완료|공유 AVD 보존, 중간파일3,598,502,380B 제거|
-|D1|기존 Alpha 업데이트|검증 beta35 AAB만 제출|정확한 버전 검토/게시 확인|미제출|다른 트랙·테스터 설정 보존|
+|D1|기존 Alpha 업데이트|검증 beta35 AAB만 제출|정확한 버전 검토/게시 확인|10월9일17:20 KST 검토 요청, 정확35 사전검사 중/제공 미확인|[제출 증거](corroborated-vocal-20261009/play-review.md), 다른 트랙·테스터 설정 보존|
 
 ## 변경과 검토
 
@@ -98,4 +98,4 @@ release 비교용 AAB는 Play에 제출하지 않는다.
 [검증 요약](corroborated-vocal-20261009/summary.json)에 실패와 한계까지 보존한다.
 
 **ULTRAQA COMPLETE: Goal met after 2 cycles (local QA).**
-기존 Alpha 제출·Google 검토/실제 제공은 별도 외부 배포 단계이며 아직 완료되지 않았다.
+기존 Alpha 검토 요청은10월9일17:20 KST 전송했다. Google 검토/실제 제공은 별도 외부 배포 단계이며 아직 완료되지 않았다.

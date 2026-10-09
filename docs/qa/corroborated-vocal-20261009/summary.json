@@ -682,9 +682,21 @@
     }
   ],
   "play": {
-    "status": "not_submitted",
+    "status": "review_requested_prechecks_running",
     "track": "Alpha",
-    "last_available_code": 34
+    "version_code": 35,
+    "release_name": "0.5.21-beta (35) - vocal corroboration",
+    "requested_at": "2026-10-09T17:20:00+09:00",
+    "last_available_code": 34,
+    "availability_verified": false,
+    "warnings": 2,
+    "blocking_errors": 0,
+    "supported_device_loss": 0,
+    "install_size": "112MB",
+    "install_size_delta": "1.92KB",
+    "automation_id": "33",
+    "automation_status": "ACTIVE",
+    "evidence": "play-review.md"
   },
   "artifact_hashes_reverified": true,
   "cleanup": {
@@ -706,5 +718,10 @@
     "cycles": 2,
     "state_cleared": true,
     "state_absent": true
+  },
+  "pre_submit_git": {
+    "head": "86cbd1456f6014990ce75e6d08c6e856b1d41304",
+    "remote_equal": true,
+    "clean": true
   }
 }
