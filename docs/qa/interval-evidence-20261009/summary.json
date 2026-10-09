@@ -47,12 +47,24 @@
       "sha256": "d27dc2601626a81cf1f2f4ff3aa0bc33ac7a4e706c050a7c9a1e888aaab14372"
     }
   },
-  "release_status": "local_product_qa_passed_pending_play_submission",
+  "release_status": "review_requested_pre_review_checks_running",
   "play_offered_version_code": 36,
   "cleanup_status": "owned_device_and_media_cleaned_build_deletion_blocked",
   "older_cleanup_policy_blocks_preserved": true,
   "signed_upgrade_passed": true,
   "signed_beta_and_release_policy_smoke_passed": true,
   "ultraqa_status": "BLOCKED: temporary build deletion rejected by automatic policy",
-  "ultraqa_cycles": 2
+  "ultraqa_cycles": 2,
+  "play_release_id": 17,
+  "play_track": "Alpha",
+  "play_submission_confirmed_kst": "2026-10-09T22:01:00+09:00",
+  "tester_availability_confirmed": false,
+  "automation_id": "33",
+  "automation_status": "ACTIVE",
+  "automation_interval_minutes": 15,
+  "unsupported_devices_delta": 0,
+  "new_install_mb": 112,
+  "update_mb": 2.56,
+  "blocking_play_errors": 0,
+  "existing_diagnostic_warnings": 2
 }
