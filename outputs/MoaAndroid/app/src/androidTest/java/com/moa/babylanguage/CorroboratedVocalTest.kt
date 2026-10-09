@@ -86,6 +86,15 @@ class CorroboratedVocalTest {
         assertEquals(failed, apply(failed))
     }
 
+    @Test fun existingPrecisePartialObservationWinsOverBroadPartial() {
+        val input = SoundAnalysis(emptyList(), frames=listOf(0L,975L).map {
+            SoundFrame(it,listOf(SoundCue("울음",.9f)),.01)
+        } + SoundFrame(6_000,listOf(SoundCue("웃음(화자 미확인)",.9f)),.01))
+        assertNotNull(SoundTimeline.partialObservation(input,20_000))
+        val later=ast(10_000,20_000).copy(scores=ast().scores+("Laughter" to .4f))
+        assertEquals(input,apply(input,ast(),ast(5_000,15_000),later,duration=20_000))
+    }
+
     @Test fun aFailedNewCorroborationIsNotReportedAsMissingInfantVoice() {
         val failed = InfantVoiceSupportPolicy.attachCandidate(audio(),
             AstAudioAnalysis(emptyList(), "synthetic native failure"), 10_000)

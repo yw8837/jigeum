@@ -71,6 +71,9 @@ internal object InfantVoiceSupportPolicy {
             }
             if (supported.isEmpty()) return audio
             val partial = hasConflict || anchors.any { frame -> supported.none { contains(it, frame) } }
+            // Keep an existing precise partial observation and its saved wording.
+            // Broad supplementation is only needed if that fallback cannot return a result.
+            if (partial && SoundTimeline.partialObservation(audio, durationMs) != null) return audio
             return audio.copy(infantVoiceWindows = supported.map {
                 InfantVoiceSupportWindow(it.startMs, it.endMs, kindUncertain = true)
             }, infantVoicePartial = partial)
