@@ -89,7 +89,7 @@ internal object SoundTimeline {
             if (audio.infantVoiceWindows.isEmpty() || durationMs < 1_000 || audio.infantVoiceWindows.any {
                     it.startMs < 0 || it.endMs > minOf(durationMs, 20_000) || it.endMs - it.startMs !in 1_000..10_000
                 } || audio.infantVoiceWindows.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return original
-            return SoundDecision(infantVoiceWindows = audio.infantVoiceWindows)
+            return SoundDecision(infantVoiceWindows = audio.infantVoiceWindows, partial = audio.infantVoicePartial)
         }
         if (audio.babbleWindows.any { it.startMs < 0 || it.endMs > 20_000 || it.endMs - it.startMs !in 1_000..10_000 })
             return original

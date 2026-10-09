@@ -220,7 +220,8 @@ class AstPublicAudioProbeTest {
             })).put("broad_windows", JSONArray(decision.broadWindows.map {
                 JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
                     .put("strongest_second_rms", it.strongestSecondRms ?: JSONObject.NULL)
-            })).put("infant_presence_windows", JSONArray(decision.infantVoiceWindows.map {
+            })).put("infant_presence_partial", audio.infantVoicePartial).put("partial", decision.partial)
+            .put("infant_presence_windows", JSONArray(decision.infantVoiceWindows.map {
                 JSONObject().put("start_ms", it.startMs).put("end_ms", it.endMs)
             }))
     }

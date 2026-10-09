@@ -144,6 +144,7 @@ internal object EvidenceInterpreter {
             ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence, audioTimelineAligned)
         val rhythm = when {
+            decision.partial && broadOnly -> "일부 시간창에서 아기 발성 단서를 찾았어요. 나머지는 소리 종류를 구분하지 못했어요. 반복 횟수나 전체 구간의 마음으로 해석하지 않았어요."
             decision.partial -> "일부 구간에서 아기 발성 단서가 반복됐어요. 다른 소리는 종류를 구분하지 못해 한 가지 소리나 마음으로 정하지 않았어요."
             broadOnly -> "넓은 시간창에서 ${if (decision.infantVoiceWindows.isEmpty()) "옹알이" else "아기 발성"} 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
@@ -151,7 +152,7 @@ internal object EvidenceInterpreter {
             shape.activeFraction >= 0.65f -> "소리가 비교적 길게 이어졌어요."
             else -> "짧게 들리는 소리를 살펴봤어요."
         }
-        val timeline = if (decision.partial) broadWindowEvidence(decision.moments.map {
+        val timeline = if (decision.partial && !broadOnly) broadWindowEvidence(decision.moments.map {
             BabbleSupportWindow(it.startMs, minOf(it.startMs + SoundPhaseRecovery.FRAME_MS, range.durationMs))
         }, range, "아기 발성") else if (broadOnly) broadWindowEvidence(
             if (decision.infantVoiceWindows.isEmpty()) decision.broadWindows else decision.infantVoiceWindows.map {

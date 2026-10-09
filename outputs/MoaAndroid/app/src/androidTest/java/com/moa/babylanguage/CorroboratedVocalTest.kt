@@ -62,10 +62,16 @@ class CorroboratedVocalTest {
         val later = audio(at = 10_725)
         assertEquals(later, apply(later, ast(), ast(5_000,15_000,.1f,.1f),
             ast(10_000,20_000,.1f,.1f), duration=20_000))
-        // A second unresolved infant window cannot disappear outside corroborated ranges.
+        // Existing approvals are preserved even when candidate AST ranges differ.
         val separated = audio().copy(frames = audio().frames + later.frames)
         assertEquals(separated, apply(separated, ast(), ast(5_000,15_000,.1f,.1f),
             ast(10_000,20_000,.1f,.1f), duration=20_000))
+        val unresolved = audio().copy(frames=audio().frames + SoundFrame(10_725,
+            listOf(SoundCue("울음",.5f),SoundCue("울음(화자 미확인)",.8f)),.01))
+        val partial = apply(unresolved, ast(),ast(5_000,15_000,.1f,.1f),
+            ast(10_000,20_000,.1f,.1f),duration=20_000)
+        assertTrue(partial.infantVoicePartial)
+        assertEquals(listOf(InfantVoiceSupportWindow(0,10_000,true)),partial.infantVoiceWindows)
     }
 
     @Test fun genericAdultSoundsAndOriginalApprovalsAreNotReclassified() {
@@ -93,10 +99,17 @@ class CorroboratedVocalTest {
             AstAudioAnalysis(emptyList(), "synthetic native failure"), 10_000))
     }
 
-    @Test fun fullCoverageEmotionAndTelevisionVetoRemainMandatory() {
+    @Test fun fullCoverageAndLocalEmotionVetoRemainMandatory() {
         for (label in ast().scores.keys) {
             val conflict = ast(10_000,20_000).copy(scores = ast().scores + (label to .30f))
-            assertEquals(label, audio(), apply(audio(), ast(), ast(5_000,15_000), conflict, duration=20_000))
+            val result = apply(audio(), ast(), ast(5_000,15_000), conflict, duration=20_000)
+            if (label in setOf("Television","Screaming")) assertEquals(label,audio(),result)
+            else {
+                assertTrue(label,result.infantVoicePartial)
+                assertEquals(listOf(InfantVoiceSupportWindow(0,10_000,true)),result.infantVoiceWindows)
+            }
+            // An emotion conflict in the only window with an anchor still blocks it.
+            assertEquals(audio(),apply(windows=arrayOf(ast().copy(scores=ast().scores+(label to .30f)))))
         }
         for (windows in listOf(arrayOf(ast()), arrayOf(ast(),ast()),
                 arrayOf(ast(10_000,20_000),ast(),ast(5_000,15_000))))

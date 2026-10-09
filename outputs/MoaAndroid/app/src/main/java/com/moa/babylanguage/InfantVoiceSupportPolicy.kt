@@ -27,7 +27,8 @@ internal object InfantVoiceSupportPolicy {
     }
 
     /** Frozen caption-weak public head. Scores are not calibrated infant accuracy.
-     * Existing approvals win. AST emotion/TV guards still cover the entire selection. */
+     * Existing approvals win. Every AST window is checked; unresolved windows may
+     * leave only a partial presence observation, never an event-kind approval. */
     fun attachCandidate(audio: SoundAnalysis, ast: AstAudioAnalysis, durationMs: Long): SoundAnalysis {
         if (SoundTimeline.decide(audio, durationMs).problem == null ||
             audio.infantVoiceWindows.isNotEmpty() ||
@@ -49,7 +50,12 @@ internal object InfantVoiceSupportPolicy {
                     window.captionPresence?.let { !it.isFinite() || it !in 0f..1f } == true ||
                     window.strongestSecondRms?.let { !it.isFinite() || it !in 0.0..1.0 } != false
             }) return audio
-        if (ast.windows.any { window -> contrary.any { window.scores.getValue(it) >= .30f } }) return audio
+        fun conflicted(window: AstAudioWindow) = contrary.any { window.scores.getValue(it) >= .30f }
+        val hasConflict = ast.windows.any { conflicted(it) }
+        // TV and screaming do not offer an infant-specific counterpart. Keep their
+        // whole-selection guard, including when other windows could be retained.
+        if (ast.windows.any { it.scores.getValue("Television") >= .30f ||
+                it.scores.getValue("Screaming") >= .30f }) return audio
         if (!unopposed) {
             val anchors = infantFrames(audio)
             fun contains(window: AstAudioWindow, frame: SoundFrame) =
@@ -58,16 +64,18 @@ internal object InfantVoiceSupportPolicy {
             // Both heads share an encoder: agreement is a conservative consistency
             // check, not independent proof. Never borrow identity or level from elsewhere.
             val supported = ast.windows.filter { window ->
-                window.infantPresence!! >= .80f && (window.captionPresence ?: 0f) >= .80f &&
+                !conflicted(window) && window.infantPresence!! >= .80f && (window.captionPresence ?: 0f) >= .80f &&
                     window.strongestSecondRms!! >= .003 && anchors.any {
                         it.windowRms!! >= .003 && contains(window, it)
                     }
             }
-            if (supported.isEmpty() || anchors.any { frame -> supported.none { contains(it, frame) } }) return audio
+            if (supported.isEmpty()) return audio
+            val partial = hasConflict || anchors.any { frame -> supported.none { contains(it, frame) } }
             return audio.copy(infantVoiceWindows = supported.map {
                 InfantVoiceSupportWindow(it.startMs, it.endMs, kindUncertain = true)
-            })
+            }, infantVoicePartial = partial)
         }
+        if (hasConflict) return audio
         // Audibility must be in the same broad window, not an unrelated louder
         // parent/music segment elsewhere. Reuse the existing input-silence floor.
         val audible = ast.windows.filter { it.strongestSecondRms!! >= .003 }
