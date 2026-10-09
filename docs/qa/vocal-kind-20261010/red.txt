@@ -11,4 +11,3 @@ java.lang.AssertionError: Audible corroborated presence lost to event-kind gate:
 
 FAILURES!!!
 Tests run: 1,  Failures: 1
-
