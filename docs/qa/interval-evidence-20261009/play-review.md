@@ -1,14 +1,16 @@
-# 0.5.23-beta(code37) Alpha 검토 요청
+# 0.5.23-beta(code37) Alpha 제공 확인
 
 ## 확인한 상태
 
-- 확인: **2026-10-09 22:01 KST**.
+- 제공 확인: **2026-10-09 23:32 KST**. 검토 요청 확인은22:01 KST.
 - 기존 비공개 테스트 **Alpha**, 출시ID17.
 - 이름: `0.5.23-beta (37) - interval evidence`.
-- 게시 개요: **검토 중인 변경사항**, 사전 빠른 검사 실행 중.
+- Alpha: 정확37에 **선택한 테스터에게 제공됩니다** 표시.
+- Console 게시일: **2026-10-09 23:28 KST**.
+- 게시 개요: 검토 중인 변경사항이 해소됨. 별도 게시 조치 없음.
 - 관리형 게시: 사용 중지.
-- **37의 선택한 테스터 제공은 아직 미확인**. 마지막 제공 확인 버전은36.
-- 자동화33: 도구 update 성공 / **ACTIVE**,37 승인 확인 /15분. 상태 변화가 없으면 조용히 종료.
+- 현재 확인된 테스터 제공 버전: **0.5.23-beta(37)**.
+- 자동화33: 제공 증거 커밋·푸시·SHA/clean 확인 후 일시중지 예정.
 
 ## 제출한 파일과 사전 검증
 
@@ -32,14 +34,21 @@
 
 37은 구간 일부의 발성단서와 넓은 시간범위의 영상관찰 연결을 보완한다.
 일반 인식률·감정/욕구·화자 확인이나 새 S25 성능을 입증한 것은 아니다.
-승인 후 Alpha의 정확37 **선택한 테스터에게 제공됩니다**를 확인해 작은 증거를 보존하고,
+Alpha의 정확37 제공과 게시개요 검토 항목 해소를 확인해 아래 작은 증거를 보존했다.
 문서·요약을 커밋/푸시해 local/remote SHA·clean을 대조한 뒤 자동화33을 일시중지한다.
-반려나 별도 조치가 필요한 경우 실제 내용을 보고한다. 중복 제출/취소하지 않는다.
+이번 배포 완료가 장기 인식·욕구 해석 목표 완료를 뜻하지 않는다. 정리 정책 차단3곳도 유지한다.
+
+기존 설치: https://play.google.com/store/apps/details?id=com.moa.babylanguage
+
+웹 참여: https://play.google.com/apps/testing/com.moa.babylanguage
 
 ## 증거
 
+- [Alpha 제공 텍스트](play-available.txt)
+- [Alpha 제공 화면](play-available.png)
+- [게시개요 대기 항목 해소](play-publishing-cleared.txt)
 - [출시검증 텍스트](play-pre-submit.txt)
 - [제출후 텍스트](play-submitted.txt)
 - [제출후 화면](play-submitted.png)
 
-![Google Play 검토 중인 변경사항](play-submitted.png)
+![Google Play Alpha37 테스터 제공](play-available.png)

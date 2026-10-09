@@ -79,9 +79,9 @@ UltraQA cycle2의 제품 게이트는 통과했다. 정리 포함 상태는 **UL
 `laugh_babble`은 알려진 개발용 CC0 소스이며, `extra_254454`는 작성자의 babbling 설명과
 영아 tag만 확인된 자료다. 이번 두 출력은 정확한 욕구·영아 정답2개나 일반 인식률 증가율이 아니다.
 시간 이동된 다른 아기 음성의 주체·정밀 입술 동기를 구분한 것도 아니다.
-code36 Alpha 제공 상태는 유지되며 code37은 **2026-10-09 22:01 KST 검토 요청 확인**이다.
-게시 개요의 검토 중인 변경사항에 정확37이 있고 사전 빠른 검사가 진행 중이다.
-실제37 테스터 제공은 미확인이다. [Play 제출](interval-evidence-20261009/play-review.md).
+code37은 **2026-10-09 22:01 KST 검토 요청**, **23:32 KST Alpha 제공 확인**이다.
+정확37 **선택한 테스터에게 제공됩니다**, Console 게시일23:28 KST와 게시개요 검토 항목 해소를 확인했다.
+[Play 제공 근거](interval-evidence-20261009/play-review.md). 실제 업체 계정별 설치를 대신 확인한 것은 아니다.
 QA 증거의 텍스트 사본은 CRCRLF/후행 공백을 정규화했다. 원래 실행 로그는 ignored work에 보존한다.
 
 작은 근거: [요약](interval-evidence-20261009/summary.json),
