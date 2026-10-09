@@ -98,4 +98,8 @@ release 비교용 AAB는 Play에 제출하지 않는다.
 [검증 요약](corroborated-vocal-20261009/summary.json)에 실패와 한계까지 보존한다.
 
 **ULTRAQA COMPLETE: Goal met after 2 cycles (local QA).**
-기존 Alpha 검토 요청은10월9일17:20 KST 전송했다. Google 검토/실제 제공은 별도 외부 배포 단계이며 아직 완료되지 않았다.
+기존 Alpha 검토 요청은10월9일17:20 KST 전송했다.
+**18:13 KST에 정확35가 선택한 테스터에게 제공됨을 확인했다. Console 게시일은17:56 KST다.**
+게시 개요의 검토 항목도 해소됐다. [게시 증거](corroborated-vocal-20261009/play-review.md).
+이번 code35의 로컬 QA와 Alpha 제공 확인은 완료됐으며, 전체 장기 개선 목표는 남아 있다.
+후속200ms 영상 관찰 후보는 이 배포에 포함되지 않는다.35는500ms 관찰을 사용한다.
