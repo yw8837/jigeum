@@ -46,6 +46,7 @@
  `build04.py` exit0, `native02.py` exit0/9.05초/98검사, `performance.py` exit0/8.45초/1검사.
  실제 하네스와 원천로그는 ignored `work/visual-cadence-20261009/`, 작은 익명증거는
  [증거 요약](visual-cadence-20261009/summary.json)에 있다.
+ 저장소의txt증거는ADB/Windows가더한CR줄끝·행끝공백만정규화했다. 원천로그는work에그대로보존했다.
 
 ## Standards
 

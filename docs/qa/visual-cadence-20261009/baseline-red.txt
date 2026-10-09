@@ -16,4 +16,3 @@ java.lang.AssertionError
 
 FAILURES!!!
 Tests run: 2,  Failures: 2
-
