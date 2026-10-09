@@ -100,10 +100,12 @@ class VisualTemporalAlignmentTest {
         assertEquals("AUDIO", result(continuous, visual(mouth = {
             if (it == 500L || it == 1_500L) .3f else .04f }, missingAt = 1000)).basis)
     }
-    @Test fun broadAstWindowHasNoPreciseVocalOnsetToAlign() {
+    @Test fun broadAstWindowUsesOnlyExplicitlyBroadCoObservation() {
         val audio = SoundAnalysis(emptyList(), babbleWindows = listOf(BabbleSupportWindow(0, 10_000)))
         val frames = visual(mouth = { if (it == 500L || it == 1_500L) .3f else .04f })
-        assertEquals("AUDIO", result(audio, frames).basis)
+        assertEquals("AUDIO_VISUAL", result(audio, frames).basis)
+        assertTrue(result(audio, frames).evidence.contains("넓은 소리 후보 범위"))
+        assertFalse(result(audio, frames).evidence.contains("같은 시간대의 소리 후보 창"))
     }
     @Test fun faceNeverRescuesSilenceAdultSpeechOrBackground() {
         for (audio in listOf(sound(0L to "말소리(화자 미확인)", 975L to "말소리(화자 미확인)"),

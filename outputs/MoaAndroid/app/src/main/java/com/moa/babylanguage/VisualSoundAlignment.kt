@@ -12,7 +12,8 @@ internal object VisualSoundAlignment {
     private val neutral = setOf(VocalEvent.BABBLE, VocalEvent.CHILD_VOICE)
 
     fun find(decision: SoundDecision, frames: List<VisualFrameObservation>, durationMs: Long): List<Match> {
-        if (decision.problem != null || decision.broadOnly || frames.any { it.faceCount > 1 }) return emptyList()
+        if (decision.problem != null || decision.partial || frames.any { it.faceCount > 1 }) return emptyList()
+        if (decision.broadOnly) return broadMouthObservations(decision, frames, durationMs)
         val moments = decision.moments
         if (moments.isEmpty() || moments.any { it.startMs !in 0 until durationMs } ||
             moments.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return emptyList()
@@ -86,5 +87,40 @@ internal object VisualSoundAlignment {
         }
         finishMouth()
         return matches.sortedBy { it.startMs }
+    }
+
+    /** Co-observation inside one accepted broad window, never precise AV alignment.
+     * Do not merge windows into continuous speech or let movements bridge a gap. */
+    private fun broadMouthObservations(decision: SoundDecision, frames: List<VisualFrameObservation>,
+                                      durationMs: Long): List<Match> {
+        val windows = decision.broadWindows.map { it.startMs to it.endMs } +
+            decision.infantVoiceWindows.map { it.startMs to it.endMs }
+        if (durationMs !in 1_000..20_000 || windows.isEmpty() || windows.any { (start, end) ->
+                start < 0 || end > durationMs || end - start !in 1_000..10_000
+            } || windows.zipWithNext().any { (a, b) -> b.first <= a.first } ||
+            !VisualTimeline.summarize(frames, durationMs).ordered) return emptyList()
+        val matches = mutableListOf<Match>()
+        val run = mutableListOf<VisualFrameObservation>()
+        fun finish() {
+            if (run.size >= 2 && run.last().presentationOffsetMs!! - run.first().presentationOffsetMs!! >= 1_000 &&
+                run.count { it.mouthOpening!! >= .18f } >= 2 &&
+                VisualTimeline.summarize(run, durationMs).mouthTransitions >= 2) {
+                matches += Match(run.first().presentationOffsetMs!!, run.last().presentationOffsetMs!!, Cue.MOUTH)
+            }
+            run.clear()
+        }
+        for (frame in frames) {
+            val at = frame.presentationOffsetMs!!
+            if (!frame.valid || frame.faceCount != 1 ||
+                frame.mouthOpening?.let { it.isFinite() && it in 0f..1f } != true ||
+                windows.none { (start, end) -> at >= start && at < end }) {
+                finish(); continue
+            }
+            if (run.isNotEmpty() && (at - run.last().presentationOffsetMs!! > MAX_GAP_MS ||
+                windows.none { (start, end) -> run.first().presentationOffsetMs!! >= start && at < end })) finish()
+            run += frame
+        }
+        finish()
+        return matches
     }
 }

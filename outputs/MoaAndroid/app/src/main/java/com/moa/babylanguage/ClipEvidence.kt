@@ -115,14 +115,16 @@ internal object EvidenceInterpreter {
     fun interpret(audio: SoundAnalysis, shape: AcousticShape, range: ClipRange,
                   visualEvidence: VisualEvidence? = null, audioTimelineAligned: Boolean = true): ClipAnalysisResult {
         if (audio.problem != null) return ClipAnalysisResult(problem = audio.problem, issue = audio.issue, visualEvidence = visualEvidence)
-        val originalDecision = SoundTimeline.decide(audio, range.durationMs)
+        val wholeDecision = SoundTimeline.decide(audio, range.durationMs)
+        val originalDecision = if (wholeDecision.problem != null)
+            SoundTimeline.partialObservation(audio, range.durationMs) ?: wholeDecision else wholeDecision
         originalDecision.problem?.let { return ClipAnalysisResult(problem = it, issue = originalDecision.issue, visualEvidence = visualEvidence) }
         // The existing input-silence gate measures the strongest second, while the
         // activity fraction is whole-scene energy. General presence has no localized
         // event rhythm; do not discard its audible clue with a second scene-level gate.
         // Reuse the unchanged .003 input floor, never lower model or infant thresholds.
         val audibleInput = shape.strongestSecondRms.isFinite() && shape.strongestSecondRms in .003..1.0
-        val audibleGeneralPresence = originalDecision.infantVoiceWindows.isNotEmpty() && audibleInput
+        val audibleGeneralPresence = (originalDecision.infantVoiceWindows.isNotEmpty() || originalDecision.partial) && audibleInput
         val decision = if (shape.activeFraction >= .04f || audibleGeneralPresence) originalDecision else
             if (audibleInput) acceptedAudibleDecision(audio, originalDecision, range.durationMs) else null
         if (!shape.activeFraction.isFinite() || shape.activeFraction !in 0f..1f || decision == null) return ClipAnalysisResult(
@@ -132,23 +134,26 @@ internal object EvidenceInterpreter {
         val broadOnly = decision.broadOnly
         // Whole-waveform rhythm may belong to a parent, music or another sound. A broad
         // AST event cannot attribute those bursts, rises or pauses to the baby.
-        val vocalShape = if (broadOnly) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
+        val vocalShape = if (broadOnly || decision.partial) shape.copy(activeFraction = 0f, rising = false, bursts = 0,
             pauses = 0, quietSpans = emptyList()) else shape
         val eligiblePhrases = BabyExpression.variants(decision.events.singleOrNull(), vocalShape, neutralOnly = decision.neutralOnly,
-            infantPresence = decision.infantVoiceWindows.isNotEmpty())
-        val longPhrases = sustainedPhrases(audio, decision, shape, range)
+            infantPresence = decision.infantVoiceWindows.isNotEmpty() || decision.partial)
+        val longPhrases = if (decision.partial) null else sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
-        val audioPhrase = BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey)
+        val audioPhrase = (if (decision.partial) null else BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey))
             ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence, audioTimelineAligned)
         val rhythm = when {
+            decision.partial -> "일부 구간에서 아기 발성 단서가 반복됐어요. 다른 소리는 종류를 구분하지 못해 한 가지 소리나 마음으로 정하지 않았어요."
             broadOnly -> "넓은 시간창에서 ${if (decision.infantVoiceWindows.isEmpty()) "옹알이" else "아기 발성"} 단서를 살펴봤어요. 발성의 시작 시점과 반복 횟수는 확인하지 않았어요."
             shape.rising -> "뒤쪽에서 소리가 더 커졌어요."
             shape.bursts >= 3 -> "소리와 쉼이 여러 번 이어졌어요."
             shape.activeFraction >= 0.65f -> "소리가 비교적 길게 이어졌어요."
             else -> "짧게 들리는 소리를 살펴봤어요."
         }
-        val timeline = if (broadOnly) broadWindowEvidence(
+        val timeline = if (decision.partial) broadWindowEvidence(decision.moments.map {
+            BabbleSupportWindow(it.startMs, minOf(it.startMs + SoundPhaseRecovery.FRAME_MS, range.durationMs))
+        }, range, "아기 발성") else if (broadOnly) broadWindowEvidence(
             if (decision.infantVoiceWindows.isEmpty()) decision.broadWindows else decision.infantVoiceWindows.map {
                 BabbleSupportWindow(it.startMs, it.endMs) }, range,
             if (decision.infantVoiceWindows.isEmpty()) "옹알이" else "아기 발성") else decision.moments.filterIndexed { index, moment ->
@@ -283,7 +288,7 @@ internal object VisualExpression {
     data class Result(val phrase: String, val usedVisual: Boolean, val evidence: String = "")
     fun combine(phrase: String, decision: SoundDecision, range: ClipRange, visual: VisualEvidence?,
                 audioTimelineAligned: Boolean = true): Result {
-        if (visual == null || visual.status == VisualEvidenceStatus.FAILED || decision.problem != null) return Result(phrase, false)
+        if (visual == null || visual.status == VisualEvidenceStatus.FAILED || decision.problem != null || decision.partial) return Result(phrase, false)
         if (visual.frames.any { it.presentationOffsetMs != null }) {
             if (!audioTimelineAligned) return Result(phrase, false)
             val matches = VisualSoundAlignment.find(decision, visual.frames, range.durationMs)
@@ -298,11 +303,14 @@ internal object VisualExpression {
                 .trimEnd('0').trimEnd('.')
             val evidence = matches.joinToString(" · ") {
                 "${seconds(it.startMs)}~${seconds(it.endMs)}초 ${it.cue.label}"
-            } + "을 같은 시간대의 소리 후보 창과 함께 살펴봤어요. 정확한 발성 시점·입술 동기는 확인하지 않아요."
+            } + if (decision.broadOnly)
+                "을 넓은 소리 후보 범위 안에서 관찰했어요. 이 시각에 발성했거나 화면의 사람이 소리를 냈다는 뜻은 아니에요."
+            else "을 같은 시간대의 소리 후보 창과 함께 살펴봤어요. 정확한 발성 시점·입술 동기는 확인하지 않아요."
             return Result(phrase + addition, true, evidence)
         }
         // Legacy observations lack decoded PTS. Preserve their old request-only
         // display rule, without manufacturing temporal correspondence evidence.
+        if (decision.broadOnly) return Result(phrase, false)
         val event = decision.events.singleOrNull() ?: return Result(phrase, false)
         // Multiple visible people anywhere in the selection make attribution too ambiguous.
         if (visual.frames.any { it.faceCount > 1 }) return Result(phrase, false)

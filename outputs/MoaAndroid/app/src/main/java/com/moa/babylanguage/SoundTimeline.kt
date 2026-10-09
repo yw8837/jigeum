@@ -12,10 +12,11 @@ internal data class VocalMoment(val event: VocalEvent, val startMs: Long)
 internal data class SoundDecision(val moments: List<VocalMoment> = emptyList(), val problem: String? = null,
                                   val issue: AnalysisIssue? = null,
                                   val broadWindows: List<BabbleSupportWindow> = emptyList(),
-                                  val infantVoiceWindows: List<InfantVoiceSupportWindow> = emptyList()) {
+                                  val infantVoiceWindows: List<InfantVoiceSupportWindow> = emptyList(),
+                                  val partial: Boolean = false) {
     val broadOnly get() = moments.isEmpty() && (broadWindows.isNotEmpty() || infantVoiceWindows.isNotEmpty())
     val events get() = (moments.map { it.event } + if (broadWindows.isEmpty()) emptyList() else listOf(VocalEvent.BABBLE)).distinct()
-    val sound get() = if (infantVoiceWindows.isNotEmpty() && events.isEmpty()) "아기 발성" else events.singleOrNull()?.label ?: "여러 아기 소리"
+    val sound get() = if (partial || (infantVoiceWindows.isNotEmpty() && events.isEmpty())) "아기 발성" else events.singleOrNull()?.label ?: "여러 아기 소리"
     val neutralOnly get() = (events.isNotEmpty() && events.all { it == VocalEvent.BABBLE || it == VocalEvent.CHILD_VOICE }) ||
         (infantVoiceWindows.isNotEmpty() && events.isEmpty())
 }
@@ -27,6 +28,48 @@ internal object SoundTimeline {
     private const val COMPETITOR_FLOOR = .30f
     private const val COMPETITOR_RATIO = .60f
     private data class Vote(val event: VocalEvent?, val strong: Boolean = false, val conflict: Boolean = false)
+
+    /** Preserve repeated, audible observations inside an otherwise mixed selection.
+     * This is not permission to call the whole clip happy/sad or to erase its holds.
+     * The original decision and supplementation policies remain unchanged. */
+    fun partialObservation(audio: SoundAnalysis, durationMs: Long): SoundDecision? {
+        if (audio.problem != null || durationMs !in 1_000..20_000 ||
+            decide(audio, durationMs).issue != AnalysisIssue.MIXED_VOCAL) return null
+        val frames = audio.frames
+        if (frames.isEmpty() || frames.any { frame ->
+                frame.startMs !in 0 until durationMs || frame.cues.isEmpty() ||
+                    frame.cues.any { !it.score.isFinite() || it.score !in 0f..1f } ||
+                    frame.windowRms?.let { !it.isFinite() || it !in 0.0..1.0 } != false
+            } || frames.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return null
+        val votes = frames.map { vote(it.cues) }
+        val supported = mutableListOf<VocalMoment>()
+        val run = mutableListOf<Int>()
+        fun finish() {
+            val event = run.firstOrNull()?.let { votes[it].event }
+            if (event != null && run.size >= if (event == VocalEvent.CHILD_VOICE) 3 else 2)
+                supported += run.map { VocalMoment(event, frames[it].startMs) }
+            run.clear()
+        }
+        for (index in frames.indices) {
+            val frame = frames[index]
+            val end = minOf(frame.startMs + SoundPhaseRecovery.FRAME_MS, durationMs)
+            // A shifted window may overlap a conflicting observation. It cannot
+            // borrow that time as clean evidence merely because its own vote passed.
+            val overlapsConflict = frames.indices.any { other ->
+                votes[other].conflict && frames[other].startMs < end &&
+                    frames[other].startMs + SoundPhaseRecovery.FRAME_MS > frame.startMs
+            }
+            if (votes[index].event == null || frame.windowRms!! < .003 ||
+                end - frame.startMs < SoundPhaseRecovery.FRAME_MS || overlapsConflict) {
+                finish(); continue
+            }
+            if (run.isNotEmpty() && (votes[run.last()].event != votes[index].event ||
+                frame.startMs - frames[run.last()].startMs !in SoundPhaseRecovery.FRAME_MS..1_500L)) finish()
+            run += index
+        }
+        finish()
+        return supported.takeIf { it.isNotEmpty() }?.let { SoundDecision(moments = it, partial = true) }
+    }
 
     /** A recognized but insufficiently persistent event is a deliberate hold, not a
      * window that missed every infant class. Reuse the existing identity floor. */
