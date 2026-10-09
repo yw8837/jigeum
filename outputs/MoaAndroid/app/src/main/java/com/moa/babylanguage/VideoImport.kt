@@ -217,7 +217,7 @@ internal suspend fun inspectVideo(context: Context, uri: Uri, startMs: Long, end
         val hasAudio = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) == "yes"
         require(startMs >= 0 && endMs <= durationMs && endMs > startMs && endMs - startMs <= 20_000L)
         val durationSeconds = ((endMs - startMs + 999) / 1000).toInt()
-        val sampleCount = ((endMs - startMs + 499) / 500).toInt()
+        val sampleCount = VideoFrameCadence.sampleCount(endMs - startMs)
         var faceCount = 0
         var mouthCount = 0
         var decoded = 0

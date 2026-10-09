@@ -31,12 +31,12 @@ class VideoTimelineTest {
                     colors += frame.bitmap.getPixel(frame.bitmap.width / 2, frame.bitmap.height / 2)
                 }
             }
-            assertEquals(40, times.size)
+            assertEquals(100, times.size)
             assertEquals(0L, times.first())
-            assertEquals(19_500L, times.last())
-            assertTrue(times.zipWithNext().all { (a, b) -> b - a == 500L })
+            assertEquals(19_800L, times.last())
+            assertTrue(times.zipWithNext().all { (a, b) -> b - a == 200L })
             assertTrue(Color.red(colors.first()) > 200 && Color.blue(colors.first()) < 40)
-            assertTrue(Color.blue(colors[20]) > 200 && Color.red(colors[20]) < 40)
+            assertTrue(Color.blue(colors[50]) > 200 && Color.red(colors[50]) < 40)
             assertTrue(Color.blue(colors.last()) > 200)
         } finally { file.delete() }
     }
@@ -49,7 +49,7 @@ class VideoTimelineTest {
             withContext(Dispatchers.Default) {
                 VideoFrameDecoder.decode(context, Uri.fromFile(file), 250, 1750) { times += it.presentationOffsetMs }
             }
-            assertEquals(listOf(50L, 550L, 1050L), times)
+            assertEquals(listOf(50L, 250L, 450L, 650L, 850L, 1050L, 1250L, 1450L), times)
         } finally { file.delete() }
     }
 
@@ -58,8 +58,8 @@ class VideoTimelineTest {
         assertNull(plan.select(900_000))
         assertEquals(0L, plan.select(1_100_000))
         assertNull(plan.select(1_100_000))
-        assertEquals(500L, plan.select(2_100_000))
-        assertNull(plan.select(2_200_000))
+        assertEquals(200L, plan.select(2_100_000))
+        assertNull(plan.select(2_150_000))
         try { plan.select(2_000_000); fail("Backwards PTS cannot be treated as temporal evidence") }
         catch (_: IllegalArgumentException) { }
     }
@@ -69,9 +69,9 @@ class VideoTimelineTest {
         val file = fixture("temporal-red-blue-20.mp4")
         try {
             val result = withContext(Dispatchers.Default) { inspectVideo(context, Uri.fromFile(file), 0, 20_000) }
-            assertEquals(40, result.analyzedFrames)
+            assertEquals(100, result.analyzedFrames)
             assertEquals(0L, result.frames.first().presentationOffsetMs)
-            assertEquals(19_500L, result.frames.last().presentationOffsetMs)
+            assertEquals(19_800L, result.frames.last().presentationOffsetMs)
             assertEquals(0, result.faceFrames)
             assertEquals(VisualEvidenceStatus.COMPLETE, result.visualEvidence().status)
         } finally { file.delete() }
@@ -167,7 +167,7 @@ class VideoTimelineTest {
                     count++
                 }
             }
-            assertEquals(4, count)
+            assertEquals(10, count)
         } finally { file.delete() }
     }
 
@@ -190,7 +190,7 @@ class VideoTimelineTest {
             withContext(Dispatchers.Default) {
                 VideoFrameDecoder.decode(context, Uri.fromFile(file), 0, 1000) { frames++ }
             }
-            assertEquals(2, frames)
+            assertEquals(5, frames)
         } finally { file.delete() }
     }
 
@@ -229,7 +229,7 @@ class VideoTimelineTest {
                     count++
                 }
             }
-            assertEquals(2, count)
+            assertEquals(5, count)
         } finally { file.delete() }
     }
 

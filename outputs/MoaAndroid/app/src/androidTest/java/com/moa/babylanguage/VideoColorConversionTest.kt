@@ -95,7 +95,7 @@ class VideoColorConversionTest {
                     frames++
                 }
             }
-            assertEquals(2, frames)
+            assertEquals(5, frames)
         } finally { file.delete() }
     }
 }

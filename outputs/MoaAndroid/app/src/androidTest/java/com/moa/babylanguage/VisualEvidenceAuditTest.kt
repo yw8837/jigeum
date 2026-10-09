@@ -102,8 +102,8 @@ class VisualEvidenceAuditTest {
                 inspectVideo(context, Uri.fromFile(fixture), range.startMs, range.endMs)
             }
             assertEquals("Selected later interval is three seconds", 3, summary.durationSeconds)
-            assertEquals(6, summary.sampleCount)
-            assertEquals("Every sampled frame must actually reach the bundled model", 6, summary.analyzedFrames)
+            assertEquals(15, summary.sampleCount)
+            assertEquals("Every sampled frame must actually reach the bundled model", 15, summary.analyzedFrames)
             assertTrue(summary.modelAvailable)
             assertEquals("Synthetic color/tone fixture has no face", 0, summary.faceFrames)
             assertEquals(0, summary.mouthOpenFrames)

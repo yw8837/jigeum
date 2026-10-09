@@ -232,7 +232,7 @@ class AstIntegratedCandidateTest {
                 assertNull("Known integrated case must not silently fall back", result.issue)
                 assertEquals("옹알이", result.interpretation?.sound)
                 assertEquals(VisualEvidenceStatus.COMPLETE, visual?.status)
-                assertEquals((duration / 500).toInt(), visual?.frames?.size)
+                assertEquals((duration / 200).toInt(), visual?.frames?.size)
                 assertTrue(visual?.timeline?.ordered == true && visual?.timeline?.coversSelection == true)
             }
             report.put("status", "completed")

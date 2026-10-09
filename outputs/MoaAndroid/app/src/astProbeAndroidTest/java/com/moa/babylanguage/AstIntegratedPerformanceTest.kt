@@ -127,7 +127,7 @@ class AstIntegratedPerformanceTest {
                     check(analyzed.issue != AnalysisIssue.MODEL_FAILURE) { "Audio model runtime failed" }
                     check(analyzed.interpretation == null && analyzed.problem != null) { "Synthetic tone must abstain" }
                     check(visual?.status == VisualEvidenceStatus.COMPLETE)
-                    check(visual?.frames?.size == (duration / 500).toInt()) { "Missing selected visual observations" }
+                    check(visual?.frames?.size == (duration / 200).toInt()) { "Missing selected visual observations" }
                     check(visual?.timeline?.ordered == true && visual?.timeline?.coversSelection == true)
                     check(hash(source) == inputHash) { "Synthetic input changed" }
                     row.put("input_preserved", true).put("status", "measured")

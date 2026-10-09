@@ -40,7 +40,9 @@ internal object VisualSoundAlignment {
         // the accepted laugh window. Two distant snapshots cannot create a run.
         val smileRun = mutableListOf<VisualFrameObservation>()
         fun finishSmile() {
-            if (smileRun.size >= 2) matches += Match(smileRun.first().presentationOffsetMs!!,
+            // More samples must not weaken the former 500 ms persistence floor.
+            if (smileRun.size >= 2 &&
+                smileRun.last().presentationOffsetMs!! - smileRun.first().presentationOffsetMs!! >= 500L) matches += Match(smileRun.first().presentationOffsetMs!!,
                 smileRun.last().presentationOffsetMs!!, Cue.CORNERS)
             smileRun.clear()
         }
@@ -63,6 +65,7 @@ internal object VisualSoundAlignment {
         val mouthRun = mutableListOf<VisualFrameObservation>()
         fun finishMouth() {
             if (mouthRun.count { it.mouthOpening!! >= .18f } >= 2 &&
+                mouthRun.last().presentationOffsetMs!! - mouthRun.first().presentationOffsetMs!! >= 1_000L &&
                 VisualTimeline.summarize(mouthRun, durationMs).mouthTransitions >= 2) {
                 matches += Match(mouthRun.first().presentationOffsetMs!!,
                     mouthRun.last().presentationOffsetMs!!, Cue.MOUTH)

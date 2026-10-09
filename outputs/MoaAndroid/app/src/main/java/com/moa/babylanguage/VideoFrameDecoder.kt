@@ -16,6 +16,12 @@ import kotlin.math.roundToInt
 
 /** Select the first decoded frame at/after each cadence boundary, never repeat a sparse frame. */
 internal class VideoFrameCadence(private val startUs: Long, private val endUs: Long) {
+    companion object {
+        // Capture shorter mouth changes across the selection. This is an
+        // observation cadence, not continuous AV understanding or speaker ID.
+        const val INTERVAL_MS = 200L
+        fun sampleCount(durationMs: Long): Int = ((durationMs + INTERVAL_MS - 1) / INTERVAL_MS).toInt()
+    }
     private var nextUs = startUs
     private var previousUs = Long.MIN_VALUE
     fun select(ptsUs: Long): Long? {
@@ -24,7 +30,8 @@ internal class VideoFrameCadence(private val startUs: Long, private val endUs: L
         previousUs = ptsUs
         if (ptsUs < nextUs || ptsUs >= endUs) return null
         val requestedMs = (nextUs - startUs) / 1000
-        nextUs = startUs + ((ptsUs - startUs) / 500_000 + 1) * 500_000
+        val intervalUs = INTERVAL_MS * 1000
+        nextUs = startUs + ((ptsUs - startUs) / intervalUs + 1) * intervalUs
         return requestedMs
     }
 }
