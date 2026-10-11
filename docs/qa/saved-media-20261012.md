@@ -1,12 +1,17 @@
 # UltraQA Report — 갤러리 영상 저장과 분석 독립성
 
-상태: **수정본 S25 검사18개 통과, 사용자 원본 재확인 대기**. 기준6499256. [계약](../research/20261012-saved-media-contract.md).
+상태: **수정본 S25 검사18개 통과, 사용자 원본 두 저장 경로 성공 확인**. 기준6499256. [계약](../research/20261012-saved-media-contract.md).
 소유MoaQA35/emulator-5556 및 사용자가 연결 승인한S25, synthetic media, 최대5cycle/같은실패3회 중단.
 초기2cycle 뒤 USB 승인으로 실폰3cycle를 실행했다.
 후속 사용자 확인으로 PNG는 정상이고 영상카드/장면과 함께 저장만 실패하는 것으로 정정했다.
 마지막 Play 제공 확인은code37이며, 기존 서명code38 파일에는 이번 변경이 없다.
 
 ## 목표와 범위
+
+사용자는 별도 연구 앱에서 이전에 실패했던 같은 갤러리 영상을 분석한 뒤
+‘영상 카드 앨범에 저장’과 ‘장면과 함께 저장하기’를 모두 성공했다고 답했다.
+이것은 사용자 직접 확인이며, 원본을 에이전트가 읽거나 원본의 HDR/codec을 확인한 결과는 아니다.
+이하 사용자 재확인 대기 문구는 이 응답 전 이력이다. 연구 앱의 사용자 생성 기록/미디어는 보존한다.
 
 실제 갤러리 content URI를 받는 앱 저장 콜백, Transformer와 MediaStore/기록 저장을 실행한다.
 결과가 없어도 선택 구간을 원래 소리와 함께 자막 없이 저장하고, 원본·기존 기록을 보존한다.
@@ -47,6 +52,36 @@
   실제 Play 패키지의code37/0.5.23-beta·설치시각/경로 metadata가 검사 전후 동일하다. 사용자DB는 읽지 않았다.
 
 ## 실패와 수정 이력
+
+### 실제20초 분석 후속 — performance04
+
+`python work/saved-media-20261012/performance.py <S25 serial> performance04`는 **2tests/2pass/0fail/0skip**,
+runner23.28초/driverexit0이다. 현재 제품APK SHA는 phone01과 동일하며 test만 재빌드했다.
+사용자 자료를 열지 않고 정확한 기존 공개입력 SHA의 파일과 합성 tone만 사용했다.
+
+| 입력 | 실제 DeviceClipAnalyzer 시간 | 영상관찰 | 결과/열 상태 |
+|---|---:|---|---|
+| 이전20초 공개입력, 프로세스 시작 후 첫 analyzer 호출 | 6.145초 | 1fps 실제20개, PARTIAL/ordered/coverage false | 해석 있음·문제 없음, thermal0→0 |
+| 동일 입력 반복 | 5.516초 | 동일20개·부분관찰 | 해석 있음·문제 없음, thermal0→0 |
+| 일반fps synthetic tone10초 | 3.127초 | 50개 COMPLETE/ordered/coverage true | INFANT_UNCONFIRMED 보류, thermal0→0 |
+| 일반fps synthetic tone20초 | 7.410초 | 100개 COMPLETE/ordered/coverage true | INFANT_UNCONFIRMED 보류, thermal0→0 |
+
+실행 전 research app force-stop 및 runner에서 SavedMediaPerformanceTest→AstIntegratedPerformanceTest 순서를 확인했다.
+파일시스템 cold 상태는 아니며 사용자 UI 전체시간·장시간발열·다른기기·일반정확도 측정이 아니다.
+실제 입력 SHA와 before/after 원본보존, private 입력/결과만 제거한 근거는
+[performance04](saved-media-20261012/performance04/result.json)와 두 device-result를 따른다.
+
+추가 하네스 실패 이력도 보존한다. build06은 arguments API 컴파일 오류, performance01은
+shell binary 전달로 입력SHA가 달라진 오류였다. `exec-in ... dd`와 전송 직후SHA 확인으로 보완했다.
+performance02는1fps 파일에100관찰을 기대했고, performance03은 PARTIAL이어야 할 상태를
+COMPLETE로 기대해 실패했다. 두 실행 모두 실제 첫 분석은 반환됐지만 반복 호출까지 진행하지
+못했으므로 2회 통과로 세지 않는다. 정확한1fps 관찰 계약으로 build09/performance04를 실행했다.
+일반fps100관찰은 별도 입력으로 확인하며 없는 프레임을 채워 성공시키지 않았다.
+
+기존20261010 서명38의 에뮬레이터 첫45초timeout은 **원인미확정**으로 유지한다.
+후속 성공은 그 원인을 고쳤다는 증명이 아니다. 독립Spec 후속 검토는 이실폰 첫/반복 통과와
+새서명 beta 패키지·37→38보존·실제 UI20초 분석/저장 근거가 모두 확보되면 제한된Alpha제출에
+추가Spec차단 없음으로 판단했다. Standards추가 필수0, 실패행 계측 보완은 선택사항이다.
 
 1. 초기 baseline01은 에뮬레이터 부팅 전 검사로 실행이 시작되지 않았다.
 2. baseline02의2실패는 고정 footer에 `performScrollTo`를 호출한 하네스 문제였다. 화면에 보일 때 바로 누르도록 수정했다.

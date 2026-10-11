@@ -1,0 +1,68 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaPerformanceTest:
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<9[d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d88]77> but was:<9[eea7f8fbe58263a939cf90fac303035a21549d880b86f8da5f135af3900f6]77>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:35)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage(SavedMediaPerformanceTest.kt:21)
+
+INSTRUMENTATION_STATUS: stream=
+Error in retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage(com.moa.babylanguage.SavedMediaPerformanceTest):
+org.junit.ComparisonFailure: expected:<9[d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d88]77> but was:<9[eea7f8fbe58263a939cf90fac303035a21549d880b86f8da5f135af3900f6]77>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:35)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage(SavedMediaPerformanceTest.kt:21)
+
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.018
+There was 1 failure:
+1) retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage(com.moa.babylanguage.SavedMediaPerformanceTest)
+org.junit.ComparisonFailure: expected:<9[d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d88]77> but was:<9[eea7f8fbe58263a939cf90fac303035a21549d880b86f8da5f135af3900f6]77>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:35)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesColdAndWarmWithFullVisualCoverage(SavedMediaPerformanceTest.kt:21)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

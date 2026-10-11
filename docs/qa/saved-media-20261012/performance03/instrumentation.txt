@@ -1,0 +1,98 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaPerformanceTest:
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<COMPLETE> but was:<PARTIAL>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:63)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage(SavedMediaPerformanceTest.kt:21)
+
+INSTRUMENTATION_STATUS: stream=
+Error in retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage(com.moa.babylanguage.SavedMediaPerformanceTest):
+java.lang.AssertionError: expected:<COMPLETE> but was:<PARTIAL>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:63)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage(SavedMediaPerformanceTest.kt:21)
+
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstIntegratedPerformanceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.AstIntegratedPerformanceTest:
+INSTRUMENTATION_STATUS: test=measureActualVisualTenAndTwentySecondCalls
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstIntegratedPerformanceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=measureActualVisualTenAndTwentySecondCalls
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 18.046
+There was 1 failure:
+1) retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage(com.moa.babylanguage.SavedMediaPerformanceTest)
+java.lang.AssertionError: expected:<COMPLETE> but was:<PARTIAL>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaPerformanceTest$retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage$1.invokeSuspend(SavedMediaPerformanceTest.kt:63)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.internal.ScopeCoroutine.afterResume(Scopes.kt:28)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:46)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-5400fced6b76708d54eed9c213194cf99e715dcf:1)
+	at com.moa.babylanguage.SavedMediaPerformanceTest.retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage(SavedMediaPerformanceTest.kt:21)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

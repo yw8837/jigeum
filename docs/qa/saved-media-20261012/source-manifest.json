@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-10-11T18:28:04.276344+00:00",
+  "recorded_at": "2026-10-11T18:46:57.086248+00:00",
   "baseline": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
   "source_sha256": {
     "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptionHdrCompatibilityTest.kt": "d2c2a0b4fe5bf70b2a82193bec3e6898970509a1838a2ebd3783751e90b01d9e",
@@ -11,6 +11,7 @@
     "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt": "2b3bd32807a1ed62347a2d18a56203d75b797915ec854b188f0d4582ffb36536",
     "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt": "3de26960025516011695e9e20579b097febc1b56e8f6564ea440e83a1d78ad2d",
     "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt": "e5a8442ec99a1cdb074ddab0a8f41575643db82c53ce5f21016b736a7ccd408e",
+    "outputs/MoaAndroid/app/src/astProbeAndroidTest/java/com/moa/babylanguage/SavedMediaPerformanceTest.kt": "6bdee7957ac82ecb4f83b9ea2f5b9bef60f63409bad5abdecf9c6b59c5cac952",
     "outputs/MoaAndroid/app/src/androidTest/assets/scene-hdr-pq.mp4": "6c490b999dff5373da7da661318bc1621e3813211467f3975a104e268c016cfd"
   }
 }
