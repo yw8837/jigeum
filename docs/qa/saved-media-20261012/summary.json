@@ -1,7 +1,7 @@
 {
   "version_name": "0.5.24-beta",
   "version_code": 38,
-  "status": "local_delivery_gates_pass_not_uploaded",
+  "status": "alpha38_review_requested_awaiting_availability",
   "last_confirmed_play_code": 37,
   "product_source_commit": "0f0cb825bb1d3ab296adf0ab821c5c6e41d54e1b",
   "source_head_at_recording": "f17b6ce01a7d5ef860707f18375660835c1d5ad8",
@@ -49,12 +49,12 @@
   "general_accuracy_validated": false,
   "emotion_or_need_accuracy_validated": false,
   "phone_user_records_preserved": true,
-  "automation33": "PAUSED",
+  "automation33": "ACTIVE",
   "ultraqa": {
     "cycles": 5,
     "status": "ULTRAQA STOPPED: Max cycles",
     "remaining_gate": "signed beta20 timeout; cleanup policy blocks remain",
-    "followup": "Focused local delivery gates and owned emulator cleanup complete in2 cycles; original five-cycle stopped run and old policy blocks remain as history. Play not uploaded yet."
+    "followup": "Focused local delivery gates and owned emulator cleanup complete in2 cycles; prior failed five-cycle run and old deletion blocks remain. Alpha38 review requested; actual availability pending."
   },
   "delivery_diagnosis": {
     "software_gpu_verdicts": [
@@ -78,5 +78,22 @@
     "product_code_changed_in_diagnosis": false,
     "same_package_signed20_export_sha256": "6a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8",
     "same_package_signed20_export_seconds": "20.000000"
+  },
+  "play": {
+    "release_id": 18,
+    "track": "Alpha",
+    "release_name": "0.5.24-beta (38) - saved media fix",
+    "review_requested_at": "2026-10-12T04:38:00+09:00",
+    "ui_state": "검토 중인 변경사항; 빠른 검사 실행 중",
+    "managed_publishing": false,
+    "tester_availability_confirmed": false,
+    "last_confirmed_available_code": 37,
+    "blocking_errors": 0,
+    "warnings": 2,
+    "removed_supported_devices": 0,
+    "new_install_mb": 112,
+    "new_install_change_kb": 7.14,
+    "monitor_id": "33",
+    "monitor_status": "ACTIVE"
   }
 }
