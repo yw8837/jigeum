@@ -1,5 +1,14 @@
 # Signed38 delivery gate follow-up
 
+## Actual Alpha availability
+
+Exact release **0.5.24-beta (38) - saved media fix**, release18, was confirmed as
+**선택한 테스터에게 제공됩니다** on Alpha, recorded at2026-10-12 05:26 KST.
+The Console displays publication at2026-10-12 05:19 KST; this is separate from observation time.
+See [release record](play-review.md), [screenshot](play-available.png), [UI text](play-available.txt).
+Monitor33 remains ACTIVE until this availability record is pushed and verified, then will be paused.
+Individual tester installation and12people/14continuous days remain unverified.
+
 ## Scope and result
 
 Same signed beta38 APK (106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae),
@@ -43,4 +52,4 @@ cleanup are recorded separately before upload. User S25 research records remain 
 Old policy-blocked file deletions remain blocked. Only the existing Alpha beta is authorized.
 Upload/review submission is not tester availability; exact version38 available state is required.
 
-Final local checks: two signed smoke scenarios passed, actual MP4 duration20.000s; beta/release SHA2566a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8 identical. Independent Spec final mandatory blockers0; existing Standards review unchanged because no product source changed. Owned app uninstall succeeded; external fixtures/XML removed; emulator absent. Followup local lifecycle complete→clear→read absent verified. Publication remains separate and pending.
+Final local checks: two signed smoke scenarios passed, actual MP4 duration20.000s; beta/release SHA2566a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8 identical. Independent Spec final mandatory blockers0; existing Standards review unchanged because no product source changed. Owned app uninstall succeeded; external fixtures/XML removed; emulator absent. Followup local lifecycle complete→clear→read absent verified. Publication was pending at that gate; subsequent actual availability is recorded above.

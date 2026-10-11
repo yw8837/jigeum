@@ -1,5 +1,16 @@
 # UltraQA Report — 갤러리 영상 저장과 분석 독립성
 
+## 최신 배포 상태 — Alpha38 테스터 제공 완료
+
+2026-10-12 05:26 KST Alpha에서 **0.5.24-beta (38) - saved media fix**, 출시18이
+**선택한 테스터에게 제공됩니다**로 확인됐다. 화면 게시 시각은 **05:19 KST**다.
+[배포 증거](saved-media-20261012/delivery/play-review.md). 마지막 제공 확인은38이다.
+갤러리 두 저장 경로의 S25 사용자 성공 확인과 동일 서명판 hostGPU20초/MP4/release 재잠금
+검증을 거친 AAB가 제공됐다. softwareGPU 실패 원인 미확정과 정확도/실폰UI 성능 한계는 유지한다.
+테스터별 실제 설치 및 12명 연속14일은 확인하지 않았다. 기록 푸시 후 자동화33 일시중지 예정.
+
+## 최초 QA 종료 시점 이력
+
 상태: **실폰 두 저장 경로 성공·새38 패키지/업데이트보존 통과, signed20 timeout으로 배포 보류**.
 `ULTRAQA STOPPED: Max cycles` (5cycle). 기준6499256. [계약](../research/20261012-saved-media-contract.md).
 소유MoaQA35/emulator-5556 및 사용자가 연결 승인한S25, synthetic media, 최대5cycle/같은실패3회 중단.

@@ -1,4 +1,20 @@
-# Alpha38 review request
+# Alpha38 review and tester availability
+
+## Actual availability — confirmed
+
+- Exact release **0.5.24-beta (38) - saved media fix**, release ID **18**, existing **Alpha**.
+- Alpha UI: **선택한 테스터에게 제공됩니다. 버전 코드 1개 게시일: 10월 12일 오전 5:19**.
+- Console publication time: **2026-10-12 05:19 KST**.
+- Confirmation recorded: **2026-10-12 05:26 KST**; separate from publication time.
+- Publishing overview also displayed the October12 app-update-published notification.
+- Evidence: [availability screenshot](play-available.png), [exact Alpha UI text](play-available.txt).
+- No duplicate upload, submission cancellation, other-track/settings/tester-list change, build or ADB was performed.
+- Monitor33 will be paused after this record is committed, pushed and SHA/clean verified.
+- Install/update: https://play.google.com/store/apps/details?id=com.moa.babylanguage
+- Web participation: https://play.google.com/apps/testing/com.moa.babylanguage
+- Per-tester update installation and12people/14continuous days were not independently verified.
+
+## Original review request history
 
 - Requested: **2026-10-12 04:38 KST** (2026-10-11T19:38Z).
 - Track: existing closed-test **Alpha**, release ID **18**.
@@ -27,7 +43,7 @@ Local actual20-second export/relock evidence: [README](README.md).
 짧은 구간에서 확인된 발성이 잠시 쉬었다 다시 이어지는 흐름을 표현에 반영했어요.
 일부 소리 구간에서 확인된 발성 단서를 보존하도록 보완했어요.
 
-## Remaining confirmation
+## Review-time remaining confirmation (now fulfilled above)
 
 Read exact38 in Alpha as **선택한 테스터에게 제공됩니다**. Save small proof,
 update HANDOFF/NEXT/QA/summary, commit and push with SHA+clean check, notify user with
