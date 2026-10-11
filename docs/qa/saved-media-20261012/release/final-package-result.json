@@ -1,0 +1,193 @@
+{
+  "status": "pass",
+  "variants": {
+    "beta": {
+      "package": {
+        "status": "pass",
+        "distribution_checked": "beta",
+        "backup_domains_excluded_in_both_modes": [
+          "database",
+          "device_database",
+          "device_file",
+          "device_root",
+          "device_sharedpref",
+          "external",
+          "file",
+          "root",
+          "sharedpref"
+        ],
+        "compiled_apk_has_internet_permission": true,
+        "allowBackup": false,
+        "fullBackupContent": false,
+        "baseline_comparison": {
+          "status": "pass",
+          "files_compared": 26,
+          "baseline": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.apk"
+        },
+        "aab_checked": true,
+        "aab_unsigned": false,
+        "physical_OEM_transfer_tested": false,
+        "apk_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+        "aab_distribution": {
+          "package": "com.moa.babylanguage",
+          "version_code": 38,
+          "version_name": "0.5.24-beta",
+          "test_distribution": true,
+          "closed_test_distribution": true
+        },
+        "aab_sha256": "6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217"
+      },
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-beta-code38.apk",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "assets/AST_CAPTION_NOTICE.txt",
+            "assets/AST_MODEL_NOTICE.txt",
+            "assets/ONNX_RUNTIME_LICENSE.txt",
+            "assets/ONNX_RUNTIME_NOTICE.txt",
+            "assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "assets/ast-caption-presence.f32",
+            "assets/ast-infant-presence-candidate.onnx",
+            "lib/arm64-v8a/libonnxruntime.so",
+            "lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "lib/armeabi-v7a/libonnxruntime.so",
+            "lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "lib/x86/libonnxruntime.so",
+            "lib/x86/libonnxruntime4j_jni.so",
+            "lib/x86_64/libonnxruntime.so",
+            "lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        },
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-beta-code38.aab",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "base/assets/AST_CAPTION_NOTICE.txt",
+            "base/assets/AST_MODEL_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_LICENSE.txt",
+            "base/assets/ONNX_RUNTIME_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "base/assets/ast-caption-presence.f32",
+            "base/assets/ast-infant-presence-candidate.onnx",
+            "base/lib/arm64-v8a/libonnxruntime.so",
+            "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "base/lib/armeabi-v7a/libonnxruntime.so",
+            "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "base/lib/x86/libonnxruntime.so",
+            "base/lib/x86/libonnxruntime4j_jni.so",
+            "base/lib/x86_64/libonnxruntime.so",
+            "base/lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        }
+      ],
+      "flags": {
+        "AST_INFANT_CAPTION": true,
+        "AST_INFANT_PRESENCE": true,
+        "AST_BABBLE_SUPPORT": true,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": true,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "files": {
+        "Agattok-0.5.24-beta-code38.apk": {
+          "bytes": 255179763,
+          "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae"
+        },
+        "Agattok-0.5.24-beta-code38.aab": {
+          "bytes": 160206297,
+          "sha256": "6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217"
+        }
+      }
+    },
+    "release": {
+      "package": {
+        "status": "pass",
+        "distribution_checked": "release",
+        "backup_domains_excluded_in_both_modes": [
+          "database",
+          "device_database",
+          "device_file",
+          "device_root",
+          "device_sharedpref",
+          "external",
+          "file",
+          "root",
+          "sharedpref"
+        ],
+        "compiled_apk_has_internet_permission": true,
+        "allowBackup": false,
+        "fullBackupContent": false,
+        "baseline_comparison": {
+          "status": "pass",
+          "files_compared": 18,
+          "baseline": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.apk"
+        },
+        "aab_checked": true,
+        "aab_unsigned": false,
+        "physical_OEM_transfer_tested": false,
+        "apk_sha256": "7bdaf44a4c20e3522c676ecd5d87246d37de0c431d91e1ab55f78d0e6d4533a7",
+        "aab_distribution": {
+          "package": "com.moa.babylanguage",
+          "version_code": 38,
+          "version_name": "0.5.24",
+          "test_distribution": false,
+          "closed_test_distribution": false
+        },
+        "aab_sha256": "4f639b2df572dcebe8f37cd0f181be8dd521ccff7628197e97fe514f13dd42b9"
+      },
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-release-code38.apk",
+          "payload_entries": []
+        },
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-release-code38.aab",
+          "payload_entries": []
+        }
+      ],
+      "flags": {
+        "AST_INFANT_CAPTION": false,
+        "AST_INFANT_PRESENCE": false,
+        "AST_BABBLE_SUPPORT": false,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": false,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "files": {
+        "Agattok-0.5.24-release-code38.apk": {
+          "bytes": 75381227,
+          "sha256": "7bdaf44a4c20e3522c676ecd5d87246d37de0c431d91e1ab55f78d0e6d4533a7"
+        },
+        "Agattok-0.5.24-release-code38.aab": {
+          "bytes": 46727902,
+          "sha256": "4f639b2df572dcebe8f37cd0f181be8dd521ccff7628197e97fe514f13dd42b9"
+        }
+      }
+    }
+  }
+}

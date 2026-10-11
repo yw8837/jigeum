@@ -1,6 +1,7 @@
 # UltraQA Report — 갤러리 영상 저장과 분석 독립성
 
-상태: **수정본 S25 검사18개 통과, 사용자 원본 두 저장 경로 성공 확인**. 기준6499256. [계약](../research/20261012-saved-media-contract.md).
+상태: **실폰 두 저장 경로 성공·새38 패키지/업데이트보존 통과, signed20 timeout으로 배포 보류**.
+`ULTRAQA STOPPED: Max cycles` (5cycle). 기준6499256. [계약](../research/20261012-saved-media-contract.md).
 소유MoaQA35/emulator-5556 및 사용자가 연결 승인한S25, synthetic media, 최대5cycle/같은실패3회 중단.
 초기2cycle 뒤 USB 승인으로 실폰3cycle를 실행했다.
 후속 사용자 확인으로 PNG는 정상이고 영상카드/장면과 함께 저장만 실패하는 것으로 정정했다.
@@ -97,6 +98,22 @@ COMPLETE로 기대해 실패했다. 두 실행 모두 실제 첫 분석은 반�
 
 ## 적용한 수정과 검토
 
+### 새 서명 후보 — 0.5.24-beta / code38
+
+이 작업의 새 betaAAB는 `work/saved-media-20261012/final/Agattok-0.5.24-beta-code38.aab`,
+SHA256 `6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217`이다.
+기존 `work/vocal-kind-20261010/final`의 같은버전 산출물은 덮어쓰지 않았고 이번수정본과 SHA가 다르다.
+beta/release각 APK+AAB 서명·배포/권한flags·모델 payload·200ms cadence·새 selectedVideo/renderMedia
+DEX와 이전37의 보호파일 비교를 통과했다. release는 정책비교용이며 Play제출대상이 아니다.
+beta빌드265.10초/peak4.68GB, release214.63초/peak4.20GB; 둘다5GiB/900초제한·exit0·잔여프로세스0.
+beta드라이버는 성공뒤CP949경로를UTF-8로읽다실패해 bytes기반검사와기존APK복사만재개했다.
+추가DEX검사도추측한메서드명renderVideo때문에실패해실제renderMedia로정정했다.
+빌드/기본패키지성공은유지하며제품결함으로집계하지않는다. 하네스실패와재개근거를보존한다.
+
+37→새38 서명업데이트검사는 **exit0/216.90초**로 통과했다. 앱데이터를 초기화하지 않고
+기존LEGACY문장필드와10초MP4의 SHA256 `c48cccc11f3bab614d9fd6be89307dc76e09be49c2a8c3b2b503351d34014f01`
+일치를 확인했다. 실제 Play 경유 설치검사는 아니며 소유MoaQA35의동일키APK업데이트검사다.
+
 - `TranslatedMedia`: 자막 영상은 GL HDR→SDR 변환, 자막 없는 영상은 HDR 유지 모드;
   공유된 범위/디스크/취소 제한과 원본 트랙 추론. 실패 안내에서 결과 없는 사용자에게 문장 저장을 권하지 않는다.
   자막 출력은 SDR이므로 HDR 원본과 색감·밝기가 달라질 수 있다.
@@ -109,6 +126,26 @@ COMPLETE로 기대해 실패했다. 두 실행 모두 실제 첫 분석은 반�
   Standards의 렌더/발행/정리 코드 중복 P3는 선택 개선으로 남긴다. 정적 검토를 실폰 성공으로 세지 않는다.
 
 ## 정리와 남은 한계
+
+### 최종5cycle — 새 signed beta20 실패 보존
+
+`python work/saved-media-20261012/signed_smoke.py`는 실제20초 선택뒤 **앱의45초timeout 안내**를
+관측해exit1로실패했다. 새betaAPK설치SHA는 `106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae`
+로검증됐다. [실패원문](saved-media-20261012/release/signed-smoke01/result.json).
+장면저장·20초MP4내보내기·release재잠금은이실패뒤실행되지않았으며이전성공으로대체하지않는다.
+검사시호스트여유RAM약448MiB를관측했으나시간초과의원인으로확정하지않는다.
+연구S25는fileURI의직접호출,새signed는에뮬레이터의가져오기/선택/UI콜백이어서측정범위가다르다.
+독립후속Spec분기감사에서AST_INTEGRATED_CANDIDATE/AST_BABBLE_SUPPORT의OR는양쪽true,
+동일AST구현/모델/head와YAMNet→support→SoundPhaseRecovery경로를확인했다.
+연구용우회가원인이라는증거도없다. 실제배포UI성능gate는**보류**한다.
+
+새38업로드/검토제출은0, Alpha제공37, 자동화33PAUSED다. 5cycle제한에따라추가반복QA를멈추고
+실패와미실행항목을보존했다. 소유MoaQA35의테스트앱제거·driver소유외부파일제거·종료확인.
+폰은추가검사하지않으며사용자연구앱의직접생성자료는보존했다.
+실패run의중복공개입력3개(performance01/02/03/public20.mp4, 각140,042bytes)도경계/SHA검사와
+표준Remove-Item명령을준비했으나CreateProcess이전자동정책차단으로실행0/삭제0이다.
+다른삭제수단으로우회하지않았다. 최신performance04정확입력과서명후보/증거는다음진단용으로유지한다.
+앞선원본확인대기·성능검사전상태는이력이며최신판정은이절과summary.json을따른다.
 
 에뮬레이터의 소유 MediaStore rows0, 렌더 파일0, pending journal 비어 있음을 확인한 뒤
 연구 app/test를 제거하고 MoaQA35를 종료했다. 기존 build를 재사용했다.

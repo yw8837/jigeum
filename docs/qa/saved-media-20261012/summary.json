@@ -1,45 +1,58 @@
 {
-  "baseline_commit": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
-  "status": "phone_hdr_and_save_tests_passed_original_user_video_confirmation_pending",
-  "play_last_verified_version_code": 37,
-  "new_play_submission": false,
-  "existing_signed_38_contains_this_fix": false,
-  "build": {"variant": "astcandidate debug", "version_code": 38, "exit_code": 0, "seconds": 133.956534},
-  "host": {"passed": 44, "failed": 0, "real_model_inference": false},
-  "host_baseline": {"tests": 10, "expected_failed_new_assertions": 1},
-  "android_emulator": {
-    "tests": 48, "passed": 47, "failed": 1, "skipped": 0,
-    "status": "fail", "seconds": 121.94,
-    "failed_test": "SavedMediaFlowTest.hdrImportedVideoCanRenderCaption",
-    "failure_stage": "c2.goldfish.hevc.decoder / MediaCodec Released state",
-    "legacy_hdr_overlay_failure_reproduced": true,
-    "sdr_overlay_draw_passed": true,
-    "full_app_sdr_png_video_record_save_passed": true,
-    "raw_save_without_analysis_passed": true,
-    "consecutive_import_result_and_draft_reset_passed": true
+  "version_name": "0.5.24-beta",
+  "version_code": 38,
+  "status": "blocked_signed20_timeout_not_uploaded",
+  "last_confirmed_play_code": 37,
+  "product_source_commit": "0f0cb825bb1d3ab296adf0ab821c5c6e41d54e1b",
+  "source_head_at_recording": "f17b6ce01a7d5ef860707f18375660835c1d5ad8",
+  "user_original_gallery_video": {
+    "evidence_type": "user_report",
+    "video_card_saved": true,
+    "scene_record_saved": true,
+    "agent_read_original": false
   },
-  "phone": {
-    "model": "SM-S938N", "last_adb_state": "device", "tests": 18,
-    "passed": 18, "failed": 0, "skipped": 0, "seconds": 15.78,
-    "same_apk_as_emulator": true, "synthetic_hdr_full_render_passed": true,
-    "original_play37_install_metadata_unchanged": true,
-    "original_user_video_confirmation": "requested_in_opened_research_app"
+  "host_passed": 44,
+  "emulator": {
+    "passed": 47,
+    "failed": 1,
+    "skipped": 0,
+    "failure": "goldfish HEVC HDR decoder"
   },
-  "review": {"spec_required_findings": 0, "standards_required_findings": 0, "optional_p3_duplication": 1},
-  "cleanup": {
-    "emulator_app_and_test_removed": true,
-    "emulator_owned_media_rows": 0,
-    "emulator_render_files": 0,
-    "emulator_pending_journal_empty": true,
-    "owned_emulator_stopped": true,
-    "local_reference_cleanup": "blocked_by_automatic_policy_before_process_creation",
-    "previous_build_cleanup_blocks_preserved": true,
-    "phone_research_packages": "retained_for_user_confirmation; do not delete new user-created records or media"
+  "s25_renderer": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
   },
-  "remaining_gates": [
-    "Original user gallery video save confirmation",
-    "Previously unresolved signed code38 initial 20s analysis 45s timeout",
-    "New signed packaging and Alpha release"
+  "s25_public20_first_and_repeat_ms": [
+    6145,
+    5516
   ],
-  "not_proven": ["General recognition accuracy", "Emotion or need translation accuracy", "All repeated phrase complaints resolved"]
+  "s25_tone20_ms": 7410,
+  "s25_tone20_visual_observations": 100,
+  "historical_emulator_timeout_root_cause": "unresolved",
+  "signed_package_pass": true,
+  "signed_upgrade_preservation_pass": true,
+  "signed20_ui_seconds": null,
+  "signed20_result": "app_timeout_message_observed",
+  "signed_release_relock_pass": null,
+  "signed_release_relock_status": "not_run_after_beta20_failure",
+  "artifacts": {
+    "Agattok-0.5.24-beta-code38.apk": {
+      "bytes": 255179763,
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae"
+    },
+    "Agattok-0.5.24-beta-code38.aab": {
+      "bytes": 160206297,
+      "sha256": "6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217"
+    }
+  },
+  "general_accuracy_validated": false,
+  "emotion_or_need_accuracy_validated": false,
+  "phone_user_records_preserved": true,
+  "automation33": "PAUSED",
+  "ultraqa": {
+    "cycles": 5,
+    "status": "ULTRAQA STOPPED: Max cycles",
+    "remaining_gate": "signed beta20 timeout; cleanup policy blocks remain"
+  }
 }
