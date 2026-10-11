@@ -1,0 +1,10 @@
+Launch: C:/MoaSdk/emulator/emulator.exe -avd MoaQA35 -port 5556 -no-window -no-audio -no-snapshot-load -no-snapshot-save -memory 2048 -gpu host
+ANDROID_AVD_HOME=C:/MoaAVD
+Only renderer changed from swiftshader_indirect. No AVD wipe/new AVD.
+
+INFO         | Graphics backend: gfxstream
+INFO         | emuglConfig_init: vulkan_mode_selected:host gles_mode_selected:host
+INFO         | emuglConfig_get_vulkan_hardware_gpu_support_info: Found physical GPU 'NVIDIA GeForce RTX 3050 Laptop GPU', type: VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU, apiVersion: 1.4.341, driverVersion: 610.88
+INFO         | emuglConfig_get_vulkan_hardware_gpu_support_info: Found physical GPU 'Intel(R) Iris(R) Xe Graphics', type: VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU, apiVersion: 1.3.231, driverVersion: 0.404.3887
+  Model: NVIDIA GeForce RTX 3050 Laptop GPU
+INFO         | Boot completed in 28626 ms

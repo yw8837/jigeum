@@ -1,7 +1,7 @@
 {
   "version_name": "0.5.24-beta",
   "version_code": 38,
-  "status": "blocked_signed20_timeout_not_uploaded",
+  "status": "local_delivery_gates_pass_not_uploaded",
   "last_confirmed_play_code": 37,
   "product_source_commit": "0f0cb825bb1d3ab296adf0ab821c5c6e41d54e1b",
   "source_head_at_recording": "f17b6ce01a7d5ef860707f18375660835c1d5ad8",
@@ -29,13 +29,13 @@
   ],
   "s25_tone20_ms": 7410,
   "s25_tone20_visual_observations": 100,
-  "historical_emulator_timeout_root_cause": "unresolved",
+  "historical_emulator_timeout_root_cause": "environment-dependent; software-renderer timeouts preserved; exact causal attribution unresolved",
   "signed_package_pass": true,
   "signed_upgrade_preservation_pass": true,
   "signed20_ui_seconds": null,
-  "signed20_result": "app_timeout_message_observed",
-  "signed_release_relock_pass": null,
-  "signed_release_relock_status": "not_run_after_beta20_failure",
+  "signed20_result": "two cold-process quiet runs and signed UI/export gate passed with host GPU",
+  "signed_release_relock_pass": true,
+  "signed_release_relock_status": "pass_same_build",
   "artifacts": {
     "Agattok-0.5.24-beta-code38.apk": {
       "bytes": 255179763,
@@ -53,6 +53,30 @@
   "ultraqa": {
     "cycles": 5,
     "status": "ULTRAQA STOPPED: Max cycles",
-    "remaining_gate": "signed beta20 timeout; cleanup policy blocks remain"
+    "remaining_gate": "signed beta20 timeout; cleanup policy blocks remain",
+    "followup": "Focused local delivery gates and owned emulator cleanup complete in2 cycles; original five-cycle stopped run and old policy blocks remain as history. Play not uploaded yet."
+  },
+  "delivery_diagnosis": {
+    "software_gpu_verdicts": [
+      "fail",
+      "fail"
+    ],
+    "software_gpu_host_available_min_bytes": [
+      71299072,
+      1622016
+    ],
+    "host_gpu_verdicts": [
+      "pass",
+      "pass"
+    ],
+    "host_gpu_host_available_min_bytes": [
+      200704,
+      217726976
+    ],
+    "quiet_checks_are_not_latency_measurements": true,
+    "product_timeout_ms": 45000,
+    "product_code_changed_in_diagnosis": false,
+    "same_package_signed20_export_sha256": "6a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8",
+    "same_package_signed20_export_seconds": "20.000000"
   }
 }
