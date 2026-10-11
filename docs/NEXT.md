@@ -3,13 +3,13 @@
 ### 최신 — 2026-10-12 영상 저장 수정의 실폰 확인
 
 1. [저장 QA](qa/saved-media-20261012.md)의 수정 소스/연구APK를 유지한다. host44통과,
-   Android48중47통과·HDR codec1실패·skip0이다. 전체를 통과로 기록하지 않는다.
-2. 사용자 S25 연결 동의 후 USB 디버깅이 `unauthorized`다. 허용 요청을 전달했다.
-   승인되면 `work/saved-media-20261012/phone.py <serial> phone01`로 별도 astcandidate 패키지를 설치해
-   SavedMediaFlowTest/CaptionHdrCompatibilityTest/TranslatedMediaTests를 최대420초 검사한다.
-   기존 Play 설치·기록은 보존한다. 기존 연구 패키지가 있으면 상태를 먼저 검사하며 덮어쓰지 않는다.
-3. 실폰 합성 HDR 성공을 확인한 뒤 사용자 오류 영상으로 두 저장 경로를 확인한다.
-   원본을 외부로 보내지 않는다. GL gainmap 결함과 실제 사용자 실패 원인을 구분한다.
+   에뮬레이터48중47통과·HDR codec1실패·skip0. 후속 **S25 동일APK18통과·0실패·skip0/15.78초**로
+   합성 HDR 변환을 확인했다. 에뮬레이터 실패 이력을 지우거나 독립65시나리오로 합산하지 않는다.
+2. 사용자 USB 허용 후 별도 astcandidate app/test를 설치했다. Play37 설치metadata는 검사전후 동일하다.
+   MainActivity를 열어 실제 오류 갤러리 영상의 ‘영상 카드 앨범’과 ‘장면과 함께’ 저장 확인을 요청했다.
+   현재 사용자 응답 대기다. 이후 새 데이터는 사용자 생성일 수 있으므로 연구앱/앨범자료를 임의삭제하지 않는다.
+3. 사용자 오류 영상의 결과와 필요시 숫자 Export error code만 확인한다. 원본을 외부로 보내지 않는다.
+   GL gainmap 결함/합성 HDR 성공과 실제 사용자 실패 해결을 구분한다.
 4. 새 raw 저장은 분석이 없어도 선택 구간+원래 소리를 저장한다. 새 입력 초기화는 검증했지만
    표현이 같은 실제 장면의 구분 정확도는 미입증이다. 짧은 반복 발성의 시간 흐름만 추가했다.
 5. 기존code38 첫20초45초timeout gate는 별도로 남아 있다. 기존 서명38에는 이번수정이 없으므로

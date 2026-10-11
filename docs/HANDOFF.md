@@ -6,7 +6,8 @@
 공통 변환 오류가 난다. [계약](research/20261012-saved-media-contract.md), [QA](qa/saved-media-20261012.md).
 Media3 1.11.1의 HDR BitmapOverlay가 일반 자막 bitmap에 없는 gainmap을 요구하는 경로를
 정확 버전 원천과 실제 GL 실행으로 확인했다. 자막 영상에 GL HDR→SDR 변환을 적용했고
-기존 HDR shader 실패/SDR shader 성공을 재현했다. **사용자 영상의 HDR 여부와 실폰 원인 확정은 아직 아니다.**
+기존 HDR shader 실패/SDR shader 성공을 재현했다. S25 합성 HDR 전체 변환도 후속 검사에서 통과했다.
+**사용자 원본 영상의 HDR 여부와 그 실패 원인 확정은 아직 아니다.**
 출력 자막 영상은 SDR이므로 HDR 원본과 밝기/색감 차이가 있을 수 있다.
 
 분석 성공·보류·실패에 모두 **선택 구간 영상만 저장**을 추가했다. 자막/가짜 기록 없이
@@ -19,14 +20,17 @@ Media3 1.11.1의 HDR BitmapOverlay가 일반 자막 bitmap에 없는 gainmap을 
 host44통과, 기준소스 대비 새 표현 검사1개 기대실패. 최종 Android **48개 중47통과·1실패·skip0**.
 일반 영상의 PNG/자막MP4/장면 기록, 무료/실패 후 raw 영상, 선택구간/음성/무음/취소/중복탭/
 연속입력 초기화는 통과했다. 유일한 실패는 HDR 전체 변환 중 에뮬레이터의
-`c2.goldfish.hevc.decoder` 오류이며 실폰에서 확인해야 한다. 독립Spec/Standards필수각0.
+`c2.goldfish.hevc.decoder` 오류다. 후속S25 동일APK의 저장/렌더러 **18통과·0실패·skip0**,
+15.78초로 HDR 변환·SDR 카드/영상/기록·raw/취소검사를 통과했다. 독립Spec/Standards필수각0.
 에뮬레이터 QA앱·소유MediaStore rows·렌더잔여·pending journal정리와 종료 확인.
-사용자가 S25 연결을 동의했고 현재 USB 디버깅 `unauthorized`로 승인 대기다.
+사용자가 USB 허용을 완료했고 S25의 Play37 설치metadata는 검사전후 동일하다. 사용자DB는 읽지 않았다.
+별도 연구 MainActivity를 열어 실제 오류 갤러리 영상의 두 저장 경로 확인을 요청했다.
+현재 연구 app/test는 재확인을 위해 유지한다. 이후 새 자료는 사용자 생성일 수 있어 자동삭제하지 않는다.
 새 모델/AVD 없이 기존 build를 재사용했으며, 과거 삭제 정책 차단은 우회하지 않았다.
 
 이번 변경은 연구 debug app/test에만 포함된다. 기존 최종 서명code38 APK/AAB에는 포함되지 않는다.
 **새 Play 업로드0, 마지막 제공 확인code37, 자동화33 PAUSED**. 기존code38의 첫20초45초timeout
-gate도 남는다. 실폰 HDR/사용자 영상 확인 및 성능/서명/배포 검증 후 기존Alpha로 업데이트한다.
+gate도 남는다. 사용자 영상 확인 및 성능/서명/배포 검증 후 기존Alpha로 업데이트한다.
 
 ### 최신 — 2026-10-10 생성물 정리 / code38 로컬 후보, Play 제출 보류
 

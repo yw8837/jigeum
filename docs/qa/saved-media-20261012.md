@@ -1,7 +1,8 @@
 # UltraQA Report — 갤러리 영상 저장과 분석 독립성
 
-상태: **로컬 수정 적용, 실폰 HDR 검사 대기**. 기준6499256. [계약](../research/20261012-saved-media-contract.md).
-소유MoaQA35/emulator-5556, synthetic media, 최대5cycle/같은실패3회 중단. 현재2cycle.
+상태: **수정본 S25 검사18개 통과, 사용자 원본 재확인 대기**. 기준6499256. [계약](../research/20261012-saved-media-contract.md).
+소유MoaQA35/emulator-5556 및 사용자가 연결 승인한S25, synthetic media, 최대5cycle/같은실패3회 중단.
+초기2cycle 뒤 USB 승인으로 실폰3cycle를 실행했다.
 후속 사용자 확인으로 PNG는 정상이고 영상카드/장면과 함께 저장만 실패하는 것으로 정정했다.
 마지막 Play 제공 확인은code37이며, 기존 서명code38 파일에는 이번 변경이 없다.
 
@@ -20,7 +21,7 @@
 | S4 | 연속 입력·오래된 결과 | 실제 OpenDocument 콜백에 두 번째 URI 전달, CaptureAccessLimitsTest | 이전 결과/초안 오염 없음 | 새 문장·URI 순서·초안 제거와 기존 권한 경계 통과 | 동일 | 소유 작업취소 |
 | S5 | 표현 근거/승인 정책 보존 | host5개 suite, ExpressionVarietyTest | quiet 근거 있을 때만 표현 변화 | host44통과; 기준소스10개 중 새 표현1개 기대실패. 실제 모델 재추론 아님 | host01 / host-baseline | 작은 로그 보존 |
 | S6 | 중복탭/오류 출력 | 같은 버튼 action 연속2회, 취소·손상 입력 | 하나만 저장, 오류 후 정리 | 단일 출력·취소 정리 통과; 새120초 timeout 강제실행은 안 함 | final01 | 소유 실행 종료 |
-| S7 | HDR 자막 호환성 | 실제 GL shader + 10bit PQ HEVC fixture | 기존 실패 재현, SDR 합성 및 전체 저장 성공 | 기존 gainmap 예외 재현·SDR draw·Composition 모드 통과. 전체 codec는 c2.goldfish.hevc.decoder에서 실패 | final01 | 실폰 검사 필요 |
+| S7 | HDR 자막 호환성 | 실제 GL shader + 10bit PQ HEVC fixture | 기존 실패 재현, SDR 합성 및 전체 저장 성공 | 기존 gainmap 예외 재현·SDR draw·Composition 모드 통과. 전체 codec는 에뮬레이터 실패, S25 동일APK/fixture 성공 | final01 / phone01 | 사용자 원본 재확인 필요 |
 
 ## 명령과 결과
 
@@ -38,6 +39,12 @@
   [전체 로그](saved-media-20261012/final01/instrumentation.txt), [엄격 판정](saved-media-20261012/final01/result.json).
 - app/test 설치본 SHA256을 실제 기기에서 비교했다. [provenance](saved-media-20261012/final01/provenance.json).
   이는 연구용 `com.moa.babylanguage.astcandidate`이며 Play 앱 업데이트가 아니다.
+- 사용자 USB 허용 후 `python work/saved-media-20261012/phone.py <S25 serial> phone01`:
+  동일 app/test APK로 SavedMediaFlowTest/CaptionHdrCompatibilityTest/TranslatedMediaTests **18통과·0실패·skip0**,
+  15.78초, 420초 제한, 드라이버exit0. [전체로그](saved-media-20261012/phone01/instrumentation.txt),
+  [결과](saved-media-20261012/phone01/result.json), [설치SHA](saved-media-20261012/phone01/provenance.json).
+  에뮬레이터47개와 중복된 회귀를 포함하므로65개의 독립 시나리오로 합산하지 않는다.
+  실제 Play 패키지의code37/0.5.23-beta·설치시각/경로 metadata가 검사 전후 동일하다. 사용자DB는 읽지 않았다.
 
 ## 실패와 수정 이력
 
@@ -75,13 +82,18 @@
 PowerShell `Remove-Item -LiteralPath`도 자동정책이 CreateProcess 전에 차단했다. 삭제0이며 재시도/우회하지 않았다.
 에뮬레이터 정리 확인의 첫 스크립트는 제거된 패키지의 `pm path`가 exit1을 반환해 중단했다.
 미설치를 정상 출력으로 검사하는 `pm list packages`로 보완해 나머지 제거·최종 부재를 확인했다.
-사용자 S25 연결 동의를 받았고 USB 디버깅 승인을 기다리는 중이다. 실제 앱/자료를 변경하지 않았다.
+사용자 S25 연결과 USB 허용 후 별도 시험 app/test만 설치했다. 자동시험은 자기소유 rows/DB/렌더파일을 정리한다.
+시험 뒤 MainActivity를 열어 사용자가 실제 오류 영상을 가져와 두 저장 동작을 확인하도록 요청했다.
+**현재 연구 앱을 사용자 재확인용으로 유지한다.** 이 시점 뒤 새로 생긴 연구 앱 기록/앨범 출력은
+사용자가 만든 자료일 수 있으므로 자동으로 삭제하거나 연구 앱 전체를 제거하지 않는다.
 
 반복 문구의 모든 원인이 해결된 것은 아니다. 소리 종류별8문장 계열의 한계는 남으며,
 입력 초기화 검사는 분석 대역을 사용하므로 모델이 두 실제 아기 장면을 구별한다는 입증이 아니다.
 약국 옹알이 개선은 사용자 전달이며 이번에 새 측정하지 않았다.
-**HDR 실제 폰 저장·사용자 원본 재확인, 기존code38 첫20초45초timeout, 새 서명/Play 배포는 미완료**다.
+**S25 합성 HDR 변환 검사는 통과**했다. 사용자 원본 재확인, 기존code38 첫20초45초timeout,
+새 서명/Play 배포는 미완료다. 이18개 검사는 분석 대역/렌더러 중심이며 실제20초 인식 성능 검사가 아니다.
 검사 통과를 일반 인식률·감정/욕구 정확도로 환산하지 않는다.
 
-**ULTRAQA BLOCKED: S25 USB 승인/HDR 전체 저장 및 사용자 영상 확인 대기; 참고 생성물 정리 정책 차단.**
-이번 실행만2cycle stopped→clear→부재 확인하며, 전체 목표나 배포 완료로 기록하지 않는다.
+이전2cycle는USB 승인 대기로stopped→clear→부재 확인했다. 현재3cycle는S25 자동검사를 통과했고
+사용자 원본 재확인 대기다. 참고 생성물 정리 정책차단도 유지한다. 전체 목표나 배포 완료가 아니다.
+3cycle 실행상태도 사용자 확인 대기를 명시한stopped→clear→부재 확인을 마쳤다([phone01](saved-media-20261012/phone01/)).

@@ -1,6 +1,6 @@
 {
   "baseline_commit": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
-  "status": "local_fixes_verified_in_part_phone_hdr_pending",
+  "status": "phone_hdr_and_save_tests_passed_original_user_video_confirmation_pending",
   "play_last_verified_version_code": 37,
   "new_play_submission": false,
   "existing_signed_38_contains_this_fix": false,
@@ -18,7 +18,13 @@
     "raw_save_without_analysis_passed": true,
     "consecutive_import_result_and_draft_reset_passed": true
   },
-  "phone": {"user_agreed_to_connect": true, "last_adb_state": "unauthorized", "tests_run": 0},
+  "phone": {
+    "model": "SM-S938N", "last_adb_state": "device", "tests": 18,
+    "passed": 18, "failed": 0, "skipped": 0, "seconds": 15.78,
+    "same_apk_as_emulator": true, "synthetic_hdr_full_render_passed": true,
+    "original_play37_install_metadata_unchanged": true,
+    "original_user_video_confirmation": "requested_in_opened_research_app"
+  },
   "review": {"spec_required_findings": 0, "standards_required_findings": 0, "optional_p3_duplication": 1},
   "cleanup": {
     "emulator_app_and_test_removed": true,
@@ -27,10 +33,10 @@
     "emulator_pending_journal_empty": true,
     "owned_emulator_stopped": true,
     "local_reference_cleanup": "blocked_by_automatic_policy_before_process_creation",
-    "previous_build_cleanup_blocks_preserved": true
+    "previous_build_cleanup_blocks_preserved": true,
+    "phone_research_packages": "retained_for_user_confirmation; do not delete new user-created records or media"
   },
   "remaining_gates": [
-    "USB debugging authorization then S25 HDR full render",
     "Original user gallery video save confirmation",
     "Previously unresolved signed code38 initial 20s analysis 45s timeout",
     "New signed packaging and Alpha release"

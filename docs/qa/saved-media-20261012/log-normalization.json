@@ -11,6 +11,10 @@
     "original_sha256": "3d8dc13dc0a637a45c164b230d5f957df9fee533b024237a248a178362348e44",
     "normalized_sha256": "5d48bf2bf1efd4548eb51b68349f34545973d5beb6ac0cf58565a89fed43b233"
   },
+  "phone01/instrumentation.txt": {
+    "original_sha256": "f8685944603988877e43dc955fa122d096a6fd16d8ccc2077e15da8dcb52a6cf",
+    "normalized_sha256": "ea097d68ff34b5b9186d1e4c7362b0ba257a5b2cd49b70504a1bd363ed3236ff"
+  },
   "host01/tests.txt": {
     "original_sha256": "81a8191d707cc5e117208f43f7c7bafdee774bfc0b979bac505a598847ba95b1",
     "normalized_sha256": "61bee4177bc66145a38f43a686afda65c25b8ba8b39ef18a1bb1315280896e91"
