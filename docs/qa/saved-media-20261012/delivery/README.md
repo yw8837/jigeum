@@ -6,7 +6,9 @@ Exact release **0.5.24-beta (38) - saved media fix**, release18, was confirmed a
 **선택한 테스터에게 제공됩니다** on Alpha, recorded at2026-10-12 05:26 KST.
 The Console displays publication at2026-10-12 05:19 KST; this is separate from observation time.
 See [release record](play-review.md), [screenshot](play-available.png), [UI text](play-available.txt).
-Monitor33 remains ACTIVE until this availability record is pushed and verified, then will be paused.
+Availability evidence commit632019fd5daa40439743243cabd48ee04a5a6ffb was pushed with
+local/remoteSHA equality and clean tree verified. Monitor33 was paused through the automation tool
+at2026-10-12 05:28 KST (response PAUSED).
 Individual tester installation and12people/14continuous days remain unverified.
 
 ## Scope and result

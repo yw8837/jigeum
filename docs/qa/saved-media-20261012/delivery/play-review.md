@@ -9,7 +9,8 @@
 - Publishing overview also displayed the October12 app-update-published notification.
 - Evidence: [availability screenshot](play-available.png), [exact Alpha UI text](play-available.txt).
 - No duplicate upload, submission cancellation, other-track/settings/tester-list change, build or ADB was performed.
-- Monitor33 will be paused after this record is committed, pushed and SHA/clean verified.
+- Availability evidence commit `632019fd5daa40439743243cabd48ee04a5a6ffb` was pushed; local/remoteSHA matched and tree was clean.
+- Monitor33 paused through the app tool at **2026-10-12 05:28 KST**, response `PAUSED`.
 - Install/update: https://play.google.com/store/apps/details?id=com.moa.babylanguage
 - Web participation: https://play.google.com/apps/testing/com.moa.babylanguage
 - Per-tester update installation and12people/14continuous days were not independently verified.

@@ -49,7 +49,7 @@
   "general_accuracy_validated": false,
   "emotion_or_need_accuracy_validated": false,
   "phone_user_records_preserved": true,
-  "automation33": "ACTIVE",
+  "automation33": "PAUSED",
   "ultraqa": {
     "cycles": 5,
     "status": "ULTRAQA STOPPED: Max cycles",
@@ -103,6 +103,9 @@
     "new_install_mb": 112,
     "new_install_change_kb": 7.14,
     "monitor_id": "33",
-    "monitor_status": "ACTIVE"
+    "monitor_status": "PAUSED",
+    "monitor_paused_at": "2026-10-12T05:28:10+09:00",
+    "availability_evidence_commit": "632019fd5daa40439743243cabd48ee04a5a6ffb",
+    "availability_evidence_push_sha_match_clean": true
   }
 }
