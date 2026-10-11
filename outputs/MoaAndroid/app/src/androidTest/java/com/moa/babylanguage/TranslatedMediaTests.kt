@@ -171,6 +171,53 @@ class TranslatedMediaTests {
         } finally { before.release(); after.release() }
     }
 
+    @Test fun selectedVideoKeepsLateIntervalAudioAndDoesNotCreateCaptionOrRecord() = runBlocking {
+        val source = input()
+        val output = TranslatedMedia.selectedVideo(context, source, ClipRange(8_123, 11_123)).also { files += it }
+        val reader = MediaMetadataRetriever()
+        try {
+            reader.setDataSource(output.path)
+            assertTrue(kotlin.math.abs(reader.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong() - 3_000) < 150)
+            val frame = reader.getFrameAtTime(500_000, MediaMetadataRetriever.OPTION_CLOSEST)!!
+            try { assertEquals(source.aspectRatio, frame.width.toFloat() / frame.height, .02f) }
+            finally { frame.recycle() }
+        } finally { reader.release() }
+        val samples = VideoAudioDecoder.decode(context, Uri.fromFile(output), 0, 3_000)!!
+        try { assertTrue(sqrt(samples.sumOf { it.toDouble() * it } / samples.size) > .025) }
+        finally { samples.fill(0f) }
+        assertTrue(store.snapshot().observations.isEmpty())
+        assertTrue(source.ownedFile!!.exists())
+    }
+
+    @Test fun selectedVideoWithoutAudioNeverAddsAudioTrack() = runBlocking {
+        val source = input("no-audio.mp4")
+        val output = TranslatedMedia.selectedVideo(context, source, ClipRange(123, 1_123)).also { files += it }
+        val reader = MediaExtractor()
+        try {
+            reader.setDataSource(output.path)
+            val types = (0 until reader.trackCount).map { reader.getTrackFormat(it).getString("mime")!! }
+            assertTrue(types.any { it.startsWith("video/") })
+            assertFalse(types.any { it.startsWith("audio/") })
+        } finally { reader.release() }
+    }
+
+    @Test fun selectedVideoCancellationAndCorruptSourceLeaveNoPartialOutput() = runBlocking {
+        val source = input("temporal-red-blue-device-20.mp4")
+        val folder = File(context.cacheDir, "media-render")
+        val before = folder.listFiles()?.map { it.name }?.toSet().orEmpty()
+        val job = launch { TranslatedMedia.selectedVideo(context, source, ClipRange(0, 20_000)).also { files += it } }
+        delay(30); job.cancelAndJoin()
+        assertEquals(before, folder.listFiles()?.map { it.name }?.toSet().orEmpty())
+        val broken = File(context.cacheDir, "$token-corrupt.mp4").also { it.writeText("synthetic corrupt input"); files += it }
+        try {
+            TranslatedMedia.selectedVideo(context, LocalClip(Uri.fromFile(broken), 2_000, true), ClipRange(0, 2_000))
+            fail("corrupt source must fail")
+        } catch (_: StoreException) { }
+        assertEquals(before, folder.listFiles()?.map { it.name }?.toSet().orEmpty())
+        assertEquals("synthetic corrupt input", broken.readText())
+        assertTrue(source.ownedFile!!.exists())
+    }
+
     @Test fun extremeCaptionFitsAndLeavesSceneTransparent() {
         for (text in listOf("가".repeat(160), "안녕😀\n".repeat(25), "W".repeat(160))) {
             for (video in listOf(true,false)) {

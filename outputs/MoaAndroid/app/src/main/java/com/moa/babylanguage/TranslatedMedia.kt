@@ -61,30 +61,39 @@ internal object TranslatedMedia {
         withContext(Dispatchers.IO) { sweepOnce(context) }
     }
 
-    suspend fun render(context: Context, clip: LocalClip, range: ClipRange, record: Observation): File {
+    suspend fun render(context: Context, clip: LocalClip, range: ClipRange, record: Observation): File =
+        renderMedia(context, clip, range, record)
+
+    /** Keep the selected scene and its sound even when analysis returned no sentence. */
+    suspend fun selectedVideo(context: Context, clip: LocalClip, range: ClipRange): File {
+        require(clip.hasVideo) { "영상이 있는 파일을 선택해 주세요." }
+        return renderMedia(context, clip, range, null)
+    }
+
+    private suspend fun renderMedia(context: Context, clip: LocalClip, range: ClipRange, record: Observation?): File {
         var created: File? = null
         try { return renderLocked(context, clip, range, record) { created = it } }
         catch (error: Throwable) {
             // Also owns the output if cancellation wins at the successful return handoff.
             withContext(NonCancellable + Dispatchers.IO) { created?.delete() }
-            if (error is TimeoutCancellationException) throw StoreException("영상 저장이 오래 걸려 멈췄어요. 문장만 저장하거나 다시 시도해 주세요.", error)
+            if (error is TimeoutCancellationException) throw StoreException("영상 저장이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요.", error)
             if (error is Exception && error !is CancellationException && error !is StoreException)
-                throw StoreException(if (error is IllegalStateException) error.message ?: "번역 영상을 저장하지 못했어요."
-                    else "번역 영상을 저장하지 못했어요. 문장만 저장하거나 다시 시도해 주세요.", error)
+                throw StoreException(if (error is IllegalStateException) error.message ?: "영상을 저장하지 못했어요."
+                    else "영상을 저장하지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.", error)
             throw error
         }
     }
 
-    private suspend fun renderLocked(context: Context, clip: LocalClip, range: ClipRange, record: Observation,
+    private suspend fun renderLocked(context: Context, clip: LocalClip, range: ClipRange, record: Observation?,
                                      track: (File) -> Unit): File = renderLock.withLock {
         withContext(Dispatchers.IO) { sweepOnce(context) }
         require(range.startMs >= 0 && range.endMs <= clip.durationMs && range.durationMs in 1_000..30_000)
-        ObservationStore.validateRecord(record)
+        record?.let(ObservationStore::validateRecord)
         val folder = File(context.cacheDir, "media-render").apply { check(isDirectory || mkdirs()) }
         // Keep the bounded render plus headroom within immediate free space.
         // Allocatable bytes are not free without allocation/cache eviction, which
         // a readiness check must not perform on the caregiver's behalf.
-        check(folder.usableSpace > MAX_BYTES + 16L * 1024 * 1024) { "영상으로 남길 공간이 부족해요. 공간을 확보하거나 문장만 저장해 주세요." }
+        check(folder.usableSpace > MAX_BYTES + 16L * 1024 * 1024) { "영상으로 남길 공간이 부족해요. 공간을 확보한 뒤 다시 시도해 주세요." }
         val token = UUID.randomUUID().toString()
         val output = File(folder, "$token.mp4")
         track(output)
@@ -92,19 +101,23 @@ internal object TranslatedMedia {
         var bitmap: Bitmap? = null
         var completed = false
         try {
-            val overlay = withContext(Dispatchers.Default) { caption(record, clip.hasVideo, context.resources.configuration.fontScale) }
+            val overlay = record?.let { withContext(Dispatchers.Default) { caption(it, clip.hasVideo, context.resources.configuration.fontScale) } }
             bitmap = overlay
             val source = MediaItem.Builder().setUri(clip.uri).setClippingConfiguration(
                 MediaItem.ClippingConfiguration.Builder().setStartPositionMs(range.startMs)
                     .setEndPositionMs(range.endMs).build()).build()
             val startExport: (Transformer) -> Unit
             if (clip.hasVideo) {
-                val effects = listOf(SceneLayout(overlay.height), OverlayEffect(listOf(BitmapOverlay.createStaticBitmapOverlay(overlay))))
+                val effects = if (overlay == null) emptyList() else
+                    listOf(SceneLayout(overlay.height), OverlayEffect(listOf(BitmapOverlay.createStaticBitmapOverlay(overlay))))
                 val movie = EditedMediaItem.Builder(source).setEffects(Effects(emptyList(), effects)).build()
-                // Single-item start infers the source tracks; a video without audio
-                // must not gain the silence synthesized by an explicit audio sequence.
-                startExport = { transformer -> transformer.start(movie, output.absolutePath) }
+                // Infer source tracks so a silent source never gains fabricated audio.
+                // Our caption is an SDR bitmap without a gainmap. Media3 1.11's HDR
+                // overlay path requires a gainmap on API 34+, even on HDR-capable phones.
+                val composition = videoComposition(movie, captioned = overlay != null)
+                startExport = { transformer -> transformer.start(composition, output.absolutePath) }
             } else {
+                checkNotNull(overlay)
                 withContext(Dispatchers.IO) { image.outputStream().use { check(overlay.compress(Bitmap.CompressFormat.PNG, 100, it)) } }
                 val card = EditedMediaItem.Builder(MediaItem.Builder().setUri(Uri.fromFile(image))
                     .setImageDurationMs(range.durationMs).build()).setFrameRate(24).build()
@@ -115,7 +128,7 @@ internal object TranslatedMedia {
             }
             withTimeout(120_000) { export(context, startExport) }
             coroutineContext.ensureActive()
-            check(output.length() in 1..MAX_BYTES) { "영상 파일을 완성하지 못했어요. 문장만 저장하거나 다시 시도해 주세요." }
+            check(output.length() in 1..MAX_BYTES) { "영상 파일을 완성하지 못했어요. 구간을 줄여 다시 시도해 주세요." }
             completed = true
             output
         } finally {
@@ -126,6 +139,15 @@ internal object TranslatedMedia {
             }
         }
     }
+
+    // 1.11.1's public typed-track factories synthesize missing tracks. Its replacement
+    // single-item factory is package-private; this public builder preserves inference.
+    @Suppress("DEPRECATION")
+    internal fun videoComposition(movie: EditedMediaItem, captioned: Boolean): Composition =
+        Composition.Builder(EditedMediaItemSequence.Builder(listOf(movie)).build())
+            .setHdrMode(if (captioned) Composition.HDR_MODE_TONE_MAP_HDR_TO_SDR_USING_OPEN_GL
+                else Composition.HDR_MODE_KEEP_HDR)
+            .build()
 
     private suspend fun export(context: Context, startExport: (Transformer) -> Unit) = withContext(Dispatchers.Main.immediate) {
         var transformer: Transformer? = null
@@ -139,8 +161,10 @@ internal object TranslatedMedia {
                             if (continuation.isActive) continuation.resume(Unit)
                         }
                         override fun onError(composition: Composition, exportResult: ExportResult, exportException: ExportException) {
+                            // Codec diagnostics only; never log source URI, media, or caregiver text.
+                            android.util.Log.w("AgattokVideoExport", "Export error code=${exportException.errorCode}")
                             if (continuation.isActive) continuation.resumeWithException(
-                                IllegalStateException("이 기기에서 번역 영상을 만들지 못했어요. 문장만 저장하거나 다른 파일로 다시 시도해 주세요.", exportException))
+                                IllegalStateException("영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.", exportException))
                         }
                     }).build()
                 startExport(transformer!!)

@@ -101,6 +101,39 @@ internal object BabyExpression {
         return ordered.map { continuation + it + ending }
     }
 
+    /** A short selection can contain two bouts of the same sound. A model gap alone
+     * is insufficient: require measured quiet plus stable accepted windows on both sides. */
+    fun pausedPhrase(audio: SoundAnalysis, decision: SoundDecision, shape: AcousticShape,
+                     range: ClipRange): String? {
+        if (decision.problem != null || decision.partial || decision.broadOnly || range.durationMs > 10_000) return null
+        val event = decision.events.singleOrNull() ?: return null
+        val frames = audio.frames
+        if (frames.isEmpty() || frames.any { it.startMs !in 0 until range.durationMs } ||
+            frames.zipWithNext().any { (a, b) -> b.startMs <= a.startMs }) return null
+        val moments = decision.moments
+        if (moments.size < 4 || moments.any { it.startMs !in frames.map { frame -> frame.startMs } }) return null
+        val hasSupportedPause = shape.quietSpans.any { gap ->
+            if (gap.startMs < 0 || gap.endMs > range.durationMs || gap.endMs - gap.startMs < 300) return@any false
+            val before = moments.filter { it.startMs + SoundPhaseRecovery.FRAME_MS <= gap.startMs }.takeLast(2)
+            val after = moments.filter { it.startMs >= gap.endMs }.take(2)
+            before.size == 2 && after.size == 2 &&
+                before[1].startMs - before[0].startMs in SoundPhaseRecovery.FRAME_MS..1_500L &&
+                after[1].startMs - after[0].startMs in SoundPhaseRecovery.FRAME_MS..1_500L &&
+                gap.startMs - (before.last().startMs + SoundPhaseRecovery.FRAME_MS) <= 500 &&
+                after.first().startMs - gap.endMs <= 500 &&
+                frames.filter { it.startMs in before.first().startMs..before.last().startMs }.map { it.startMs } == before.map { it.startMs } &&
+                frames.filter { it.startMs in after.first().startMs..after.last().startMs }.map { it.startMs } == after.map { it.startMs }
+        }
+        if (!hasSupportedPause) return null
+        val opening = when (event) {
+            VocalEvent.CRY -> "잠깐 조용해졌다가 울음이 다시 나왔어요."
+            VocalEvent.LAUGH -> "잠깐 조용해졌다가 웃음이 다시 나왔어요."
+            VocalEvent.BABBLE -> "잠깐 조용해졌다가 옹알옹알, 소리를 다시 건네요."
+            VocalEvent.CHILD_VOICE -> "잠깐 조용해졌다가 말소리를 다시 건네요."
+        }
+        return "$opening ${variants(event, shape)[Math.floorMod(shape.wordingKey, 8)]}"
+    }
+
     /** Two to four stable, adjacent runs establish a simple order. Do not turn an
      * aggregate/broad label, alternating guesses or duplicated timestamps into a story.
      * This describes observed sound order, never a change of mood or its cause. */

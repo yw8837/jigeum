@@ -88,7 +88,8 @@ internal fun CaptureFlow(
     initialClip: LocalClip? = null,
     testDistribution: Boolean = false,
     onSaveWithMedia: ((ClipInterpretation, String, String, LocalClip, ClipRange) -> Unit)? = null,
-    onGallery: ((ClipInterpretation, String, LocalClip?, ClipRange?, Boolean) -> Unit)? = null
+    onGallery: ((ClipInterpretation, String, LocalClip?, ClipRange?, Boolean) -> Unit)? = null,
+    onSaveVideo: ((LocalClip, ClipRange) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -511,6 +512,15 @@ internal fun CaptureFlow(
                 }
             }
             if (selecting) { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("파일을 준비하고 있어요", color = Muted) }
+            if (current?.hasVideo == true && onSaveVideo != null) {
+                GallerySaveButton(if (saving) "영상 저장 중…" else "선택 구간 영상만 저장",
+                    !navigationLocked && !analyzing, { message = it }) {
+                    stopPlayback++
+                    onSaveVideo(current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()))
+                }
+                Text("${ClipRangeEdits.time(selection.start.toLong())}–${ClipRangeEdits.time(selection.endInclusive.toLong())} 구간을 원래 소리와 함께, 아기말 자막 없이 앨범에 저장해요. 분석 결과가 없어도 가능해요.",
+                    color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
+            }
             message?.let { text ->
                 val messageView = remember { BringIntoViewRequester() }
                 LaunchedEffect(text) { messageView.bringIntoView() }

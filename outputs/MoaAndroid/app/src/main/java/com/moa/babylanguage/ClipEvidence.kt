@@ -141,6 +141,7 @@ internal object EvidenceInterpreter {
         val longPhrases = if (decision.partial) null else sustainedPhrases(audio, decision, shape, range)
         val phrases = longPhrases ?: eligiblePhrases
         val audioPhrase = (if (decision.partial) null else BabyExpression.orderedPhrase(audio, decision, range, shape.wordingKey))
+            ?: (if (audioTimelineAligned) BabyExpression.pausedPhrase(audio, decision, shape, range) else null)
             ?: phrases[Math.floorMod(shape.wordingKey, phrases.size)]
         val combined = VisualExpression.combine(audioPhrase, decision, range, visualEvidence, audioTimelineAligned)
         val rhythm = when {

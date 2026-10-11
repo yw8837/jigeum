@@ -292,6 +292,18 @@ internal fun JigeumApp(
                                         onBack = { page = Page.HOME }, saving = busy,
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
                                         testDistribution = testDistribution,
+                                        onSaveVideo = { clip, range ->
+                                            if (!busy && !sharing) {
+                                                val generation = MemoryArtifacts.currentGeneration()
+                                                update({
+                                                    var rendered: java.io.File? = null
+                                                    try {
+                                                        rendered = TranslatedMedia.selectedVideo(activity, clip, range)
+                                                        GalleryMedia.video(activity, rendered, generation)
+                                                    } finally { withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() } }
+                                                }, { notify("선택한 구간을 자막 없이 아가톡 앨범에 저장했어요.") })
+                                            }
+                                        },
                                         onGallery = { result, phrase, clip, range, video ->
                                             if (!busy && !sharing) {
                                                 val generation = MemoryArtifacts.currentGeneration()

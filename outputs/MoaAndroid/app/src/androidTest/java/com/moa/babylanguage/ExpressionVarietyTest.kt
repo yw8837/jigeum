@@ -104,4 +104,27 @@ class ExpressionVarietyTest {
             SoundAnalysis(cue("울음") + cue("아기 웃음 후보"))))
             assertNull(EvidenceInterpreter.interpret(audio, shape, range).interpretation)
     }
+
+    @Test fun measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression() {
+        val audio = recording(listOf("옹알이 후보", "옹알이 후보", "배경 소리", "옹알이 후보", "옹알이 후보"),
+            listOf(0, 975, 2_500, 3_900, 4_875))
+        // Quiet measured from PCM; a background label alone does not establish a pause.
+        val measured = shape.copy(quietSpans = listOf(AcousticPause(2_000, 3_600)))
+        val plain = EvidenceInterpreter.interpret(audio, shape, range).interpretation!!
+        val paused = EvidenceInterpreter.interpret(audio, measured, range).interpretation!!
+        assertEquals(plain.sound, paused.sound)
+        assertTrue(paused.phrase, paused.phrase.startsWith("잠깐 조용해졌다가 옹알옹알"))
+        assertNotEquals(plain.phrase, paused.phrase)
+        assertEquals(paused, EvidenceInterpreter.interpret(audio, measured, range).interpretation)
+        assertEquals(plain.phrase, EvidenceInterpreter.interpret(audio, measured, range, audioTimelineAligned = false).interpretation!!.phrase)
+        assertEquals(plain.phrase, EvidenceInterpreter.interpret(audio, shape.copy(quietSpans = listOf(AcousticPause(300, 700))), range).interpretation!!.phrase)
+    }
+
+    @Test fun broadPartialOrIsolatedSoundCannotBorrowWholeClipPause() {
+        val measured = shape.copy(quietSpans = listOf(AcousticPause(2_000, 3_600)))
+        for (audio in listOf(recording(listOf("옹알이 후보", "옹알이 후보")),
+            SoundAnalysis(emptyList(), babbleWindows = listOf(BabbleSupportWindow(0, 10_000))))) {
+            assertEquals(phrase(audio), EvidenceInterpreter.interpret(audio, measured, range).interpretation!!.phrase)
+        }
+    }
 }

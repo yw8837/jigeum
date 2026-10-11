@@ -1,0 +1,39 @@
+{
+  "baseline_commit": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
+  "status": "local_fixes_verified_in_part_phone_hdr_pending",
+  "play_last_verified_version_code": 37,
+  "new_play_submission": false,
+  "existing_signed_38_contains_this_fix": false,
+  "build": {"variant": "astcandidate debug", "version_code": 38, "exit_code": 0, "seconds": 133.956534},
+  "host": {"passed": 44, "failed": 0, "real_model_inference": false},
+  "host_baseline": {"tests": 10, "expected_failed_new_assertions": 1},
+  "android_emulator": {
+    "tests": 48, "passed": 47, "failed": 1, "skipped": 0,
+    "status": "fail", "seconds": 121.94,
+    "failed_test": "SavedMediaFlowTest.hdrImportedVideoCanRenderCaption",
+    "failure_stage": "c2.goldfish.hevc.decoder / MediaCodec Released state",
+    "legacy_hdr_overlay_failure_reproduced": true,
+    "sdr_overlay_draw_passed": true,
+    "full_app_sdr_png_video_record_save_passed": true,
+    "raw_save_without_analysis_passed": true,
+    "consecutive_import_result_and_draft_reset_passed": true
+  },
+  "phone": {"user_agreed_to_connect": true, "last_adb_state": "unauthorized", "tests_run": 0},
+  "review": {"spec_required_findings": 0, "standards_required_findings": 0, "optional_p3_duplication": 1},
+  "cleanup": {
+    "emulator_app_and_test_removed": true,
+    "emulator_owned_media_rows": 0,
+    "emulator_render_files": 0,
+    "emulator_pending_journal_empty": true,
+    "owned_emulator_stopped": true,
+    "local_reference_cleanup": "blocked_by_automatic_policy_before_process_creation",
+    "previous_build_cleanup_blocks_preserved": true
+  },
+  "remaining_gates": [
+    "USB debugging authorization then S25 HDR full render",
+    "Original user gallery video save confirmation",
+    "Previously unresolved signed code38 initial 20s analysis 45s timeout",
+    "New signed packaging and Alpha release"
+  ],
+  "not_proven": ["General recognition accuracy", "Emotion or need translation accuracy", "All repeated phrase complaints resolved"]
+}

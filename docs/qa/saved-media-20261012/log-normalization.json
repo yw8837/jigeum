@@ -1,0 +1,30 @@
+{
+  "baseline02/instrumentation.txt": {
+    "original_sha256": "1d9bcbe5abfb270744584eaf112f8479bcb8975739d3c7596525f1e00ffbdcb8",
+    "normalized_sha256": "a74fbed0fb9d0046b42e11428d41c118760714b919d42df1e8ef60be49aff7b4"
+  },
+  "baseline03/instrumentation.txt": {
+    "original_sha256": "9614781f1e59dfac0efa5963ca322263c2e7f63f7f59f301aa88a255e3999917",
+    "normalized_sha256": "d77d86ecb880b83df9700865c9db689bb4800cf265f57dd66b2b7d947fe630b1"
+  },
+  "final01/instrumentation.txt": {
+    "original_sha256": "3d8dc13dc0a637a45c164b230d5f957df9fee533b024237a248a178362348e44",
+    "normalized_sha256": "5d48bf2bf1efd4548eb51b68349f34545973d5beb6ac0cf58565a89fed43b233"
+  },
+  "host01/tests.txt": {
+    "original_sha256": "81a8191d707cc5e117208f43f7c7bafdee774bfc0b979bac505a598847ba95b1",
+    "normalized_sha256": "61bee4177bc66145a38f43a686afda65c25b8ba8b39ef18a1bb1315280896e91"
+  },
+  "host-baseline/tests.txt": {
+    "original_sha256": "88d73d945b8b04e352bdd29dca93ba8958d47c3ceddb36c129cab04310036f6f",
+    "normalized_sha256": "31754c5d1c34d7e17b914469fe74d4a19bb7c3d6ef24f854630450436e93238a"
+  },
+  "commands/build03.txt": {
+    "original_sha256": "5dcac75b94a9c2269c0ee96751abf44e8b5d885924f4bd132131c27e20fc8ec0",
+    "normalized_sha256": "8253837fc33a2728513b3ca072d97d74e7142ca8fabe4b74d514759d2a69a28b"
+  },
+  "commands/build05.txt": {
+    "original_sha256": "c8248182c16733f6624d50b3c74251fdf414cda3050257d76195d99016d76142",
+    "normalized_sha256": "ad8bc7fda9ddea0598ffa983904b11e5211e33b531aa184bcc04a295b09b2013"
+  }
+}

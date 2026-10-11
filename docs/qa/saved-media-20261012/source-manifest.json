@@ -1,0 +1,9 @@
+{
+  "recorded_at": "2026-10-11T18:21:36.799459+00:00",
+  "baseline": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
+  "source_sha256": {
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/SavedMediaFlowTest.kt": "8c3039ee9e911014c371d0ed52da33994bc8fd0442efd5225d0b706743a35995",
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptionHdrCompatibilityTest.kt": "d2c2a0b4fe5bf70b2a82193bec3e6898970509a1838a2ebd3783751e90b01d9e",
+    "outputs/MoaAndroid/app/src/androidTest/assets/scene-hdr-pq.mp4": "6c490b999dff5373da7da661318bc1621e3813211467f3975a104e268c016cfd"
+  }
+}
