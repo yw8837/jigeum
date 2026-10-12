@@ -184,6 +184,32 @@ class SavedMediaFlowTest {
         } finally { reader.release() }
     }
 
+    @Test fun sceneSaveKeepsResultAndProvidesPlayback() {
+        start()
+        click("장면과 함께 저장하기")
+        compose.waitUntil(45_000) { runBlocking { store.snapshot().mediaIds.size == 1 } }
+        compose.waitForIdle()
+        compose.onNodeWithTag("page-capture").assertExists()
+        compose.onNodeWithTag("baby-phrase").assertExists()
+        click("저장한 장면 보기")
+        waitText("그때의 아기말")
+        compose.onNodeWithTag("clip-video-preview").assertExists()
+        assertTrue(resolver.openInputStream(clip.uri)!!.use { it.read() } >= 0)
+    }
+
+    @Test fun hdrImportedVideoHasScenePoster() {
+        val row = Observation(System.currentTimeMillis(), "옹알이", "0:00–0:02", "", "옹알옹알, 내 목소리를 들어봐요.")
+        val poster = MomentCardRenderer.frame(compose.activity, row, clip, ClipRange(0, 2_000))
+        try {
+            assertEquals(720, poster.width)
+            // The supplied synthetic HDR scene has visible colour; the scene area must not be blank.
+            val colours = (100..600 step 50).flatMap { x -> (100..540 step 40).map { y -> poster.getPixel(x, y) } }.toSet()
+            assertTrue("HDR source scene must appear above the caption", colours.size > 3)
+        } finally { poster.recycle() }
+    }
+
+    @Test fun hdrImportedVideoResultSavesThroughActualUi() = galleryVideoResultSavesPngMp4AndSceneRecord()
+
     @Test fun hdrImportedVideoCanRenderCaption() = runBlocking {
         val row = Observation(System.currentTimeMillis(), "옹알이", "0:00–0:02", "", "옹알옹알, 내 목소리를 들어봐요.")
         val output = TranslatedMedia.render(compose.activity, clip, ClipRange(0, 2_000), row)

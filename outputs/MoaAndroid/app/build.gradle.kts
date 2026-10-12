@@ -91,8 +91,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 38
-        versionName = "0.5.24"
+        versionCode = 39
+        versionName = "0.5.25"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
@@ -342,6 +342,7 @@ dependencies {
     implementation("androidx.camera:camera-video:$cameraXVersion")
     implementation("androidx.media3:media3-transformer:1.11.1")
     implementation("androidx.media3:media3-effect:1.11.1")
+    implementation("androidx.media3:media3-inspector-frame:1.11.1")
     implementation("com.google.mediapipe:tasks-vision:1.0.0")
     implementation("com.google.mediapipe:tasks-audio:1.0.0")
     // Python probe used 1.24.4; Android's official 1.24 series ends at 1.24.3.

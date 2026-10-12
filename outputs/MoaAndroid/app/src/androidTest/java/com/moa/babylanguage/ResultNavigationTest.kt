@@ -130,6 +130,19 @@ class ResultNavigationTest {
     }
     private fun back() = compose.runOnIdle { compose.activity.onBackPressedDispatcher.onBackPressed() }
 
+    @Test fun resultBackCanLeaveInsteadOfCyclingThroughRangeEditor() {
+        start(); analyze()
+        clickTag("result-other-range-fixed")
+        back(); awaitTag("result-action")
+        back()
+        compose.onNodeWithTag("confirm-close-capture").assertExists()
+        click("계속 보기")
+        compose.onNodeWithTag("baby-phrase").assertExists()
+        clickTag("capture-back")
+        clickTag("confirm-close-capture")
+        compose.runOnIdle { assertEquals(1, backCalls) }
+    }
+
     @Test fun sameSourceRangeAndBackPreserveDraftButNewAnalysisStartsFresh() {
         start(); chooseRange(8_000f, 11_000f); analyze(); draft()
         clickTag("result-other-range-fixed")
@@ -146,7 +159,7 @@ class ResultNavigationTest {
             assertEquals("우리 아기 메모", saved!!.note)
             assertTrue(source.ownedFile!!.exists())
         }
-        back(); awaitTag("selected-range")
+        clickTag("result-other-range-fixed"); awaitTag("selected-range")
         chooseRange(9_000f, 12_000f); analyze()
         click("장면과 함께 저장하기")
         compose.runOnIdle {
@@ -311,9 +324,15 @@ class ResultNavigationTest {
         compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
         clickTag("clip-play")
         compose.waitUntil(8_000) { compose.onAllNodesWithText("재생 멈추기", substring = true).fetchSemanticsNodes().isNotEmpty() }
-        compose.waitUntil(8_000) { compose.onAllNodesWithTag("clip-video-preview").fetchSemanticsNodes().isEmpty() }
+        val playbackStates = linkedSetOf<String>()
+        try {
+            compose.waitUntil(8_000) {
+                playbackStates += compose.onNodeWithTag("clip-play").fetchSemanticsNode().config[SemanticsProperties.Text].toString()
+                compose.onAllNodesWithTag("clip-video-preview").fetchSemanticsNodes().isEmpty()
+            }
+        } catch (failure: Throwable) { throw AssertionError("Replay did not end; states=$playbackStates", failure) }
         compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 보기·듣기")
-        clickTag("capture-back"); awaitTag("selected-range")
+        clickTag("result-other-range"); awaitTag("selected-range")
         compose.onNodeWithTag("clip-video-preview").assertExists()
         compose.onNodeWithTag("clip-play").assertTextEquals("선택 구간 다시 듣기 · 영상 함께 보기")
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
@@ -345,7 +364,7 @@ class ResultNavigationTest {
         val viewport = compose.onNodeWithTag("capture-flow").fetchSemanticsNode().boundsInRoot
         assertEquals("The test must exercise a short landscape viewport", 2f, viewport.width / viewport.height, .03f)
         compose.onNodeWithTag("capture-back").assertIsDisplayed()
-        compose.onNodeWithTag("capture-back").assertTextEquals("구간으로")
+        compose.onNodeWithTag("capture-back").assertTextEquals("닫기")
         compose.onNodeWithTag("result-other-range-fixed").assertDoesNotExist()
         compose.onNodeWithText("장면과 함께 저장하기").assertIsDisplayed()
         assertContentStartsAtTop()
@@ -355,7 +374,7 @@ class ResultNavigationTest {
             screenshot("$it-landscape-$scale")
             assertFullyInContent(it)
         }
-        clickTag("capture-back"); awaitTag("selected-range")
+        clickTag("result-other-range"); awaitTag("selected-range")
         compose.onNodeWithTag("capture-back").assertIsDisplayed()
         assertContentStartsAtTop()
         compose.onNodeWithTag("clip-range-start").performScrollTo()

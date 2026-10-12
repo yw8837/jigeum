@@ -1,0 +1,10 @@
+{
+  "package": "com.moa.babylanguage.astcandidate",
+  "base_apk": "/data/app/~~ORnV2VjqeBBjGd6NqmDpLg==/com.moa.babylanguage.astcandidate-Flqp7euaLbV6CJOB_u0Ktw==/base.apk",
+  "sha256": "982735e9a6d6c2ad31dea24bd4da165ce66c5bbf49361afdb24f39048ae65421",
+  "expected_sha256": "982735e9a6d6c2ad31dea24bd4da165ce66c5bbf49361afdb24f39048ae65421",
+  "version_code": 38,
+  "version_name": "0.5.24-astcandidate",
+  "verified": true,
+  "errors": []
+}

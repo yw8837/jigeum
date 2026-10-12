@@ -171,6 +171,7 @@ internal fun JigeumApp(
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
     var mediaIds by remember { mutableStateOf(emptySet<Long>()) }
     var viewingMediaId by rememberSaveable { mutableLongStateOf(-1L) }
+    var captureSaveReceipt by remember { mutableStateOf<CaptureSaveReceipt?>(null) }
     var ageBand by remember { mutableStateOf("") }
     var loaded by remember { mutableStateOf(false) }
     var loadError by remember { mutableStateOf<String?>(null) }
@@ -292,6 +293,8 @@ internal fun JigeumApp(
                                         onBack = { page = Page.HOME }, saving = busy,
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
                                         testDistribution = testDistribution,
+                                        saveReceipt = captureSaveReceipt,
+                                        onViewSaved = { if (!busy && !sharing) viewingMediaId = it },
                                         onSaveVideo = { clip, range ->
                                             if (!busy && !sharing) {
                                                 val generation = MemoryArtifacts.currentGeneration()
@@ -328,6 +331,7 @@ internal fun JigeumApp(
                                             }
                                         },
                                         onSaveWithMedia = { result, phrase, note, clip, range ->
+                                            var receipt: CaptureSaveReceipt? = null
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
                                                 var newId = System.currentTimeMillis()
@@ -339,12 +343,14 @@ internal fun JigeumApp(
                                                 try {
                                                     rendered = TranslatedMedia.render(activity, clip, range, record)
                                                     store.save(record, rendered)
+                                                    receipt = CaptureSaveReceipt(newId, phrase, note, true)
                                                 } finally {
                                                     withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() }
                                                 }
-                                            }, { page = Page.TIMELINE; notify("그때의 장면과 아기말을 함께 남겼어요.") })
+                                            }, { captureSaveReceipt = receipt; notify("장면과 아기말을 앱 기록에 저장했어요.") })
                                         },
                                         onSave = { result, phrase, note ->
+                                            var receipt: CaptureSaveReceipt? = null
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
                                                 var newId = System.currentTimeMillis()
@@ -352,7 +358,8 @@ internal fun JigeumApp(
                                                 store.save(Observation(newId, result.sound, result.range, note, phrase,
                                                     if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound,
                                                     ExpressionBasis.forPhrase(result.basis, result.phrase, phrase)))
-                                            }, { page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
+                                                receipt = CaptureSaveReceipt(newId, phrase, note, false)
+                                            }, { captureSaveReceipt = receipt; notify("아기말을 앱 기록에 저장했어요.") })
                                         },
                                         passContent = { close ->
                                             var policy by remember { mutableStateOf("") }

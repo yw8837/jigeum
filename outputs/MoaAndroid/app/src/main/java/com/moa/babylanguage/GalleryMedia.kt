@@ -175,6 +175,7 @@ internal object GalleryMedia {
                 val values = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                     put(MediaStore.MediaColumns.MIME_TYPE, if (video) "video/mp4" else "image/png")
+                    put(MediaStore.Images.ImageColumns.DATE_TAKEN, System.currentTimeMillis())
                     if (Build.VERSION.SDK_INT >= 29) {
                         put(MediaStore.MediaColumns.RELATIVE_PATH, "$directory/아가톡/")
                         put(MediaStore.MediaColumns.IS_PENDING, 1)
@@ -201,7 +202,10 @@ internal object GalleryMedia {
                 ensureActive(); requireGeneration(generation)
                 remember(context,token,uri,legacyFile,true)
                 if (Build.VERSION.SDK_INT >= 29) check(context.contentResolver.update(uri,
-                    ContentValues().apply { put(MediaStore.MediaColumns.IS_PENDING, 0) }, null, null) == 1) {
+                    ContentValues().apply {
+                        put(MediaStore.Images.ImageColumns.DATE_TAKEN, System.currentTimeMillis())
+                        put(MediaStore.MediaColumns.IS_PENDING, 0)
+                    }, null, null) == 1) {
                     "앨범에 파일을 표시하지 못했어요. 다시 시도해 주세요."
                 }
                 ensureActive(); requireGeneration(generation)

@@ -18,6 +18,8 @@ import androidx.core.graphics.withTranslation
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.Size
+import androidx.media3.container.Mp4TimestampData
+import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.effect.BitmapOverlay
 import androidx.media3.effect.MatrixTransformation
 import androidx.media3.effect.OverlayEffect
@@ -27,6 +29,7 @@ import androidx.media3.transformer.EditedMediaItemSequence
 import androidx.media3.transformer.Effects
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
+import androidx.media3.transformer.InAppMp4Muxer
 import androidx.media3.transformer.Transformer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -154,6 +157,14 @@ internal object TranslatedMedia {
         try {
             suspendCancellableCoroutine<Unit> { continuation ->
                 transformer = Transformer.Builder(context.applicationContext)
+                    .setMuxerFactory(InAppMp4Muxer.Factory { metadata ->
+                        // This is a newly saved copy, not the camera original. Otherwise the
+                        // imported MP4 timestamp places it back on the original shooting day.
+                        metadata.removeAll { it is Mp4TimestampData ||
+                            (it is MdtaMetadataEntry && it.key == "com.apple.quicktime.creationdate") }
+                        val savedAt = Mp4TimestampData.unixTimeToMp4TimeSeconds(System.currentTimeMillis())
+                        metadata.add(Mp4TimestampData(savedAt, savedAt))
+                    })
                     .setVideoMimeType(MimeTypes.VIDEO_H264).setAudioMimeType(MimeTypes.AUDIO_AAC)
                     .setUsePlatformDiagnostics(false)
                     .addListener(object : Transformer.Listener {
