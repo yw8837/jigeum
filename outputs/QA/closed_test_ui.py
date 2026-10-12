@@ -43,7 +43,9 @@ def download_media(owned, label, expected_name=None):
         q.tap(*downloads[-1]['center'])
     save = next(n for n in q.nodes() if n['text'].lower() == 'save' and n['enabled'])
     q.tap(*save['center'])
-    q.wait_ui('그때의 아기말', seconds=30)
+    # The viewer keeps its scroll position after SAF returns; its title can be
+    # above the viewport. Verify the export receipt, which is next to the action.
+    q.wait_ui('번역 영상을 선택한 위치에 내려받았어요', seconds=30)
     for _ in range(12):
         if any('번역 영상을 선택한 위치에 내려받았어요' in node['text'] for node in q.nodes()):
             break
