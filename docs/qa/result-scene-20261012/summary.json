@@ -1,7 +1,7 @@
 {
   "version_name": "0.5.25-beta",
   "version_code": 39,
-  "status": "local_validation_pass_upload_processing",
+  "status": "review_requested_pre_review_checks_running",
   "last_confirmed_alpha": 38,
   "phone": {
     "model": "SM-S938N",
@@ -52,8 +52,27 @@
   ],
   "recognition_logic_changed": false,
   "automation": "PAUSED; user requested no scheduling",
-  "play_submitted": false,
+  "play_submitted": true,
   "actually_available": false,
+  "play_review": {
+    "release_id": 19,
+    "track": "Alpha",
+    "release_name": "0.5.25-beta (39) - result and save date",
+    "confirmed_at": "2026-10-12T23:36:37+09:00",
+    "publishing_overview": "검토 중인 변경사항",
+    "quick_checks": "running",
+    "alpha_status": "검토 중",
+    "managed_publishing": false,
+    "blocking_errors": 0,
+    "advisory_warnings": 2,
+    "devices_removed": 0,
+    "new_install_size_mb": 112,
+    "update_size_mb": 5.99,
+    "aab_sha256": "b77b5d3cf31164031ed3a90a9a73b66e90fbd80954f482925e8faec8ee360fb0",
+    "evidence": "delivery/play-review.md",
+    "last_available_version_code": 38,
+    "new_automation_created": false
+  },
   "package": {
     "status": "pass",
     "variants": {
