@@ -84,6 +84,11 @@ python tools/qa/run_expression_host_tests.py --java 'C:/Program Files/Eclipse Ad
 
 출력 폴더는 새 `work/` 하위 폴더여야 한다. 기존 출력은 덮어쓰지 않는다.
 
+검증 근거를 보존한 뒤 이번에 생성한 `work/expression-expansion-20261019` 임시 host 시험 폴더만
+정리하려 했으나 자동 승인 정책이 `blocked by policy`로 삭제 실행을 차단했다.
+삭제는 실행되지 않았으며 폴더는 남아 있다. 다른 삭제 경로나 권한으로 재시도하지 않았다.
+Git 작업 트리 clean은 이 ignored 폴더의 정리 완료를 의미하지 않는다.
+
 ## 남은 일
 
 - 새 배포판을 만들 때 버전 증가, beta 패키지·서명·현재 제공판과의 업데이트 검사 및 기존Alpha 제출/실제 제공 확인.
