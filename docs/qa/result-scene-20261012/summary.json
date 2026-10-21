@@ -397,5 +397,17 @@
     "free_capture_seconds": 60,
     "free_analysis_seconds": 10,
     "owned_external_files_removed": true
+  },
+  "play_delivery_confirmation_20261021": {
+    "checked_date_kst": "2026-10-21",
+    "track": "Alpha",
+    "release_id": 19,
+    "version_code": 39,
+    "release_name": "0.5.25-beta (39) - result and save date",
+    "status_text": "선택한 테스터에게 제공됩니다.",
+    "published_text": "10월 13일 오전 12:11",
+    "evidence": "docs/qa/play-status-20261021/README.md",
+    "expression_expansion_20261019_included": false,
+    "actual_tester_installation_verified": false
   }
 }
