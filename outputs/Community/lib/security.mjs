@@ -38,41 +38,104 @@ export function sameOrigin(request) {
 export function mediaInfo(bytes) {
   need(bytes.length > 16 && bytes.length <= MAX_MEDIA, '사진·영상은 25MB 이하로 골라 주세요.');
   const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  // Only freshly re-encoded JPEG or an MP4 with a bounded movie duration is accepted.
-  if (bytes[0] === 255 && bytes[1] === 216 && bytes[bytes.length - 2] === 255 && bytes[bytes.length - 1] === 217) {
-    let p = 2;
-    while (p + 4 < bytes.length && bytes[p] === 255) {
-      const marker = bytes[p + 1]; if (marker === 218) break;
-      const n = v.getUint16(p + 2); need(n >= 2 && p + 2 + n <= bytes.length, '사진 파일을 읽을 수 없어요.');
-      need(marker !== 225, '위치 정보가 없는 사진으로 다시 저장해 주세요.');
-      p += n + 2;
-    }
-    return { mime: 'image/jpeg', duration: 0, ext: 'jpg' };
-  }
-  const word = p => String.fromCharCode(...bytes.slice(p, p + 4));
-  need(word(4) === 'ftyp', 'JPEG 사진 또는 MP4 영상카드를 골라 주세요.');
-  let duration = null;
-  function scan(start, end, depth) {
-    let p = start;
-    while (p + 8 <= end) {
-      const size = v.getUint32(p); need(size >= 8 && p + size <= end, 'MP4 파일이 손상됐어요.');
-      const type = word(p + 4);
-      if (type === 'moov' && depth === 0) scan(p + 8, p + size, 1);
-      if (type === 'mvhd' && depth === 1) {
-        const version = bytes[p + 8]; need(version === 0 || version === 1, '지원하지 않는 MP4 영상이에요.');
-        const offset = version ? 28 : 20;
-        need(size >= offset + (version ? 12 : 8), 'MP4 길이 정보를 읽을 수 없어요.');
-        const scale = v.getUint32(p + offset);
-        const ticks = version ? Number(v.getBigUint64(p + offset + 4)) : v.getUint32(p + offset + 4);
-        need(scale > 0 && Number.isSafeInteger(ticks), 'MP4 길이 정보가 올바르지 않아요.');
-        duration = ticks / scale;
+  const invalid = '미디어 파일이 손상됐거나 지원하지 않는 형식이에요.';
+  if (bytes[0] === 255 && bytes[1] === 216) {
+    let p=2, frame=false, scan=false, quant=false, huffman=false, entropy=0;
+    while(p<bytes.length) {
+      need(bytes[p++]===255,invalid);while(bytes[p]===255)p++;
+      const marker=bytes[p++];need(marker!==undefined,invalid);
+      if(marker===217){need(p===bytes.length&&frame&&scan&&quant&&huffman&&entropy>0,invalid);return {mime:'image/jpeg',duration:0,ext:'jpg'};}
+      need(marker!==216&&marker!==0&&!(marker>=208&&marker<=215)&&p+2<=bytes.length,invalid);
+      const n=v.getUint16(p);need(n>=2&&p+n<=bytes.length,invalid);
+      need(marker!==225,'위치 정보가 없는 사진으로 다시 저장해 주세요.');
+      if([192,193,194].includes(marker)){
+        need(!frame&&n>=11&&bytes[p+2]===8,invalid);
+        const height=v.getUint16(p+3),width=v.getUint16(p+5),components=bytes[p+7];
+        need(height>0&&width>0&&height<=8192&&width<=8192&&[1,3,4].includes(components)&&n===8+3*components,invalid);frame=true;
       }
-      p += size;
+      if(marker===219){need(n>=67,invalid);quant=true;}
+      if(marker===196){need(n>=19,invalid);huffman=true;}
+      if(marker===218){
+        need(frame&&quant&&huffman&&n>=8&&n===6+2*bytes[p+2],invalid);scan=true;p+=n;
+        const start=p;
+        while(p<bytes.length){
+          if(bytes[p]!==255){p++;continue;}
+          if(bytes[p+1]===0||(bytes[p+1]>=208&&bytes[p+1]<=215)){p+=2;continue;}
+          break;
+        }
+        entropy+=p-start;continue;
+      }
+      p+=n;
     }
+    need(false,invalid);
   }
-  scan(0, bytes.length, 0);
-  need(duration !== null && duration > 0 && duration <= 30.1, '영상카드는 30초 이내로 골라 주세요.');
-  return { mime: 'video/mp4', duration, ext: 'mp4' };
+  const word=p=>String.fromCharCode(...bytes.subarray(p,p+4));
+  let boxBudget=4096;
+  function boxes(start,end) {
+    const result=[];let p=start;
+    while(p<end){need(--boxBudget>=0&&p+8<=end,invalid);const type=word(p+4);let size=v.getUint32(p),header=8;
+      // Android MediaMuxer writes mdat with a 64-bit size even for small cards.
+      if(size===1){need(type==='mdat'&&p+16<=end,invalid);size=Number(v.getBigUint64(p+8));header=16;}
+      need(Number.isSafeInteger(size)&&size>=header&&p+size<=end,invalid);
+      result.push({p,size,header,end:p+size,type});p+=size;}
+    return result;
+  }
+  const one=(list,type)=>{const matches=list.filter(b=>b.type===type);need(matches.length===1,invalid);return matches[0];};
+  function time(box) {
+    const version=bytes[box.p+8];need(version===0||version===1,invalid);
+    const offset=version?28:20;need(box.size>=offset+(version?12:8),invalid);
+    const scale=v.getUint32(box.p+offset),ticks=version?Number(v.getBigUint64(box.p+offset+4)):v.getUint32(box.p+offset+4);
+    need(scale>0&&Number.isSafeInteger(ticks),invalid);const duration=ticks/scale;
+    need(duration>0&&duration<=30.1,'영상카드는 30초 이내로 골라 주세요.');return duration;
+  }
+  const top=boxes(0,bytes.length),ftyp=one(top,'ftyp'),moov=one(top,'moov');
+  need(ftyp.p===0&&ftyp.size>=16&&!top.some(b=>b.type==='moof'),invalid);
+  const mdats=top.filter(b=>b.type==='mdat'&&b.size>b.header);need(mdats.length>0,invalid);
+  const movie=boxes(moov.p+8,moov.end),mvhd=one(movie,'mvhd');
+  need(mvhd.size>=(bytes[mvhd.p+8]===1?120:108),invalid);const duration=time(mvhd);
+  const tracks=movie.filter(b=>b.type==='trak');need(tracks.length>0&&tracks.length<=8,invalid);
+  let video=false;
+  for(const track of tracks){
+    const tc=boxes(track.p+8,track.end);one(tc,'tkhd');
+    const mdia=one(tc,'mdia'),mc=boxes(mdia.p+8,mdia.end),mdhd=one(mc,'mdhd'),trackDuration=time(mdhd);
+    const trackScale=v.getUint32(mdhd.p+(bytes[mdhd.p+8]===1?28:20));
+    const hdlr=one(mc,'hdlr');need(hdlr.size>=32,invalid);const kind=word(hdlr.p+16);
+    need(['vide','soun'].includes(kind),invalid);
+    const minf=one(mc,'minf'),stbl=one(boxes(minf.p+8,minf.end),'stbl'),tables=boxes(stbl.p+8,stbl.end);
+    const stsd=one(tables,'stsd');need(stsd.size>=16,invalid);const descriptions=boxes(stsd.p+16,stsd.end);
+    need(descriptions.length===v.getUint32(stsd.p+12)&&descriptions.length>0,invalid);
+    if(kind==='vide'){
+      video=true;
+      for(const d of descriptions){need(['avc1','avc3','hvc1','hev1','mp4v','av01'].includes(d.type)&&d.size>=86,invalid);
+        const width=v.getUint16(d.p+32),height=v.getUint16(d.p+34);need(width>0&&height>0&&width<=8192&&height<=8192,invalid);}
+    }
+    const stsz=one(tables,'stsz');need(stsz.size>=20,invalid);
+    const fixed=v.getUint32(stsz.p+12),count=v.getUint32(stsz.p+16);
+    need(count>0&&count<=1000000&&stsz.size===20+(fixed?0:4*count),invalid);
+    const stts=one(tables,'stts');need(stts.size>=16,invalid);const timeCount=v.getUint32(stts.p+12);
+    need(stts.size===16+timeCount*8&&timeCount>0,invalid);let timed=0,ticks=0;
+    for(let i=0;i<timeCount;i++){const samples=v.getUint32(stts.p+16+8*i),delta=v.getUint32(stts.p+20+8*i);timed+=samples;ticks+=samples*delta;need(samples>0&&delta>0&&Number.isSafeInteger(ticks),invalid);}need(timed===count,invalid);
+    const sampleDuration=ticks/trackScale;need(sampleDuration<=30.1,'영상카드는 30초 이내로 골라 주세요.');
+    need(Math.abs(sampleDuration-trackDuration)<=0.1,invalid);
+    const stsc=one(tables,'stsc');need(stsc.size>=16,invalid);const scCount=v.getUint32(stsc.p+12);
+    need(scCount>0&&stsc.size===16+12*scCount,invalid);
+    const offsets=tables.filter(b=>['stco','co64'].includes(b.type));need(offsets.length===1,invalid);
+    const co=offsets[0],wide=co.type==='co64';need(co.size>=16,invalid);const chunks=v.getUint32(co.p+12);
+    need(chunks>0&&co.size===16+chunks*(wide?8:4),invalid);
+    for(let i=0;i<scCount;i++){const p=stsc.p+16+i*12,first=v.getUint32(p);
+      need(first>0&&first<=chunks&&(i?first>v.getUint32(p-12):first===1)&&v.getUint32(p+4)>0&&v.getUint32(p+8)>0&&v.getUint32(p+8)<=descriptions.length,invalid);}
+    let sample=0,group=0;
+    for(let chunk=1;chunk<=chunks;chunk++){
+      if(group+1<scCount&&chunk===v.getUint32(stsc.p+16+(group+1)*12))group++;
+      const n=v.getUint32(stsc.p+20+group*12);need(sample+n<=count,invalid);
+      const pos=co.p+16+(chunk-1)*(wide?8:4),offset=wide?Number(v.getBigUint64(pos)):v.getUint32(pos);let length=0;
+      for(let i=0;i<n;i++){const size=fixed||v.getUint32(stsz.p+20+4*sample++);need(size>0,invalid);length+=size;}
+      if(fixed)sample+=n;
+      need(Number.isSafeInteger(offset)&&mdats.some(b=>offset>=b.p+b.header&&offset+length<=b.end),invalid);
+    }
+    need(sample===count,invalid);
+  }
+  need(video,invalid);return {mime:'video/mp4',duration,ext:'mp4'};
 }
 
 /** Replace metadata boxes with equal-sized free boxes so chunk offsets remain valid. */
@@ -81,7 +144,9 @@ export function stripMovieMetadata(input) {
   const bytes=input.slice(),view=new DataView(bytes.buffer),containers=new Set(['moov','trak','mdia','minf','stbl','edts','dinf']);
   function walk(start,end,depth) {
     need(depth<=8,'MP4 구조를 읽지 못했어요.');let p=start;
-    while(p+8<=end){const size=view.getUint32(p);need(size>=8&&p+size<=end,'MP4 파일이 손상됐어요.');const type=String.fromCharCode(...bytes.slice(p+4,p+8));
+    while(p+8<=end){let size=view.getUint32(p);const type=String.fromCharCode(...bytes.slice(p+4,p+8));
+      if(size===1){need(type==='mdat'&&p+16<=end,'MP4 파일이 손상됐어요.');size=Number(view.getBigUint64(p+8));}
+      need(Number.isSafeInteger(size)&&size>=(view.getUint32(p)===1?16:8)&&p+size<=end,'MP4 파일이 손상됐어요.');
       if(['udta','meta','uuid'].includes(type)){bytes.set(new TextEncoder().encode('free'),p+4);bytes.fill(0,p+8,p+size);}
       else if(['mvhd','tkhd','mdhd'].includes(type)){const length=bytes[p+8]===1?16:8;need(size>=12+length,'MP4 파일이 손상됐어요.');bytes.fill(0,p+12,p+12+length);}
       if(containers.has(type))walk(p+8,p+size,depth+1);

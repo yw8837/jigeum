@@ -1,0 +1,30 @@
+{
+  "status": "pass",
+  "expected": "present",
+  "archive": "work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.aab",
+  "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+  "model_variant": "infant-caption",
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86",
+    "x86_64"
+  ],
+  "payload_entries": [
+    "base/assets/AST_CAPTION_NOTICE.txt",
+    "base/assets/AST_MODEL_NOTICE.txt",
+    "base/assets/ONNX_RUNTIME_LICENSE.txt",
+    "base/assets/ONNX_RUNTIME_NOTICE.txt",
+    "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+    "base/assets/ast-caption-presence.f32",
+    "base/assets/ast-infant-presence-candidate.onnx",
+    "base/lib/arm64-v8a/libonnxruntime.so",
+    "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+    "base/lib/armeabi-v7a/libonnxruntime.so",
+    "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+    "base/lib/x86/libonnxruntime.so",
+    "base/lib/x86/libonnxruntime4j_jni.so",
+    "base/lib/x86_64/libonnxruntime.so",
+    "base/lib/x86_64/libonnxruntime4j_jni.so"
+  ]
+}

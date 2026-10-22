@@ -1,0 +1,20 @@
+{
+  "status": "completed_owned_runtime_and_selected_intermediates",
+  "s25": "released to user; production39 and user data unchanged; owned releaseqa packages removed by ARM runner",
+  "emulator": {
+    "serial": "emulator-5554",
+    "owned_package_uninstalled": "com.moa.babylanguage",
+    "owned_external_files_removed": ["community-final-owned-cry.mp4", "community-final-owned-cry20.mp4", "moa-ultraqa.xml"],
+    "download_directory_empty": true,
+    "remaining_moa_packages": 0,
+    "adbd_unrooted": true,
+    "owned_emulator_stopped": true,
+    "shared_avd_deleted": false
+  },
+  "local_preview_stopped": true,
+  "local_owned_seed_posts_removed": 22,
+  "hosted_owned_synthetic_posts_removed": true,
+  "intermediate_files": "cleanup-files.json",
+  "preserved": ["latest40 beta and policy-only packages", "original39 AAB and same-signature baseline", "ARM proof app/test APK pair", "logs and SHA evidence", "models", "user media and keys"],
+  "blocked_deletions": "Earlier blocked targets untouched. Publishing checkout generated dist deletion was blocked by automatic approval policy; old extras retained. No bypass."
+}

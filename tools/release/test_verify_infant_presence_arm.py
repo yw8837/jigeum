@@ -89,6 +89,19 @@ class ArmGateTest(unittest.TestCase):
         with self.assertRaises(ValueError): gate.verify(bad, self.directory, now=NOW, infant_caption=True)
         bad = copy.deepcopy(value); bad['storage_after']['scope'] = str(self.directory / 'unrelated')
         with self.assertRaises(ValueError): gate.verify(bad, self.directory, now=NOW, infant_caption=True)
+        release = copy.deepcopy(value)
+        release['candidate_revision'] = 'caption-release-20261022'
+        release['measurement'].update(candidate_revision='caption-release-20261022', research_package=gate.RELEASE_QA_PACKAGE)
+        for role, digest, size in [('app', gate.RELEASE_QA_APK_SHA, gate.RELEASE_QA_APK_BYTES),
+                                  ('test', gate.RELEASE_QA_TEST_SHA, gate.RELEASE_QA_TEST_BYTES)]:
+            release['provenance'][role + '_apk'] = dict(sha256=digest, bytes=size)
+            release[role + '_installed'].update(sha256=digest, expected_sha256=digest,
+                package=gate.RELEASE_QA_PACKAGE + ('.test' if role == 'test' else ''))
+        gate.verify(release, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        with self.assertRaises(ValueError): gate.verify(release, self.directory, now=NOW, infant_caption=True)
+        with self.assertRaises(ValueError): gate.verify(value, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        release['app_installed']['sha256'] = '0' * 64
+        with self.assertRaises(ValueError): gate.verify(release, self.directory, now=NOW, infant_caption=True, release_qa=True)
         value['measurement']['cases'][1]['caption_native_windows'] = 2
         with self.assertRaises(ValueError): gate.verify(value, self.directory, now=NOW, infant_caption=True)
 

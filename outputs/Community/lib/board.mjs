@@ -1,5 +1,7 @@
 import { BoardError, need, textField, passwordField, randomToken, digest, hashPassword, checkPassword, cookieToken, sameOrigin, mediaInfo, stripMovieMetadata, MAX_MEDIA } from './security.mjs';
 const json = (value, status = 200, extra = {}) => Response.json(value, {status, headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer',...extra}});
+const bytesDigest = async bytes => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), b => b.toString(16).padStart(2,'0')).join('');
+const retryConflict = '이 요청의 이전 내용이 이미 게시됐어요. 목록에서 해당 글·댓글을 확인한 뒤 수정·삭제해 주세요.';
 const pageCursor = value => { if(!value)return null; const [time,id]=value.split(':'); need(/^\d{1,16}$/.test(time)&&Number.isSafeInteger(Number(time)), '페이지 정보가 올바르지 않아요.'); return {time:Number(time),id:uuid(id)}; };
 const uuid = value => { need(/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(value || ''), '요청 번호가 올바르지 않아요.'); return value; };
 async function boundedBody(request, maximum) {
@@ -90,6 +92,11 @@ export async function handleBoard(request,env) {
       if(object.range && 'offset' in object.range){const r=object.range;headers['Content-Range']=`bytes ${r.offset}-${r.offset+r.length-1}/${object.size}`;headers['Content-Length']=String(r.length);return new Response(object.body,{status:206,headers});}
       headers['Content-Length']=String(object.size);return new Response(object.body,{headers});
     }
+    if(request.method==='GET' && parts[0]==='post') {
+      const p=await visiblePost(db,uuid(parts[1]),visitor);
+      const counts=await one(db,"SELECT (SELECT COUNT(*) FROM likes WHERE post_id=?) likes, EXISTS(SELECT 1 FROM likes WHERE post_id=? AND visitor=?) liked, (SELECT COUNT(*) FROM comments c WHERE c.post_id=? AND c.state='active' AND NOT EXISTS(SELECT 1 FROM blocks WHERE visitor=? AND author=c.author)) comments",p.id,p.id,visitor,p.id,visitor);
+      return json({post:publicPost({...p,...counts})});
+    }
     if(request.method==='GET' && parts[0]==='comments') {
       const post=await visiblePost(db,uuid(parts[1]),visitor);
       const cursor=pageCursor(url.searchParams.get('after')),after=cursor?.time||Number.MAX_SAFE_INTEGER,afterId=cursor?.id||'~';
@@ -116,13 +123,21 @@ export async function handleBoard(request,env) {
       const bytes=await boundedBody(request,MAX_MEDIA+16384);
       const form=await new Response(bytes,{headers:{'Content-Type':request.headers.get('content-type')||''}}).formData();
       need(form.get('consent')==='yes','공개 공유 동의를 확인해 주세요.');
-      const id=uuid(form.get('id')),existing=await one(db,'SELECT author,state FROM posts WHERE id=?',id);
-      if(existing){need(existing.author===visitor&&existing.state==='active','같은 요청을 다시 사용할 수 없어요.',409);return json({id});}
+      const id=uuid(form.get('id')),existing=await one(db,'SELECT * FROM posts WHERE id=?',id);
       const nickname=textField(form.get('nickname')||'익명',20),body=textField(form.get('body'),1000),pw=passwordField(form.get('password'));
       const file=form.get('file');need(file instanceof File,'사진이나 영상카드를 골라 주세요.');
-      const media=new Uint8Array(await file.arrayBuffer()),info=mediaInfo(media),hashed=await hashPassword(pw);
-      const key=crypto.randomUUID()+'.'+info.ext;
-      await env.BUCKET.put(key,info.mime==='video/mp4'?stripMovieMetadata(media):media,{httpMetadata:{contentType:info.mime}});
+      const media=new Uint8Array(await file.arrayBuffer()),info=mediaInfo(media);
+      const clean=info.mime==='video/mp4'?stripMovieMetadata(media):media, fingerprint=await bytesDigest(clean);
+      if(existing){
+        need(existing.author===visitor&&existing.state==='active','같은 요청을 다시 사용할 수 없어요.',409);
+        need(existing.nickname===nickname&&existing.body===body,retryConflict,409);
+        try{await checkPassword(pw,existing);}catch{throw new BoardError(409,retryConflict);}
+        const stored=await env.BUCKET.get(existing.media_key);need(stored,'파일을 확인하지 못했어요. 잠시 후 다시 시도해 주세요.',503);
+        const previous=stored.customMetadata?.sha256||await bytesDigest(await stored.arrayBuffer());
+        need(previous===fingerprint,retryConflict,409);return json({id});
+      }
+      const hashed=await hashPassword(pw),key=crypto.randomUUID()+'.'+info.ext;
+      await env.BUCKET.put(key,clean,{httpMetadata:{contentType:info.mime},customMetadata:{sha256:fingerprint}});
       try {
         await run(db,'INSERT INTO posts (id,author,nickname,body,salt,password_hash,media_key,mime,bytes,duration,created,state) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',id,visitor,nickname,body,hashed.salt,hashed.hash,key,info.mime,media.length,Math.round(info.duration*1000),now,'active');
       } catch(error) { await env.BUCKET.delete(key); throw error; }
@@ -133,10 +148,17 @@ export async function handleBoard(request,env) {
     need(data&&typeof data==='object'&&!Array.isArray(data),'입력 내용을 확인해 주세요.');
     if(parts[0]==='comments' && parts.length===1) {
       await limit(db,'comment:'+visitor,30,3600,now);
+      need(data.consent==='yes','게시판 이용규칙과 공개 댓글 동의를 확인해 주세요.');
       const p=await visiblePost(db,uuid(data.postId),visitor),id=uuid(data.id);
-      const existing=await one(db,'SELECT author,state FROM comments WHERE id=?',id);
-      if(existing){need(existing.author===visitor&&existing.state==='active','같은 요청을 다시 사용할 수 없어요.',409);return json({id});}
-      const nickname=textField(data.nickname||'익명',20),body=textField(data.body,500),hashed=await hashPassword(data.password);
+      const nickname=textField(data.nickname||'익명',20),body=textField(data.body,500),pw=passwordField(data.password);
+      const existing=await one(db,'SELECT * FROM comments WHERE id=?',id);
+      if(existing){
+        need(existing.author===visitor&&existing.state==='active','같은 요청을 다시 사용할 수 없어요.',409);
+        need(existing.post_id===p.id&&existing.nickname===nickname&&existing.body===body,retryConflict,409);
+        try{await checkPassword(pw,existing);}catch{throw new BoardError(409,retryConflict);}
+        return json({id});
+      }
+      const hashed=await hashPassword(pw);
       await run(db,"INSERT INTO comments(id,post_id,author,nickname,body,salt,password_hash,created,state) SELECT ?,?,?,?,?,?,?,?,'active' WHERE EXISTS(SELECT 1 FROM posts WHERE id=? AND state='active')",id,p.id,visitor,nickname,body,hashed.salt,hashed.hash,now,p.id);
       return json({id},201);
     }
@@ -154,7 +176,7 @@ export async function handleBoard(request,env) {
       if(data.action==='delete') {
         if(data.kind==='post')await removePost(db,env.BUCKET,id);
         else await run(db,"UPDATE comments SET state='deleted',body='',nickname='삭제됨',salt='',password_hash='' WHERE id=?",id);
-      } else {need(data.action==='edit','작업을 확인해 주세요.');await run(db,`UPDATE ${table} SET body=? WHERE id=?`,textField(data.body,data.kind==='post'?1000:500),id);}
+      } else {need(data.action==='edit','작업을 확인해 주세요.');const changed=await run(db,`UPDATE ${table} SET body=? WHERE id=? AND state!='deleted'${data.kind==='comment'?" AND EXISTS(SELECT 1 FROM posts WHERE posts.id=comments.post_id AND posts.state!='deleted')":''}`,textField(data.body,data.kind==='post'?1000:500),id);need(changed.meta.changes>0,'이미 삭제된 글이에요.',404);}
       return json({ok:true});
     }
     if(parts[0]==='report'||parts[0]==='block') {

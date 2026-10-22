@@ -45,7 +45,7 @@ def download_media(owned, label, expected_name=None):
     q.tap(*save['center'])
     # The viewer keeps its scroll position after SAF returns; its title can be
     # above the viewport. Verify the export receipt, which is next to the action.
-    q.wait_ui('번역 영상을 선택한 위치에 내려받았어요', seconds=30)
+    # The receipt may initially be below the viewport; scroll before asserting it.
     for _ in range(12):
         if any('번역 영상을 선택한 위치에 내려받았어요' in node['text'] for node in q.nodes()):
             break
@@ -212,11 +212,10 @@ def main():
         else:
             raise AssertionError('Expanded no-face evidence not reachable after bounded scrolling')
         q.screenshot('beta-actual-visual-result'); q.trace('beta-actual-visual-result')
-        q.tap_text('장면과 함께 저장하기'); q.wait_ui('우리가 나눈 아기말', seconds=45)
-        q.tap_text('장면 보기 · 내려받기'); q.wait_ui('그때의 아기말')
+        q.tap_text('장면과 함께 저장하기'); q.wait_ui('저장한 장면 보기', seconds=45)
+        q.tap_text('저장한 장면 보기'); q.wait_ui('그때의 아기말')
         result['beta_media'] = download_media(owned, 'beta')
-        q.shell('input', 'keyevent', 'KEYCODE_BACK'); q.wait_ui('우리가 나눈 아기말')
-        q.tap_text('아기말북'); q.tap_text('이 달의 아기말북 PDF 만들기', attempts=12)
+        flow.launch(); q.tap_text('아기말북'); q.tap_text('이 달의 아기말북 PDF 만들기', attempts=12)
         deadline = time.monotonic()+30
         while time.monotonic() < deadline:
             activity = q.shell('dumpsys','activity','activities').stdout.decode('utf-8','replace')

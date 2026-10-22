@@ -42,6 +42,9 @@ val infantCaptionEnabled = infantCaptionProperty == "true"
 require(!infantCaptionEnabled || infantPresenceEnabled) {
     "Caption head is debug research only and requires the infant-presence candidate."
 }
+// Isolate fresh release QA from the user's older research installation.
+val captionReleaseQa = providers.gradleProperty("agattokCaptionReleaseQa").orNull == "true"
+require(!captionReleaseQa || infantCaptionEnabled) { "Release QA requires the caption research runtime." }
 val astBetaProperty = providers.gradleProperty("agattokAstBeta").orNull
 require(astBetaProperty == null || astBetaProperty in setOf("true", "false")) {
     "agattokAstBeta must be explicitly true or false."
@@ -91,8 +94,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 39
-        versionName = "0.5.25"
+        versionCode = 40
+        versionName = "0.5.26"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
@@ -125,7 +128,7 @@ android {
         getByName("debug") {
             if (astStandaloneEnabled) applicationIdSuffix = ".astprobe"
             if (astCandidateEnabled) {
-                applicationIdSuffix = ".astcandidate"
+                applicationIdSuffix = if (captionReleaseQa) ".astcandidate.releaseqa" else ".astcandidate"
                 versionNameSuffix = "-astcandidate"
                 buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "true")
                 buildConfigField("boolean", "AST_INFANT_PRESENCE", infantPresenceEnabled.toString())
@@ -308,6 +311,10 @@ val verifyInfantPresenceArm by tasks.registering(Exec::class) {
         }
         val args = mutableListOf(python, rootProject.file("../../tools/release/verify_infant_presence_arm.py").absolutePath, proof)
         if (infantCaptionBetaEnabled) args += "--infant-caption-candidate"
+        if (providers.gradleProperty("agattokCaptionReleaseQaProof").orNull == "true") {
+            require(infantCaptionBetaEnabled) { "Release QA proof requires caption beta." }
+            args += "--caption-release-qa"
+        }
         commandLine(args)
     }
 }
@@ -330,6 +337,8 @@ dependencies {
     val cameraXVersion = "1.6.2"
     implementation(composeBom)
     implementation("androidx.activity:activity-compose:1.13.0")
+    // CameraX/AppCompat otherwise resolve Fragment 1.1, incompatible with ActivityResult.
+    implementation("androidx.fragment:fragment:1.8.9")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")

@@ -34,6 +34,11 @@ CAPTION_APK_SHA = '069badfcd44fe7fff4e52b654dc4b019c7f8006dc2f2d5bc6197be05620b3
 CAPTION_TEST_SHA = 'dc05f37363e2f3a68b8dcef4e502b7eb7ee0b851cf4e7433cd50470d1bfc1922'
 CAPTION_APK_BYTES = 265359219
 CAPTION_TEST_BYTES = 2770840
+RELEASE_QA_PACKAGE = 'com.moa.babylanguage.astcandidate.releaseqa'
+RELEASE_QA_APK_SHA = '464e2034dab85881b62a608a236a79791ed9946f90aaa82bb2117541416f11d2'
+RELEASE_QA_TEST_SHA = 'e3382b281ca9902d4abcefb17761ec33ae5958692e6b12afc11b69d85ff67281'
+RELEASE_QA_APK_BYTES = 264722265
+RELEASE_QA_TEST_BYTES = 3180329
 CAPTION_HEAD_SHA = '979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1'
 ANDROID = '{http://schemas.android.com/apk/res/android}'
 PROHIBITED = {'android.permission.INTERNET', 'android.permission.RECORD_AUDIO',
@@ -41,9 +46,9 @@ PROHIBITED = {'android.permission.INTERNET', 'android.permission.RECORD_AUDIO',
               'com.android.vending.BILLING'}
 
 
-def validate_manifest(xml: str, *, test=False, infant_presence=False):
+def validate_manifest(xml: str, *, test=False, infant_presence=False, release_qa=False):
     root = ET.fromstring(xml)
-    package = CANDIDATE_PACKAGE if infant_presence else PACKAGE
+    package = RELEASE_QA_PACKAGE if release_qa else CANDIDATE_PACKAGE if infant_presence else PACKAGE
     expected = package + '.test' if test else package
     if root.get('package') != expected:
         raise ValueError('Only the exact standalone research APK is allowed')
@@ -205,10 +210,12 @@ def main(argv=None):
                         help='Measure the pinned integrated candidate on a physical ARM phone, not an emulator.')
     candidates.add_argument('--infant-caption-candidate', action='store_true',
                             help='Measure the separately pinned frozen-pair caption runtime on physical ARM.')
+    candidates.add_argument('--caption-release-qa', action='store_true', help='Pinned current release runtime in an isolated physical QA package.')
     args = parser.parse_args(argv)
-    caption = args.infant_caption_candidate
+    release_qa = args.caption_release_qa
+    caption = args.infant_caption_candidate or release_qa
     infant = args.infant_presence_candidate or caption
-    package = CANDIDATE_PACKAGE if infant else PACKAGE
+    package = RELEASE_QA_PACKAGE if release_qa else CANDIDATE_PACKAGE if infant else PACKAGE
     test_package = package + '.test'
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -218,6 +225,7 @@ def main(argv=None):
     run_id = uuid.uuid4().hex
     result = {'run_id': run_id, 'status': 'fail', 'quality_validated': False, 'stage': 'apk_preflight'}
     result['storage_before'] = storage_before
+    if release_qa: result['candidate_revision'] = 'caption-release-20261022'
     touched = False
     before = None
     try:
@@ -226,11 +234,11 @@ def main(argv=None):
         shutil.copyfile(args.test_apk, test_apk)
         for key, apk, is_test in [('app', app_apk, False), ('test', test_apk, True)]:
             xml = command([str(args.apkanalyzer.resolve()), 'manifest', 'print', str(apk.resolve())], timeout=60).decode('utf-8')
-            result[key + '_manifest'] = validate_manifest(xml, test=is_test, infant_presence=infant)
+            result[key + '_manifest'] = validate_manifest(xml, test=is_test, infant_presence=infant, release_qa=release_qa)
         result['provenance'] = local_provenance(app_apk, test_apk, ROOT)
         if infant:
-            pins = [('app_apk', CAPTION_APK_SHA if caption else CANDIDATE_APK_SHA),
-                    ('test_apk', CAPTION_TEST_SHA if caption else CANDIDATE_TEST_SHA)]
+            pins = [('app_apk', RELEASE_QA_APK_SHA if release_qa else CAPTION_APK_SHA if caption else CANDIDATE_APK_SHA),
+                    ('test_apk', RELEASE_QA_TEST_SHA if release_qa else CAPTION_TEST_SHA if caption else CANDIDATE_TEST_SHA)]
             for role, expected in pins:
                 if result['provenance'][role]['sha256'] != expected:
                     raise ValueError('Use the exact reviewed APK/test pair for the selected candidate')
@@ -261,7 +269,7 @@ def main(argv=None):
         groups = [
             ('benchmark', PRODUCTION + '.AstDeviceBenchmarkTest',
              ['-e', 'ast_infant_caption_device_probe' if caption else
-                    'ast_infant_device_probe' if infant else 'ast_device_probe', 'true', '-e', 'ast_device_run_id', run_id]),
+                    'ast_infant_device_probe' if infant else 'ast_device_probe', 'true', '-e', 'ast_device_run_id', run_id] + (['-e', 'ast_caption_release_qa', 'true'] if release_qa else [])),
             ('recovery', ','.join(PRODUCTION + '.AstAudioAnalyzerTest#' + name for name in (
                 'analyzerCancellationReleasesOwnerAndSubsequentRunSucceeds',
                 'cancellingNativeRunTerminatesAndFreshRunOptionsResume')), []),
@@ -319,7 +327,7 @@ def main(argv=None):
             try:
                 sys.path.insert(0, str(ROOT / 'tools/release'))
                 from verify_infant_presence_arm import verify
-                verify(result, out, infant_caption=True) if caption else verify(result, out)
+                verify(result, out, infant_caption=caption, release_qa=release_qa)
                 result['arm_gate_passed'] = True
             except Exception as error:
                 result.update(status='fail', arm_gate_passed=False, arm_gate_error=str(error))

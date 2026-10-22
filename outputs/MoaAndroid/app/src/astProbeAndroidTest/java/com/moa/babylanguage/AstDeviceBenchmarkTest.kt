@@ -23,7 +23,10 @@ class AstDeviceBenchmarkTest {
         val infantProbe = args.getString("ast_infant_device_probe") == "true" || captionProbe
         assumeTrue("Explicit offline benchmark only", args.getString("ast_device_probe") == "true" || infantProbe)
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        if (infantProbe) check(context.packageName == "com.moa.babylanguage.astcandidate" &&
+        val releaseQa = args.getString("ast_caption_release_qa") == "true"
+        check(!releaseQa || captionProbe)
+        val candidatePackage = if (releaseQa) "com.moa.babylanguage.astcandidate.releaseqa" else "com.moa.babylanguage.astcandidate"
+        if (infantProbe) check(context.packageName == candidatePackage &&
             BuildConfig.AST_INTEGRATED_CANDIDATE && BuildConfig.AST_INFANT_PRESENCE)
         else check(context.packageName == "com.moa.babylanguage.astprobe" && !BuildConfig.AST_INFANT_PRESENCE)
         check(BuildConfig.AST_INFANT_CAPTION == captionProbe) { "Benchmark mode must match the installed caption runtime" }
@@ -40,6 +43,8 @@ class AstDeviceBenchmarkTest {
             .put("api", Build.VERSION.SDK_INT).put("abi", Build.SUPPORTED_ABIS.first())
             .put("synthetic_only", true).put("infant_presence_candidate", infantProbe).put("cases", rows)
             .put("infant_caption_candidate", captionProbe)
+            .put("research_package", context.packageName)
+            .put("candidate_revision", if (releaseQa) "caption-release-20261022" else JSONObject.NULL)
             .put("caption_head_sha256", if (captionProbe) InfantCaptionHead.SHA256 else JSONObject.NULL)
         try {
             for ((index, duration) in listOf(10000, 20000, 20000).withIndex()) {

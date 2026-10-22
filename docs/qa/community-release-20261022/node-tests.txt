@@ -1,0 +1,40 @@
+✔ type filter searches all visible posts before pagination and excludes blocked authors (95.1589ms)
+✔ public read never reveals password, salt, author token, or media key (22.8033ms)
+✔ wrong password cannot edit/delete, correct password works from another browser (74.3299ms)
+✔ likes are idempotent, concurrent duplicate creates only one (27.5431ms)
+✔ comments require their own password; parent deletion removes visibility (84.9596ms)
+✔ block hides posts and media only for blocking visitor; unblock restores (22.5445ms)
+✔ reports are private; only verified configured operator can moderate (26.8801ms)
+✔ rate limits survive new visitor cookies and password guessing is bounded (357.7488ms)
+✔ explicit consent, valid media, origin and cookie required before publish (15.4725ms)
+✔ media deletion failure stays invisible and is retried on next session (59.7836ms)
+✔ unset operator configuration revokes persisted operator immediately (4.7911ms)
+✔ feed and comments cursors do not skip matching timestamps (34.0924ms)
+✔ operator can inspect, hide, restore and remove a reported comment (55.7447ms)
+✔ client retries do not duplicate a post or comment (99.2702ms)
+✔ changed retry payload or password is rejected, including old objects without a fingerprint (95.5084ms)
+✔ comment retries bind consent, parent, nickname, text and password (132.9429ms)
+✔ detail fetch works outside first feed page and respects block, hidden and deleted states (40.7289ms)
+✔ deletion during password verification cannot repopulate post (75.5481ms)
+✔ deletion during password verification cannot repopulate comment (77.1556ms)
+✔ Back closes the top dialog, then its parent, while preserving the feed (8.4669ms)
+✔ Declining to discard a draft restores its entry and keeps the parent open (0.5234ms)
+✔ Closing with X removes its history entry without closing the parent (0.453ms)
+✔ Removing parent and child together does not leave stale Back entries (0.2727ms)
+✔ password hashes have random salts, reject a different password (86.5366ms)
+✔ cross origin and simple form requests cannot mutate (24.8917ms)
+✔ cookie parsing rejects malformed tokens; text bounds are enforced (0.6132ms)
+✔ reject SVG, PNG disguised as MP4, oversize, and JPEG EXIF (0.83ms)
+✔ real JPEG and MP4 structure accepted; signature-only files and truncated media rejected (2.5273ms)
+✔ MP4 duration is read from movie and track bytes rather than client input (0.9209ms)
+✔ video metadata and creation dates are removed without moving samples (2.5073ms)
+✔ short movie headers cannot conceal a long sample timeline (0.7714ms)
+✔ too many tiny MP4 boxes are rejected with a bounded allocation budget (7.2533ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1538.5423

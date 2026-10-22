@@ -879,7 +879,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("2026년 10월 21일 개정 · 게시판 연결판의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("2026년 10월 22일 개정 · 게시판 연결판의 처리 방식", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }

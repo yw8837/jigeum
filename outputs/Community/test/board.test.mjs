@@ -11,7 +11,7 @@ beforeEach(() => {
     all:async()=>({results:sqlite.prepare(sql).all(...args)}),run:async()=>({meta:sqlite.prepare(sql).run(...args)})});
   const objects=new Map();
   env={DB:{prepare,batch:async list=>{sqlite.exec('BEGIN');try{const r=await Promise.all(list.map(s=>s.run()));sqlite.exec('COMMIT');return r;}catch(e){sqlite.exec('ROLLBACK');throw e;}}},
-    BUCKET:{put:async(k,v)=>objects.set(k,new Uint8Array(v)),get:async k=>objects.has(k)?{body:objects.get(k),size:objects.get(k).length}:null,delete:async k=>objects.delete(k)},RATE_SECRET:'test-secret',ADMIN_EMAIL:'operator@example.test'};
+    BUCKET:{put:async(k,v,options={})=>objects.set(k,{bytes:new Uint8Array(v),customMetadata:options.customMetadata}),get:async k=>{const o=objects.get(k);return o?{body:o.bytes,size:o.bytes.length,customMetadata:o.customMetadata,arrayBuffer:async()=>o.bytes.slice().buffer}:null;},delete:async k=>objects.delete(k)},RATE_SECRET:'test-secret',ADMIN_EMAIL:'operator@example.test'};
 });
 afterEach(()=>sqlite.close());
 const visitor='a'.repeat(64),second='b'.repeat(64);
@@ -21,7 +21,7 @@ async function call(path,data,who=visitor,extra={}) {
     body:data instanceof FormData?data:data?JSON.stringify(data):undefined}),env);
 }
 function form(id=crypto.randomUUID()) {
-  const jpeg=new Uint8Array(25);jpeg.set([255,216,255,218]);jpeg.set([255,217],23);
+  const jpeg=readFileSync(new URL('./fixtures/synthetic.jpg',import.meta.url));
   const f=new FormData();for(const [k,v]of Object.entries({id,nickname:'익명',body:'우리 아기의 오늘',password:'my-only-post-password',consent:'yes'}))f.set(k,v);
   f.set('file',new File([jpeg],'photo.jpg',{type:'image/jpeg'}));return f;
 }
@@ -56,9 +56,9 @@ test('likes are idempotent, concurrent duplicate creates only one',async()=>{
 });
 test('comments require their own password; parent deletion removes visibility',async()=>{
   const postId=await create(),id=crypto.randomUUID();
-  assert.equal((await call('comments',{postId,id,body:'귀여워요',password:'comment-password'},second)).status,201);
+  assert.equal((await call('comments',{postId,id,body:'귀여워요',password:'comment-password',consent:'yes'},second)).status,201);
   assert.equal((await call('manage',{kind:'comment',id,action:'delete',password:'my-only-post-password'})).status,403);
-  assert.equal((await call('manage',{kind:'comment',id,action:'edit',password:'comment-password',body:'정말 귀여워요'})).status,200);
+  assert.equal((await call('manage',{kind:'comment',id,action:'edit',password:'comment-password',consent:'yes',body:'정말 귀여워요'})).status,200);
   await call('manage',{kind:'post',id:postId,action:'delete',password:'my-only-post-password'});
   assert.equal((await call('comments/'+postId)).status,404);
 });
@@ -117,7 +117,7 @@ test('feed and comments cursors do not skip matching timestamps',async()=>{
 });
 test('operator can inspect, hide, restore and remove a reported comment',async()=>{
   const postId=await create(),id=crypto.randomUUID(),auth={'oai-authenticated-user-id':'operator-id','oai-authenticated-user-email':'operator@example.test'};
-  await call('comments',{postId,id,body:'검토할 댓글',password:'comment-password'});
+  await call('comments',{postId,id,body:'검토할 댓글',password:'comment-password',consent:'yes'});
   await call('report',{kind:'comment',id,reason:'검토 요청'},second);
   const report=(await (await call('moderation',null,visitor,auth)).json()).reports[0];
   assert.equal(report.body,'검토할 댓글');assert.equal(report.postId,postId);assert.equal(report.state,'active');
@@ -129,6 +129,59 @@ test('operator can inspect, hide, restore and remove a reported comment',async()
 test('client retries do not duplicate a post or comment',async()=>{
   const f=form(),id=f.get('id');assert.equal((await call('posts',f)).status,201);assert.equal((await call('posts',f)).status,200);
   assert.equal((await call('posts',f,second)).status,409);assert.equal((await (await call('feed')).json()).posts.length,1);
-  const data={postId:id,id:crypto.randomUUID(),body:'댓글',password:'comment-password'};
+  const data={postId:id,id:crypto.randomUUID(),body:'댓글',password:'comment-password',consent:'yes'};
   await call('comments',data);await call('comments',data);assert.equal((await (await call('comments/'+id)).json()).comments.length,1);
+});
+
+test('changed retry payload or password is rejected, including old objects without a fingerprint',async()=>{
+  const f=form(),id=f.get('id');assert.equal((await call('posts',f)).status,201);
+  for(const [key,value] of [['body','바뀐 설명'],['password','a-new-password'],['nickname','새 닉네임']]){
+    const retry=form(id);retry.set(key,value);assert.equal((await call('posts',retry)).status,409);
+  }
+  const changed=form(id),jpeg=readFileSync(new URL('./fixtures/synthetic.jpg',import.meta.url));
+  // A valid extra JPEG COM marker changes the content without corrupting the image.
+  changed.set('file',new File([jpeg.subarray(0,2),new Uint8Array([255,254,0,4,65,66]),jpeg.subarray(2)],'photo.jpg',{type:'image/jpeg'}));
+  assert.equal((await call('posts',changed)).status,409);
+  const get=env.BUCKET.get;env.BUCKET.get=async(...args)=>({...await get(...args),customMetadata:undefined});
+  assert.equal((await call('posts',form(id))).status,200);
+  assert.equal((await (await call('post/'+id)).json()).post.body,'우리 아기의 오늘');
+});
+test('comment retries bind consent, parent, nickname, text and password',async()=>{
+  const postId=await create(),other=await create(),data={postId,id:crypto.randomUUID(),body:'댓글',password:'comment-password',consent:'yes'};
+  assert.equal((await call('comments',{...data,consent:'no'})).status,400);
+  assert.equal((await call('comments',data)).status,201);
+  for(const update of [{postId:other},{body:'바뀐 댓글'},{password:'new-password'},{nickname:'새 이름'}])
+    assert.equal((await call('comments',{...data,...update})).status,409);
+  assert.equal((await call('comments',data)).status,200);
+});
+test('detail fetch works outside first feed page and respects block, hidden and deleted states',async()=>{
+  const id=await create();
+  for(let i=0;i<21;i++)sqlite.prepare('INSERT INTO posts SELECT ?,author,nickname,body,salt,password_hash,media_key,mime,bytes,duration,created+?,state FROM posts WHERE id=?').run(crypto.randomUUID(),i+1,id);
+  assert.ok(!(await (await call('feed')).json()).posts.some(p=>p.id===id));
+  const detail=await (await call('post/'+id)).json();assert.equal(detail.post.id,id);
+  assert.ok(!JSON.stringify(detail).includes('password_hash'));
+  await call('block',{kind:'post',id},second);assert.equal((await call('post/'+id,null,second)).status,404);
+  sqlite.prepare("UPDATE posts SET state='hidden' WHERE id=?").run(id);assert.equal((await call('post/'+id)).status,404);
+  sqlite.prepare("UPDATE posts SET state='deleted' WHERE id=?").run(id);assert.equal((await call('post/'+id)).status,404);
+});
+for(const kind of ['post','comment'])test('deletion during password verification cannot repopulate '+kind,async()=>{
+  const postId=await create(),id=kind==='post'?postId:crypto.randomUUID();
+  if(kind==='comment')await call('comments',{postId,id,body:'원래 댓글',password:'comment-password',consent:'yes'});
+  const original=env.DB.prepare;let captured=false,release,signal;
+  const gate=new Promise(r=>release=r),selected=new Promise(r=>signal=r);
+  function wrapped(sql,args=[]){
+    const real=original(sql).bind(...args);
+    return {...real,bind:(...v)=>wrapped(sql,v),first:async()=>{
+      const row=await real.first();
+      if(!captured&&sql===`SELECT * FROM ${kind==='post'?'posts':'comments'} WHERE id=? AND state!='deleted'`){captured=true;signal();await gate;}
+      return row;
+    }};
+  }
+  env.DB.prepare=sql=>wrapped(sql);
+  const pending=call('manage',{kind,id,action:'edit',body:'늦게 도착한 수정',password:kind==='post'?'my-only-post-password':'comment-password'});
+  await selected;
+  assert.equal((await call('manage',{kind:'post',id:postId,action:'delete',password:'my-only-post-password'})).status,200);
+  release();assert.equal((await pending).status,404);
+  const row=sqlite.prepare(`SELECT body,state FROM ${kind==='post'?'posts':'comments'} WHERE id=?`).get(id);
+  assert.equal(row.body,'');assert.equal(row.state,'deleted');
 });

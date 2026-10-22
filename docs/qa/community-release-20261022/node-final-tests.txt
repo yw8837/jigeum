@@ -1,0 +1,42 @@
+✔ type filter searches all visible posts before pagination and excludes blocked authors (86.9249ms)
+✔ public read never reveals password, salt, author token, or media key (22.4124ms)
+✔ wrong password cannot edit/delete, correct password works from another browser (61.0584ms)
+✔ likes are idempotent, concurrent duplicate creates only one (18.8503ms)
+✔ comments require their own password; parent deletion removes visibility (75.2286ms)
+✔ block hides posts and media only for blocking visitor; unblock restores (19.2612ms)
+✔ reports are private; only verified configured operator can moderate (19.6024ms)
+✔ rate limits survive new visitor cookies and password guessing is bounded (238.7373ms)
+✔ explicit consent, valid media, origin and cookie required before publish (7.2023ms)
+✔ media deletion failure stays invisible and is retried on next session (33.6034ms)
+✔ unset operator configuration revokes persisted operator immediately (2.9015ms)
+✔ feed and comments cursors do not skip matching timestamps (21.5904ms)
+✔ operator can inspect, hide, restore and remove a reported comment (35.5325ms)
+✔ client retries do not duplicate a post or comment (66.7698ms)
+✔ changed retry payload or password is rejected, including old objects without a fingerprint (72.7069ms)
+✔ comment retries bind consent, parent, nickname, text and password (81.0047ms)
+✔ detail fetch works outside first feed page and respects block, hidden and deleted states (24.6162ms)
+✔ deletion during password verification cannot repopulate post (52.6422ms)
+✔ deletion during password verification cannot repopulate comment (63.3945ms)
+✔ Back closes the top dialog, then its parent, while preserving the feed (8.7781ms)
+✔ Declining to discard a draft restores its entry and keeps the parent open (0.2462ms)
+✔ Closing with X removes its history entry without closing the parent (0.1481ms)
+✔ Removing parent and child together does not leave stale Back entries (0.161ms)
+✔ password hashes have random salts, reject a different password (68.3496ms)
+✔ cross origin and simple form requests cannot mutate (16.069ms)
+✔ cookie parsing rejects malformed tokens; text bounds are enforced (0.3575ms)
+✔ reject SVG, PNG disguised as MP4, oversize, and JPEG EXIF (0.5726ms)
+✔ real JPEG and MP4 structure accepted; signature-only files and truncated media rejected (1.9604ms)
+✔ MP4 duration is read from movie and track bytes rather than client input (1.3016ms)
+✔ video metadata and creation dates are removed without moving samples (2.9535ms)
+✔ short movie headers cannot conceal a long sample timeline (0.6855ms)
+✔ Android-style extended mdat accepts real samples and preserves them while stripping metadata (1.1262ms)
+✔ extended mdat rejects truncated, unsafe and out-of-bounds sizes and sample offsets inside its header (3.0067ms)
+✔ too many tiny MP4 boxes are rejected with a bounded allocation budget (8.6401ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1101.8798

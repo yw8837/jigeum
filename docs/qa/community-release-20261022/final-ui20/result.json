@@ -1,0 +1,8 @@
+{
+  "status": "pass",
+  "source": "public CC0 QA fixture; never uploaded",
+  "intent_accuracy_tested": false,
+  "result_observed_after_seconds": 7.7,
+  "twenty_second_result": true,
+  "saved_scene_result_retained": true
+}

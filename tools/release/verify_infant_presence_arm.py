@@ -15,7 +15,9 @@ sys.path.insert(0, str(ROOT / 'tools/research'))
 from ast_device_benchmark import (CANDIDATE_APK_SHA, CANDIDATE_TEST_SHA,
                                   CANDIDATE_PACKAGE, validate_measurement,
                                   CAPTION_APK_SHA, CAPTION_TEST_SHA,
-                                  CAPTION_APK_BYTES, CAPTION_TEST_BYTES)
+                                  CAPTION_APK_BYTES, CAPTION_TEST_BYTES,
+                                  RELEASE_QA_PACKAGE, RELEASE_QA_APK_SHA, RELEASE_QA_TEST_SHA,
+                                  RELEASE_QA_APK_BYTES, RELEASE_QA_TEST_BYTES)
 
 MAX_BYTES = 128 * 1024
 MAX_AST_MS = 30_000  # Leaves headroom within the existing 45-second analysis limit.
@@ -43,9 +45,14 @@ def read_proof(path):
                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite JSON')))
 
 
-def verify(value, directory, *, now=None, infant_caption=False):
+def verify(value, directory, *, now=None, infant_caption=False, release_qa=False):
     if not isinstance(value, dict):
         raise ValueError('Require a JSON object')
+    if release_qa:
+        if not infant_caption or value.get('candidate_revision') != 'caption-release-20261022':
+            raise ValueError('Explicit current caption release proof required')
+    elif value.get('candidate_revision') is not None:
+        raise ValueError('Release QA proof requires its explicit mode')
     run_id = value.get('run_id')
     if not isinstance(run_id, str) or not re.fullmatch('[a-f0-9]{32}', run_id):
         raise ValueError('Missing or malformed run ID')
@@ -92,17 +99,22 @@ def verify(value, directory, *, now=None, infant_caption=False):
     artifacts = ([('app', CAPTION_APK_SHA, CAPTION_APK_BYTES), ('test', CAPTION_TEST_SHA, CAPTION_TEST_BYTES)]
                  if infant_caption else [('app', CANDIDATE_APK_SHA, 265_353_775),
                                          ('test', CANDIDATE_TEST_SHA, 2_765_526)])
+    if release_qa:
+        artifacts = [('app', RELEASE_QA_APK_SHA, RELEASE_QA_APK_BYTES), ('test', RELEASE_QA_TEST_SHA, RELEASE_QA_TEST_BYTES)]
     for role, digest, size in artifacts:
         if not re.fullmatch('[a-f0-9]{64}', digest) or size < 1:
             raise ValueError('Selected candidate APK/test pair is not frozen')
         artifact = value.get('provenance', {}).get(role + '_apk', {})
         installed = value.get(role + '_installed', {})
-        expected_package = CANDIDATE_PACKAGE + ('.test' if role == 'test' else '')
+        expected_package = (RELEASE_QA_PACKAGE if release_qa else CANDIDATE_PACKAGE) + ('.test' if role == 'test' else '')
         if (artifact.get('sha256') != digest or type(artifact.get('bytes')) is not int or artifact['bytes'] != size or
                 installed.get('verified') is not True or installed.get('sha256') != digest or
                 installed.get('expected_sha256') != digest or installed.get('package') != expected_package or
                 installed.get('errors') != []):
             raise ValueError('Exact reviewed and installed APK/test provenance required')
+    if release_qa and (value.get('measurement', {}).get('research_package') != RELEASE_QA_PACKAGE or
+                       value.get('measurement', {}).get('candidate_revision') != 'caption-release-20261022'):
+        raise ValueError('Native release QA package/revision differs')
     measurement = validate_measurement(value.get('measurement', {}), run_id,
                                        infant_presence=True, infant_caption=infant_caption)
     if (measurement.get('abi') != device['ro.product.cpu.abi'] or
@@ -143,10 +155,11 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('proof', type=Path)
     parser.add_argument('--infant-caption-candidate', action='store_true')
+    parser.add_argument('--caption-release-qa', action='store_true')
     args = parser.parse_args(argv)
     try:
         print(json.dumps(verify(read_proof(args.proof), args.proof.resolve().parent,
-                                infant_caption=args.infant_caption_candidate)))
+                                infant_caption=args.infant_caption_candidate, release_qa=args.caption_release_qa)))
         return 0
     except (ValueError, TypeError, KeyError, AttributeError, OSError) as error:
         print(json.dumps({'status': 'fail', 'error': str(error)}))

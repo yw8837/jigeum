@@ -7,10 +7,12 @@ param(
     [switch]$AstBabbleSupport,
     [switch]$InfantPresenceSupport,
     [switch]$InfantCaptionSupport,
+    [switch]$CaptionReleaseQaProof,
     [string]$InfantArmProof,
     [string]$ProofPython
 )
 $ErrorActionPreference = 'Stop'
+if ($CaptionReleaseQaProof -and -not $InfantCaptionSupport) { throw 'Release QA proof requires InfantCaptionSupport.' }
 if ($AstBabbleSupport -and $Purpose -ne 'closed-test') {
     throw 'AST babble support is valid only for closed-test beta candidates.'
 }
@@ -26,6 +28,7 @@ if ($InfantPresenceSupport) {
     $ProofPython = [IO.Path]::GetFullPath($ProofPython)
     $proofArguments = @((Join-Path $PSScriptRoot 'verify_infant_presence_arm.py'), $InfantArmProof)
     if ($InfantCaptionSupport) { $proofArguments += '--infant-caption-candidate' }
+    if ($CaptionReleaseQaProof) { $proofArguments += '--caption-release-qa' }
     & $ProofPython @proofArguments
     if ($LASTEXITCODE -ne 0) { throw 'Infant presence ARM proof rejected; no signing or build started.' }
 } elseif ($InfantArmProof -or $ProofPython) {
@@ -76,6 +79,7 @@ try {
             $gradleArguments += @('-PagattokInfantPresenceBeta=true', "-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
         }
         if ($InfantCaptionSupport) { $gradleArguments += '-PagattokInfantCaptionBeta=true' }
+        if ($CaptionReleaseQaProof) { $gradleArguments += '-PagattokCaptionReleaseQaProof=true' }
         & ./gradlew.bat @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }

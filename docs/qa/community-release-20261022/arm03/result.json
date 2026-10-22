@@ -1,0 +1,244 @@
+{
+  "run_id": "0308e9d3b5f14439b9c409c4d9ad1654",
+  "status": "pass",
+  "quality_validated": false,
+  "stage": "complete",
+  "storage_before": {
+    "measured_at": "2026-10-22T10:57:26.642101+00:00",
+    "scope": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\arm03",
+    "file_count": 0,
+    "folder_logical_bytes": 0,
+    "drive_free_bytes": 58432274432
+  },
+  "candidate_revision": "caption-release-20261022",
+  "app_manifest": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "permissions": [
+      "android.permission.CAMERA",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.WAKE_LOCK",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "com.moa.babylanguage.astcandidate.releaseqa.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ]
+  },
+  "test_manifest": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa.test",
+    "permissions": [
+      "android.permission.REORDER_TASKS"
+    ]
+  },
+  "provenance": {
+    "app_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\arm03\\.frozen-apks-k4wmsel3\\probe-app.apk",
+      "sha256": "464e2034dab85881b62a608a236a79791ed9946f90aaa82bb2117541416f11d2",
+      "bytes": 264722265
+    },
+    "test_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\arm03\\.frozen-apks-k4wmsel3\\probe-test.apk",
+      "sha256": "e3382b281ca9902d4abcefb17761ec33ae5958692e6b12afc11b69d85ff67281",
+      "bytes": 3180329
+    },
+    "git": {
+      "sha": "709d7966ee4604d7a60da4cd401e450f4c570f00",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/Community/app/board.tsx",
+        " M outputs/Community/lib/board.mjs",
+        " M outputs/Community/lib/security.mjs",
+        " M outputs/Community/test/board.test.mjs",
+        " M outputs/Community/test/security.test.mjs",
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/astProbeAndroidTest/java/com/moa/babylanguage/AstDeviceBenchmarkTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        " M tools/qa/community-live-smoke.mjs",
+        " M tools/release/build-play-bundle.ps1",
+        " M tools/release/test_verify_infant_presence_arm.py",
+        " M tools/release/verify_infant_presence_arm.py",
+        " M tools/research/ast_device_benchmark.py",
+        "?? docs/qa/community-release-20261022/",
+        "?? outputs/Community/public/privacy.html",
+        "?? outputs/Community/test/fixtures/"
+      ]
+    }
+  },
+  "physical_device": {
+    "ro.kernel.qemu": "0",
+    "ro.boot.qemu": "",
+    "ro.product.cpu.abi": "arm64-v8a",
+    "ro.product.model": "SM-S938N",
+    "ro.build.version.sdk": "36"
+  },
+  "production_before": {
+    "installed": true,
+    "apk_hashes": [
+      "ae62af077081c9d1faffa44095be933efd159af286dba1f6ff217d29679b3e8a",
+      "bb6558baf2a7a6698325042ffc8d5afc421afc8be0b95bb8ffc5bbea4d80e5b9",
+      "e28758e83354475638f6fecb81c93da2fceb3658488a5143abf368d4912d75ef",
+      "fb551f8f21e8cf4586b3814555e6f55cc5526a201e329f0cdca6bd8ab15908c2"
+    ],
+    "versionCode": "39 minSdk=26 targetSdk=36",
+    "versionName": "0.5.25-beta",
+    "lastUpdateTime": "2026-10-13 15:00:28"
+  },
+  "app_installed": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "base_apk": "/data/app/~~2rjZsZG6iFO5tajHleS8Rg==/com.moa.babylanguage.astcandidate.releaseqa-6xBQeJerOoQYF_NMTnAGIw==/base.apk",
+    "sha256": "464e2034dab85881b62a608a236a79791ed9946f90aaa82bb2117541416f11d2",
+    "expected_sha256": "464e2034dab85881b62a608a236a79791ed9946f90aaa82bb2117541416f11d2",
+    "version_code": 40,
+    "version_name": "0.5.26-astcandidate",
+    "verified": true,
+    "errors": []
+  },
+  "test_installed": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa.test",
+    "base_apk": "/data/app/~~DMOYvPnD5sg9H3ofOhFNdg==/com.moa.babylanguage.astcandidate.releaseqa.test-8EymE-fMnABSikwR5mO4cQ==/base.apk",
+    "sha256": "e3382b281ca9902d4abcefb17761ec33ae5958692e6b12afc11b69d85ff67281",
+    "expected_sha256": "e3382b281ca9902d4abcefb17761ec33ae5958692e6b12afc11b69d85ff67281",
+    "version_code": 0,
+    "version_name": "null",
+    "verified": true,
+    "errors": []
+  },
+  "benchmark": {
+    "status": "pass",
+    "tests": 1,
+    "passed_tests": 1,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 16.98,
+    "exit": 0
+  },
+  "measurement": {
+    "run_id": "0308e9d3b5f14439b9c409c4d9ad1654",
+    "status": "completed",
+    "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+    "device_model": "SM-S938N",
+    "api": 36,
+    "abi": "arm64-v8a",
+    "synthetic_only": true,
+    "infant_presence_candidate": true,
+    "cases": [
+      {
+        "index": 0,
+        "duration_ms": 10000,
+        "input_samples": 160000,
+        "elapsed_ms": 3238,
+        "peak_sampled_pss_kb": 515026,
+        "pss_samples": 29,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          }
+        ],
+        "caption_native_windows": 1,
+        "caption_scores_finite": true
+      },
+      {
+        "index": 1,
+        "duration_ms": 20000,
+        "input_samples": 320000,
+        "elapsed_ms": 5651,
+        "peak_sampled_pss_kb": 521468,
+        "pss_samples": 50,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          },
+          {
+            "start_ms": 5000,
+            "end_ms": 15000
+          },
+          {
+            "start_ms": 10000,
+            "end_ms": 20000
+          }
+        ],
+        "caption_native_windows": 3,
+        "caption_scores_finite": true
+      },
+      {
+        "index": 2,
+        "duration_ms": 20000,
+        "input_samples": 320000,
+        "elapsed_ms": 5602,
+        "peak_sampled_pss_kb": 520695,
+        "pss_samples": 49,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          },
+          {
+            "start_ms": 5000,
+            "end_ms": 15000
+          },
+          {
+            "start_ms": 10000,
+            "end_ms": 20000
+          }
+        ],
+        "caption_native_windows": 3,
+        "caption_scores_finite": true
+      }
+    ],
+    "infant_caption_candidate": true,
+    "research_package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "candidate_revision": "caption-release-20261022",
+    "caption_head_sha256": "979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1"
+  },
+  "recovery": {
+    "status": "pass",
+    "tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 7.11,
+    "exit": 0
+  },
+  "cleanup_complete": true,
+  "production_after": {
+    "installed": true,
+    "apk_hashes": [
+      "ae62af077081c9d1faffa44095be933efd159af286dba1f6ff217d29679b3e8a",
+      "bb6558baf2a7a6698325042ffc8d5afc421afc8be0b95bb8ffc5bbea4d80e5b9",
+      "e28758e83354475638f6fecb81c93da2fceb3658488a5143abf368d4912d75ef",
+      "fb551f8f21e8cf4586b3814555e6f55cc5526a201e329f0cdca6bd8ab15908c2"
+    ],
+    "versionCode": "39 minSdk=26 targetSdk=36",
+    "versionName": "0.5.25-beta",
+    "lastUpdateTime": "2026-10-13 15:00:28"
+  },
+  "production_install_unchanged": true,
+  "frozen_apk_copies_removed": true,
+  "storage_after": {
+    "measured_at": "2026-10-22T10:58:06.724586+00:00",
+    "scope": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\arm03",
+    "file_count": 5,
+    "folder_logical_bytes": 4571,
+    "drive_free_bytes": 58431225856
+  },
+  "completed_at": "2026-10-22T10:58:06.724767+00:00",
+  "arm_gate_passed": true
+}

@@ -20,7 +20,7 @@ try {
     const posted=await request('posts',form);assert.equal(posted.status,201,await posted.clone().text());created.push(id);
     assert.equal((await request('like',{postId:id,liked:true})).status,200);
     assert.equal((await (await request('like',{postId:id,liked:true})).json()).count,1);
-    const commentId=crypto.randomUUID();assert.equal((await request('comments',{postId:id,id:commentId,body:'합성 댓글',password:'comment-only-qa-password'})).status,201);
+    const commentId=crypto.randomUUID();assert.equal((await request('comments',{postId:id,id:commentId,body:'합성 댓글',password:'comment-only-qa-password',consent:'yes'})).status,201);
     assert.equal((await request('manage',{kind:'post',id,action:'edit',body:'수정',password:'wrong-password'})).status,403);
     assert.equal((await request('manage',{kind:'post',id,action:'edit',body:'합성 QA 수정 완료',password:'synthetic-only-qa-password'})).status,200);
     const range=await request('media/'+id,null,{Range:'bytes=0-99'});assert.equal(range.status,206);assert.equal((await range.arrayBuffer()).byteLength,100);

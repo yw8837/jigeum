@@ -1,0 +1,6 @@
+{
+  "status": "pass",
+  "expected": "absent",
+  "archive": "work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.aab",
+  "payload_entries": []
+}
