@@ -105,6 +105,7 @@ android {
         // Public configuration only. Server credentials must never enter the APK.
         fun publicConfig(name: String) = "\"" + (System.getenv(name) ?: "")
             .replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "").replace("\r", "") + "\""
+        buildConfigField("String", "COMMUNITY_URL", publicConfig("JIGEUM_COMMUNITY_URL"))
         buildConfigField("String", "PLAY_VERIFY_URL", publicConfig("JIGEUM_PLAY_VERIFY_URL"))
         buildConfigField("String", "PLAY_ENTITLEMENT_PUBLIC_KEY", publicConfig("JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY"))
     }

@@ -93,7 +93,8 @@ internal fun CaptureFlow(
     onGallery: ((ClipInterpretation, String, LocalClip?, ClipRange?, Boolean) -> Unit)? = null,
     onSaveVideo: ((LocalClip, ClipRange) -> Unit)? = null,
     saveReceipt: CaptureSaveReceipt? = null,
-    onViewSaved: ((Long) -> Unit)? = null
+    onViewSaved: ((Long) -> Unit)? = null,
+    onCommunity: ((ClipInterpretation, String, LocalClip?, ClipRange?) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -493,6 +494,16 @@ internal fun CaptureFlow(
                         stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, true)
                     }
                     Text("사진·동영상 앱의 ‘아가톡’ 앨범에 저장해요. 앱 기록 보관은 아래 저장 버튼을 눌러 주세요.", color = Muted, fontSize = 13.sp)
+                }
+                if (onCommunity != null) {
+                    OutlinedButton(onClick = {
+                        stopPlayback++; onCommunity(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange)
+                    }, enabled = !navigationLocked && cardPhrase.isNotBlank(),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("result-community")) {
+                        Text("우리 아이 자랑에 올리기")
+                    }
+                    Text("공유할 카드를 기기에서 준비해요. 게시판에서 미리보고 공개 버튼을 눌러야 올라가요.",
+                        color = Muted, fontSize = 12.sp, lineHeight = 19.sp)
                 }
                 var expanded by remember { mutableStateOf(false) }
                 TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) "관찰 근거 접기" else "어떤 소리를 들었나요?", color = Ink) }

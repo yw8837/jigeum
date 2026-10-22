@@ -286,6 +286,7 @@ internal fun JigeumApp(
                                     Page.HOME -> HomeScreen(observations,
                                         testDistribution = testDistribution, premium = billingState.isPremium,
                                         onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
+                                        onCommunity = if (CommunitySharing.available) ({ CommunitySharing.open(activity) }) else null,
                                         onPremium = { showPass(null, Page.HOME) },
                                         onAbout = { aboutReturn = Page.HOME; page = Page.ABOUT })
                                     Page.CAPTURE -> CaptureFlow(
@@ -307,6 +308,15 @@ internal fun JigeumApp(
                                                 }, { notify("선택한 구간을 자막 없이 아가톡 앨범에 저장했어요.") })
                                             }
                                         },
+                                        onCommunity = if (CommunitySharing.available) ({ result, phrase, clip, range ->
+                                            if (!busy && !sharing) update({
+                                                val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase,
+                                                    basis = ExpressionBasis.forPhrase(result.basis, result.phrase, phrase))
+                                                val prepared = CommunitySharing.prepare(activity, record, clip, range)
+                                                try { CommunitySharing.open(activity, prepared) }
+                                                catch (error: Exception) { withContext(Dispatchers.IO) { prepared.delete() }; throw error }
+                                            })
+                                        }) else null,
                                         onGallery = { result, phrase, clip, range, video ->
                                             if (!busy && !sharing) {
                                                 val generation = MemoryArtifacts.currentGeneration()
@@ -495,7 +505,8 @@ private fun AppNavigation(current: Page, rail: Boolean = false, onSelect: (Page)
 @Composable
 internal fun HomeScreen(
     observations: List<Observation>, onRecord: () -> Unit, onTimeline: () -> Unit,
-    onPremium: () -> Unit, onAbout: () -> Unit, testDistribution: Boolean, premium: Boolean
+    onPremium: () -> Unit, onAbout: () -> Unit, testDistribution: Boolean, premium: Boolean,
+    onCommunity: (() -> Unit)? = null
 ) {
     Column(Modifier.fillMaxSize()) {
       LazyColumn(
@@ -518,6 +529,10 @@ internal fun HomeScreen(
             )
             Spacer(Modifier.height(18.dp))
             HeroRecordCard()
+            if (onCommunity != null) OutlinedButton(onClick = onCommunity,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).heightIn(min = 48.dp).testTag("home-community")) {
+                Text("우리 아이 자랑 · 영상카드 함께 나누기", color = Ink)
+            }
             TextButton(onClick = onAbout, modifier = Modifier.padding(horizontal = 12.dp).heightIn(min = 48.dp).testTag("home-about")) {
                 Text("어떤 근거로 아기말을 만들까요?", color = Ink, fontSize = 13.sp)
             }
@@ -815,7 +830,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "1. 서비스와 처리 범위" to
             "‘아가톡 - 지금 내 기분이 그래’는 6~18개월 아기의 보호자가 소리와 장면을 살펴보고 표현 예시를 만드는 앱입니다. " +
             "소리 유형, 선택 구간, 메모, 문장, 모델 단서와 이전 버전의 기록은 이 기기에만 저장합니다. " +
-            "아기 기록을 저장하는 외부 DB나 앱 회원가입은 없습니다.",
+            "개인 분석·기록에는 외부 DB나 앱 회원가입이 없습니다. 우리 아이 자랑 게시판은 보호자가 직접 공개한 자료만 별도로 저장합니다.",
         "2. 마이크·카메라·선택한 영상" to
             "보호자가 시작할 때만 무료는 최대 1분, 전체 이용권은 최대 2분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
             "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
@@ -824,6 +839,13 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "앨범에 직접 저장" to
             "보호자가 앨범 저장 버튼을 누르면 결과 카드 PNG 또는 영상·원음·번역 MP4 사본을 사진·동영상 앱의 아가톡 앨범에 저장합니다. Android 10 이상은 별도 저장소 읽기 권한 없이 앱이 만든 파일만 추가합니다. Android 8·9에서는 저장 버튼을 누를 때 저장 권한을 요청합니다. " +
             "앨범 사본은 앱 기록을 삭제하거나 앱을 제거해도 남으며 해당 사진 앱에서 관리·삭제합니다. 사진 앱의 클라우드 백업이 켜져 있다면 그 앱의 설정과 정책에 따라 백업될 수 있습니다.",
+        "우리 아이 자랑 · 선택한 자료의 공개" to
+            "게시판은 로그인 없이 읽고, 선택한 사진·영상카드와 설명을 미리 확인한 뒤 공개 버튼을 누를 때만 전송합니다. 개인 분석 원본·전체 기록을 자동으로 보내지 않습니다. " +
+            "게시물·댓글·닉네임·관리 비밀번호 검증용 해시, 좋아요·차단·신고와 브라우저 무작위 식별값을 서버에 저장합니다. 비밀번호 원문은 저장하지 않으며 분실 시 자동 복구할 수 없습니다. " +
+            "OpenAI Sites / Cloudflare 서버를 사용하며 해외에서 처리될 수 있습니다. 스팸 제한에는 일별 IP 해시를 사용하고 원문 IP를 게시판 DB에 저장하지 않습니다. 호스팅 제공자의 보안 로그에는 해당 제공자의 정책이 적용됩니다. " +
+            "게시물 삭제 시 공개 접근을 즉시 차단하고 미디어를 제거합니다. 저장소 오류 시 다음 방문·운영자 확인 때 삭제를 재시도합니다. 보안상 삭제 상태와 신고는 남을 수 있습니다. 다른 사람이 이미 저장한 사본까지 회수할 수 없습니다. " +
+            "게시판 공유용 기기 초안은 화면 종료 시 삭제하며, 비정상 종료로 남은 파일은 24시간이 지난 뒤 다음 게시판 사용 때 정리합니다. 앱 기록을 지워도 공개 게시물은 자동 삭제되지 않으므로 게시판에서 비밀번호로 별도 삭제해 주세요. " +
+            "공유할 권리가 있는 자료만 올리고 아동의 노출·민감한 장면, 실명·주소·연락처는 올리지 마세요. 신고·작성자 차단 기능과 운영자 삭제 요청을 이용할 수 있습니다.",
         "3. 외부 전송과 제3자 제공" to
             "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
@@ -857,7 +879,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("시행일 2026년 10월 2일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("2026년 10월 21일 개정 · 게시판 연결판의 처리 방식", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }
