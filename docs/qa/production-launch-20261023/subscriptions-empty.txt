@@ -1,0 +1,82 @@
+Browser tab: 7, Title: "정기 결제 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions".
+1 AXWebArea 정기 결제 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+				58 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					59 button 모니터링 및 개선
+						60 text 모니터링 및 개선
+				61 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					62 button 사용자 늘리기
+						63 text 사용자 늘리기
+				64 container (expanded) Description: Play를 통한 수익 창출, Secondary Actions: Collapse
+					65 button Play를 통한 수익 창출
+						66 text Play를 통한 수익 창출
+					69 content list
+						70 container
+							71 container (expanded) Description: 제품, Secondary Actions: Collapse
+								72 button 제품
+								105 content list
+									106 container
+										107 container 앱 가격
+											108 button 앱 가격
+										109 container 일회성 제품
+											110 button 일회성 제품
+										111 container 정기 결제
+											112 button 정기 결제
+							73 container 상품화 및 최적화
+								74 button 상품화 및 최적화
+							75 container 가격 실험
+								76 button 가격 실험
+							77 container 프로모션 코드
+								78 button 프로모션 코드
+							79 container (collapsed) Description: 재무 보고서, Secondary Actions: Expand
+								80 button 재무 보고서
+							81 container 수익 창출 설정
+								82 button 수익 창출 설정
+			67 container main-content
+				68 container
+					113 heading 정기 결제, Value: 1
+						114 text 정기 결제
+					115 heading 반복 또는 선불 방식으로 콘텐츠 또는 서비스를 판매하세요., Value: 2
+						116 text 반복 또는 선불 방식으로 콘텐츠 또는 서비스를 판매하세요.
+					117 text 정기 결제를 만들어 다양한 방식으로 판매하세요. 자동 갱신 정기 결제, 충전 방식의 선불 요금제, 다양한 기간을 구성해 보세요. 혜택을 추가해 신규 정기 결제 사용자를 유치하거나 기존 정기 결제 사용자의 업그레이드를 유도할 수도 있습니다.
+					118 button 구독 만들기
+						119 text 구독 만들기
+					120 link Description: 정기 결제 자세히 알아보기(새 탭에서 열림), Value: support.google.com/googleplay/android-developer/answer/12154973
+				121 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				122 link Description: 상태 대시보드, Value: status.play.google.com/
+				123 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				124 text © 2026 Google
+				125 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				126 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				127 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 정기 결제 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions

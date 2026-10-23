@@ -1,0 +1,22 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file 'C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts' line: 77
+
+* What went wrong:
+AST production cannot be mixed with beta or research flags.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 10s

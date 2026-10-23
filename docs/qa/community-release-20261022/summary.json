@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "checked_at_kst": "2026-10-22T20:46:00+09:00",
-  "status": "website_live_android_review_pending",
+  "checked_at_kst": "2026-10-23T20:08:51+09:00",
+  "status": "website_live_android_alpha40_available",
   "site": {
     "url": "https://baby.yeolmaeapps.kr/",
     "version": 5,
@@ -32,10 +32,12 @@
     "aab_sha256": "aa12d9cd8699815b0ccf518c76f3d27012de8aae249548cbd5fc70b21986aa61",
     "apk_sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
     "submitted_at_kst": "2026-10-22T20:44:00+09:00",
-    "play_status": "검토 중",
-    "current_available_version_code": 39,
+    "play_status": "선택한 테스터에게 제공됩니다",
+    "current_available_version_code": 40,
     "managed_publishing": false,
-    "actually_available": false
+    "actually_available": true,
+    "published_at_console": "10월 22일 오후 9:31",
+    "published_at_kst": "2026-10-22T21:31:00+09:00"
   },
   "checks": {
     "web_tests": 34,
@@ -56,8 +58,7 @@
     "Custom-domain operator login callback404; use default platform domain",
     "One initial hosted moderation seed POST500, retry succeeded, cause undetermined",
     "No general recognition/intention/emotion/needs accuracy claim",
-    "No actual Play installation or signed40 full S25 UI performance test",
-    "IARC/data safety/privacy changes submitted with Alpha; Google review pending"
+    "No actual Play installation or signed40 full S25 UI performance test"
   ],
   "cleanup": {
     "s25_returned": true,
@@ -73,5 +74,10 @@
   "automation": {
     "new_schedule_created": false,
     "automation33": "PAUSED"
+  },
+  "production": {
+    "access_approved": true,
+    "public_release_available": false,
+    "evidence": "../production-launch-20261023/README.md"
   }
 }

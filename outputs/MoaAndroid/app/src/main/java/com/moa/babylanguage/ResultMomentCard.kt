@@ -34,6 +34,7 @@ import kotlinx.coroutines.*
 
 /** Same dimensions, scene fit and caption renderer as the exported movie. */
 internal object MomentCardRenderer {
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
     fun frame(context: Context, record: Observation, clip: LocalClip?, range: ClipRange?): Bitmap {
         val card = TranslatedMedia.caption(record, clip?.hasVideo == true, context.resources.configuration.fontScale)
         if (clip?.hasVideo != true) return card

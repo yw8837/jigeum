@@ -67,9 +67,19 @@ require(!infantCaptionBetaEnabled || infantPresenceBetaEnabled) {
 require(!astBetaEnabled || !(astProbeEnabled || astStandaloneEnabled || astCandidateEnabled)) {
     "AST beta cannot be mixed with AST probe, standalone or candidate research flags."
 }
-val astRuntimeEnabled = astProbeEnabled || astBetaEnabled
-val infantPresenceModelEnabled = infantPresenceEnabled || infantPresenceBetaEnabled
-val infantCaptionRuntimeEnabled = infantCaptionEnabled || infantCaptionBetaEnabled
+// Production uses the same frozen, physically measured model stack as beta.
+// It never enables either tester-access flag.
+val astProductionProperty = providers.gradleProperty("agattokAstProduction").orNull
+require(astProductionProperty == null || astProductionProperty in setOf("true", "false")) {
+    "agattokAstProduction must be explicitly true or false."
+}
+val astProductionEnabled = astProductionProperty == "true"
+require(!astProductionEnabled || !(astProbeEnabled || astBetaEnabled)) {
+    "AST production cannot be mixed with beta or research flags."
+}
+val astRuntimeEnabled = astProbeEnabled || astBetaEnabled || astProductionEnabled
+val infantPresenceModelEnabled = infantPresenceEnabled || infantPresenceBetaEnabled || astProductionEnabled
+val infantCaptionRuntimeEnabled = infantCaptionEnabled || infantCaptionBetaEnabled || astProductionEnabled
 val infantPresenceAssets = layout.buildDirectory.dir("generated/infantPresenceAssets")
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
@@ -94,8 +104,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 40
-        versionName = "0.5.26"
+        versionCode = 41
+        versionName = "0.5.27"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
@@ -141,6 +151,9 @@ android {
             }
         }
         release {
+            buildConfigField("boolean", "AST_BABBLE_SUPPORT", astProductionEnabled.toString())
+            buildConfigField("boolean", "AST_INFANT_PRESENCE", astProductionEnabled.toString())
+            buildConfigField("boolean", "AST_INFANT_CAPTION", astProductionEnabled.toString())
             // MediaPipe 1.0.0 relies on protobuf fields and JNI bindings that
             // fail in an R8-minified release. Keep release behavior identical
             // to the tested debug model path until an upgraded SDK is verified.
@@ -216,6 +229,19 @@ kotlin {
 // Runtime source selection is per invocation; reject mixed graphs before any task
 // runs so another variant cannot package AST with an inactive product flag.
 gradle.taskGraph.whenReady {
+    if (astProductionEnabled) {
+        val releaseNativeMetadataTasks = setOf("stripReleaseDebugSymbols", "mergeReleaseNativeDebugMetadata")
+        val forbidden = allTasks.filter { task ->
+            task.project == project && task.name !in releaseNativeMetadataTasks &&
+                listOf("debug", "beta", "preview").any {
+                    task.name.contains(it, ignoreCase = true)
+                }
+        }
+        require(forbidden.isEmpty()) {
+            "AST production is release-only; remove agattokAstProduction for other variants: " +
+                forbidden.joinToString { it.path }
+        }
+    }
     if (astBetaEnabled) {
         // These beta tasks handle native debug metadata, not the debug variant.
         val betaNativeMetadataTasks = setOf("stripBetaDebugSymbols", "mergeBetaNativeDebugMetadata")
@@ -310,9 +336,9 @@ val verifyInfantPresenceArm by tasks.registering(Exec::class) {
             "Validated infant presence beta requires a new versionCode above 32; do not re-upload code32."
         }
         val args = mutableListOf(python, rootProject.file("../../tools/release/verify_infant_presence_arm.py").absolutePath, proof)
-        if (infantCaptionBetaEnabled) args += "--infant-caption-candidate"
+        if (infantCaptionBetaEnabled || astProductionEnabled) args += "--infant-caption-candidate"
         if (providers.gradleProperty("agattokCaptionReleaseQaProof").orNull == "true") {
-            require(infantCaptionBetaEnabled) { "Release QA proof requires caption beta." }
+            require(infantCaptionBetaEnabled || astProductionEnabled) { "Release QA proof requires caption beta or production." }
             args += "--caption-release-qa"
         }
         commandLine(args)
@@ -326,6 +352,9 @@ tasks.configureEach {
     }
     if (astProbeEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(verifyAstModel)
     if (infantPresenceEnabled && (name == "mergeDebugAssets" || name == "mergeDebugAndroidTestAssets")) dependsOn(stageInfantPresenceAssets)
+    if (astProductionEnabled && name == "mergeReleaseAssets") {
+        dependsOn(verifyAstModel, stageInfantPresenceAssets, verifyInfantPresenceArm)
+    }
     if (astBetaEnabled && name == "mergeBetaAssets") dependsOn(verifyAstModel)
     if (infantPresenceBetaEnabled && name == "mergeBetaAssets") {
         dependsOn(stageInfantPresenceAssets, verifyInfantPresenceArm)

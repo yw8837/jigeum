@@ -1,4 +1,9 @@
-# Play Alpha40 — 검토 요청 완료 / 제공 대기
+# Play Alpha40 — 선택한 테스터 제공 확인
+
+**2026-10-23 수동 확인:** 정확 `0.5.26-beta (40) - community and expressions` / 출시20이
+`선택한 테스터에게 제공됩니다`로 표시된다. 게시일 원문 `10월 22일 오후 9:31`.
+[현재 화면·원문](../production-launch-20261023/README.md). 프로덕션 액세스도 승인됐으나 공개출시는 별도이며 현재 비활성이다.
+아래는10월22일 제출 당시 이력이다.
 
 - 2026-10-22 **20:44 KST** 게시 개요의 `검토 중인 변경사항`에 정확 `0.5.26-beta (40) - community and expressions` 확인.
 - 기존 Alpha **출시20**, beta AAB SHA `aa12d9cd8699815b0ccf518c76f3d27012de8aae249548cbd5fc70b21986aa61`를 업로드했다. 정책 비교용 release는 업로드하지 않았다.

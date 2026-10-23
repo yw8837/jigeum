@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('internal', 'paid-candidate', 'closed-test')][string]$Purpose = 'internal',
+    [ValidateSet('internal', 'paid-candidate', 'closed-test', 'production-basic')][string]$Purpose = 'internal',
     [string]$SigningDirectory = (Join-Path ([Environment]::GetFolderPath('UserProfile')) '.jigeum/signing'),
     [string]$JavaHome = $env:JAVA_HOME,
     [string]$AndroidSdk = $env:ANDROID_HOME,
@@ -13,15 +13,19 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ($CaptionReleaseQaProof -and -not $InfantCaptionSupport) { throw 'Release QA proof requires InfantCaptionSupport.' }
-if ($AstBabbleSupport -and $Purpose -ne 'closed-test') {
-    throw 'AST babble support is valid only for closed-test beta candidates.'
+$productionModel = $Purpose -in @('production-basic', 'paid-candidate') -and $AstBabbleSupport
+if ($Purpose -in @('production-basic', 'paid-candidate') -and -not ($AstBabbleSupport -and $InfantPresenceSupport -and $InfantCaptionSupport)) {
+    throw 'Production requires the complete validated AST, infant presence and caption stack.'
 }
-if ($InfantCaptionSupport -and (-not $InfantPresenceSupport -or -not $AstBabbleSupport -or $Purpose -ne 'closed-test')) {
-    throw 'Caption support requires closed-test, AstBabbleSupport and InfantPresenceSupport.'
+if ($AstBabbleSupport -and $Purpose -notin @('closed-test', 'production-basic', 'paid-candidate')) {
+    throw 'AST babble support is valid only for closed-test or explicit production candidates.'
+}
+if ($InfantCaptionSupport -and (-not $InfantPresenceSupport -or -not $AstBabbleSupport)) {
+    throw 'Caption support requires AstBabbleSupport and InfantPresenceSupport.'
 }
 if ($InfantPresenceSupport) {
-    if ($Purpose -ne 'closed-test' -or -not $AstBabbleSupport) {
-        throw 'Infant presence requires closed-test and AstBabbleSupport.'
+    if ($Purpose -notin @('closed-test', 'production-basic', 'paid-candidate') -or -not $AstBabbleSupport) {
+        throw 'Infant presence requires closed-test or explicit production and AstBabbleSupport.'
     }
     if (-not $InfantArmProof -or -not $ProofPython) { throw 'Provide actual ARM proof and ProofPython.' }
     $InfantArmProof = [IO.Path]::GetFullPath($InfantArmProof)
@@ -46,8 +50,8 @@ if ($Purpose -eq 'paid-candidate') {
     if (-not $env:JIGEUM_PLAY_VERIFY_URL.StartsWith('https://', [StringComparison]::OrdinalIgnoreCase)) {
         throw 'Verifier URL must use HTTPS.'
     }
-} elseif ($Purpose -eq 'internal' -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
-    throw 'Internal bootstrap is explicitly billing-disabled. Use paid-candidate for configured billing.'
+} elseif ($Purpose -in @('internal', 'production-basic') -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
+    throw 'Internal/basic distribution is explicitly billing-disabled. Use paid-candidate for configured billing.'
 }
 $keystore = Join-Path $SigningDirectory 'jigeum-upload.p12'
 $secretFile = Join-Path $SigningDirectory 'password.dpapi'
@@ -74,11 +78,16 @@ try {
     try {
         $variant = if ($Purpose -eq 'closed-test') { 'Beta' } else { 'Release' }
         $gradleArguments = @(":app:bundle$variant", ":app:assemble$variant", '--max-workers=1', '--console=plain', '--no-daemon')
-        if ($AstBabbleSupport) { $gradleArguments += '-PagattokAstBeta=true' }
-        if ($InfantPresenceSupport) {
-            $gradleArguments += @('-PagattokInfantPresenceBeta=true', "-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
+        if ($productionModel) {
+            $gradleArguments += '-PagattokAstProduction=true'
+        } else {
+            if ($AstBabbleSupport) { $gradleArguments += '-PagattokAstBeta=true' }
+            if ($InfantPresenceSupport) { $gradleArguments += '-PagattokInfantPresenceBeta=true' }
+            if ($InfantCaptionSupport) { $gradleArguments += '-PagattokInfantCaptionBeta=true' }
         }
-        if ($InfantCaptionSupport) { $gradleArguments += '-PagattokInfantCaptionBeta=true' }
+        if ($InfantPresenceSupport) {
+            $gradleArguments += @("-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
+        }
         if ($CaptionReleaseQaProof) { $gradleArguments += '-PagattokCaptionReleaseQaProof=true' }
         & ./gradlew.bat @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
