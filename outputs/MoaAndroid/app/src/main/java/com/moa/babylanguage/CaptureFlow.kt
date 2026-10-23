@@ -490,9 +490,11 @@ internal fun CaptureFlow(
                     GallerySaveButton("카드 이미지 앨범에 저장", !navigationLocked && cardPhrase.isNotBlank(), { message = it }) {
                         stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, false)
                     }
-                    if (current != null) GallerySaveButton("영상 카드 앨범에 저장", !navigationLocked && cardPhrase.isNotBlank(), { message = it }) {
+                    if (current != null) GallerySaveButton(if (current.hasVideo) "영상 카드 앨범에 저장" else "소리+아가말 카드 앨범에 저장", !navigationLocked && cardPhrase.isNotBlank(), { message = it }) {
                         stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, true)
                     }
+                    if (current != null && !current.hasVideo) Text("녹음한 소리와 아가말 카드를 하나의 MP4로 저장해요. 사진 앱의 아가톡 앨범에서 보고 들을 수 있어요.",
+                        color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                     Text("사진·동영상 앱의 ‘아가톡’ 앨범에 저장해요. 앱 기록 보관은 아래 저장 버튼을 눌러 주세요.", color = Muted, fontSize = 13.sp)
                 }
                 if (onCommunity != null) {
@@ -599,14 +601,15 @@ internal fun CaptureFlow(
             val saved = savedForResult?.takeIf { it.phrase == finalPhrase && it.note == note.trim() && it.withMedia == savingScene }
             if (saving) LinearProgressIndicator(Modifier.fillMaxWidth().padding(bottom = 8.dp))
             if (saved != null) {
-                Text(if (saved.withMedia) "장면과 아기말을 앱 기록에 저장했어요." else "아기말을 앱 기록에 저장했어요.",
+                Text(if (saved.withMedia && current?.hasVideo == false) "소리와 아기말을 앱 기록에 저장했어요."
+                    else if (saved.withMedia) "장면과 아기말을 앱 기록에 저장했어요." else "아기말을 앱 기록에 저장했어요.",
                     color = Ink, fontSize = 13.sp, modifier = Modifier.testTag("capture-save-status"))
                 if (saved.withMedia && onViewSaved != null) OutlinedButton(onClick = { stopPlayback++; onViewSaved(saved.recordId) },
-                    enabled = !navigationLocked, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("저장한 장면 보기") }
+                    enabled = !navigationLocked, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(if (current?.hasVideo == false) "저장한 소리와 카드 보기" else "저장한 장면 보기") }
             }
             if (saved == null && current != null && !compactResultFooter) OutlinedButton(onClick = ::editAnotherRange, enabled = !navigationLocked,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("result-other-range-fixed")) { Text("다른 구간 분석하기") }
-            PrimaryButton(if (saving) "저장하고 있어요" else if (saved != null) "기록 저장 완료" else if (savingScene) "장면과 함께 저장하기" else "이 문장 저장하기", {
+            PrimaryButton(if (saving) "저장하고 있어요" else if (saved != null) "기록 저장 완료" else if (savingScene && current?.hasVideo == false) "소리와 함께 기록하기" else if (savingScene) "장면과 함께 저장하기" else "이 문장 저장하기", {
                 stopPlayback++
                 val savedResult = lockedResult.copy(basis = ExpressionBasis.forPhrase(lockedResult.basis, lockedResult.phrase, finalPhrase))
                 if (keepScene && current != null && onSaveWithMedia != null)

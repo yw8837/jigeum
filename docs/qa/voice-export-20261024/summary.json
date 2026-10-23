@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-24",
+  "report": "in-app voice recording result cannot export sound with translated card",
+  "device": "owned MoaQA35 API35 emulator, host GPU",
+  "userPhoneUsed": false,
+  "baselineExtractedAudio": {"passed": 1, "failed": 0, "skipped": 0},
+  "baselineActualRecorderUi": {"passed": 1, "failed": 0, "skipped": 0},
+  "afterClarifiedLabels": {"passed": 2, "failed": 0, "skipped": 0},
+  "analysisSubstitute": true,
+  "realComponents": ["MediaRecorder", "Media3", "MediaStore", "SQLite"],
+  "userFailureReproduced": false,
+  "userFailureFixed": false,
+  "change": "audio-only export and local-record labels plus MP4 explanation",
+  "billingRestrictionAdded": false,
+  "newPlayReleaseSubmitted": false,
+  "ownedQaAppsRemoved": true,
+  "emulatorStopped": true,
+  "pending": ["user's actual pressed button and error message", "physical-device reproduction if required"]
+}

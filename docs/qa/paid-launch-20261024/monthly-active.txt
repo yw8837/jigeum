@@ -1,0 +1,158 @@
+Browser tab: 7, Title: "기본 요금제 수정 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album/base-plans/b/monthly".
+0 AXWebArea 기본 요금제 수정 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album/base-plans/b/monthly
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				8 container 홈
+					9 button 홈
+						10 text 홈
+				11 container 계정 관리
+					12 button 계정 관리
+						13 text 계정 관리
+				14 container 아가톡 - 지금 내 기분이 그래
+					15 pop up button 아가톡 - 지금 내 기분이 그래
+				16 container 대시보드
+					17 button 대시보드
+						18 text 대시보드
+				19 container 통계
+					20 button 통계
+						21 text 통계
+				22 container 게시 개요
+					23 button 게시 개요
+						24 text 게시 개요
+				25 container Google Play로 보호됨
+					26 button Google Play로 보호됨
+						27 text Google Play로 보호됨
+				28 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					29 button 테스트 및 출시
+						30 text 테스트 및 출시
+				31 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					32 button 모니터링 및 개선
+						33 text 모니터링 및 개선
+				34 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					35 button 사용자 늘리기
+						36 text 사용자 늘리기
+				37 container (expanded) Description: Play를 통한 수익 창출, Secondary Actions: Collapse
+					38 button Play를 통한 수익 창출
+						39 text Play를 통한 수익 창출
+					40 content list
+						41 container
+							42 container (expanded) Description: 제품, Secondary Actions: Collapse
+								43 button 제품
+								44 content list
+									45 container
+										46 container 앱 가격
+											47 button 앱 가격
+										48 container 일회성 제품
+											49 button 일회성 제품
+										50 container 정기 결제
+											51 button 정기 결제
+							52 container 상품화 및 최적화
+								53 button 상품화 및 최적화
+							54 container 가격 실험
+								55 button 가격 실험
+							56 container 프로모션 코드
+								57 button 프로모션 코드
+							58 container (collapsed) Description: 재무 보고서, Secondary Actions: Expand
+								59 button 재무 보고서
+							60 container 수익 창출 설정
+								61 button 수익 창출 설정
+			62 container main-content
+				63 container
+					64 link Description: 정기 결제아가톡 전체 이용권 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album
+					65 heading 기본 요금제 수정, Value: 1
+						66 text 기본 요금제 수정
+					156 button 비활성화
+						157 text 비활성화
+					69 container
+						158 text 활성 monthly
+					71 container 유형
+						72 text 유형
+						73 text 매월, 자동 갱신
+						74 container
+							75 container 유예 기간 및 계정 보류
+								76 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--101
+									77 text 유예 기간 및 계정 보류
+									78 button (collapsed) Description: "유예 기간 및 계정 보류"에 대한 추가 정보, Secondary Actions: Expand
+								79 container
+									80 text 유예 기간
+									81 text field (settable) Description: 유예 기간 필드, Value: 7
+									82 text 일
+								83 container
+									84 text 7일의 유예 기간을 설정하는 것이 좋습니다.
+									85 link Description: Google Play 정기 결제 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/12154973#base_plan_attributes
+								86 container
+									87 radio button (settable, integer) Description: 계정 보류 자동 계산(권장), Value: 1, ID: aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--102
+									88 text 53일간 계정 보류
+									89 text 유예 기간을 기준으로 계산되며 최대 60일까지 합산 적용됩니다.
+								90 container
+									91 radio button (settable, integer) Description: 맞춤 계정 보류 기간 설정, Value: 0, ID: aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--103
+							92 container 고객 기본 요금제 및 혜택 변경사항
+								93 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--95
+									94 text 고객 기본 요금제 및 혜택 변경사항
+									95 button (collapsed) Description: "고객 기본 요금제 및 혜택 변경사항"에 대한 추가 정보, Secondary Actions: Expand
+								96 pop up button (collapsed) 고객 기본 요금제 및 혜택 변경사항 "고객 기본 요금제 및 혜택 변경사항"에 대한 추가 정보 다음 청구일에 청구, ID: aDA388D51-5258-417D-B122-4CEFD8FD8244--12, Secondary Actions: Expand
+								97 container
+									98 text 사용자가 혜택을 변경하는 경우 남은 유료 기간을 어떻게 적용할지 선택하세요.
+									99 link Description: Google Play 정기 결제 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/12154973#base_plan_attributes
+							100 container 정기 결제 재신청
+								101 text 정기 결제 재신청
+								102 pop up button (collapsed) 정기 결제 재신청 허용, ID: aDA388D51-5258-417D-B122-4CEFD8FD8244--14, Secondary Actions: Expand
+								103 container
+									104 text 정기 결제 취소 또는 만료 후에 사용자가 Play 스토어에서 정기 결제를 재신청하도록 허용합니다.
+									105 link Description: 정기 결제 재신청 모드 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/12154973#base_plan_attributes
+					106 container 태그
+						107 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--90
+							108 text 태그
+							109 button (collapsed) Description: "태그"에 대한 추가 정보, Secondary Actions: Expand
+						110 table
+							111 row 태그 입력
+								112 cell
+									113 text field (settable) 태그 입력
+						114 text 소문자로 시작해야 하며 숫자(0~9), 소문자(a~z), 하이픈(-)을 포함할 수 있습니다. 20자(영문 기준) 이하여야 합니다.
+					115 heading 가격 및 구매 가능 여부, Value: 2
+						116 text 가격 및 구매 가능 여부
+					117 button 사용 가능한 국가/지역 관리
+						118 text 사용 가능한 국가/지역 관리
+					119 button Set prices
+						120 text Set prices
+					121 text 지역별 가격 보기
+					122 pop up button (collapsed) 지역별 가격 보기 모든 지역, ID: aDA388D51-5258-417D-B122-4CEFD8FD8244--16, Secondary Actions: Expand
+					123 container 이름으로 국가 또는 지역 검색
+						124 container
+							125 text 이름으로 국가 또는 지역 검색
+							126 text field (settable) 이름으로 국가 또는 지역 검색
+					127 container
+						128 table 가격
+							159 row 국가/지역 가격 세금
+								160 cell 국가/지역
+									161 text 국가/지역
+								162 cell 가격
+									163 text 가격
+								164 cell 세금
+									165 text 세금
+							166 row 대한민국 KRW 4,900 테이블 셀
+								167 cell
+									168 text 대한민국
+								169 cell
+									170 text KRW 4,900
+								171 cell
+									172 container 테이블 셀
+										173 text VAT 없음
+					144 container
+						174 text 변경사항이 저장되었습니다.
+						175 button (disabled) 변경사항 저장
+							176 text 변경사항 저장
+				149 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				150 link Description: 상태 대시보드, Value: status.play.google.com/
+				151 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				152 text © 2026 Google
+				153 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				154 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				155 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 기본 요금제 수정 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album/base-plans/b/monthly

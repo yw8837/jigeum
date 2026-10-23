@@ -337,7 +337,8 @@ internal fun JigeumApp(
                                                             GalleryMedia.image(activity, checkNotNull(bitmap), generation)
                                                         } finally { bitmap?.recycle() }
                                                     }
-                                                }, { notify(if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
+                                                }, { notify(if (video && clip?.hasVideo == false) "아가톡 앨범에 소리와 아가말 카드를 저장했어요."
+                                                    else if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
                                             }
                                         },
                                         onSaveWithMedia = { result, phrase, note, clip, range ->
@@ -357,7 +358,7 @@ internal fun JigeumApp(
                                                 } finally {
                                                     withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() }
                                                 }
-                                            }, { captureSaveReceipt = receipt; notify("장면과 아기말을 앱 기록에 저장했어요.") })
+                                            }, { captureSaveReceipt = receipt; notify(if (clip.hasVideo) "장면과 아기말을 앱 기록에 저장했어요." else "소리와 아기말을 앱 기록에 저장했어요.") })
                                         },
                                         onSave = { result, phrase, note ->
                                             var receipt: CaptureSaveReceipt? = null

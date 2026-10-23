@@ -72,7 +72,9 @@ class SavedMediaFlowTest {
         compose.activity.getSharedPreferences(id, Context.MODE_PRIVATE).edit().clear().commit()
     }
 
-    private fun start(preview: Boolean = true) {
+    private fun start(preview: Boolean = true, recordVoice: Boolean = false) {
+        if (recordVoice) InstrumentationRegistry.getInstrumentation().uiAutomation.grantRuntimePermission(
+            compose.activity.packageName, android.Manifest.permission.RECORD_AUDIO)
         val billing = object : AccessBilling {
             override val state = MutableStateFlow(BillingUiState(status = BillingStatus.READY))
             override fun hasCurrentEntitlement() = false
@@ -100,10 +102,17 @@ class SavedMediaFlowTest {
         started = true
         compose.setContent { CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
             if (visible.value) JigeumApp(compose.activity, store, billing,
-                captureAnalyzer = analyzer, captureSeed = clip, testDistribution = preview)
+                captureAnalyzer = analyzer, captureSeed = if (recordVoice) null else clip, testDistribution = preview)
         } }
         waitText("아기말 번역하기"); click("아기말 번역하기")
-        val analyzeLabel = if (preview) "영상 + 소리로 번역하기" else "이 구간 소리로 번역하기"
+        if (recordVoice) {
+            click("카메라 없이 소리만 녹음"); click("녹음 시작")
+            waitText("0:03 / 1:00"); click("촬영 마치기"); waitText("어느 순간을 들어볼까요?")
+            val file = java.io.File(compose.activity.cacheDir, "captures").listFiles()!!.single()
+            clip = CaptureFiles.inspect(compose.activity, Uri.fromFile(file), file)
+            assertFalse(clip.hasVideo)
+        }
+        val analyzeLabel = if (preview && !recordVoice) "영상 + 소리로 번역하기" else "이 구간 소리로 번역하기"
         waitText(analyzeLabel)
         click(analyzeLabel)
         compose.waitUntil(8_000) {
@@ -144,6 +153,36 @@ class SavedMediaFlowTest {
         click("장면과 함께 저장하기")
         compose.waitUntil(45_000) { runBlocking { store.snapshot().mediaIds.size == 1 } }
         assertTrue(resolver.openInputStream(clip.uri)!!.use { it.read() } >= 0)
+    }
+
+    /** The analyzer alone is substituted: microphone, AAC, renderer, gallery and SQLite are real. */
+    @Test fun recordedVoiceResultExportsSoundAndCaptionWithoutSubscription() {
+        start(preview = false, recordVoice = true)
+        val initial = rows()
+        click("소리+아가말 카드 앨범에 저장")
+        val mp4 = newOutput(initial, "video/mp4")
+        val retriever = MediaMetadataRetriever()
+        try {
+            retriever.setDataSource(compose.activity, mp4)
+            assertEquals("yes", retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO))
+            assertEquals("yes", retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO))
+            val duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toLong()
+            assertTrue(kotlin.math.abs(duration - clip.durationMs) < 150)
+            val frame = checkNotNull(retriever.getFrameAtTime(500_000))
+            try { assertEquals(720, frame.width); assertTrue(frame.height >= 960) } finally { frame.recycle() }
+        } finally { retriever.release() }
+        waitText("아가톡 앨범에 소리와 아가말 카드를 저장했어요.")
+        click("소리와 함께 기록하기")
+        compose.waitUntil(45_000) { runBlocking { store.snapshot().mediaIds.size == 1 } }
+        val record = runBlocking { store.snapshot() }.observations.single()
+        assertEquals("AUDIO", record.basis)
+        val saved = checkNotNull(RecordMedia.file(compose.activity, record.id))
+        val stored = MediaMetadataRetriever()
+        try {
+            stored.setDataSource(saved.path)
+            assertEquals("yes", stored.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO))
+            assertEquals("yes", stored.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO))
+        } finally { stored.release() }
     }
 
     @Test fun withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord() {

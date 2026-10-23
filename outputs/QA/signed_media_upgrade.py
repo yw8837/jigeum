@@ -65,6 +65,7 @@ def main():
     parser.add_argument('--old-version-name', required=True)
     parser.add_argument('--new-version-code', type=int, required=True)
     parser.add_argument('--new-version-name', required=True)
+    parser.add_argument('--new-distribution', choices=['beta', 'release'], default='beta')
     args = parser.parse_args()
     assert args.new_version_code > args.old_version_code
     for file in (args.old_apk, args.new_apk, args.cry_video):
@@ -106,7 +107,9 @@ def main():
         result['old_media'] = download_media(owned, 'before-upgrade')
         result['installs'].append(delivery.install(args.new_apk))
         verify_install(result['installs'][-1], args.new_version_code, args.new_version_name)
-        flow.launch(); q.wait_ui('전체 기능 테스트 · 2분 촬영 · 20초 분석')
+        expected_home = ('전체 기능 테스트 · 2분 촬영 · 20초 분석' if args.new_distribution == 'beta'
+                         else '무료 · 1분 촬영 · 10초 분석')
+        flow.launch(); q.wait_ui(expected_home)
         q.tap_text('기록'); q.tap_text('장면 보기 · 내려받기')
         q.wait_ui('그때의 아기말')
         result['new_media'] = download_media(owned, 'after-upgrade', result['old_media']['name'])
@@ -114,7 +117,8 @@ def main():
         result['new_legacy_record'] = verify_legacy_record(export_backup(owned), seed['records'][0])
         flow.launch(); q.tap_text('기록'); verify_saved_record(phrase, 'upgraded-legacy-record')
         result.update(checks_passed=True, legacy_text_preserved=True, media_bytes_preserved=True,
-                      beta_full_access_retained=True)
+                      beta_full_access_retained=args.new_distribution == 'beta',
+                      release_free_limits_restored=args.new_distribution == 'release')
     except Exception as error:
         result.update(status='fail', error=str(error))
         try:
