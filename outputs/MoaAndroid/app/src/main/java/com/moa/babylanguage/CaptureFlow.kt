@@ -77,6 +77,9 @@ private val SelectionSaver = Saver<ClosedFloatingPointRange<Float>, List<Float>>
 )
 
 internal data class CaptureSaveReceipt(val recordId: Long, val phrase: String, val note: String, val withMedia: Boolean)
+internal data class CaptureGalleryReceipt(
+    val uri: Uri, val sourceUri: Uri?, val range: ClipRange?, val phrase: String, val video: Boolean
+)
 
 /** One input and review flow. Test substitutes are supplied by androidTest, never persisted. */
 @Composable
@@ -93,6 +96,8 @@ internal fun CaptureFlow(
     onGallery: ((ClipInterpretation, String, LocalClip?, ClipRange?, Boolean) -> Unit)? = null,
     onSaveVideo: ((LocalClip, ClipRange) -> Unit)? = null,
     saveReceipt: CaptureSaveReceipt? = null,
+    galleryReceipt: CaptureGalleryReceipt? = null,
+    onOpenGallery: ((CaptureGalleryReceipt) -> Unit)? = null,
     onViewSaved: ((Long) -> Unit)? = null,
     onCommunity: ((ClipInterpretation, String, LocalClip?, ClipRange?) -> Unit)? = null
 ) {
@@ -496,6 +501,22 @@ internal fun CaptureFlow(
                     if (current != null && !current.hasVideo) Text("녹음한 소리와 아가말 카드를 하나의 MP4로 저장해요. 사진 앱의 아가톡 앨범에서 보고 들을 수 있어요.",
                         color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                     Text("사진·동영상 앱의 ‘아가톡’ 앨범에 저장해요. 앱 기록 보관은 아래 저장 버튼을 눌러 주세요.", color = Muted, fontSize = 13.sp)
+                    galleryReceipt?.takeIf { it.sourceUri == current?.uri && it.range == cardRange && it.phrase == cardPhrase }?.let { saved ->
+                        val bring = remember { BringIntoViewRequester() }
+                        LaunchedEffect(saved.uri) { bring.bringIntoView() }
+                        Column(Modifier.fillMaxWidth().background(PaleSage, RoundedCornerShape(16.dp))
+                            .padding(16.dp).bringIntoViewRequester(bring), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("앨범 저장 완료", color = Ink, fontWeight = FontWeight.Bold)
+                            Text(if (saved.video) "갤러리 · 아가톡 앨범 · 동영상(MP4)" else "갤러리 · 아가톡 앨범 · 이미지(PNG)",
+                                color = Ink, fontSize = 13.sp, modifier = Modifier.testTag("gallery-save-location"))
+                            if (saved.video && current?.hasVideo == false)
+                                Text("소리가 나오는 아가말 카드 동영상으로 저장됐어요.", color = Muted, fontSize = 13.sp)
+                            if (onOpenGallery != null) OutlinedButton(onClick = { stopPlayback++; onOpenGallery(saved) },
+                                enabled = !navigationLocked, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                                Text("저장한 파일 열기")
+                            }
+                        }
+                    }
                 }
                 if (onCommunity != null) {
                     OutlinedButton(onClick = {

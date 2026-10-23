@@ -172,6 +172,7 @@ internal fun JigeumApp(
     var mediaIds by remember { mutableStateOf(emptySet<Long>()) }
     var viewingMediaId by rememberSaveable { mutableLongStateOf(-1L) }
     var captureSaveReceipt by remember { mutableStateOf<CaptureSaveReceipt?>(null) }
+    var captureGalleryReceipt by remember { mutableStateOf<CaptureGalleryReceipt?>(null) }
     var ageBand by remember { mutableStateOf("") }
     var loaded by remember { mutableStateOf(false) }
     var loadError by remember { mutableStateOf<String?>(null) }
@@ -285,7 +286,7 @@ internal fun JigeumApp(
                                 } else when (page) {
                                     Page.HOME -> HomeScreen(observations,
                                         testDistribution = testDistribution, premium = billingState.isPremium,
-                                        onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
+                                        onRecord = { captureGalleryReceipt = null; page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
                                         onCommunity = if (CommunitySharing.available) ({ CommunitySharing.open(activity) }) else null,
                                         onPremium = { showPass(null, Page.HOME) },
                                         onAbout = { aboutReturn = Page.HOME; page = Page.ABOUT })
@@ -295,6 +296,14 @@ internal fun JigeumApp(
                                         analyzer = captureAnalyzer, initialClip = captureSeed,
                                         testDistribution = testDistribution,
                                         saveReceipt = captureSaveReceipt,
+                                        galleryReceipt = captureGalleryReceipt,
+                                        onOpenGallery = { receipt ->
+                                            if (!busy && !sharing) scope.launch {
+                                                try { GalleryMedia.open(activity, receipt.uri, receipt.video) }
+                                                catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                                                catch (_: Exception) { notify("저장한 파일을 열지 못했어요. 갤러리의 아가톡 앨범에서 확인해 주세요.") }
+                                            }
+                                        },
                                         onViewSaved = { if (!busy && !sharing) viewingMediaId = it },
                                         onSaveVideo = { clip, range ->
                                             if (!busy && !sharing) {
@@ -319,6 +328,8 @@ internal fun JigeumApp(
                                         }) else null,
                                         onGallery = { result, phrase, clip, range, video ->
                                             if (!busy && !sharing) {
+                                                captureGalleryReceipt = null
+                                                var savedUri: Uri? = null
                                                 val generation = MemoryArtifacts.currentGeneration()
                                                 update({
                                                     val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase,
@@ -328,16 +339,18 @@ internal fun JigeumApp(
                                                         var rendered: java.io.File? = null
                                                         try {
                                                             rendered = TranslatedMedia.render(activity, clip, range, record)
-                                                            GalleryMedia.video(activity, rendered, generation)
+                                                            savedUri = GalleryMedia.video(activity, rendered, generation)
                                                         } finally { withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() } }
                                                     } else {
                                                         var bitmap: android.graphics.Bitmap? = null
                                                         try {
                                                             withContext(Dispatchers.IO) { bitmap = MomentCardRenderer.frame(activity, record, clip, range) }
-                                                            GalleryMedia.image(activity, checkNotNull(bitmap), generation)
+                                                            savedUri = GalleryMedia.image(activity, checkNotNull(bitmap), generation)
                                                         } finally { bitmap?.recycle() }
                                                     }
-                                                }, { notify(if (video && clip?.hasVideo == false) "아가톡 앨범에 소리와 아가말 카드를 저장했어요."
+                                                }, {
+                                                    captureGalleryReceipt = savedUri?.let { CaptureGalleryReceipt(it, clip?.uri, range, phrase, video) }
+                                                    notify(if (video && clip?.hasVideo == false) "아가톡 앨범에 소리와 아가말 카드를 저장했어요."
                                                     else if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
                                             }
                                         },

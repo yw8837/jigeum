@@ -157,6 +157,22 @@ internal object GalleryMedia {
         }
     }
 
+    /** Opens the published copy only after the user's tap; never shares the temporary source. */
+    suspend fun open(context: Context, uri: Uri, video: Boolean) {
+        withContext(Dispatchers.IO) {
+            checkNotNull(context.contentResolver.openFileDescriptor(uri, "r")).use {
+                check(it.statSize != 0L)
+            }
+        }
+        withContext(Dispatchers.Main.immediate) {
+            context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, if (video) "video/mp4" else "image/png")
+                clipData = android.content.ClipData.newRawUri("아가톡 저장 파일", uri)
+                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            })
+        }
+    }
+
     private fun requireGeneration(generation: Long) {
         check(generation == MemoryArtifacts.currentGeneration()) { "기록이 변경되어 앨범 저장을 중단했어요." }
     }

@@ -1,19 +1,55 @@
 {
   "date": "2026-10-24",
-  "report": "in-app voice recording result cannot export sound with translated card",
+  "report": "in-app voice export uncertain: user may not have found the saved result",
   "device": "owned MoaQA35 API35 emulator, host GPU",
   "userPhoneUsed": false,
-  "baselineExtractedAudio": {"passed": 1, "failed": 0, "skipped": 0},
-  "baselineActualRecorderUi": {"passed": 1, "failed": 0, "skipped": 0},
-  "afterClarifiedLabels": {"passed": 2, "failed": 0, "skipped": 0},
+  "baselineExtractedAudio": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "baselineActualRecorderUi": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "afterClarifiedLabels": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
   "analysisSubstitute": true,
-  "realComponents": ["MediaRecorder", "Media3", "MediaStore", "SQLite"],
+  "realComponents": [
+    "MediaRecorder",
+    "Media3",
+    "MediaStore",
+    "SQLite"
+  ],
   "userFailureReproduced": false,
   "userFailureFixed": false,
-  "change": "audio-only export and local-record labels plus MP4 explanation",
+  "change": "audio-only labels, MP4 explanation, persistent gallery save receipt and open-published-file action",
   "billingRestrictionAdded": false,
   "newPlayReleaseSubmitted": false,
   "ownedQaAppsRemoved": true,
   "emulatorStopped": true,
-  "pending": ["user's actual pressed button and error message", "physical-device reproduction if required"]
+  "pending": [
+    "physical-device reproduction only if the result remains missing or an error is observed",
+    "final signed package and Play delivery remain part of paid launch"
+  ],
+  "afterOpenFileAction": {
+    "skipped": 0,
+    "failed": 0,
+    "externalViewerPlaybackVerified": false,
+    "passed": 3,
+    "viewerIntentIntercepted": true
+  },
+  "firstOpenActionAttempt": {
+    "reason": "test compared MediaStore Files and Video URI aliases; fixed exact Video URI expectation and asserted identical bytes",
+    "failed": 1,
+    "passed": 2
+  },
+  "followupApkSha256": {
+    "androidTest": "bcadb61d86e58a1f8ddd91a2f7e9a6a453e2f77327b565fa98810fe662149a82",
+    "app": "a6c277db431c14815c453e68aff95e510ea54e543d24003f10763c324ea6ca61"
+  }
 }

@@ -143,6 +143,7 @@ class SavedMediaFlowTest {
         val bitmap = resolver.openInputStream(png)!!.use(BitmapFactory::decodeStream)!!
         assertEquals(720, bitmap.width); bitmap.recycle()
         waitText("아가톡 앨범에 카드 이미지를 저장했어요.")
+        compose.onNodeWithTag("gallery-save-location").performScrollTo().assertTextEquals("갤러리 · 아가톡 앨범 · 이미지(PNG)")
         val beforeVideo = rows()
         click("영상 카드 앨범에 저장")
         val mp4 = newOutput(beforeVideo, "video/mp4")
@@ -150,6 +151,7 @@ class SavedMediaFlowTest {
         try { retriever.setDataSource(compose.activity, mp4); assertEquals("yes", retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO)) }
         finally { retriever.release() }
         waitText("아가톡 앨범에 영상 카드를 저장했어요.")
+        compose.onNodeWithTag("gallery-save-location").performScrollTo().assertTextEquals("갤러리 · 아가톡 앨범 · 동영상(MP4)")
         click("장면과 함께 저장하기")
         compose.waitUntil(45_000) { runBlocking { store.snapshot().mediaIds.size == 1 } }
         assertTrue(resolver.openInputStream(clip.uri)!!.use { it.read() } >= 0)
@@ -172,6 +174,35 @@ class SavedMediaFlowTest {
             try { assertEquals(720, frame.width); assertTrue(frame.height >= 960) } finally { frame.recycle() }
         } finally { retriever.release() }
         waitText("아가톡 앨범에 소리와 아가말 카드를 저장했어요.")
+        compose.onNodeWithTag("gallery-save-location").performScrollTo().assertTextContains("갤러리 · 아가톡 앨범 · 동영상(MP4)", substring = true)
+        val opened = java.util.concurrent.atomic.AtomicReference<Intent?>()
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val monitor = object : android.app.Instrumentation.ActivityMonitor() {
+            override fun onStartActivity(intent: Intent): android.app.Instrumentation.ActivityResult? {
+                if (intent.action != Intent.ACTION_VIEW) return null
+                opened.set(intent)
+                return android.app.Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null)
+            }
+        }
+        instrumentation.addMonitor(monitor)
+        try {
+            click("저장한 파일 열기")
+            compose.waitUntil(5_000) { opened.get() != null }
+            val expectedUri = android.content.ContentUris.withAppendedId(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, android.content.ContentUris.parseId(mp4))
+            assertEquals(expectedUri, opened.get()!!.data)
+            assertArrayEquals(resolver.openInputStream(mp4)!!.use { it.readBytes() },
+                resolver.openInputStream(opened.get()!!.data!!)!!.use { it.readBytes() })
+            assertEquals("video/mp4", opened.get()!!.type)
+            assertTrue(opened.get()!!.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION != 0)
+            compose.onNodeWithTag("baby-phrase").assertExists()
+            resolver.delete(mp4, null, null)
+            opened.set(null)
+            click("저장한 파일 열기")
+            waitText("저장한 파일을 열지 못했어요. 갤러리의 아가톡 앨범에서 확인해 주세요.")
+            assertNull(opened.get())
+            compose.onNodeWithTag("baby-phrase").assertExists()
+        } finally { instrumentation.removeMonitor(monitor) }
         click("소리와 함께 기록하기")
         compose.waitUntil(45_000) { runBlocking { store.snapshot().mediaIds.size == 1 } }
         val record = runBlocking { store.snapshot() }.observations.single()
@@ -257,6 +288,9 @@ class SavedMediaFlowTest {
 
     @Test fun nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately() {
         start()
+        click("카드 이미지 앨범에 저장")
+        waitText("아가톡 앨범에 카드 이미지를 저장했어요.")
+        compose.onNodeWithTag("gallery-save-location").assertExists()
         click("기록에 메모·수정 남기기")
         compose.onNodeWithTag("draft-phrase-editor").performScrollTo().performTextReplacement("이전 영상에만 쓴 문장")
         val next = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
@@ -275,6 +309,8 @@ class SavedMediaFlowTest {
         compose.waitUntil(8_000) { compose.onAllNodesWithTag("baby-phrase").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("baby-phrase").assertTextEquals("새 영상의 웃는 소리예요.")
         compose.onNodeWithTag("draft-phrase-editor").assertDoesNotExist()
+        compose.onNodeWithTag("gallery-save-location").assertDoesNotExist()
+        compose.onNodeWithText("저장한 파일 열기").assertDoesNotExist()
         assertEquals(listOf(clip.uri, next), analyzedUris.toList())
     }
 }

@@ -1,0 +1,75 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaFlowTest:
+INSTRUMENTATION_STATUS: test=nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=recordedVoiceResultExportsSoundAndCaptionWithoutSubscription
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<content://media/external/file/1000000370> but was:<content://media/external/video/media/1000000370>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaFlowTest.recordedVoiceResultExportsSoundAndCaptionWithoutSubscription(SavedMediaFlowTest.kt:191)
+
+INSTRUMENTATION_STATUS: stream=
+Error in recordedVoiceResultExportsSoundAndCaptionWithoutSubscription(com.moa.babylanguage.SavedMediaFlowTest):
+java.lang.AssertionError: expected:<content://media/external/file/1000000370> but was:<content://media/external/video/media/1000000370>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaFlowTest.recordedVoiceResultExportsSoundAndCaptionWithoutSubscription(SavedMediaFlowTest.kt:191)
+
+INSTRUMENTATION_STATUS: test=recordedVoiceResultExportsSoundAndCaptionWithoutSubscription
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 17.119
+There was 1 failure:
+1) recordedVoiceResultExportsSoundAndCaptionWithoutSubscription(com.moa.babylanguage.SavedMediaFlowTest)
+java.lang.AssertionError: expected:<content://media/external/file/1000000370> but was:<content://media/external/video/media/1000000370>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.SavedMediaFlowTest.recordedVoiceResultExportsSoundAndCaptionWithoutSubscription(SavedMediaFlowTest.kt:191)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1
