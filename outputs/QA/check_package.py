@@ -84,6 +84,7 @@ def main():
     parser.add_argument("--distribution", choices=['release','preview','beta'], help="Assert compiled release, sideload preview or Play closed-test beta markers and version suffix.")
     parser.add_argument("--expect-unsigned-aab", action="store_true", help="Require an unsigned bundle when upload credentials were intentionally omitted.")
     parser.add_argument("--bundletool", type=Path, help="Official local bundletool JAR to inspect the final AAB manifest; required for beta.")
+    parser.add_argument("--admob-app-id", help="Require the approved compiled AdMob application ID and SDK manifest configuration.")
     parser.add_argument("--build-tools", default=os.environ.get("JIGEUM_QA_BUILD_TOOLS", "36.0.0"))
     args = parser.parse_args()
     if args.distribution == 'preview' and not args.skip_aab:
@@ -129,7 +130,14 @@ def main():
         assert compiled.count(f'domain="{domain}"') == 2, domain
     manifest = run("manifest-apk.txt", [aapt, "dump", "xmltree", apk, "--file", "AndroidManifest.xml"])
     assert "android.permission.INTERNET" in manifest
-    assert "android.permission.ACCESS_NETWORK_STATE" not in manifest
+    if args.admob_app_id:
+        assert re.fullmatch(r"ca-app-pub-\d{16}~\d{10}", args.admob_app_id), "Invalid expected AdMob app ID"
+        assert "android.permission.ACCESS_NETWORK_STATE" in manifest
+        assert "com.google.android.gms.permission.AD_ID" in manifest
+        assert "com.google.android.gms.ads.APPLICATION_ID" in manifest and args.admob_app_id in manifest
+        assert "com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT" in manifest
+    else:
+        assert "android.permission.ACCESS_NETWORK_STATE" not in manifest, "Ads build requires explicit --admob-app-id check"
     assert "android:allowBackup" in manifest and "android:fullBackupContent" in manifest
     for line in manifest.splitlines():
         if "android:allowBackup" in line or "android:fullBackupContent" in line:
@@ -155,6 +163,15 @@ def main():
             bundle_manifest = run('manifest-aab.xml', [tool_path('java', java), '-jar', args.bundletool.resolve(),
                                                        'dump', 'manifest', '--bundle=' + str(aab), '--module=base'])
             aab_distribution = assert_bundle_distribution(bundle_manifest, badging, args.distribution)
+            if args.admob_app_id:
+                android = '{http://schemas.android.com/apk/res/android}'
+                tree = ET.fromstring(bundle_manifest)
+                metadata = {node.get(android + 'name'): node.get(android + 'value')
+                            for node in tree.findall('application/meta-data')}
+                assert metadata.get('com.google.android.gms.ads.APPLICATION_ID') == args.admob_app_id
+                assert metadata.get('com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT') == 'true'
+                permissions = {node.get(android + 'name') for node in tree.findall('uses-permission')}
+                assert {'android.permission.ACCESS_NETWORK_STATE', 'com.google.android.gms.permission.AD_ID'} <= permissions
     baseline_result = {"status": "skipped", "reason": "No --baseline supplied"}
     if args.baseline:
         with zipfile.ZipFile(args.baseline.resolve()) as old, zipfile.ZipFile(apk) as new:
@@ -167,7 +184,7 @@ def main():
                "compiled_apk_has_internet_permission": True, "allowBackup": False, "fullBackupContent": False,
                "baseline_comparison": baseline_result, "aab_checked": not args.skip_aab, "aab_unsigned": aab_unsigned,
                "physical_OEM_transfer_tested": False, "apk_sha256": hashlib.sha256(apk.read_bytes()).hexdigest(),
-               "aab_distribution": aab_distribution,
+               "aab_distribution": aab_distribution, "admob_app_id_checked": args.admob_app_id,
                "aab_sha256": hashlib.sha256(aab.read_bytes()).hexdigest() if not args.skip_aab else None}
     (evidence / "package-verdict.json").write_text(json.dumps(verdict, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(verdict, indent=2))

@@ -102,8 +102,21 @@ def main():
         q.wait_ui('장면과 함께 저장하기', seconds=65)
         q.tap_text('장면과 함께 저장하기')
         # Since code39, saving keeps the result open until the explicit scene action.
-        q.wait_ui('저장한 장면 보기', seconds=45)
-        q.tap_text('저장한 장면 보기'); q.wait_ui('그때의 아기말')
+        q.wait_ui('기록 저장 완료', seconds=45)
+        # Receipt insertion can move this button while bringIntoView settles.
+        # Require stable observed bounds before tapping the navigation action.
+        previous_center = None
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline:
+            entries = q.nodes()
+            button = next((n for n in entries if n['text'] == '저장한 장면 보기' and n['enabled']), None)
+            if button and button['center'] == previous_center:
+                q.tap(*button['center'])
+                break
+            previous_center = button['center'] if button else None
+        else:
+            raise AssertionError('Saved-scene action did not settle after completed save')
+        q.wait_ui('그때의 아기말')
         result['old_media'] = download_media(owned, 'before-upgrade')
         result['installs'].append(delivery.install(args.new_apk))
         verify_install(result['installs'][-1], args.new_version_code, args.new_version_name)

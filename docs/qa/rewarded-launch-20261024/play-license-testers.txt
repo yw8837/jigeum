@@ -1,0 +1,132 @@
+Browser tab: 7, Title: "라이선스 테스트", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/license-tester".
+0 AXWebArea 라이선스 테스트, URL: play.google.com/console/u/0/developers/8736564730162379651/license-tester
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				448 container 홈
+					449 button 홈
+						450 text 홈
+				451 container 계정 관리
+					452 button 계정 관리
+						453 text 계정 관리
+				454 container 아가톡 - 지금 내 기분이 그래
+					455 pop up button 아가톡 - 지금 내 기분이 그래
+				456 container 대시보드
+					457 button 대시보드
+						458 text 대시보드
+				459 container 통계
+					460 button 통계
+						461 text 통계
+				462 container 게시 개요
+					463 button 게시 개요
+						464 text 게시 개요
+				465 container Google Play로 보호됨
+					466 button Google Play로 보호됨
+						467 text Google Play로 보호됨
+				468 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					469 button 테스트 및 출시
+						470 text 테스트 및 출시
+				471 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					472 button 모니터링 및 개선
+						473 text 모니터링 및 개선
+				474 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					475 button 사용자 늘리기
+						476 text 사용자 늘리기
+				477 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					478 button Play를 통한 수익 창출
+						479 text Play를 통한 수익 창출
+			62 container main-content
+				447 container
+					480 link Description: 계정 관리 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/manage-account
+					481 heading 라이선스 테스트, Value: 1
+						482 text 라이선스 테스트
+					486 heading 라이선스 테스트는 Play Integrity API 또는 자동 보호를 지원하지 않습니다, Value: 4
+						487 text 라이선스 테스트는 Play Integrity API 또는 자동 보호를 지원하지 않습니다
+					488 link Description: Integrity API로 이동, Value: play.google.com/console/developers/app/keymanagement?tab=integrityApi
+					489 text 에서 Integrity API 테스트를 구성하세요. 자동 보호를 테스트하려면
+					490 link Description: App Bundle 탐색기로 이동, Value: play.google.com/console/developers/app/bundle-explorer-selector
+					491 text 에서 앱의 보호된 버전을 다운로드하고 새 계정 또는 기기를 사용하여 로컬로 설치하세요.
+					492 button 닫기
+						493 text 닫기
+					494 container 라이선스 테스터
+						495 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--667
+							496 text 라이선스 테스터
+							497 button (collapsed) Description: "라이선스 테스터"에 대한 추가 정보, Secondary Actions: Expand
+						498 라이선스 테스터 라디오 그룹
+							499 container
+								500 radio button (settable, integer) Description: 이메일 목록, Value: 1, ID: aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--668
+							517 container
+								518 container 이메일 목록
+									519 container
+										520 text 이메일 목록
+										521 text field (settable) 이메일 목록
+								522 table 이메일 목록
+									523 row 모든 행 선택 목록 이름 사용자
+										524 cell
+											525 checkbox Description: 모든 행 선택, Value: 2
+										526 cell 목록 이름
+											527 text 목록 이름
+										528 cell 사용자
+											529 text 사용자
+										530 cell
+									531 row 아가톡 Zardu 20260802 아가톡 Zardu 20260802 33 이메일 목록 아가톡 Zardu 20260802 수정
+										532 cell
+											533 checkbox Description: 아가톡 Zardu 20260802, Value: 0
+										534 cell
+											535 text 아가톡 Zardu 20260802
+										536 cell
+											537 text 33
+										538 cell
+											539 button 이메일 목록 아가톡 Zardu 20260802 수정
+									540 row 아가톡 기존 그룹 회원 20261007 아가톡 기존 그룹 회원 20261007 4 이메일 목록 아가톡 기존 그룹 회원 20261007 수정
+										541 cell
+											542 checkbox Description: 아가톡 기존 그룹 회원 20261007, Value: 0
+										543 cell
+											544 text 아가톡 기존 그룹 회원 20261007
+										545 cell
+											546 text 4
+										547 cell
+											548 button 이메일 목록 아가톡 기존 그룹 회원 20261007 수정
+									549 row 아가톡 비공개 테스트 아가톡 비공개 테스트 2 이메일 목록 아가톡 비공개 테스트 수정
+										550 cell
+											551 checkbox Description: 아가톡 비공개 테스트, Value: 0
+										552 cell
+											553 text 아가톡 비공개 테스트
+										554 cell
+											555 text 2
+										556 cell
+											557 button 이메일 목록 아가톡 비공개 테스트 수정
+									558 row 아가톡 출시 검증 20261024 아가톡 출시 검증 20261024 1 이메일 목록 아가톡 출시 검증 20261024 수정
+										559 cell
+											560 checkbox Description: 아가톡 출시 검증 20261024, Value: 1
+										561 cell
+											562 text 아가톡 출시 검증 20261024
+										563 cell
+											564 text 1
+										565 cell
+											566 button 이메일 목록 아가톡 출시 검증 20261024 수정
+								567 button 이메일 목록 만들기
+									568 text 이메일 목록 만들기
+							501 container
+								502 radio button (settable, integer) Description: Google 그룹스, Value: 0, ID: aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--669
+					503 container 라이선스 응답
+						504 text 라이선스 응답
+						505 pop up button (collapsed) 라이선스 응답 RESPOND_NORMALLY, ID: aDA388D51-5258-417D-B122-4CEFD8FD8244--44, Secondary Actions: Expand
+						506 text 모든 라이선스 테스터가 이 응답을 받게 됩니다.
+					507 container
+						569 text 변경사항이 저장되었습니다.
+						508 button (disabled) 변경사항 저장
+							509 text 변경사항 저장
+				510 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				511 link Description: 상태 대시보드, Value: status.play.google.com/
+				512 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support
+				513 text © 2026 Google
+				514 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				515 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				516 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 라이선스 테스트, URL: play.google.com/console/u/0/developers/8736564730162379651/license-tester

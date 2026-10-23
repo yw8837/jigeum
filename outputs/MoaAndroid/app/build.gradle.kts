@@ -81,6 +81,13 @@ val astRuntimeEnabled = astProbeEnabled || astBetaEnabled || astProductionEnable
 val infantPresenceModelEnabled = infantPresenceEnabled || infantPresenceBetaEnabled || astProductionEnabled
 val infantCaptionRuntimeEnabled = infantCaptionEnabled || infantCaptionBetaEnabled || astProductionEnabled
 val infantPresenceAssets = layout.buildDirectory.dir("generated/infantPresenceAssets")
+val admobAppId = System.getenv("JIGEUM_ADMOB_APP_ID").orEmpty()
+val rewardedUnitId = System.getenv("JIGEUM_ADMOB_REWARDED_UNIT_ID").orEmpty()
+val adsConfigured = admobAppId.matches(Regex("ca-app-pub-[0-9]{16}~[0-9]{10}")) &&
+    rewardedUnitId.matches(Regex("ca-app-pub-[0-9]{16}/[0-9]{10}"))
+require(admobAppId.isEmpty() && rewardedUnitId.isEmpty() || adsConfigured) { "Supply both valid AdMob IDs." }
+require(!astProductionEnabled || (adsConfigured && !admobAppId.contains("3940256099942544") &&
+    !rewardedUnitId.contains("3940256099942544"))) { "Production requires the approved live AdMob app and rewarded unit IDs." }
 
 // Supply all four MOA_UPLOAD_* variables for a Play-uploadable release.
 // Without them, Gradle deliberately produces an unsigned release bundle.
@@ -112,6 +119,9 @@ android {
         buildConfigField("boolean", "AST_BABBLE_SUPPORT", "false")
         buildConfigField("boolean", "AST_INFANT_PRESENCE", "false")
         buildConfigField("boolean", "AST_INFANT_CAPTION", "false")
+        manifestPlaceholders["admobAppId"] = if (adsConfigured) admobAppId else "ca-app-pub-3940256099942544~3347511713"
+        buildConfigField("boolean", "REWARDED_ADS_ENABLED", adsConfigured.toString())
+        buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$rewardedUnitId\"")
         manifestPlaceholders["testDistribution"] = "false"
         manifestPlaceholders["closedTestDistribution"] = "false"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -136,6 +146,9 @@ android {
 
     buildTypes {
         getByName("debug") {
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+            buildConfigField("boolean", "REWARDED_ADS_ENABLED", "true")
+            buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
             if (astStandaloneEnabled) applicationIdSuffix = ".astprobe"
             if (astCandidateEnabled) {
                 applicationIdSuffix = if (captionReleaseQa) ".astcandidate.releaseqa" else ".astcandidate"
@@ -390,6 +403,8 @@ dependencies {
     // Newer 4.x runtime supports the older MediaPipe gencode; keep parser/model regression coverage.
     implementation("com.google.protobuf:protobuf-javalite:4.36.2")
     implementation("com.android.billingclient:billing:9.1.0")
+    implementation("com.google.android.gms:play-services-ads:25.5.0")
+    implementation("com.google.android.ump:user-messaging-platform:4.0.0")
     implementation("androidx.compose.material:material-icons-extended")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

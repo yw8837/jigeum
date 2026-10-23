@@ -1,0 +1,30 @@
+
+com.moa.babylanguage.RewardLedgerTest:.....
+com.moa.babylanguage.CaptureAccessLimitsTest:
+Error in rewardedVisualAnalysisConsumesOnceAndCompletedResultRemainsSaveable(com.moa.babylanguage.CaptureAccessLimitsTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '이 구간 소리로 번역하기' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+	at com.moa.babylanguage.CaptureAccessLimitsTest.click(CaptureAccessLimitsTest.kt:72)
+	at com.moa.babylanguage.CaptureAccessLimitsTest.rewardedVisualAnalysisConsumesOnceAndCompletedResultRemainsSaveable(CaptureAccessLimitsTest.kt:194)
+........
+
+Time: 13.97
+There was 1 failure:
+1) rewardedVisualAnalysisConsumesOnceAndCompletedResultRemainsSaveable(com.moa.babylanguage.CaptureAccessLimitsTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains '이 구간 소리로 번역하기' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+	at com.moa.babylanguage.CaptureAccessLimitsTest.click(CaptureAccessLimitsTest.kt:72)
+	at com.moa.babylanguage.CaptureAccessLimitsTest.rewardedVisualAnalysisConsumesOnceAndCompletedResultRemainsSaveable(CaptureAccessLimitsTest.kt:194)
+
+FAILURES!!!
+Tests run: 14,  Failures: 1

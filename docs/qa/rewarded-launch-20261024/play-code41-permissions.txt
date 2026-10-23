@@ -1,0 +1,245 @@
+Browser tab: 7, Title: "버전 검토 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4701013220785139321/releases/1/review".
+0 AXWebArea 버전 검토 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4701013220785139321/releases/1/review
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				183 container 홈
+					184 button 홈
+						185 text 홈
+				186 container 계정 관리
+					187 button 계정 관리
+						188 text 계정 관리
+				189 container 아가톡 - 지금 내 기분이 그래
+					190 pop up button 아가톡 - 지금 내 기분이 그래
+				191 container 대시보드
+					192 button 대시보드
+						193 text 대시보드
+				194 container 통계
+					195 button 통계
+						196 text 통계
+				197 container 게시 개요
+					198 button 게시 개요
+						199 text 게시 개요
+				200 container Google Play로 보호됨
+					201 button Google Play로 보호됨
+						202 text Google Play로 보호됨
+				203 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+					204 button 테스트 및 출시
+						205 text 테스트 및 출시
+					233 content list
+						234 container
+							235 container 최신 버전 및 번들
+								236 button 최신 버전 및 번들
+							237 container 프로덕션
+								238 button 프로덕션
+							239 container (expanded) Description: 테스트, Secondary Actions: Collapse
+								240 button 테스트
+								265 content list
+									266 container
+										267 container 공개 테스트
+											268 button 공개 테스트
+										269 container 비공개 테스트
+											270 button 비공개 테스트
+										271 container 내부 테스트
+											272 button 내부 테스트
+										273 container (collapsed) Description: 사전 출시 보고서, Secondary Actions: Expand
+											274 button 사전 출시 보고서
+										275 container 내부 앱 공유
+											276 button 내부 앱 공유
+							241 container 사전 등록
+								242 button 사전 등록
+							243 container 앱 무결성
+								244 button 앱 무결성
+							245 container 고급 설정
+								246 button 고급 설정
+				206 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					207 button 모니터링 및 개선
+						208 text 모니터링 및 개선
+				227 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					228 button 사용자 늘리기
+						229 text 사용자 늘리기
+				230 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					231 button Play를 통한 수익 창출
+						232 text Play를 통한 수익 창출
+			62 container main-content
+				277 container
+					278 heading 내부 테스트 버전 만들기, Value: 1
+						279 text 내부 테스트 버전 만들기
+					282 tab group
+						283 tab (selectable, disabled, settable, boolean) Description: 1/2단계, 새 버전 출시하기, Value: 0
+새 버전 출시하기
+						284 tab (selected, settable, boolean) Description: 2/2단계, 미리보기 및 확인, Value: 1
+2
+미리보기 및 확인
+					285 button 임시 출시 삭제
+						286 text 임시 출시 삭제
+					287 heading 오류, 경고 및 메시지, Value: 2
+						288 text 오류, 경고 및 메시지
+					289 text 오류 1개
+					290 button (expanded) Description: 검증 세부정보 간략히 보기, Secondary Actions: Collapse
+						291 text 간략히
+					292 container
+						293 text 오류
+						294 text 광고 ID 선언에는 앱에서 광고 ID를 사용한다고 명시되어 있습니다. 활성 아티팩트 중 하나의 매니페스트 파일에 com.google.android.gms.permission.AD_ID 권한이 포함되어 있지 않습니다.
+						295 container
+							296 text 매니페스트 파일에 이 권한을 포함하지 않으면 광고 ID가 0으로 처리됩니다. 그로 인해 광고 및 분석 사용 사례가 손상되고 수익 손실이 발생할 수 있습니다.
+							297 link Description: 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/6048248
+						298 text 광고 ID 선언을 업데이트하면 이러한 오류를 해결할 수 있습니다.
+						299 text AD_ID 권한 없이 Android 13(API 33)을 타겟팅하는 앱은 광고 ID가 0으로 처리됩니다. 이는 광고 및 분석 사용 사례에 영향을 미칠 수 있습니다.
+						300 link Description: 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/6048248
+						301 link Description: 선언 업데이트, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/ad-id-declaration
+						302 button 권한 없이 출시
+							303 text 권한 없이 출시
+					304 text 경고 2개
+					305 button (collapsed) Description: 검증 세부정보 더보기, Secondary Actions: Expand
+						306 text 더보기
+					307 heading 출시 버전 제공, Value: 2
+						308 text 출시 버전 제공
+					309 container
+						310 button (collapsed) 신규 설치 크기, Secondary Actions: Expand
+						311 text 115MB
+					312 container
+						313 button (collapsed) 다운로드 시간, Secondary Actions: Expand
+						314 text 31분 33초
+					315 container
+						316 button (collapsed) 업데이트 크기, Secondary Actions: Expand
+					317 heading 새 App Bundle, Value: 2
+						318 text 새 App Bundle
+					319 container
+						320 table 아티팩트
+							321 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+								322 cell 파일 형식
+									323 text 파일 형식
+								324 cell 버전
+									325 text 버전
+								326 cell API 수준
+									327 text API 수준
+								328 cell 타겟 SDK
+									329 text 타겟 SDK
+								330 cell 화면 레이아웃
+									331 text 화면 레이아웃
+								332 cell ABI
+									333 text ABI
+								334 cell 필수 기능
+									335 text 필수 기능
+								336 cell
+							337 row App bundle 고급 41 (0.5.27) 26 이상 36 4 4 4 App Bundle: 41(0.5.27) 세부정보 보기
+								338 cell
+									339 text App bundle
+									340 button (collapsed) 고급, Secondary Actions: Expand
+										341 text 고급
+								342 cell
+									343 text 41 (0.5.27)
+								344 cell
+									345 text 26 이상
+								346 cell
+									347 text 36
+								348 cell
+									349 text 4
+								350 cell
+									351 text 4
+								352 cell
+									353 text 4
+								354 cell
+									355 button App Bundle: 41(0.5.27) 세부정보 보기
+					356 heading 출시 노트, Value: 2
+						357 text 출시 노트
+					358 text 기본 언어 - ko-KR
+					359 text 월 구독과 광고 시청 후 1회 이용 기능을 추가했습니다.
+직접 녹음한 소리와 아가말을 함께 저장하는 안내를 개선하고, 저장 위치 확인과 저장한 파일 열기를 추가했습니다.
+기존 기록과 영상은 유지되며 생성된 카드와 영상 내보내기는 무료입니다.
+출시 전 구매·복원 확인을 위한 운영자 검증 버전입니다.
+					360 container
+						361 text 저장하려면 오류를 수정하세요.
+						362 button 뒤로
+							363 text 뒤로
+						364 button (disabled) 저장 및 출시
+							365 text 저장 및 출시
+				366 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				367 link Description: 상태 대시보드, Value: status.play.google.com/
+				368 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				369 text © 2026 Google
+				370 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				371 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				372 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+		373 container default-acx-overlay-container
+			374 container
+				375 container App Bundle: 41(0.5.27)
+					377 heading App Bundle: 41(0.5.27), Value: 2, ID: aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--484
+						378 text App Bundle: 41(0.5.27)
+					376 button 닫기
+					379 container
+						380 link Description: App Bundle 살펴보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-bundle-explorer?artifactId=4860243768848540711
+						381 tab group
+							382 tab (selected, settable, boolean) Description: 세부정보, Value: 1
+							383 tab (selectable, settable, boolean) Description: 다운로드, Value: 0
+							384 tab (selectable, settable, boolean) Description: 전송, Value: 0
+						385 heading 세부정보, Value: 2
+							386 text 세부정보
+						387 text 출시
+						388 container
+							389 text 버전 1개
+							390 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								391 text 세부정보 보기
+						392 text 지원되는 Android 기기
+						393 text 17,989
+						394 link Description: 기기 카탈로그로 이동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/devices
+						395 text 현지화
+						396 container
+							397 text 현지화 버전 85개
+							398 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								399 text 세부정보 보기
+						400 text 권한
+						401 container
+							402 text 권한 15개
+							403 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+								404 text 세부정보 숨기기
+							447 text android.permission.ACCESS_ADSERVICES_AD_ID, android.permission.ACCESS_ADSERVICES_ATTRIBUTION, android.permission.ACCESS_ADSERVICES_TOPICS, android.permission.ACCESS_NETWORK_STATE, android.permission.CAMERA, android.permission.FOREGROUND_SERVICE, android.permission.INTERNET, android.permission.READ_EXTERNAL_STORAGE, android.permission.RECORD_AUDIO, android.permission.WAKE_LOCK, android.permission.WRITE_EXTERNAL_STORAGE, com.android.vending.BILLING, com.android.vending.CHECK_LICENSE, com.google.android.gms.permission.AD_ID, com.moa.babylanguage.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+						405 text 기능
+						406 container
+							407 text 기능 4개
+							408 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								409 text 세부정보 보기
+						410 text 화면 레이아웃
+						411 text small, normal, large, xlarge
+						412 text 네이티브 플랫폼
+						413 text arm64-v8a, armeabi-v7a, x86, x86_64
+						414 text API 수준
+						415 text 26+
+						416 text 타겟 SDK
+						417 text 36
+						418 text OpenGL ES 버전
+						419 text 0.0 이상
+						420 text OpenGL 텍스처
+						421 text 텍스처 필요 없음
+						422 text 메모리 페이지 크기
+						423 text 16KB 지원
+						424 text 앱이 Google에서 감지할 수 없는 라이브러리를 사용하거나 코드가 기기에서 특정 페이지 크기를 사용한다고 가정하는 경우 여전히 오류가 발생할 수 있습니다.
+						425 link Description: 16KB 페이지 크기 호환성 자세히 알아보기, 새 탭에서 열기, Value: developer.android.com/guide/practices/page-sizes#build
+						426 text DEX 코드 최적화
+						427 text -
+						428 text 점수를 최적화하여 메모리 사용량과 전반적인 사용자 성능을 개선하세요.
+						429 link Description: DEX 코드 최적화 자세히 알아보기, 새 탭에서 열기, Value: developer.android.com/topic/performance/vitals/code-optimization
+						430 container
+							431 text 최적화 비율
+							432 button (collapsed) Description: "최적화 비율"에 대한 추가 정보, Secondary Actions: Expand
+						433 text -
+						434 container
+							435 text 난독화 비율
+							436 button (collapsed) Description: "난독화 비율"에 대한 추가 정보, Secondary Actions: Expand
+						437 text -
+						438 container
+							439 text 축소 비율
+							440 button (collapsed) Description: "축소 비율"에 대한 추가 정보, Secondary Actions: Expand
+						441 text -
+						442 text R8 구성
+						443 text -
+						444 text 최고의 성능을 얻으려면 AGP 버전 9.0(으)로 업그레이드하고 R8을 사용하세요.
+						445 text 압축되지 않은 총 DEX 크기
+						446 text 65.1MB
+
+The focused UI element is 403 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse

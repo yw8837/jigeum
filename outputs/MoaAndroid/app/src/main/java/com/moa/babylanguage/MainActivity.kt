@@ -128,6 +128,7 @@ private enum class Page { HOME, CAPTURE, TIMELINE, GUIDE, PRIVACY, TERMS, ALBUM,
 class MainActivity : ComponentActivity() {
     private var stopCaptureOnBackground: (() -> Unit)? = null
     private var billing: BillingManager? = null
+    private var rewardedAds: RewardedAds? = null
     private var observationStore: ObservationStore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,17 +138,20 @@ class MainActivity : ComponentActivity() {
         val store = ObservationStore(this).also { observationStore = it }
         val billingManager = BillingManager(this).also { billing = it }
         val accessBilling = PlayAccessBilling(billingManager)
+        val rewards: RewardAccess = if (BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST) NoRewardAccess
+            else RewardedAds(this).also { rewardedAds = it }
         setContent {
             var showTitle by rememberSaveable { mutableStateOf(savedInstanceState == null) }
             if (showTitle) AppTitleScreen { showTitle = false }
             else JigeumApp(this, store, accessBilling,
                 testDistribution = BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST,
-                registerBackgroundStop = { stopCaptureOnBackground = it })
+                rewardAccess = rewards, registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }
     override fun onResume() { super.onResume(); billing?.refresh() }
     override fun onDestroy() {
         billing?.close()
+        rewardedAds?.close()
         observationStore?.let { store -> kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch { store.close() } }
         observationStore = null
         super.onDestroy()
@@ -165,7 +169,8 @@ internal fun JigeumApp(
     captureSeed: LocalClip? = null,
     artifactExporter: ArtifactExporter = DeviceArtifactExporter,
     recordImporter: RecordImporter = DeviceRecordImporter,
-    testDistribution: Boolean = false
+    testDistribution: Boolean = false,
+    rewardAccess: RewardAccess = NoRewardAccess
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
@@ -188,6 +193,8 @@ internal fun JigeumApp(
     DisposableEffect(access) { onDispose { access.invalidateMedia() } }
     val screenState = rememberSaveableStateHolder()
     val billingState by billingManager.state.collectAsState()
+    val rewardState by rewardAccess.state.collectAsState()
+    var pdfReward by remember { mutableStateOf<RewardLease?>(null) }
     val scope = rememberCoroutineScope()
     val snacks = remember { SnackbarHostState() }
     val feedback = remember(snacks, scope) { LatestFeedback(snacks, scope) }
@@ -204,6 +211,7 @@ internal fun JigeumApp(
         billingManager.refresh()
     }
     fun closePass() {
+        rewardAccess.cancelAd()
         page = paywallReturn
         requestedFeature = null
         paywallNotice = null
@@ -293,7 +301,7 @@ internal fun JigeumApp(
                                     Page.CAPTURE -> CaptureFlow(
                                         authorizeVisual = { access.canUse(AppFeature.VISUAL_ANALYSIS) },
                                         onBack = { page = Page.HOME }, saving = busy,
-                                        analyzer = captureAnalyzer, initialClip = captureSeed,
+                                        analyzer = captureAnalyzer, initialClip = captureSeed, rewardAccess = rewardAccess,
                                         testDistribution = testDistribution,
                                         saveReceipt = captureSaveReceipt,
                                         galleryReceipt = captureGalleryReceipt,
@@ -396,7 +404,7 @@ internal fun JigeumApp(
                                                     onBack = close, onPrivacy = { policy = "privacy" }, onTerms = { policy = "terms" },
                                                     onReviewActivate = billingManager::activateReviewAccess,
                                                     onReviewDeactivate = billingManager::deactivateReviewAccess,
-                                                    testDistribution = testDistribution)
+                                                    testDistribution = testDistribution, rewardAccess = rewardAccess)
                                             }
                                         })
                                     Page.TIMELINE -> TimelineScreen(observations, mediaIds,
@@ -449,16 +457,26 @@ internal fun JigeumApp(
                                     Page.TERMS -> ServiceTermsScreen { goBack() }
                                     Page.ABOUT -> AnalysisAboutScreen(onBack = ::goBack)
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
-                                        AlbumScreen(observations, testDistribution || billingState.isPremium,
+                                        AlbumScreen(observations, testDistribution || billingState.isPremium || RewardKind.PDF in rewardState.ready,
                                             onPremium = { showPass(AppFeature.PDF, Page.ALBUM) }, onMessage = ::notify,
                                             operationScope = scope, exporting = sharing || busy, onExportingChange = { sharing = it },
                                             artifactExporter = artifactExporter,
+                                            onExportFinished = { success ->
+                                                pdfReward?.let { lease ->
+                                                    if (rewardAccess.finish(lease, success)) pdfReward = null
+                                                    else notify("광고 이용 기회를 보관하지 못했어요. 앱을 다시 열어 확인해 주세요.")
+                                                }
+                                            },
                                             authorizeExport = { selectedRecords ->
                                                 if (busy || sharing) false
                                                 else if (selectedRecords != observations) {
                                                     notify("기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요."); false
                                                 }
                                                 else if (access.canUse(AppFeature.PDF)) true
+                                                else if (rewardAccess.available(RewardKind.PDF)) {
+                                                    pdfReward = rewardAccess.reserve(RewardKind.PDF)
+                                                    pdfReward != null
+                                                }
                                                 else { showPass(AppFeature.PDF, Page.ALBUM, "PDF를 만들기 전에 이용권을 다시 확인해 주세요."); false }
                                             })
                                     }
@@ -467,18 +485,19 @@ internal fun JigeumApp(
                                         onRestore = billingManager::restore, onRetry = billingManager::refresh,
                                         requestedFeature = requestedFeature, notice = paywallNotice,
                                         onContinue = {
+                                            rewardAccess.cancelAd()
                                             val feature = requestedFeature
                                             if (feature == null) closePass()
                                             else if (feature == AppFeature.PDF) page = Page.ALBUM else page = Page.CAPTURE
                                         },
                                         freeContinuationLabel = "무료로 촬영·소리 번역하기",
-                                        onFree = { requestedFeature = null; paywallNotice = null; page = Page.CAPTURE },
+                                        onFree = { rewardAccess.cancelAd(); requestedFeature = null; paywallNotice = null; page = Page.CAPTURE },
                                         onBack = ::closePass,
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
                                         onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
                                         onReviewActivate = billingManager::activateReviewAccess,
                                         onReviewDeactivate = billingManager::deactivateReviewAccess,
-                                        testDistribution = testDistribution)
+                                        testDistribution = testDistribution, rewardAccess = rewardAccess)
                                 }
                             }
                         }
@@ -861,10 +880,17 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
             "게시판 공유용 기기 초안은 화면 종료 시 삭제하며, 비정상 종료로 남은 파일은 24시간이 지난 뒤 다음 게시판 사용 때 정리합니다. 앱 기록을 지워도 공개 게시물은 자동 삭제되지 않으므로 게시판에서 비밀번호로 별도 삭제해 주세요. " +
             "공유할 권리가 있는 자료만 올리고 아동의 노출·민감한 장면, 실명·주소·연락처는 올리지 마세요. 신고·작성자 차단 기능과 운영자 삭제 요청을 이용할 수 있습니다.",
         "3. 외부 전송과 제3자 제공" to
-            "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
+            "아기 소리·영상·기록은 서버로 자동 전송하지 않고 광고 SDK에 전달하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
             "Play 심사 접근을 선택하면 심사 코드와 심사 전용 설치 식별자를 HTTPS로 확인하고, 코드는 기기 안에서 암호화해 보관하며 해제 시 삭제합니다. 서비스가 설정되지 않은 빌드는 이 통신을 하지 않습니다. " +
             "사용자가 직접 내보내거나 공유한 파일은 선택한 저장 위치·수신 앱의 정책이 적용됩니다.",
+        "선택형 보상 광고와 개인정보 설정" to
+            "성인 보호자가 광고 보기를 선택하면 Google AdMob 보상형 광고를 요청합니다. 광고 완료 1회로 분석 또는 PDF 만들기 1회를 이용합니다. 결과 생성 실패·취소 시 기회는 남으며, 기존 결과 저장은 무료입니다. 구독자는 광고를 볼 필요가 없습니다. " +
+            "Google Mobile Ads SDK는 광고 요청·표시 과정에서 IP 주소(대략적인 위치 추정), 앱 상호작용, 성능·진단 정보, 광고 ID·앱 세트 ID 등 기기 식별자를 수집·공유할 수 있습니다. 광고 제공·측정·분석 및 부정 이용 방지가 목적이며 HTTPS로 전송합니다. 아기 미디어·문장·메모는 광고 요청에 포함하지 않습니다. " +
+            "Google UMP는 동의 필요 여부를 확인하며 해당 지역에서는 광고 전 동의 화면을 표시합니다. 필요한 경우 이용권 화면의 ‘광고 개인정보 설정’에서 선택을 바꿀 수 있습니다. 광고를 보지 않아도 무료 기능을 이용할 수 있습니다. " +
+            "광고 처리 제공자는 Google LLC(미국)이며 해외에서 처리될 수 있습니다. 제공자의 보관·삭제와 권리 행사는 Google 개인정보처리방침을 따릅니다. 이용 기회와 처리 중 상태는 기기 안에 보관하고 앱 데이터 삭제 시 함께 삭제됩니다.",
+        "SDK 진단" to
+            "Media3 영상 내보내기의 플랫폼 진단 전송은 명시적으로 끕니다. MediaPipe·Google Play 서비스와 광고 SDK의 진단 정보는 각 제공자 정책이 적용됩니다. 네트워크 권한이 있으므로 SDK 진단 전송이 모두 차단된다고 보장하지 않습니다.",
         "4. 검증 서비스와 접속 정보" to
             "결제·심사 확인 서비스는 Google Cloud 서울 리전에서 실행합니다. 구매 토큰·설치 식별자·심사 코드를 DB·파일·요청 본문 로그에 저장하지 않습니다. " +
             "확인과 요청 제한을 위한 일시 상태는 서버 메모리에서만 처리합니다. 아기 소리·영상·기록은 이 서비스로 보내지 않습니다. " +
@@ -887,13 +913,13 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "7. 문의와 변경" to
             "운영자 최용우 · 문의 bsfire1237@gmail.com. " +
             "처리 방식이 바뀌면 이 방침과 앱 내 안내를 업데이트합니다. " +
-            "계정, 동기화, 광고, 서버 기능을 추가하기 전에는 처리 범위를 다시 고지합니다."
+            "처리 항목과 제공자가 달라지면 적용 전에 다시 고지합니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("2026년 10월 22일 개정 · 게시판 연결판의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("2026년 10월 24일 개정 · 선택형 보상 광고와 결제·게시판 안내", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }

@@ -53,6 +53,12 @@ if ($Purpose -eq 'paid-candidate') {
 } elseif ($Purpose -in @('internal', 'production-basic') -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
     throw 'Internal/basic distribution is explicitly billing-disabled. Use paid-candidate for configured billing.'
 }
+if ($productionModel) {
+    if ($env:JIGEUM_ADMOB_APP_ID -ne 'ca-app-pub-2269464728885792~3259646120' -or
+        $env:JIGEUM_ADMOB_REWARDED_UNIT_ID -ne 'ca-app-pub-2269464728885792/4692147296') {
+        throw 'Production requires the approved Agattok AdMob app and opt-in rewarded unit.'
+    }
+}
 $keystore = Join-Path $SigningDirectory 'jigeum-upload.p12'
 $secretFile = Join-Path $SigningDirectory 'password.dpapi'
 if (-not (Test-Path -LiteralPath $keystore) -or -not (Test-Path -LiteralPath $secretFile)) {

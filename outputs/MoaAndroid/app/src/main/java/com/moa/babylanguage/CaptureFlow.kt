@@ -99,7 +99,8 @@ internal fun CaptureFlow(
     galleryReceipt: CaptureGalleryReceipt? = null,
     onOpenGallery: ((CaptureGalleryReceipt) -> Unit)? = null,
     onViewSaved: ((Long) -> Unit)? = null,
-    onCommunity: ((ClipInterpretation, String, LocalClip?, ClipRange?) -> Unit)? = null
+    onCommunity: ((ClipInterpretation, String, LocalClip?, ClipRange?) -> Unit)? = null,
+    rewardAccess: RewardAccess = NoRewardAccess
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -123,7 +124,13 @@ internal fun CaptureFlow(
         }
     }
     val currentAuthorize by rememberUpdatedState(authorizeVisual)
-    fun hasFullAccess() = testDistribution || currentAuthorize()
+    var analysisReward by remember { mutableStateOf<RewardLease?>(null) }
+    val rewardState by rewardAccess.state.collectAsState()
+    fun hasFullAccess() = testDistribution || currentAuthorize() ||
+        analysisReward?.let(rewardAccess::active) == true || rewardAccess.available(RewardKind.ANALYSIS)
+    fun releaseReward() {
+        analysisReward?.let { if (rewardAccess.finish(it, false)) analysisReward = null }
+    }
     fun liveLimits() = CaptureLimits.forAccess(hasFullAccess())
     var limits by remember { mutableStateOf(liveLimits()) }
     var recordingLimits by remember { mutableStateOf(limits) }
@@ -186,7 +193,7 @@ internal fun CaptureFlow(
         if (clip == null && result == null) hasPermission = permissionsGranted()
     }
 
-    fun cancelAnalysis() { generation++; job?.cancel(); job = null; analyzing = false; analyzingVisual = false; analyzingExtended = false; selecting = false; withheldAnalysis = null }
+    fun cancelAnalysis() { generation++; job?.cancel(); job = null; releaseReward(); analyzing = false; analyzingVisual = false; analyzingExtended = false; selecting = false; withheldAnalysis = null }
     fun reset() {
         cancelAnalysis(); capture.discard(); recording = false; finishing = false
         discardOwnedFile(clip?.ownedFile); clip = null; result = null; hasPermission = false; cameraRecorder = null
@@ -290,7 +297,7 @@ internal fun CaptureFlow(
         }
         lifecycle.addObserver(observer)
         onDispose {
-            alive.set(false); generation++; job?.cancel(); capture.discard()
+            alive.set(false); generation++; job?.cancel(); releaseReward(); rewardAccess.cancelAd(); capture.discard()
             discardOwnedFile(clip?.ownedFile); lifecycle.removeObserver(observer)
         }
     }
@@ -313,6 +320,7 @@ internal fun CaptureFlow(
         }
     }
     LaunchedEffect(limits, clip, result, analyzing, editingResult) {
+        if ((result == null || editingResult) && !analyzing && !hasFullAccess()) visual = false
         if ((result == null || editingResult) && !analyzing && selection.endInclusive - selection.start > limits.analysisMs) {
             selection = selection.start..(selection.start + limits.analysisMs)
             stopPlayback++; withheldAnalysis = null
@@ -321,7 +329,7 @@ internal fun CaptureFlow(
     }
     BackHandler {
         if (!navigationLocked) {
-            if (pass) pass = false
+            if (pass) { rewardAccess.cancelAd(); pass = false }
             else if (analyzing) { cancelAnalysis(); message = "분석을 취소했어요. 구간을 다시 고를 수 있어요." }
             else if (editingResult && result != null) returnToResult()
             else exit()
@@ -338,7 +346,7 @@ internal fun CaptureFlow(
         confirmButton = { TextButton(onClick = { if (!navigationLocked) { reset(); newCaptureConfirmation = false } }, enabled = !navigationLocked,
             modifier = Modifier.testTag("confirm-new-capture")) { Text("새 촬영·녹음 시작") } },
         dismissButton = { TextButton(onClick = { newCaptureConfirmation = false }, enabled = !navigationLocked) { Text("계속 보기") } })
-    if (pass) { passContent { pass = false }; return }
+    if (pass) { passContent { rewardAccess.cancelAd(); pass = false }; return }
 
     val current = clip
     val lockedResult = result.takeUnless { editingResult }
@@ -355,14 +363,21 @@ internal fun CaptureFlow(
         }
     }
     fun analyzeSelected() {
-        if (!alive.get() || current == null || navigationLocked) return
+        if (!alive.get() || current == null || navigationLocked || analyzing) return
         val useVisual = visual && current.hasVideo
         if (useVisual && !hasFullAccess()) { visual = false; pass = true; return }
         val range = ClipRange(selection.start.toLong(), selection.endInclusive.toLong())
         if (!liveLimits().allowsAnalysis(range)) { limits = liveLimits(); pass = true; return }
         // A new explicit analysis replaces the prior result and its caregiver draft.
         result = null; editingResult = false; clearDraft()
-        stopPlayback++; cancelAnalysis(); analyzingVisual = useVisual
+        stopPlayback++; cancelAnalysis()
+        if (!testDistribution && !currentAuthorize() && rewardAccess.available(RewardKind.ANALYSIS)) {
+            analysisReward = rewardAccess.reserve(RewardKind.ANALYSIS)
+            if (analysisReward == null) { message = "광고 이용 기회를 확인하지 못했어요. 다시 시도해 주세요."; return }
+        }
+        val usedReward = analysisReward
+        if ((useVisual || range.durationMs > CaptureLimits.FREE.analysisMs) && !hasFullAccess()) { pass = true; return }
+        analyzingVisual = useVisual
         analyzingExtended = range.durationMs > CaptureLimits.FREE.analysisMs
         analyzing = true; message = null
         val request = generation
@@ -375,6 +390,10 @@ internal fun CaptureFlow(
                         visual = false; limits = liveLimits()
                         message = "이용권 확인이 필요해요. 10초 이내 구간의 소리 분석은 무료로 계속할 수 있어요."
                     } else {
+                        if (analyzed.interpretation != null && usedReward != null) {
+                            check(rewardAccess.finish(usedReward, true)) { "광고 이용 기회를 확인하지 못했어요." }
+                            analysisReward = null
+                        }
                         result = analyzed.interpretation; resultStart = range.startMs; resultEnd = range.endMs; message = analyzed.problem
                         withheldAnalysis = analyzed.takeIf { it.interpretation == null }
                     }
@@ -383,7 +402,7 @@ internal fun CaptureFlow(
             catch (e: CancellationException) { throw e }
             catch (_: Exception) { if (request == generation) message = "이 구간을 분석하지 못했어요. 다시 재생해 보고 다른 구간이나 파일을 골라 주세요." }
             catch (_: LinkageError) { if (request == generation) message = "이 기기에서 분석 모델을 실행하지 못했어요." }
-            finally { if (request == generation) analyzing = false }
+            finally { if (request == generation) { releaseReward(); analyzing = false } }
         })
     }
     BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -406,6 +425,8 @@ internal fun CaptureFlow(
             if (current == null && lockedResult == null) {
                 Text(if (recording) "편하게 담아 주세요" else "아기의 순간을 담아요", color = Ink, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 Text("최대 ${limits.minutes}분 담고, ${limits.analysisSeconds}초까지 골라요.", color = Muted, lineHeight = 23.sp)
+                if (!recording && !finishing && !hasFullAccess())
+                    TextButton(onClick = { pass = true }, enabled = !navigationLocked) { Text("2분 촬영·20초 분석 이용하기") }
                 if (!audioOnly && hasPermission) {
                     CameraRecordingPreview(facing, onReady = { recorder, switch -> cameraRecorder = recorder; canSwitch = switch },
                         onError = { cameraRecorder = null; message = it })
@@ -428,12 +449,17 @@ internal fun CaptureFlow(
                     Text("무료는 1분 촬영·10초 분석, 전체 이용권은 2분 촬영·20초 분석이에요. 원본은 기기 안에서만 임시로 보관해요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                 }
             }
+            if (lockedResult == null && RewardKind.ANALYSIS in rewardState.ready && !testDistribution && !currentAuthorize())
+                Text("광고 분석 1회가 준비됐어요. 이번 분석에 사용하며 결과가 없거나 취소하면 기회가 남아요.",
+                    color = Ink, fontSize = 13.sp, modifier = Modifier.testTag("analysis-reward-ready"))
             if (current != null) {
                 ClipPlayerPane(current, selection.start.toLong(), selection.endInclusive.toLong(), stopPlayback,
                     enabled = !analyzing && !navigationLocked, showPreview = lockedResult == null)
             }
             if (lockedResult == null && current != null) {
                 Text("어느 순간을 들어볼까요?", color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                if (!analyzing && !hasFullAccess())
+                    TextButton(onClick = { pass = true }, enabled = !navigationLocked) { Text("20초 분석·표정 관찰 이용하기") }
                 if (editingResult) Text("새 구간을 번역하면 이전 문장·메모가 바뀌어요. 결과로 돌아가면 바꾸던 구간은 취소되고, 이전 선택 구간과 수정 내용이 그대로 남아요.",
                     color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.testTag("range-reanalysis-notice"))
                 ClipRangeEditor(current, ClipRange(selection.start.toLong(), selection.endInclusive.toLong()),

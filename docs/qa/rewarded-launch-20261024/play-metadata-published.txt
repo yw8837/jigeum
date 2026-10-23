@@ -1,0 +1,93 @@
+Browser tab: 7, Title: "제출 세부정보 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/21/details".
+1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/21/details
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				163 container 홈
+					164 button 홈
+						165 text 홈
+				166 container 계정 관리
+					167 button 계정 관리
+						168 text 계정 관리
+				169 container 아가톡 - 지금 내 기분이 그래
+					170 pop up button 아가톡 - 지금 내 기분이 그래
+				171 container 대시보드
+					172 button 대시보드
+						173 text 대시보드
+				174 container 통계
+					175 button 통계
+						176 text 통계
+				177 container 게시 개요
+					178 button 게시 개요
+						179 text 게시 개요
+				180 container Google Play로 보호됨
+					181 button Google Play로 보호됨
+						182 text Google Play로 보호됨
+				183 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					184 button 테스트 및 출시
+						185 text 테스트 및 출시
+				200 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					201 button 모니터링 및 개선
+						202 text 모니터링 및 개선
+				203 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					204 button 사용자 늘리기
+						205 text 사용자 늘리기
+				206 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					207 button Play를 통한 수익 창출
+						208 text Play를 통한 수익 창출
+			55 container main-content
+				56 container
+					209 link Description: 제출 활동 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					210 heading 제출 21, Value: 1
+						211 text 제출 21
+					212 heading 변경사항 3개, Value: 2
+						213 text 변경사항 3개
+					214 table Changes
+						215 row 변경된 항목 설명
+							216 cell
+								217 text 변경된 항목
+							218 cell
+								219 text 설명
+						220 row 프로덕션
+							221 cell
+								222 text 프로덕션
+						223 row 국가/지역 1개 국가/지역 추가: 대한민국
+							224 cell
+								225 text 국가/지역
+							226 cell
+								227 text 1개 국가/지역 추가: 대한민국
+						228 row 앱 콘텐츠
+							229 cell
+								230 text 앱 콘텐츠
+						231 row 광고 선언 광고 선언 업데이트
+							232 cell
+								233 text 광고 선언
+							234 cell
+								235 text 광고 선언 업데이트
+						236 row 데이터 보안 데이터 보안 설문지 작성
+							237 cell
+								238 text 데이터 보안
+							239 cell
+								240 text 데이터 보안 설문지 작성
+					241 text 제출 ID
+					242 text 21
+					243 text 소스
+					244 text Play Console
+					245 text 변경사항 제출됨
+					246 text 10월 24, 2026, 3:29 오전
+					247 text 상태
+					248 text 출시됨
+					249 text 10월 24, 2026, 3:40 오전
+				250 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				251 link Description: 상태 대시보드, Value: status.play.google.com/
+				252 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				253 text © 2026 Google
+				254 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				255 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				256 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/21/details
