@@ -1,6 +1,6 @@
 {
   "date": "2026-10-24",
-  "status": "internal_available_production_ready_waiting_for_play_billing_qa",
+  "status": "internal_available_production_under_review_billing_qa_still_pending",
   "version_name": "0.5.27",
   "version_code": 41,
   "source_base_commit": "63bb8955b45f314fba5248bb8a7493f6f8d20e3e",
@@ -29,10 +29,12 @@
     "production_track": "4697837620700937386",
     "production_release_id": 1,
     "production_release_name": "0.5.27 (41) - first production release",
-    "production_status": "saved_to_publishing_overview_not_submitted",
+    "production_status": "under_review",
+    "production_submission_id": 22,
+    "production_submitted_kst": "2026-10-24T14:17:00+09:00",
     "production_prechecks": "completed_ready_to_send_for_review",
     "production_prechecks_checked_kst": "2026-10-24T14:12:00+09:00",
-    "production_release_submitted": false,
+    "production_release_submitted": true,
     "production_available": false,
     "production_countries": ["KR"],
     "metadata_published": ["production_country_KR", "contains_ads", "data_safety"],
@@ -123,11 +125,14 @@
   "automation_created": false,
   "user_phone_connection_currently_unavailable": true,
   "user_response_waives_play_billing_qa": false,
+  "later_user_release_instruction": ["출시해", "출시 배포 완료하고 보고"],
+  "release_requested_after_billing_qa_gap_disclosed": true,
+  "production_submitted_with_billing_qa_pending": true,
   "long_term_improvement_goal_complete": false,
   "next": [
     "When user is available, install exact41 from internal Google Play and verify on S25 via USB or user-run on-device flow with server checks",
     "Verify official Play test purchase with no charge, server acknowledgement, entitlement, restore and expiration/revocation",
-    "Submit existing production41 change in publishing overview after required checks pass",
+    "Verify approval and public availability of production41 submission22; do not resubmit duplicate41",
     "Verify actual Play public status, then link public store in AdMob and verify readiness"
   ]
 }
