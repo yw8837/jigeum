@@ -30,7 +30,8 @@
     "production_release_id": 1,
     "production_release_name": "0.5.27 (41) - first production release",
     "production_status": "saved_to_publishing_overview_not_submitted",
-    "production_prechecks": "in_progress_at_last_observation",
+    "production_prechecks": "completed_ready_to_send_for_review",
+    "production_prechecks_checked_kst": "2026-10-24T14:12:00+09:00",
     "production_release_submitted": false,
     "production_available": false,
     "production_countries": ["KR"],
@@ -120,9 +121,11 @@
     "report": "cleanup-result.json"
   },
   "automation_created": false,
+  "user_phone_connection_currently_unavailable": true,
+  "user_response_waives_play_billing_qa": false,
   "long_term_improvement_goal_complete": false,
   "next": [
-    "Connect S25 and install exact41 from internal Google Play using the owner account",
+    "When user is available, install exact41 from internal Google Play and verify on S25 via USB or user-run on-device flow with server checks",
     "Verify official Play test purchase with no charge, server acknowledgement, entitlement, restore and expiration/revocation",
     "Submit existing production41 change in publishing overview after required checks pass",
     "Verify actual Play public status, then link public store in AdMob and verify readiness"

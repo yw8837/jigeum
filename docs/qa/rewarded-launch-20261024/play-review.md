@@ -27,7 +27,8 @@ R8 매핑 없음(minify 사용 안 함), native debug symbols 없음의 비차�
 - `0.5.27 (41) - first production release`, 기존 업로드41을 라이브러리에서 재사용하고 미리보기 확인 후 게시 개요에 저장했다.
 - **프로덕션 버전 검토 제출/공개 제공은 미실행.** 실제 Play 결제/복원 QA를 먼저 수행한다.
 - **03:29 제출21의 대한민국 추가 / 광고 선언 / 데이터보안3건은03:40 KST 출시됨**으로 확인했다. `play-metadata-published.png/txt` 참조.
-- 현재 게시 개요 `아직 검토를 위해 제출되지 않음`에는 정확 공개 출시41 변경1건이 있고 빠른 검사가 진행 중이다. `play-production41-ready.png/txt` 참조.
+- 현재 게시 개요 `아직 검토를 위해 제출되지 않음`에는 정확 공개 출시41 변경1건이 있다. 저장 직후 빠른 검사 진행 화면은 `play-production41-ready.png/txt` 참조.
+- 14:12 KST `이제 검토를 위해 변경사항을 전송할 수 있습니다`로 변경됐다. `play-prechecks-ready-1412.png/txt` 참조. 사용자 폰 연결 불가 응답으로 실제 거래 QA/공개 제출은 보류했다.
 - 광고ID 선언은 `제출해 주신 내용`에 있다. 관리형 게시 사용 중지 유지.
 - `play-production41-draft.png/txt`, `play-declarations-review.png/txt`는 이전 초안/검토 중 이력이다.
 
