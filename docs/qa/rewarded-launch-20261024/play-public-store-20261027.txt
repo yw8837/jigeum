@@ -1,0 +1,110 @@
+Browser tab: 2, Title: "아가톡 - 지금 내 기분이 그래 - Google Play 앱", URL: "https://play.google.com/store/apps/details?id=com.moa.babylanguage".
+0 AXWebArea 아가톡 - 지금 내 기분이 그래 - Google Play 앱, URL: play.google.com/store/apps/details?id=com.moa.babylanguage
+	1 container yDmH0d
+		2 container
+			3 container 페이지 헤더
+				4 link Description: Google Play 로고, Value: play.google.com/store/games
+				5 container 기본
+					6 tab group
+						7 tab (selectable, settable, boolean) 게임, Value: 0, ID: 11
+						8 tab (selected, settable, boolean) 앱, Value: 1
+						9 tab (selectable, settable, boolean) 도서, Value: 0, ID: 5
+						10 tab (selectable, settable, boolean) 키즈, Value: 0, ID: 13
+				11 button 검색
+				12 button 고객센터
+				13 pop up button (collapsed) Description: Google 계정: 뇽뇽(bsfire1237@gmail.com), Secondary Actions: Expand
+		14 container
+			15 container
+				16 heading 아가톡 - 지금 내 기분이 그래, Value: 1
+					17 text 아가톡 - 지금 내 기분이 그래
+				18 link Description: Yeolmae, Value: play.google.com/store/apps/developer?id=Yeolmae
+				19 text 광고 포함  ·  인앱 구매
+				20 container 정보 배지
+					21 container
+						22 text 10+ 다운로드
+			23 button 다른 기기에 설치
+				24 text 다른 기기에 설치
+			25 button 공유
+				26 text 공유
+			27 text 내 기기 중 일부에서 앱을 사용할 수 있습니다. 가족과 공유할 수 있는 콘텐츠입니다.
+			28 link Description: 가족 콘텐츠 라이브러리에 관해 자세히 알아보기, Value: play.google.com/store/family/create
+			29 container
+				30 content list
+					31 button 스크린샷 이미지
+					32 button 스크린샷 이미지
+					33 button 스크린샷 이미지
+					34 button 스크린샷 이미지
+				106 button 다음으로 스크롤
+				35 heading 새로운 기능, Value: 2
+					36 text 새로운 기능
+				37 container
+					38 text 아기의 소리를 살펴보고 아가말과 함께 간직하는 아가톡의 첫 정식 버전입니다.
+					39 text 월 구독과 광고 시청 후 1회 이용 기능을 추가했습니다.
+					40 text 직접 녹음한 소리와 아가말을 함께 저장하는 안내, 저장 위치 확인과 저장한 파일 열기를 개선했습니다.
+					41 text 만들어진 카드·영상 내보내기는 무료이며 우리 아이 자랑 게시판에서 직접 공유할 수 있습니다.
+				42 container
+					43 heading 데이터 보안, Value: 2
+						44 text 데이터 보안
+					45 link Description: 데이터 보안 자세히 알아보기, Value: play.google.com/store/apps/datasafety?id=com.moa.babylanguage
+				46 text 보안은 개발자가 데이터를 수집 및 공유하는 방식을 파악하는 것에서 시작됩니다. 데이터 개인 정보 보호 및 보안 관행은 사용자의 앱 사용, 지역, 연령에 따라 다를 수 있습니다. 다음은 개발자가 제공한 정보이며 추후 업데이트될 수 있습니다.
+				47 content list
+					48 container
+						49 text 앱에서 제3자와 공유할 수 있는 데이터 유형 위치, 앱 활동 외 2개
+					50 container
+						51 text 앱에서 수집할 수 있는 데이터 유형 위치, 개인 정보 외 4개
+					52 text 전송 중 데이터 암호화됨
+					53 text 데이터 삭제를 요청할 수 있음
+				54 container
+					55 link Description: 데이터 보안에 관해 자세히 알아보기, Value: play.google.com/store/apps/datasafety?id=com.moa.babylanguage
+				56 container
+					57 heading 앱 정보, Value: 2
+						58 text 앱 정보
+					59 button 앱 정보 자세히 알아보기
+				60 container 아기의 소리와 장면을 살펴보고, 아이 시점의 한마디로 소중한 순간을 남겨요.
+					61 text 아기의 소리와 장면을 살펴보고, 아이 시점의 한마디로 소중한 순간을 남겨요.
+				62 text 업데이트 날짜
+				63 text 2026. 10. 24.
+				64 container
+					65 link Description: 출산/육아, Value: play.google.com/store/apps/category/PARENTING
+			66 link Description: 부적절한 콘텐츠로 신고(새 창에서 열림), Value: support.google.com/googleplay/?p=report_content
+			67 image 콘텐츠 등급
+			68 text 3세 이상
+			69 text 사용자 상호작용
+			70 link Description: 콘텐츠 등급에 대해 자세히 알아보기(새 창에서 열림), Value: support.google.com/googleplay?p=appgame_ratings
+			71 container developer-contacts-heading
+				72 heading 앱 지원, Value: 2
+					73 text 앱 지원
+				74 button (collapsed) Description: 펼치기, Secondary Actions: Expand
+			75 container
+				76 heading 비슷한 추천 앱 보기, Value: 2
+					77 text 비슷한 추천 앱 보기
+				78 container
+					79 link Description: 비슷한 추천 앱 보기 자세히 알아보기, Value: play.google.com/store/apps/collection/cluster?gsr=Sl5qLDNSSTYwNG96TWJ1ZDRPS0dPTkViOE9ROHBEeHkvM1RYTWtxK3EvZjlRblE9mggqChgKFGNvbS5tb2EuYmFieWxhbmd1YWdlEAcQAhoGCAEQABgAIAAwATgAsBIA:S:ANO1ljJLnkO1FIHTwc3rXObKube3510cSg
+				80 link Description: TVING Tving Co Ltd 별표 5개 만점에 1.9개를 받았습니다., Value: play.google.com/store/apps/details?id=net.cj.cjhv.gs.tving
+				81 link Description: ReelShort - 드라마 및 TV 스트리밍 NewLeaf Publishing 별표 5개 만점에 4.3개를 받았습니다., Value: play.google.com/store/apps/details?id=com.newleaf.app.android.victor
+				82 link Description: 듀오링고(Duolingo): 언어 학습 Duolingo 별표 5개 만점에 4.8개를 받았습니다., Value: play.google.com/store/apps/details?id=com.duolingo
+				83 link Description: FaceApp: 얼굴 편집기 FaceApp Technology Ltd 별표 5개 만점에 4.6개를 받았습니다., Value: play.google.com/store/apps/details?id=io.faceapp
+				84 link Description: MePic－AI 사진·영상 생성기 Ocean Float Mobile 별표 5개 만점에 4.5개를 받았습니다., Value: play.google.com/store/apps/details?id=com.aieditor.artgen
+				85 link Description: Gemini Notebook Google LLC 별표 5개 만점에 4.8개를 받았습니다., Value: play.google.com/store/apps/details?id=com.google.android.apps.labs.language.tailwind
+		86 container
+			87 text Google Play
+			88 link Description: Play Pass, Value: play.google.com/store/pass/getstarted
+			89 link Description: Play Points, Value: play.google.com/store/points
+			90 link Description: 기프트 카드, Value: play.google.com/about/giftcards
+			91 link Description: 코드 등록, Value: play.google.com/redeem
+			92 link Description: 환불 정책, Value: support.google.com/googleplay/answer/134336
+			93 text 어린이/가족
+			94 link Description: 보호자 가이드, Value: support.google.com/googleplay?p=pff_parentguide
+			95 link Description: 가족 공유, Value: support.google.com/googleplay/answer/7007852
+			96 link Description: 서비스 약관, Value: play.google.com/intl/ko_kr/about/play-terms.html
+			97 link Description: 개인 정보 보호, Value: policies.google.com/privacy
+			98 link Description: Google Play 정보, Value: support.google.com/googleplay/?p=about_play
+			99 link Description: 개발자, Value: developer.android.com/index.html
+			100 link Description: Google Store, Value: store.google.com/?playredirect=true&utm_source=play&utm_medium=google_oo&utm_campaign=GS106288
+			101 text 모두 VAT 포함된 가격입니다. 대한민국 (한국어) 상호명: Google LLC. | 대표자: Sundar Pichai | 주소: 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States | 고객센터: 080-085-1500 (무료) /
+			102 link Description: gpk-usersupport@google.com, Value: mailto:gpk-usersupport@google.com
+			103 text  | 호스팅 서비스 제공: Google LLC. |
+			104 link Description: 사업자정보, Value: ftc.go.kr/selectBizOvrCommPop.do?apvPermMgtNo=2022%EA%B3%B5%EC%A0%950001
+			105 text Google Play에 등록된 앱과 게임은 각 개발자가 제공하고 판매하는 것이며, Google LLC가 개발자로 표시된 앱과 게임 이외에 Play에 등록된 상품 및 관련 거래에 대해 Google LLC는 어떠한 책임도 지지 않습니다.
+
+The focused UI element is 0 AXWebArea 아가톡 - 지금 내 기분이 그래 - Google Play 앱, URL: play.google.com/store/apps/details?id=com.moa.babylanguage

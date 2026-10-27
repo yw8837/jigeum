@@ -18,7 +18,7 @@
 
 - 모델 출력은 일반 소리/얼굴 관찰 단서다. 아기 의도 번역 정확도나 의료 진단으로 표현하지 않는다.
 - 구매 콜백·PENDING·화면 Boolean만으로 유료를 열지 않는다. `BillingManager.hasCurrentEntitlement()`로 실제 실행 시점에도 확인한다. 테스트 대역은 `androidTest`에만 둔다.
-- 최신 버전·검증 수치·배포 상태는 [HANDOFF](docs/HANDOFF.md)와 [정식41 QA](docs/qa/rewarded-launch-20261024/README.md)를 먼저 확인한다. 현재 최종41은 정식 모델을 포함한 release AAB이며 운영자 내부 테스트 제공 및 대한민국 프로덕션 검토 제출을 마쳤다. 같은41 중복 업로드/제출취소를 하지 않고 실제 승인/공개 상태를 확인한다. sideload preview·정식 정책 비교용 AAB는 제출하지 않는다. 정식 release의 두 테스트 접근 표시는false다.
+- 최신 버전·검증 수치·배포 상태는 [HANDOFF](docs/HANDOFF.md)와 [정식41 QA](docs/qa/rewarded-launch-20261024/README.md)를 먼저 확인한다. 정식 모델을 포함한 최종41 release는 **2026-10-27 16:32 KST 대한민국 프로덕션 공개**됐으며 제출22 `출시됨`과 정확41 `Google Play에 제공됨`, 공개 스토어를 확인했다. 실제 Play 거래/복원 QA와 AdMob 스토어 연결·검토·실광고 확인은 남았다. 같은41 중복 업로드/제출취소를 하지 않는다. sideload preview·정식 정책 비교용 AAB는 제출하지 않는다. 정식 release의 두 테스트 접근 표시는false다.
 - 제공 영상2개의 발성 누락은 남아 있다. 원본 float YAMNet 비교에서 회복되지 않아 기존 모델/음성 임계값을 유지했다. [비교 근거](docs/research/20261002-model-059-comparison.md). 시각 표본은 얼굴 주인·발성 동기를 입증하지 않으며, 구조화 관찰에 맞는 요청형 표현에만 기여한다. [출처·보류 계약](docs/UX-SOUND-VISUAL-0.5.9.md).
 - 결과 보기만으로 자동 기록을 만들지 않고 저장 버튼으로 문장/선택 구간 MP4를 로컬 보관한다. PNG/MP4 앨범 저장과 기존 기록 내보내기는 무료이며 JSON/CSV/PDF에는 미디어가 없다. 새 DB/JSON은v2이며 구형 기록의 출처는LEGACY다. 새 앱은JSONv1/v2를 읽고 구버전 앱으로의다운그레이드는 지원하지 않는다. 표정 단독 욕구 번역은 미추가다. 실제12명14일의 참여는 그룹회원수/로컬설치/링크생성으로 대신하지 않는다.
 - 이미 생성된 문장·기록·무료 내보내기를 유료 잠금으로 가리지 않는다.

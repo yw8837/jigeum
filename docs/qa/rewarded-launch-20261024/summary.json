@@ -1,6 +1,7 @@
 {
   "date": "2026-10-24",
-  "status": "internal_available_production_under_review_billing_qa_still_pending",
+  "status": "production_available_billing_qa_and_admob_readiness_pending",
+  "production_status_checked_date": "2026-10-27",
   "version_name": "0.5.27",
   "version_code": 41,
   "source_base_commit": "63bb8955b45f314fba5248bb8a7493f6f8d20e3e",
@@ -29,13 +30,20 @@
     "production_track": "4697837620700937386",
     "production_release_id": 1,
     "production_release_name": "0.5.27 (41) - first production release",
-    "production_status": "under_review",
+    "production_status": "available",
+    "production_status_observed": "Google Play에 제공됨",
+    "production_submission_status_observed": "출시됨",
+    "production_published_kst": "2026-10-27T16:32:00+09:00",
     "production_submission_id": 22,
     "production_submitted_kst": "2026-10-24T14:17:00+09:00",
     "production_prechecks": "completed_ready_to_send_for_review",
     "production_prechecks_checked_kst": "2026-10-24T14:12:00+09:00",
     "production_release_submitted": true,
-    "production_available": false,
+    "production_available": true,
+    "public_store_listing_verified": true,
+    "public_store_url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage",
+    "production_public_evidence": ["play-submission22-published-20261027.png", "play-production41-available-20261027.png", "play-public-store-20261027.png"],
+    "dex_optimization_followup": {"obfuscation_observed_percent": 0, "deadline_observed": "2027-02", "blocks_current_published_release": false},
     "production_countries": ["KR"],
     "metadata_published": ["production_country_KR", "contains_ads", "data_safety"],
     "metadata_submission_id": 21,
@@ -132,7 +140,7 @@
   "next": [
     "When user is available, install exact41 from internal Google Play and verify on S25 via USB or user-run on-device flow with server checks",
     "Verify official Play test purchase with no charge, server acknowledgement, entitlement, restore and expiration/revocation",
-    "Verify approval and public availability of production41 submission22; do not resubmit duplicate41",
-    "Verify actual Play public status, then link public store in AdMob and verify readiness"
+    "Link the verified public Google Play listing in AdMob and verify app readiness and live inventory",
+    "Review DEX obfuscation optimization notice before the displayed February 2027 deadline; do not resubmit duplicate41"
   ]
 }
