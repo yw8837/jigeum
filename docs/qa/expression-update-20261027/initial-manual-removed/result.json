@@ -1,0 +1,63 @@
+{
+  "status": "pass",
+  "tests": 46,
+  "passed_tests": 46,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [],
+  "seconds": 131.43,
+  "exit": 0,
+  "provenance": {
+    "app_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "d156e3e207c93671f95914b74bb95c82028ef0a9299d9cf787557e1b82482b77",
+      "bytes": 87862278
+    },
+    "test_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "aa7d72b0a648f79d99131640e4a8639ef455f6905d1c6b1568e1396cf3ed1500",
+      "bytes": 2946877
+    },
+    "git": {
+      "sha": "25de160f2c80e7f686231c517ea69c64aefb50fc",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisUiTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionExpansionTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BabyExpressionCatalog.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaregiverCaptionTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/PlayUpdateNoticeTest.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaregiverCaptionCatalog.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaregiverCaptionPicker.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PlayUpdateNotice.kt"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~I4Krqry2zv6LAmgyjCZnkg==/com.moa.babylanguage-5PzaAQg4d2Z3JT5bbE07lA==/base.apk",
+      "sha256": "d156e3e207c93671f95914b74bb95c82028ef0a9299d9cf787557e1b82482b77",
+      "expected_sha256": "d156e3e207c93671f95914b74bb95c82028ef0a9299d9cf787557e1b82482b77",
+      "version_code": 43,
+      "version_name": "0.5.29",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~j55-XlFDuWdRPYNu9as4cQ==/com.moa.babylanguage.test-f79WHwq8-jmrqiylvZhE2g==/base.apk",
+      "sha256": "aa7d72b0a648f79d99131640e4a8639ef455f6905d1c6b1568e1396cf3ed1500",
+      "expected_sha256": "aa7d72b0a648f79d99131640e4a8639ef455f6905d1c6b1568e1396cf3ed1500",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  }
+}

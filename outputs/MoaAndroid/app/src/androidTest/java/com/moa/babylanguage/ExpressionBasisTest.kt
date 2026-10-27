@@ -43,7 +43,8 @@ class ExpressionBasisTest {
     }
 
     @Test fun versionTwoPreservesEveryBasisAndVersionOneDefaultsToLegacy() {
-        for (basis in listOf(ExpressionBasis.AUDIO, ExpressionBasis.AUDIO_VISUAL, ExpressionBasis.CAREGIVER, ExpressionBasis.LEGACY)) {
+        for (basis in listOf(ExpressionBasis.AUDIO, ExpressionBasis.AUDIO_VISUAL, ExpressionBasis.AUDIO_PLAYFUL,
+            ExpressionBasis.AUDIO_VISUAL_PLAYFUL, ExpressionBasis.CAREGIVER, ExpressionBasis.LEGACY)) {
             val document = json(row(basis))
             assertEquals(2, document.getInt("version"))
             assertEquals(row(basis), parse(document).records.single())

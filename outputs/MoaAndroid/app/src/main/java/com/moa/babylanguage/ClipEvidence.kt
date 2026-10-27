@@ -267,8 +267,10 @@ internal object DeviceClipAnalyzer : ClipAnalyzer {
                 ensureActive()
                 val frames = if (visual) inspectVideoEvidence(context, uri, range.startMs, range.endMs) else null
                 ensureActive()
-                val result = EvidenceInterpreter.interpret(audio, shape, range, frames,
+                val observed = EvidenceInterpreter.interpret(audio, shape, range, frames,
                     audioTimelineAligned = decoded?.selectionTimelineAligned == true)
+                val result = AutomaticBabySpeech.apply(observed, SoundTimeline.decide(audio, range.durationMs),
+                    shape, range, frames, decoded?.selectionTimelineAligned == true)
                 if (pcm != null && audio.problem == null && result.interpretation == null) {
                     val cleaned = AudioCleanup.filter(pcm)
                     try {

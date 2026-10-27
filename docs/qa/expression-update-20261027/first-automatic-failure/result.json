@@ -1,0 +1,83 @@
+{
+  "status": "fail",
+  "tests": null,
+  "passed_tests": 49,
+  "failed_tests": 1,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [
+    "Expected exactly one nonempty OK summary",
+    "Runner reported a failure or harness timeout",
+    "Discovered, started, completed and summary counts do not agree",
+    "One or more tests failed"
+  ],
+  "seconds": 54.07,
+  "exit": 0,
+  "provenance": {
+    "app_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "003c08b2ffcc2d78304e2b7ea86ee73763d04efc0cf5c10b09befbdec0bac6a4",
+      "bytes": 87854832
+    },
+    "test_apk": {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+      "sha256": "1ad1d027ea6c3f8e5a88d36317f11f30d73523a4afbed2c48003a7f596e03b19",
+      "bytes": 2951250
+    },
+    "git": {
+      "sha": "25de160f2c80e7f686231c517ea69c64aefb50fc",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionBasisUiTest.kt",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionExpansionTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BabyExpressionCatalog.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ExpressionBasis.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt",
+        "?? docs/qa/expression-update-20261027/",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AutomaticBabySpeechTest.kt",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/PlayUpdateNoticeTest.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AutomaticBabySpeech.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AutomaticBabySpeechCatalog.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/PlayUpdateNotice.kt"
+      ]
+    },
+    "installed_app": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~rPGCkM8oE4NQn9h10TSxCQ==/com.moa.babylanguage-vuYKJ8eB6YahI7iGfzcdtA==/base.apk",
+      "sha256": "003c08b2ffcc2d78304e2b7ea86ee73763d04efc0cf5c10b09befbdec0bac6a4",
+      "expected_sha256": "003c08b2ffcc2d78304e2b7ea86ee73763d04efc0cf5c10b09befbdec0bac6a4",
+      "version_code": 43,
+      "version_name": "0.5.29",
+      "verified": true,
+      "errors": []
+    },
+    "installed_test": {
+      "package": "com.moa.babylanguage.test",
+      "base_apk": "/data/app/~~q8hmMgfyY986DDfU3urgBg==/com.moa.babylanguage.test-bN7DSmU2LmMJATJ5tD_mgw==/base.apk",
+      "sha256": "1ad1d027ea6c3f8e5a88d36317f11f30d73523a4afbed2c48003a7f596e03b19",
+      "expected_sha256": "1ad1d027ea6c3f8e5a88d36317f11f30d73523a4afbed2c48003a7f596e03b19",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  },
+  "classes": [
+    "PlayUpdateNoticeTest",
+    "AutomaticBabySpeechTest",
+    "ExpressionExpansionTest",
+    "ExpressionVarietyTest",
+    "ExpressionBasisTest",
+    "ExpressionBasisUiTest",
+    "LongExpressionTest",
+    "PaddingExpressionRegressionTest"
+  ],
+  "scope": "automatic wording + official fake Play update + storage UI regression, synthetic model observations"
+}

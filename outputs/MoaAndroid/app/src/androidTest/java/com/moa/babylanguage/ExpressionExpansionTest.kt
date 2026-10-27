@@ -25,22 +25,22 @@ class ExpressionExpansionTest {
     @Test fun everyMeaningFamilyHasHundredsOfReachableCompleteExpressions() {
         val all = mutableSetOf<String>()
         for (audio in families()) {
-            val outputs = (0 until 512).map { result(audio, it) }
-            assertEquals("${outputs.first().sound} needs 512 reachable choices", 512, outputs.map { it.phrase }.toSet().size)
+            val outputs = (0 until 1152).map { result(audio, it) }
+            assertEquals("${outputs.first().sound} needs 1152 reachable choices", 1152, outputs.map { it.phrase }.toSet().size)
             assertEquals(1, outputs.map { it.copy(phrase = "") }.toSet().size)
             assertTrue(outputs.all { it.phrase.length in 15..100 && it.phrase.last() in ".!?" })
             assertTrue(outputs.map { it.phrase.substringBefore('.').substringBefore('!').substringBefore('?') }.toSet().size >= 32)
             all.addAll(outputs.map { it.phrase })
         }
-        assertEquals("No duplicated full expressions across families", 3584, all.size)
+        assertEquals("No duplicated full expressions across families", 8064, all.size)
     }
 
     @Test fun pausePathCanReachTheExpandedVocabularyToo() {
         val audio = SoundAnalysis(emptyList(), frames = listOf(0L, 975, 3900, 4875).map { SoundFrame(it, cue("옹알이 후보")) })
         val measured = shape.copy(quietSpans = listOf(AcousticPause(2000, 3600)))
         val plain = result(audio, 0)
-        val variants = (0 until 512).map { result(audio, it, measured) }
-        assertEquals(512, variants.map { it.phrase }.toSet().size)
+        val variants = (0 until 1152).map { result(audio, it, measured) }
+        assertEquals(1152, variants.map { it.phrase }.toSet().size)
         assertTrue(variants.all { it.sound == plain.sound && it.phrase.contains("조용해졌다가") })
         assertTrue(variants.all { it.phrase.length <= 130 })
     }
@@ -57,13 +57,13 @@ class ExpressionExpansionTest {
 
     @Test fun expandedKeysStayDeterministicAndDoNotChangeEvidenceOrInventNeeds() {
         val forbidden = listOf("배고", "졸려", "아파", "화났", "슬퍼", "기분이 풀", "엄마가", "아빠가")
-        for (audio in families()) for (key in (-512 until 512) + listOf(Int.MIN_VALUE, Int.MAX_VALUE)) {
+        for (audio in families()) for (key in (-1152 until 1152) + listOf(Int.MIN_VALUE, Int.MAX_VALUE)) {
             val first = result(audio, key)
             assertEquals(first, result(audio, key))
             forbidden.forEach { assertFalse(first.phrase, first.phrase.contains(it)) }
         }
         val general = families().last()
-        for (key in 0 until 512) {
+        for (key in 0 until 1152) {
             val text = result(general, key).phrase
             for (word in listOf("울음", "웃음", "옹알", "쉬었다", "커졌", "계속")) assertFalse(text, text.contains(word))
         }
@@ -125,17 +125,17 @@ class ExpressionExpansionTest {
         // The same mixed catalog can have both mouth and smile observations.
         basic += recording(listOf("울음", "아기 웃음 후보", "옹알이 후보", "옹알이 후보",
             "울음", "아기 웃음 후보", "옹알이 후보", "옹알이 후보", "울음"))
-        basic.forEach { audit("basic", it, 10_000, shape, 512) }
+        basic.forEach { audit("basic", it, 10_000, shape, 1152) }
         val longPatterns = VocalEvent.entries.map { listOf(it.cue) } + listOf(
             listOf("울음", "아기 웃음 후보", "옹알이 후보", "옹알이 후보"), listOf("옹알이 후보", "어린 말소리 후보"))
         for (pattern in longPatterns) for (pause in listOf(false, true)) {
             val audio = recording(List(20) { pattern[it % pattern.size] })
             audit("sustained", audio, 20_000, shape.copy(quietSpans =
-                if (pause) listOf(AcousticPause(6000, 7000)) else emptyList()), 512)
+                if (pause) listOf(AcousticPause(6000, 7000)) else emptyList()), 1152)
         }
         for (event in VocalEvent.entries) {
             val audio = SoundAnalysis(emptyList(), frames = listOf(0L, 975, 3900, 4875).map { SoundFrame(it, cue(event.cue)) })
-            audit("pause", audio, 10_000, shape.copy(quietSpans = listOf(AcousticPause(2000, 3600))), 512)
+            audit("pause", audio, 10_000, shape.copy(quietSpans = listOf(AcousticPause(2000, 3600))), 1152)
         }
         var orders = 0
         fun sequences(prefix: List<VocalEvent>) {
@@ -150,11 +150,11 @@ class ExpressionExpansionTest {
         sequences(emptyList())
         assertEquals(150, orders)
         val audioOnly = groups.values.flatten().toSet()
-        val expected = mapOf("basic" to 3584, "sustained" to 6144, "pause" to 2048, "ordered" to 19200)
+        val expected = mapOf("basic" to 8064, "sustained" to 13824, "pause" to 4608, "ordered" to 19200)
         assertEquals(expected, groups.mapValues { it.value.size })
-        assertEquals(30976, audioOnly.size)
+        assertEquals(45696, audioOnly.size)
         println("VISUAL_GROUP_COUNTS=${visualGroups.mapValues { it.value.size }}")
-        assertEquals(90624, withVisual.size)
+        assertEquals(121344, withVisual.size)
         val allSentences = groups.getValue("basic").flatMap { it.split(Regex("(?<=[.!?]) +")) }.toSet()
         val basicWords = groups.getValue("basic").flatMap { it.split(Regex("\\s+")) }
             .map { it.trim('.', '!', '?', ',', '…') }.filter { it.isNotBlank() }.toSet()

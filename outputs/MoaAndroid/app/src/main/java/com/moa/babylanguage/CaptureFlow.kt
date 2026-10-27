@@ -497,6 +497,7 @@ internal fun CaptureFlow(
                 val cardRecord = Observation(1, lockedResult.sound, lockedResult.range, "", cardPhrase.ifBlank { lockedResult.phrase }, basis = cardBasis)
                 val cardRange = current?.let { ClipRange(selection.start.toLong(), selection.endInclusive.toLong()) }
                 ResultMomentCard(cardRecord, current, cardRange)
+
                 Text("${lockedResult.range} · ${if (lockedResult.visual) "소리 + 표정 관찰" else "소리 관찰"}", color = Muted, fontSize = 13.sp)
                 Column(Modifier.fillMaxWidth().background(PaleSage, RoundedCornerShape(20.dp)).padding(16.dp)
                     .testTag("result-next-analysis"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -516,7 +517,7 @@ internal fun CaptureFlow(
                     Text(it, color = Ink, lineHeight = 23.sp, modifier = Modifier.fillMaxWidth()
                         .background(PaleApricot, RoundedCornerShape(16.dp)).padding(16.dp).testTag("visual-notice"))
                 }
-                Text("우리 아기 모습과 함께 재미있게 살펴보세요. 마음에 드는 순간은 영상과 함께 간직해요. 실제 마음·욕구를 알아낸 번역은 아니에요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                Text("소리·장면을 참고해 아가말을 자동으로 만들어요. 장난과 투정은 재미로 상상한 말투이며, 실제 마음·욕구를 알아낸 번역은 아니에요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
                 if (onGallery != null) {
                     GallerySaveButton("카드 이미지 앨범에 저장", !navigationLocked && cardPhrase.isNotBlank(), { message = it }) {
                         stopPlayback++; onGallery(lockedResult.copy(basis = cardBasis), cardPhrase, current, cardRange, false)

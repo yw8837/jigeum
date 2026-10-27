@@ -118,8 +118,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 42
-        versionName = "0.5.28"
+        versionCode = 43
+        versionName = "0.5.29"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")
@@ -410,6 +410,7 @@ dependencies {
     // Newer 4.x runtime supports the older MediaPipe gencode; keep parser/model regression coverage.
     implementation("com.google.protobuf:protobuf-javalite:4.36.2")
     implementation("com.android.billingclient:billing:9.1.0")
+    implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.gms:play-services-ads:25.5.0")
     implementation("com.google.android.ump:user-messaging-platform:4.0.0")
     implementation("androidx.compose.material:material-icons-extended")

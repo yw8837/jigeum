@@ -130,6 +130,7 @@ class MainActivity : ComponentActivity() {
     private var billing: BillingManager? = null
     private var rewardedAds: RewardedAds? = null
     private var observationStore: ObservationStore? = null
+    private var updateNotice: PlayUpdateNotice? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,6 +139,7 @@ class MainActivity : ComponentActivity() {
         val store = ObservationStore(this).also { observationStore = it }
         val billingManager = BillingManager(this).also { billing = it }
         val accessBilling = PlayAccessBilling(billingManager)
+        val updates = PlayUpdateNotice(this).also { updateNotice = it }
         val rewards: RewardAccess = if (BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST) NoRewardAccess
             else RewardedAds(this).also { rewardedAds = it }
         setContent {
@@ -145,12 +147,14 @@ class MainActivity : ComponentActivity() {
             if (showTitle) AppTitleScreen { showTitle = false }
             else JigeumApp(this, store, accessBilling,
                 testDistribution = BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST,
-                rewardAccess = rewards, registerBackgroundStop = { stopCaptureOnBackground = it })
+                rewardAccess = rewards, updateNotice = updates,
+                registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }
-    override fun onResume() { super.onResume(); billing?.refresh() }
+    override fun onResume() { super.onResume(); billing?.refresh(); updateNotice?.check() }
     override fun onDestroy() {
         billing?.close()
+        updateNotice?.close()
         rewardedAds?.close()
         observationStore?.let { store -> kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch { store.close() } }
         observationStore = null
@@ -170,7 +174,8 @@ internal fun JigeumApp(
     artifactExporter: ArtifactExporter = DeviceArtifactExporter,
     recordImporter: RecordImporter = DeviceRecordImporter,
     testDistribution: Boolean = false,
-    rewardAccess: RewardAccess = NoRewardAccess
+    rewardAccess: RewardAccess = NoRewardAccess,
+    updateNotice: PlayUpdateNotice? = null
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
@@ -271,6 +276,10 @@ internal fun JigeumApp(
     MaterialTheme(colorScheme = lightColorScheme(primary = Ink, onPrimary = White,
         surface = Cream, onSurface = Ink, secondaryContainer = PaleSage, onSecondaryContainer = Ink,
         background = Cream, onBackground = Ink, outline = Muted)) {
+        StartupUpdatePrompt(updateNotice,
+            eligible = loaded && page == Page.HOME && !busy && !sharing && viewingMediaId < 0,
+            onUpdate = { PlayUpdateNotice.openStore(activity) },
+            onFailure = { notify("스토어를 열지 못했어요. Play 스토어에서 아가톡을 찾아 업데이트해 주세요.") })
         observations.find { it.id == viewingMediaId }?.let { record ->
             RecordMediaViewer(record, onClose = { viewingMediaId = -1L }, onMessage = ::notify)
         }

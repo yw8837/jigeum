@@ -1,0 +1,92 @@
+{
+  "version": "0.5.29",
+  "versionCode": 43,
+  "recorded_at": "2026-10-28T00:13:38.142903+09:00",
+  "status": "implemented_and_debug_qa_passed_not_released",
+  "play43_uploaded": false,
+  "play42_status": "production review pending; existing submission 23 preserved",
+  "android": {
+    "tests": 52,
+    "passed": 52,
+    "failed": 0,
+    "skipped": 0,
+    "device": "MoaQA35 API35 x86_64 host GPU",
+    "seconds": 39.68,
+    "apk_sha256": "b04c855d382abbd11f0891d7e7ae80c602e7116485892e8cabab0a3488cb8c7f",
+    "test_apk_sha256": "9a800ba1286c40e6df155647a9056622e37a6ecd36823eb706d802454fe566a7"
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 22,
+    "hints": 1
+  },
+  "base_expression_counts": {
+    "basic": 8064,
+    "audio_only": 45696,
+    "with_visual": 121344,
+    "authored_sentence_units": 504,
+    "whitespace_words": 741,
+    "synthetic_pcm_unique": 232,
+    "synthetic_pcm_samples": 256
+  },
+  "imaginative_catalog": {
+    "themes": 6,
+    "authored_combinations": 384,
+    "combined_output_max_chars": 160,
+    "manual_selection": false,
+    "emotion_classifier_validated": false
+  },
+  "automatic_mapping": {
+    "localized_cry": [
+      "pout",
+      "bothered"
+    ],
+    "localized_laugh": [
+      "excited"
+    ],
+    "localized_babble_child_voice": [
+      "playful",
+      "affection"
+    ],
+    "sleepy": "aligned accepted babble/child voice plus full single-face eye/mouth temporal rule; unvalidated shape heuristic"
+  },
+  "update_notice": {
+    "api": "Google Play AppUpdateManager 2.1.0",
+    "test_api": "official FakeAppUpdateManager",
+    "same_version_snooze_hours": 24,
+    "actual_play_delivery_tested": false
+  },
+  "limitations": [
+    "No measured infant sleep, annoyance, emotion or intent accuracy.",
+    "The sleep-related rule is synthetic-tested only, not a validated yawn detector; face and speaker identity unknown.",
+    "No new real-phone measurement or signed43 release QA.",
+    "No real Play purchase/discount/restore test or live AdMob verification.",
+    "The new popup requires installing43 first; versions41/42 do not gain it remotely.",
+    "Base expression counts do not count emotion states or prove recognition performance; combined creative total not enumerated."
+  ],
+  "cleanup": {
+    "owned_emulator_cleanup": "app and test uninstalled; MoaQA35 stopped and absent from ADB",
+    "blocked_previous_deletions_preserved": true,
+    "actions": {
+      "com.moa.babylanguage.test": {
+        "exit": 0,
+        "output": "Success",
+        "error": ""
+      },
+      "com.moa.babylanguage": {
+        "exit": 0,
+        "output": "Success",
+        "error": ""
+      },
+      "emulator_stop": {
+        "exit": 0,
+        "output": "OK: killing emulator, bye bye\n\nOK"
+      }
+    },
+    "completed_at": "2026-10-28T00:16:42.087666+09:00",
+    "free_bytes": {
+      "C": 66220019712,
+      "D": 108327731200
+    }
+  }
+}
