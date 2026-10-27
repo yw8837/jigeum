@@ -1,0 +1,109 @@
+Browser tab: 1, Title: "출시 트랙 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386?tab=releases".
+1 AXWebArea 출시 트랙 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386?tab=releases
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+					32 content list
+						33 container
+							34 container 최신 버전 및 번들
+								35 button 최신 버전 및 번들
+							36 container 프로덕션
+								37 button 프로덕션
+							38 container (collapsed) Description: 테스트, Secondary Actions: Expand
+								39 button 테스트
+							40 container 사전 등록
+								41 button 사전 등록
+							42 container 앱 무결성
+								43 button 앱 무결성
+							44 container 고급 설정
+								45 button 고급 설정
+				46 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					47 button 모니터링 및 개선
+						48 text 모니터링 및 개선
+				49 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					50 button 사용자 늘리기
+						51 text 사용자 늘리기
+				52 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					53 button Play를 통한 수익 창출
+						54 text Play를 통한 수익 창출
+			55 container main-content
+				56 container
+					57 heading 프로덕션, Value: 1
+						58 text 프로덕션
+					59 pop up button (collapsed) Description: 휴대전화, 태블릿, Desktop (Googlebook OS, ChromeOS), Android XR 폼 팩터를 선택합니다., ID: a349BBB97-4491-44C5-B44E-BAD2E5A6A3F7--2, Secondary Actions: Expand
+					60 button 새 버전 만들기
+						61 text 새 버전 만들기
+					62 container
+						63 text 프로덕션 버전을 생성 및 관리하여 앱을 선택한 국가의 모든 사용자에게 제공하세요.
+						64 link Description: 프로덕션 자세히 알아보기(새 탭에서 열림), Value: play.google.com/console/about/publicreleases
+					65 heading 휴대전화, 태블릿, Desktop, Android XR 트랙 요약, Value: 4
+						66 text 휴대전화, 태블릿, Desktop, Android XR 트랙 요약
+					67 content list
+						68 text 활성
+						69 container
+							70 text 출시 버전 0.5.28 (42) - access codes and launch offer 검토 중
+						71 container
+							72 text 국가/지역 1개
+						73 container
+							74 text 설치 수 31회
+					75 tab group
+						76 tab (selectable, settable, boolean) Description: 출시 대시보드, Value: 0
+						77 tab (selected, settable, boolean) Description: 출시, Value: 1
+						78 tab (selectable, settable, boolean) Description: 국가/지역, Value: 0
+					79 heading 출시, Value: 2
+						80 text 출시
+					81 container
+						82 heading Description: 버전: 0.5.28 (42) - access codes and launch offer, Value: 3
+							83 text 0.5.28 (42) - access codes and launch offer
+						84 link Description: 버전 0.5.28 (42) - access codes and launch offer 관리, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/2/details
+						85 text 검토 중.
+						86 link 게시 개요로 이동
+							87 text 게시 개요로 이동
+						88 text 버전 코드 1개
+						89 button (collapsed) Description: 0.5.28 (42) - access codes and launch offer 요약 표시, Secondary Actions: Expand
+							90 text 요약 표시
+						91 heading Description: 버전: 0.5.27 (41) - first production release, Value: 3
+							92 text 0.5.27 (41) - first production release
+						93 link Description: 버전 0.5.27 (41) - first production release 관리, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/1/details
+						94 text Google Play에 제공됨 버전 코드 1개 게시일: 10월 27일 오후 4:32
+						95 button (collapsed) Description: 0.5.27 (41) - first production release 요약 표시, Secondary Actions: Expand
+							96 text 요약 표시
+					97 heading 출시 내역, Value: 2
+						98 text 출시 내역
+					99 button (collapsed) Description: 콘텐츠 표시: 출시 내역, Secondary Actions: Expand
+				100 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				101 link Description: 상태 대시보드, Value: status.play.google.com/
+				102 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				103 text © 2026 Google
+				104 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				105 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				106 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 출시 트랙 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386?tab=releases

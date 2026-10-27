@@ -44,7 +44,7 @@ def main():
               'actual_infant_intent_accuracy_tested': False}
     try:
         q.shell('pm', 'clear', q.PACKAGE)
-        q.shell('wm', 'size', '1080x1920')
+        q.shell('wm', 'size', '1080x2400')
         q.shell('wm', 'density', '420')
         q.shell('settings', 'put', 'system', 'font_scale', '1.0')
         q.adb('push', str(args.fixture), '/sdcard/Download/' + fixture_name)
@@ -54,7 +54,8 @@ def main():
         q.screenshot('store-02-range'); result['screens'].append('store-02-range.png')
         q.tap_text('이 구간 소리로 번역하기')
         q.wait_ui('장면과 함께 저장하기', seconds=65)
-        q.swipe_up()  # Show the actual generated text, below the non-personal fixture video.
+        # A small scroll keeps the entire generated phrase visible.
+        q.shell('input', 'swipe', '540', '1600', '540', '1200', '360')
         q.screenshot('store-03-expression'); result['screens'].append('store-03-expression.png')
         q.trace('store-actual-model-expression')
         q.tap_text('장면과 함께 저장하기'); q.wait_ui('기록 저장 완료', seconds=45)
@@ -65,6 +66,9 @@ def main():
                 raise RuntimeError('Transient save notice did not disappear before store capture')
             time.sleep(.25)
         q.screenshot('store-04-record'); result['screens'].append('store-04-record.png')
+        flow.launch()
+        q.wait_ui('우리 아이 자랑 · 영상카드 함께 나누기')
+        q.screenshot('store-06-community'); result['screens'].append('store-06-community.png')
         result['status'] = 'pass'
     except Exception as error:
         result['status'] = 'fail'; result['error'] = str(error)

@@ -18,6 +18,8 @@ def main():
     parser.add_argument('--serial', required=True)
     parser.add_argument('--code-file', type=Path, required=True)
     parser.add_argument('--evidence', type=Path, required=True)
+    parser.add_argument('--version-code', type=int, default=42)
+    parser.add_argument('--version-name', default='0.5.28')
     args = parser.parse_args()
     if not args.serial.startswith('emulator-'):
         parser.error('Only an owned emulator is allowed.')
@@ -66,8 +68,9 @@ def main():
 
     try:
         package_info = adb('shell', 'dumpsys', 'package', package).decode('utf-8', 'replace')
-        assert 'versionCode=42 ' in package_info and 'versionName=0.5.28' in package_info
-        result['version_code'] = 42
+        assert f'versionCode={args.version_code} ' in package_info and f'versionName={args.version_name}' in package_info
+        result['version_code'] = args.version_code
+        result['version_name'] = args.version_name
         launch()
         find('무료 · 1분 촬영 · 10초 분석')
         tap('전체 이용권')
@@ -75,10 +78,17 @@ def main():
         find('이용 코드 등록', scroll=True)
         input_node = next(n for n in nodes() if n.get('class') == 'android.widget.EditText')
         screenshot('code-entry-empty.png')
+        assert input_node.get('enabled') == 'true', 'Access-code input disabled: verify packaged server configuration'
         tap_node(input_node)
+        assert any(n.get('class') == 'android.widget.EditText' and n.get('focused') == 'true'
+                   for n in nodes()), 'Access-code input did not receive focus'
         # Deliberately bypass logging wrappers for the secret-bearing input command.
         adb('shell', 'input', 'text', code)
-        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
+        # Hardware-keyboard emulator sessions may not show an IME. Back in
+        # that state navigates away from the page instead of hiding a keyboard.
+        ime = adb('shell', 'dumpsys', 'input_method').decode('utf-8', 'replace')
+        if re.search(r'(?:mInputShown|isInputViewShown)=true', ime):
+            adb('shell', 'input', 'keyevent', 'KEYCODE_BACK')
         tap('이용 코드 등록', scroll=True)
         find('초대 이용권 · 기간 제한 없이 무료')
         result['invitation_accepted'] = True

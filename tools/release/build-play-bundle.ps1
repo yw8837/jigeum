@@ -49,8 +49,13 @@ if ($Purpose -eq 'paid-candidate') {
     if (-not $env:JIGEUM_PLAY_VERIFY_URL -or -not $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY) {
         throw 'Paid candidates require the actual HTTPS verification URL and public key.'
     }
-    if (-not $env:JIGEUM_PLAY_VERIFY_URL.StartsWith('https://', [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'Verifier URL must use HTTPS.'
+    $verifyUri = [Uri]$env:JIGEUM_PLAY_VERIFY_URL
+    if ($verifyUri.Scheme -ne 'https' -or -not $verifyUri.Host -or $verifyUri.UserInfo -or
+        $verifyUri.Query -or $verifyUri.Fragment -or $verifyUri.AbsolutePath -ne '/verify') {
+        throw 'Verifier URL must be HTTPS with the exact /verify path, without credentials/query/fragment.'
+    }
+    if ($env:JIGEUM_COMMUNITY_URL -ne 'https://baby.yeolmaeapps.kr/') {
+        throw 'Paid release requires the approved public community URL.'
     }
 } elseif ($Purpose -in @('internal', 'production-basic') -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
     throw 'Internal/basic distribution is explicitly billing-disabled. Use paid-candidate for configured billing.'

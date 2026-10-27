@@ -1,0 +1,189 @@
+Browser tab: 1, Title: "제출 활동 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity".
+1 AXWebArea 제출 활동 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				275 container 홈
+					276 button 홈
+						277 text 홈
+				278 container 계정 관리
+					279 button 계정 관리
+						280 text 계정 관리
+				281 container 아가톡 - 지금 내 기분이 그래
+					282 pop up button 아가톡 - 지금 내 기분이 그래
+				283 container 대시보드
+					284 button 대시보드
+						285 text 대시보드
+				286 container 통계
+					287 button 통계
+						288 text 통계
+				289 container 게시 개요
+					290 button 게시 개요
+						291 text 게시 개요
+				292 container Google Play로 보호됨
+					293 button Google Play로 보호됨
+						294 text Google Play로 보호됨
+				295 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					296 button 테스트 및 출시
+						297 text 테스트 및 출시
+				298 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					299 button 모니터링 및 개선
+						300 text 모니터링 및 개선
+				301 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					302 button 사용자 늘리기
+						303 text 사용자 늘리기
+				320 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					321 button Play를 통한 수익 창출
+						322 text Play를 통한 수익 창출
+			57 container main-content
+				330 container
+					331 link Description: 게시 개요 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+					332 heading 제출 활동, Value: 1
+						342 text 제출 활동
+					333 container
+						343 text 제출된 변경사항과 검토 상태를 모니터링하세요. 2026년 5월 1일부터 기록된 제출 활동입니다.
+						334 button 제출 활동 자세히 알아보기(새 탭에서 열림)
+					344 table
+						345 row 필터 추가
+							346 cell
+								347 combo box (collapsed, settable) Description: 필터 추가, Secondary Actions: Expand
+					348 pop up button (collapsed) Description: 기간 선택, ID: a74E37605-DBB2-4CE7-9205-CBF75627095B--6, Secondary Actions: Expand
+						349 text date_range
+						350 text 기간 선택
+					351 table 제출 활동
+						352 row 제출 ID 제출됨 변경사항 상태
+							353 cell 제출 ID
+								354 text 제출 ID
+							355 cell 제출됨
+								356 text 제출됨
+							357 cell 변경사항
+								358 text 변경사항
+							359 cell 상태
+								360 text 상태
+							361 cell
+						362 row 24 10월 28, 2026, 1:58 오전 프로덕션, 스토어 등록정보 검토 중 제출 세부정보 보기
+							363 cell
+								364 text 24
+							365 cell
+								366 text 10월 28, 2026, 1:58 오전
+							367 cell
+								368 text 프로덕션, 스토어 등록정보
+							369 cell
+								370 text 검토 중
+							371 cell
+								372 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/24/details
+						373 row 23 10월 27, 2026, 11:16 오후 프로덕션, 스토어 등록정보 취소됨 제출 세부정보 보기
+							374 cell
+								375 text 23
+							376 cell
+								377 text 10월 27, 2026, 11:16 오후
+							378 cell
+								379 text 프로덕션, 스토어 등록정보
+							380 cell
+								381 text 취소됨
+							382 cell
+								383 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/23/details
+						384 row 22 10월 24, 2026, 2:17 오후 프로덕션 출시됨 제출 세부정보 보기
+							385 cell
+								386 text 22
+							387 cell
+								388 text 10월 24, 2026, 2:17 오후
+							389 cell
+								390 text 프로덕션
+							391 cell
+								392 text 출시됨
+							393 cell
+								394 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/22/details
+						395 row 21 10월 24, 2026, 3:29 오전 프로덕션, 앱 콘텐츠 출시됨 제출 세부정보 보기
+							396 cell
+								397 text 21
+							398 cell
+								399 text 10월 24, 2026, 3:29 오전
+							400 cell
+								401 text 프로덕션, 앱 콘텐츠
+							402 cell
+								403 text 출시됨
+							404 cell
+								405 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/21/details
+						406 row 20 10월 22, 2026, 8:44 오후 비공개 테스트 - Alpha, 앱 콘텐츠 출시됨 제출 세부정보 보기
+							407 cell
+								408 text 20
+							409 cell
+								410 text 10월 22, 2026, 8:44 오후
+							411 cell
+								412 text 비공개 테스트 - Alpha, 앱 콘텐츠
+							413 cell
+								414 text 출시됨
+							415 cell
+								416 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/20/details
+						417 row 19 10월 12, 2026, 11:34 오후 비공개 테스트 - Alpha 출시됨 제출 세부정보 보기
+							418 cell
+								419 text 19
+							420 cell
+								421 text 10월 12, 2026, 11:34 오후
+							422 cell
+								423 text 비공개 테스트 - Alpha
+							424 cell
+								425 text 출시됨
+							426 cell
+								427 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/19/details
+						428 row 18 10월 12, 2026, 4:38 오전 비공개 테스트 - Alpha 출시됨 제출 세부정보 보기
+							429 cell
+								430 text 18
+							431 cell
+								432 text 10월 12, 2026, 4:38 오전
+							433 cell
+								434 text 비공개 테스트 - Alpha
+							435 cell
+								436 text 출시됨
+							437 cell
+								438 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/18/details
+						439 row 17 10월 09, 2026, 10:01 오후 비공개 테스트 - Alpha 출시됨 제출 세부정보 보기
+							440 cell
+								441 text 17
+							442 cell
+								443 text 10월 09, 2026, 10:01 오후
+							444 cell
+								445 text 비공개 테스트 - Alpha
+							446 cell
+								447 text 출시됨
+							448 cell
+								449 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/17/details
+						450 row 16 10월 09, 2026, 6:56 오후 비공개 테스트 - Alpha 출시됨 제출 세부정보 보기
+							451 cell
+								452 text 16
+							453 cell
+								454 text 10월 09, 2026, 6:56 오후
+							455 cell
+								456 text 비공개 테스트 - Alpha
+							457 cell
+								458 text 출시됨
+							459 cell
+								460 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/16/details
+						461 row 15 10월 09, 2026, 5:20 오후 비공개 테스트 - Alpha 출시됨 제출 세부정보 보기
+							462 cell
+								463 text 15
+							464 cell
+								465 text 10월 09, 2026, 5:20 오후
+							466 cell
+								467 text 비공개 테스트 - Alpha
+							468 cell
+								469 text 출시됨
+							470 cell
+								471 link Description: 제출 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/15/details
+					472 text 1~10
+					473 button (disabled) 이전 페이지로 이동
+					474 button 다음 페이지로 이동
+				335 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				336 link Description: 상태 대시보드, Value: status.play.google.com/
+				337 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				338 text © 2026 Google
+				339 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				340 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				341 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 제출 활동 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
