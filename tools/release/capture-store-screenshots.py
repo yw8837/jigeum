@@ -51,13 +51,14 @@ def main():
         flow.launch()
         q.screenshot('store-01-home'); result['screens'].append('store-01-home.png')
         import_video(fixture_name)
-        q.tap_text('0.5초씩 맞추기')
         q.screenshot('store-02-range'); result['screens'].append('store-02-range.png')
         q.tap_text('이 구간 소리로 번역하기')
-        q.wait_ui('이 문장 저장하기', seconds=55)
+        q.wait_ui('장면과 함께 저장하기', seconds=65)
+        q.swipe_up()  # Show the actual generated text, below the non-personal fixture video.
         q.screenshot('store-03-expression'); result['screens'].append('store-03-expression.png')
         q.trace('store-actual-model-expression')
-        q.tap_text('이 문장 저장하기'); q.wait_ui('우리가 나눈 아기말')
+        q.tap_text('장면과 함께 저장하기'); q.wait_ui('기록 저장 완료', seconds=45)
+        flow.launch(); q.tap_text('기록'); q.wait_ui('우리가 나눈 아기말')
         deadline = time.monotonic() + 12
         while any('우리 아이의 한마디를 남겼어요' in n['text'] for n in q.nodes()):
             if time.monotonic() >= deadline:

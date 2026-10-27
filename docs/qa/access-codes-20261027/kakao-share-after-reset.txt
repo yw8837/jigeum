@@ -1,0 +1,87 @@
+Browser tab: 5, Title: "카카오디벨로퍼스 | 카카오톡 URL 메타 정보 관리", URL: "https://developers.kakao.com/tool/debugger/sharing".
+1 AXWebArea 카카오디벨로퍼스 | 카카오톡 URL 메타 정보 관리, URL: developers.kakao.com/tool/debugger/sharing
+	2 container
+		3 link Description: 본문 바로가기, Value: developers.kakao.com/tool/debugger/sharing#mainContent
+		4 link Description: 메인 메뉴 바로가기, Value: developers.kakao.com/tool/debugger/sharing#gnbContent
+		5 link Description: 사이드 메뉴 바로가기, Value: developers.kakao.com/tool/debugger/sharing#sideContent
+	6 container inner_header
+		7 heading kakao developers, Value: 1, ID: doc-title
+			8 link Description: kakao developers, Value: developers.kakao.com/, ID: link_title
+		9 container util_wrap
+			10 button btn_search
+			11 text 관련사이트
+			12 content list doc_relate
+				13 pop up button (collapsed) 알림 2, ID: radix-_R_nj9av5ubrb_, Secondary Actions: Expand
+					14 text 알림
+					52 text 2
+			15 button
+	16 container
+		17 button btn_menu
+		18 content list
+			19 text 운영 지원
+			20 text 카카오톡 URL 메타정보 관리
+	21 container
+		22 container mainContent
+			23 heading 카카오톡 URL 메타 정보 관리, Value: 1
+				24 text 카카오톡 URL 메타 정보 관리
+			25 link Description: 문서 확인, Value: developers.kakao.com/docs/tool/common#url-meta
+			26 container
+				27 text 카카오톡 채팅방에 URL 공유할 때 미리보기에 사용되는 OG(Open Graph) 메타 정보를 확인하고, 필요한 경우 초기화할 수 있습니다.
+				28 text ( 카카오톡 메시지 API/카카오톡 공유 API로 보낸 스크랩 메시지, 카카오스토리로 공유한 URL 포함 )
+			53 heading URL 정보, Value: 2
+				54 text URL 정보
+			55 table
+				56 row
+					57 cell
+						58 text 미리보기
+					59 cell
+						60 text play.google.com
+						61 container
+							62 text * 메시지 미리보기는 수신자 환경이나 카카오톡 버전에 따라 다르게 보일 수 있습니다.
+				63 row
+					64 cell
+						65 text 조회한 URL
+						66 button
+					67 cell
+						68 text https://play.google.com/store/apps/details?id=com.moa.babylanguage
+				69 row
+					70 cell
+						71 text Content-Type
+					72 cell
+						73 text text/html; charset=utf-8
+			74 heading OG(Open Graph) 태그 정보, Value: 2
+				75 text OG(Open Graph) 태그 정보
+			76 table
+				77 row
+					78 cell
+						79 text og:url
+				80 row
+					81 cell
+						82 text og:title
+				83 row
+					84 cell
+						85 text og:description
+				86 row
+					87 cell
+						88 text og:type
+				89 row
+					90 cell
+						91 text og:image
+				92 row
+					93 cell
+						94 text og:site_name
+		39 container Notifications (F8)
+			40 content list snackbar_viewport
+	41 button 맨 위로 이동, ID: btn_top
+	42 container wrap_etc
+		43 text 약관 및 정책
+		44 content list
+			45 link Description: 카카오비즈니스 이용약관, Value: kakaobusiness-policy.kakao.com/SERVICE/
+			46 link Description: 서비스 약관, Value: developers.kakao.com/terms/latest/ko/site-terms
+			47 link Description: 운영 정책, Value: developers.kakao.com/terms/latest/ko/site-policies
+			48 link Description: 쿼터, Value: developers.kakao.com/docs/latest/ko/getting-started/quota
+			49 link Description: 개인정보 처리방침, Value: business.kakao.com/policy/privacy/
+		50 link Description: © Kakao Corp., Value: kakaocorp.com/
+		51 pop up button (collapsed) Family Site, ID: radix-_R_9d9av5ubrb_, Secondary Actions: Expand
+
+The focused UI element is 1 AXWebArea 카카오디벨로퍼스 | 카카오톡 URL 메타 정보 관리, URL: developers.kakao.com/tool/debugger/sharing

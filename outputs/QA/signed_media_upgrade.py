@@ -98,7 +98,7 @@ def main():
         result['old_legacy_record'] = verify_legacy_record(export_backup(owned), seed['records'][0])
         flow.launch(); q.tap_text('기록'); verify_saved_record(phrase, 'baseline-legacy-record')
         delivery.import_video(Path(remote_video).name)
-        q.tap_text('영상 + 소리로 번역하기')
+        q.tap_text('영상 + 소리로 번역하기' if args.old_version_name.endswith('-beta') else '이 구간 소리로 번역하기')
         q.wait_ui('장면과 함께 저장하기', seconds=65)
         q.tap_text('장면과 함께 저장하기')
         # Since code39, saving keeps the result open until the explicit scene action.

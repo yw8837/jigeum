@@ -7,6 +7,8 @@ import { createMetadataTokenProvider } from './credentials.js';
 import { createReviewVerifier, validReviewRequest } from './review.js';
 import { readRuntimeConfig } from './runtime-config.js';
 import { createPublicPageHandler } from './public-pages.js';
+import { createAccessCodeVerifier, validAccessCodeRequest } from './access-codes.js';
+import { createGcsCodeReservations } from './code-redemptions.js';
 
 const MAX_BODY_BYTES = 16_384;
 
@@ -25,6 +27,7 @@ function reply(response, status, body, extraHeaders = {}) {
 export function createVerificationServer({
   verify,
   review = async () => null,
+  accessCode = async () => null,
   publicRouteHandler,
   maxConcurrent = 32,
   maxRequestsPerMinute = 30,
@@ -62,7 +65,7 @@ export function createVerificationServer({
     // The public Google frontend returned its own HTML 404 for /healthz in live
     // deployment. Use a service-specific route externally; keep the local alias.
     if (request.method === 'GET' && ['/jigeum-health', '/healthz'].includes(request.url)) return reply(response, 200, { ok: true });
-    if (request.method !== 'POST' || !['/verify', '/review'].includes(request.url)) return reply(response, 404, { error: 'not_found' });
+    if (request.method !== 'POST' || !['/verify', '/review', '/access-code'].includes(request.url)) return reply(response, 404, { error: 'not_found' });
     const now = clock();
     if (now - globalBucket.start >= 60_000) globalBucket = { start: now, count: 0 };
     if (++globalBucket.count > maxGlobalRequestsPerMinute) {
@@ -107,12 +110,13 @@ export function createVerificationServer({
       let input;
       try { input = JSON.parse(body); } catch { return reply(response, 400, { error: 'invalid_json' }); }
       const isReview = request.url === '/review';
-      if (!(isReview ? validReviewRequest(input) : validRequest(input))) return reply(response, 400, { error: 'invalid_request' });
+      const isAccessCode = request.url === '/access-code';
+      if (!(isAccessCode ? validAccessCodeRequest(input) : isReview ? validReviewRequest(input) : validRequest(input))) return reply(response, 400, { error: 'invalid_request' });
       if (rateLimitMode === 'installation' && rateLimited(createHmac('sha256', rateSalt).update(input.installationId.toLowerCase()).digest('hex'))) {
         return reply(response, 429, { error: 'rate_limited' }, { 'retry-after': '60' });
       }
       const entitlement = await Promise.race([
-        (isReview ? review : verify)(input, { signal: controller.signal }),
+        (isAccessCode ? accessCode : isReview ? review : verify)(input, { signal: controller.signal }),
         new Promise((_, reject) => {
           timer = setTimeout(() => {
             controller.abort();
@@ -150,6 +154,10 @@ function start() {
     ...config.server,
     verify: createVerifier({ ...credentials, privateKey, upstreamTimeoutMs: config.upstreamTimeoutMs }),
     review: createReviewVerifier({ privateKey, reviewCodeSha256: config.reviewCodeSha256, reviewAccessId: config.reviewAccessId }),
+    accessCode: createAccessCodeVerifier({ privateKey,
+      manifest: config.accessCodeManifestPath ? JSON.parse(readFileSync(config.accessCodeManifestPath, 'utf8')) : null,
+      reserveDiscount: config.codeRedemptionBucket ? createGcsCodeReservations({ bucket: config.codeRedemptionBucket }) : undefined
+    }),
     publicRouteHandler: createPublicPageHandler()
   });
   server.listen(config.port, config.host);

@@ -9,9 +9,11 @@ param(
     [switch]$InfantCaptionSupport,
     [switch]$CaptionReleaseQaProof,
     [string]$InfantArmProof,
-    [string]$ProofPython
+    [string]$ProofPython,
+    [string]$BuildRoot
 )
 $ErrorActionPreference = 'Stop'
+if ($BuildRoot -and -not [IO.Path]::IsPathRooted($BuildRoot)) { throw 'BuildRoot must be absolute.' }
 if ($CaptionReleaseQaProof -and -not $InfantCaptionSupport) { throw 'Release QA proof requires InfantCaptionSupport.' }
 $productionModel = $Purpose -in @('production-basic', 'paid-candidate') -and $AstBabbleSupport
 if ($Purpose -in @('production-basic', 'paid-candidate') -and -not ($AstBabbleSupport -and $InfantPresenceSupport -and $InfantCaptionSupport)) {
@@ -84,6 +86,7 @@ try {
     try {
         $variant = if ($Purpose -eq 'closed-test') { 'Beta' } else { 'Release' }
         $gradleArguments = @(":app:bundle$variant", ":app:assemble$variant", '--max-workers=1', '--console=plain', '--no-daemon')
+        if ($BuildRoot) { $gradleArguments += "-PagattokBuildRoot=$BuildRoot" }
         if ($productionModel) {
             $gradleArguments += '-PagattokAstProduction=true'
         } else {
@@ -99,7 +102,8 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }
     $variantDirectory = $variant.ToLowerInvariant()
-    $aab = Join-Path $project "app/build/outputs/bundle/$variantDirectory/app-$variantDirectory.aab"
+    $appBuild = if ($BuildRoot) { Join-Path $BuildRoot "app" } else { Join-Path $project "app/build" }
+    $aab = Join-Path $appBuild "outputs/bundle/$variantDirectory/app-$variantDirectory.aab"
     New-Item -ItemType Directory -Path (Split-Path -Parent $final) -Force | Out-Null
     # Use the JDK's documented AAB signer as the final writer. AGP places its
     # manifest at the end of this archive; JarInputStream then reports it missing.

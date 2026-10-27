@@ -1,0 +1,41 @@
+[
+  {
+    "url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage",
+    "status": 200,
+    "final_url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage",
+    "meta": {
+      "og:type": "website",
+      "og:url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=en_US",
+      "og:title": "아가톡 - 지금 내 기분이 그래 - Apps on Google Play",
+      "og:description": "Observe the baby's sounds and scenes, and capture precious moments with a single word from the child's perspective.",
+      "og:image": "https://play-lh.googleusercontent.com/7YKUN3Crwd3hbX7hFrmPSWihIpIhB9rdzUkMhgDCefwMBPam_ZNQrmXpI99ZAF7SHwr58VNWw43NNBoAKi87=s0-br30"
+    },
+    "not_available": false
+  },
+  {
+    "url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=ko&gl=KR",
+    "status": 200,
+    "final_url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=ko&gl=KR",
+    "meta": {
+      "og:type": "website",
+      "og:url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=ko",
+      "og:title": "아가톡 - 지금 내 기분이 그래 - Google Play 앱",
+      "og:description": "아기의 소리와 장면을 살펴보고, 아이 시점의 한마디로 소중한 순간을 남겨요.",
+      "og:image": "https://play-lh.googleusercontent.com/7YKUN3Crwd3hbX7hFrmPSWihIpIhB9rdzUkMhgDCefwMBPam_ZNQrmXpI99ZAF7SHwr58VNWw43NNBoAKi87=s0-br30"
+    },
+    "not_available": false
+  },
+  {
+    "url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&pcampaignid=web_share",
+    "status": 200,
+    "final_url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&pcampaignid=web_share",
+    "meta": {
+      "og:type": "website",
+      "og:url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=en_US",
+      "og:title": "아가톡 - 지금 내 기분이 그래 - Apps on Google Play",
+      "og:description": "Observe the baby's sounds and scenes, and capture precious moments with a single word from the child's perspective.",
+      "og:image": "https://play-lh.googleusercontent.com/7YKUN3Crwd3hbX7hFrmPSWihIpIhB9rdzUkMhgDCefwMBPam_ZNQrmXpI99ZAF7SHwr58VNWw43NNBoAKi87=s0-br30"
+    },
+    "not_available": false
+  }
+]

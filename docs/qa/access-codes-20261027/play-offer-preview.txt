@@ -1,0 +1,162 @@
+Browser tab: 1, Title: "쿠폰 수정 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album/base-plans/b/monthly/offers/o/launch-2m-half".
+1 AXWebArea 쿠폰 수정 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album/base-plans/b/monthly/offers/o/launch-2m-half
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+				32 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					33 button 모니터링 및 개선
+						34 text 모니터링 및 개선
+				35 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					36 button 사용자 늘리기
+						37 text 사용자 늘리기
+				38 container (expanded) Description: Play를 통한 수익 창출, Secondary Actions: Collapse
+					39 button Play를 통한 수익 창출
+						40 text Play를 통한 수익 창출
+					41 content list
+						42 container
+							43 container (expanded) Description: 제품, Secondary Actions: Collapse
+								44 button 제품
+								45 content list
+									46 container
+										47 container 앱 가격
+											48 button 앱 가격
+										49 container 일회성 제품
+											50 button 일회성 제품
+										51 container 정기 결제
+											52 button 정기 결제
+							53 container 상품화 및 최적화
+								54 button 상품화 및 최적화
+							55 container 가격 실험
+								56 button 가격 실험
+							57 container 프로모션 코드
+								58 button 프로모션 코드
+							59 container (collapsed) Description: 재무 보고서, Secondary Actions: Expand
+								60 button 재무 보고서
+							61 container 수익 창출 설정
+								62 button 수익 창출 설정
+			63 container main-content
+				64 container
+					65 link Description: 정기 결제아가톡 전체 이용권 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album
+					66 heading 쿠폰 수정, Value: 1
+						67 text 쿠폰 수정
+					68 button 삭제
+						69 text 삭제
+					72 text * — 필수 입력란
+					73 container 기본 요금제 및 제공 여부
+						74 container
+							75 text 기본 요금제 및 제공 여부
+							76 container 필수 입력란
+								77 text *
+						78 text 매월, 자동 갱신
+						79 text 사용 가능 국가/지역
+						80 text 국가/지역 총 1개 중 1개
+						81 button 사용 가능한 국가/지역 관리
+							82 text 사용 가능한 국가/지역 관리
+					83 container 자격 기준
+						84 container
+							85 text 자격 기준
+							86 container 필수 입력란
+								87 text *
+						88 container
+							89 pop up button (collapsed) Description: 신규 고객 확보, ID: aFFA9A941-8854-43FE-87EF-37759E73D3C4--14, Secondary Actions: Expand
+							90 container 이용 자격 취소
+								91 text 이용 자격 취소
+								92 container
+									93 radio button (settable, integer) Value: 0, ID: a94C1C5AB-9BD5-4D68-A6DA-67490AB30C67--93
+									94 text 이 구독을 이용한 적 없음 이 정기 결제(jigeum_album)를 이용한 적이 없는 사용자용
+								95 container
+									96 radio button (settable, integer) Value: 1, ID: a94C1C5AB-9BD5-4D68-A6DA-67490AB30C67--94
+									97 text 구독한 적 없음 이 앱(아가톡 - 지금 내 기분이 그래)에서 정기 결제한 적이 없는 사용자용
+					98 container 태그
+						99 container a94C1C5AB-9BD5-4D68-A6DA-67490AB30C67--87
+							100 text 태그
+							101 button (collapsed) Description: "태그"에 대한 추가 정보, Secondary Actions: Expand
+						102 table
+							103 row 태그 입력
+								104 cell
+									105 text field (settable) 태그 입력
+						106 text 소문자로 시작해야 하며 숫자(0~9), 소문자(a~z), 하이픈(-)을 포함할 수 있습니다. 20자(영문 기준) 이하여야 합니다.
+					107 heading 단계, Value: 2
+						108 text 단계
+					109 button 미리보기
+						110 text 미리보기
+					111 button 단계 추가
+						112 text 단계 추가
+					113 container
+						114 table 단계
+							115 row 유형 기간
+								116 cell
+									117 text 유형
+								118 cell
+									119 text 기간
+								120 cell
+								121 cell
+								122 cell
+							123 row 할인된 반복 결제 2개 기간 동안 매월 삭제 할인된 반복 결제 수정
+								124 cell
+									125 text 할인된 반복 결제
+								126 cell
+									127 text 2개 기간 동안 매월
+								128 cell
+								129 cell
+									130 button 삭제
+								131 cell
+									132 button 할인된 반복 결제 수정
+					133 container
+						134 button 활성화
+							135 text 활성화
+						136 button (disabled) 변경사항 저장
+							137 text 변경사항 저장
+				138 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				139 link Description: 상태 대시보드, Value: status.play.google.com/
+				140 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				141 text © 2026 Google
+				142 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				143 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				144 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+		145 container
+			146 container 정기 결제 구조 미리보기 닫기
+				147 heading 정기 결제 구조 미리보기, Value: 1
+					148 text 정기 결제 구조 미리보기
+				149 button 닫기
+				150 text 국가/지역
+				151 pop up button (collapsed) 국가/지역 대한민국(KRW), ID: aFFA9A941-8854-43FE-87EF-37759E73D3C4--16, Secondary Actions: Expand
+				152 container
+					153 text 할인된 반복 결제
+					154 text 2개월
+					155 text KRW 2,450/개월
+					156 container 사용자에게 다음 단계로 이동함을 알려주는 앞으로 화살표 아이콘
+				157 container
+					158 text 자동 갱신
+					159 text 매월
+					160 text KRW 4,900
+					161 container 사용자에게 취소될 때까지 단계가 반복됨을 알려주는 원형 화살표 아이콘
+
+The focused UI element is 149 button 닫기

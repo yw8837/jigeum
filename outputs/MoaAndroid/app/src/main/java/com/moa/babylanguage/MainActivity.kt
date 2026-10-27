@@ -403,6 +403,8 @@ internal fun JigeumApp(
                                                     onContinue = close, freeContinuationLabel = "같은 구간 소리로 계속하기", onFree = close,
                                                     onBack = close, onPrivacy = { policy = "privacy" }, onTerms = { policy = "terms" },
                                                     onReviewActivate = billingManager::activateReviewAccess,
+                                                    onCodeActivate = billingManager::activateAccessCode,
+                                                    onCodeDeactivate = billingManager::deactivateAccessCode,
                                                     onReviewDeactivate = billingManager::deactivateReviewAccess,
                                                     testDistribution = testDistribution, rewardAccess = rewardAccess)
                                             }
@@ -496,6 +498,8 @@ internal fun JigeumApp(
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
                                         onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
                                         onReviewActivate = billingManager::activateReviewAccess,
+                                                    onCodeActivate = billingManager::activateAccessCode,
+                                                    onCodeDeactivate = billingManager::deactivateAccessCode,
                                         onReviewDeactivate = billingManager::deactivateReviewAccess,
                                         testDistribution = testDistribution, rewardAccess = rewardAccess)
                                 }

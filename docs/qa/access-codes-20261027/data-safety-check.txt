@@ -1,0 +1,303 @@
+Browser tab: 1, Title: "데이터 보안 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/data-privacy-security".
+0 AXWebArea 데이터 보안 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/data-privacy-security
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				8 container 홈
+					9 button 홈
+						10 text 홈
+				11 container 계정 관리
+					12 button 계정 관리
+						13 text 계정 관리
+				14 container 아가톡 - 지금 내 기분이 그래
+					15 pop up button 아가톡 - 지금 내 기분이 그래
+				16 container 대시보드
+					17 button 대시보드
+						18 text 대시보드
+				19 container 통계
+					20 button 통계
+						21 text 통계
+				22 container 게시 개요
+					23 button 게시 개요
+						24 text 게시 개요
+				25 container Google Play로 보호됨
+					26 button Google Play로 보호됨
+						27 text Google Play로 보호됨
+				28 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					29 button 테스트 및 출시
+						30 text 테스트 및 출시
+				31 container (expanded) Description: 모니터링 및 개선, Secondary Actions: Collapse
+					32 button 모니터링 및 개선
+						33 text 모니터링 및 개선
+					34 content list
+						35 container
+							36 container (collapsed) Description: 도달범위 및 기기, Secondary Actions: Expand
+								37 button 도달범위 및 기기
+							38 container (collapsed) Description: 평점 및 리뷰, Secondary Actions: Expand
+								39 button 평점 및 리뷰
+							40 container (collapsed) Description: Android vitals, Secondary Actions: Expand
+								41 button Android vitals
+							42 container (expanded) Description: 정책 및 프로그램, Secondary Actions: Collapse
+								43 button 정책 및 프로그램
+								44 content list
+									45 container
+										46 container 정책 상태
+											47 button 정책 상태
+										48 container 앱 콘텐츠
+											49 button 앱 콘텐츠
+										50 container (collapsed) Description: 프로그램, Secondary Actions: Expand
+											51 button 프로그램
+				52 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					53 button 사용자 늘리기
+						54 text 사용자 늘리기
+				55 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					56 button Play를 통한 수익 창출
+						57 text Play를 통한 수익 창출
+			58 container main-content
+				59 container
+					191 container
+						192 link Description: 앱 콘텐츠 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/overview
+						193 heading 데이터 보안, Value: 1
+							194 text 데이터 보안
+						195 button CSV 파일로 내보내기
+							196 text CSV 파일로 내보내기
+						197 button CSV에서 가져오기
+							198 text CSV에서 가져오기
+					70 tab group
+						71 tab (selectable, disabled, settable, boolean) Description: 1/5단계, 개요, Value: 0
+개요
+						72 tab (selectable, disabled, settable, boolean) Description: 2/5단계, 데이터 수집 및 보안, Value: 0
+데이터 수집 및 보안
+						73 tab (selectable, disabled, settable, boolean) Description: 3/5단계, 데이터 유형, Value: 0
+데이터 유형
+						74 tab (selected, settable, boolean) Description: 4/5단계, 데이터 취급 및 처리, Value: 1
+4
+데이터 취급 및 처리
+						75 tab (selectable, disabled, settable, boolean) Description: 5/5단계, 미리보기, Value: 0
+5
+미리보기
+					76 container aE780DFF3-7DAB-468C-A169-6313394DC1E6--3
+						134 heading 데이터 취급 및 처리, Value: 2
+							135 text 데이터 취급 및 처리
+						136 text 앱에서 수집 또는 공유하는 각 사용자 데이터 유형 옆에 있는 시작을 선택하여 데이터의 사용 및 취급 방식에 관한 질문에 답합니다.
+						137 text 선택한 사용자 데이터 유형을 변경하려면 이전 단계로 돌아갑니다.
+						138 heading 개인 정보, Value: 3
+							139 text 개인 정보
+						140 button (collapsed) Description: 콘텐츠 표시: 개인 정보, Secondary Actions: Expand
+						199 text 1/1개 완료됨
+						200 text 이름
+						155 heading 금융 정보, Value: 3
+							156 text 금융 정보
+						157 button (collapsed) Description: 콘텐츠 표시: 금융 정보, Secondary Actions: Expand
+						158 text 1/1개 완료됨
+						159 text 구매 내역
+						160 heading 위치, Value: 3
+							161 text 위치
+						162 button (collapsed) Description: 콘텐츠 표시: 위치, Secondary Actions: Expand
+						163 text 1/1개 완료됨
+						164 text 대략적인 위치
+						165 heading 사진 및 동영상, Value: 3
+							166 text 사진 및 동영상
+						167 button (collapsed) Description: 콘텐츠 표시: 사진 및 동영상, Secondary Actions: Expand
+						168 text 2/2개 완료됨
+						169 text 사진, 동영상
+						170 heading 앱 정보 및 성능, Value: 3
+							171 text 앱 정보 및 성능
+						172 button (collapsed) Description: 콘텐츠 표시: 앱 정보 및 성능, Secondary Actions: Expand
+						173 text 1/1개 완료됨
+						174 text 진단
+						175 heading 앱 활동, Value: 3
+							176 text 앱 활동
+						177 button (collapsed) Description: 콘텐츠 표시: 앱 활동, Secondary Actions: Expand
+						178 text 2/2개 완료됨
+						179 text 앱 상호작용, 기타 사용자 제작 콘텐츠
+						180 heading 기기 또는 기타 ID, Value: 3
+							181 text 기기 또는 기타 ID
+						182 button (expanded) Description: 콘텐츠 숨기기: 기기 또는 기타 ID, Secondary Actions: Collapse
+						201 table 기기 또는 기타 ID 데이터
+							202 row 데이터 유형 상태
+								203 cell 데이터 유형
+									204 text 데이터 유형
+								205 cell 상태
+									206 text 상태
+								207 cell
+							208 row 기기 또는 기타 ID 완료됨 미응답 기기 또는 기타 ID 질문
+								209 cell
+									210 text 기기 또는 기타 ID
+								211 cell
+									212 text 완료됨
+								213 cell
+									214 button 미응답 기기 또는 기타 ID 질문
+					115 text 4/5단계, 데이터 취급 및 처리
+					116 container
+						117 button 다음
+							118 text 다음
+						185 button 뒤로
+							186 text 뒤로
+						187 button (disabled) 임시저장
+							188 text 임시저장
+						189 button (disabled) 변경사항 취소
+							190 text 변경사항 취소
+				125 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				126 link Description: 상태 대시보드, Value: status.play.google.com/
+				127 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				128 text © 2026 Google
+				129 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				130 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				131 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+		215 container
+			216 container 기기 또는 기타 ID
+				217 heading 기기 또는 기타 ID, Value: 2, ID: a10557B27-579C-46D2-8453-631C977F6F89--173
+					218 text 기기 또는 기타 ID
+				219 button 닫기
+				220 container
+					221 container 데이터를 수집 또는 공유하나요? 아니면 수집과 공유를 모두 하나요?
+						222 text 데이터를 수집 또는 공유하나요? 아니면 수집과 공유를 모두 하나요?
+						223 container
+							224 text 해당하는 항목을 모두 선택해 주세요. 일부 데이터 수집 및 공유 유형은 제외됩니다.
+							225 link Description: 정의 및 예외 보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko
+						226 container
+							227 checkbox (settable, integer) Description: 수집됨 이 데이터는 사용자 기기 외부의 개발자 또는 타사로 전송됩니다. 여기에는 임시 처리되거나 오랫동안 보관되는 데이터가 포함됩니다., Value: 1
+							228 container a10557B27-579C-46D2-8453-631C977F6F89--175
+								229 text 수집됨
+								230 text 이 데이터는 사용자 기기 외부의 개발자 또는 타사로 전송됩니다. 여기에는 임시 처리되거나 오랫동안 보관되는 데이터가 포함됩니다.
+						231 container
+							232 checkbox (settable, integer) Description: 공유됨 이 데이터는 사용자 기기 내부 또는 외부에 있는 타사로 전송됩니다., Value: 1
+							233 container a10557B27-579C-46D2-8453-631C977F6F89--176
+								234 text 공유됨
+								235 text 이 데이터는 사용자 기기 내부 또는 외부에 있는 타사로 전송됩니다.
+					236 container 이 데이터는 임시로 처리되나요?
+						237 text 이 데이터는 임시로 처리되나요?
+						238 text 데이터 '임시' 처리란 메모리에 저장되어 있는 동안만 데이터에 액세스하고 이를 사용하며, 특정 요청을 실시간으로 처리하는 데 필요한 시간 동안만 데이터가 보관된다는 의미입니다.
+						239 container
+							240 text 이 방식으로 수집된 데이터도 공개 대상이기는 하지만 스토어 등록정보에서 사용자에게 표시되지는 않습니다.
+							241 link Description: 정의 및 예외 보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#collection
+						242 이 데이터는 임시로 처리되나요?
+							243 container
+								244 radio button (settable, integer) Description: 예, 수집된 데이터가 임시적으로 처리됩니다, Value: 0, ID: a10557B27-579C-46D2-8453-631C977F6F89--179
+							245 container
+								246 radio button (settable, integer) Description: 아니요, 수집된 데이터가 임시적으로 처리되지 않습니다, Value: 1, ID: a10557B27-579C-46D2-8453-631C977F6F89--180
+					247 container
+						248 text 이 데이터는 앱에 필수인가요? 아니면 사용자가 수집 여부를 선택할 수 있나요?
+						249 link Description: 정의 및 예외 보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#other
+					250 이 데이터는 앱에 필수인가요? 아니면 사용자가 수집 여부를 선택할 수 있나요?
+						251 container
+							252 radio button (settable, integer) Description: 데이터 수집은 필수입니다(사용자가 이 데이터 수집을 중지할 수 없음), Value: 0, ID: a10557B27-579C-46D2-8453-631C977F6F89--182
+						253 container
+							254 radio button (settable, integer) Description: 사용자가 데이터의 수집 여부를 선택할 수 있습니다, Value: 1, ID: a10557B27-579C-46D2-8453-631C977F6F89--183
+							255 text 데이터는 스토어 등록정보에 선택사항으로 표시됩니다.
+					256 container
+						257 text 이 사용자 데이터가 수집되는 이유는 무엇인가요? 해당하는 항목을 모두 선택해 주세요.
+						258 link Description: 자세히 알아보기 및 예시 보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					259 container
+						260 checkbox (settable, integer) Description: 앱 기능 앱의 기능에 사용됩니다. 기능 사용 설정 또는 사용자 인증을 예로 들 수 있습니다.앱 기능에 관해 자세히 알아보기, 새 탭에서 열기, Value: 1
+						261 container a10557B27-579C-46D2-8453-631C977F6F89--186
+							262 text 앱 기능
+							263 container
+								264 text 앱의 기능에 사용됩니다. 기능 사용 설정 또는 사용자 인증을 예로 들 수 있습니다.
+								265 link Description: 앱 기능에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					266 container
+						267 checkbox (settable, integer) Value: 1, Description: 애널리틱스 사용자의 앱 사용 방식이나 앱의 성능에 관한 데이터를 수집하는 데 사용됩니다. 특정 기능을 사용하는 사용자 수 확인, 앱 상태 모니터링, 버그 또는 비정상 종료의 진단 및 수정, 향후 성능 개선을 예로 들 수 있습니다.애널리틱스에 관해 자세히 알아보기, 새 탭에서 열기
+						268 container a10557B27-579C-46D2-8453-631C977F6F89--187
+							269 text 애널리틱스
+							270 container
+								271 text 사용자의 앱 사용 방식이나 앱의 성능에 관한 데이터를 수집하는 데 사용됩니다. 특정 기능을 사용하는 사용자 수 확인, 앱 상태 모니터링, 버그 또는 비정상 종료의 진단 및 수정, 향후 성능 개선을 예로 들 수 있습니다.
+								272 link Description: 애널리틱스에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					273 container
+						274 checkbox (settable, integer) Value: 0, Description: 개발자 커뮤니케이션 개발자 또는 앱에 관한 뉴스나 알림을 전송하는 데 사용됩니다. 사용자에게 중요 보안 업데이트에 관한 푸시 알림을 전송하거나 앱의 새로운 기능에 대해 안내하는 경우를 예로 들 수 있습니다.개발자 커뮤니케이션에 관해 자세히 알아보기, 새 탭에서 열기
+						275 container a10557B27-579C-46D2-8453-631C977F6F89--188
+							276 text 개발자 커뮤니케이션
+							277 container
+								278 text 개발자 또는 앱에 관한 뉴스나 알림을 전송하는 데 사용됩니다. 사용자에게 중요 보안 업데이트에 관한 푸시 알림을 전송하거나 앱의 새로운 기능에 대해 안내하는 경우를 예로 들 수 있습니다.
+								279 link Description: 개발자 커뮤니케이션에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					280 container
+						281 checkbox (settable, integer) Value: 1, Description: 광고 또는 마케팅 광고 또는 마케팅 커뮤니케이션을 표시 또는 타겟팅하거나 광고 실적을 측정하는 데 사용됩니다. 앱에 광고를 표시하거나, 다른 제품이나 서비스를 홍보하기 위해 푸시 알림을 전송하거나, 광고 파트너와 데이터를 공유하는 경우를 예로 들 수 있습니다.광고 또는 마케팅에 관해 자세히 알아보기, 새 탭에서 열기
+						282 container a10557B27-579C-46D2-8453-631C977F6F89--189
+							283 text 광고 또는 마케팅
+							284 container
+								285 text 광고 또는 마케팅 커뮤니케이션을 표시 또는 타겟팅하거나 광고 실적을 측정하는 데 사용됩니다. 앱에 광고를 표시하거나, 다른 제품이나 서비스를 홍보하기 위해 푸시 알림을 전송하거나, 광고 파트너와 데이터를 공유하는 경우를 예로 들 수 있습니다.
+								286 link Description: 광고 또는 마케팅에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					287 container
+						288 checkbox (settable, integer) Value: 1, Description: 사기 예방, 보안, 규정 준수 사기 예방, 보안, 법률 준수를 위해 사용됩니다. 사기 가능성이 있는 활동을 식별하기 위해 로그인 시도 실패를 모니터링하는 경우를 예로 들 수 있습니다.사기 예방, 보안, 규정 준수에 관해 자세히 알아보기, 새 탭에서 열기
+						289 container a10557B27-579C-46D2-8453-631C977F6F89--190
+							290 text 사기 예방, 보안, 규정 준수
+							291 container
+								292 text 사기 예방, 보안, 법률 준수를 위해 사용됩니다. 사기 가능성이 있는 활동을 식별하기 위해 로그인 시도 실패를 모니터링하는 경우를 예로 들 수 있습니다.
+								293 link Description: 사기 예방, 보안, 규정 준수에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					294 container
+						295 checkbox (settable, integer) Value: 0, Description: 맞춤설정 추천 콘텐츠 또는 제안을 표시하는 등 앱을 맞춤설정하는 데 사용됩니다. 사용자의 청취 습관에 따른 재생목록 추천 또는 사용자 위치를 기준으로 한 현지 뉴스 제공을 예로 들 수 있습니다.맞춤설정에 관해 자세히 알아보기, 새 탭에서 열기
+						296 container a10557B27-579C-46D2-8453-631C977F6F89--191
+							297 text 맞춤설정
+							298 container
+								299 text 추천 콘텐츠 또는 제안을 표시하는 등 앱을 맞춤설정하는 데 사용됩니다. 사용자의 청취 습관에 따른 재생목록 추천 또는 사용자 위치를 기준으로 한 현지 뉴스 제공을 예로 들 수 있습니다.
+								300 link Description: 맞춤설정에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					301 container
+						302 checkbox (settable, integer) Value: 0, Description: 계정 관리 사용자 계정의 설정 또는 관리에 사용됩니다. 사용자가 계정을 생성할 수 있도록 하거나, 제공한 계정에 정보를 추가하거나, 서비스에서 사용하거나, 앱에 로그인하거나, 사용자 인증 정보를 확인하는 경우를 예로 들 수 있습니다.계정 관리에 관해 자세히 알아보기, 새 탭에서 열기
+						303 container a10557B27-579C-46D2-8453-631C977F6F89--192
+							304 text 계정 관리
+							305 container
+								306 text 사용자 계정의 설정 또는 관리에 사용됩니다. 사용자가 계정을 생성할 수 있도록 하거나, 제공한 계정에 정보를 추가하거나, 서비스에서 사용하거나, 앱에 로그인하거나, 사용자 인증 정보를 확인하는 경우를 예로 들 수 있습니다.
+								307 link Description: 계정 관리에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					308 container
+						309 text 이 사용자 데이터가 공유되는 이유는 무엇인가요? 해당하는 항목을 모두 선택해 주세요.
+						310 link Description: 자세히 알아보기 및 예시 보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#sharing
+					311 container
+						312 checkbox (settable, integer) Description: 앱 기능 앱의 기능에 사용됩니다. 기능 사용 설정 또는 사용자 인증을 예로 들 수 있습니다.앱 기능에 관해 자세히 알아보기, 새 탭에서 열기, Value: 0
+						313 container a10557B27-579C-46D2-8453-631C977F6F89--193
+							314 text 앱 기능
+							315 container
+								316 text 앱의 기능에 사용됩니다. 기능 사용 설정 또는 사용자 인증을 예로 들 수 있습니다.
+								317 link Description: 앱 기능에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					318 container
+						319 checkbox (settable, integer) Value: 1, Description: 애널리틱스 사용자의 앱 사용 방식이나 앱의 성능에 관한 데이터를 수집하는 데 사용됩니다. 특정 기능을 사용하는 사용자 수 확인, 앱 상태 모니터링, 버그 또는 비정상 종료의 진단 및 수정, 향후 성능 개선을 예로 들 수 있습니다.애널리틱스에 관해 자세히 알아보기, 새 탭에서 열기
+						320 container a10557B27-579C-46D2-8453-631C977F6F89--194
+							321 text 애널리틱스
+							322 container
+								323 text 사용자의 앱 사용 방식이나 앱의 성능에 관한 데이터를 수집하는 데 사용됩니다. 특정 기능을 사용하는 사용자 수 확인, 앱 상태 모니터링, 버그 또는 비정상 종료의 진단 및 수정, 향후 성능 개선을 예로 들 수 있습니다.
+								324 link Description: 애널리틱스에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					325 container
+						326 checkbox (settable, integer) Value: 0, Description: 개발자 커뮤니케이션 개발자 또는 앱에 관한 뉴스나 알림을 전송하는 데 사용됩니다. 사용자에게 중요 보안 업데이트에 관한 푸시 알림을 전송하거나 앱의 새로운 기능에 대해 안내하는 경우를 예로 들 수 있습니다.개발자 커뮤니케이션에 관해 자세히 알아보기, 새 탭에서 열기
+						327 container a10557B27-579C-46D2-8453-631C977F6F89--195
+							328 text 개발자 커뮤니케이션
+							329 container
+								330 text 개발자 또는 앱에 관한 뉴스나 알림을 전송하는 데 사용됩니다. 사용자에게 중요 보안 업데이트에 관한 푸시 알림을 전송하거나 앱의 새로운 기능에 대해 안내하는 경우를 예로 들 수 있습니다.
+								331 link Description: 개발자 커뮤니케이션에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					332 container
+						333 checkbox (settable, integer) Value: 1, Description: 광고 또는 마케팅 광고 또는 마케팅 커뮤니케이션을 표시 또는 타겟팅하거나 광고 실적을 측정하는 데 사용됩니다. 앱에 광고를 표시하거나, 다른 제품이나 서비스를 홍보하기 위해 푸시 알림을 전송하거나, 광고 파트너와 데이터를 공유하는 경우를 예로 들 수 있습니다.광고 또는 마케팅에 관해 자세히 알아보기, 새 탭에서 열기
+						334 container a10557B27-579C-46D2-8453-631C977F6F89--196
+							335 text 광고 또는 마케팅
+							336 container
+								337 text 광고 또는 마케팅 커뮤니케이션을 표시 또는 타겟팅하거나 광고 실적을 측정하는 데 사용됩니다. 앱에 광고를 표시하거나, 다른 제품이나 서비스를 홍보하기 위해 푸시 알림을 전송하거나, 광고 파트너와 데이터를 공유하는 경우를 예로 들 수 있습니다.
+								338 link Description: 광고 또는 마케팅에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					339 container
+						340 checkbox (settable, integer) Value: 1, Description: 사기 예방, 보안, 규정 준수 사기 예방, 보안, 법률 준수를 위해 사용됩니다. 사기 가능성이 있는 활동을 식별하기 위해 로그인 시도 실패를 모니터링하는 경우를 예로 들 수 있습니다.사기 예방, 보안, 규정 준수에 관해 자세히 알아보기, 새 탭에서 열기
+						341 container a10557B27-579C-46D2-8453-631C977F6F89--197
+							342 text 사기 예방, 보안, 규정 준수
+							343 container
+								344 text 사기 예방, 보안, 법률 준수를 위해 사용됩니다. 사기 가능성이 있는 활동을 식별하기 위해 로그인 시도 실패를 모니터링하는 경우를 예로 들 수 있습니다.
+								345 link Description: 사기 예방, 보안, 규정 준수에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					346 container
+						347 checkbox (settable, integer) Value: 0, Description: 맞춤설정 추천 콘텐츠 또는 제안을 표시하는 등 앱을 맞춤설정하는 데 사용됩니다. 사용자의 청취 습관에 따른 재생목록 추천 또는 사용자 위치를 기준으로 한 현지 뉴스 제공을 예로 들 수 있습니다.맞춤설정에 관해 자세히 알아보기, 새 탭에서 열기
+						348 container a10557B27-579C-46D2-8453-631C977F6F89--198
+							349 text 맞춤설정
+							350 container
+								351 text 추천 콘텐츠 또는 제안을 표시하는 등 앱을 맞춤설정하는 데 사용됩니다. 사용자의 청취 습관에 따른 재생목록 추천 또는 사용자 위치를 기준으로 한 현지 뉴스 제공을 예로 들 수 있습니다.
+								352 link Description: 맞춤설정에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					353 container
+						354 checkbox (settable, integer) Value: 0, Description: 계정 관리 사용자 계정의 설정 또는 관리에 사용됩니다. 사용자가 계정을 생성할 수 있도록 하거나, 제공한 계정에 정보를 추가하거나, 서비스에서 사용하거나, 앱에 로그인하거나, 사용자 인증 정보를 확인하는 경우를 예로 들 수 있습니다.계정 관리에 관해 자세히 알아보기, 새 탭에서 열기
+						355 container a10557B27-579C-46D2-8453-631C977F6F89--199
+							356 text 계정 관리
+							357 container
+								358 text 사용자 계정의 설정 또는 관리에 사용됩니다. 사용자가 계정을 생성할 수 있도록 하거나, 제공한 계정에 정보를 추가하거나, 서비스에서 사용하거나, 앱에 로그인하거나, 사용자 인증 정보를 확인하는 경우를 예로 들 수 있습니다.
+								359 link Description: 계정 관리에 관해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/10787469?hl=ko#data_purposes
+					360 container
+						361 button (disabled) 저장
+							362 text 저장
+						363 button (disabled) 변경사항 취소
+							364 text 변경사항 취소
+
+The focused UI element is 219 button 닫기

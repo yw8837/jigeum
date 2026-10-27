@@ -1,9 +1,16 @@
 import java.security.MessageDigest
+import java.io.File
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+}
+
+// Keep new build outputs on the operator-selected drive without moving source or shared caches.
+providers.gradleProperty("agattokBuildRoot").orNull?.let { root ->
+    require(File(root).isAbsolute) { "agattokBuildRoot must be absolute." }
+    layout.buildDirectory.set(File(root, "app"))
 }
 
 // AST is explicit opt-in for local debug research or the validated beta candidate.
@@ -111,8 +118,8 @@ android {
         applicationId = "com.moa.babylanguage"
         minSdk = 26
         targetSdk = 36
-        versionCode = 41
-        versionName = "0.5.27"
+        versionCode = 42
+        versionName = "0.5.28"
         buildConfigField("boolean", "FULL_ACCESS_PREVIEW", "false")
         buildConfigField("boolean", "FULL_ACCESS_CLOSED_TEST", "false")
         buildConfigField("boolean", "AST_INTEGRATED_CANDIDATE", "false")

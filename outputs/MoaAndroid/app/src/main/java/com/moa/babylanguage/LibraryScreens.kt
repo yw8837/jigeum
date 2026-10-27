@@ -309,7 +309,9 @@ internal fun PremiumScreen(
     onReviewActivate: (String) -> Unit,
     onReviewDeactivate: () -> Unit,
     testDistribution: Boolean = false,
-    rewardAccess: RewardAccess = NoRewardAccess
+    rewardAccess: RewardAccess = NoRewardAccess,
+    onCodeActivate: (String) -> Unit = {},
+    onCodeDeactivate: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
@@ -317,6 +319,8 @@ internal fun PremiumScreen(
     val rewardKind = if (requestedFeature == AppFeature.PDF) RewardKind.PDF else RewardKind.ANALYSIS
     DisposableEffect(rewardAccess) { onDispose { rewardAccess.cancelAd() } }
     val processing = state.status in listOf(BillingStatus.CONNECTING, BillingStatus.PURCHASING, BillingStatus.VERIFYING)
+    val visibleOptions = state.options.filter { it.plan != BillingPlan.LAUNCH_MONTHLY || state.codeKind == AccessCodeKind.LAUNCH_OFFER }
+        .sortedBy { if (it.plan == BillingPlan.LAUNCH_MONTHLY) 0 else 1 }
     val title = when (requestedFeature) {
         AppFeature.VISUAL_ANALYSIS -> "더 긴 순간을 함께 살펴봐요"
         AppFeature.PDF -> "쌓인 아기말을 한 권으로"
@@ -341,7 +345,7 @@ internal fun PremiumScreen(
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
                 Spacer(Modifier.height(18.dp))
                 if (testDistribution || state.isPremium) {
-                    Text(if (testDistribution) "이 설치본은 전체 기능 테스트용이에요." else if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else "전체 이용권을 확인했어요.",
+                    Text(if (testDistribution) "이 설치본은 전체 기능 테스트용이에요." else if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else if (state.entitlementSource == EntitlementSource.INVITATION) "초대 이용권으로 무료 이용 중이에요." else "전체 이용권을 확인했어요.",
                         color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(12.dp))
                     PrimaryButton(continueLabel, onContinue)
@@ -372,16 +376,25 @@ internal fun PremiumScreen(
                     }
                     Spacer(Modifier.height(22.dp))
                 }
-                if (!testDistribution && !state.isPremium && state.options.isNotEmpty()) {
-                    state.options.forEach { option ->
-                        val monthly = option.plan == BillingPlan.MONTHLY
+                if (!testDistribution) {
+                    AccessCodeSection(state, onCodeActivate, onCodeDeactivate)
+                    Spacer(Modifier.height(22.dp))
+                    if (state.codeKind == AccessCodeKind.LAUNCH_OFFER && visibleOptions.none { it.plan == BillingPlan.LAUNCH_MONTHLY }) {
+                        Text("할인 상품을 불러오지 못했어요. 신규 구독 대상인지 확인하고 다시 시도해 주세요. 일반 상품을 선택하면 할인은 적용되지 않아요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                        TextButton(onClick = onRetry, enabled = !processing) { Text("할인 상품 다시 확인", color = Ink) }
+                    }
+                }
+                if (!testDistribution && !state.isPremium && visibleOptions.isNotEmpty()) {
+                    visibleOptions.forEach { option ->
+                        val launch = option.plan == BillingPlan.LAUNCH_MONTHLY
+                        val monthly = option.plan != BillingPlan.THREE_MONTH_PREPAID
                         OutlinedButton(onClick = { onPurchase(option.plan) }, enabled = state.status == BillingStatus.READY,
                             modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp).heightIn(min = 86.dp),
                             shape = RoundedCornerShape(18.dp)) {
                             Column(Modifier.fillMaxWidth().padding(10.dp)) {
-                                Text(if (monthly) "월간 전체 이용권" else "3개월 전체 이용권", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                                Text(if (launch) "출시 할인 · 첫 2개월 50%" else if (monthly) "월간 전체 이용권" else "3개월 전체 이용권", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                                 Text(option.formattedPrice, color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                                Text(if (monthly) "매월 자동 갱신 · Play에서 해지 가능" else "3개월 1회 결제 · 자동 갱신 없음",
+                                Text(if (launch) "첫 2개월 매월 ${option.formattedPrice}\n이후 매월 ${option.renewalFormattedPrice} 자동 갱신 · Play에서 해지 가능" else if (monthly) "매월 자동 갱신 · Play에서 해지 가능" else "3개월 1회 결제 · 자동 갱신 없음",
                                     color = Muted, fontSize = 13.sp)
                             }
                         }
