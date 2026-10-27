@@ -1,0 +1,27 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "reference": "../launch-20261027/feature-source.png",
+  "reference_role": "user-approved generated mascot/style only; no user baby media",
+  "assets": [
+    {
+      "file": "01-hello-agattok-feed.png",
+      "title": "앱 소개 피드",
+      "prompt": "Use case: ads-marketing. Create ONE finished Korean Instagram feed poster, portrait 4:5 aspect ratio, ideally 1080x1350. Input image 1 is ONLY a reference for the established Agattok baby mascot, soft rounded illustration style, dark forest green/cream/sage/peach brand palette. Keep that mascot identity; create a new vertical composition, not a screenshot of the reference. Mature, polished parent-facing design, joyful and warm, very easy to read on a phone. Dark forest green background, generous cream headline at upper left, sage and peach accents. A cute illustrated baby holding one keepsake video card in the lower half; symbolic play icon only, no invented app UI, no actual children. Clear hierarchy, comfortable margins at least 7%, no cropped words, no excessive decoration. Exact Korean text and only these strings: top brand \"아가톡\"; large headline on two lines \"오늘의 옹알이,\" / \"우리만의 추억으로.\"; subheading \"소리와 아가말을 영상카드로 간직해요.\"; footer \"Android · Google Play\"; small but readable explanatory line \"소리·장면을 참고한 상상 표현입니다.\"; discreet maker \"Yeolmae_STUDIO\". No price, discount, giveaway, fake testimonials, accuracy percentages, emotion diagnosis, sleepy wording, new-version claims, or screenshot-like interface. Prioritize beautifully typeset accurate Korean lettering. Output one full-bleed poster, not a mockup or contact sheet."
+    },
+    {
+      "file": "02-keep-the-voice-feed.png",
+      "title": "원음 저장 피드",
+      "prompt": "Use case: ads-marketing. Create ONE finished Korean Instagram carousel/feed poster, 4:5 portrait, ideally 1080x1350. Input image 1 is a mascot/style/color reference only. Match the same recognizable smiling baby mascot (curled single hair, round peach face, tiny black eyes, sage outfit) and rounded high-quality illustration. This second poster has a warm cream background with forest-green large text, sage panel and peach accents. Main visual: an illustrated keepsake card containing that baby and a simple play symbol, with a flowing sound-wave ribbon linking to a small microphone illustration. These are conceptual illustrations, NOT a fabricated app screenshot. Mobile-first: large readable text, ample whitespace, 7% safe margins. Exact text only: brand \"아가톡\"; main headline in two lines \"소리는 그대로,\" / \"아가말은 함께.\"; support copy \"소리만 녹음해도\" / \"원음 + 아가말 영상카드로 저장\"; a small bottom note \"이미지 카드에는 소리가 담기지 않아요.\"; maker \"Yeolmae_STUDIO\". No actual baby media, no speech quote presented as a real model result, no pricing, claims of mind-reading, AI badges or fake UI. One finished poster, not a phone mockup or collage."
+    },
+    {
+      "file": "03-our-baby-community-feed.png",
+      "title": "우리 아이 자랑 피드",
+      "prompt": "Use case: ads-marketing. Create ONE finished Korean social feed poster, portrait 4:5, ideally 1080x1350. Input image 1 is the Agattok established mascot, palette and illustration style reference. Preserve this mascot language. Use a soft peach background with forest-green typography, cream keepsake cards and sage accents, coordinated with the reference but a new vertical layout. The illustrated baby mascot happily shows two cards: a video card with a simple play icon and an image card with a heart. Around them use restrained abstract speech bubbles and a heart to communicate comments and likes. No fake app UI, no invented usernames, no user posts, no real children. Very readable on a phone, large type, generous margins. Exact text only: top brand \"아가톡\"; large headline \"우리 아이 자랑\"; second line \"귀여운 순간은 함께 봐요.\"; description \"사진 · 아가말 영상카드 · 댓글 · 좋아요\"; destination \"baby.yeolmaeapps.kr\"; small privacy reminder \"공개할 순간은 보호자가 직접 골라요.\"; maker \"Yeolmae_STUDIO\". No subscription, discount, accuracy or diagnostic claims. One polished full-bleed poster, not a mockup or sheet."
+    },
+    {
+      "file": "04-agattok-story.png",
+      "title": "세로 스토리",
+      "prompt": "Use case: ads-marketing. Create ONE Korean Instagram Story artwork, vertical 9:16, ideally 1080x1920. Input image 1 is ONLY an identity/style reference for the Agattok cute rounded baby mascot and forest green/cream/sage/peach palette. Design a new elegant mobile story with a deep forest-green field, large cream and peach lettering, a smiling baby holding a keepsake video card at center, and a few quiet sparkle/leaf accents. Keep all essential text inside x=8%-92%, y=15%-78%; top 12% and bottom 18% are intentionally quiet safe areas for Instagram overlays and a real link sticker. Do NOT draw fake buttons or sticker placeholder boxes. Exact text only: \"아가톡\"; headline \"오늘만의 옹알이,\" / \"오래 남겨요.\"; subheading \"원음과 아가말을 영상카드로\"; short feature line \"우리 아이 자랑에서 함께 나눠요.\"; a small readable line \"소리·장면을 참고한 상상 표현입니다.\"; maker \"Yeolmae_STUDIO\". No actual user baby images, no fabricated app UI, no automatic emotional understanding claim, no pricing or discounts. Clean readable Korean, warm joyful illustration. One finished story artwork."
+    }
+  ]
+}
