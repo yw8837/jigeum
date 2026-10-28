@@ -1,0 +1,133 @@
+Browser tab: 3, Title: "테스트 및 출시 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/test-and-release".
+0 AXWebArea 테스트 및 출시 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/test-and-release
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				83 button 읽지 않은 알림 알림 센터 열기
+					84 text 읽지 않은 알림
+				35 button 아가톡 - 지금 내 기분이 그래
+					36 text 아가톡 - 지금 내 기분이 그래
+				37 button 개발자 계정 전환
+					38 image 개발자 계정 전환
+			39 container
+				40 link Description: 모든 앱, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				41 content list
+					42 container 대시보드
+						43 button 대시보드
+							44 text 대시보드
+					45 container 통계
+						46 button 통계
+							47 text 통계
+					48 container 게시 개요
+						49 button 게시 개요
+							50 text 게시 개요
+					51 container Google Play로 보호됨
+						52 button Google Play로 보호됨
+							53 text Google Play로 보호됨
+					54 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+						55 button 테스트 및 출시
+							56 text 테스트 및 출시
+						85 content list
+							86 container
+								87 container 최신 버전 및 번들
+									88 button 최신 버전 및 번들
+								89 container 프로덕션
+									90 button 프로덕션
+								91 container (collapsed) Description: 테스트, Secondary Actions: Expand
+									92 button 테스트
+								93 container 사전 등록
+									94 button 사전 등록
+								95 container 앱 무결성
+									96 button 앱 무결성
+								97 container 고급 설정
+									98 button 고급 설정
+					57 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+						58 button 모니터링 및 개선
+							59 text 모니터링 및 개선
+					60 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+						61 button 사용자 늘리기
+							62 text 사용자 늘리기
+					63 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+						64 button Play를 통한 수익 창출
+							65 text Play를 통한 수익 창출
+			66 container main-content
+				67 container
+					99 heading 테스트 및 출시, Value: 1
+						100 text 테스트 및 출시
+					101 pop up button (collapsed) Description: 휴대전화, 태블릿, Desktop (Googlebook OS, ChromeOS), Android XR 폼 팩터를 선택합니다., ID: a8234E5EC-8FB1-4019-B7F4-CECE514716F9--2, Secondary Actions: Expand
+					102 container
+						103 text 게시 개요 게시되지 않은 변경사항이 없습니다.
+						104 link Description: 게시 페이지로 이동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+					105 heading 공개 테스트, Value: 2
+						106 text 공개 테스트
+					107 link Description: 공개 테스트 시작하기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/open-testing?releaseType=defaultReleases
+					108 text 누구나 Play에서 공개적으로 앱 테스트에 등록할 수 있도록 설정하여 출시 전에 대규모 사용자로부터 의견을 조기 수렴하고 주요 측정항목을 모니터링하세요.
+					109 heading 비공개 테스트, Value: 2
+						110 text 비공개 테스트
+					111 link Description: 트랙 전체 보기(1개), Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/closed-testing?releaseType=defaultReleases
+					112 heading alpha, Value: 3
+						113 text alpha
+					114 link Description: alpha(으)로 이동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217
+					115 text 출시 이름: 0.5.22-beta (36) - visual cadence 제공 시간: 2분 전
+					116 heading 내부 테스트, Value: 2
+						117 text 내부 테스트
+					118 link Description: 내부 테스트 시작하기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/internal-testing?releaseType=defaultReleases
+					119 text 이메일 주소를 사용하여 최대 100명의 내부 테스터에게 앱을 빠르게 배포하세요.
+					120 heading 내부 앱 공유, Value: 2
+						121 text 내부 앱 공유
+					122 link Description: 내부 앱 공유 시작하기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/releases/internal-app-sharing
+					123 text 링크를 사용해 내부 팀과 App Bundle을 간편하게 공유하여 앱의 초기 버전에서 작업을 반복하세요.
+					124 heading 다음 출시 버전을 위한 발견 항목, Value: 2
+						125 text 다음 출시 버전을 위한 발견 항목
+					126 text 주의 필요
+					127 heading DEX 코드 최적화가 기준점 미만입니다, Value: 3
+						128 text DEX 코드 최적화가 기준점 미만입니다
+					129 container aD0BCECC2-269B-43A4-9E63-08EE4CFB369F--33
+						130 text 다음 카테고리에서 비율을 개선하세요.
+						131 content list
+							132 container
+								133 AXListMarker • 
+								134 text 난독화(1%)
+						135 container
+							136 text 비율이 25% 미만인 앱 카테고리가 있으면 Google Play에서 앱의 공개 상태와 게시 기능이 영향을 받을 수 있습니다. 이를 방지하려면 기한 내에 앱을 최적화하세요. 
+							137 link Description: 앱 최적화 자세히 알아보기, Value: developer.android.com/topic/performance/vitals/code-optimization
+						138 text 메모리 사용량
+						139 text 비정상적인 동작
+						140 text 출시 이름: 0.5.22-beta (36) - visual cadence
+					141 container
+						142 text 해결 기한
+						143 text 2월 2027
+					144 link Description: 영향을 받는 Bundle 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-bundle-explorer?artifactId=4860238809090129595&tab=details
+					145 heading 앱에서 오래된 SDK 버전(androidx.fragment:fragment) 사용, Value: 3
+						146 text 앱에서 오래된 SDK 버전(androidx.fragment:fragment) 사용
+					147 container aD0BCECC2-269B-43A4-9E63-08EE4CFB369F--34
+						148 text androidx.fragment:fragment (androidx.fragment:fragment) 개발자가 1.1.0 버전이 오래되었다고 신고했습니다. 앱에 변경사항을 게시하기 전에 최신 버전(1.2.1+)으로 업데이트하는 것이 좋습니다.
+						149 text 기술 품질
+						150 text 출시 이름: 0.5.22-beta (36) - visual cadence
+						151 text 도움이 되었나요?
+						152 checkbox Description: 정보가 유용하다고 보고하는 좋아요 버튼, Value: 0
+						153 checkbox Description: 정보가 유용하지 않다고 보고하는 싫어요 버튼, Value: 0
+					154 button 더보기
+						155 text 더보기
+					156 heading 일부 사용자에게는 더 넓은 화면이 표시되지 않을 수 있습니다, Value: 3
+						157 text 일부 사용자에게는 더 넓은 화면이 표시되지 않을 수 있습니다
+					158 container aD0BCECC2-269B-43A4-9E63-08EE4CFB369F--35
+						159 container
+							160 text Android 15부터는 SDK 35를 타겟팅하는 앱이 기본적으로 더 넓은 화면을 표시합니다. SDK 35를 타겟팅하는 앱은 Android 15 이상에서 앱이 올바르게 표시되도록 인셋을 처리해야 합니다. 이 문제를 조사하고 시간을 두고 더 넓은 화면을 테스트하여 필요한 업데이트를 적용하세요. 또는 이전 버전과의 호환성을 위해 Kotlin의 경우  enableEdgeToEdge() , 자바의 경우  EdgeToEdge.enable() 을(를) 호출하세요.
+						161 text 사용자 환경
+						162 text 출시 이름: 0.5.22-beta (36) - visual cadence
+						163 text 도움이 되었나요?
+						164 checkbox Description: 정보가 유용하다고 보고하는 좋아요 버튼, Value: 0
+						165 checkbox Description: 정보가 유용하지 않다고 보고하는 싫어요 버튼, Value: 0
+					166 link Description: 새 탭에서 이 문제 자세히 알아보기, Value: developer.android.com/about/versions/15/behavior-changes-15#edge-to-edge
+				167 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				168 link Description: 상태 대시보드, Value: status.play.google.com/
+				169 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				170 text © 2026 Google
+				171 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				172 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				173 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 55 button 테스트 및 출시

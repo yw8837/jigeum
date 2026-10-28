@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-24",
+  "subscription": {
+    "productId": "jigeum_album",
+    "basePlanId": "monthly",
+    "status": "active",
+    "period": "P1M",
+    "autoRenewing": true,
+    "country": "KR",
+    "currency": "KRW",
+    "price": 4900,
+    "freeTrialConfigured": false,
+    "threeMonthPlanRegistered": false
+  },
+  "admob": {
+    "appId": "ca-app-pub-2269464728885792~3259646120",
+    "rewardedUnitId": "ca-app-pub-2269464728885792/4692147296",
+    "rewardAmount": 1,
+    "rewardDescription": "유료 기능 1회",
+    "storeLinked": false,
+    "sdkImplemented": false,
+    "rewardedOperationImplemented": false,
+    "testAdVerified": false,
+    "liveAdDeliveryVerified": false
+  },
+  "verifierTests": {"passed": 56, "failed": 0},
+  "httpsSmoke": {"passed": 9, "failed": 0},
+  "livePlayPurchaseTested": false,
+  "code41NoAdCandidate": "superseded by rewarded-ad requirement; do not upload",
+  "packageVerification": "passed for intermediate candidate only",
+  "finalReleaseUploaded": false,
+  "productionSubmitted": false,
+  "productionAvailable": false,
+  "existingAlphaVersionCode": 40,
+  "automationCreated": false
+}

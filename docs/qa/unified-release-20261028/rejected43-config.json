@@ -1,0 +1,23 @@
+{
+  "status": "fail",
+  "artifacts": [
+    {
+      "file": "D:\\Codex\\Agattok\\release-20261028\\delivery\\Agattok-0.5.29-release-code43.apk",
+      "sha256": "7042d799d84d951ea377058e195cc3bd30a33bfe1b064d41690e9bd969928a2c",
+      "checks": {
+        "verification_endpoint": false,
+        "community_endpoint": false,
+        "public_key": true
+      }
+    },
+    {
+      "file": "D:\\Codex\\Agattok\\release-20261028\\delivery\\Agattok-0.5.29-release-code43.aab",
+      "sha256": "e3518dde301da966ce3fbf8d8276684dca8dc3d5c62c4ab6301adbd7a96f3d5b",
+      "checks": {
+        "verification_endpoint": false,
+        "community_endpoint": false,
+        "public_key": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "failedAnalysisStillSavesVideoWithoutSentence",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "galleryVideoResultSavesPngMp4AndSceneRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "hdrImportedVideoCanRenderCaption",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptionHdrCompatibilityTest",
+    "test": "plainCaptionFailsInLegacyHdrShaderAndDrawsInSdrShader",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptionHdrCompatibilityTest",
+    "test": "actualExportCompositionToneMapsOnlyCaptionedVideoAndInfersSourceTracks",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "duplicateAndInvalidSavePreserveExistingRecordAndMedia",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "failedFileDeletionKeepsRetryIntentAndAccurateSnapshot",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoCancellationAndCorruptSourceLeaveNoPartialOutput",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "extremeCaptionFitsAndLeavesSceneTransparent",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "videoWithoutAudioKeepsSceneCaptionAndSelectedDurationWithoutAddingAudio",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "completeSceneSurvivesLandscapeAndRotation",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "cancelCorruptAndStaleExportsLeaveNoPartialFiles",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "voiceOnlyRendersCardWithOriginalSound",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoKeepsLateIntervalAudioAndDoesNotCreateCaptionOrRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "lateVideoRangeHasAudioCaptionAndSurvivesStoreReopen",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoWithoutAudioNeverAddsAudioTrack",
+    "code": 0
+  }
+]

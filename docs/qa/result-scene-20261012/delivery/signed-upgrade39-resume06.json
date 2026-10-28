@@ -1,0 +1,74 @@
+{
+  "status": "pass",
+  "resumes": [
+    "signed-upgrade39-04",
+    "signed-upgrade39-resume05"
+  ],
+  "seed_record_id": 1791814557350,
+  "old_legacy_record": {
+    "id": 1791814557350,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1791814557207325700",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "old_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~2J_d-XLiEQkHstQFXcjQXQ==/com.moa.babylanguage-Rfar-ZfBo1usiGaryE0gaw==/base.apk",
+    "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "version_code": 38,
+    "version_name": "0.5.24-beta",
+    "verified": true,
+    "errors": []
+  },
+  "old_media": {
+    "name": "아가톡-1791814872570.mp4",
+    "bytes": 809284,
+    "sha256": "f3eab600508e4b67a5ff1f8c83b46d2d447661108f45fa0613ae98657b3d4262",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~7CNG4B8Skat9JPezdgi-xw==/com.moa.babylanguage-FJg3sgLQKHlrgAde0Zl66w==/base.apk",
+    "sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+    "expected_sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+    "version_code": 39,
+    "version_name": "0.5.25-beta",
+    "verified": true,
+    "errors": []
+  },
+  "new_media": {
+    "name": "아가톡-1791814872570.mp4",
+    "bytes": 809284,
+    "sha256": "f3eab600508e4b67a5ff1f8c83b46d2d447661108f45fa0613ae98657b3d4262",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_legacy_record": {
+    "id": 1791814557350,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1791814557207325700",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "legacy_text_preserved": true,
+  "media_bytes_preserved": true,
+  "beta_full_access_retained": true,
+  "owned_external_files_removed": true
+}

@@ -1,0 +1,6 @@
+Browser tab: 1, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 441-447
++					505 text 변경사항을 검토 중입니다. 앱을 검토하는 과정에서 추가 문제가 발견될 수도 있습니다.
++					506 link Description: 검토를 위해 변경사항을 전송하기 전에 Google에서 문제를 감지하기 위해 실행하는 자동 검사에 대해 자세히 알아보려면 고객센터로 이동하세요., Value: support.google.com/googleplay/android-developer/answer/14807773
+The focused UI element is 1 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

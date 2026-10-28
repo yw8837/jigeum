@@ -1,0 +1,83 @@
+Audio Spectrogram Transformer (AST)
+MIT/ast-finetuned-audioset-10-10-0.4593
+Pinned model revision: f826b80d28226b62986cc218e5cec390b1096902
+Local derivative: opset17 ONNX, dynamic QInt8 per-channel MatMul/Gemm; Conv FP32.
+Base encoder graph SHA256: 3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e
+Code/license source: https://github.com/YuanGongND/ast/blob/master/LICENSE
+Model card source: https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/tree/f826b80d28226b62986cc218e5cec390b1096902
+
+General AudioSet multilabel observations; infant accuracy and needs interpretation unvalidated.
+
+BSD 3-Clause License
+
+Copyright (c) 2021, Yuan Gong
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Agattok experimental infant-presence derivative (2026-10-07)
+Bundled graph SHA256: 4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a
+Base logits preserved. Added L2-normalized 768-to-1 sigmoid presence head.
+Frozen head SHA256: 81d7357c4c59f57222952a1542716f7d89e423d45f2987dd3917a3522bdfd510
+Training manifest SHA256: 27966aa9265da239489e7351959c01399ed3a0aed6428149babc2cb127fad4b9
+Source: https://github.com/yw8837/jigeum/tree/codex/ondevice-av-probe/tools/research
+Changes: public MP3 previews decoded mono16kHz, up to20s; AST embeddings;
+train-only source CV regularization and binary discriminative head. No raw audio is distributed.
+Caption-weak clip labels; not calibrated accuracy, emotion, intention, identity or event onset.
+User media, held evaluation and extra9 public sources were not training inputs.
+
+FSD50K annotation attribution:
+FSD50K: an Open Dataset of Human-Labeled Sound Events, Eduardo Fonseca et al.
+https://zenodo.org/records/4060432
+Curated dataset license: https://creativecommons.org/licenses/by/4.0/
+Individual clip credits and licenses below are separate. No contributor endorsement is implied.
+CC0 legalcode: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+CC BY3 legalcode: https://creativecommons.org/licenses/by/3.0/legalcode
+CC BY4 legalcode: https://creativecommons.org/licenses/by/4.0/legalcode.en
+The following source sounds were used for analysis features and a discriminative head;
+files were clipped/decoded as above, and their authors did not endorse Agattok.
+
+ID/page | author | title | individual grant
+| [113220](https://freesound.org/people/NoiseCollector/sounds/113220/) | NoiseCollector | 2tone.wav | [BY3](http://creativecommons.org/licenses/by/3.0/) |
+| [113221](https://freesound.org/people/NoiseCollector/sounds/113221/) | NoiseCollector | ahdada.wav | [BY3](http://creativecommons.org/licenses/by/3.0/) |
+| [113223](https://freesound.org/people/NoiseCollector/sounds/113223/) | NoiseCollector | ahhhhahaha.wav | [BY3](http://creativecommons.org/licenses/by/3.0/) |
+| [46963](https://freesound.org/people/reinsamba/sounds/46963/) | reinsamba | baby_voice6.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [47371](https://freesound.org/people/reinsamba/sounds/47371/) | reinsamba | baby_laugh2.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [377237](https://freesound.org/people/Fugazi80/sounds/377237/) | Fugazi80 | Æ.20161218.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [8157](https://freesound.org/people/levinj/sounds/8157/) | levinj | Jazzgiggle-10-8-05(9mo).mp3 | [BY3](http://creativecommons.org/licenses/by/3.0/) |
+| [184432](https://freesound.org/people/unfa/sounds/184432/) | unfa | Yo YO yo yO | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [168494](https://freesound.org/people/AlienXXX/sounds/168494/) | AlienXXX | Build_it_and_They_will_come_a.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [87680](https://freesound.org/people/flogman/sounds/87680/) | flogman | e.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [122204](https://freesound.org/people/dobroide/sounds/122204/) | dobroide | 20110612.bye.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [256684](https://freesound.org/people/xtrgamr/sounds/256684/) | xtrgamr | PIANO LOOP.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [412332](https://freesound.org/people/clemza/sounds/412332/) | clemza | prepared piano loop 2.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [148628](https://freesound.org/people/conleec/sounds/148628/) | conleec | AMB_Ext_Auto_Engine_001.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [410616](https://freesound.org/people/tutenchwimse/sounds/410616/) | tutenchwimse | Sewing machine | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [92388](https://freesound.org/people/sandyrb/sounds/92388/) | sandyrb | CLOSE FEMALE LAUGH 029.wav | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [277549](https://freesound.org/people/Coral_Island_Studios/sounds/277549/) | Coral_Island_Studios | Adult Woman Tickled 'Hold on'! hahahaha Authentic Acting.mp3 | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [119459](https://freesound.org/people/Eneasz/sounds/119459/) | Eneasz | Male Laughter.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |
+| [254869](https://freesound.org/people/jacobmathiassen/sounds/254869/) | jacobmathiassen | Male crying and weeping | [BY4](https://creativecommons.org/licenses/by/4.0/) |
+| [319537](https://freesound.org/people/FreyaMaluk/sounds/319537/) | FreyaMaluk (metadata kleine_blume) | woman crying | [BY3](http://creativecommons.org/licenses/by/3.0/) |
+| [219663](https://freesound.org/people/saraonsins/sounds/219663/) | saraonsins | high-pitched scream.wav | [CC0](http://creativecommons.org/publicdomain/zero/1.0/) |

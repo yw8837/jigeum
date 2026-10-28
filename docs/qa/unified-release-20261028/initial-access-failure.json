@@ -1,0 +1,10 @@
+{
+  "status": "fail",
+  "real_server": true,
+  "real_play_purchase": false,
+  "real_discount_codes_consumed": 0,
+  "secret_written_to_evidence": false,
+  "version_code": 43,
+  "version_name": "0.5.29",
+  "error": "Expected UI not shown: 이용 코드 등록"
+}

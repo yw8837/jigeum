@@ -1,0 +1,90 @@
+Browser tab: 2, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+0 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+				7 button 아가톡 - 지금 내 기분이 그래
+			66 container
+				67 button 개발자 계정 전환 Yeolmae bsfire1237@gmail.com
+					68 image 개발자 계정 전환
+					69 text Yeolmae
+					70 text bsfire1237@gmail.com
+				71 link Description: 모든 앱, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				72 content list
+					73 container 대시보드
+						74 button 대시보드
+							75 text 대시보드
+					76 container 통계
+						77 button 통계
+							78 text 통계
+					79 container 게시 개요
+						80 button 게시 개요
+							81 text 게시 개요
+					82 container Google Play로 보호됨
+						83 button Google Play로 보호됨
+							84 text Google Play로 보호됨
+					85 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+						86 button 테스트 및 출시
+							87 text 테스트 및 출시
+					88 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+						89 button 모니터링 및 개선
+							90 text 모니터링 및 개선
+					91 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+						92 button 사용자 늘리기
+							93 text 사용자 늘리기
+					94 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+						95 button Play를 통한 수익 창출
+							96 text Play를 통한 수익 창출
+			65 container main-content
+				140 container
+					141 heading 게시 개요, Value: 1
+						142 text 게시 개요
+					143 container
+						144 text 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+						145 button 게시 개요에 관한 세부정보 더보기
+					146 pop up button (collapsed) 관리형 게시가 사용 중지됨, ID: a641213C8-9C6C-444E-B56E-07E0EE893CA3--8, Secondary Actions: Expand
+					147 text 최근 게시일: 2026년 10월 9일
+					148 link Description: 제출 활동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					149 heading 검토 중인 변경사항, Value: 2
+						150 text 검토 중인 변경사항
+					151 button (collapsed) Description: "검토 중인 변경사항"에 대한 추가 정보, Secondary Actions: Expand
+					152 button 변경사항 삭제
+						153 text 변경사항 삭제
+					154 button (expanded) Description: 콘텐츠 숨기기: 검토 중인 변경사항, Secondary Actions: Collapse
+					155 heading 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 4
+						156 text 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중
+					157 level indicator 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 7
+					158 container
+						159 text 이러한 검사를 통해 특정 정책 및 앱 품질 문제를 발견하여 검토 전에 문제를 해결할 수 있습니다. 검사가 성공적으로 완료되는 즉시 변경사항이 검토를 위해 전송됩니다.
+						160 link Description: 검토를 위해 변경사항을 전송하기 전에 Google에서 문제를 감지하기 위해 실행하는 자동 검사에 대해 자세히 알아보려면 고객센터로 이동하세요., Value: support.google.com/googleplay/android-developer/answer/14807773
+					161 text 최대 14분 남음
+					162 table 변경사항
+						163 row 변경된 항목 설명
+							164 cell
+								165 text 변경된 항목
+							166 cell
+								167 text 설명
+							168 cell
+						169 row 비공개 테스트 - Alpha
+							170 cell
+								171 text 비공개 테스트 - Alpha
+						172 row 0.5.24-beta (38) - saved media fix 전체 출시 시작 추가 작업
+							173 cell
+								174 text 0.5.24-beta (38) - saved media fix
+							175 cell
+								176 text 전체 출시 시작
+							177 cell
+								178 list 추가 작업
+									179 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+				133 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				134 link Description: 상태 대시보드, Value: status.play.google.com/
+				135 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				136 text © 2026 Google
+				137 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				138 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				139 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

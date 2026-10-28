@@ -1,0 +1,125 @@
+{
+  "status": "pass",
+  "variants": {
+    "beta": {
+      "files": {
+        "Agattok-0.5.23-beta-code37.apk": {
+          "bytes": 255179763,
+          "sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88"
+        },
+        "Agattok-0.5.23-beta-code37.aab": {
+          "bytes": 160200230,
+          "sha256": "d27dc2601626a81cf1f2f4ff3aa0bc33ac7a4e706c050a7c9a1e888aaab14372"
+        }
+      },
+      "flags": {
+        "AST_INFANT_CAPTION": true,
+        "AST_INFANT_PRESENCE": true,
+        "AST_BABBLE_SUPPORT": true,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": true,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "package_status": "pass",
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.apk",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "assets/AST_CAPTION_NOTICE.txt",
+            "assets/AST_MODEL_NOTICE.txt",
+            "assets/ONNX_RUNTIME_LICENSE.txt",
+            "assets/ONNX_RUNTIME_NOTICE.txt",
+            "assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "assets/ast-caption-presence.f32",
+            "assets/ast-infant-presence-candidate.onnx",
+            "lib/arm64-v8a/libonnxruntime.so",
+            "lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "lib/armeabi-v7a/libonnxruntime.so",
+            "lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "lib/x86/libonnxruntime.so",
+            "lib/x86/libonnxruntime4j_jni.so",
+            "lib/x86_64/libonnxruntime.so",
+            "lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        },
+        {
+          "status": "pass",
+          "expected": "present",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.aab",
+          "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+          "model_variant": "infant-caption",
+          "abis": [
+            "arm64-v8a",
+            "armeabi-v7a",
+            "x86",
+            "x86_64"
+          ],
+          "payload_entries": [
+            "base/assets/AST_CAPTION_NOTICE.txt",
+            "base/assets/AST_MODEL_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_LICENSE.txt",
+            "base/assets/ONNX_RUNTIME_NOTICE.txt",
+            "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+            "base/assets/ast-caption-presence.f32",
+            "base/assets/ast-infant-presence-candidate.onnx",
+            "base/lib/arm64-v8a/libonnxruntime.so",
+            "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+            "base/lib/armeabi-v7a/libonnxruntime.so",
+            "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+            "base/lib/x86/libonnxruntime.so",
+            "base/lib/x86/libonnxruntime4j_jni.so",
+            "base/lib/x86_64/libonnxruntime.so",
+            "base/lib/x86_64/libonnxruntime4j_jni.so"
+          ]
+        }
+      ]
+    },
+    "release": {
+      "files": {
+        "Agattok-0.5.23-release-code37.apk": {
+          "bytes": 75381227,
+          "sha256": "e43485f9b16374e76a4f2787d4a0785d333c314bf20e80d686ec76dc9fdebcdb"
+        },
+        "Agattok-0.5.23-release-code37.aab": {
+          "bytes": 46724103,
+          "sha256": "aad12ea883cc2990b8723a8ad1a12219b20b9dfd3e3dc4b68d02a0d46f55191f"
+        }
+      },
+      "flags": {
+        "AST_INFANT_CAPTION": false,
+        "AST_INFANT_PRESENCE": false,
+        "AST_BABBLE_SUPPORT": false,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": false,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      },
+      "package_status": "pass",
+      "payload": [
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.apk",
+          "payload_entries": []
+        },
+        {
+          "status": "pass",
+          "expected": "absent",
+          "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.aab",
+          "payload_entries": []
+        }
+      ]
+    }
+  }
+}

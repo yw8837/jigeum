@@ -1,0 +1,5 @@
+N: android=http://schemas.android.com/apk/res/android (line=2)
+  E: paths (line=2)
+      E: cache-path (line=3)
+        A: name="exports" (Raw: "exports")
+        A: path="exports/" (Raw: "exports/")

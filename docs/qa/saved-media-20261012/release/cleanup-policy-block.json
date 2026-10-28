@@ -1,0 +1,13 @@
+{
+  "phase": "duplicate public test input cleanup",
+  "targets_relative_to_owned_work_directory": [
+    "performance01/public20.mp4",
+    "performance02/public20.mp4",
+    "performance03/public20.mp4"
+  ],
+  "execution_started": false,
+  "files_deleted": 0,
+  "reported_reason": "CreateProcess rejected: blocked by policy",
+  "bypass_attempted": false,
+  "exact_latest_input_retained": "performance04/public20.mp4"
+}

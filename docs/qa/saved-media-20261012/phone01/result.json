@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "tests": 18,
+  "passed_tests": 18,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [],
+  "seconds": 15.78,
+  "exit": 0,
+  "original_app_metadata_unchanged": true
+}

@@ -1,0 +1,298 @@
+{
+  "Status": "pass",
+  "BeforeFreeBytes": 52905541632,
+  "Removed": [
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-phone-20261009\\recovery-test.apk",
+      "Bytes": 2243621,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-continuity-20261006\\final\\Agattok-0.5.17-beta-code31.aab",
+      "Bytes": 160175731,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-continuity-20261006\\final\\Agattok-0.5.17-beta-code31.apk",
+      "Bytes": 255154786,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-continuity-20261006\\final\\Agattok-0.5.17-release-code31.aab",
+      "Bytes": 46706406,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-continuity-20261006\\final\\Agattok-0.5.17-release-code31.apk",
+      "Bytes": 75364843,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-beta-code36.aab",
+      "Bytes": 160196569,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-beta-code36.apk",
+      "Bytes": 255163375,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-release-code36.aab",
+      "Bytes": 46720778,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-release-20261009\\final\\Agattok-0.5.22-release-code36.apk",
+      "Bytes": 75381227,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-20261009\\final\\research-app.apk",
+      "Bytes": 264656665,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-cadence-20261009\\final\\research-test.apk",
+      "Bytes": 2819762,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-alignment-20261006\\final\\Agattok-0.5.18-beta-code32.aab",
+      "Bytes": 160179389,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-alignment-20261006\\final\\Agattok-0.5.18-beta-code32.apk",
+      "Bytes": 255154786,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-alignment-20261006\\final\\Agattok-0.5.18-release-code32.aab",
+      "Bytes": 46711401,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\visual-alignment-20261006\\final\\Agattok-0.5.18-release-code32.apk",
+      "Bytes": 75364847,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\infant-presence-android-20261007\\final\\Agattok-infant-presence-research-code32-test.apk",
+      "Bytes": 2765526,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\infant-presence-android-20261007\\final\\Agattok-infant-presence-research-code32.apk",
+      "Bytes": 265353775,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-beta-code35.aab",
+      "Bytes": 160197432,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-beta-code35.apk",
+      "Bytes": 255179763,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-release-code35.aab",
+      "Bytes": 46720579,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-release-code35.apk",
+      "Bytes": 75381231,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-beta-20261007\\final\\Agattok-0.5.19-beta-code33.aab",
+      "Bytes": 160193654,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-beta-20261007\\final\\Agattok-0.5.19-beta-code33.apk",
+      "Bytes": 255163379,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-beta-20261007\\final\\Agattok-0.5.19-release-code33.aab",
+      "Bytes": 46716618,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-beta-20261007\\final\\Agattok-0.5.19-release-code33.apk",
+      "Bytes": 75364843,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-android-20261007\\final\\caption-app.apk",
+      "Bytes": 265359219,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\caption-android-20261007\\final\\caption-test.apk",
+      "Bytes": 2770840,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-beta-code34.aab",
+      "Bytes": 160195341,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-beta-code34.apk",
+      "Bytes": 255163379,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-release-code34.aab",
+      "Bytes": 46718695,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-release-code34.apk",
+      "Bytes": 75364843,
+      "Reason": "Completed older release/research package; current and prior signed releases retained"
+    }
+  ],
+  "PreservedPackages": [
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-beta-code38.aab",
+      "Bytes": 160201124,
+      "SHA256": "563DC52E4F865C97B9626C784CFCB508EAAFBBDA28B506851ACC3C7532EEF8A0"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-beta-code38.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-beta-code38.apk",
+      "Bytes": 255179763,
+      "SHA256": "D3028EE1785B93B646395BC7A57376E309C61AF8A362F7496098F3C9CAE2AD10"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-release-code38.aab",
+      "Bytes": 46724467,
+      "SHA256": "F822A9E12928A8D3AD0868111128E08B8288A917F841FA2F0CDE9B537BA5E82E"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-release-code38.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\Agattok-0.5.24-release-code38.apk",
+      "Bytes": 75381227,
+      "SHA256": "BF9033964D3168733CEDEDF34B779C90E8757C4E3490AFFFEA08813F192EC091"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\beta-buildconfig-dex.txt",
+      "Bytes": 1162,
+      "SHA256": "0BA631672FBC6DD0C8EA60B4133BA6B351EABB561AB6AD15148A5A87DBBCFF9B"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\beta-cadence-dex.txt",
+      "Bytes": 5099,
+      "SHA256": "2D3FD09DA8678354154D621797818EE50B22F83DF8B15A19E57391863B7CCAD1"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\beta-package.log",
+      "Bytes": 1137,
+      "SHA256": "C185CB75C8132033D972E163732F7E7596D5504BB3CF4B7AA7798BB33892DE39"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\final-package-result.json",
+      "Bytes": 7635,
+      "SHA256": "EEDCAD6385F2468C412213E50B342B005B26677024901E6837D405CF6A0E29C0"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\release-buildconfig-dex.txt",
+      "Bytes": 1164,
+      "SHA256": "52EA2A657B9B251B66860C3324A8882E59F5F028F52ECEABCD55F383FCF4B14F"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\release-cadence-dex.txt",
+      "Bytes": 5102,
+      "SHA256": "0CFB1F854F82E94521D70A57AF8739DC3FDD04AC06362CC0DB9AF12DD86E2282"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\vocal-kind-20261010\\final\\release-package.log",
+      "Bytes": 1140,
+      "SHA256": "7301E741348F7E160687DD117E1872743C1E1C92FE394F89875FC58B701E6E7D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.aab",
+      "Bytes": 160200230,
+      "SHA256": "D27DC2601626A81CF1F2F4FF3AA0BC33AC7A4E706C050A7C9A1E888AAAB14372"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-beta-code37.apk",
+      "Bytes": 255179763,
+      "SHA256": "0683358F1E860C780E3962946CC369B028D9E1AE45AE41D516A99406B4DAEF88"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.aab",
+      "Bytes": 46724103,
+      "SHA256": "AAD12EA883CC2990B8723A8AD1A12219B20B9DFD3E3DC4B68D02A0D46F55191F"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\Agattok-0.5.23-release-code37.apk",
+      "Bytes": 75381227,
+      "SHA256": "E43485F9B16374E76A4F2787D4A0785D333C314BF20E80D686EC76DC9FDEBCDB"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\beta-buildconfig-dex.txt",
+      "Bytes": 1162,
+      "SHA256": "54AF33317D03EC425B8142ECC119B31D10DF902941FC6CC16241FE8BB2F00894"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\beta-cadence-dex.txt",
+      "Bytes": 5099,
+      "SHA256": "2D3FD09DA8678354154D621797818EE50B22F83DF8B15A19E57391863B7CCAD1"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\beta-package.log",
+      "Bytes": 1142,
+      "SHA256": "75708D677960EB63FD59416E9BF6B03D87CA37A829FA2FD9711E2160C5712FDB"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\final-package-result.json",
+      "Bytes": 7673,
+      "SHA256": "46FDCABF893BD7FF2839A7A134D2B604F69F5E2ADF7645943DF8457CA0368E94"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\release-buildconfig-dex.txt",
+      "Bytes": 1164,
+      "SHA256": "4CC12A133DFF47CB2587F89F12EAF515BFD7FAE35B2E1255B5C07F895E226E93"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\release-cadence-dex.txt",
+      "Bytes": 5102,
+      "SHA256": "0CFB1F854F82E94521D70A57AF8739DC3FDD04AC06362CC0DB9AF12DD86E2282"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\final\\release-package.log",
+      "Bytes": 1145,
+      "SHA256": "E7DA7B9C9B4307D1FD62A22F3B0661F6E60D416696511FB93FBE38CC6EB65B30"
+    }
+  ],
+  "PreservedReports": [],
+  "Errors": [],
+  "AfterFreeBytes": 56892604416,
+  "RecoveredVolumeBytes": 3987062784,
+  "CompletedAt": "2026-10-10T00:13:05.8538241+09:00"
+}

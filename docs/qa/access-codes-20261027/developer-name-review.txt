@@ -1,0 +1,5 @@
+Requested developer display name: Yeolmae_STUDIO
+Saved successfully.
+Console: 새 개발자 이름을 검토 중입니다.
+새 이름(Yeolmae_STUDIO)이 승인되기 전까지 사용자에게는 개발자 이름이 Yeolmae(으)로 표시됩니다.
+Legal, contact, tax, payment and website fields were not modified.

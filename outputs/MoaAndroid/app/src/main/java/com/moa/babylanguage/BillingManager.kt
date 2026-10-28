@@ -38,19 +38,22 @@ class BillingManager internal constructor(
     private val purchaseCallbackTimeoutMs: Long = 120_000,
     private val purchaseQueryTimeoutMs: Long = 30_000,
     private val acknowledgeRetryDelayMs: Long = 5_000,
-    private val reviewer: ReviewEntitlements? = null
+    private val reviewer: ReviewEntitlements? = null,
+    private val accessCodes: CodeEntitlements? = null
 ) : PurchasesUpdatedListener, AutoCloseable {
     constructor(context: Context) : this(
         PurchaseVerifier(context.applicationContext),
         { listener -> PlayBillingGateway(context.applicationContext, listener) },
-        reviewer = ReviewAccessVerifier(context.applicationContext)
+        reviewer = ReviewAccessVerifier(context.applicationContext),
+        accessCodes = AccessCodeVerifier(context.applicationContext)
     )
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mutableState = MutableStateFlow(BillingUiState(
         status = if (verifier.isConfigured) BillingStatus.CONNECTING else BillingStatus.UNAVAILABLE,
         isPremium = verifier.cachedEntitlement(),
         message = if (verifier.isConfigured) null else "구독 확인 서비스가 아직 설정되지 않았어요. 무료 기능은 계속 사용할 수 있어요.",
-        reviewStatus = if (reviewer?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE
+        reviewStatus = if (reviewer?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE,
+        codeStatus = if (accessCodes?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE
     ))
     val state: StateFlow<BillingUiState> = mutableState
     // Unconfigured installations use only free features and never need a Play client.
@@ -73,6 +76,9 @@ class BillingManager internal constructor(
     private var reviewGeneration = 0L
     private var reviewVerification: Job? = null
     private var nextReviewRetryElapsed = 0L
+    private var codeGeneration = 0L
+    private var codeVerification: Job? = null
+    private var nextCodeRetryElapsed = 0L
 
     init { refresh() }
 
@@ -88,6 +94,7 @@ class BillingManager internal constructor(
         if (closed) return
         recheckEntitlement()
         refreshReviewAccess()
+        refreshAccessCode()
         if (!verifier.isConfigured) return
         if (purchaseDeadline != null) {
             recoverPurchaseIfDue()
@@ -160,6 +167,67 @@ class BillingManager internal constructor(
         }
     }
 
+    @MainThread
+    fun activateAccessCode(code: String) {
+        if (closed) return
+        val clean = code.trim()
+        if (!validReviewCode(clean)) {
+            updateCode(ReviewAccessStatus.ERROR, "전달받은 이용 코드를 그대로 붙여 넣어 주세요.")
+            return
+        }
+        if (accessCodes?.isConfigured != true) {
+            updateCode(ReviewAccessStatus.UNAVAILABLE, "이용 코드 확인 서비스를 연결하지 못했어요.")
+            return
+        }
+        verifyAccessCode(clean, activation = true)
+    }
+
+    @MainThread
+    fun deactivateAccessCode() {
+        if (closed) return
+        codeGeneration++; codeVerification?.cancel(); codeVerification = null
+        accessCodes?.clear(); nextCodeRetryElapsed = 0L
+        updateCode(if (accessCodes?.isConfigured == true) ReviewAccessStatus.INACTIVE else ReviewAccessStatus.UNAVAILABLE,
+            "이 기기의 코드 적용을 해제했어요. 구매 구독과 기존 기록은 유지돼요. 할인 코드를 다른 기기로 옮기는 기능은 아니에요.")
+        recheckEntitlement()
+    }
+
+    private fun refreshAccessCode() {
+        if (closed || accessCodes?.isConfigured != true || codeVerification?.isActive == true ||
+            recoveryClock() < nextCodeRetryElapsed) return
+        accessCodes.storedCode()?.let { verifyAccessCode(it, activation = false) }
+    }
+
+    private fun verifyAccessCode(code: String, activation: Boolean) {
+        val access = accessCodes ?: return
+        if (codeVerification?.isActive == true) return
+        val token = ++codeGeneration
+        nextCodeRetryElapsed = recoveryClock() + 60_000
+        updateCode(ReviewAccessStatus.VERIFYING, "이용 코드를 확인하고 있어요.")
+        codeVerification = scope.launch {
+            val result = try { access.verify(code) }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { VerificationResult.Unavailable }
+            if (closed || token != codeGeneration) return@launch
+            val accepted = result is VerificationResult.Verified && runCatching { access.accept(result.envelope, code) }.getOrDefault(false)
+            if (result == VerificationResult.Rejected && !activation) access.clear()
+            recheckEntitlement()
+            val grant = access.cachedGrant()
+            if (accepted && !busy()) setState(idleStatus(), null)
+            updateCode(if (grant != null) ReviewAccessStatus.ACTIVE else ReviewAccessStatus.ERROR, when {
+                accepted && grant?.kind == AccessCodeKind.INVITATION -> "초대 이용권이 적용됐어요. 자동 결제 없이 기간 제한 없이 이용해요."
+                accepted -> "출시 할인 코드가 등록됐어요. 할인 상품과 Google Play 결제창의 금액을 확인해 주세요."
+                result == VerificationResult.Rejected -> "유효하지 않거나 다른 기기에 등록된 코드예요. 전달받은 코드를 확인해 주세요."
+                grant != null -> "이전에 확인한 코드 혜택을 사용 중이에요. 연결되면 다시 확인해 주세요."
+                else -> "코드를 확인하지 못했어요. 인터넷에 연결해 다시 시도해 주세요."
+            })
+        }
+    }
+
+    private fun updateCode(status: ReviewAccessStatus, message: String?) {
+        mutableState.value = mutableState.value.copy(codeStatus = status, codeMessage = message)
+    }
+
     private fun updateReview(status: ReviewAccessStatus, message: String?) {
         mutableState.value = mutableState.value.copy(reviewStatus = status, reviewMessage = message)
     }
@@ -186,6 +254,10 @@ class BillingManager internal constructor(
         if (closed || activity.isFinishing || activity.isDestroyed) return
         recheckEntitlement()
         if (!verifier.isConfigured) { setState(BillingStatus.UNAVAILABLE, "구독 확인 서비스가 설정되지 않았어요."); return }
+        if (plan == BillingPlan.LAUNCH_MONTHLY && accessCodes?.cachedGrant()?.kind != AccessCodeKind.LAUNCH_OFFER) {
+            setState(BillingStatus.ERROR, "출시 할인 코드를 먼저 등록해 주세요. 일반 가격으로 결제하지 않았어요.")
+            return
+        }
         // Both the UI and manager guard duplicate taps; pending purchases cannot be charged again.
         if (mutableState.value.isPremium || mutableState.value.status != BillingStatus.READY || queryInFlight != null || !purchaseHistoryConfirmed) return
         if (!client.isReady || mutableState.value.options.none { it.plan == plan }) {
@@ -425,12 +497,16 @@ class BillingManager internal constructor(
         val wasPremium = mutableState.value.isPremium
         val purchaseUntil = verifier.cachedExpiryMs()
         val reviewUntil = reviewer?.cachedExpiryMs()
-        val validUntil = listOfNotNull(purchaseUntil, reviewUntil).maxOrNull()
+        val codeGrant = accessCodes?.cachedGrant()
+        val invitationUntil = codeGrant?.takeIf { it.kind == AccessCodeKind.INVITATION }?.expiresAtMs
+        val validUntil = listOfNotNull(purchaseUntil, reviewUntil, invitationUntil).maxOrNull()
+        val refreshUntil = listOfNotNull(validUntil, codeGrant?.expiresAtMs).maxOrNull()
         val before = mutableState.value
         mutableState.value = before.copy(isPremium = validUntil != null,
             entitlementSource = when {
                 purchaseUntil != null -> EntitlementSource.PLAY_PURCHASE
                 reviewUntil != null -> EntitlementSource.PLAY_REVIEW
+                invitationUntil != null -> EntitlementSource.INVITATION
                 else -> EntitlementSource.NONE
             },
             reviewStatus = when {
@@ -440,15 +516,26 @@ class BillingManager internal constructor(
                 before.reviewStatus == ReviewAccessStatus.ACTIVE -> ReviewAccessStatus.ERROR
                 else -> before.reviewStatus
             },
+            codeKind = codeGrant?.kind ?: AccessCodeKind.NONE,
+            codeStatus = when {
+                accessCodes?.isConfigured != true -> ReviewAccessStatus.UNAVAILABLE
+                before.codeStatus == ReviewAccessStatus.VERIFYING -> ReviewAccessStatus.VERIFYING
+                codeGrant != null -> ReviewAccessStatus.ACTIVE
+                before.codeStatus == ReviewAccessStatus.ACTIVE -> ReviewAccessStatus.ERROR
+                else -> before.codeStatus
+            },
+            codeMessage = if (codeGrant == null && before.codeStatus == ReviewAccessStatus.ACTIVE)
+                "코드를 다시 확인해야 해요. 인터넷에 연결해 이용 코드를 확인해 주세요." else before.codeMessage,
             reviewMessage = if (reviewUntil == null && before.reviewStatus == ReviewAccessStatus.ACTIVE)
                 "심사 이용권 확인 기간이 끝났어요. 인터넷에 연결해 다시 확인해 주세요." else before.reviewMessage)
         if (wasPremium && validUntil == null && !busy()) setState(idleStatus(), "구독 확인 기간이 끝났어요. 인터넷에 연결해 다시 확인해 주세요.")
-        if (validUntil != null) expiry = scope.launch {
+        if (refreshUntil != null) expiry = scope.launch {
             // Recheck wall-clock changes too; holding the screen open cannot keep an expired grant.
-            delay((validUntil - clock()).coerceIn(1, 60_000))
+            delay((refreshUntil - clock()).coerceIn(1, 60_000))
             recheckEntitlement()
             // Renew the install-bound review grant after expiry or near its deadline.
             if (reviewUntil == null || reviewUntil - clock() <= 300_000) refreshReviewAccess()
+            if (codeGrant == null || codeGrant.expiresAtMs - clock() <= 300_000) refreshAccessCode()
         }
     }
     private fun setState(status: BillingStatus, message: String?) { mutableState.value = mutableState.value.copy(status = status, message = message) }
@@ -457,6 +544,7 @@ class BillingManager internal constructor(
         closed = true
         generation++
         reviewGeneration++
+        codeGeneration++
         scope.cancel()
         if (clientDelegate.isInitialized()) client.endConnection()
     }
@@ -497,18 +585,13 @@ private class PlayBillingGateway(context: Context, listener: PurchasesUpdatedLis
             offers.clear()
             val details = productDetails
             val options = details?.subscriptionOfferDetails.orEmpty().mapNotNull { offer ->
-                val plan = BillingPlan.entries.firstOrNull { it.basePlanId == offer.basePlanId }
-                val phase = offer.pricingPhases.pricingPhaseList.singleOrNull()
-                val correctTerms = when (plan) {
-                    BillingPlan.MONTHLY -> phase?.billingPeriod == "P1M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING
-                    BillingPlan.THREE_MONTH_PREPAID -> phase?.billingPeriod == "P3M" && phase.recurrenceMode == ProductDetails.RecurrenceMode.NON_RECURRING
-                    null -> false
-                }
-                // Hide unexpected promotional/term configurations instead of misdescribing a charge.
-                if (plan == null || offer.offerId != null || phase == null || !correctTerms) return@mapNotNull null
-                offers[plan] = offer
-                BillingOption(plan, details!!.productId, offer.basePlanId, phase.formattedPrice, phase.billingPeriod,
-                    if (plan == BillingPlan.MONTHLY) "AUTO_RENEWING" else "PREPAID")
+                val option = checkedBillingOption(details!!.productId, offer.basePlanId, offer.offerId,
+                    offer.pricingPhases.pricingPhaseList.map { phase ->
+                        OfferPricePhase(phase.priceAmountMicros, phase.priceCurrencyCode, phase.formattedPrice,
+                            phase.billingPeriod, phase.recurrenceMode, phase.billingCycleCount)
+                    }) ?: return@mapNotNull null
+                offers[option.plan] = offer
+                option
             }
             callback(result, BillingCatalog(details?.let { listOf(BillingProduct(it.productId, it.title, it.description)) }.orEmpty(), options))
         }

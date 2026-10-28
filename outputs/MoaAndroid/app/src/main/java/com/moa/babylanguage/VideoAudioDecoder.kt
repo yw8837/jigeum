@@ -10,7 +10,6 @@ import android.os.SystemClock
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.coroutines.coroutineContext
 import kotlin.math.sqrt
@@ -35,6 +34,7 @@ internal data class VideoAudioAnalysis(
 }
 
 internal object VideoAudioDecoder {
+    internal data class DecodedAudio(val samples: FloatArray, val selectionTimelineAligned: Boolean)
     private const val OUTPUT_RATE = 16_000
     private const val MAX_ENCODED_BYTES = 12 * 1024 * 1024L
     private const val MAX_SOURCE_BYTES = 200L * 1024L * 1024L
@@ -78,18 +78,22 @@ internal object VideoAudioDecoder {
         }
     }
 
-    internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? = decodeLock.withLock {
+    internal suspend fun decode(context: Context, uri: Uri, startMs: Long = 0, endMs: Long = 10_000): FloatArray? =
+        decodeWithTiming(context, uri, startMs, endMs)?.samples
+
+    internal suspend fun decodeWithTiming(context: Context, uri: Uri, startMs: Long, endMs: Long): DecodedAudio? = decodeLock.withLock {
         require(startMs >= 0 && endMs <= 120_500 && endMs - startMs in 1_000..30_000)
         decodeOne(context, uri, startMs * 1000, endMs * 1000)
     }
 
-    private suspend fun decodeOne(context: Context, uri: Uri, startUs: Long, endUs: Long): FloatArray? {
+    private suspend fun decodeOne(context: Context, uri: Uri, startUs: Long, endUs: Long): DecodedAudio? {
         val deadline = SystemClock.elapsedRealtime() + DECODE_DEADLINE_MS
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         var codecStarted = false
         val maxOutput = ((endUs - startUs) * OUTPUT_RATE / 1_000_000).toInt()
         val resampler = BoundedPcmResampler(maxOutput)
+        val timing = AudioTimestampAudit(startUs)
         try {
             coroutineContext.ensureActive()
             val sourceSize = context.contentResolver.openFileDescriptor(uri, "r")
@@ -191,6 +195,7 @@ internal object VideoAudioDecoder {
                                 val skip = (((startUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
                                 val keepUntil = (((endUs - outputInfo.presentationTimeUs).coerceAtLeast(0) * rate + 999_999) / 1_000_000).coerceAtMost(frames.toLong()).toInt()
                                 if (keepUntil > skip) {
+                                    timing.observe(outputInfo.presentationTimeUs, skip, keepUntil - skip, rate)
                                     buffer.position(start + skip * frameBytes)
                                     buffer.limit(start + keepUntil * frameBytes)
                                     resampler.add(buffer.slice().order(ByteOrder.LITTLE_ENDIAN), rate, channels, pcmEncoding)
@@ -203,7 +208,7 @@ internal object VideoAudioDecoder {
                     }
                 }
             }
-            return resampler.copyResult()
+            return DecodedAudio(resampler.copyResult(), timing.aligned)
         } finally {
             resampler.clear()
             if (codec != null) {
@@ -215,54 +220,5 @@ internal object VideoAudioDecoder {
     }
 }
 
-private class UnsupportedAudioException : Exception()
+internal class UnsupportedAudioException : Exception()
 private class DecodeTimeoutException : Exception()
-
-/** Small streaming resampler, preserving at most ten seconds of mono 16 kHz PCM. */
-internal class BoundedPcmResampler(maxSamples: Int = 160_000) {
-    private val output = FloatArray(maxSamples)
-    var size: Int = 0
-        private set
-    private var sourceFrame = 0L
-    private var previous = 0f
-
-    fun add(buffer: ByteBuffer, sampleRate: Int, channels: Int, encoding: Int) {
-        val bytesPerSample = when (encoding) {
-            AudioFormat.ENCODING_PCM_16BIT -> 2
-            AudioFormat.ENCODING_PCM_FLOAT -> 4
-            else -> throw UnsupportedAudioException()
-        }
-        val frameBytes = bytesPerSample * channels
-        if (buffer.remaining() % frameBytes != 0) throw UnsupportedAudioException()
-        while (buffer.remaining() >= frameBytes && size < output.size) {
-            var value = 0f
-            repeat(channels) {
-                value += if (encoding == AudioFormat.ENCODING_PCM_16BIT)
-                    buffer.short / 32768f else buffer.float
-            }
-            value = (value / channels).coerceIn(-1f, 1f)
-            if (!value.isFinite()) throw UnsupportedAudioException()
-            if (sourceFrame == 0L) {
-                output[size++] = value
-            } else {
-                // Interpolate at destination sample positions across each source frame pair.
-                while (size < output.size && size.toLong() * sampleRate <= sourceFrame * 16_000L) {
-                    val position = size.toLong() * sampleRate - (sourceFrame - 1) * 16_000L
-                    val fraction = position.toFloat() / 16_000f
-                    output[size++] = previous + (value - previous) * fraction
-                }
-            }
-            previous = value
-            sourceFrame++
-        }
-    }
-
-    fun copyResult(): FloatArray = output.copyOf(size).also { output.fill(0f) }
-
-    fun clear() {
-        output.fill(0f)
-        size = 0
-        sourceFrame = 0L
-        previous = 0f
-    }
-}

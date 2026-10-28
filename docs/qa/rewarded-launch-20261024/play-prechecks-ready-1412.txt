@@ -1,0 +1,89 @@
+Browser tab: 7, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+0 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				8 container 홈
+					9 button 홈
+						10 text 홈
+				11 container 계정 관리
+					12 button 계정 관리
+						13 text 계정 관리
+				14 container 아가톡 - 지금 내 기분이 그래
+					15 pop up button 아가톡 - 지금 내 기분이 그래
+				16 container 대시보드
+					17 button 대시보드
+						18 text 대시보드
+				19 container 통계
+					20 button 통계
+						21 text 통계
+				22 container 게시 개요
+					23 button 게시 개요
+						24 text 게시 개요
+				25 container Google Play로 보호됨
+					26 button Google Play로 보호됨
+						27 text Google Play로 보호됨
+				28 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					29 button 테스트 및 출시
+						30 text 테스트 및 출시
+				31 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					32 button 모니터링 및 개선
+						33 text 모니터링 및 개선
+				34 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					35 button 사용자 늘리기
+						36 text 사용자 늘리기
+				37 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					38 button Play를 통한 수익 창출
+						39 text Play를 통한 수익 창출
+			40 container main-content
+				41 container
+					42 heading 게시 개요, Value: 1
+						43 text 게시 개요
+					44 container
+						45 text 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+						46 button 게시 개요에 관한 세부정보 더보기
+					47 pop up button (collapsed) 관리형 게시가 사용 중지됨, ID: a2A51B340-1200-4782-ABA8-5534A55C82C7--6, Secondary Actions: Expand
+					48 text 최근 게시일: 2026년 10월 24일
+					49 link Description: 제출 활동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					50 heading 변경사항이 아직 검토를 위해 제출되지 않음, Value: 2
+						51 text 변경사항이 아직 검토를 위해 제출되지 않음
+					52 button (collapsed) Description: "변경사항이 아직 검토를 위해 제출되지 않음"에 대한 추가 정보, Secondary Actions: Expand
+					53 button 검토를 위해 변경사항 1개 제출
+						54 text 검토를 위해 변경사항 1개 제출
+					55 button (expanded) Description: 콘텐츠 숨기기: 변경사항이 아직 검토를 위해 제출되지 않음, Secondary Actions: Collapse
+					56 text 이제 검토를 위해 변경사항을 전송할 수 있습니다. 앱을 검토하는 과정에서 추가 문제가 발견될 수도 있습니다.
+					57 link Description: 검토를 위해 변경사항을 전송하기 전에 Google에서 문제를 감지하기 위해 실행하는 자동 검사에 대해 자세히 알아보려면 고객센터로 이동하세요., Value: support.google.com/googleplay/android-developer/answer/14807773
+					58 table 변경사항
+						59 row 변경된 항목 설명
+							60 cell
+								61 text 변경된 항목
+							62 cell
+								63 text 설명
+							64 cell
+						65 row 프로덕션 button
+							66 cell
+								67 text 프로덕션
+							68 button button
+								69 container button
+									70 text 나중을 위해 저장
+						71 row 0.5.27 (41) - first production release 전체 출시 시작 추가 작업
+							72 cell
+								73 text 0.5.27 (41) - first production release
+							74 cell
+								75 text 전체 출시 시작
+							76 cell
+								77 list 추가 작업
+									78 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+				79 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				80 link Description: 상태 대시보드, Value: status.play.google.com/
+				81 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				82 text © 2026 Google
+				83 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				84 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				85 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

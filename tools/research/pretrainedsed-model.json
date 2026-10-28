@@ -1,0 +1,40 @@
+{
+  "repo": "fschmid56/PretrainedSED",
+  "revision": "1aa47e482f7e89904cba2338999345025d8b4e36",
+  "source_files": {
+    "LICENSE": "399acc6d903cfd65a6cd5baba6a99af3ee534d79161b07854c1a6ffeab3dc88b",
+    "README.md": "b6f9101fcad76e50a6a5d564198fa52a1199bb6c803ee48743fd10c0d1897fe5",
+    "config.py": "10e4012076a9b884d1222c9b199b8bbd7a916775d46d1c2425c264d12cebe683",
+    "inference.py": "8c918e9aff94243d3c189b18dbb056044b52457274f1689fffc718c904c4502a",
+    "requirements.txt": "0e40e4bb65d0d57dfe055a084f8e795bab626a7ce646ef5434518afde43f850e",
+    "data_util/audioset_classes.py": "771adb63768b349171a1668b4b0c2f932f6db1b21e10450c7e9136c0397e076f",
+    "models/prediction_wrapper.py": "53f37f7870a85e64242d07dd087ffb4c72a8a8413d43a593ab46bba85b3983eb",
+    "models/seq_models.py": "d7ac2ab967ce65e3dad7dd3cf717163a107e8cc0b57bdab0d775a72f075ca667",
+    "models/transformer_wrapper.py": "8ca7284475e47dc00a5f476bd8d937400e35c95ae3164b8fd9111505c4a4dee8",
+    "models/frame_passt/preprocess.py": "1ac324f812566924ab52879077186dcaffdc8a4062ee186153be48e99b658db0",
+    "models/frame_mn/Frame_MN_wrapper.py": "c9f9be29be6cb5dfb94b03a0cb95a22c35519aaefabf913fdebc0e3fc2f40d77",
+    "models/frame_mn/model.py": "6c316eab1744c3a6d45537532bd4dfc91718f7132f1de42e79a922c8c5b48077",
+    "models/frame_mn/block_types.py": "1dfa5636aadb209eeaa7e412d5fc422bfefe230b4b30f49a14fe11776eab825c",
+    "models/frame_mn/utils.py": "b952d15279cf2fb21658e6916ce23e00e3338187564b4ad9c635a10dd261aac5"
+  },
+  "weight": {
+    "name": "frame_mn10_strong_1.pt",
+    "url": "https://github.com/fschmid56/PretrainedSED/releases/download/v0.0.1/frame_mn10_strong_1.pt",
+    "size": 15537114,
+    "sha256": "4a0fe320d5369987b772394c51881fb20a602967e6842f72f3e5c8181065ece7",
+    "asset_id": 226877789
+  },
+  "num_classes": 447,
+  "parameters": 3830798,
+  "state_keys": 312,
+  "embedding_dim": 960,
+  "sequence_steps": 250,
+  "sample_rate_hz": 16000,
+  "python_version": "3.13.14",
+  "runtime": {
+    "torch": "2.11.0+cpu",
+    "torchvision": "0.26.0+cpu",
+    "torchaudio": "2.11.0+cpu",
+    "numpy": "2.5.2"
+  }
+}

@@ -24,7 +24,7 @@
 
 `PublicAudioProbeTest`는 기본 전체 실행에서 조건skip한다. 권리를 확인한 로컬 PCM자료를 명시적으로 준비한 뒤 `-e public_audio_probe true -e class com.moa.babylanguage.PublicAudioProbeTest`로 별도 실행한다. 없는 사건은 미실행으로 보고하며 측정 도구의 성공을 분류 성공으로 해석하지 않는다. [출처/절차/한계](../../docs/research/20261001-public-audio-probes.md).
 
-0.5.3부터 opt-in PCM은 앱 내부 `files/qa-public-audio`를 사용한다(ADB가 만든 external 폴더의 소유권 문제 회피). `sound_probe.py --corpus <manifest.json+f32폴더> --install-app`은 현재 APK의 실제 설치 해시와 fixture 해시를 확인하고 주입한다. 소스 라벨 불일치는 보고서에 남으며 `--strict`이면 계측 실패로도 반환한다. 일반 모드의 명령 성공은 측정 완료일 뿐 정확도 통과가 아니다. [22개 측정·필터·회귀](../../docs/qa/sound-quality-0.5.3/README.md).
+opt-in PCM은 앱 내부 `files/qa-public-audio/<run_id>`를 사용한다. `sound_probe.py --corpus <manifest.json+f32폴더> --install-app`은 현재 APK의 설치 해시와 1~20초 mono16kHz float32le 입력의 길이·진폭·해시, 장치 수신 hash/구간/run ID를 확인한다. host 증거도 `sound-probe-<run_id>`에 별도로 남긴다. 계측·모델 실행 실패와 이전 결과 재사용은 성공 측정으로 세지 않는다. 소스 라벨 불일치는 보고서에 남으며 `--strict`이면 실패로 반환한다. 일반 모드의 명령 성공은 측정 완료일 뿐 정확도 통과가 아니다. 기존 corpus 생성기의 baseline 길이는 유지한다. [최신 20초 도구 검증](../../docs/qa/ondevice-av-generation/PUBLIC-AUDIO-20S-QA.md), [기존 22개 측정·필터·회귀](../../docs/qa/sound-quality-0.5.3/README.md).
 
 # Android 통합 QA 재현 도구
 

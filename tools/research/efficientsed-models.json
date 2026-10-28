@@ -1,0 +1,52 @@
+{
+  "repo": "theMoro/EfficientSED",
+  "revision": "e3449bfd1f4922b81d82410ed842653f462bfca8",
+  "source_files": {
+    "LICENSE": "399acc6d903cfd65a6cd5baba6a99af3ee534d79161b07854c1a6ffeab3dc88b",
+    "README.md": "9462bdfb591bbcf81961ee0c2423c014e296180562e662e0bf0031da45eeae18",
+    "config.py": "823dc393386ec47d326d4895bbc2585909dc0a44493aa2bf8784260e62264d8a",
+    "data_util/audioset_classes.py": "771adb63768b349171a1668b4b0c2f932f6db1b21e10450c7e9136c0397e076f",
+    "inference.py": "d7df6e8d3f5c75e9e39769decf81fa1b30192897c5d75d47b70c1d3e49722f74",
+    "models/efficient_cnns/fmn/block_types.py": "cefd12c6fd2c708f3c81c8ea68aa1427b10e9dee180a5bbb05a50c63add5fef7",
+    "models/efficient_cnns/fmn/fmn_wrapper.py": "17e2390aa6e8fd864d41dc1292e27008fe1e404bef5aa0ca48326beb0ea241b3",
+    "models/efficient_cnns/fmn/model.py": "d313e357565f9e21111796ef9ee79a0b272bc823301f5a8f141fc5ea0393a5db",
+    "models/efficient_cnns/fmn/utils.py": "b3d0b37803d923aa2fd46996f9c4e0d2b7765c94130821db3bce379bc0766f32",
+    "models/prediction_wrapper.py": "024e592bdcfb9862012ce7f67b3860b7fa3c3e93de45054024911414608c6b12",
+    "models/transformers/frame_passt/preprocess.py": "1ac324f812566924ab52879077186dcaffdc8a4062ee186153be48e99b658db0",
+    "models/transformers/transformer_wrapper.py": "8ca7284475e47dc00a5f476bd8d937400e35c95ae3164b8fd9111505c4a4dee8",
+    "models/sequence_models/helper.py": "5106959c7e149b7362e9a65cbd1a22d456f13fb175cdc9628583bfefc2c69312",
+    "models/sequence_models/roformer/attention.py": "c735b0ed2a32641be2936d146c671a853dc5f710668bc360de1a15e00f78ffa9",
+    "models/sequence_models/roformer/transformer_block.py": "f8d67366b4bb889bb166d5126d19f8883affb7e162639a0755e3e9065303ac88",
+    "requirements.txt": "89590c4c399024ba2615207e84cb7674d6326612ddc26ce7a02a1e5277efa036"
+  },
+  "weights": [
+    {
+      "name": "fmn04_strong.pt",
+      "url": "https://github.com/theMoro/EfficientSED/releases/download/v0.0.1/fmn04_strong.pt",
+      "size": 3600026,
+      "sha256": "f1b0b772a00c349f0f6ed5b570c91ab229aef53d9a0fe8bc66e6b9b9d3351f1b",
+      "asset_id": 242942866
+    },
+    {
+      "name": "fmn06_strong.pt",
+      "url": "https://github.com/theMoro/EfficientSED/releases/download/v0.0.1/fmn06_strong.pt",
+      "size": 6637146,
+      "sha256": "a8dca404451b23a99f60b08ff16df286c8a7bd1a2ecfc901ac8ad1df0f296c5b",
+      "asset_id": 242942899
+    },
+    {
+      "name": "fmn10+tf-256_advanced-kd-weak-strong.pt",
+      "url": "https://github.com/theMoro/EfficientSED/releases/download/v0.0.1/fmn10%2Btf-256_advanced-kd-weak-strong.pt",
+      "size": 20304913,
+      "sha256": "7d5326a485b742b323b33dd2bcb366606b614b2a5deaa5e452ef34ddedb9797c",
+      "asset_id": 242943016
+    }
+  ],
+  "runtime": {
+    "torch": "2.11.0+cpu",
+    "torchvision": "0.26.0+cpu",
+    "rotary_embedding_torch": "0.9.1",
+    "einops": "0.8.2",
+    "torchaudio": "2.11.0+cpu"
+  }
+}

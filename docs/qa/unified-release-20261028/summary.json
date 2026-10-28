@@ -1,0 +1,67 @@
+{
+  "version": "0.5.30",
+  "versionCode": 44,
+  "status": "final_qa_passed_play_submission24_in_review",
+  "aab_sha256": "c2fcb676d5c68c11b1a95bf8dac435e6328c420109f757532ff706f309801fb0",
+  "apk_sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+  "prior_feature_tests": {
+    "passed": 52,
+    "failed": 0,
+    "skipped": 0,
+    "source_report": "../expression-update-20261027/summary.json"
+  },
+  "lintRelease": {
+    "Warning": 22,
+    "Hint": 1,
+    "Error": 0
+  },
+  "models_native_equal": 26,
+  "release_test_flags": false,
+  "real_invitation_registration_restart_removal": "pass",
+  "actual_play_purchase_tested": false,
+  "actual_play_update_notice_tested": false,
+  "live_admob_verified": false,
+  "real_phone_used": false,
+  "record_preservation": {
+    "path": "42 -> 43 -> 44, same signing certificate",
+    "status": "pass",
+    "mp4_sha256": "7e1685242c1c1ab05bac5af875bfd998fe1efcdbbf5032c0d4197f56314325d2"
+  },
+  "store_screens": 4,
+  "store_feature_graphic": "actual UI composition",
+  "screens_generated_by_ai": false,
+  "store_crop_labels": true,
+  "rejected_candidate": {
+    "code": 43,
+    "review_submitted": false,
+    "provided": false,
+    "draft_removed": true,
+    "reason": "missing /verify path and community URL"
+  },
+  "play_production_release_id": 4,
+  "automation_created": false,
+  "cleanup": {
+    "owned_qa_app_uninstalled": true,
+    "owned_external_fixtures_and_xml_removed": true,
+    "owned_emulator_stopped": true,
+    "adb_devices_after_cleanup": 0,
+    "rejected43_package_bytes_removed": 421410922,
+    "preserved": "final44, previous42, models, keys, user records, shared caches and AVD",
+    "prior_policy_blocked_deletions_not_retried": true,
+    "free_bytes": {
+      "C": 67395883008,
+      "D": 107744854016
+    }
+  },
+  "play": {
+    "submission_id": 24,
+    "release_id": 4,
+    "submitted_at_kst": "2026-10-28T01:58:00+09:00",
+    "console_status": "검토 중",
+    "pre_review_checks": "running at submission",
+    "public_availability_verified": false,
+    "managed_publishing": false,
+    "previous_submission23": "cancelled by Google combined-review restart",
+    "changes": 5
+  }
+}

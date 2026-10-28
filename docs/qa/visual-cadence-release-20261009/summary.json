@@ -1,0 +1,152 @@
+{
+  "version_name": "0.5.22-beta",
+  "version_code": 36,
+  "visual_interval_ms": 200,
+  "scope": "Denser bounded visual observation; no audio rejection recovery or general intent accuracy claim",
+  "physical_device_performance_measured": false,
+  "general_accuracy_validated": false,
+  "prior_candidate_qa": "visual-cadence-20261009.md",
+  "package_status": "pass",
+  "artifacts": {
+    "beta": {
+      "Agattok-0.5.22-beta-code36.apk": {
+        "bytes": 255163375,
+        "sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4"
+      },
+      "Agattok-0.5.22-beta-code36.aab": {
+        "bytes": 160196569,
+        "sha256": "f160674fa45947adaa8adceefefb4777d8dca0264e21fcc645a5d463a0a00ab3"
+      }
+    },
+    "release": {
+      "Agattok-0.5.22-release-code36.apk": {
+        "bytes": 75381227,
+        "sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96"
+      },
+      "Agattok-0.5.22-release-code36.aab": {
+        "bytes": 46720778,
+        "sha256": "e4f44e67809b8ea844a17ec3b92ad22777fb75d19eec276d4cce9bd10d6c82b2"
+      }
+    }
+  },
+  "face_load": [
+    {
+      "id": "face10",
+      "elapsed_ms": 14549.0578,
+      "observations": 50,
+      "single_face": 50,
+      "visual_ms": 6461.3668,
+      "max_stage_pss_bytes": 254825472,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "face20",
+      "elapsed_ms": 19950.7181,
+      "observations": 100,
+      "single_face": 99,
+      "visual_ms": 13053.4314,
+      "max_stage_pss_bytes": 260823040,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "repeat20",
+      "elapsed_ms": 17425.5781,
+      "observations": 100,
+      "single_face": 99,
+      "visual_ms": 11292.6921,
+      "max_stage_pss_bytes": 258993152,
+      "timeline_ordered": true,
+      "covers_selection": true
+    }
+  ],
+  "face_input_is_reencoded_repeated_10s": true,
+  "signed_upgrade": {
+    "status": "pass",
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true
+  },
+  "signed_smoke": {
+    "status": "pass_with_preserved_partial_failure_and_scoped_resume",
+    "partial_status": "failed",
+    "remaining_status": "pass",
+    "analysis_ui_seconds": 5.649,
+    "beta_actual_av": true,
+    "media_export_preserved_on_release": true,
+    "visual_pdf_relocked": true,
+    "release_free_capture_screen_and_labels": true,
+    "new_capture_duration_limit_test": false
+  },
+  "failures": [
+    {
+      "stage": "face-probe01 pre-install",
+      "reason": "pm path absent package exit1 treated as execution error",
+      "product_defect": false
+    },
+    {
+      "stage": "signed-smoke01 final capture",
+      "reason": "QA camera/microphone permissions missing; permission screen correctly shown",
+      "product_defect": false
+    }
+  ],
+  "cleanup": {
+    "qa_packages_removed": true,
+    "emulator_shutdown_requested": true,
+    "shared_avd_preserved": true,
+    "intermediate_build_delete_status": "policy_blocked_user_confirmation_pending",
+    "intermediate_build_bytes": 2383214379
+  },
+  "play": {
+    "status": "available_to_selected_testers",
+    "availability_verified": true,
+    "last_available_code": 36,
+    "review_requested_at": "2026-10-09T18:56:00+09:00",
+    "release_id": 16,
+    "release_name": "0.5.22-beta (36) - visual cadence",
+    "supported_device_loss": 0,
+    "blocking_errors": 0,
+    "warnings": 2,
+    "warning_types": [
+      "deobfuscation_file_absent",
+      "native_debug_symbols_absent"
+    ],
+    "automation_id": "33",
+    "automation_status": "PAUSED",
+    "evidence": [
+      "play-preflight.txt",
+      "play-submitted.txt",
+      "play-submitted.png"
+    ],
+    "availability_verified_at": "2026-10-09T19:27:00+09:00",
+    "published_at": "2026-10-09T19:24:00+09:00",
+    "approval_evidence": [
+      "play-available.txt",
+      "play-available.png",
+      "play-publishing-complete.txt",
+      "play-release-complete.txt"
+    ],
+    "availability_evidence_commit": "069cc7bd4a111b0659b1eb06c5539647d7c762e4",
+    "availability_evidence_push_sha_matched": true
+  },
+  "qa_lifecycle": {
+    "status": "blocked_cleanup_policy",
+    "iteration": 3,
+    "product_verification_passed": true,
+    "state_cleared_and_absence_verified": true,
+    "next_step": "Await explicit path confirmation for app/build cleanup; do not bypass policy rejection"
+  },
+  "completion_audit": {
+    "alpha_update_available": true,
+    "overall_recognition_goal_completed": false,
+    "remaining": [
+      "physical_device_performance",
+      "audio_rejection_and_visual_linkage",
+      "broader_general_accuracy_and_intent_validation",
+      "policy_blocked_build_cleanup"
+    ],
+    "no_new_build_or_adb": true,
+    "tester_installation_or_continuous_14_days_verified": false
+  }
+}

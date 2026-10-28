@@ -1,0 +1,108 @@
+Browser tab: 1, Title: "제출 세부정보 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/24/details".
+1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/24/details
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				275 container 홈
+					276 button 홈
+						277 text 홈
+				278 container 계정 관리
+					279 button 계정 관리
+						280 text 계정 관리
+				281 container 아가톡 - 지금 내 기분이 그래
+					282 pop up button 아가톡 - 지금 내 기분이 그래
+				283 container 대시보드
+					284 button 대시보드
+						285 text 대시보드
+				286 container 통계
+					287 button 통계
+						288 text 통계
+				289 container 게시 개요
+					290 button 게시 개요
+						291 text 게시 개요
+				292 container Google Play로 보호됨
+					293 button Google Play로 보호됨
+						294 text Google Play로 보호됨
+				295 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					296 button 테스트 및 출시
+						297 text 테스트 및 출시
+				298 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					299 button 모니터링 및 개선
+						300 text 모니터링 및 개선
+				301 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					302 button 사용자 늘리기
+						303 text 사용자 늘리기
+				320 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					321 button Play를 통한 수익 창출
+						322 text Play를 통한 수익 창출
+			57 container main-content
+				330 container
+					331 link Description: 제출 활동 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					332 heading 제출 24, Value: 1
+						333 text 제출 24
+					341 heading 변경사항 5개, Value: 2
+						342 text 변경사항 5개
+					343 table Changes
+						344 row 변경된 항목 설명
+							345 cell
+								346 text 변경된 항목
+							347 cell
+								348 text 설명
+						349 row 프로덕션
+							350 cell
+								351 text 프로덕션
+						352 row 0.5.30 (44) - codes expressions and update notice 전체 출시 시작
+							353 cell
+								354 text 0.5.30 (44) - codes expressions and update notice
+							355 cell
+								356 text 전체 출시 시작
+						357 row 스토어 등록정보
+							358 cell
+								359 text 스토어 등록정보
+						360 row 한국어 – ko-KR 기본 스토어 등록정보 간단한 설명을 '아기의 소리와 장면을 아가말 영상카드로 간직하고, 우리 아이 자랑에서 함께 나눠요.'(으)로 변경
+							361 cell
+								362 text 한국어 – ko-KR
+								363 text 기본 스토어 등록정보
+							364 cell
+								365 text 간단한 설명을 '아기의 소리와 장면을 아가말 영상카드로 간직하고, 우리 아이 자랑에서 함께 나눠요.'(으)로 변경
+						366 row 한국어 – ko-KR 기본 스토어 등록정보 전체 설명 변경
+							367 cell
+								368 text 한국어 – ko-KR
+								369 text 기본 스토어 등록정보
+							370 cell
+								371 text 전체 설명 변경
+						372 row 한국어 – ko-KR 기본 스토어 등록정보 휴대전화 스크린샷 변경
+							373 cell
+								374 text 한국어 – ko-KR
+								375 text 기본 스토어 등록정보
+							376 cell
+								377 text 휴대전화 스크린샷 변경
+						378 row 한국어 – ko-KR 기본 스토어 등록정보 그래픽 이미지 변경
+							379 cell
+								380 text 한국어 – ko-KR
+								381 text 기본 스토어 등록정보
+							382 cell
+								383 text 그래픽 이미지 변경
+					384 text 제출 ID
+					385 text 24
+					386 text 소스
+					387 text Play Console
+					388 text 변경사항 제출됨
+					389 text 10월 28, 2026, 1:58 오전
+					390 text 상태
+					391 text 검토 중
+					392 button 게시 개요로 이동
+						393 text 게시 개요로 이동
+				334 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				335 link Description: 상태 대시보드, Value: status.play.google.com/
+				336 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				337 text © 2026 Google
+				338 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				339 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				340 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/24/details

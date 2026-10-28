@@ -43,6 +43,36 @@ class GalleryMediaTests {
         buildSet { while (cursor.moveToNext()) add(cursor.getLong(0)) }
     }
     private fun record() = Observation(System.currentTimeMillis(), "옹알이", "0:00–0:02", "", "우리 아기 목소리도 들어봐요.")
+
+    @Test fun newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate() = runBlocking {
+        val source = File(context.cacheDir, "gallery-old-${UUID.randomUUID()}.mp4").also { files += it }
+        InstrumentationRegistry.getInstrumentation().context.assets.open("media-quadrants-old-date.mp4").use { input ->
+            source.outputStream().use { input.copyTo(it) }
+        }
+        val original = source.readBytes()
+        fun recordedAt(file: File): Long {
+            val reader = android.media.MediaMetadataRetriever()
+            return try {
+                reader.setDataSource(file.path)
+                val text = checkNotNull(reader.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DATE))
+                java.text.SimpleDateFormat("yyyyMMdd'T'HHmmss.SSSX", java.util.Locale.US).parse(text)!!.time
+            } finally { reader.release() }
+        }
+        assertEquals(1_577_836_800_000L, recordedAt(source))
+        val imported = CaptureFiles.inspect(context, Uri.fromFile(source), source, CaptureLimits.FULL)
+        for (captioned in listOf(true, false)) {
+            val began = System.currentTimeMillis() - 1_000
+            val output = (if (captioned) TranslatedMedia.render(context, imported, ClipRange(0, 2_000), record())
+                else TranslatedMedia.selectedVideo(context, imported, ClipRange(0, 2_000))).also { files += it }
+            assertTrue("New MP4 must carry its save date", recordedAt(output) in began..System.currentTimeMillis())
+            val saved = GalleryMedia.video(context, output, MemoryArtifacts.currentGeneration()).also { rows += it }
+            context.contentResolver.query(saved, arrayOf(MediaStore.MediaColumns.DATE_TAKEN), null, null, null)!!.use {
+                assertTrue(it.moveToFirst())
+                assertTrue("Gallery must list the new copy at its save date", it.getLong(0) in began..System.currentTimeMillis())
+            }
+        }
+        assertArrayEquals("Import must remain untouched", original, source.readBytes())
+    }
     private fun clip(): LocalClip {
         val file = File(context.cacheDir,"gallery-${UUID.randomUUID()}.mp4").also { files += it }
         InstrumentationRegistry.getInstrumentation().context.assets.open("media-quadrants.mp4").use { input -> file.outputStream().use { input.copyTo(it) } }

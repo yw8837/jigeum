@@ -1,0 +1,87 @@
+Browser tab: 7, Title: "대시보드 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-dashboard".
+1 AXWebArea 대시보드 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-dashboard
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+				32 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					33 button 모니터링 및 개선
+						34 text 모니터링 및 개선
+				35 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					36 button 사용자 늘리기
+						37 text 사용자 늘리기
+				38 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					39 button Play를 통한 수익 창출
+						40 text Play를 통한 수익 창출
+			41 container main-content
+				42 container
+					43 heading 대시보드, Value: 1
+						44 text 대시보드
+					45 container
+						46 text 앱 설정을 시작하세요.
+						47 button 대시보드에 관한 세부정보 더보기
+					48 image 아가톡 - 지금 내 기분이 그래
+					49 heading 아가톡 - 지금 내 기분이 그래, Value: 2
+						50 text 아가톡 - 지금 내 기분이 그래
+					51 link Description: 출시 개요 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/releases/overview
+					52 text com.moa.babylanguage
+					53 heading 프로덕션, Value: 3
+						54 text 프로덕션
+					55 text 비활성
+					56 button (collapsed) Description: 테스트 트랙 표시, Secondary Actions: Expand
+						57 text 테스트 트랙 표시
+					58 heading 앱 출시, Value: 2
+						59 text 앱 출시
+					60 heading Google Play에서 누구나 앱 테스트에 등록할 수 있도록 설정, Value: 3
+						61 text Google Play에서 누구나 앱 테스트에 등록할 수 있도록 설정
+					62 text 공개 테스트를 사용하면 누구나 Google Play에서 테스트에 참여할 수 있습니다. 사용자는 의견을 제공할 수 있지만, 이는 앱의 공개 평점에 영향을 주지 않습니다.
+					63 button (collapsed) Description: Google Play에서 누구나 앱 테스트에 등록할 수 있도록 설정 작업 보기, Secondary Actions: Expand
+						64 text 할 일 보기
+					65 heading 사전 등록을 통해 앱에 대한 기대감 높이기, Value: 3
+						66 text 사전 등록을 통해 앱에 대한 기대감 높이기
+					67 text 사전 등록을 사용하면 앱을 출시하기 전에 스토어 등록정보를 게시하여 앱에 관심이 있는 사용자가 미리 등록할 수 있습니다. 앱을 출시하면 사전 등록한 모든 사용자에게 앱 다운로드 알림이 전송됩니다.
+					68 button (collapsed) Description: 사전 등록을 통해 앱에 대한 기대감 높이기 작업 보기, Secondary Actions: Expand
+						69 text 할 일 보기
+					70 heading 버전 생성 및 게시, Value: 3
+						71 text 버전 생성 및 게시
+					72 text 앱을 프로덕션 트랙에 출시하여 실제 사용자를 대상으로 Google Play에 게시합니다.
+					73 container
+						74 text 축하합니다. 앱에 Google Play 프로덕션 액세스 권한이 부여되었습니다. 신청하신 Google Play 프로덕션 액세스 권한이 앱에 부여되었습니다. 프로덕션 트랙을 통해 Google Play에서 수십억 명의 사용자에게 앱을 제공할 수 있습니다. 이제 공개 테스트도 사용할 수 있습니다.
+						75 link Description: 테스트 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/9845334
+					76 button (collapsed) Description: 버전 생성 및 게시 작업 보기, Secondary Actions: Expand
+						77 text 할 일 보기
+				78 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				79 link Description: 상태 대시보드, Value: status.play.google.com/
+				80 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				81 text © 2026 Google
+				82 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				83 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				84 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 대시보드 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-dashboard

@@ -5,8 +5,42 @@ import org.junit.Test
 import kotlin.math.*
 
 class AudioCleanupTest {
+    @Test fun classifierWindowLevelUsesOnlyItsOwnSamplesAndKeepsThePaddedTailQuiet() {
+        val pcm = FloatArray(31_201) { if (it < 15_600) .006f else .4f }
+        val original = pcm.copyOf()
+        assertEquals(.006, AudioCleanup.classifierWindowRms(pcm, 0)!!, 1e-8)
+        assertEquals(.4, AudioCleanup.classifierWindowRms(pcm, 975)!!, 1e-7)
+        assertEquals(.4 / sqrt(15_600.0), AudioCleanup.classifierWindowRms(pcm, 1_950)!!, 1e-8)
+        assertArrayEquals(original, pcm, 0f)
+        for (at in listOf(-1L, 1_951L, Long.MAX_VALUE)) assertNull(AudioCleanup.classifierWindowRms(pcm, at))
+        assertNull(AudioCleanup.classifierWindowRms(floatArrayOf(Float.NaN), 0))
+        assertNull(AudioCleanup.classifierWindowRms(floatArrayOf(1.1f), 0))
+        assertNull(AudioCleanup.classifierWindowRms(FloatArray(0), 0))
+        assertNull(AudioCleanup.classifierWindowRms(FloatArray(480_001), 0))
+    }
+
     private fun tone(hz: Int, amplitude: Float = .1f) = FloatArray(48000) { amplitude*sin(2*PI*hz*it/16000).toFloat() }
     private fun rms(pcm: FloatArray) = sqrt(pcm.drop(1600).sumOf { it.toDouble()*it }/(pcm.size-1600))
+    @Test fun presenceScansEveryWindowIncludingTheFinalSampleWithoutChangingPcm() {
+        // Non-aligned location catches implementations which examine disjoint one-second blocks.
+        for (start in listOf(0, 8_137, 304_000)) {
+            val pcm = FloatArray(320_000)
+            for (i in start until start + 16_000) pcm[i] = .006f
+            val source = pcm.copyOf()
+            assertEquals(.006, AudioCleanup.strongestSecondRms(pcm), 1e-8)
+            assertArrayEquals(source, pcm, 0f)
+        }
+        val finalSample = FloatArray(16_001).also { it[it.lastIndex] = .1f }
+        assertEquals(.1 / sqrt(16_000.0), AudioCleanup.strongestSecondRms(finalSample), 1e-9)
+    }
+    @Test fun presenceHandlesShortSilenceAndRejectsInvalidPcm() {
+        assertEquals(.02, AudioCleanup.strongestSecondRms(FloatArray(400) { .02f }), 1e-8)
+        assertEquals(0.0, AudioCleanup.strongestSecondRms(FloatArray(320_000)), 0.0)
+        for (pcm in listOf(floatArrayOf(), FloatArray(480_001), floatArrayOf(Float.NaN),
+                floatArrayOf(Float.POSITIVE_INFINITY))) {
+            assertTrue(runCatching { AudioCleanup.strongestSecondRms(pcm) }.exceptionOrNull() is IllegalArgumentException)
+        }
+    }
     @Test fun removesDcAndAttenuatesRumbleWithoutMutatingInput() {
         val dc=FloatArray(48000){.3f}
         assertEquals(0.0,rms(AudioCleanup.filter(dc)),1e-7)

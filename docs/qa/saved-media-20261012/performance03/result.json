@@ -1,0 +1,28 @@
+{
+  "status": "fail",
+  "encoding_sha256_attempts": [
+    "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877"
+  ],
+  "retained_public_input": true,
+  "user_media_read": false,
+  "runner": {
+    "status": "fail",
+    "tests": null,
+    "passed_tests": 1,
+    "failed_tests": 1,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [
+      "Expected exactly one nonempty OK summary",
+      "Runner reported a failure or harness timeout",
+      "Discovered, started, completed and summary counts do not agree",
+      "One or more tests failed"
+    ],
+    "seconds": 18.99,
+    "exit": 0
+  },
+  "owned_device_input_and_report_removed": true
+}

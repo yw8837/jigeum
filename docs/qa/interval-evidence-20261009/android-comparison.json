@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "same_source_conditions": 53,
+  "existing_outputs_preserved": 26,
+  "new_partial_results": [
+    "laugh_babble",
+    "extra_254454"
+  ],
+  "negative_new_outputs": 0,
+  "model_observations_exact": true,
+  "general_accuracy_validated": false
+}

@@ -1,0 +1,12 @@
+JUnit version 4.13.2
+....E...........................................
+Time: 0.546
+There was 1 failure:
+1) malformedVisualsAndUnalignedAudioDoNotAuthorizeCoObservation(com.moa.babylanguage.IntervalEvidenceTest)
+org.junit.ComparisonFailure: expected:<AUDIO[]> but was:<AUDIO[_VISUAL]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.moa.babylanguage.IntervalEvidenceTest.malformedVisualsAndUnalignedAudioDoNotAuthorizeCoObservation(IntervalEvidenceTest.kt:109)
+
+FAILURES!!!
+Tests run: 47,  Failures: 1

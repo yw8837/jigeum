@@ -128,7 +128,9 @@ private enum class Page { HOME, CAPTURE, TIMELINE, GUIDE, PRIVACY, TERMS, ALBUM,
 class MainActivity : ComponentActivity() {
     private var stopCaptureOnBackground: (() -> Unit)? = null
     private var billing: BillingManager? = null
+    private var rewardedAds: RewardedAds? = null
     private var observationStore: ObservationStore? = null
+    private var updateNotice: PlayUpdateNotice? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,17 +139,23 @@ class MainActivity : ComponentActivity() {
         val store = ObservationStore(this).also { observationStore = it }
         val billingManager = BillingManager(this).also { billing = it }
         val accessBilling = PlayAccessBilling(billingManager)
+        val updates = PlayUpdateNotice(this).also { updateNotice = it }
+        val rewards: RewardAccess = if (BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST) NoRewardAccess
+            else RewardedAds(this).also { rewardedAds = it }
         setContent {
             var showTitle by rememberSaveable { mutableStateOf(savedInstanceState == null) }
             if (showTitle) AppTitleScreen { showTitle = false }
             else JigeumApp(this, store, accessBilling,
                 testDistribution = BuildConfig.FULL_ACCESS_PREVIEW || BuildConfig.FULL_ACCESS_CLOSED_TEST,
+                rewardAccess = rewards, updateNotice = updates,
                 registerBackgroundStop = { stopCaptureOnBackground = it })
         }
     }
-    override fun onResume() { super.onResume(); billing?.refresh() }
+    override fun onResume() { super.onResume(); billing?.refresh(); updateNotice?.check() }
     override fun onDestroy() {
         billing?.close()
+        updateNotice?.close()
+        rewardedAds?.close()
         observationStore?.let { store -> kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch { store.close() } }
         observationStore = null
         super.onDestroy()
@@ -165,12 +173,16 @@ internal fun JigeumApp(
     captureSeed: LocalClip? = null,
     artifactExporter: ArtifactExporter = DeviceArtifactExporter,
     recordImporter: RecordImporter = DeviceRecordImporter,
-    testDistribution: Boolean = false
+    testDistribution: Boolean = false,
+    rewardAccess: RewardAccess = NoRewardAccess,
+    updateNotice: PlayUpdateNotice? = null
 ) {
     var page by rememberSaveable { mutableStateOf(Page.HOME) }
     var observations by remember { mutableStateOf(emptyList<Observation>()) }
     var mediaIds by remember { mutableStateOf(emptySet<Long>()) }
     var viewingMediaId by rememberSaveable { mutableLongStateOf(-1L) }
+    var captureSaveReceipt by remember { mutableStateOf<CaptureSaveReceipt?>(null) }
+    var captureGalleryReceipt by remember { mutableStateOf<CaptureGalleryReceipt?>(null) }
     var ageBand by remember { mutableStateOf("") }
     var loaded by remember { mutableStateOf(false) }
     var loadError by remember { mutableStateOf<String?>(null) }
@@ -186,6 +198,8 @@ internal fun JigeumApp(
     DisposableEffect(access) { onDispose { access.invalidateMedia() } }
     val screenState = rememberSaveableStateHolder()
     val billingState by billingManager.state.collectAsState()
+    val rewardState by rewardAccess.state.collectAsState()
+    var pdfReward by remember { mutableStateOf<RewardLease?>(null) }
     val scope = rememberCoroutineScope()
     val snacks = remember { SnackbarHostState() }
     val feedback = remember(snacks, scope) { LatestFeedback(snacks, scope) }
@@ -202,6 +216,7 @@ internal fun JigeumApp(
         billingManager.refresh()
     }
     fun closePass() {
+        rewardAccess.cancelAd()
         page = paywallReturn
         requestedFeature = null
         paywallNotice = null
@@ -261,6 +276,10 @@ internal fun JigeumApp(
     MaterialTheme(colorScheme = lightColorScheme(primary = Ink, onPrimary = White,
         surface = Cream, onSurface = Ink, secondaryContainer = PaleSage, onSecondaryContainer = Ink,
         background = Cream, onBackground = Ink, outline = Muted)) {
+        StartupUpdatePrompt(updateNotice,
+            eligible = loaded && page == Page.HOME && !busy && !sharing && viewingMediaId < 0,
+            onUpdate = { PlayUpdateNotice.openStore(activity) },
+            onFailure = { notify("스토어를 열지 못했어요. Play 스토어에서 아가톡을 찾아 업데이트해 주세요.") })
         observations.find { it.id == viewingMediaId }?.let { record ->
             RecordMediaViewer(record, onClose = { viewingMediaId = -1L }, onMessage = ::notify)
         }
@@ -284,16 +303,50 @@ internal fun JigeumApp(
                                 } else when (page) {
                                     Page.HOME -> HomeScreen(observations,
                                         testDistribution = testDistribution, premium = billingState.isPremium,
-                                        onRecord = { page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
+                                        onRecord = { captureGalleryReceipt = null; page = Page.CAPTURE }, onTimeline = { page = Page.TIMELINE },
+                                        onCommunity = if (CommunitySharing.available) ({ CommunitySharing.open(activity) }) else null,
                                         onPremium = { showPass(null, Page.HOME) },
                                         onAbout = { aboutReturn = Page.HOME; page = Page.ABOUT })
                                     Page.CAPTURE -> CaptureFlow(
                                         authorizeVisual = { access.canUse(AppFeature.VISUAL_ANALYSIS) },
                                         onBack = { page = Page.HOME }, saving = busy,
-                                        analyzer = captureAnalyzer, initialClip = captureSeed,
+                                        analyzer = captureAnalyzer, initialClip = captureSeed, rewardAccess = rewardAccess,
                                         testDistribution = testDistribution,
+                                        saveReceipt = captureSaveReceipt,
+                                        galleryReceipt = captureGalleryReceipt,
+                                        onOpenGallery = { receipt ->
+                                            if (!busy && !sharing) scope.launch {
+                                                try { GalleryMedia.open(activity, receipt.uri, receipt.video) }
+                                                catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                                                catch (_: Exception) { notify("저장한 파일을 열지 못했어요. 갤러리의 아가톡 앨범에서 확인해 주세요.") }
+                                            }
+                                        },
+                                        onViewSaved = { if (!busy && !sharing) viewingMediaId = it },
+                                        onSaveVideo = { clip, range ->
+                                            if (!busy && !sharing) {
+                                                val generation = MemoryArtifacts.currentGeneration()
+                                                update({
+                                                    var rendered: java.io.File? = null
+                                                    try {
+                                                        rendered = TranslatedMedia.selectedVideo(activity, clip, range)
+                                                        GalleryMedia.video(activity, rendered, generation)
+                                                    } finally { withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() } }
+                                                }, { notify("선택한 구간을 자막 없이 아가톡 앨범에 저장했어요.") })
+                                            }
+                                        },
+                                        onCommunity = if (CommunitySharing.available) ({ result, phrase, clip, range ->
+                                            if (!busy && !sharing) update({
+                                                val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase,
+                                                    basis = ExpressionBasis.forPhrase(result.basis, result.phrase, phrase))
+                                                val prepared = CommunitySharing.prepare(activity, record, clip, range)
+                                                try { CommunitySharing.open(activity, prepared) }
+                                                catch (error: Exception) { withContext(Dispatchers.IO) { prepared.delete() }; throw error }
+                                            })
+                                        }) else null,
                                         onGallery = { result, phrase, clip, range, video ->
                                             if (!busy && !sharing) {
+                                                captureGalleryReceipt = null
+                                                var savedUri: Uri? = null
                                                 val generation = MemoryArtifacts.currentGeneration()
                                                 update({
                                                     val record = Observation(System.currentTimeMillis(), result.sound, result.range, "", phrase,
@@ -303,19 +356,23 @@ internal fun JigeumApp(
                                                         var rendered: java.io.File? = null
                                                         try {
                                                             rendered = TranslatedMedia.render(activity, clip, range, record)
-                                                            GalleryMedia.video(activity, rendered, generation)
+                                                            savedUri = GalleryMedia.video(activity, rendered, generation)
                                                         } finally { withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() } }
                                                     } else {
                                                         var bitmap: android.graphics.Bitmap? = null
                                                         try {
                                                             withContext(Dispatchers.IO) { bitmap = MomentCardRenderer.frame(activity, record, clip, range) }
-                                                            GalleryMedia.image(activity, checkNotNull(bitmap), generation)
+                                                            savedUri = GalleryMedia.image(activity, checkNotNull(bitmap), generation)
                                                         } finally { bitmap?.recycle() }
                                                     }
-                                                }, { notify(if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
+                                                }, {
+                                                    captureGalleryReceipt = savedUri?.let { CaptureGalleryReceipt(it, clip?.uri, range, phrase, video) }
+                                                    notify(if (video && clip?.hasVideo == false) "아가톡 앨범에 소리와 아가말 카드를 저장했어요."
+                                                    else if (video) "아가톡 앨범에 영상 카드를 저장했어요." else "아가톡 앨범에 카드 이미지를 저장했어요.") })
                                             }
                                         },
                                         onSaveWithMedia = { result, phrase, note, clip, range ->
+                                            var receipt: CaptureSaveReceipt? = null
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
                                                 var newId = System.currentTimeMillis()
@@ -327,12 +384,14 @@ internal fun JigeumApp(
                                                 try {
                                                     rendered = TranslatedMedia.render(activity, clip, range, record)
                                                     store.save(record, rendered)
+                                                    receipt = CaptureSaveReceipt(newId, phrase, note, true)
                                                 } finally {
                                                     withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { rendered?.delete() }
                                                 }
-                                            }, { page = Page.TIMELINE; notify("그때의 장면과 아기말을 함께 남겼어요.") })
+                                            }, { captureSaveReceipt = receipt; notify(if (clip.hasVideo) "장면과 아기말을 앱 기록에 저장했어요." else "소리와 아기말을 앱 기록에 저장했어요.") })
                                         },
                                         onSave = { result, phrase, note ->
+                                            var receipt: CaptureSaveReceipt? = null
                                             if (!busy) update({
                                                 val usedIds = observations.mapTo(HashSet()) { it.id }
                                                 var newId = System.currentTimeMillis()
@@ -340,7 +399,8 @@ internal fun JigeumApp(
                                                 store.save(Observation(newId, result.sound, result.range, note, phrase,
                                                     if (result.visual) "VIDEO_FILE" else "AUDIO", result.sound,
                                                     ExpressionBasis.forPhrase(result.basis, result.phrase, phrase)))
-                                            }, { page = Page.TIMELINE; notify("우리 아이의 한마디를 남겼어요.") })
+                                                receipt = CaptureSaveReceipt(newId, phrase, note, false)
+                                            }, { captureSaveReceipt = receipt; notify("아기말을 앱 기록에 저장했어요.") })
                                         },
                                         passContent = { close ->
                                             var policy by remember { mutableStateOf("") }
@@ -352,8 +412,10 @@ internal fun JigeumApp(
                                                     onContinue = close, freeContinuationLabel = "같은 구간 소리로 계속하기", onFree = close,
                                                     onBack = close, onPrivacy = { policy = "privacy" }, onTerms = { policy = "terms" },
                                                     onReviewActivate = billingManager::activateReviewAccess,
+                                                    onCodeActivate = billingManager::activateAccessCode,
+                                                    onCodeDeactivate = billingManager::deactivateAccessCode,
                                                     onReviewDeactivate = billingManager::deactivateReviewAccess,
-                                                    testDistribution = testDistribution)
+                                                    testDistribution = testDistribution, rewardAccess = rewardAccess)
                                             }
                                         })
                                     Page.TIMELINE -> TimelineScreen(observations, mediaIds,
@@ -406,16 +468,26 @@ internal fun JigeumApp(
                                     Page.TERMS -> ServiceTermsScreen { goBack() }
                                     Page.ABOUT -> AnalysisAboutScreen(onBack = ::goBack)
                                     Page.ALBUM -> screenState.SaveableStateProvider("album") {
-                                        AlbumScreen(observations, testDistribution || billingState.isPremium,
+                                        AlbumScreen(observations, testDistribution || billingState.isPremium || RewardKind.PDF in rewardState.ready,
                                             onPremium = { showPass(AppFeature.PDF, Page.ALBUM) }, onMessage = ::notify,
                                             operationScope = scope, exporting = sharing || busy, onExportingChange = { sharing = it },
                                             artifactExporter = artifactExporter,
+                                            onExportFinished = { success ->
+                                                pdfReward?.let { lease ->
+                                                    if (rewardAccess.finish(lease, success)) pdfReward = null
+                                                    else notify("광고 이용 기회를 보관하지 못했어요. 앱을 다시 열어 확인해 주세요.")
+                                                }
+                                            },
                                             authorizeExport = { selectedRecords ->
                                                 if (busy || sharing) false
                                                 else if (selectedRecords != observations) {
                                                     notify("기록이 변경되어 내보내기를 중단했어요. 다시 선택해 주세요."); false
                                                 }
                                                 else if (access.canUse(AppFeature.PDF)) true
+                                                else if (rewardAccess.available(RewardKind.PDF)) {
+                                                    pdfReward = rewardAccess.reserve(RewardKind.PDF)
+                                                    pdfReward != null
+                                                }
                                                 else { showPass(AppFeature.PDF, Page.ALBUM, "PDF를 만들기 전에 이용권을 다시 확인해 주세요."); false }
                                             })
                                     }
@@ -424,18 +496,21 @@ internal fun JigeumApp(
                                         onRestore = billingManager::restore, onRetry = billingManager::refresh,
                                         requestedFeature = requestedFeature, notice = paywallNotice,
                                         onContinue = {
+                                            rewardAccess.cancelAd()
                                             val feature = requestedFeature
                                             if (feature == null) closePass()
                                             else if (feature == AppFeature.PDF) page = Page.ALBUM else page = Page.CAPTURE
                                         },
                                         freeContinuationLabel = "무료로 촬영·소리 번역하기",
-                                        onFree = { requestedFeature = null; paywallNotice = null; page = Page.CAPTURE },
+                                        onFree = { rewardAccess.cancelAd(); requestedFeature = null; paywallNotice = null; page = Page.CAPTURE },
                                         onBack = ::closePass,
                                         onPrivacy = { privacyReturn = Page.PAYWALL; page = Page.PRIVACY },
                                         onTerms = { privacyReturn = Page.PAYWALL; page = Page.TERMS },
                                         onReviewActivate = billingManager::activateReviewAccess,
+                                                    onCodeActivate = billingManager::activateAccessCode,
+                                                    onCodeDeactivate = billingManager::deactivateAccessCode,
                                         onReviewDeactivate = billingManager::deactivateReviewAccess,
-                                        testDistribution = testDistribution)
+                                        testDistribution = testDistribution, rewardAccess = rewardAccess)
                                 }
                             }
                         }
@@ -476,7 +551,8 @@ private fun AppNavigation(current: Page, rail: Boolean = false, onSelect: (Page)
 @Composable
 internal fun HomeScreen(
     observations: List<Observation>, onRecord: () -> Unit, onTimeline: () -> Unit,
-    onPremium: () -> Unit, onAbout: () -> Unit, testDistribution: Boolean, premium: Boolean
+    onPremium: () -> Unit, onAbout: () -> Unit, testDistribution: Boolean, premium: Boolean,
+    onCommunity: (() -> Unit)? = null
 ) {
     Column(Modifier.fillMaxSize()) {
       LazyColumn(
@@ -499,6 +575,10 @@ internal fun HomeScreen(
             )
             Spacer(Modifier.height(18.dp))
             HeroRecordCard()
+            if (onCommunity != null) OutlinedButton(onClick = onCommunity,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).heightIn(min = 48.dp).testTag("home-community")) {
+                Text("우리 아이 자랑 · 영상카드 함께 나누기", color = Ink)
+            }
             TextButton(onClick = onAbout, modifier = Modifier.padding(horizontal = 12.dp).heightIn(min = 48.dp).testTag("home-about")) {
                 Text("어떤 근거로 아기말을 만들까요?", color = Ink, fontSize = 13.sp)
             }
@@ -796,7 +876,7 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "1. 서비스와 처리 범위" to
             "‘아가톡 - 지금 내 기분이 그래’는 6~18개월 아기의 보호자가 소리와 장면을 살펴보고 표현 예시를 만드는 앱입니다. " +
             "소리 유형, 선택 구간, 메모, 문장, 모델 단서와 이전 버전의 기록은 이 기기에만 저장합니다. " +
-            "아기 기록을 저장하는 외부 DB나 앱 회원가입은 없습니다.",
+            "개인 분석·기록에는 외부 DB나 앱 회원가입이 없습니다. 우리 아이 자랑 게시판은 보호자가 직접 공개한 자료만 별도로 저장합니다.",
         "2. 마이크·카메라·선택한 영상" to
             "보호자가 시작할 때만 무료는 최대 1분, 전체 이용권은 최대 2분 녹화·녹음합니다. 다시 듣기와 구간 선택을 위해 앱의 비공개 임시 폴더에 보관하며 " +
             "화면 종료·재촬영 시 삭제하고, 비정상 종료 뒤 남은 파일은 다음 앱 실행 시 정리합니다. " +
@@ -805,11 +885,25 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "앨범에 직접 저장" to
             "보호자가 앨범 저장 버튼을 누르면 결과 카드 PNG 또는 영상·원음·번역 MP4 사본을 사진·동영상 앱의 아가톡 앨범에 저장합니다. Android 10 이상은 별도 저장소 읽기 권한 없이 앱이 만든 파일만 추가합니다. Android 8·9에서는 저장 버튼을 누를 때 저장 권한을 요청합니다. " +
             "앨범 사본은 앱 기록을 삭제하거나 앱을 제거해도 남으며 해당 사진 앱에서 관리·삭제합니다. 사진 앱의 클라우드 백업이 켜져 있다면 그 앱의 설정과 정책에 따라 백업될 수 있습니다.",
+        "우리 아이 자랑 · 선택한 자료의 공개" to
+            "게시판은 로그인 없이 읽고, 선택한 사진·영상카드와 설명을 미리 확인한 뒤 공개 버튼을 누를 때만 전송합니다. 개인 분석 원본·전체 기록을 자동으로 보내지 않습니다. " +
+            "게시물·댓글·닉네임·관리 비밀번호 검증용 해시, 좋아요·차단·신고와 브라우저 무작위 식별값을 서버에 저장합니다. 비밀번호 원문은 저장하지 않으며 분실 시 자동 복구할 수 없습니다. " +
+            "OpenAI Sites / Cloudflare 서버를 사용하며 해외에서 처리될 수 있습니다. 스팸 제한에는 일별 IP 해시를 사용하고 원문 IP를 게시판 DB에 저장하지 않습니다. 호스팅 제공자의 보안 로그에는 해당 제공자의 정책이 적용됩니다. " +
+            "게시물 삭제 시 공개 접근을 즉시 차단하고 미디어를 제거합니다. 저장소 오류 시 다음 방문·운영자 확인 때 삭제를 재시도합니다. 보안상 삭제 상태와 신고는 남을 수 있습니다. 다른 사람이 이미 저장한 사본까지 회수할 수 없습니다. " +
+            "게시판 공유용 기기 초안은 화면 종료 시 삭제하며, 비정상 종료로 남은 파일은 24시간이 지난 뒤 다음 게시판 사용 때 정리합니다. 앱 기록을 지워도 공개 게시물은 자동 삭제되지 않으므로 게시판에서 비밀번호로 별도 삭제해 주세요. " +
+            "공유할 권리가 있는 자료만 올리고 아동의 노출·민감한 장면, 실명·주소·연락처는 올리지 마세요. 신고·작성자 차단 기능과 운영자 삭제 요청을 이용할 수 있습니다.",
         "3. 외부 전송과 제3자 제공" to
-            "아기 소리·영상·기록은 서버로 자동 전송하지 않으며 광고·행동 분석 SDK를 사용하지 않습니다. " +
+            "아기 소리·영상·기록은 서버로 자동 전송하지 않고 광고 SDK에 전달하지 않습니다. " +
             "선택한 구독 구매·복원에는 Google Play와 결제 검증 통신이 필요합니다. 구매 토큰과 임의의 설치 식별자를 처리해 이용권을 확인하며 아기 기록·원본 미디어는 보내지 않습니다. " +
             "Play 심사 접근을 선택하면 심사 코드와 심사 전용 설치 식별자를 HTTPS로 확인하고, 코드는 기기 안에서 암호화해 보관하며 해제 시 삭제합니다. 서비스가 설정되지 않은 빌드는 이 통신을 하지 않습니다. " +
             "사용자가 직접 내보내거나 공유한 파일은 선택한 저장 위치·수신 앱의 정책이 적용됩니다.",
+        "선택형 보상 광고와 개인정보 설정" to
+            "성인 보호자가 광고 보기를 선택하면 Google AdMob 보상형 광고를 요청합니다. 광고 완료 1회로 분석 또는 PDF 만들기 1회를 이용합니다. 결과 생성 실패·취소 시 기회는 남으며, 기존 결과 저장은 무료입니다. 구독자는 광고를 볼 필요가 없습니다. " +
+            "Google Mobile Ads SDK는 광고 요청·표시 과정에서 IP 주소(대략적인 위치 추정), 앱 상호작용, 성능·진단 정보, 광고 ID·앱 세트 ID 등 기기 식별자를 수집·공유할 수 있습니다. 광고 제공·측정·분석 및 부정 이용 방지가 목적이며 HTTPS로 전송합니다. 아기 미디어·문장·메모는 광고 요청에 포함하지 않습니다. " +
+            "Google UMP는 동의 필요 여부를 확인하며 해당 지역에서는 광고 전 동의 화면을 표시합니다. 필요한 경우 이용권 화면의 ‘광고 개인정보 설정’에서 선택을 바꿀 수 있습니다. 광고를 보지 않아도 무료 기능을 이용할 수 있습니다. " +
+            "광고 처리 제공자는 Google LLC(미국)이며 해외에서 처리될 수 있습니다. 제공자의 보관·삭제와 권리 행사는 Google 개인정보처리방침을 따릅니다. 이용 기회와 처리 중 상태는 기기 안에 보관하고 앱 데이터 삭제 시 함께 삭제됩니다.",
+        "SDK 진단" to
+            "Media3 영상 내보내기의 플랫폼 진단 전송은 명시적으로 끕니다. MediaPipe·Google Play 서비스와 광고 SDK의 진단 정보는 각 제공자 정책이 적용됩니다. 네트워크 권한이 있으므로 SDK 진단 전송이 모두 차단된다고 보장하지 않습니다.",
         "4. 검증 서비스와 접속 정보" to
             "결제·심사 확인 서비스는 Google Cloud 서울 리전에서 실행합니다. 구매 토큰·설치 식별자·심사 코드를 DB·파일·요청 본문 로그에 저장하지 않습니다. " +
             "확인과 요청 제한을 위한 일시 상태는 서버 메모리에서만 처리합니다. 아기 소리·영상·기록은 이 서비스로 보내지 않습니다. " +
@@ -832,13 +926,13 @@ private fun PrivacyPolicyScreen(onBack: () -> Unit) {
         "7. 문의와 변경" to
             "운영자 최용우 · 문의 bsfire1237@gmail.com. " +
             "처리 방식이 바뀌면 이 방침과 앱 내 안내를 업데이트합니다. " +
-            "계정, 동기화, 광고, 서버 기능을 추가하기 전에는 처리 범위를 다시 고지합니다."
+            "처리 항목과 제공자가 달라지면 적용 전에 다시 고지합니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 28.dp)) {
         item {
             TextButton(onClick = onBack, modifier = Modifier.padding(start = 12.dp).heightIn(min = 48.dp)) { Text("돌아가기", color = Ink) }
             TopBar("개인정보처리방침", "지금 내 기분이 그래 · 데이터 처리 안내")
-            Text("시행일 2026년 10월 2일 · 현재 Android 앱의 처리 방식", color = Muted, fontSize = 13.sp,
+            Text("2026년 10월 24일 개정 · 선택형 보상 광고와 결제·게시판 안내", color = Muted, fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(20.dp))
         }

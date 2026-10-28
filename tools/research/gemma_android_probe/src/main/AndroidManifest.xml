@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:label="Gemma research probe" android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_rules" android:dataExtractionRules="@xml/data_extraction_rules"
+        android:usesCleartextTraffic="false">
+        <uses-native-library android:name="libOpenCL.so" android:required="false" />
+        <uses-native-library android:name="libvndksupport.so" android:required="false" />
+    </application>
+    <instrumentation android:name="com.agattok.gemmaprobe.ProbeInstrumentation"
+        android:targetPackage="com.agattok.gemmaprobe" android:functionalTest="true"
+        android:handleProfiling="false" />
+</manifest>

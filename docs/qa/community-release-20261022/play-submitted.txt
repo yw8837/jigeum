@@ -1,0 +1,118 @@
+Browser tab: 1, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+1 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+				58 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					59 button 모니터링 및 개선
+						60 text 모니터링 및 개선
+				61 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					62 button 사용자 늘리기
+						63 text 사용자 늘리기
+				64 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					65 button Play를 통한 수익 창출
+						66 text Play를 통한 수익 창출
+			67 container main-content
+				75 container
+					76 heading 게시 개요, Value: 1
+						77 text 게시 개요
+					78 container
+						79 text 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+						80 button 게시 개요에 관한 세부정보 더보기
+					81 pop up button (collapsed) 관리형 게시가 사용 중지됨, ID: a3406F73E-8D71-49C5-959A-94AA89401C29--0, Secondary Actions: Expand
+					82 text 최근 게시일: 2026년 10월 13일
+					83 link Description: 제출 활동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					84 heading 검토 중인 변경사항, Value: 2
+						85 text 검토 중인 변경사항
+					86 button (collapsed) Description: "검토 중인 변경사항"에 대한 추가 정보, Secondary Actions: Expand
+					87 button 변경사항 삭제
+						88 text 변경사항 삭제
+					89 button (expanded) Description: 콘텐츠 숨기기: 검토 중인 변경사항, Secondary Actions: Collapse
+					90 heading 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 4
+						91 text 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중
+					92 level indicator 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 46
+					93 container
+						94 text 이러한 검사를 통해 특정 정책 및 앱 품질 문제를 발견하여 검토 전에 문제를 해결할 수 있습니다. 검사가 성공적으로 완료되는 즉시 변경사항이 검토를 위해 전송됩니다.
+						95 link Description: 검토를 위해 변경사항을 전송하기 전에 Google에서 문제를 감지하기 위해 실행하는 자동 검사에 대해 자세히 알아보려면 고객센터로 이동하세요., Value: support.google.com/googleplay/android-developer/answer/14807773
+					96 text 최대 8분 남음
+					97 table 변경사항
+						98 row 변경된 항목 설명
+							99 cell
+								100 text 변경된 항목
+							101 cell
+								102 text 설명
+							103 cell
+						104 row 비공개 테스트 - Alpha
+							105 cell
+								106 text 비공개 테스트 - Alpha
+						107 row 0.5.26-beta (40) - community and expressions 전체 출시 시작 추가 작업
+							108 cell
+								109 text 0.5.26-beta (40) - community and expressions
+							110 cell
+								111 text 전체 출시 시작
+							112 cell
+								113 list 추가 작업
+									114 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						115 row 앱 콘텐츠
+							116 cell
+								117 text 앱 콘텐츠
+						118 row 콘텐츠 등급 새 설문지 제출 추가 작업
+							119 cell
+								120 text 콘텐츠 등급
+							121 cell
+								122 text 새 설문지 제출
+							123 cell
+								124 list 추가 작업
+									125 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						126 row 개인정보처리방침 개인정보처리방침 URL을 https://baby.yeolmaeapps.kr/privacy.html(으)로 설정 추가 작업
+							127 cell
+								128 text 개인정보처리방침
+							129 cell
+								130 text 개인정보처리방침 URL을 https://baby.yeolmaeapps.kr/privacy.html(으)로 설정
+							131 cell
+								132 list 추가 작업
+									133 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						134 row 데이터 보안 데이터 보안 설문지 작성 추가 작업
+							135 cell
+								136 text 데이터 보안
+							137 cell
+								138 text 데이터 보안 설문지 작성
+							139 cell
+								140 list 추가 작업
+									141 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+				68 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				69 link Description: 상태 대시보드, Value: status.play.google.com/
+				70 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				71 text © 2026 Google
+				72 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				73 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				74 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

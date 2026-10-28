@@ -1,11 +1,45 @@
 param(
-    [ValidateSet('internal', 'paid-candidate', 'closed-test')][string]$Purpose = 'internal',
+    [ValidateSet('internal', 'paid-candidate', 'closed-test', 'production-basic')][string]$Purpose = 'internal',
     [string]$SigningDirectory = (Join-Path ([Environment]::GetFolderPath('UserProfile')) '.jigeum/signing'),
     [string]$JavaHome = $env:JAVA_HOME,
     [string]$AndroidSdk = $env:ANDROID_HOME,
-    [Parameter(Mandatory = $true)][string]$Destination
+    [Parameter(Mandatory = $true)][string]$Destination,
+    [switch]$AstBabbleSupport,
+    [switch]$InfantPresenceSupport,
+    [switch]$InfantCaptionSupport,
+    [switch]$CaptionReleaseQaProof,
+    [string]$InfantArmProof,
+    [string]$ProofPython,
+    [string]$BuildRoot
 )
 $ErrorActionPreference = 'Stop'
+if ($BuildRoot -and -not [IO.Path]::IsPathRooted($BuildRoot)) { throw 'BuildRoot must be absolute.' }
+if ($CaptionReleaseQaProof -and -not $InfantCaptionSupport) { throw 'Release QA proof requires InfantCaptionSupport.' }
+$productionModel = $Purpose -in @('production-basic', 'paid-candidate') -and $AstBabbleSupport
+if ($Purpose -in @('production-basic', 'paid-candidate') -and -not ($AstBabbleSupport -and $InfantPresenceSupport -and $InfantCaptionSupport)) {
+    throw 'Production requires the complete validated AST, infant presence and caption stack.'
+}
+if ($AstBabbleSupport -and $Purpose -notin @('closed-test', 'production-basic', 'paid-candidate')) {
+    throw 'AST babble support is valid only for closed-test or explicit production candidates.'
+}
+if ($InfantCaptionSupport -and (-not $InfantPresenceSupport -or -not $AstBabbleSupport)) {
+    throw 'Caption support requires AstBabbleSupport and InfantPresenceSupport.'
+}
+if ($InfantPresenceSupport) {
+    if ($Purpose -notin @('closed-test', 'production-basic', 'paid-candidate') -or -not $AstBabbleSupport) {
+        throw 'Infant presence requires closed-test or explicit production and AstBabbleSupport.'
+    }
+    if (-not $InfantArmProof -or -not $ProofPython) { throw 'Provide actual ARM proof and ProofPython.' }
+    $InfantArmProof = [IO.Path]::GetFullPath($InfantArmProof)
+    $ProofPython = [IO.Path]::GetFullPath($ProofPython)
+    $proofArguments = @((Join-Path $PSScriptRoot 'verify_infant_presence_arm.py'), $InfantArmProof)
+    if ($InfantCaptionSupport) { $proofArguments += '--infant-caption-candidate' }
+    if ($CaptionReleaseQaProof) { $proofArguments += '--caption-release-qa' }
+    & $ProofPython @proofArguments
+    if ($LASTEXITCODE -ne 0) { throw 'Infant presence ARM proof rejected; no signing or build started.' }
+} elseif ($InfantArmProof -or $ProofPython) {
+    throw 'ARM proof arguments require InfantPresenceSupport.'
+}
 if (-not $JavaHome -or -not $AndroidSdk) { throw 'Set JAVA_HOME and ANDROID_HOME or pass their paths.' }
 if (Test-Path -LiteralPath $Destination) { throw 'Destination already exists; preserve the old artifact.' }
 if ($Purpose -eq 'closed-test' -and [IO.Path]::GetFileName($Destination) -notmatch '-beta-code\d+\.aab$') {
@@ -15,11 +49,22 @@ if ($Purpose -eq 'paid-candidate') {
     if (-not $env:JIGEUM_PLAY_VERIFY_URL -or -not $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY) {
         throw 'Paid candidates require the actual HTTPS verification URL and public key.'
     }
-    if (-not $env:JIGEUM_PLAY_VERIFY_URL.StartsWith('https://', [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'Verifier URL must use HTTPS.'
+    $verifyUri = [Uri]$env:JIGEUM_PLAY_VERIFY_URL
+    if ($verifyUri.Scheme -ne 'https' -or -not $verifyUri.Host -or $verifyUri.UserInfo -or
+        $verifyUri.Query -or $verifyUri.Fragment -or $verifyUri.AbsolutePath -ne '/verify') {
+        throw 'Verifier URL must be HTTPS with the exact /verify path, without credentials/query/fragment.'
     }
-} elseif ($Purpose -eq 'internal' -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
-    throw 'Internal bootstrap is explicitly billing-disabled. Use paid-candidate for configured billing.'
+    if ($env:JIGEUM_COMMUNITY_URL -ne 'https://baby.yeolmaeapps.kr/') {
+        throw 'Paid release requires the approved public community URL.'
+    }
+} elseif ($Purpose -in @('internal', 'production-basic') -and ($env:JIGEUM_PLAY_VERIFY_URL -or $env:JIGEUM_PLAY_ENTITLEMENT_PUBLIC_KEY)) {
+    throw 'Internal/basic distribution is explicitly billing-disabled. Use paid-candidate for configured billing.'
+}
+if ($productionModel) {
+    if ($env:JIGEUM_ADMOB_APP_ID -ne 'ca-app-pub-2269464728885792~3259646120' -or
+        $env:JIGEUM_ADMOB_REWARDED_UNIT_ID -ne 'ca-app-pub-2269464728885792/4692147296') {
+        throw 'Production requires the approved Agattok AdMob app and opt-in rewarded unit.'
+    }
 }
 $keystore = Join-Path $SigningDirectory 'jigeum-upload.p12'
 $secretFile = Join-Path $SigningDirectory 'password.dpapi'
@@ -45,11 +90,25 @@ try {
     Push-Location $project
     try {
         $variant = if ($Purpose -eq 'closed-test') { 'Beta' } else { 'Release' }
-        & ./gradlew.bat ":app:bundle$variant" ":app:assemble$variant" --max-workers=1 --console=plain --no-daemon
+        $gradleArguments = @(":app:bundle$variant", ":app:assemble$variant", '--max-workers=1', '--console=plain', '--no-daemon')
+        if ($BuildRoot) { $gradleArguments += "-PagattokBuildRoot=$BuildRoot" }
+        if ($productionModel) {
+            $gradleArguments += '-PagattokAstProduction=true'
+        } else {
+            if ($AstBabbleSupport) { $gradleArguments += '-PagattokAstBeta=true' }
+            if ($InfantPresenceSupport) { $gradleArguments += '-PagattokInfantPresenceBeta=true' }
+            if ($InfantCaptionSupport) { $gradleArguments += '-PagattokInfantCaptionBeta=true' }
+        }
+        if ($InfantPresenceSupport) {
+            $gradleArguments += @("-PagattokInfantArmProof=$InfantArmProof", "-PagattokProofPython=$ProofPython")
+        }
+        if ($CaptionReleaseQaProof) { $gradleArguments += '-PagattokCaptionReleaseQaProof=true' }
+        & ./gradlew.bat @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
     } finally { Pop-Location }
     $variantDirectory = $variant.ToLowerInvariant()
-    $aab = Join-Path $project "app/build/outputs/bundle/$variantDirectory/app-$variantDirectory.aab"
+    $appBuild = if ($BuildRoot) { Join-Path $BuildRoot "app" } else { Join-Path $project "app/build" }
+    $aab = Join-Path $appBuild "outputs/bundle/$variantDirectory/app-$variantDirectory.aab"
     New-Item -ItemType Directory -Path (Split-Path -Parent $final) -Force | Out-Null
     # Use the JDK's documented AAB signer as the final writer. AGP places its
     # manifest at the end of this archive; JarInputStream then reports it missing.

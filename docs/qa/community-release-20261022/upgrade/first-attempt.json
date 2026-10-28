@@ -1,0 +1,31 @@
+{
+  "status": "fail",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~j0hojnwrcDTfs97Qh47zOw==/com.moa.babylanguage-o0U_GlQL-7TuMM5f9dnQMQ==/base.apk",
+      "sha256": "5571e959b782ef2bb43bfa05b63e81da96707362d0db6680ac13a4947a3f1f0d",
+      "expected_sha256": "5571e959b782ef2bb43bfa05b63e81da96707362d0db6680ac13a4947a3f1f0d",
+      "version_code": 39,
+      "version_name": "0.5.25-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1792667642948,
+  "old_legacy_record": {
+    "id": 1792667642948,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1792667642868170900",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "error": "UI missing 우리가 나눈 아기말; current: ['테스트 버전 · 전체 기능 열림', '닫기', '아기의 한마디', '닫기', '선택 구간 다시 보기·듣기', '소리를 바탕으로 예상한 아기말', '내 마음을 말로 꺼내기가 어려워요. 조금만 다정하게 기다려 주세요.', '장면과 아기말을 앱 기록에 저장했어요.', '저장한 장면 보기', '기록 저장 완료']",
+  "owned_external_files_removed": true
+}

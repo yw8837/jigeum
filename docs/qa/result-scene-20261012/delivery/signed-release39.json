@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "resumes": "signed-smoke39",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "beta_media": {
+    "name": "아가톡-1791815201070.mp4",
+    "bytes": 809284,
+    "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~Ew2tcqpXxxG4k8ziN4WdEg==/com.moa.babylanguage-BLmNDsIH3KkiwqTfEzAspQ==/base.apk",
+    "sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+    "expected_sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+    "version_code": 39,
+    "version_name": "0.5.25",
+    "verified": true,
+    "errors": []
+  },
+  "release_media": {
+    "name": "아가톡-1791815201070.mp4",
+    "bytes": 809284,
+    "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "pdf_relocked": true,
+  "visual_relocked": true,
+  "free_capture_seconds": 60,
+  "free_analysis_seconds": 10,
+  "owned_external_files_removed": true
+}

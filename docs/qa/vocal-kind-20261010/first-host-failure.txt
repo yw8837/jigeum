@@ -1,0 +1,13 @@
+JUnit version 4.13.2
+...E.......................................................
+Time: 0.324
+There was 1 failure:
+1) unrelatedLouderFramesAndHighHeadsElsewhereCannotLendSupport(com.moa.babylanguage.CorroboratedVocalTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.CorroboratedVocalTest.unrelatedLouderFramesAndHighHeadsElsewhereCannotLendSupport(CorroboratedVocalTest.kt:69)
+
+FAILURES!!!
+Tests run: 58,  Failures: 1

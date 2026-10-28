@@ -16,3 +16,5 @@ docs/references/originals/** -text
 docs/qa/baseline-0.3.0/** -text
 docs/qa/0.4.0/** -text
 tools/marketing/audio/*.json -text
+# Preserve the upstream license bytes and the hashes in the bundled source notice.
+outputs/MoaAndroid/app/src/astProbe/assets/ONNX_RUNTIME_*.txt -text

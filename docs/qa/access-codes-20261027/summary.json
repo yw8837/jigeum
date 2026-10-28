@@ -1,0 +1,111 @@
+{
+  "versionName": "0.5.28",
+  "versionCode": 42,
+  "aabSha256": "104a3ba0b90667a00da6f6ee59cfebd94af14c8624be9b64be00fa82ff813714",
+  "apkSha256": "ef58a09ce243c6fdb5ed3ea7398d5ae194ccda6f32c196b5fd6d9efe8690dbb4",
+  "internal": {
+    "releaseId": 2,
+    "status": "provided",
+    "publishedAtKst": "2026-10-27T23:07:00+09:00"
+  },
+  "production": {
+    "releaseId": 2,
+    "submissionId": 23,
+    "status": "in_review",
+    "submittedAtKst": "2026-10-27T23:16:00+09:00",
+    "publiclyAvailable": false,
+    "previousPublicVersionCode": 41,
+    "managedPublishing": false,
+    "country": "KR"
+  },
+  "storeListing": {
+    "status": "in_review",
+    "submissionId": 23,
+    "phoneScreenshots": 2,
+    "generatedFeatureGraphicLabeled": true
+  },
+  "tests": {
+    "androidAccessBillingPassed": 58,
+    "nodePassed": 67,
+    "releaseGatesPassed": 15,
+    "httpsQaPassed": 7,
+    "lintRelease": "pass",
+    "signedUpgrade41to42": "pass",
+    "signedInvitationRealServer": "pass",
+    "modelsUnchangedCount": 26,
+    "realPlayInstall": false,
+    "realPlayPurchase": false,
+    "realDiscountCatalog": false,
+    "realPlayRestoreRevoke": false,
+    "newPhysicalPhonePerformance": false,
+    "infantIntentAccuracy": false
+  },
+  "codes": {
+    "invitationCount": 1,
+    "invitationCampaignExpiry": null,
+    "deviceCacheHours": 24,
+    "discountCount": 100,
+    "realDiscountCodesConsumed": 0,
+    "codeFilesCommitted": false,
+    "tamperProofPlayTransactionCap": false
+  },
+  "offer": {
+    "id": "launch-2m-half",
+    "status": "active",
+    "currency": "KRW",
+    "introMonthlyPrice": 2450,
+    "introMonthlyCycles": 2,
+    "renewalMonthlyPrice": 4900,
+    "newSubscriberOnly": true
+  },
+  "backend": {
+    "revision": "jigeum-verifier-00007-rmg",
+    "trafficPercent": 100,
+    "manifestVersion": 2,
+    "qaManifestDisabled": true
+  },
+  "admob": {
+    "status": "review_required",
+    "playStoreLinked": false,
+    "liveAdsVerified": false
+  },
+  "community": {
+    "url": "https://baby.yeolmaeapps.kr/",
+    "siteVersion": 7,
+    "sourceSha": "fadd044897a5174c4bd2b96af5d59c0f949b7430",
+    "bannerLive": true,
+    "testsPassed": 34,
+    "physicalMobileCheckedThisRun": false
+  },
+  "iarc": {
+    "certificateId": "b917e49f-a80e-86f6-8340-3fb431ccc20e",
+    "status": "complete",
+    "korea": "3+",
+    "interaction": "Users Interact",
+    "rejection": false
+  },
+  "kakaoShare": {
+    "userReportedPreviewFailure": true,
+    "anonymousPlayOg": "pass",
+    "anonymousImageStatus": 200,
+    "debuggerBefore": "empty_og_metadata",
+    "resolved": false,
+    "cacheReset": "1_scrap_deleted",
+    "debuggerAfter": "empty_og_metadata_all_3_urls"
+  },
+  "cleanup": {
+    "ownedEmulatorStopped": true,
+    "ownedAppFixtureXmlRemoved": true,
+    "localPreviewStopped": true,
+    "incompleteSignatureBytes": 57001222,
+    "incompleteSignatureDeletion": "policy_blocked_preserved",
+    "previousBlockedTargetsPreserved": true
+  },
+  "externalMessagesSent": false,
+  "automationCreatedOrResumed": false,
+  "developerDisplayName": {
+    "requested": "Yeolmae_STUDIO",
+    "status": "in_review",
+    "publicNameUntilApproved": "Yeolmae"
+  }
+}

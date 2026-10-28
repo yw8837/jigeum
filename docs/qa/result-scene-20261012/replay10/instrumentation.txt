@@ -1,0 +1,53 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ResultNavigationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.ResultNavigationTest:
+INSTRUMENTATION_STATUS: test=resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ResultNavigationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Replay did not end; states=[[재생 멈추기 · 0:08], [재생 멈추기 · 0:00], [재생 멈추기 · 0:01], [재생 멈추기 · 0:02], [재생 멈추기 · 0:03], [재생 멈추기 · 0:04], [재생 멈추기 · 0:05], [재생 멈추기 · 0:06], [재생 멈추기 · 0:07]]
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:333)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 8000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:329)
+	... 66 more
+
+INSTRUMENTATION_STATUS: stream=
+Error in resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(com.moa.babylanguage.ResultNavigationTest):
+java.lang.AssertionError: Replay did not end; states=[[재생 멈추기 · 0:08], [재생 멈추기 · 0:00], [재생 멈추기 · 0:01], [재생 멈추기 · 0:02], [재생 멈추기 · 0:03], [재생 멈추기 · 0:04], [재생 멈추기 · 0:05], [재생 멈추기 · 0:06], [재생 멈추기 · 0:07]]
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:333)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 8000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:329)
+	... 66 more
+
+INSTRUMENTATION_STATUS: test=resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 10.004
+There was 1 failure:
+1) resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(com.moa.babylanguage.ResultNavigationTest)
+java.lang.AssertionError: Replay did not end; states=[[재생 멈추기 · 0:08], [재생 멈추기 · 0:00], [재생 멈추기 · 0:01], [재생 멈추기 · 0:02], [재생 멈추기 · 0:03], [재생 멈추기 · 0:04], [재생 멈추기 · 0:05], [재생 멈추기 · 0:06], [재생 멈추기 · 0:07]]
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:333)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 8000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+	at com.moa.babylanguage.ResultNavigationTest.resultUsesOneCardAndSourceReplayWhileEditorKeepsVideoPreview(ResultNavigationTest.kt:329)
+	... 66 more
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -98,6 +98,7 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
     private val installationId: String? = run {
         preferences.getString("installation_id", null)?.takeIf { it.isNotBlank() } ?: run {
             val generated = UUID.randomUUID().toString()
+            // Use the ID only after a successful durable write; KTX edit returns Unit.
             if (preferences.edit().putString("installation_id", generated).commit()) generated else null
         }
     }
@@ -124,6 +125,7 @@ internal class PurchaseVerifier(private val context: Context) : BillingEntitleme
         if (remaining(envelope, anchor, now) == null) return false
         // Envelope and evidence form one atomic preference transaction. A legacy
         // envelope without these fields must be reverified online before reuse.
+        // Acceptance must return commit's success Boolean; KTX edit returns Unit.
         return preferences.edit()
             .putString("entitlement", envelope)
             .putInt("entitlement_cache_version", anchor.version)

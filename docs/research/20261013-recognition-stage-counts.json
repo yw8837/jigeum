@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "scope": "frozen_pcm_probe_stage_counts",
+  "conditions": 53,
+  "unique_pcm_hashes": 53,
+  "independent_families": null,
+  "input_scope": {
+    "measured_pcm": 53
+  },
+  "container_decode_measured": false,
+  "visual_measured": false,
+  "production_ast_execution_measured": false,
+  "accuracy_measured": false,
+  "new_model_forwards": 0,
+  "product_changed": false,
+  "base_outcomes": {
+    "held_analysis_silence": 5,
+    "held_background_dominant": 1,
+    "held_infant_unconfirmed": 25,
+    "held_mixed_vocal": 7,
+    "output": 13,
+    "output_after_whole_decision_hold": 2
+  },
+  "prior_outcomes": {
+    "held_analysis_silence": 5,
+    "held_background_dominant": 1,
+    "held_infant_unconfirmed": 24,
+    "held_mixed_vocal": 7,
+    "output": 14,
+    "output_after_whole_decision_hold": 2
+  },
+  "final_outcomes": {
+    "held_analysis_silence": 5,
+    "held_background_dominant": 1,
+    "held_infant_unconfirmed": 16,
+    "held_mixed_vocal": 3,
+    "output": 26,
+    "output_after_whole_decision_hold": 2
+  },
+  "whole_decision_issues": {
+    "BACKGROUND_DOMINANT": 1,
+    "INFANT_UNCONFIRMED": 16,
+    "MIXED_VOCAL": 5,
+    "NONE": 26,
+    "SILENCE": 5
+  },
+  "transitions": {
+    "held_to_held": 25,
+    "held_to_output": 12,
+    "output_to_output": 16
+  },
+  "transition_scope": "recorded prior_phase to phase; not deployed version comparison",
+  "recorded_ast_union_ms": 570986,
+  "recorded_ast_window_ms": 779967,
+  "precise_event_boundaries_measured": false,
+  "phrase_groups_across_distinct_pcm": 4,
+  "phrase_collision_proves_wrong_result": false,
+  "current_product_inference_measured": false,
+  "private_rows_exported": false,
+  "source_label": "20261009-code37-fixed53",
+  "source_report_sha256": "985a6198c92707a9f654af29cf7d8f7d9c068b186409ce431970a13dd58b1347",
+  "source_model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+  "audit_sha256": "cc5a555c4787f4f57d88894d78aee455c2e86b6f37f7409b96c9ad016ad97bd6"
+}

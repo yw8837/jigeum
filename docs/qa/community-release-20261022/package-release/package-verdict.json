@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "distribution_checked": "release",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "skipped",
+    "reason": "No --baseline supplied"
+  },
+  "aab_checked": true,
+  "aab_unsigned": false,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "b6193ed5a166ae251add91d5784adf71eaf50193eab61565ff45fe35de20fad9",
+  "aab_distribution": null,
+  "aab_sha256": "6df3ccba410f59b061a99cdbe3acc7fad8042ab6f43b7a30d428a56edf6cfe05"
+}

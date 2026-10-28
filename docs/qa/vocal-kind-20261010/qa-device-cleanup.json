@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "device": "emulator-5556",
+  "avd": "MoaQA35",
+  "removed": [
+    "com.moa.babylanguage.astcandidate.test",
+    "com.moa.babylanguage.astcandidate",
+    "com.moa.babylanguage"
+  ],
+  "owned_qa_packages_absent": true,
+  "emulator_stop_output": [
+    "OK: killing emulator, bye bye",
+    "",
+    "OK",
+    ""
+  ],
+  "physical_phone_modified": false,
+  "emulator_absent_verified": true
+}

@@ -1,0 +1,106 @@
+Browser tab: 9, Title: "Google AdMob", URL: "https://admob.google.com/v2/apps/3259646120/settings".
+1 AXWebArea Google AdMob, URL: admob.google.com/v2/apps/3259646120/settings
+	2 container
+		3 button 메인 콘텐츠로 건너뛰기
+			4 text 메인 콘텐츠로 건너뛰기
+		5 container
+			6 button (collapsed) Description: 메뉴, Secondary Actions: Expand
+			7 link Description: AdMob 홈으로 이동, Value: admob.google.com/v2/home
+			8 container a1C3844BD-A2CB-490B-8CC0-EB3DD67E8353--1
+				9 container
+					10 text 앱, 광고 단위, 미디에이션 그룹, 보고서, 캠페인 검색
+					11 combo box (collapsed, settable) Description: 앱, 광고 단위, 미디에이션 그룹, 보고서, 캠페인을 찾을 수 있는 검색창, ID: aDEE45F9D-83C1-4556-9705-F982B35C327C--0, Secondary Actions: Expand
+			12 button 알림 열기
+				20 text 4
+			13 pop up button (collapsed) Description: Google 계정, Secondary Actions: Expand
+				14 image Google 계정 (bsfire1237@gmail.com)
+		21 container 사이드바
+			22 link 홈
+			23 container
+				24 link Description: 앱 열기/닫기, ID: app-picker-sidebar-item
+				25 container 아가톡 - 지금 내 기분이 그래 Android
+				26 link 아가톡 - 지금 내 기분이 그래의 앱 개요
+				27 link 아가톡 - 지금 내 기분이 그래의 광고 단위
+				28 link 아가톡 - 지금 내 기분이 그래의 차단 관리
+				29 link 아가톡 - 지금 내 기분이 그래의 앱 설정
+			30 container
+				31 link 보고서
+				32 link 미디에이션
+				33 link 캠페인
+			34 container
+				35 link 정책 센터
+				36 link 개인 정보 보호 및 메시지
+				37 link 게시자 데이터
+				38 link 차단 관리
+				39 link 지급
+				40 link 변경 내역
+				41 link 설정
+				42 link 실험실
+				43 button 도움말
+				44 button 의견
+		15 container
+			109 heading 앱 설정, Value: 1
+				110 text 앱 설정
+			51 container
+				52 heading 앱 정보, Value: 2
+					53 text 앱 정보
+				54 heading 앱 이름, Value: 2
+					55 button (collapsed) 앱 이름, Secondary Actions: Expand
+						56 container Description: 앱 이름, ID: aB244198A-D062-4CC1-A79F-ABC89B0494EC--0
+							57 container
+								58 text 앱 이름
+								59 pop up button 앱 이름의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+				60 heading 앱 ID, Value: 2
+					61 button (disabled, collapsed) 앱 ID, Secondary Actions: Expand
+						62 container Description: 앱 ID, ID: a6C6C8C12-35D4-4A60-8568-F64FB4B092AD--0
+							63 container
+								64 text 앱 ID
+								65 pop up button (disabled) 앱 ID의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+						66 button 클립보드에 복사
+							67 text ca-app-pub-2269464728885792~3259646120
+				68 heading 앱 스토어 세부정보, Value: 2
+					69 button (disabled, collapsed) 앱 스토어 세부정보, Secondary Actions: Expand
+						70 container Description: 앱 스토어 세부정보, ID: aEB0E706D-E842-4509-814D-338539BD3C54--0
+							71 container
+								72 text 앱 스토어 세부정보
+								73 pop up button (disabled) 앱 스토어 세부정보의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+						74 container a9E7E429B-E1D0-40AD-8F75-CDC5B9A2B70D--0
+							75 text —
+							76 link Description: 추가, Value: admob.google.com/v2/apps/3259646120/update?ctp=%2Fapps%2F3259646120%2Fsettings&appPlatform=2
+							77 text —
+				78 heading 앱 인증, Value: 2
+					79 button (disabled, collapsed) 앱 인증, Secondary Actions: Expand
+				80 heading 승인 상태, Value: 2
+					81 button (disabled, collapsed) 승인 상태, Secondary Actions: Expand
+						82 container Description: 승인 상태, ID: a1D43D606-AF8C-4BAB-8F65-B561950D47E8--0
+							83 container
+								84 text 승인 상태
+								85 pop up button (disabled) 승인 상태의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+				86 heading 연결된 서비스, Value: 2
+					87 button (disabled, collapsed) 연결된 서비스, Secondary Actions: Expand
+						88 container Description: 연결된 서비스, ID: a691F8BAD-FB0C-4C48-B359-5301CCD2FE89--0
+							89 container
+								90 text 연결된 서비스
+								91 pop up button (disabled) 연결된 서비스의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+						92 container aA6394810-EB5E-43C2-BBE3-FB1D732070BA--0
+							93 text AdMob 앱 또는 계정을 다른 Google 서비스에 연결
+							94 link Description: 연결된 서비스 관리하기, Value: admob.google.com/v2/settings/product-linking/list?app=%EC%95%84%EA%B0%80%ED%86%A1+-+%EC%A7%80%EA%B8%88+%EB%82%B4+%EA%B8%B0%EB%B6%84%EC%9D%B4+%EA%B7%B8%EB%9E%98
+				95 heading 광고 게재 설정, Value: 2
+					96 text 광고 게재 설정
+				97 heading 게재빈도 설정, Value: 2
+					98 button (collapsed) 게재빈도 설정, Secondary Actions: Expand
+						99 container Description: 게재빈도 설정, ID: a83BE4A60-890E-4D33-B6D3-4CDE2519A4B0--0
+							100 container
+								101 text 게재빈도 설정
+								102 pop up button 게재빈도 설정의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+				111 heading 참여도가 높은 광고, Value: 2
+					112 button (collapsed) 참여도가 높은 광고, Secondary Actions: Expand
+						113 container Description: 참여도가 높은 광고, ID: aCB39EC80-6599-4B57-AC13-BA05F95FFD12--0
+							114 container
+								115 text 참여도가 높은 광고
+								116 pop up button 참여도가 높은 광고의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+			48 text © 2026 Google
+			49 link Description: 개인정보처리방침open_in_new, Value: google.com/intl/ko/policies/privacy
+			50 link Description: 약관open_in_new, Value: adsense.google.com/adsense/terms
+
+The focused UI element is 112 button (collapsed) 참여도가 높은 광고, Secondary Actions: Expand

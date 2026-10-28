@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\signed_media_upgrade.py", line 150, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\signed_media_upgrade.py", line 106, in main
+    q.tap_text('저장한 장면 보기'); q.wait_ui('그때의 아기말')
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\QA\qa_harness.py", line 51, in wait_ui
+    raise AssertionError(f"UI missing {expect}; current: {[n['text'] for n in last if n['text']][:25]}")
+AssertionError: UI missing 그때의 아기말; current: ['테스트 버전 · 전체 기능 열림', '닫기', '아기의 한마디', '닫기', '선택 구간 다시 보기·듣기', '소리를 바탕으로 예상한 아기말', '울음으로 꺼낸 내 이야기예요. 작은 목소리로 내 이름을 불러 줘요.', '장면과 아기말을 앱 기록에 저장했어요.', '저장한 장면 보기', '기록 저장 완료']

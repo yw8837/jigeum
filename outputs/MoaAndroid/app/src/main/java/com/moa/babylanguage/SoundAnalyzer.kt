@@ -18,7 +18,10 @@ enum class AnalysisIssue { NO_AUDIO, TOO_SHORT, INVALID_AUDIO, SILENCE, QUIET,
     BACKGROUND_DOMINANT, INFANT_UNCONFIRMED, MIXED_VOCAL, MODEL_FAILURE }
 data class SoundAnalysis(val cues: List<SoundCue>, val problem: String? = null,
                          val frames: List<SoundFrame> = emptyList(),
-                         val issue: AnalysisIssue? = null)
+                         val issue: AnalysisIssue? = null,
+                         val babbleWindows: List<BabbleSupportWindow> = emptyList(),
+                         val infantVoiceWindows: List<InfantVoiceSupportWindow> = emptyList(),
+                         val infantVoicePartial: Boolean = false)
 
 /** YAMNet recognizes general sound events. These are suggestions, never interpretations of needs. */
 object SoundAnalyzer {
@@ -41,7 +44,15 @@ object SoundAnalyzer {
     suspend fun analyze(context: Context, pcm: FloatArray): List<SoundCue> =
         analyzeDetailed(context, pcm).cues
 
-    suspend fun analyzeDetailed(context: Context, pcm: FloatArray): SoundAnalysis = inferenceLock.withLock {
+    /** Baseline observations for existing callers and paired evaluation. */
+    suspend fun analyzeDetailed(context: Context, pcm: FloatArray): SoundAnalysis = analyzePcm(context, pcm, null)
+
+    /** Keep established supplemental recognition before trying a different window phase. */
+    internal suspend fun analyzeWithSupport(context: Context, pcm: FloatArray,
+        support: suspend (SoundAnalysis) -> SoundAnalysis): SoundAnalysis = analyzePcm(context, pcm, support)
+
+    private suspend fun analyzePcm(context: Context, pcm: FloatArray,
+        support: (suspend (SoundAnalysis) -> SoundAnalysis)?): SoundAnalysis = inferenceLock.withLock {
         coroutineContext.ensureActive()
         if (pcm.size < 16_000) return@withLock SoundAnalysis(emptyList(),
             "구간이 너무 짧아요. 아기 소리가 담긴 구간을 1초 이상 골라 주세요.", issue = AnalysisIssue.TOO_SHORT)
@@ -49,7 +60,7 @@ object SoundAnalyzer {
             return@withLock SoundAnalysis(emptyList(), "소리 데이터를 읽지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.", issue = AnalysisIssue.INVALID_AUDIO)
         val cleaned = AudioCleanup.filter(pcm)
         try {
-            val rms = kotlin.math.sqrt(cleaned.sumOf { it.toDouble() * it } / cleaned.size)
+            val rms = AudioCleanup.strongestSecondRms(cleaned)
             if (!rms.isFinite() || rms < 0.003) return@withLock SoundAnalysis(emptyList(),
                 "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.", issue = AnalysisIssue.SILENCE)
             val options = AudioClassifier.AudioClassifierOptions.builder()
@@ -61,18 +72,35 @@ object SoundAnalyzer {
                     .setNumOfChannels(1)
                     .setSampleRate(16_000f)
                     .build()
-                val audio = AudioData.create(format, pcm.size)
-                audio.load(cleaned)
-                val frames = classifier.classify(audio).classificationResults().map { frame ->
-                    SoundFrame(frame.timestampMs().orElseThrow { IllegalStateException("Missing audio timestamp") }, frame.classifications().flatMap { it.categories() }
-                        .mapNotNull { category -> cueLabel(category.categoryName())?.let { SoundCue(it, category.score()) } }
-                        .groupBy { it.label }.map { (label, scores) -> SoundCue(label, scores.maxOf { it.score }) })
+                fun classify(samples: FloatArray, offsetMs: Long): SoundAnalysis {
+                    val audio = AudioData.create(format, samples.size)
+                    audio.load(samples)
+                    val frames = classifier.classify(audio).classificationResults().map { frame ->
+                        val localStartMs = frame.timestampMs().orElseThrow { IllegalStateException("Missing audio timestamp") }
+                        SoundFrame(offsetMs + localStartMs,
+                            frame.classifications().flatMap { it.categories() }
+                                .mapNotNull { category -> cueLabel(category.categoryName())?.let { SoundCue(it, category.score()) } }
+                                .groupBy { it.label }.map { (label, scores) -> SoundCue(label, scores.maxOf { it.score }) },
+                            AudioCleanup.classifierWindowRms(samples, localStartMs))
+                    }
+                    val cues = frames.flatMap { it.cues }.groupBy { it.label }.map { (label, list) ->
+                        SoundCue(label, list.maxOf { it.score })
+                    }.filter { it.score >= 0.20f }.sortedByDescending { it.score }
+                    return SoundAnalysis(cues, frames = frames)
                 }
-                val cues = frames.flatMap { it.cues }.groupBy { it.label }.map { (label, list) ->
-                    SoundCue(label, list.maxOf { it.score })
-                }.filter { it.score >= 0.20f }.sortedByDescending { it.score }
+                val original = classify(cleaned, 0)
                 coroutineContext.ensureActive()
-                SoundAnalysis(cues, frames = frames)
+                if (support == null) return@use original
+                // Retry between the original window boundaries without refiltering, gain
+                // changes, or dropping the original observations used by the conflict guard.
+                SoundPhaseRecovery.complete(original, support) {
+                    val shiftedPcm = cleaned.copyOfRange(SoundPhaseRecovery.OFFSET_SAMPLES, cleaned.size)
+                    try {
+                        classify(shiftedPcm, SoundPhaseRecovery.OFFSET_SAMPLES / 16L)
+                    } finally {
+                        shiftedPcm.fill(0f)
+                    }
+                }
             }
         } catch (cancelled: CancellationException) {
             throw cancelled

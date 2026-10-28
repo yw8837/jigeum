@@ -32,6 +32,7 @@ internal object GalleryMedia {
     private val lock = Mutex()
     private fun journal(context: Context) = context.getSharedPreferences("gallery-pending", Context.MODE_PRIVATE)
     // Synchronous commit on IO is required before the next MediaStore mutation or crash boundary.
+    // Both journal operations need commit's Boolean; KTX edit returns Unit.
     @SuppressLint("ApplySharedPref")
     private fun remember(context: Context, token: String, uri: Uri?, legacy: File?, written: Boolean) {
         check(journal(context).edit().putString(token, JSONObject().put("uri",uri?.toString() ?: "")
@@ -156,6 +157,22 @@ internal object GalleryMedia {
         }
     }
 
+    /** Opens the published copy only after the user's tap; never shares the temporary source. */
+    suspend fun open(context: Context, uri: Uri, video: Boolean) {
+        withContext(Dispatchers.IO) {
+            checkNotNull(context.contentResolver.openFileDescriptor(uri, "r")).use {
+                check(it.statSize != 0L)
+            }
+        }
+        withContext(Dispatchers.Main.immediate) {
+            context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, if (video) "video/mp4" else "image/png")
+                clipData = android.content.ClipData.newRawUri("아가톡 저장 파일", uri)
+                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            })
+        }
+    }
+
     private fun requireGeneration(generation: Long) {
         check(generation == MemoryArtifacts.currentGeneration()) { "기록이 변경되어 앨범 저장을 중단했어요." }
     }
@@ -174,6 +191,7 @@ internal object GalleryMedia {
                 val values = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                     put(MediaStore.MediaColumns.MIME_TYPE, if (video) "video/mp4" else "image/png")
+                    put(MediaStore.Images.ImageColumns.DATE_TAKEN, System.currentTimeMillis())
                     if (Build.VERSION.SDK_INT >= 29) {
                         put(MediaStore.MediaColumns.RELATIVE_PATH, "$directory/아가톡/")
                         put(MediaStore.MediaColumns.IS_PENDING, 1)
@@ -200,7 +218,10 @@ internal object GalleryMedia {
                 ensureActive(); requireGeneration(generation)
                 remember(context,token,uri,legacyFile,true)
                 if (Build.VERSION.SDK_INT >= 29) check(context.contentResolver.update(uri,
-                    ContentValues().apply { put(MediaStore.MediaColumns.IS_PENDING, 0) }, null, null) == 1) {
+                    ContentValues().apply {
+                        put(MediaStore.Images.ImageColumns.DATE_TAKEN, System.currentTimeMillis())
+                        put(MediaStore.MediaColumns.IS_PENDING, 0)
+                    }, null, null) == 1) {
                     "앨범에 파일을 표시하지 못했어요. 다시 시도해 주세요."
                 }
                 ensureActive(); requireGeneration(generation)

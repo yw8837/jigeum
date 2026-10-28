@@ -1,0 +1,8 @@
+{
+  "status": "stopped_host_pressure",
+  "completed_rows": 2,
+  "third_analysis_not_run": true,
+  "reason": "host available memory minimum 1,622,016 bytes after two timeout results; stopped owned runner before redundant third analysis",
+  "owned_fixture_removed": true,
+  "owned_emulator_stopped_before_gpu_restart": true
+}

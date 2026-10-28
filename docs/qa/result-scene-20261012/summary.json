@@ -1,0 +1,413 @@
+{
+  "version_name": "0.5.25-beta",
+  "version_code": 39,
+  "status": "google_review_in_progress",
+  "last_confirmed_alpha": 38,
+  "phone": {
+    "model": "SM-S938N",
+    "android": 16,
+    "portrait": {
+      "status": "pass",
+      "tests": 36,
+      "passed_tests": 36,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 45.94,
+      "exit": 0,
+      "play_metadata_unchanged": true
+    },
+    "landscape": {
+      "status": "pass",
+      "tests": 2,
+      "passed_tests": 2,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 9.14,
+      "exit": 0,
+      "play_metadata_unchanged": true
+    },
+    "provenance": {
+      "app": "03d499a6cc95f3f06b304430246fd703ede685c1ccb4d2317f2b6a8168f25c32",
+      "test": "e154ed059760871033d9e1c4b2a5a9d4fd7884e706dbc4c6dd655f2db998d51a"
+    },
+    "temporary_stay_awake_restored": 0,
+    "user_records_preserved": true,
+    "released_for_user": true
+  },
+  "scope": [
+    "result scene preview and save retention",
+    "new export save dates",
+    "result back exit",
+    "selected range repeat playback"
+  ],
+  "recognition_logic_changed": false,
+  "automation": "PAUSED; user requested no scheduling",
+  "play_submitted": true,
+  "actually_available": false,
+  "play_review": {
+    "release_id": 19,
+    "track": "Alpha",
+    "release_name": "0.5.25-beta (39) - result and save date",
+    "confirmed_at": "2026-10-12T23:36:37+09:00",
+    "last_alpha_recheck_at": "2026-10-12T23:50:00+09:00",
+    "last_alpha_recheck": "39 검토 중; 38 선택한 테스터에게 제공됩니다",
+    "publishing_overview": "검토 중인 변경사항",
+    "quick_checks": "progress_indicator_no_longer_displayed",
+    "last_publishing_recheck_at": "2026-10-13T00:05:00+09:00",
+    "review_message": "변경사항을 검토 중입니다. 앱을 검토하는 과정에서 추가 문제가 발견될 수도 있습니다.",
+    "alpha_status": "검토 중",
+    "managed_publishing": false,
+    "blocking_errors": 0,
+    "advisory_warnings": 2,
+    "devices_removed": 0,
+    "new_install_size_mb": 112,
+    "update_size_mb": 5.99,
+    "aab_sha256": "b77b5d3cf31164031ed3a90a9a73b66e90fbd80954f482925e8faec8ee360fb0",
+    "evidence": "delivery/play-review.md",
+    "last_available_version_code": 38,
+    "new_automation_created": false
+  },
+  "package": {
+    "status": "pass",
+    "variants": {
+      "beta": {
+        "package": {
+          "status": "pass",
+          "distribution_checked": "beta",
+          "backup_domains_excluded_in_both_modes": [
+            "database",
+            "device_database",
+            "device_file",
+            "device_root",
+            "device_sharedpref",
+            "external",
+            "file",
+            "root",
+            "sharedpref"
+          ],
+          "compiled_apk_has_internet_permission": true,
+          "allowBackup": false,
+          "fullBackupContent": false,
+          "baseline_comparison": {
+            "status": "pass",
+            "files_compared": 26,
+            "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-beta-code38.apk"
+          },
+          "aab_checked": true,
+          "aab_unsigned": false,
+          "physical_OEM_transfer_tested": false,
+          "apk_sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+          "aab_distribution": {
+            "package": "com.moa.babylanguage",
+            "version_code": 39,
+            "version_name": "0.5.25-beta",
+            "test_distribution": true,
+            "closed_test_distribution": true
+          },
+          "aab_sha256": "b77b5d3cf31164031ed3a90a9a73b66e90fbd80954f482925e8faec8ee360fb0"
+        },
+        "payload": [
+          {
+            "status": "pass",
+            "expected": "present",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\result-scene-20261012\\final\\Agattok-0.5.25-beta-code39.apk",
+            "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+            "model_variant": "infant-caption",
+            "abis": [
+              "arm64-v8a",
+              "armeabi-v7a",
+              "x86",
+              "x86_64"
+            ],
+            "payload_entries": [
+              "assets/AST_CAPTION_NOTICE.txt",
+              "assets/AST_MODEL_NOTICE.txt",
+              "assets/ONNX_RUNTIME_LICENSE.txt",
+              "assets/ONNX_RUNTIME_NOTICE.txt",
+              "assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+              "assets/ast-caption-presence.f32",
+              "assets/ast-infant-presence-candidate.onnx",
+              "lib/arm64-v8a/libonnxruntime.so",
+              "lib/arm64-v8a/libonnxruntime4j_jni.so",
+              "lib/armeabi-v7a/libonnxruntime.so",
+              "lib/armeabi-v7a/libonnxruntime4j_jni.so",
+              "lib/x86/libonnxruntime.so",
+              "lib/x86/libonnxruntime4j_jni.so",
+              "lib/x86_64/libonnxruntime.so",
+              "lib/x86_64/libonnxruntime4j_jni.so"
+            ]
+          },
+          {
+            "status": "pass",
+            "expected": "present",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\result-scene-20261012\\final\\Agattok-0.5.25-beta-code39.aab",
+            "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+            "model_variant": "infant-caption",
+            "abis": [
+              "arm64-v8a",
+              "armeabi-v7a",
+              "x86",
+              "x86_64"
+            ],
+            "payload_entries": [
+              "base/assets/AST_CAPTION_NOTICE.txt",
+              "base/assets/AST_MODEL_NOTICE.txt",
+              "base/assets/ONNX_RUNTIME_LICENSE.txt",
+              "base/assets/ONNX_RUNTIME_NOTICE.txt",
+              "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+              "base/assets/ast-caption-presence.f32",
+              "base/assets/ast-infant-presence-candidate.onnx",
+              "base/lib/arm64-v8a/libonnxruntime.so",
+              "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+              "base/lib/armeabi-v7a/libonnxruntime.so",
+              "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+              "base/lib/x86/libonnxruntime.so",
+              "base/lib/x86/libonnxruntime4j_jni.so",
+              "base/lib/x86_64/libonnxruntime.so",
+              "base/lib/x86_64/libonnxruntime4j_jni.so"
+            ]
+          }
+        ],
+        "flags": {
+          "AST_INFANT_CAPTION": true,
+          "AST_INFANT_PRESENCE": true,
+          "AST_BABBLE_SUPPORT": true,
+          "AST_INTEGRATED_CANDIDATE": false,
+          "FULL_ACCESS_CLOSED_TEST": true,
+          "FULL_ACCESS_PREVIEW": false,
+          "DEBUG": false
+        },
+        "files": {
+          "Agattok-0.5.25-beta-code39.apk": {
+            "bytes": 255196147,
+            "sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17"
+          },
+          "Agattok-0.5.25-beta-code39.aab": {
+            "bytes": 160221321,
+            "sha256": "b77b5d3cf31164031ed3a90a9a73b66e90fbd80954f482925e8faec8ee360fb0"
+          }
+        }
+      },
+      "release": {
+        "package": {
+          "status": "pass",
+          "distribution_checked": "release",
+          "backup_domains_excluded_in_both_modes": [
+            "database",
+            "device_database",
+            "device_file",
+            "device_root",
+            "device_sharedpref",
+            "external",
+            "file",
+            "root",
+            "sharedpref"
+          ],
+          "compiled_apk_has_internet_permission": true,
+          "allowBackup": false,
+          "fullBackupContent": false,
+          "baseline_comparison": {
+            "status": "pass",
+            "files_compared": 18,
+            "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-release-code38.apk"
+          },
+          "aab_checked": true,
+          "aab_unsigned": false,
+          "physical_OEM_transfer_tested": false,
+          "apk_sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+          "aab_distribution": {
+            "package": "com.moa.babylanguage",
+            "version_code": 39,
+            "version_name": "0.5.25",
+            "test_distribution": false,
+            "closed_test_distribution": false
+          },
+          "aab_sha256": "2bae082189a490a486cf8ef8c55a1ca73ee366938fc865ec4b6c4bad5ea5e2d0"
+        },
+        "payload": [
+          {
+            "status": "pass",
+            "expected": "absent",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\result-scene-20261012\\final\\Agattok-0.5.25-release-code39.apk",
+            "payload_entries": []
+          },
+          {
+            "status": "pass",
+            "expected": "absent",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\result-scene-20261012\\final\\Agattok-0.5.25-release-code39.aab",
+            "payload_entries": []
+          }
+        ],
+        "flags": {
+          "AST_INFANT_CAPTION": false,
+          "AST_INFANT_PRESENCE": false,
+          "AST_BABBLE_SUPPORT": false,
+          "AST_INTEGRATED_CANDIDATE": false,
+          "FULL_ACCESS_CLOSED_TEST": false,
+          "FULL_ACCESS_PREVIEW": false,
+          "DEBUG": false
+        },
+        "files": {
+          "Agattok-0.5.25-release-code39.apk": {
+            "bytes": 75397615,
+            "sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1"
+          },
+          "Agattok-0.5.25-release-code39.aab": {
+            "bytes": 46742650,
+            "sha256": "2bae082189a490a486cf8ef8c55a1ca73ee366938fc865ec4b6c4bad5ea5e2d0"
+          }
+        }
+      }
+    }
+  },
+  "signed_upgrade": {
+    "status": "pass",
+    "resumes": [
+      "signed-upgrade39-04",
+      "signed-upgrade39-resume05"
+    ],
+    "seed_record_id": 1791814557350,
+    "old_legacy_record": {
+      "id": 1791814557350,
+      "sound": "옹알이",
+      "context": "QA",
+      "note": "Synthetic signed upgrade fixture",
+      "phrase": "이전 버전의 검사 기록 1791814557207325700",
+      "source": "VIDEO_FILE",
+      "modelCue": "",
+      "basis": "LEGACY"
+    },
+    "actual_play_install_tested": false,
+    "app_data_cleared": false,
+    "old_install": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~2J_d-XLiEQkHstQFXcjQXQ==/com.moa.babylanguage-Rfar-ZfBo1usiGaryE0gaw==/base.apk",
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "version_code": 38,
+      "version_name": "0.5.24-beta",
+      "verified": true,
+      "errors": []
+    },
+    "old_media": {
+      "name": "아가톡-1791814872570.mp4",
+      "bytes": 809284,
+      "sha256": "f3eab600508e4b67a5ff1f8c83b46d2d447661108f45fa0613ae98657b3d4262",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "new_install": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~7CNG4B8Skat9JPezdgi-xw==/com.moa.babylanguage-FJg3sgLQKHlrgAde0Zl66w==/base.apk",
+      "sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+      "expected_sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+      "version_code": 39,
+      "version_name": "0.5.25-beta",
+      "verified": true,
+      "errors": []
+    },
+    "new_media": {
+      "name": "아가톡-1791814872570.mp4",
+      "bytes": 809284,
+      "sha256": "f3eab600508e4b67a5ff1f8c83b46d2d447661108f45fa0613ae98657b3d4262",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "new_legacy_record": {
+      "id": 1791814557350,
+      "sound": "옹알이",
+      "context": "QA",
+      "note": "Synthetic signed upgrade fixture",
+      "phrase": "이전 버전의 검사 기록 1791814557207325700",
+      "source": "VIDEO_FILE",
+      "modelCue": "",
+      "basis": "LEGACY"
+    },
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true,
+    "owned_external_files_removed": true
+  },
+  "signed_beta_scenario": [
+    "New signed beta39 actual 10-second AV analysis, scene save, and MP4 export without purchase"
+  ],
+  "signed_beta_media": {
+    "name": "아가톡-1791815201070.mp4",
+    "bytes": 809284,
+    "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "signed_release": {
+    "status": "pass",
+    "resumes": "signed-smoke39",
+    "actual_play_install_tested": false,
+    "physical_device": false,
+    "beta_media": {
+      "name": "아가톡-1791815201070.mp4",
+      "bytes": 809284,
+      "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "release_install": {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~Ew2tcqpXxxG4k8ziN4WdEg==/com.moa.babylanguage-BLmNDsIH3KkiwqTfEzAspQ==/base.apk",
+      "sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+      "expected_sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+      "version_code": 39,
+      "version_name": "0.5.25",
+      "verified": true,
+      "errors": []
+    },
+    "release_media": {
+      "name": "아가톡-1791815201070.mp4",
+      "bytes": 809284,
+      "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "pdf_relocked": true,
+    "visual_relocked": true,
+    "free_capture_seconds": 60,
+    "free_analysis_seconds": 10,
+    "owned_external_files_removed": true
+  },
+  "play_delivery_confirmation_20261021": {
+    "checked_date_kst": "2026-10-21",
+    "track": "Alpha",
+    "release_id": 19,
+    "version_code": 39,
+    "release_name": "0.5.25-beta (39) - result and save date",
+    "status_text": "선택한 테스터에게 제공됩니다.",
+    "published_text": "10월 13일 오전 12:11",
+    "evidence": "docs/qa/play-status-20261021/README.md",
+    "expression_expansion_20261019_included": false,
+    "actual_tester_installation_verified": false
+  }
+}

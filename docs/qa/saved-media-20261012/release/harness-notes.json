@@ -1,0 +1,13 @@
+{
+  "beta_build": {
+    "bounded_build_exit": 0,
+    "signature_verified": true,
+    "driver_post_build_failure": "UTF-8-only decoding of a CP949 path in build output",
+    "recovery": "Read the ASCII success marker as bytes, verified bounded metadata, copied the already-built APK without rebuilding or replacing the AAB"
+  },
+  "first_package_driver": {
+    "beta_package_check": "pass",
+    "post_package_failure": "A new harness assertion guessed renderVideo; actual shared method is renderMedia",
+    "recovery": "Checked actual compiled DEX, corrected method assertion, reused hash-matched package verdict, completed beta and release checks without rebuilding"
+  }
+}

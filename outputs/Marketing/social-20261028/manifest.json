@@ -1,0 +1,98 @@
+{
+  "created_at": "2026-10-28T00:49:54.661943+09:00",
+  "images": [
+    {
+      "file": "01-hello-agattok-feed.png",
+      "width": 1122,
+      "height": 1402,
+      "mode": "RGB",
+      "bytes": 1614773,
+      "sha256": "573463abe231cabfd827d949c16e827e742e867ebf19d008c7a14ad2e377ee59"
+    },
+    {
+      "file": "02-keep-the-voice-feed.png",
+      "width": 1122,
+      "height": 1402,
+      "mode": "RGB",
+      "bytes": 1494715,
+      "sha256": "5703e50eccade3deacc2b37925fd36b5fdc41c51db95c22e4a198bf437049acb"
+    },
+    {
+      "file": "03-our-baby-community-feed.png",
+      "width": 1122,
+      "height": 1402,
+      "mode": "RGB",
+      "bytes": 1479132,
+      "sha256": "4247c690804e1065561e147e64e3dca95b5989c5169dad56094474021b7fb6ca"
+    },
+    {
+      "file": "04-agattok-story.png",
+      "width": 941,
+      "height": 1672,
+      "mode": "RGB",
+      "bytes": 1632912,
+      "sha256": "b8723c929d686a6bc602a20417f81ba5808a24b50a76be91fb5d80abeaff4200"
+    }
+  ],
+  "copy_validation": [
+    {
+      "id": "instagram-01-launch-carousel",
+      "characters": 339,
+      "limit": 2200,
+      "status": "ready"
+    },
+    {
+      "id": "instagram-02-voice",
+      "characters": 315,
+      "limit": 2200,
+      "status": "ready"
+    },
+    {
+      "id": "instagram-03-community",
+      "characters": 285,
+      "limit": 2200,
+      "status": "ready"
+    },
+    {
+      "id": "threads-01-launch",
+      "characters": 281,
+      "limit": 500,
+      "status": "ready"
+    },
+    {
+      "id": "threads-02-voice",
+      "characters": 253,
+      "limit": 500,
+      "status": "ready"
+    },
+    {
+      "id": "threads-03-community",
+      "characters": 199,
+      "limit": 500,
+      "status": "ready"
+    },
+    {
+      "id": "threads-event-HOLD",
+      "characters": 306,
+      "limit": 500,
+      "status": "hold_until_public42_and_discount_checkout_verified"
+    }
+  ],
+  "published": false,
+  "scheduled": false,
+  "delivery_status": "ready organic assets and six captions; promotion draft separately held",
+  "checks": [
+    "All four PNG files decode.",
+    "Three feed images share identical dimensions and approximately4:5 aspect.",
+    "Story approximately9:16.",
+    "Korean text, URL and maker visually reviewed.",
+    "Threads posts under500 characters; Instagram captions under2200.",
+    "No private codes or real baby media.",
+    "Generated images are conceptual illustration, not app screenshots."
+  ],
+  "context_validator": {
+    "completeness_score": 87,
+    "scope": "document markers only; not marketing performance"
+  },
+  "external_changes": []
+}

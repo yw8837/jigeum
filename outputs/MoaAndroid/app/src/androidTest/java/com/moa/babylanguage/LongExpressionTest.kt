@@ -47,9 +47,9 @@ class LongExpressionTest {
         // There is no entitlement input to this interpreter: matching evidence
         // produces matching wording for free, preview and paid callers.
         val babble = recording(10_000) { cue("옹알이 후보") }
-        assertEquals("옹알옹알, 내 목소리예요! 내 얘기도 들어봐요.", phrase(babble, 10_000))
+        assertEquals("내 입에서 소리가 나왔어요. 우리 소리 놀이 해볼까요?", phrase(babble, 10_000))
         val laugh = recording(10_000) { cue("아기 웃음 후보") }
-        assertEquals("헤헤! 나도 웃음이 나요. 같이 웃어요.", phrase(laugh, 10_000))
+        assertEquals("웃음이 퐁퐁 나와요. 우리 같이 웃으며 놀아요!", phrase(laugh, 10_000))
     }
 
     @Test fun oneSecondLaughPaddedWithSilenceOrOtherSoundCannotBecomeMonologue() {
@@ -90,7 +90,8 @@ class LongExpressionTest {
                 assertFalse(result.phrase.contains(word))
             assertTrue(result.guide.contains("편안한지"))
             assertTrue(result.evidence.contains("→"))
-            assertEquals("나 여기 있어요. 이렇게도, 저렇게도 소리 내볼래요. 내 얘기 아직 남았어요. 조금만 더 들어줄래요?", result.phrase)
+            val first = if (reverse) "울음 소리 뒤에 웃음 소리도 나왔어요." else "웃음 소리 뒤에 울음이 나왔어요."
+            assertEquals(first + " 내 반응을 살피며 천천히 함께해 주세요.", result.phrase)
         }
     }
 

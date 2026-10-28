@@ -1,0 +1,239 @@
+{
+  "scope": "quiet accepted vocal audibility; fixed development inputs, not general accuracy",
+  "comparison": {
+    "status": "pass",
+    "conditions": 28,
+    "input_hashes_equal": true,
+    "old_outputs_preserved": [
+      "cry_original",
+      "laugh_original",
+      "babble_seven_month_original"
+    ],
+    "recovered": [
+      "babble_seven_month_rms6",
+      "babble_seven_month_rms9"
+    ],
+    "remaining_quiet": [
+      "cry_rms6",
+      "cry_rms9"
+    ],
+    "control_outputs": [],
+    "general_accuracy_validated": false,
+    "retained_regression": {
+      "conditions": 53,
+      "outputs": 20,
+      "all_observations_exact": true
+    }
+  },
+  "native": {
+    "status": "pass",
+    "tests": 100,
+    "passed_tests": 100,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 10.12,
+    "exit": 0
+  },
+  "signed_recovery": {
+    "status": "pass",
+    "source_sha256": "74ebc6171a6efe241ce994ae69dac087a1d5a64076438d41c39d9c247cfc58ef",
+    "attenuated_pcm_sha256": "8fc115843382ab5f2d17a664eac79fc0a47be208d3bbd4ba5e0ad6e40941a25c",
+    "general_accuracy_validated": false,
+    "rows": [
+      {
+        "version": 33,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "93bdf6de8ca211b4779ea131c2ee4e2cdca564e3acfb36dfedbc73849a4341af",
+          "expected_sha256": "93bdf6de8ca211b4779ea131c2ee4e2cdca564e3acfb36dfedbc73849a4341af",
+          "version_code": 33,
+          "version_name": "0.5.19-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "QUIET",
+        "ui_seconds": 20.806
+      },
+      {
+        "version": 34,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "expected_sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "version_code": 34,
+          "version_name": "0.5.20-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "BABBLE_RESULT",
+        "ui_seconds": 30.007
+      }
+    ],
+    "movie_sha256": "0fc5fcb7107dea543525cac9ae524381ed9c02c8b8d44f2f0f59992d51b3b4d3",
+    "local_movie_removed": true,
+    "remote_movie_removed": true,
+    "source_unchanged": true
+  },
+  "builds": {
+    "beta": {
+      "root_pid": 31336,
+      "exit_code": 0,
+      "elapsed_seconds": 165.514486,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 5291859968,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5510,
+      "output_truncated": false
+    },
+    "release": {
+      "root_pid": 39408,
+      "exit_code": 0,
+      "elapsed_seconds": 119.026515,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 4579282944,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5213,
+      "output_truncated": false
+    }
+  },
+  "source_sha256": {
+    "AudioCleanup.kt": "a31c172b1fc80469a26f30110edbbeeed2e9d587f44fb732ef36afc7592d7c9d",
+    "SoundAnalyzer.kt": "bd4dce2454be94152327d39f10bd54d87df102b2302808ba17bd6f16af1af548",
+    "SoundTimeline.kt": "f725180428e8ff2a701af8603d171dc08fd86c50ae81de279a56a297af9cb4b9",
+    "BabbleSupportPolicy.kt": "935698426697b7cbbda0dfd98e803c31d2182d0b239b714c321ebd5a8fe46f26",
+    "ClipEvidence.kt": "6960cd5bf4f9057538845bd154a5d9f6cd5c7d9afa2f7faf57ec3aaaee9983cb"
+  },
+  "packages": {
+    "beta": {
+      "Agattok-0.5.20-beta-code34.apk": {
+        "bytes": 255163379,
+        "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e"
+      },
+      "Agattok-0.5.20-beta-code34.aab": {
+        "bytes": 160195341,
+        "sha256": "172df8f28cd2ac503bbb7b6e4c4c4f34a9df18b349549b4ee75313addbd0ec25"
+      }
+    },
+    "release": {
+      "Agattok-0.5.20-release-code34.apk": {
+        "bytes": 75364843,
+        "sha256": "e4615f0d459f03384406fd841b70407f255ff10bf2672d0bb34558ef171a2c11"
+      },
+      "Agattok-0.5.20-release-code34.aab": {
+        "bytes": 46718695,
+        "sha256": "54f90822c16fe4134066351f5dcf061d046f8c2d272a1a2d73f87d3d700ce0f2"
+      }
+    }
+  },
+  "play_available_version_code": 34,
+  "candidate_version_code": 34,
+  "signed_upgrade_pending": false,
+  "closed_policy_pending": false,
+  "signed_upgrade": {
+    "status": "pass",
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true,
+    "owned_external_files_removed": true,
+    "media_sha256": "284b98d279c82501f22b512eb4f46025e284f0d6b6a54be92709ce88643192fe",
+    "duration_seconds": "10.000000"
+  },
+  "closed_policy": {
+    "status": "pass",
+    "scenarios": [
+      "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+      "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+      "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase",
+      "cold restart retains distribution access and records without a purchase or code",
+      "same-key release update restores 60/10/100, visual/PDF gates and preserves records/media"
+    ],
+    "capture_timeline": {
+      "end_label": "1:59.6",
+      "lower_ms": 119600,
+      "precision_ms": 100
+    },
+    "cleanup": {
+      "owned_external_files_removed": true,
+      "large_local_files_removed": true,
+      "raw_downloaded_media_removed": true,
+      "display_restored": true,
+      "font_restored": true,
+      "errors": []
+    },
+    "media_sha256": "2bd8f762f006a4731276eb656fbc0cc9114e8079e66dfa566e60fc9464e8a045"
+  },
+  "known_navigation": {
+    "status": "pass",
+    "range_ms": [
+      0,
+      10000
+    ],
+    "known_development_case": true,
+    "accuracy_test": false,
+    "broad_babble_evidence": true,
+    "saved_record": false,
+    "same_range_return": true,
+    "os_picker_cancel_preserves_result": true,
+    "new_capture_cancel_preserves_result": true,
+    "remote_copy_absent": true,
+    "source_unchanged": true
+  },
+  "cleanup": {
+    "status": "pass",
+    "owned_install_removed": true,
+    "emulator_disconnected": true,
+    "shared_avd_preserved": true,
+    "large_fixtures_absent": true,
+    "duplicate_logical_bytes_removed": 804857502.0,
+    "drive_free_bytes": 95618437120,
+    "current_and_previous_final_preserved": true
+  },
+  "local_qa": {
+    "status": "pass",
+    "cycles": 2,
+    "lifecycle_complete_and_cleared": true,
+    "independent_spec_mandatory_findings": 0,
+    "independent_standards_mandatory_findings": 0,
+    "play34_submitted": true
+  },
+  "play": {
+    "version_code": 34,
+    "version_name": "0.5.20-beta",
+    "track": "Alpha",
+    "review_requested_at": "2026-10-07T21:25:49+09:00",
+    "observed_state": "available_to_selected_testers",
+    "published_at": "2026-10-07T22:06:00+09:00",
+    "last_observed_at": "2026-10-07T22:14:12+09:00",
+    "pre_review_checks_complete": true,
+    "available_to_testers_confirmed": true,
+    "last_confirmed_available_version_code": 34,
+    "blocking_errors": 0,
+    "advisories": ["missing_deobfuscation_file", "missing_native_debug_symbols"],
+    "supported_devices_removed": 0,
+    "reference_install_mb": 112,
+    "reference_install_delta_kb": 1.32,
+    "testers_changed": false,
+    "monitor_automation_id": "33",
+    "monitor_status": "PAUSED",
+    "completion_audit": "all_required_evidence_verified",
+    "deployment_proof_commit": "c83652f569c4e1649c3072badd3357d135ede8a3",
+    "approval_blocker_resolved": true,
+    "tester_lists_preserved": [{"name":"Zardu 20260802","count":33},{"name":"existing group members 20261007","count":4},{"name":"original closed testers","count":2}],
+    "vendor_installation_report": "User relayed that all testers installed; not independently verified per account or version",
+    "twelve_testers_continuous_fourteen_days_verified": false,
+    "evidence": "play-review.md"
+  }
+}

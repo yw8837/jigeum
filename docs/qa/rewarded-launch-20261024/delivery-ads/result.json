@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "exact_release_code": 41,
+  "test_ad": true,
+  "live_inventory_verified": false,
+  "earned_credit_survived_restart": true,
+  "twenty_second_visual_analysis": true,
+  "result_export_receipt": true,
+  "credit_consumed_once": true,
+  "free_home_restored": true,
+  "owned_fixture_removed": true,
+  "actual_play_install": false
+}

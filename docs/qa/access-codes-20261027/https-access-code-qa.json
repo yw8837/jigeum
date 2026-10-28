@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-27T13:10:38.392Z",
+  "base": "https://jigeum-verifier-th7ce7roma-du.a.run.app",
+  "passed": 7,
+  "checks": [
+    "invitation signed with production public key",
+    "shared invitation works on another installation",
+    "QA discount first reservation and exact prices",
+    "same installation idempotent",
+    "different installation rejected",
+    "unknown code rejected",
+    "invitation is not Play review access"
+  ],
+  "customerCodesConsumed": 0,
+  "realPlayPurchaseTested": false,
+  "privateValuesLogged": false
+}

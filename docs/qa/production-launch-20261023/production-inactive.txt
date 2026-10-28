@@ -1,0 +1,88 @@
+Browser tab: 7, Title: "프로덕션 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/production?tab=countryAvailability".
+1 AXWebArea 프로덕션 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/production?tab=countryAvailability
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+					69 content list
+						70 container
+							71 container 최신 버전 및 번들
+								72 button 최신 버전 및 번들
+							73 container 프로덕션
+								74 button 프로덕션
+							75 container (collapsed) Description: 테스트, Secondary Actions: Expand
+								76 button 테스트
+							77 container 사전 등록
+								78 button 사전 등록
+							79 container 앱 무결성
+								80 button 앱 무결성
+							81 container 고급 설정
+								82 button 고급 설정
+				58 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					59 button 모니터링 및 개선
+						60 text 모니터링 및 개선
+				61 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					62 button 사용자 늘리기
+						63 text 사용자 늘리기
+				64 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					65 button Play를 통한 수익 창출
+						66 text Play를 통한 수익 창출
+			67 container main-content
+				68 container
+					83 heading 프로덕션, Value: 1
+						84 text 프로덕션
+					85 pop up button (collapsed) Description: 휴대전화, 태블릿, Desktop (Googlebook OS, ChromeOS), Android XR 폼 팩터를 선택합니다., ID: aB0293E08-814A-4572-8ED9-70B1195174B8--2, Secondary Actions: Expand
+					86 button 새 버전 만들기
+						87 text 새 버전 만들기
+					88 container
+						89 text 프로덕션 버전을 생성 및 관리하여 앱을 선택한 국가의 모든 사용자에게 제공하세요.
+						90 link Description: 프로덕션 자세히 알아보기(새 탭에서 열림), Value: play.google.com/console/about/publicreleases
+					91 heading 휴대전화, 태블릿, Desktop, Android XR 트랙 요약, Value: 4
+						92 text 휴대전화, 태블릿, Desktop, Android XR 트랙 요약
+					93 text 비활성
+					94 tab group
+						95 tab (selectable, settable, boolean) Description: 출시 대시보드, Value: 0
+						96 tab (selectable, settable, boolean) Description: 출시, Value: 0
+						97 tab (selected, settable, boolean) Description: 국가/지역, Value: 1
+					98 heading 국가/지역, Value: 2
+						99 text 국가/지역
+					100 button (collapsed) Description: "국가/지역"에 대한 추가 정보, Secondary Actions: Expand
+					108 text 이 트랙을 제공할 국가를 추가하세요.
+					109 button 국가/지역 추가
+						110 text 국가/지역 추가
+					111 link Description: 국가/지역 추가 및 동기화에 관해 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/9874837
+				101 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				102 link Description: 상태 대시보드, Value: status.play.google.com/
+				103 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				104 text © 2026 Google
+				105 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				106 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				107 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 97 tab (selected, settable, boolean) Description: 국가/지역, Value: 1

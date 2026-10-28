@@ -1,0 +1,130 @@
+Browser tab: 1, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+1 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				275 container 홈
+					276 button 홈
+						277 text 홈
+				278 container 계정 관리
+					279 button 계정 관리
+						280 text 계정 관리
+				281 container 아가톡 - 지금 내 기분이 그래
+					282 pop up button 아가톡 - 지금 내 기분이 그래
+				283 container 대시보드
+					284 button 대시보드
+						285 text 대시보드
+				286 container 통계
+					287 button 통계
+						288 text 통계
+				289 container 게시 개요
+					290 button 게시 개요
+						291 text 게시 개요
+				292 container Google Play로 보호됨
+					293 button Google Play로 보호됨
+						294 text Google Play로 보호됨
+				295 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					296 button 테스트 및 출시
+						297 text 테스트 및 출시
+				298 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					299 button 모니터링 및 개선
+						300 text 모니터링 및 개선
+				301 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					302 button 사용자 늘리기
+						303 text 사용자 늘리기
+				320 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					321 button Play를 통한 수익 창출
+						322 text Play를 통한 수익 창출
+			57 container main-content
+				330 container
+					331 heading 게시 개요, Value: 1
+						332 text 게시 개요
+					333 container
+						334 text 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+						335 button 게시 개요에 관한 세부정보 더보기
+					336 pop up button (collapsed) 관리형 게시가 사용 중지됨, ID: a74E37605-DBB2-4CE7-9205-CBF75627095B--4, Secondary Actions: Expand
+					337 text 최근 게시일: 2026년 10월 27일
+					338 link Description: 제출 활동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					339 heading 검토 중인 변경사항, Value: 2
+						340 text 검토 중인 변경사항
+					341 button (collapsed) Description: "검토 중인 변경사항"에 대한 추가 정보, Secondary Actions: Expand
+					342 button 변경사항 삭제
+						343 text 변경사항 삭제
+					344 button (expanded) Description: 콘텐츠 숨기기: 검토 중인 변경사항, Secondary Actions: Collapse
+					345 heading 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 4
+						346 text 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중
+					347 level indicator 일반적으로 발견되는 문제에 대한 빠른 검사 실행 중, Value: 6
+					348 container
+						349 text 이러한 검사를 통해 특정 정책 및 앱 품질 문제를 발견하여 검토 전에 문제를 해결할 수 있습니다. 검사가 성공적으로 완료되는 즉시 변경사항이 검토를 위해 전송됩니다.
+						350 link Description: 검토를 위해 변경사항을 전송하기 전에 Google에서 문제를 감지하기 위해 실행하는 자동 검사에 대해 자세히 알아보려면 고객센터로 이동하세요., Value: support.google.com/googleplay/android-developer/answer/14807773
+					351 text 최대 14분 남음
+					352 table 변경사항
+						353 row 변경된 항목 설명
+							354 cell
+								355 text 변경된 항목
+							356 cell
+								357 text 설명
+							358 cell
+						359 row 프로덕션
+							360 cell
+								361 text 프로덕션
+						362 row 0.5.30 (44) - codes expressions and update notice 전체 출시 시작 추가 작업
+							363 cell
+								364 text 0.5.30 (44) - codes expressions and update notice
+							365 cell
+								366 text 전체 출시 시작
+							367 cell
+								368 list 추가 작업
+									369 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						370 row 스토어 등록정보
+							371 cell
+								372 text 스토어 등록정보
+						373 row 한국어 – ko-KR 기본 스토어 등록정보 간단한 설명을 '아기의 소리와 장면을 아가말 영상카드로 간직하고, 우리 아이 자랑에서 함께 나눠요.'(으)로 변경 추가 작업
+							374 cell
+								375 text 한국어 – ko-KR
+								376 text 기본 스토어 등록정보
+							377 cell
+								378 text 간단한 설명을 '아기의 소리와 장면을 아가말 영상카드로 간직하고, 우리 아이 자랑에서 함께 나눠요.'(으)로 변경
+							379 cell
+								380 list 추가 작업
+									381 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						382 row 한국어 – ko-KR 기본 스토어 등록정보 전체 설명 변경 추가 작업
+							383 cell
+								384 text 한국어 – ko-KR
+								385 text 기본 스토어 등록정보
+							386 cell
+								387 text 전체 설명 변경
+							388 cell
+								389 list 추가 작업
+									390 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						391 row 한국어 – ko-KR 기본 스토어 등록정보 휴대전화 스크린샷 변경 추가 작업
+							392 cell
+								393 text 한국어 – ko-KR
+								394 text 기본 스토어 등록정보
+							395 cell
+								396 text 휴대전화 스크린샷 변경
+							397 cell
+								398 list 추가 작업
+									399 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+						400 row 한국어 – ko-KR 기본 스토어 등록정보 그래픽 이미지 변경 추가 작업
+							401 cell
+								402 text 한국어 – ko-KR
+								403 text 기본 스토어 등록정보
+							404 cell
+								405 text 그래픽 이미지 변경
+							406 cell
+								407 list 추가 작업
+									408 pop up button (collapsed) Description: 추가 작업, Secondary Actions: Expand
+				323 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				324 link Description: 상태 대시보드, Value: status.play.google.com/
+				325 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				326 text © 2026 Google
+				327 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				328 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				329 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

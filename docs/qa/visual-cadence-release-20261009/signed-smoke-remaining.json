@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "scope": "remaining capture permission/setup and free bounds only",
+  "prior_partial_evidence_sha256": "8a22a2bb5709c743f473b098f7068a0af76666e78ca54af4c8c5af0ba7db11f8",
+  "install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~12bW1UDmpE8hV8BjVerfMA==/com.moa.babylanguage-2qkBy-sG-btGoGc3xnJFdQ==/base.apk",
+    "sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96",
+    "expected_sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96",
+    "version_code": 36,
+    "version_name": "0.5.22",
+    "verified": true,
+    "errors": []
+  }
+}
