@@ -100,6 +100,21 @@ class ArmGateTest(unittest.TestCase):
         gate.verify(release, self.directory, now=NOW, infant_caption=True, release_qa=True)
         with self.assertRaises(ValueError): gate.verify(release, self.directory, now=NOW, infant_caption=True)
         with self.assertRaises(ValueError): gate.verify(value, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        current = copy.deepcopy(release)
+        revision = 'caption-short-codes-20261102'
+        current['candidate_revision'] = revision
+        current['measurement']['candidate_revision'] = revision
+        # A new revision cannot re-label the old frozen APK pair as current evidence.
+        with self.assertRaises(ValueError): gate.verify(current, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        app_sha, test_sha, app_bytes, test_bytes = gate.RELEASE_QA_CANDIDATES[revision]
+        for role, digest, size in [('app', app_sha, app_bytes), ('test', test_sha, test_bytes)]:
+            current['provenance'][role + '_apk'] = dict(sha256=digest, bytes=size)
+            current[role + '_installed'].update(sha256=digest, expected_sha256=digest)
+        gate.verify(current, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        current['measurement']['candidate_revision'] = 'caption-release-20261022'
+        with self.assertRaises(ValueError): gate.verify(current, self.directory, now=NOW, infant_caption=True, release_qa=True)
+        current['candidate_revision'] = 'unknown-revision'
+        with self.assertRaises(ValueError): gate.verify(current, self.directory, now=NOW, infant_caption=True, release_qa=True)
         release['app_installed']['sha256'] = '0' * 64
         with self.assertRaises(ValueError): gate.verify(release, self.directory, now=NOW, infant_caption=True, release_qa=True)
         value['measurement']['cases'][1]['caption_native_windows'] = 2

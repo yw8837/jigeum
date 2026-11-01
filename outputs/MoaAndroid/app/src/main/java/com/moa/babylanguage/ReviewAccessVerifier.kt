@@ -214,7 +214,8 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
 internal class ReviewCredentialStore(
     context: Context,
     private val installationId: String,
-    private val preferences: SharedPreferences
+    private val preferences: SharedPreferences,
+    private val accessCodeMode: Boolean = false
 ) {
     private val packageName = context.packageName
     private val keyAlias = "$packageName.play_review_code_v1.$installationId"
@@ -228,15 +229,15 @@ internal class ReviewCredentialStore(
         if (data.getInt("version") != 1) return null
         val iv = Base64.decode(data.getString("iv"), Base64.NO_WRAP)
         val bytes = Base64.decode(data.getString("ciphertext"), Base64.NO_WRAP)
-        if (iv.size != 12 || bytes.size !in 48..144) return null
+        if (iv.size != 12 || bytes.size !in (if (accessCodeMode) 24 else 48)..144) return null
         val key = keystore().getKey(keyAlias, null) as? SecretKey ?: return null
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(128, iv))
         cipher.updateAAD(aad())
-        String(cipher.doFinal(bytes), Charsets.UTF_8).takeIf(::validReviewCode)
+        String(cipher.doFinal(bytes), Charsets.UTF_8).takeIf { if (accessCodeMode) validAccessCode(it) else validReviewCode(it) }
     }.getOrNull()
     fun encrypt(code: String): String {
-        require(validReviewCode(code))
+        require(if (accessCodeMode) validAccessCode(code) else validReviewCode(code))
         val store = keystore()
         val key = (store.getKey(keyAlias, null) as? SecretKey) ?: KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore").run {
             init(KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)

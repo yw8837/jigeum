@@ -23,7 +23,12 @@ def main():
     args = parser.parse_args()
     if not args.serial.startswith('emulator-'):
         parser.error('Only an owned emulator is allowed.')
-    code = re.search(r'AGATTOK-FRIENDS-[A-Za-z0-9_-]{32}', args.code_file.read_text(encoding='utf-8')).group(0)
+    private_text = args.code_file.read_text(encoding='utf-8')
+    short_match = re.search(r'무료: ([A-Z2-9]{5}-[A-Z2-9]{5})', private_text)
+    legacy_match = re.search(r'AGATTOK-FRIENDS-[A-Za-z0-9_-]{32}', private_text)
+    if not short_match and not legacy_match:
+        raise ValueError('Expected a private invitation code file; contents are intentionally omitted')
+    code = short_match.group(1) if short_match else legacy_match.group(0)
     args.evidence.mkdir(parents=True, exist_ok=True)
     package = 'com.moa.babylanguage'
     remote = '/sdcard/agattok-access-code-smoke.xml'

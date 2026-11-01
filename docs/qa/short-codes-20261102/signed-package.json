@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "checks": {
+    "model_native_identical": true,
+    "closed_test_false": true,
+    "preview_false": true,
+    "release": true,
+    "version45": true,
+    "version_name": true,
+    "debug_false": true
+  },
+  "model_native_entries": 28,
+  "artifacts": {
+    ".apk": {
+      "path": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.apk",
+      "bytes": 258250161,
+      "sha256": "fb6d3ac1a5d73acb9c446d98874f124bdafb53f0b39b043dfeddf24c24f2997c"
+    },
+    ".aab": {
+      "path": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.aab",
+      "bytes": 163177736,
+      "sha256": "1ce09db54abf8c1e909b81cb1b7ded20d2529ae979f2ad283a57a0282af79157"
+    }
+  }
+}

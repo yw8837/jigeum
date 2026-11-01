@@ -1,0 +1,280 @@
+{
+  "version_code": 45,
+  "version_name": "0.5.31",
+  "public_version_at_start": 44,
+  "status": "production_review_submitted",
+  "server": {
+    "revision": "jigeum-verifier-00008-nm8",
+    "traffic_percent": 100,
+    "tests_passed": 74,
+    "manifest_secret_version": 3,
+    "short_invitation_live_verified": true,
+    "unknown_short_code_rejected": true,
+    "shared_discount_closed_rejected": true,
+    "real_discount_slots_consumed_by_qa": 0
+  },
+  "campaign": {
+    "limit": 100,
+    "count_basis": "app_installation_registrations_not_purchases_or_verified_people",
+    "registered_at_last_check": 0,
+    "accepting_new": true,
+    "manual_close_reopen": true,
+    "existing_registrants_retained_when_closed": true
+  },
+  "dashboard": {
+    "url": "http://127.0.0.1:8765/",
+    "shortcut": "D:/Codex/Agattok/campaign-dashboard/아가톡 할인 대시보드.lnk",
+    "loopback_only": true,
+    "existing_operator_auth": true
+  },
+  "android": {
+    "debug_tests": {
+      "status": "pass",
+      "tests": 48,
+      "passed_tests": 48,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 27.25,
+      "exit": 0,
+      "completed_at": "2026-11-01T17:37:49.089151+00:00",
+      "provenance": {
+        "app_apk": {
+          "path": "D:\\Codex\\Agattok\\short-codes-20261102\\build\\app\\outputs\\apk\\debug\\app-debug.apk",
+          "sha256": "54ccae942024828c4938d12cbb90f7149ed5673c0bccd2720c6a48dbd2e744af",
+          "bytes": 87049096
+        },
+        "test_apk": {
+          "path": "D:\\Codex\\Agattok\\short-codes-20261102\\build\\app\\outputs\\apk\\androidTest\\debug\\app-debug-androidTest.apk",
+          "sha256": "bd4c78a3224b4f2135ac67ac0f34219ff30678872c4f3c93d390e3082734b48f",
+          "bytes": 2408871
+        },
+        "git": {
+          "sha": "bf08dd63e894e9583b0b64154d4c29601c117554",
+          "dirty": true,
+          "porcelain": [
+            " M outputs/MoaAndroid/app/build.gradle.kts",
+            " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessCodeTest.kt",
+            " M outputs/MoaAndroid/app/src/astProbeAndroidTest/java/com/moa/babylanguage/AstDeviceBenchmarkTest.kt",
+            " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeSection.kt",
+            " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeVerifier.kt",
+            " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BillingManager.kt",
+            " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+            " M outputs/PlayVerifier/src/access-codes.js",
+            " M outputs/PlayVerifier/src/server.js",
+            " M tools/deploy/access-codes-plan.json",
+            " M tools/qa/access_code_release_smoke.py",
+            " M tools/release/verify_infant_presence_arm.py",
+            " M tools/research/ast_device_benchmark.py",
+            "?? docs/qa/dex-review-20261102/remediation.md",
+            "?? docs/qa/short-codes-20261102/",
+            "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ShortAccessCodeTest.kt",
+            "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeInput.kt",
+            "?? outputs/PlayVerifier/src/campaign-reservations.js",
+            "?? outputs/PlayVerifier/test/campaign-dashboard.test.js",
+            "?? outputs/PlayVerifier/test/shared-campaign.test.js",
+            "?? tools/access-campaign/",
+            "?? tools/qa/short_code_tests.py"
+          ]
+        },
+        "app_installed": {
+          "package": "com.moa.babylanguage",
+          "base_apk": "/data/app/~~PEAVQzpoVuE_qHyghgwaBA==/com.moa.babylanguage-B_ZittEG-7PkfBMpjHNvdQ==/base.apk",
+          "sha256": "54ccae942024828c4938d12cbb90f7149ed5673c0bccd2720c6a48dbd2e744af",
+          "expected_sha256": "54ccae942024828c4938d12cbb90f7149ed5673c0bccd2720c6a48dbd2e744af",
+          "version_code": 45,
+          "version_name": "0.5.31",
+          "verified": true,
+          "errors": []
+        },
+        "test_installed": {
+          "package": "com.moa.babylanguage.test",
+          "base_apk": "/data/app/~~Ob2di4BVccJ5tRFJoTKRtA==/com.moa.babylanguage.test-urhGWiOMSuQeECYcWHspng==/base.apk",
+          "sha256": "bd4c78a3224b4f2135ac67ac0f34219ff30678872c4f3c93d390e3082734b48f",
+          "expected_sha256": "bd4c78a3224b4f2135ac67ac0f34219ff30678872c4f3c93d390e3082734b48f",
+          "version_code": 0,
+          "version_name": "null",
+          "verified": true,
+          "errors": []
+        }
+      },
+      "actual_play_purchase_tested": false
+    },
+    "physical_arm_status": "pass",
+    "physical_run_id": "6e0917c89eb742b9bd6162efa4e55a73",
+    "proof_revision": "caption-short-codes-20261102",
+    "model_native_entries_equal_public44": 28,
+    "physical_cleanup_complete": true,
+    "production_install_unchanged": true,
+    "phone_released_to_user": true,
+    "signed_package": {
+      "status": "pass",
+      "checks": {
+        "model_native_identical": true,
+        "closed_test_false": true,
+        "preview_false": true,
+        "release": true,
+        "version45": true,
+        "version_name": true,
+        "debug_false": true
+      },
+      "model_native_entries": 28,
+      "artifacts": {
+        ".apk": {
+          "path": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.apk",
+          "bytes": 258250161,
+          "sha256": "fb6d3ac1a5d73acb9c446d98874f124bdafb53f0b39b043dfeddf24c24f2997c"
+        },
+        ".aab": {
+          "path": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.aab",
+          "bytes": 163177736,
+          "sha256": "1ce09db54abf8c1e909b81cb1b7ded20d2529ae979f2ad283a57a0282af79157"
+        }
+      }
+    },
+    "lint_release": {
+      "errors": 0,
+      "warnings": 22,
+      "hints": 1
+    },
+    "native_alignment_64bit_16kib": true,
+    "signed_invitation": {
+      "status": "pass",
+      "real_server": true,
+      "real_play_purchase": false,
+      "real_discount_codes_consumed": 0,
+      "secret_written_to_evidence": false,
+      "version_code": 45,
+      "version_name": "0.5.31",
+      "invitation_accepted": true,
+      "restart_retained": true,
+      "local_removal_relocks": true
+    },
+    "signed_upgrade": {
+      "status": "pass",
+      "installs": [
+        {
+          "package": "com.moa.babylanguage",
+          "base_apk": "/data/app/~~34Rpf0n4gsMT6taaOo76Fg==/com.moa.babylanguage-mN4q2QxDSNaze-nOMBJBlw==/base.apk",
+          "sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+          "expected_sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+          "version_code": 44,
+          "version_name": "0.5.30",
+          "verified": true,
+          "errors": []
+        },
+        {
+          "package": "com.moa.babylanguage",
+          "base_apk": "/data/app/~~YTAcN7nUK9lR0NhRSKMdNg==/com.moa.babylanguage-G5QL-q6h9C6oQak3MC9f5A==/base.apk",
+          "sha256": "fb6d3ac1a5d73acb9c446d98874f124bdafb53f0b39b043dfeddf24c24f2997c",
+          "expected_sha256": "fb6d3ac1a5d73acb9c446d98874f124bdafb53f0b39b043dfeddf24c24f2997c",
+          "version_code": 45,
+          "version_name": "0.5.31",
+          "verified": true,
+          "errors": []
+        }
+      ],
+      "actual_play_install_tested": false,
+      "app_data_cleared": false,
+      "infant_intent_accuracy_tested": false,
+      "seed_record_id": 1793556523957,
+      "old_legacy_record": {
+        "id": 1793556523957,
+        "sound": "옹알이",
+        "context": "QA",
+        "note": "Synthetic signed upgrade fixture",
+        "phrase": "이전 버전의 검사 기록 1793556523843802500",
+        "source": "VIDEO_FILE",
+        "modelCue": "",
+        "basis": "LEGACY"
+      },
+      "old_media": {
+        "name": "아가톡-1793556637471.mp4",
+        "bytes": 578783,
+        "sha256": "e5c250aefa5e6d178a401c511984e2c6ab05ad11017cfc0586e58a7a74901be0",
+        "duration": "3.008000",
+        "streams": [
+          "audio",
+          "video"
+        ]
+      },
+      "new_media": {
+        "name": "아가톡-1793556637471.mp4",
+        "bytes": 578783,
+        "sha256": "e5c250aefa5e6d178a401c511984e2c6ab05ad11017cfc0586e58a7a74901be0",
+        "duration": "3.008000",
+        "streams": [
+          "audio",
+          "video"
+        ]
+      },
+      "new_legacy_record": {
+        "id": 1793556523957,
+        "sound": "옹알이",
+        "context": "QA",
+        "note": "Synthetic signed upgrade fixture",
+        "phrase": "이전 버전의 검사 기록 1793556523843802500",
+        "source": "VIDEO_FILE",
+        "modelCue": "",
+        "basis": "LEGACY"
+      },
+      "checks_passed": true,
+      "legacy_text_preserved": true,
+      "media_bytes_preserved": true,
+      "beta_full_access_retained": false,
+      "release_free_limits_restored": true,
+      "owned_external_files_removed": true
+    }
+  },
+  "limits": {
+    "actual_play_purchase_restore_verified": false,
+    "actual_discount_charge_verified": false,
+    "live_ads_verified": false,
+    "general_infant_intent_accuracy_validated": false,
+    "dex_warning_fixed": false,
+    "r8_enabled": false
+  },
+  "privacy": {
+    "codes_in_git": false,
+    "private_baby_media_uploaded": false,
+    "automations_created": false,
+    "messages_sent": false
+  },
+  "play": {
+    "production_release_id": 5,
+    "draft_created": true,
+    "artifact_uploaded": true,
+    "review_submitted": true,
+    "available_to_users": false,
+    "rollout_percent": 100,
+    "countries": [
+      "KR"
+    ],
+    "managed_publishing": false,
+    "submission_id": 25,
+    "submitted_at_kst": "2026-11-02T03:16:00+09:00",
+    "status": "in_review",
+    "quick_checks": "in_progress_at_submission"
+  },
+  "cleanup": {
+    "scope": "D:\\Codex\\Agattok\\short-codes-20261102",
+    "build_path": "D:\\Codex\\Agattok\\short-codes-20261102\\build",
+    "build_present": true,
+    "build_logical_bytes": 2718239425,
+    "build_deletion": "blocked_by_automatic_approval_policy_before_execution",
+    "blocked_action_retried": false,
+    "basic_qa_apks_preserved": true,
+    "final45_and_previous44_preserved": true,
+    "frozen_proof_pair_preserved": true,
+    "previous_blocked_targets_untouched": true,
+    "drive_free_bytes": 37604556800,
+    "owned_emulator_app_removed": true,
+    "owned_xml_and_external_fixtures_removed": true,
+    "owned_emulator_stopped": true,
+    "phone_qa_cleanup_complete": true
+  }
+}

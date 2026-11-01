@@ -1,0 +1,48 @@
+{
+  "status": "pass",
+  "entry_count": 28,
+  "baseline": "signed44",
+  "entries": {
+    "lib/arm64-v8a/libandroidx.graphics.path.so": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+    "lib/arm64-v8a/libimage_processing_util_jni.so": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+    "lib/arm64-v8a/libmediapipe_tasks_jni.so": "59708f0daa04d24d42e48de7a3c2b73fff12e460004266b026787274effe700a",
+    "lib/arm64-v8a/libonnxruntime.so": "4d2318b3849abb8862133d3068fc7e807ed8b2671cc6d83657fff2fcb9e1caad",
+    "lib/arm64-v8a/libonnxruntime4j_jni.so": "5c032a6547e3c33671c07d885af59f1bddd92eb72c595ae8d80db5bbe3fdd2ef",
+    "lib/arm64-v8a/libsurface_util_jni.so": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+    "lib/armeabi-v7a/libandroidx.graphics.path.so": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+    "lib/armeabi-v7a/libimage_processing_util_jni.so": "05973c0cf8e8dd281c8ec505c41814b78b740461056925bb41120594d7c35dcd",
+    "lib/armeabi-v7a/libmediapipe_tasks_jni.so": "981111800567e3b9a911fd2bb7919346c318fc7039c2662d3326807ae473f6cc",
+    "lib/armeabi-v7a/libonnxruntime.so": "eddf2c0e4c735db7fa3af3c80d5804f5a931caebeb369189c15d1b8606162fdc",
+    "lib/armeabi-v7a/libonnxruntime4j_jni.so": "58da45b4c221eecd7c82145e9699b93c33752459121ecd882dc1430be2d4c1c9",
+    "lib/armeabi-v7a/libsurface_util_jni.so": "78eb0b10e91b819be97cb7daa8c97fb757fa6d07cb80ccb7e92c113b45bda9be",
+    "lib/x86/libandroidx.graphics.path.so": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+    "lib/x86/libimage_processing_util_jni.so": "b52f93b57d408b2306071f9de1a4b0b5684c1b86563e34a8711d80a1e6c03f94",
+    "lib/x86/libmediapipe_tasks_jni.so": "0b3243d63a32ae26738d99feccd6bf4ba8fe203ab2a955e12abb00efc76bc5e2",
+    "lib/x86/libonnxruntime.so": "c3812349a3e51683bafd62531c75a77fdf4eee5adc7727b7781becccd079e368",
+    "lib/x86/libonnxruntime4j_jni.so": "e92141e1f4205ac26845471f747c959d45aa52f12a00c24655becd0c6ca982b9",
+    "lib/x86/libsurface_util_jni.so": "3048a535d701579c87c4ad91283cd1246d2c85399a164ee4720642037ea31727",
+    "lib/x86_64/libandroidx.graphics.path.so": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+    "lib/x86_64/libimage_processing_util_jni.so": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+    "lib/x86_64/libmediapipe_tasks_jni.so": "2b1a68c8d8fdca49a4d023ae27e5978ca692432a1bbf8edb8b2e59e0c7c50386",
+    "lib/x86_64/libonnxruntime.so": "2328d9481be5869dd8c4be96eb57b38a0105db17f1fe696a903c02a0988f0bd9",
+    "lib/x86_64/libonnxruntime4j_jni.so": "c840cb9d07909d1f8cb72ff54307dcb30fb3699bc1a9836f45866a6f6368a6a6",
+    "lib/x86_64/libsurface_util_jni.so": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+    "assets/ast-caption-presence.f32": "979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1",
+    "assets/ast-infant-presence-candidate.onnx": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+    "assets/face_landmarker.task": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "assets/yamnet.tflite": "4d8b4a53282dc83ef04e3e7dbc4fbc98082e34e44ed798e16c3a0cdd4c584faf"
+  },
+  "new_only": [],
+  "missing": [],
+  "changed": [],
+  "artifacts": {
+    "app.apk": {
+      "sha256": "a1cd56e88a36fc42751a5e7b27a2ad2b506d02b9d96c67f69444075a0c01df9c",
+      "bytes": 267839660
+    },
+    "test.apk": {
+      "sha256": "a71192e894f12633163cd30f20ad26e92dcc6ddb65fe4de39f43afbc2565c042",
+      "bytes": 2585907
+    }
+  }
+}

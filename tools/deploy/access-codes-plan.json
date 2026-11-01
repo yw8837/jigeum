@@ -8,7 +8,7 @@
   "artifactRepository": "jigeum",
   "buildSourceBucket": "jigeum-play-20261001-build-source",
   "imageName": "play-verifier",
-  "imageTag": "access-codes-20261027",
+  "imageTag": "short-codes-20261102",
   "runtimeServiceAccountName": "jigeum-play-runtime",
   "signingSecret": "jigeum-entitlement-signing",
   "signingSecretVersion": "1",
@@ -101,7 +101,7 @@
   },
   "accessCodes": {
     "manifestSecret": "jigeum-access-code-manifest",
-    "version": "2",
+    "version": "3",
     "bucket": "jigeum-play-20261001-code-redemptions"
   }
 }

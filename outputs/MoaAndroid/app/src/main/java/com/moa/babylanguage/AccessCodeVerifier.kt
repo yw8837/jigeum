@@ -28,7 +28,7 @@ internal interface CodeEntitlements : ReviewEntitlements {
 
 internal fun verifiedAccessCodeClaims(envelope: String, key: PublicKey, installation: String,
     packageName: String, code: String, now: Long): JSONObject? = runCatching {
-    if (!validReviewCode(code) || envelope.length > 16_384) return null
+    if (!validAccessCode(code) || envelope.length > 16_384) return null
     val json = JSONObject(envelope)
     val payload = Base64.decode(json.getString("payload"), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
     val signature = Base64.decode(json.getString("signature"), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
@@ -69,7 +69,7 @@ internal class AccessCodeVerifier(private val context: Context) : CodeEntitlemen
         val id = UUID.randomUUID().toString()
         if (preferences.edit().putString("installation_id", id).commit()) id else null
     }
-    private val credentials = installationId?.let { ReviewCredentialStore(context, it, preferences) }
+    private val credentials = installationId?.let { ReviewCredentialStore(context, it, preferences, accessCodeMode = true) }
     override fun storedCode(): String? = credentials?.read()
     override fun clear() {
         preferences.edit().remove("credential").remove("entitlement").remove("cache_version")
@@ -107,7 +107,7 @@ internal class AccessCodeVerifier(private val context: Context) : CodeEntitlemen
         return verifiedAccessCodeClaims(envelope, key, installation, context.packageName, code, now)
     }
     override suspend fun verify(code: String): VerificationResult = withContext(Dispatchers.IO) {
-        if (!isConfigured || installationId == null || !validReviewCode(code)) return@withContext VerificationResult.Unavailable
+        if (!isConfigured || installationId == null || !validAccessCode(code)) return@withContext VerificationResult.Unavailable
         val connection = try { URI(checkNotNull(endpoint)).toURL().openConnection() as HttpURLConnection }
             catch (_: Exception) { return@withContext VerificationResult.Unavailable }
         val deadline = HttpRequestDeadline(connection, currentCoroutineContext().job)

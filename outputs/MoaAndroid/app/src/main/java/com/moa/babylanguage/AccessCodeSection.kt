@@ -45,10 +45,10 @@ internal fun AccessCodeSection(state: BillingUiState, onActivate: (String) -> Un
                 keyboardOptions = KeyboardOptions(autoCorrectEnabled = false, keyboardType = KeyboardType.Password),
                 enabled = !verifying && state.codeStatus != ReviewAccessStatus.UNAVAILABLE,
                 modifier = Modifier.fillMaxWidth().testTag("access-code-input"))
-            Text("할인 코드는 신규 구독자용이며 처음 등록한 기기에 연결돼요. 재설치·기기 변경 전 등록 상태를 확인해 주세요. 코드 확인에는 인터넷이 필요하며 코드와 무작위 설치 식별자만 전송해요.",
+            Text("짧은 코드는 대소문자나 하이픈 없이 입력해도 돼요. 할인 코드는 신규 구독자용이며 처음 등록한 기기에 연결돼요. 재설치·기기 변경 전 등록 상태를 확인해 주세요. 코드 확인에는 인터넷이 필요하며 코드와 무작위 설치 식별자만 전송해요.",
                 color = Muted, fontSize = 12.sp, lineHeight = 19.sp, modifier = Modifier.padding(vertical = 8.dp))
-            OutlinedButton(onClick = { onActivate(code.trim()) },
-                enabled = !verifying && state.codeStatus != ReviewAccessStatus.UNAVAILABLE && validReviewCode(code.trim()),
+            OutlinedButton(onClick = { onActivate(normalizeAccessCode(code)) },
+                enabled = !verifying && state.codeStatus != ReviewAccessStatus.UNAVAILABLE && validAccessCode(normalizeAccessCode(code)),
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
                 Text(if (verifying) "코드 확인 중" else "이용 코드 등록", color = Ink)
             }

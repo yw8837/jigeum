@@ -44,7 +44,7 @@ class AstDeviceBenchmarkTest {
             .put("synthetic_only", true).put("infant_presence_candidate", infantProbe).put("cases", rows)
             .put("infant_caption_candidate", captionProbe)
             .put("research_package", context.packageName)
-            .put("candidate_revision", if (releaseQa) "caption-release-20261022" else JSONObject.NULL)
+            .put("candidate_revision", if (releaseQa) "caption-short-codes-20261102" else JSONObject.NULL)
             .put("caption_head_sha256", if (captionProbe) InfantCaptionHead.SHA256 else JSONObject.NULL)
         try {
             for ((index, duration) in listOf(10000, 20000, 20000).withIndex()) {

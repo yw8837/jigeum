@@ -11,11 +11,11 @@ export function validAccessCodeRequest(input) {
     Object.keys(input).length === 3 && input.packageName === PACKAGE_NAME &&
     typeof input.installationId === 'string' &&
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input.installationId) &&
-    typeof input.code === 'string' && /^[A-Za-z0-9_-]{32,128}$/.test(input.code);
+    typeof input.code === 'string' && (/^[A-Z0-9]{8,12}$/.test(input.code) || /^[A-Za-z0-9_-]{32,128}$/.test(input.code));
 }
 
 export function validateCodeManifest(manifest) {
-  if (!manifest || manifest.schemaVersion !== 1 || manifest.campaignId !== CODE_CAMPAIGN ||
+  if (!manifest || ![1, 2].includes(manifest.schemaVersion) || manifest.campaignId !== CODE_CAMPAIGN ||
       manifest.offerId !== LAUNCH_OFFER_ID || !/^[0-9a-f]{64}$/.test(manifest.familyCodeSha256 ?? '') ||
       !Array.isArray(manifest.discountCodeSha256) || manifest.discountCodeSha256.length !== 100 ||
       manifest.discountCodeSha256.some(hash => !/^[0-9a-f]{64}$/.test(hash)) ||
@@ -23,14 +23,21 @@ export function validateCodeManifest(manifest) {
       manifest.discountCodeSha256.includes(manifest.familyCodeSha256)) {
     throw new Error('Invalid access code manifest');
   }
+  if (manifest.schemaVersion === 2) {
+    const hashes = [manifest.familyCodeSha256, ...manifest.discountCodeSha256,
+      manifest.shortFamilyCodeSha256, manifest.sharedDiscountCodeSha256];
+    if (manifest.registrationLimit !== 100 || hashes.some(hash => !/^[0-9a-f]{64}$/.test(hash ?? '')) ||
+        new Set(hashes).size !== 103) throw new Error('Invalid shared campaign manifest');
+  }
   return manifest;
 }
 
 /** Codes are not purchases. Only invitation grants unlock full access; offer grants never do. */
-export function createAccessCodeVerifier({ privateKey, manifest, reserveDiscount, clock = Date.now }) {
+export function createAccessCodeVerifier({ privateKey, manifest, reserveDiscount, reserveCampaign, clock = Date.now }) {
   if (!manifest) return async () => null;
   validateCodeManifest(manifest);
   if (typeof reserveDiscount !== 'function') throw new Error('Durable code reservation is required');
+  if (manifest.schemaVersion === 2 && typeof reserveCampaign !== 'function') throw new Error('Durable campaign reservation is required');
   const key = typeof privateKey === 'string' || Buffer.isBuffer(privateKey) ? createPrivateKey(privateKey) : privateKey;
   if (key?.asymmetricKeyType !== 'ec' || key?.asymmetricKeyDetails?.namedCurve !== 'prime256v1') {
     throw new Error('Entitlement signing key must be EC P-256');
@@ -41,11 +48,14 @@ export function createAccessCodeVerifier({ privateKey, manifest, reserveDiscount
     if (!validAccessCodeRequest(input)) return null;
     signal?.throwIfAborted();
     const codeHash = sha256(input.code);
-    const invitation = timingSafeEqual(Buffer.from(codeHash, 'hex'), familyHash);
+    const invitation = timingSafeEqual(Buffer.from(codeHash, 'hex'), familyHash) ||
+      (manifest.schemaVersion === 2 && timingSafeEqual(Buffer.from(codeHash, 'hex'), Buffer.from(manifest.shortFamilyCodeSha256, 'hex')));
     if (!invitation) {
-      if (!discountHashes.has(codeHash)) return null;
+      const legacy = discountHashes.has(codeHash);
+      if (!legacy && !(manifest.schemaVersion === 2 && codeHash === manifest.sharedDiscountCodeSha256)) return null;
       const installationHash = sha256(`${CODE_CAMPAIGN}:${input.installationId.toLowerCase()}`);
-      if (!await reserveDiscount({ codeHash, installationHash, campaignId: CODE_CAMPAIGN, signal })) return null;
+      if (legacy && !await reserveDiscount({ codeHash, installationHash, campaignId: CODE_CAMPAIGN, signal })) return null;
+      if (manifest.schemaVersion === 2 && !await reserveCampaign({ installationHash, campaignId: CODE_CAMPAIGN, signal })) return null;
     }
     signal?.throwIfAborted();
     const issuedAtMs = clock();

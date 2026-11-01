@@ -39,6 +39,15 @@ RELEASE_QA_APK_SHA = '464e2034dab85881b62a608a236a79791ed9946f90aaa82bb211754141
 RELEASE_QA_TEST_SHA = 'e3382b281ca9902d4abcefb17761ec33ae5958692e6b12afc11b69d85ff67281'
 RELEASE_QA_APK_BYTES = 264722265
 RELEASE_QA_TEST_BYTES = 3180329
+# Reviewed immutable APK pairs. New revisions are added only after comparing packaged models.
+RELEASE_QA_CANDIDATES = {
+    'caption-release-20261022': (RELEASE_QA_APK_SHA, RELEASE_QA_TEST_SHA, RELEASE_QA_APK_BYTES, RELEASE_QA_TEST_BYTES),
+    # 28 packaged model/native entries byte-identical to public signed44; comparison in QA evidence.
+    'caption-short-codes-20261102': (
+        'a1cd56e88a36fc42751a5e7b27a2ad2b506d02b9d96c67f69444075a0c01df9c',
+        'a71192e894f12633163cd30f20ad26e92dcc6ddb65fe4de39f43afbc2565c042',
+        267839660, 2585907),
+}
 CAPTION_HEAD_SHA = '979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1'
 ANDROID = '{http://schemas.android.com/apk/res/android}'
 PROHIBITED = {'android.permission.INTERNET', 'android.permission.RECORD_AUDIO',
@@ -211,6 +220,7 @@ def main(argv=None):
     candidates.add_argument('--infant-caption-candidate', action='store_true',
                             help='Measure the separately pinned frozen-pair caption runtime on physical ARM.')
     candidates.add_argument('--caption-release-qa', action='store_true', help='Pinned current release runtime in an isolated physical QA package.')
+    parser.add_argument('--caption-release-revision', choices=tuple(RELEASE_QA_CANDIDATES), default='caption-release-20261022')
     args = parser.parse_args(argv)
     release_qa = args.caption_release_qa
     caption = args.infant_caption_candidate or release_qa
@@ -225,7 +235,7 @@ def main(argv=None):
     run_id = uuid.uuid4().hex
     result = {'run_id': run_id, 'status': 'fail', 'quality_validated': False, 'stage': 'apk_preflight'}
     result['storage_before'] = storage_before
-    if release_qa: result['candidate_revision'] = 'caption-release-20261022'
+    if release_qa: result['candidate_revision'] = args.caption_release_revision
     touched = False
     before = None
     try:
@@ -237,8 +247,8 @@ def main(argv=None):
             result[key + '_manifest'] = validate_manifest(xml, test=is_test, infant_presence=infant, release_qa=release_qa)
         result['provenance'] = local_provenance(app_apk, test_apk, ROOT)
         if infant:
-            pins = [('app_apk', RELEASE_QA_APK_SHA if release_qa else CAPTION_APK_SHA if caption else CANDIDATE_APK_SHA),
-                    ('test_apk', RELEASE_QA_TEST_SHA if release_qa else CAPTION_TEST_SHA if caption else CANDIDATE_TEST_SHA)]
+            pins = [('app_apk', RELEASE_QA_CANDIDATES[args.caption_release_revision][0] if release_qa else CAPTION_APK_SHA if caption else CANDIDATE_APK_SHA),
+                    ('test_apk', RELEASE_QA_CANDIDATES[args.caption_release_revision][1] if release_qa else CAPTION_TEST_SHA if caption else CANDIDATE_TEST_SHA)]
             for role, expected in pins:
                 if result['provenance'][role]['sha256'] != expected:
                     raise ValueError('Use the exact reviewed APK/test pair for the selected candidate')

@@ -9,6 +9,7 @@ import { readRuntimeConfig } from './runtime-config.js';
 import { createPublicPageHandler } from './public-pages.js';
 import { createAccessCodeVerifier, validAccessCodeRequest } from './access-codes.js';
 import { createGcsCodeReservations } from './code-redemptions.js';
+import { createCampaignReservations, createGcsJsonStore } from './campaign-reservations.js';
 
 const MAX_BODY_BYTES = 16_384;
 
@@ -156,7 +157,9 @@ function start() {
     review: createReviewVerifier({ privateKey, reviewCodeSha256: config.reviewCodeSha256, reviewAccessId: config.reviewAccessId }),
     accessCode: createAccessCodeVerifier({ privateKey,
       manifest: config.accessCodeManifestPath ? JSON.parse(readFileSync(config.accessCodeManifestPath, 'utf8')) : null,
-      reserveDiscount: config.codeRedemptionBucket ? createGcsCodeReservations({ bucket: config.codeRedemptionBucket }) : undefined
+      reserveDiscount: config.codeRedemptionBucket ? createGcsCodeReservations({ bucket: config.codeRedemptionBucket }) : undefined,
+      reserveCampaign: config.codeRedemptionBucket ? createCampaignReservations({
+        store: createGcsJsonStore({ bucket: config.codeRedemptionBucket }) }) : undefined
     }),
     publicRouteHandler: createPublicPageHandler()
   });

@@ -51,6 +51,18 @@ class AccessCodeTest {
         for (bad in listOf("", "null", "[]", "x".repeat(16385))) assertNull(f.claims(bad))
     }
 
+    @Test fun shortCodeGrantStillRequiresTheExactSignedCodeHash() {
+        val fixture = SignedFixture()
+        val shortCode = "TESTHALF"
+        val envelope = fixture.envelope("launch-offer") {
+            it.put("codeHash", MessageDigest.getInstance("SHA-256").digest(shortCode.toByteArray())
+                .joinToString("") { byte -> "%02x".format(byte) })
+        }
+        assertNotNull(fixture.claims(envelope, shortCode))
+        assertNull(fixture.claims(envelope, "TESTFREE"))
+        assertNull(fixture.claims(envelope, "testhalf"))
+    }
+
     @Test fun discountNeverUnlocksWhileInvitationSurvivesEmptyOwnershipAndRestore() = onMain {
         ManagerFixture().use { f ->
             f.manager.activateAccessCode(code)

@@ -170,8 +170,8 @@ class BillingManager internal constructor(
     @MainThread
     fun activateAccessCode(code: String) {
         if (closed) return
-        val clean = code.trim()
-        if (!validReviewCode(clean)) {
+        val clean = normalizeAccessCode(code)
+        if (!validAccessCode(clean)) {
             updateCode(ReviewAccessStatus.ERROR, "전달받은 이용 코드를 그대로 붙여 넣어 주세요.")
             return
         }

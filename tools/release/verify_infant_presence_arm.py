@@ -17,7 +17,7 @@ from ast_device_benchmark import (CANDIDATE_APK_SHA, CANDIDATE_TEST_SHA,
                                   CAPTION_APK_SHA, CAPTION_TEST_SHA,
                                   CAPTION_APK_BYTES, CAPTION_TEST_BYTES,
                                   RELEASE_QA_PACKAGE, RELEASE_QA_APK_SHA, RELEASE_QA_TEST_SHA,
-                                  RELEASE_QA_APK_BYTES, RELEASE_QA_TEST_BYTES)
+                                  RELEASE_QA_APK_BYTES, RELEASE_QA_TEST_BYTES, RELEASE_QA_CANDIDATES)
 
 MAX_BYTES = 128 * 1024
 MAX_AST_MS = 30_000  # Leaves headroom within the existing 45-second analysis limit.
@@ -49,7 +49,7 @@ def verify(value, directory, *, now=None, infant_caption=False, release_qa=False
     if not isinstance(value, dict):
         raise ValueError('Require a JSON object')
     if release_qa:
-        if not infant_caption or value.get('candidate_revision') != 'caption-release-20261022':
+        if not infant_caption or value.get('candidate_revision') not in RELEASE_QA_CANDIDATES:
             raise ValueError('Explicit current caption release proof required')
     elif value.get('candidate_revision') is not None:
         raise ValueError('Release QA proof requires its explicit mode')
@@ -100,7 +100,8 @@ def verify(value, directory, *, now=None, infant_caption=False, release_qa=False
                  if infant_caption else [('app', CANDIDATE_APK_SHA, 265_353_775),
                                          ('test', CANDIDATE_TEST_SHA, 2_765_526)])
     if release_qa:
-        artifacts = [('app', RELEASE_QA_APK_SHA, RELEASE_QA_APK_BYTES), ('test', RELEASE_QA_TEST_SHA, RELEASE_QA_TEST_BYTES)]
+        app_sha, test_sha, app_bytes, test_bytes = RELEASE_QA_CANDIDATES[value['candidate_revision']]
+        artifacts = [('app', app_sha, app_bytes), ('test', test_sha, test_bytes)]
     for role, digest, size in artifacts:
         if not re.fullmatch('[a-f0-9]{64}', digest) or size < 1:
             raise ValueError('Selected candidate APK/test pair is not frozen')
@@ -113,7 +114,7 @@ def verify(value, directory, *, now=None, infant_caption=False, release_qa=False
                 installed.get('errors') != []):
             raise ValueError('Exact reviewed and installed APK/test provenance required')
     if release_qa and (value.get('measurement', {}).get('research_package') != RELEASE_QA_PACKAGE or
-                       value.get('measurement', {}).get('candidate_revision') != 'caption-release-20261022'):
+                       value.get('measurement', {}).get('candidate_revision') != value['candidate_revision']):
         raise ValueError('Native release QA package/revision differs')
     measurement = validate_measurement(value.get('measurement', {}), run_id,
                                        infant_presence=True, infant_caption=infant_caption)
