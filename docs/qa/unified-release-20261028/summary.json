@@ -63,5 +63,13 @@
     "managed_publishing": false,
     "previous_submission23": "cancelled by Google combined-review restart",
     "changes": 5
+  },
+  "followup_20261102": {
+    "submission24_status": "출시됨",
+    "released_at_kst": "2026-10-28T17:44:00+09:00",
+    "versionCode": 44,
+    "source": "../dex-review-20261102/README.md",
+    "original_snapshot_preserved": true,
+    "actual_play_transactions_still_unverified": true
   }
 }
