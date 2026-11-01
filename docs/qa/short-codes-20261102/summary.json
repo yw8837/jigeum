@@ -239,10 +239,12 @@
     "r8_enabled": false
   },
   "privacy": {
-    "codes_in_git": false,
     "private_baby_media_uploaded": false,
     "automations_created": false,
-    "messages_sent": false
+    "messages_sent": false,
+    "private_invitation_code_in_git": false,
+    "issued_code_literals_in_current_sources": false,
+    "shared_promotional_code_literal_in_prior_commit": true
   },
   "play": {
     "production_release_id": 5,

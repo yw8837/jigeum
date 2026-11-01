@@ -13,11 +13,11 @@
 - 등록 수는 GCS 슬롯을 직접 읽어 표시한다. 오류를 0건으로 표시하지 않는다. 실제 결제 수는 미집계로 표시한다.
 - 런타임은 기존 get/create 권한을 유지한다. 운영자만 control object를 generation CAS로 수정한다.
 - Host/Origin 검사, CSRF, no-store, CSP, 요청 크기 제한을 적용한다. OAuth 토큰은 서버 메모리에만 있다.
-- 코드 원문은 D의 private 디렉터리에만 보존한다. 앱/소스/웹/로그에 하드코딩하지 않는다.
+- 비공개 초대코드 원문은 D의 private 디렉터리에만 보존한다. 앱/웹/로그에는 코드 원문을 넣지 않는다. 생성 도구도 공용 할인코드를 환경변수로 받고 로그에 출력하지 않는다.
 
 ## 배포와 이관
 
-1. `prepare-private-codes.mjs`에 기존 private manifest와 **새** D private 디렉터리를 준다. 기존 파일을 덮어쓰지 않는다.
+1. 운영자가 정한8~12자리 대문자/숫자 공용코드를 `AGATTOK_SHARED_DISCOUNT_CODE` 환경변수로 전달하고, `prepare-private-codes.mjs`에 기존 private manifest와 **새** D private 디렉터리를 준다. 기존 파일을 덮어쓰지 않는다.
 2. `migrate.mjs <private-manifest> inspect`로 실제 발급 코드에 속한 기존 등록만 조회한다.
 3. `seed-closed`로 control을 닫힌 상태로 만들고 기존 실제 등록을 공용 슬롯에 보존한다.
 4. 기존 Cloud Run에 v2 manifest를 배포하고 100% 새 revision을 확인한다. 이전 요청의 최대 30초가 지난 뒤 `seed-closed`를 다시 수행해 전환 중 기존 등록도 포함한다.

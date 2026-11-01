@@ -11,7 +11,9 @@ const old = validateCodeManifest(JSON.parse(await readFile(source, 'utf8')));
 if (old.schemaVersion !== 1) throw new Error('Expected original manifest; never overwrite an issued set');
 const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const invitation = Array.from({ length: 10 }, () => alphabet[randomInt(alphabet.length)]).join('');
-const shared = 'BABYHALF';
+const shared = process.env.AGATTOK_SHARED_DISCOUNT_CODE?.trim();
+if (!/^[A-Z0-9]{8,12}$/.test(shared ?? ''))
+  throw new Error('Provide the selected shared code through AGATTOK_SHARED_DISCOUNT_CODE; contents are never logged');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const manifest = validateCodeManifest({ ...old, schemaVersion: 2, registrationLimit: 100,
   shortFamilyCodeSha256: hash(invitation), sharedDiscountCodeSha256: hash(shared) });
