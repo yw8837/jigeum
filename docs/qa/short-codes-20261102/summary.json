@@ -2,7 +2,7 @@
   "version_code": 45,
   "version_name": "0.5.31",
   "public_version_at_start": 44,
-  "status": "production_review_submitted",
+  "status": "production_available",
   "server": {
     "revision": "jigeum-verifier-00008-nm8",
     "traffic_percent": 100,
@@ -251,7 +251,7 @@
     "draft_created": true,
     "artifact_uploaded": true,
     "review_submitted": true,
-    "available_to_users": false,
+    "available_to_users": true,
     "rollout_percent": 100,
     "countries": [
       "KR"
@@ -259,8 +259,25 @@
     "managed_publishing": false,
     "submission_id": 25,
     "submitted_at_kst": "2026-11-02T03:16:00+09:00",
-    "status": "in_review",
-    "quick_checks": "in_progress_at_submission"
+    "status": "released",
+    "quick_checks": "in_progress_at_submission",
+    "released_at_kst": "2026-11-02T03:49:00+09:00",
+    "availability_verified_at_kst": "2026-11-02T13:00:00+09:00",
+    "availability_verification_time_precision": "approximate_minute",
+    "availability_evidence_directory": "D:/Codex/Agattok/store-community-20261102/",
+    "availability_evidence": [
+      "play45-released.jpg",
+      "play45-released.txt",
+      "play45-available.jpg",
+      "play45-available.txt"
+    ],
+    "store_image_followup": {
+      "submission_id": 26,
+      "submitted_at_kst": "2026-11-02T12:58:00+09:00",
+      "status": "in_review",
+      "scope": "ko-KR phone screenshots only",
+      "available_to_users": false
+    }
   },
   "cleanup": {
     "scope": "D:\\Codex\\Agattok\\short-codes-20261102",
