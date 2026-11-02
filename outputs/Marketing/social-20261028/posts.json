@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-28",
+  "timezone": "Asia/Seoul",
+  "published": false,
+  "scheduled": false,
+  "notes": "Prepared organic content. No account handle invented; no private codes included.",
+  "posts": [
+    {
+      "id": "instagram-01-launch-carousel",
+      "channel": "Instagram",
+      "state": "ready",
+      "assets": [
+        "01-hello-agattok-feed.png",
+        "02-keep-the-voice-feed.png",
+        "03-our-baby-community-feed.png"
+      ],
+      "alt": "숲빛 배경의 아가톡 소개, 원음 저장 안내, 우리 아이 자랑 안내로 이어지는 세 장의 아기 캐릭터 일러스트.",
+      "text": "이 옹알이, 나중에도 다시 듣고 싶어서 🌱\n\n사진으로는 남지 않는 작은 목소리까지.\n아가톡에서 소리 단서로 떠올린 아가말을 원음이 담긴 영상카드로 간직해 보세요.\n\n🎬 갤러리 영상에서 원하는 구간 고르기\n🎙 카메라 없이 소리만 녹음하기\n💚 사진과 영상카드를 ‘우리 아이 자랑’에서 나누기\n\n영상카드에는 원래 소리가 담겨요.\n이미지 카드에는 소리가 담기지 않아요.\n\n아가말은 소리·장면을 참고해 상상한 표현이에요. 아이의 실제 마음이나 건강 상태를 판별하는 결과는 아니에요.\n\nGoogle Play에서 ‘아가톡’을 찾아보세요.\nAndroid · 대한민국\n\n#아가톡 #육아기록 #옹알이 #아기영상 #우리아이자랑"
+    },
+    {
+      "id": "instagram-02-voice",
+      "channel": "Instagram",
+      "state": "ready",
+      "assets": [
+        "02-keep-the-voice-feed.png"
+      ],
+      "alt": "크림색 바탕에 소리는 그대로, 아가말은 함께라는 문구와 마이크, 음파, 영상카드를 든 아기 캐릭터가 있는 그림.",
+      "text": "사진엔 안 담기는 목소리도 있잖아요.\n\n잠깐의 옹알이, 까르르 웃는 소리.\n아가톡에서는 카메라 없이 소리만 녹음한 결과도 원음 + 아가말 영상카드로 저장할 수 있어요.\n\n저장할 때는 ‘영상 카드 앨범에 저장’을 선택해 주세요.\n완료 후 저장 위치를 확인하고 ‘저장한 파일 열기’로 바로 찾아볼 수 있어요.\n\n🖼 이미지 카드 = 그림과 문장\n🎬 영상카드 = 원래 소리와 아가말\n\n이미 만든 결과의 카드 저장은 무료예요.\n아가말은 관찰 단서를 참고한 상상 표현이에요.\n\nGoogle Play에서 ‘아가톡’ 검색 🌱\n\n#아가톡 #육아기록 #아기목소리 #옹알이 #육아일상"
+    },
+    {
+      "id": "instagram-03-community",
+      "channel": "Instagram",
+      "state": "ready",
+      "assets": [
+        "03-our-baby-community-feed.png"
+      ],
+      "alt": "살구색 배경에 우리 아이 자랑이라는 제목, 사진과 영상카드를 든 아기 캐릭터, 댓글 말풍선과 하트가 있는 그림.",
+      "text": "오늘은 어떤 귀여운 순간을 자랑하고 싶나요? 💚\n\n아가톡 ‘우리 아이 자랑’에서\n사진도, 이미지 카드도, 아가말 영상카드도 함께 나눠요.\n\n댓글로 이야기하고, 좋아요로 마음을 남길 수 있어요.\n글과 댓글은 닉네임과 비밀번호로 작성해요.\n\n앱의 ‘우리 아이 자랑’에서 열거나\nbaby.yeolmaeapps.kr로 방문해 주세요.\n\n공개할 순간은 보호자가 직접 골라요.\n아이의 실명·주소나 민감한 장면은 빼고, 함께 찍힌 사람의 공개 동의도 확인해 주세요.\n\n#아가톡 #우리아이자랑 #육아소통 #아기일상 #육아기록"
+    },
+    {
+      "id": "threads-01-launch",
+      "channel": "Threads",
+      "state": "ready",
+      "assets": [
+        "01-hello-agattok-feed.png"
+      ],
+      "alt": "아가톡 아기 캐릭터가 영상카드를 들고 있는 소개 이미지.",
+      "text": "이 옹알이, 나중에도 다시 듣고 싶어서 만든 앱 🌱\n\n아가톡은 아기의 소리 단서로 떠올린 아가말을 원음이 담긴 영상카드로 남겨요. 소리만 녹음해도 되고, 갤러리 영상에서 원하는 구간을 골라도 돼요.\n\n‘우리 아이 자랑’에서는 사진·영상카드와 댓글·좋아요로 함께 이야기할 수 있어요.\n\n아가말은 관찰 단서를 참고한 상상 표현이며 실제 마음을 판별하는 결과는 아니에요.\n\nAndroid: https://play.google.com/store/apps/details?id=com.moa.babylanguage"
+    },
+    {
+      "id": "threads-02-voice",
+      "channel": "Threads",
+      "state": "ready",
+      "assets": [
+        "02-keep-the-voice-feed.png"
+      ],
+      "alt": "소리만 녹음한 결과도 원음과 아가말 영상카드로 저장할 수 있음을 안내하는 그림.",
+      "text": "사진엔 안 담기는 아기 목소리도 있잖아요.\n\n아가톡에서 소리만 녹음했다면 결과의 ‘영상 카드 앨범에 저장’을 눌러 보세요. 원래 목소리와 아가말이 함께 담긴 MP4로 남아요.\n\n이미지 카드에는 소리가 없어요. 목소리까지 간직하려면 영상카드로! 이미 만든 결과의 카드 저장은 무료예요.\n\n아가말은 관찰 단서를 참고한 상상 표현이에요.\n\nhttps://play.google.com/store/apps/details?id=com.moa.babylanguage"
+    },
+    {
+      "id": "threads-03-community",
+      "channel": "Threads",
+      "state": "ready",
+      "assets": [
+        "03-our-baby-community-feed.png"
+      ],
+      "alt": "사진과 아가말 영상카드, 댓글, 좋아요를 지원하는 우리 아이 자랑 게시판 소개.",
+      "text": "우리 아이 귀여운 거, 나만 보기 아까운 날 💚\n\n아가톡 ‘우리 아이 자랑’에 사진도 아가말 영상카드도 올릴 수 있어요. 댓글이랑 좋아요도 있고, 글·댓글은 닉네임과 비밀번호로 작성해요.\n\n공개할 장면은 직접 골라 주세요. 아이의 실명·주소나 민감한 장면은 빼고요.\n\n오늘 자랑하고 싶은 순간은 뭐예요?\n\nhttps://baby.yeolmaeapps.kr/"
+    },
+    {
+      "id": "threads-event-HOLD",
+      "channel": "Threads",
+      "state": "hold_until_public42_and_discount_checkout_verified",
+      "assets": [],
+      "alt": "행사 이미지는 미제작. 현재 게시 금지.",
+      "text": "아가톡 출시 이벤트 🌱\n\n신규 구독자 선착순 100명에게 첫 2개월 50% 할인 코드를 드려요.\n이 글 좋아요 + 리포스트 후 DM으로 ‘아가톡’을 보내 주세요.\n\n첫 2개월은 매월 2,450원, 이후 매월 4,900원 자동 갱신이에요. Google Play에서 언제든 해지할 수 있어요.\n\n대한민국 Android 신규 구독자 · 1인 1회 · 코드 100개 · 첫 등록 설치에 연결\n\n할인 조건은 결제창에서 꼭 확인해 주세요.\nhttps://play.google.com/store/apps/details?id=com.moa.babylanguage"
+    }
+  ]
+}

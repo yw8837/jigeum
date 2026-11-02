@@ -1,0 +1,11 @@
+{
+  "avd": "MoaQA35",
+  "rows": "No result found.",
+  "render_files": "",
+  "empty_pending_journal": true,
+  "uninstalled": [
+    "com.moa.babylanguage.astcandidate.test",
+    "com.moa.babylanguage.astcandidate"
+  ],
+  "emulator_kill": "OK: killing emulator, bye bye\n\nOK"
+}

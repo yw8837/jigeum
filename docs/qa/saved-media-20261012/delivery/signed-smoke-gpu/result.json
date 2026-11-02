@@ -1,0 +1,51 @@
+{
+  "status": "pass",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "scenarios": [
+    "New signed beta38 actual 20-second AV analysis, scene save, and MP4 export without purchase",
+    "Same-key release38 relocks visual/PDF and 60/10 capture while saved MP4 hash remains identical"
+  ],
+  "beta_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~VJI9c0VfwqVzOm3m_Ow2qw==/com.moa.babylanguage-KnOTUh3CnDeFgMH4HhbWfA==/base.apk",
+    "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "version_code": 38,
+    "version_name": "0.5.24-beta",
+    "verified": true,
+    "errors": []
+  },
+  "analysis_confirmation_seconds_including_46_second_quiet_wait": 48.503,
+  "beta_media": {
+    "name": "아가톡-1791747002608.mp4",
+    "bytes": 1245850,
+    "sha256": "6a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8",
+    "duration": "20.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~tktDRGUULp5I9V_RTr2UfA==/com.moa.babylanguage-7YsH7z_3Z95aBxMU_2AXAQ==/base.apk",
+    "sha256": "7bdaf44a4c20e3522c676ecd5d87246d37de0c431d91e1ab55f78d0e6d4533a7",
+    "expected_sha256": "7bdaf44a4c20e3522c676ecd5d87246d37de0c431d91e1ab55f78d0e6d4533a7",
+    "version_code": 38,
+    "version_name": "0.5.24",
+    "verified": true,
+    "errors": []
+  },
+  "release_media": {
+    "name": "아가톡-1791747002608.mp4",
+    "bytes": 1245850,
+    "sha256": "6a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8",
+    "duration": "20.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "owned_external_files_removed": true
+}

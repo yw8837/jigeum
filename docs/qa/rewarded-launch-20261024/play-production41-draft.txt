@@ -1,0 +1,164 @@
+Browser tab: 7, Title: "출시 준비 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/1/prepare".
+0 AXWebArea 출시 준비 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/1/prepare
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				278 container 홈
+					279 button 홈
+						280 text 홈
+				281 container 계정 관리
+					282 button 계정 관리
+						283 text 계정 관리
+				284 container 아가톡 - 지금 내 기분이 그래
+					285 pop up button 아가톡 - 지금 내 기분이 그래
+				286 container 대시보드
+					287 button 대시보드
+						288 text 대시보드
+				289 container 통계
+					290 button 통계
+						291 text 통계
+				292 container 게시 개요
+					293 button 게시 개요
+						294 text 게시 개요
+				295 container Google Play로 보호됨
+					296 button Google Play로 보호됨
+						297 text Google Play로 보호됨
+				298 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+					299 button 테스트 및 출시
+						300 text 테스트 및 출시
+					301 content list
+						302 container
+							303 container 최신 버전 및 번들
+								304 button 최신 버전 및 번들
+							305 container 프로덕션
+								306 button 프로덕션
+							307 container (collapsed) Description: 테스트, Secondary Actions: Expand
+								308 button 테스트
+							321 container 사전 등록
+								322 button 사전 등록
+							323 container 앱 무결성
+								324 button 앱 무결성
+							325 container 고급 설정
+								326 button 고급 설정
+				327 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					328 button 모니터링 및 개선
+						329 text 모니터링 및 개선
+				330 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					331 button 사용자 늘리기
+						332 text 사용자 늘리기
+				333 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					334 button Play를 통한 수익 창출
+						335 text Play를 통한 수익 창출
+			62 container main-content
+				392 container
+					393 heading 프로덕션 버전 만들기, Value: 1
+						394 text 프로덕션 버전 만들기
+					395 container
+						396 text 프로덕션 버전은 선택한 국가의 모든 사용자에게 제공됩니다.
+					397 text 공개 트랙으로 게시하고 나면 앱 서명 키 선택사항이 고정됩니다.
+					398 tab group
+						399 tab (selected, settable, boolean) Description: 1/2단계, 새 버전 출시하기, Value: 1
+1
+새 버전 출시하기
+						400 tab (selectable, disabled, settable, boolean) Description: 2/2단계, 미리보기 및 확인, Value: 0
+2
+미리보기 및 확인
+					401 button 임시 출시 삭제
+						402 text 임시 출시 삭제
+					403 heading App Bundle, Value: 2
+						404 text App Bundle
+					405 heading ‎개선사항 3개 중 2개 활성 상태, Value: 3
+						406 text ‎개선사항 3개 중 2개 활성 상태
+					407 button (collapsed) Description: 콘텐츠 표시: ‎개선사항 3개 중 2개 활성 상태, Secondary Actions: Expand
+					408 heading App Bundle 업로드, Value: 3
+						409 text App Bundle 업로드
+					410 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--584
+						411 text 업로드할 App Bundle을 여기에 드롭하세요
+						412 button 업로드
+							413 text 업로드
+						414 button 라이브러리에서 추가
+							415 text 라이브러리에서 추가
+					416 container
+						417 table 아티팩트
+							418 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+								419 cell 파일 형식
+									420 text 파일 형식
+								421 cell 버전
+									422 text 버전
+								423 cell API 수준
+									424 text API 수준
+								425 cell 타겟 SDK
+									426 text 타겟 SDK
+								427 cell 화면 레이아웃
+									428 text 화면 레이아웃
+								429 cell ABI
+									430 text ABI
+								431 cell 필수 기능
+									432 text 필수 기능
+								433 cell
+								434 cell
+							435 row App bundle 고급 41 (0.5.27) 26 이상 36 4 4 4 아티팩트 관리 App Bundle: 41(0.5.27) 세부정보 보기
+								436 cell
+									437 text App bundle
+									438 button (collapsed) 고급, Secondary Actions: Expand
+										439 text 고급
+								440 cell
+									441 text 41 (0.5.27)
+								442 cell
+									443 text 26 이상
+								444 cell
+									445 text 36
+								446 cell
+									447 text 4
+								448 cell
+									449 text 4
+								450 cell
+									451 text 4
+								452 cell
+									453 pop up button (collapsed) Description: 아티팩트 관리, ID: aDA388D51-5258-417D-B122-4CEFD8FD8244--38, Secondary Actions: Expand
+								454 cell
+									455 button App Bundle: 41(0.5.27) 세부정보 보기
+					456 heading 버전 세부정보, Value: 2
+						457 text 버전 세부정보
+					458 container 출시명
+						459 container
+							460 text 출시명
+							461 container 필수 입력란
+								462 text *
+						463 container
+							464 text field (settable) Description: 출시명, Value: 0.5.27 (41) - first production release
+							465 text 38자(영문 기준)로 구성된 텍스트입니다. /50
+						466 text 개발자가 버전을 구분하기 위해 지정한 이름으로 Google Play에서 사용자에게 표시되지는 않습니다. 이름은 이 버전에 처음으로 추가된 App Bundle 또는 APK 이름을 바탕으로 추천된 것이며 변경할 수 있습니다.
+					467 container 출시 노트
+						468 text 출시 노트
+						469 button 이전 버전에서 복사
+							470 text 이전 버전에서 복사
+						471 text entry area (settable) Description: 출시 노트, Value: <ko-KR>
+아기의 소리를 살펴보고 아가말과 함께 간직하는 아가톡의 첫 정식 버전입니다.
+월 구독과 광고 시청 후 1회 이용 기능을 추가했습니다.
+직접 녹음한 소리와 아가말을 함께 저장하는 안내, 저장 위치 확인과 저장한 파일 열기를 개선했습니다.
+만들어진 카드·영상 내보내기는 무료이며 우리 아이 자랑 게시판에서 직접 공유할 수 있습니다.
+</ko-KR>
+						472 text 1개의 언어로 출시 노트 제공됨
+						473 text 새 버전이 어떻게 달라졌는지 사용자에게 알려주세요. 언어 태그 안에 각 언어에 대한 출시 노트를 입력하세요.
+					474 container
+						475 text 변경사항이 저장되었습니다. 이제 검토를 위해 전송하기 전에 출시 버전을 미리 볼 수 있습니다.
+						476 button (disabled) 변경사항 취소
+							477 text 변경사항 취소
+						478 button (disabled) 임시보관함에 저장
+							479 text 임시보관함에 저장
+						480 button 다음
+							481 text 다음
+				385 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				386 link Description: 상태 대시보드, Value: status.play.google.com/
+				387 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				388 text © 2026 Google
+				389 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				390 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				391 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 출시 준비 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/1/prepare

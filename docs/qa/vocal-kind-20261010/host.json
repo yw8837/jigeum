@@ -1,0 +1,25 @@
+{
+  "compile_exit": 0,
+  "android_inference": false,
+  "source_sha256": {
+    "SoundTimeline.kt": "aaa263bbe691c207cdceaf0e8fb18dd5b40d2b3f5e5a397fd68e7274ff2cc32d",
+    "InfantVoiceSupportPolicy.kt": "d9087c439a0beb618e88737bdf9b9898a6733bdfcb207003f78551ce399e7e52",
+    "SoundPhaseRecovery.kt": "f06c2770e6d005b031481d4f977504c5d231374c1fbda84fe5f2b5744c27c656",
+    "BabbleSupportPolicy.kt": "935698426697b7cbbda0dfd98e803c31d2182d0b239b714c321ebd5a8fe46f26",
+    "AstAudioTypes.kt": "93034a33cc101fd394fd97539a20feb7d3e84eba9b26169db9feb3256e7a5457",
+    "AudioCleanup.kt": "a31c172b1fc80469a26f30110edbbeeed2e9d587f44fb732ef36afc7592d7c9d",
+    "VisualTimeline.kt": "61e9bcabe0b162d3fcca950050c6fe85e527ac6b8d554485616632ca89163117",
+    "VisualSoundAlignment.kt": "2e3182d26472a00c8ef0738f29e3879b65aa8e421578705f49c420d5ea9d0bf9",
+    "AudioTimestampAudit.kt": "5eccfe115234b613d2a1bcdbbb5e433239f3273d99e6bcffe4bde09dadd9a682",
+    "BabyExpression.kt": "57d4169c54ab3e5c9841bbd874aefdd460382fab1147c36aa6f5835a2698312d",
+    "Cadence.kt": "d76ddcb5572a8506bdab5070d0f13459ff8f48335c5bde237d1a2d3aaa02d67d",
+    "VocalKindEvidenceTest.kt": "ae057846d6b050c1577c474d5e1fc229baef8bb987d38c08ca4af89aecbb65a8",
+    "CorroboratedVocalTest.kt": "09498dfc909135bf6f0d334c492e23e6f335a16aeb30958018124a5af88de8f4",
+    "InfantVoiceSupportPolicyTest.kt": "0d24936e9636ae57f69aeacdc9d2e181371e25c1ad0fd7a21bcaf125088919c3",
+    "IntervalEvidenceTest.kt": "0f03887b595b492e16f0750b3b39cd77bcd9e2280399e64425f863ad1000522d",
+    "VisualTemporalAlignmentTest.kt": "8b901fd790c530180599c5eb21213aaa61696efe3f644a35f20b9d1a91ada2f0",
+    "EvidenceInterpreterTest.kt": "42a7b1d3d7588de4c77e3187e26b874f8f69ecfa6b55b57d4c193fc79fa45b58",
+    "ClipEvidence.kt": "b436c59c333de8ad204c12ad6afcd1974a29567a22ac7b15f3dedd8a168c3cee"
+  },
+  "test_exit": 0
+}

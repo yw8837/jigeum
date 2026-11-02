@@ -1,0 +1,51 @@
+{
+  "status": "failed",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "scenarios": [
+    "Signed beta36 actual AV analysis, save, and MP4 export without purchase"
+  ],
+  "beta_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~NtAVnauff3llAdi_5d4xtg==/com.moa.babylanguage-ZROXbwGvLqKxxMz2c_qSkw==/base.apk",
+    "sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4",
+    "expected_sha256": "703bac76b5482bc3779e7bba34cab599ecdec52a1f07d00c0a4e1882c264eaa4",
+    "version_code": 36,
+    "version_name": "0.5.22-beta",
+    "verified": true,
+    "errors": []
+  },
+  "analysis_ui_seconds": 5.649,
+  "beta_media": {
+    "name": "아가톡-1791538846951.mp4",
+    "bytes": 932978,
+    "sha256": "759562fb7958f51bcce3ce9360ab654ab2cb6727f9f8bdc44920c15eea5beb8b",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~12bW1UDmpE8hV8BjVerfMA==/com.moa.babylanguage-2qkBy-sG-btGoGc3xnJFdQ==/base.apk",
+    "sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96",
+    "expected_sha256": "7db35507debd8e2765636ccf2772618bb2449aac390b1caf5f0a40e05b487b96",
+    "version_code": 36,
+    "version_name": "0.5.22",
+    "verified": true,
+    "errors": []
+  },
+  "release_media": {
+    "name": "아가톡-1791538846951.mp4",
+    "bytes": 932978,
+    "sha256": "759562fb7958f51bcce3ce9360ab654ab2cb6727f9f8bdc44920c15eea5beb8b",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "error": "UI missing 녹화 시작; current: ['닫기', '아기말 번역', '아기의 순간을 담아요', '최대 1분 담고, 10초까지 골라요.', '카메라 없이 소리만 녹음', '저장된 영상 가져오기', '무료는 1분 촬영·10초 분석, 전체 이용권은 2분 촬영·20초 분석이에요. 원본은 기기 안에서만 임시로 보관해요.', '카메라·마이크 허용하기', '현재 이용 범위 · 최대 1분 촬영 · 10초 분석']",
+  "owned_external_files_removed": true
+}

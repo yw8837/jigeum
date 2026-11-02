@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "date_kst": "2026-10-04",
+  "candidate_code": 24,
+  "candidate_version": "0.5.10",
+  "product_goal_complete": false,
+  "play_upload_performed": false,
+  "physical_arm_or_play_delivery_tested": false,
+  "infant_intent_accuracy_tested": false,
+  "signed_packages": {
+    "beta": {
+      "apk_name": "Agattok-0.5.10-beta-code24.apk",
+      "aab_name": "Agattok-0.5.10-beta-code24.aab",
+      "apk_sha256": "61d3d51f53b10e5bb81a3133f20f5d133de064e5bd75c5c9eed1a1b730173d31",
+      "aab_sha256": "62699404facab34a7ab427fec68f96728e22b40c4705527fdea1e44dcaf7c399",
+      "apk_bytes": 75387753,
+      "aab_bytes": 46713022,
+      "baseline_native_model_files_identical": 18,
+      "same_upload_certificate_as_beta23": true,
+      "no_ast_or_ort": true,
+      "version": {
+        "package": "com.moa.babylanguage",
+        "version_code": 24,
+        "version_name": "0.5.10-beta",
+        "test_distribution": true,
+        "closed_test_distribution": true
+      },
+      "status": "pass"
+    },
+    "release": {
+      "apk_name": "Agattok-0.5.10-release-code24.apk",
+      "aab_name": "Agattok-0.5.10-release-code24.aab",
+      "apk_sha256": "1aca83b5da00b37d93275cf0f916914870b57f78da310d3d01d7a177cc9e7043",
+      "aab_sha256": "b7b33c9690754e20eb8dbb23f0b81eb4dcf2cf8f9b057c0585358479f602a74f",
+      "apk_bytes": 75387753,
+      "aab_bytes": 46713397,
+      "baseline_native_model_files_identical": 18,
+      "same_upload_certificate_as_beta23": true,
+      "no_ast_or_ort": true,
+      "version": {
+        "package": "com.moa.babylanguage",
+        "version_code": 24,
+        "version_name": "0.5.10",
+        "test_distribution": false,
+        "closed_test_distribution": false
+      },
+      "status": "pass"
+    }
+  },
+  "lint": {
+    "beta": {
+      "Error": 0,
+      "Warning": 19,
+      "Fatal": 0
+    },
+    "release": {
+      "Error": 0,
+      "Warning": 19,
+      "Fatal": 0
+    }
+  },
+  "upgrade": {
+    "status": "pass",
+    "from_code": 23,
+    "to_code": 24,
+    "original_media_sha256": "230e51e21b5198c723a188d1001c794d176ed95665048c331e9eca926d5014d4",
+    "same_media_filename_and_bytes": true,
+    "app_data_cleared": false,
+    "legacy_record_verified_by_id_after_upgrade": true,
+    "same_seed_fields": [
+      "id",
+      "sound",
+      "context",
+      "note",
+      "phrase",
+      "source",
+      "modelCue"
+    ],
+    "basis": "LEGACY",
+    "original_harness_legacy_check_was_too_broad": true,
+    "supplemental_actual_backup_id_audit_passed": true,
+    "corrected_full_harness_rerun": false,
+    "before_upgrade_json_export_was_not_run": true
+  },
+  "signed_ui": {
+    "status": "pass",
+    "scenarios": [
+      "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+      "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+      "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase",
+      "cold restart retains distribution access and records without a purchase or code",
+      "same-key release update restores 60/10/100, visual/PDF gates and preserves records/media"
+    ],
+    "observed_capture_seconds": 123.01,
+    "capture_timeline": {
+      "end_label": "1:59.8",
+      "lower_ms": 119800,
+      "precision_ms": 100
+    },
+    "large_fixture_bytes": 209715200,
+    "oversized_fixture_bytes": 209715201,
+    "cleanup": {
+      "owned_external_files_removed": true,
+      "large_local_files_removed": true,
+      "raw_downloaded_media_removed": true,
+      "display_restored": true,
+      "font_restored": true
+    }
+  },
+  "release_relock_media_sha256": "5d1363c113c1d610d497327e20e1243b4c9c7488ca68b871207b92afc62c98c3",
+  "verifier_adversarial_tests": {
+    "passed": 8,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "cleanup": {
+    "status": "pass",
+    "app_data_cleared": false,
+    "full_access_restored": true,
+    "emulator_shutdown_acknowledged": true
+  },
+  "residual_gates": [
+    "independent perception quality",
+    "grounded new sentence generation",
+    "deployment scope response",
+    "ARM device evidence",
+    "Play publication"
+  ]
+}

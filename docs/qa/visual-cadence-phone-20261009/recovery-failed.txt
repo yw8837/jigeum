@@ -1,0 +1,109 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstAudioAnalyzerTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.AstAudioAnalyzerTest:
+INSTRUMENTATION_STATUS: test=analyzerCancellationReleasesOwnerAndSubsequentRunSucceeds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstAudioAnalyzerTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=analyzerCancellationReleasesOwnerAndSubsequentRunSucceeds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstAudioAnalyzerTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellingNativeRunTerminatesAndFreshRunOptionsResume
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstAudioAnalyzerTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellingNativeRunTerminatesAndFreshRunOptionsResume
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VideoTimelineTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.VideoTimelineTest:
+INSTRUMENTATION_STATUS: test=cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VideoTimelineTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalArgumentException: 
+	at android.media.MediaCodec.native_configure(Native Method)
+	at android.media.MediaCodec.configure(MediaCodec.java:2562)
+	at android.media.MediaCodec.configure(MediaCodec.java:2422)
+	at com.moa.babylanguage.VideoFrameDecoder.decode(VideoFrameDecoder.kt:115)
+	at com.moa.babylanguage.VideoTimelineTest$cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain$1$1.invokeSuspend(VideoTimelineTest.kt:181)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:832)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: stream=
+Error in cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain(com.moa.babylanguage.VideoTimelineTest):
+java.lang.IllegalArgumentException: 
+	at android.media.MediaCodec.native_configure(Native Method)
+	at android.media.MediaCodec.configure(MediaCodec.java:2562)
+	at android.media.MediaCodec.configure(MediaCodec.java:2422)
+	at com.moa.babylanguage.VideoFrameDecoder.decode(VideoFrameDecoder.kt:115)
+	at com.moa.babylanguage.VideoTimelineTest$cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain$1$1.invokeSuspend(VideoTimelineTest.kt:181)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:832)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+INSTRUMENTATION_STATUS: test=cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VideoAudioTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.VideoAudioTest:
+INSTRUMENTATION_STATUS: test=cancellationReleasesCodecForNextRun
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.VideoAudioTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationReleasesCodecForNextRun
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.695
+There was 1 failure:
+1) cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain(com.moa.babylanguage.VideoTimelineTest)
+java.lang.IllegalArgumentException: 
+	at android.media.MediaCodec.native_configure(Native Method)
+	at android.media.MediaCodec.configure(MediaCodec.java:2562)
+	at android.media.MediaCodec.configure(MediaCodec.java:2422)
+	at com.moa.babylanguage.VideoFrameDecoder.decode(VideoFrameDecoder.kt:115)
+	at com.moa.babylanguage.VideoTimelineTest$cancellationReleasesBorrowedBitmapAndDecoderCanRunAgain$1$1.invokeSuspend(VideoTimelineTest.kt:181)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:832)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

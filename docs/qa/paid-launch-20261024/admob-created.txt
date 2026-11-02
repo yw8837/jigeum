@@ -1,0 +1,46 @@
+Browser tab: 9, Title: "Google AdMob", URL: "https://admob.google.com/v2/apps/3259646120/adunits/create".
+0 AXWebArea Google AdMob, URL: admob.google.com/v2/apps/3259646120/adunits/create
+	1 container
+		2 button 메인 콘텐츠로 건너뛰기
+			3 text 메인 콘텐츠로 건너뛰기
+		34 container
+			69 container am-tlc-app-bar-api-apps
+				70 button 닫기
+				71 heading 광고 단위 만들기, Value: 1
+					72 text 광고 단위 만들기
+				73 pop up button 추가 옵션
+			74 container
+				75 text 광고 단위 생성됨 새 광고 단위에서 광고 게재를 시작하는 데 최대 1시간이 걸릴 수 있습니다.
+				76 link Description: 기다리는 동안 샘플 광고 단위를 테스트해 보세요.open_in_new, Value: developers.google.com/admob/android/test-ads
+				77 text 그런 다음 앱에 광고 단위 배치 다음 안내를 따르세요.
+				78 content list
+					79 container
+						80 AXListMarker 1.
+						81 text 다음 앱 ID를 사용하여
+						82 link Description: Google 모바일 광고 SDK 가이드open_in_new, Value: developers.google.com/admob/android/quick-start?hl=ko#import_the_mobile_ads_sdk
+						83 text 의 안내를 따르세요.
+						84 image 아가톡 - 지금 내 기분이 그래
+						85 text ca-app-pub-2269464728885792~3259646120
+					86 container
+						87 AXListMarker 2.
+						88 text SDK를 통합하려면
+						89 link Description: 보상형 광고 구현 가이드open_in_new, Value: developers.google.com/admob/android/rewarded-video?hl=ko
+						90 text 를 따르세요. 다음 광고 단위 ID를 사용하여 코드를 통합할 때 광고 유형 및 게재위치를 지정합니다.
+						91 image premium_operation_rewarded
+						92 text ca-app-pub-2269464728885792/4692147296
+					93 container
+						94 AXListMarker 3.
+						95 text 구현이
+						96 link Description: AdMob 정책open_in_new, Value: support.google.com/admob/answer/6128543?hl=ko
+						97 text 을 준수하는지 검토하세요.
+				98 button 이메일 도움말
+					99 text 이메일 도움말
+				100 button 완료
+					101 text 완료
+				102 button 다른 광고 단위 생성
+					103 text 다른 광고 단위 생성
+			66 text © 2026 Google
+			67 link Description: 개인정보처리방침open_in_new, Value: google.com/intl/ko/policies/privacy
+			68 link Description: 약관open_in_new, Value: adsense.google.com/adsense/terms
+
+The focused UI element is 0 AXWebArea Google AdMob, URL: admob.google.com/v2/apps/3259646120/adunits/create

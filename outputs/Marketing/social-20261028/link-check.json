@@ -1,0 +1,18 @@
+{
+  "checked_on": "2026-10-28 KST",
+  "scope": "anonymous HTTP status/title only; not Kakao preview or Play purchase validation",
+  "results": [
+    {
+      "url": "https://baby.yeolmaeapps.kr/",
+      "status": 200,
+      "final_url": "https://baby.yeolmaeapps.kr/",
+      "title": "우리 아이 자랑 · 아가톡"
+    },
+    {
+      "url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=ko&gl=KR",
+      "status": 200,
+      "final_url": "https://play.google.com/store/apps/details?id=com.moa.babylanguage&hl=ko&gl=KR",
+      "title": "아가톡 - 지금 내 기분이 그래 - Google Play 앱"
+    }
+  ]
+}

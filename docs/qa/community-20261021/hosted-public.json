@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-21T14:58:00.710Z",
+  "base": "https://agattok-community.bsfire1237.chatgpt.site",
+  "passed": [
+    "anonymous session",
+    "host strips forged operator headers",
+    "image/jpeg publish, persist, range, comment, like and password",
+    "video/mp4 publish, persist, range, comment, like and password",
+    "all owned synthetic posts deleted; media denied"
+  ],
+  "syntheticPosts": 2
+}

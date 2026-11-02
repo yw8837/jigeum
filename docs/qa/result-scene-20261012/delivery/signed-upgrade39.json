@@ -1,0 +1,22 @@
+{
+  "status": "fail",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~k2Erwht83dzaV5qykjECZA==/com.moa.babylanguage-BfNji57tp1ipHF7Y9wYbXg==/base.apk",
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "version_code": 38,
+      "version_name": "0.5.24-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1791809001968,
+  "error": "Command '['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'shell', 'wm', 'size']' timed out after 25 seconds",
+  "diagnostic_error": "Command failed ['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'exec-out', 'screencap', '-p']: error: protocol fault (couldn't read status): connection reset\r\n",
+  "cleanup_error": "Command failed ['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'shell', 'am', 'force-stop', 'com.moa.babylanguage']: * daemon not running; starting now at tcp:5037\r\n* daemon started successfully\r\nadb.: device 'emulator-5556' not found\r\n"
+}

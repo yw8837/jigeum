@@ -1,0 +1,31 @@
+{
+  "status": "fail",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~7lbcnqjQVW3hLVUSGjQm0A==/com.moa.babylanguage-XTdAu_8GNL4aZqBeNIQdZQ==/base.apk",
+      "sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
+      "expected_sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
+      "version_code": 40,
+      "version_name": "0.5.26-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1792778415610,
+  "old_legacy_record": {
+    "id": 1792778415610,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1792778415479531800",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "error": "UI missing 그때의 아기말; current: ['테스트 버전 · 전체 기능 열림', '닫기', '아기의 한마디', '닫기', '선택 구간 다시 보기·듣기', '소리를 바탕으로 예상한 아기말', '울음으로 꺼낸 내 이야기예요. 작은 목소리로 내 이름을 불러 줘요.', '장면과 아기말을 앱 기록에 저장했어요.', '저장한 장면 보기', '기록 저장 완료']",
+  "owned_external_files_removed": true
+}

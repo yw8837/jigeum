@@ -1,0 +1,31 @@
+{
+  "status": "fail",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~2J_d-XLiEQkHstQFXcjQXQ==/com.moa.babylanguage-Rfar-ZfBo1usiGaryE0gaw==/base.apk",
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "version_code": 38,
+      "version_name": "0.5.24-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1791814557350,
+  "old_legacy_record": {
+    "id": 1791814557350,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1791814557207325700",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "error": "UI missing 어느 순간을 들어볼까요?; current: ['테스트 버전 · 전체 기능 열림', '닫기', '구간 고르기', '0:00.0 – 0:10.0 · 10초 선택', '영상 + 소리로 번역하기']",
+  "owned_external_files_removed": true
+}

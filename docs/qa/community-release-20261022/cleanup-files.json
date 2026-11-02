@@ -1,0 +1,53 @@
+{
+  "Status": "pass",
+  "BeforeFreeBytes": 57798348800,
+  "Removed": [
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\baseline39-debug.apk",
+      "Bytes": 255254797,
+      "Reason": "Completed intermediate package; original39 AAB and signed39 baseline retained"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\play39-base.apk",
+      "Bytes": 139942711,
+      "Reason": "Completed intermediate package; original39 AAB and signed39 baseline retained"
+    }
+  ],
+  "PreservedPackages": [
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.aab",
+      "Bytes": 160293923,
+      "SHA256": "AA12D9CD8699815B0CCF518C76F3D27012DE8AAE249548CBD5FC70B21986AA61"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.apk",
+      "Bytes": 255265516,
+      "SHA256": "3A7D37F31D40F58A31DCD5463351B43536D70C07BC8177A107DC8F6C29CEB809"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.aab",
+      "Bytes": 46816873,
+      "SHA256": "6DF3CCBA410F59B061A99CDBE3ACC7FAD8042AB6F43B7A30D428A56EDF6CFE05"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.apk",
+      "Bytes": 75466948,
+      "SHA256": "B6193ED5A166AE251ADD91D5784ADF71EAF50193EAB61565FF45FE35DE20FAD9"
+    }
+  ],
+  "PreservedReports": [],
+  "Errors": [],
+  "AfterFreeBytes": 58193616896,
+  "RecoveredVolumeBytes": 395268096,
+  "CompletedAt": "2026-10-22T20:44:55.4456857+09:00"
+}

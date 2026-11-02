@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "scenarios": [],
+  "beta_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~e4sciDzunT81UHDKGZtZ0g==/com.moa.babylanguage-aMhpSwtkzrqKNCfuEKqRVQ==/base.apk",
+    "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+    "version_code": 38,
+    "version_name": "0.5.24-beta",
+    "verified": true,
+    "errors": []
+  },
+  "error": "UI missing 장면과 함께 저장하기; current: ['테스트 버전 · 전체 기능 열림', '닫기', '구간 고르기', '전체', '2배 확대', '4배 확대', '최대 20초 선택', '미세 조절 접기', '시작', '0:00.0', '끝', '0:20.0', '구간 이동', '길이는 그대로', '표정도 함께 보기', '테스트에서 바로 사용 · 같은 구간의 얼굴·입 관찰', '다른 영상·녹음 고르기', '다시 촬영하기', '선택 구간 영상만 저장', '0:00.0–0:20.0 구간을 원래 소리와 함께, 아기말 자막 없이 앨범에 저장해요. 분석 결과가 없어도 가능해요.', '분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요.', '0:00.0 – 0:20.0 · 20초 선택', '영상 + 소리로 번역하기']",
+  "owned_external_files_removed": true
+}

@@ -1,0 +1,18 @@
+JUnit version 4.13.2
+.E.E
+Time: 0.136
+There were 2 failures:
+1) shortRepeatedMouthChangesReachTheTemporalInterpreter(com.moa.babylanguage.VideoCadenceTest)
+java.lang.AssertionError: Half-second samples alias this repeated motion into a static mouth
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.moa.babylanguage.VideoCadenceTest.shortRepeatedMouthChangesReachTheTemporalInterpreter(VideoCadenceTest.kt:16)
+2) extraSmileSamplesCannotShortenTheExistingHalfSecondPersistence(com.moa.babylanguage.VideoCadenceTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.VideoCadenceTest.extraSmileSamplesCannotShortenTheExistingHalfSecondPersistence(VideoCadenceTest.kt:33)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2

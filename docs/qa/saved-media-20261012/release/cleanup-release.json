@@ -1,0 +1,8 @@
+{
+  "avd": "MoaQA35",
+  "qa_package_absent": true,
+  "owned_media_removed_by_both_drivers": true,
+  "phone_untouched": true,
+  "emulator_stop_response": "OK: killing emulator, bye bye  OK ",
+  "free_bytes": 38195240960
+}

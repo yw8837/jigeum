@@ -1,0 +1,13 @@
+{
+  "root_pid": 35612,
+  "exit_code": 0,
+  "elapsed_seconds": 176.605793,
+  "termination": null,
+  "cleanup_complete": true,
+  "remaining_job_processes": 0,
+  "peak_job_committed_bytes": 5425405952,
+  "memory_limit_bytes": 12884901888,
+  "memory_limit_hit": false,
+  "output_bytes": 5661,
+  "output_truncated": false
+}

@@ -35,11 +35,18 @@ $environment = @(
     "BODY_TIMEOUT_MS=$($plan.runtime.bodyTimeoutMs)", "UPSTREAM_TIMEOUT_MS=$($plan.runtime.upstreamTimeoutMs)",
     "VERIFICATION_TIMEOUT_MS=$($plan.runtime.verificationTimeoutMs)", "PLAY_REVIEW_ACCESS_ID=$($plan.reviewAccessId)"
 ) -join ','
+$secretBindings = "/secrets/entitlement.pem=$($plan.signingSecret):$($plan.signingSecretVersion),PLAY_REVIEW_CODE_SHA256=$($plan.reviewHashSecret):$($plan.reviewHashSecretVersion)"
+if ($plan.accessCodes) {
+    if ($plan.accessCodes.manifestSecret -ne 'jigeum-access-code-manifest' -or $plan.accessCodes.version -notmatch '^[1-9]\d*$' -or
+        $plan.accessCodes.bucket -ne "$projectId-code-redemptions") { throw 'Invalid dedicated access code resources' }
+    $environment += ",ACCESS_CODE_MANIFEST_PATH=/secrets/access-codes/manifest.json,CODE_REDEMPTION_BUCKET=$($plan.accessCodes.bucket)"
+    $secretBindings += ",/secrets/access-codes/manifest.json=$($plan.accessCodes.manifestSecret):$($plan.accessCodes.version)"
+}
 $deploymentArgs = @('run', 'deploy', $plan.service, "--region=$($plan.region)", "--service-account=$runtimeEmail",
     '--cpu=1', '--memory=512Mi', '--concurrency=24', '--min=0', '--max=1', '--min-instances=0', '--max-instances=1',
     '--cpu-throttling', '--timeout=30s', '--port=8080', '--ingress=all', '--execution-environment=gen2',
     "--set-env-vars=$environment",
-    "--set-secrets=/secrets/entitlement.pem=$($plan.signingSecret):$($plan.signingSecretVersion),PLAY_REVIEW_CODE_SHA256=$($plan.reviewHashSecret):$($plan.reviewHashSecretVersion)")
+    "--set-secrets=$secretBindings")
 if ($PublishPublicService) { $deploymentArgs += '--allow-unauthenticated' }
 $deploymentArgs += $common
 
@@ -99,6 +106,12 @@ foreach ($secretVersion in @(
 )) {
     $secret = Get-GcloudJson @('secrets', 'versions', 'describe', $secretVersion.Version, "--secret=$($secretVersion.Name)") 'Secret version'
     if ($secret.state -ne 'ENABLED') { throw 'A required immutable secret version is not enabled' }
+}
+if ($plan.accessCodes) {
+    $codeSecret = Get-GcloudJson @('secrets', 'versions', 'describe', $plan.accessCodes.version, "--secret=$($plan.accessCodes.manifestSecret)") 'Access code secret'
+    if ($codeSecret.state -ne 'ENABLED') { throw 'Access code manifest version is not enabled' }
+    $codeBucket = Get-GcloudJson @('storage', 'buckets', 'describe', "gs://$($plan.accessCodes.bucket)") 'Code bucket'
+    if ($codeBucket.public_access_prevention -ne 'enforced' -or $codeBucket.uniform_bucket_level_access -ne $true) { throw 'Code bucket must be private with uniform access' }
 }
 $repository = Get-GcloudJson @('artifacts', 'repositories', 'describe', $plan.artifactRepository, "--location=$($plan.region)") 'Artifact repository'
 if ($repository.format -ne 'DOCKER') { throw 'Artifact repository must exist with DOCKER format' }

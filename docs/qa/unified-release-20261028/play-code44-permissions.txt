@@ -1,0 +1,416 @@
+Browser tab: 1, Title: "버전 검토 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/4/review".
+1 AXWebArea 버전 검토 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/4/review
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 button 탐색 사이드바 표시
+				7 button 읽지 않은 알림 알림 센터 열기
+			8 content list
+				9 container 홈
+					10 button 홈
+						11 text 홈
+				12 container 계정 관리
+					13 button 계정 관리
+						14 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						19 text 대시보드
+				20 container 통계
+					21 button 통계
+						22 text 통계
+				23 container 게시 개요
+					24 button 게시 개요
+						25 text 게시 개요
+				26 container Google Play로 보호됨
+					27 button Google Play로 보호됨
+						28 text Google Play로 보호됨
+				29 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+					30 button 테스트 및 출시
+						31 text 테스트 및 출시
+					32 content list
+						33 container
+							34 container 최신 버전 및 번들
+								35 button 최신 버전 및 번들
+							36 container 프로덕션
+								37 button 프로덕션
+							38 container (collapsed) Description: 테스트, Secondary Actions: Expand
+								39 button 테스트
+							40 container 사전 등록
+								41 button 사전 등록
+							42 container 앱 무결성
+								43 button 앱 무결성
+							44 container 고급 설정
+								45 button 고급 설정
+				46 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					47 button 모니터링 및 개선
+						48 text 모니터링 및 개선
+				49 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					50 button 사용자 늘리기
+						51 text 사용자 늘리기
+				52 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					53 button Play를 통한 수익 창출
+						54 text Play를 통한 수익 창출
+			55 container main-content
+				56 container
+					57 heading 프로덕션 버전 만들기, Value: 1
+						58 text 프로덕션 버전 만들기
+					61 tab group
+						62 tab (selectable, disabled, settable, boolean) Description: 1/2단계, 새 버전 출시하기, Value: 0
+새 버전 출시하기
+						63 tab (selected, settable, boolean) Description: 2/2단계, 미리보기 및 확인, Value: 1
+2
+미리보기 및 확인
+					64 button 임시 출시 삭제
+						65 text 임시 출시 삭제
+					66 heading 오류, 경고 및 메시지, Value: 2
+						67 text 오류, 경고 및 메시지
+					68 text 오류 1개
+					69 button (expanded) Description: 검증 세부정보 간략히 보기, Secondary Actions: Collapse
+						70 text 간략히
+					71 container
+						72 text 오류
+						73 text 광고 ID 선언에는 앱에서 광고 ID를 사용한다고 명시되어 있습니다. 활성 아티팩트 중 하나의 매니페스트 파일에 com.google.android.gms.permission.AD_ID 권한이 포함되어 있지 않습니다.
+						74 container
+							75 text 매니페스트 파일에 이 권한을 포함하지 않으면 광고 ID가 0으로 처리됩니다. 그로 인해 광고 및 분석 사용 사례가 손상되고 수익 손실이 발생할 수 있습니다.
+							76 link Description: 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/6048248
+						77 text 광고 ID 선언을 업데이트하면 이러한 오류를 해결할 수 있습니다.
+						78 text AD_ID 권한 없이 Android 13(API 33)을 타겟팅하는 앱은 광고 ID가 0으로 처리됩니다. 이는 광고 및 분석 사용 사례에 영향을 미칠 수 있습니다.
+						79 link Description: 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/6048248
+						80 link Description: 선언 업데이트, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/ad-id-declaration
+						81 button 권한 없이 출시
+							82 text 권한 없이 출시
+					83 text 경고 2개
+					84 button (collapsed) Description: 검증 세부정보 더보기, Secondary Actions: Expand
+						85 text 더보기
+					86 heading 지원 기기 변경사항, Value: 2
+						87 text 지원 기기 변경사항
+					88 text 지원 기기가 변경된 이유는 매니페스트가 변경되었거나 App Bundle이 누락되었기 때문일 수 있습니다. 기기 카탈로그에서 제외된 기기는 여기에 표시되지 않습니다.
+					89 table 지원되는 폼 팩터
+						90 row 폼 팩터 마지막 출시에서 지원하는 기기 수 더 이상 지원되지 않는 기기 새롭게 지원되는 기기 이 출시에서 지원하는 총 기기 수
+							91 cell
+							92 cell 폼 팩터
+								93 text 폼 팩터
+							94 cell 마지막 출시에서 지원하는 기기 수
+								95 text 마지막 출시에서 지원하는 기기 수
+							96 cell 더 이상 지원되지 않는 기기
+								97 text 더 이상 지원되지 않는 기기
+							98 cell 새롭게 지원되는 기기
+								99 text 새롭게 지원되는 기기
+							100 cell 이 출시에서 지원하는 총 기기 수
+								101 text 이 출시에서 지원하는 총 기기 수
+							102 cell
+						103 row 전화 11,471 0 0 11,471
+							104 cell
+							105 cell
+								106 text 전화
+							107 cell
+								108 text 11,471
+							109 cell
+								110 text 0
+							111 cell
+								112 text 0
+							113 cell
+								114 text 11,471
+							115 cell
+						116 row 태블릿 6,486 0 0 6,486
+							117 cell
+							118 cell
+								119 text 태블릿
+							120 cell
+								121 text 6,486
+							122 cell
+								123 text 0
+							124 cell
+								125 text 0
+							126 cell
+								127 text 6,486
+							128 cell
+						129 row TV 5 0 0 5
+							130 cell
+							131 cell
+								132 text TV
+							133 cell
+								134 text 5
+							135 cell
+								136 text 0
+							137 cell
+								138 text 0
+							139 cell
+								140 text 5
+							141 cell
+						142 row 웨어러블 0 0 0 0
+							143 cell
+							144 cell
+								145 text 웨어러블
+							146 cell
+								147 text 0
+							148 cell
+								149 text 0
+							150 cell
+								151 text 0
+							152 cell
+								153 text 0
+							154 cell
+						155 row 차량 27 0 0 27
+							156 cell
+							157 cell
+								158 text 차량
+							159 cell
+								160 text 27
+							161 cell
+								162 text 0
+							163 cell
+								164 text 0
+							165 cell
+								166 text 27
+							167 cell
+						168 row Chromebook 77 0 0 77
+							169 cell
+							170 cell
+								171 text Chromebook
+							172 cell
+								173 text 77
+							174 cell
+								175 text 0
+							176 cell
+								177 text 0
+							178 cell
+								179 text 77
+							180 cell
+						181 row Android XR 1 0 0 1
+							182 cell
+							183 cell
+								184 text Android XR
+							185 cell
+								186 text 1
+							187 cell
+								188 text 0
+							189 cell
+								190 text 0
+							191 cell
+								192 text 1
+							193 cell
+					194 heading 출시 버전 제공, Value: 2
+						195 text 출시 버전 제공
+					196 container
+						197 button (collapsed) 신규 설치 크기, Secondary Actions: Expand
+						198 text 115MB 27.4KB
+						199 text (이전 출시 버전 대비)
+					200 container
+						201 button (collapsed) 다운로드 시간, Secondary Actions: Expand
+						202 text 1분 3초 0초
+						203 text (이전 출시 버전 대비)
+					204 container
+						205 button (collapsed) 업데이트 크기, Secondary Actions: Expand
+						206 text 1.87MB
+					207 heading 새 App Bundle, Value: 2
+						208 text 새 App Bundle
+					209 container
+						210 table 아티팩트
+							211 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+								212 cell
+								213 cell 파일 형식
+									214 text 파일 형식
+								215 cell 버전
+									216 text 버전
+								217 cell API 수준
+									218 text API 수준
+								219 cell 타겟 SDK
+									220 text 타겟 SDK
+								221 cell 화면 레이아웃
+									222 text 화면 레이아웃
+								223 cell ABI
+									224 text ABI
+								225 cell 필수 기능
+									226 text 필수 기능
+								227 cell
+							228 row App bundle 고급 44 (0.5.30) 26 이상 36 4 4 4 App Bundle: 44(0.5.30) 세부정보 보기
+								229 cell
+								230 cell
+									231 text App bundle
+									232 button (collapsed) 고급, Secondary Actions: Expand
+										233 text 고급
+								234 cell
+									235 text 44 (0.5.30)
+								236 cell
+									237 text 26 이상
+								238 cell
+									239 text 36
+								240 cell
+									241 text 4
+								242 cell
+									243 text 4
+								244 cell
+									245 text 4
+								246 cell
+									247 button App Bundle: 44(0.5.30) 세부정보 보기
+					248 heading 이전 버전, Value: 3
+						249 text 이전 버전
+					250 heading 포함됨, Value: 4
+						251 text 포함됨
+					252 text 이번 버전에 포함되는 이전 버전의 App Bundle이 없습니다
+					253 heading 포함되지 않음, Value: 4
+						254 text 포함되지 않음
+					255 text 이전 버전의 다음과 같은 아티팩트 버전이 이번 버전에 포함되지 않습니다.
+					256 container
+						257 table 아티팩트
+							258 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+								259 cell 파일 형식
+									260 text 파일 형식
+								261 cell 버전
+									262 text 버전
+								263 cell API 수준
+									264 text API 수준
+								265 cell 타겟 SDK
+									266 text 타겟 SDK
+								267 cell 화면 레이아웃
+									268 text 화면 레이아웃
+								269 cell ABI
+									270 text ABI
+								271 cell 필수 기능
+									272 text 필수 기능
+								273 cell
+							274 row App bundle 고급 42 (0.5.28) 26 이상 36 4 4 4 App Bundle: 42(0.5.28) 세부정보 보기
+								275 cell
+									276 text App bundle
+									277 button (collapsed) 고급, Secondary Actions: Expand
+										278 text 고급
+								279 cell
+									280 text 42 (0.5.28)
+								281 cell
+									282 text 26 이상
+								283 cell
+									284 text 36
+								285 cell
+									286 text 4
+								287 cell
+									288 text 4
+								289 cell
+									290 text 4
+								291 cell
+									292 button App Bundle: 42(0.5.28) 세부정보 보기
+					293 heading 출시 노트, Value: 2
+						294 text 출시 노트
+					295 text 기본 언어 - ko-KR
+					296 text • 초대·이벤트 이용 코드 입력란을 추가했어요. 전체 이용권에서 받은 코드를 등록할 수 있어요.
+• 아가말 표현을 더 풍부하게 늘렸어요. 소리와 장면 단서를 참고한 다정한 말투와 귀여운 투정이 자동으로 더해져요.
+• 새로운 버전을 Google Play에서 받을 수 있을 때 앱 시작 화면에서 업데이트를 안내해요.
+• 우리 아이 자랑 게시판과 영상카드 저장 기능을 실제 앱 화면으로 소개해요.
+아가말은 단서를 참고해 상상한 표현이며, 실제 감정이나 의도를 판별하는 결과는 아니에요.
+					297 heading 단계적 출시, Value: 2
+						298 text 단계적 출시
+					299 text 이 버전을 사용자층의 몇 퍼센트를 대상으로 출시할지 입력합니다.
+					300 container 활성 기기 설치 수: 31
+						301 text 사용 중인 기기에 설치된 횟수
+						302 text 31
+					303 container 출시율
+						304 container
+							305 text 출시율
+							306 container 필수 입력란
+								307 text *
+						308 container
+							309 text field (settable) %, Value: 100.0
+							310 text %
+					311 container 제공 국가
+						312 text 제공 국가
+						313 container
+							314 radio button (settable, integer) Description: 모든 대상 국가에서 제공, Value: 1, ID: aFE3332E7-FCD9-42A3-9532-5FFC020D1181--89
+						315 container
+							316 radio button (settable, integer) Description: 특정 국가/지역 선택, Value: 0, ID: aFE3332E7-FCD9-42A3-9532-5FFC020D1181--90
+					317 container 단계적 출시 대상 설치 사용자 수 31회
+						318 text 단계적 출시 대상 설치 사용자 수
+						319 text 31
+					320 container
+						321 text 저장하려면 오류를 수정하세요.
+						322 button 뒤로
+							323 text 뒤로
+						324 button (disabled) 저장
+							325 text 저장
+				326 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				327 link Description: 상태 대시보드, Value: status.play.google.com/
+				328 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				329 text © 2026 Google
+				330 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				331 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				332 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+		333 container default-acx-overlay-container
+			334 container
+				335 container App Bundle: 44(0.5.30)
+					337 heading App Bundle: 44(0.5.30), Value: 2, ID: aFE3332E7-FCD9-42A3-9532-5FFC020D1181--91
+						338 text App Bundle: 44(0.5.30)
+					336 button 닫기
+					339 container
+						340 link Description: App Bundle 살펴보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-bundle-explorer?artifactId=4860245128099605119
+						341 tab group
+							342 tab (selected, settable, boolean) Description: 세부정보, Value: 1
+							343 tab (selectable, settable, boolean) Description: 다운로드, Value: 0
+							344 tab (selectable, settable, boolean) Description: 전송, Value: 0
+							345 tab (selectable, settable, boolean) Description: 변경사항, Value: 0
+						346 heading 세부정보, Value: 2
+							347 text 세부정보
+						348 text 출시
+						349 container
+							350 text 버전 1개
+							351 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								352 text 세부정보 보기
+						353 text 지원되는 Android 기기
+						354 text 18,073
+						355 link Description: 기기 카탈로그로 이동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/devices
+						356 text 현지화
+						357 container
+							358 text 현지화 버전 85개
+							359 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								360 text 세부정보 보기
+						361 text 권한
+						362 container
+							363 text 권한 15개
+							364 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+								365 text 세부정보 숨기기
+							408 text android.permission.ACCESS_ADSERVICES_AD_ID, android.permission.ACCESS_ADSERVICES_ATTRIBUTION, android.permission.ACCESS_ADSERVICES_TOPICS, android.permission.ACCESS_NETWORK_STATE, android.permission.CAMERA, android.permission.FOREGROUND_SERVICE, android.permission.INTERNET, android.permission.READ_EXTERNAL_STORAGE, android.permission.RECORD_AUDIO, android.permission.WAKE_LOCK, android.permission.WRITE_EXTERNAL_STORAGE, com.android.vending.BILLING, com.android.vending.CHECK_LICENSE, com.google.android.gms.permission.AD_ID, com.moa.babylanguage.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+						366 text 기능
+						367 container
+							368 text 기능 4개
+							369 button (collapsed) Description: 세부정보 보기, Secondary Actions: Expand
+								370 text 세부정보 보기
+						371 text 화면 레이아웃
+						372 text small, normal, large, xlarge
+						373 text 네이티브 플랫폼
+						374 text arm64-v8a, armeabi-v7a, x86, x86_64
+						375 text API 수준
+						376 text 26+
+						377 text 타겟 SDK
+						378 text 36
+						379 text OpenGL ES 버전
+						380 text 0.0 이상
+						381 text OpenGL 텍스처
+						382 text 텍스처 필요 없음
+						383 text 메모리 페이지 크기
+						384 text 16KB 지원
+						385 text 앱이 Google에서 감지할 수 없는 라이브러리를 사용하거나 코드가 기기에서 특정 페이지 크기를 사용한다고 가정하는 경우 여전히 오류가 발생할 수 있습니다.
+						386 link Description: 16KB 페이지 크기 호환성 자세히 알아보기, 새 탭에서 열기, Value: developer.android.com/guide/practices/page-sizes#build
+						387 text DEX 코드 최적화
+						388 text -
+						389 text 점수를 최적화하여 메모리 사용량과 전반적인 사용자 성능을 개선하세요.
+						390 link Description: DEX 코드 최적화 자세히 알아보기, 새 탭에서 열기, Value: developer.android.com/topic/performance/vitals/code-optimization
+						391 container
+							392 text 최적화 비율
+							393 button (collapsed) Description: "최적화 비율"에 대한 추가 정보, Secondary Actions: Expand
+						394 text -
+						395 container
+							396 text 난독화 비율
+							397 button (collapsed) Description: "난독화 비율"에 대한 추가 정보, Secondary Actions: Expand
+						398 text -
+						399 container
+							400 text 축소 비율
+							401 button (collapsed) Description: "축소 비율"에 대한 추가 정보, Secondary Actions: Expand
+						402 text -
+						403 text R8 구성
+						404 text -
+						405 text 최고의 성능을 얻으려면 AGP 버전 9.0(으)로 업그레이드하고 R8을 사용하세요.
+						406 text 압축되지 않은 총 DEX 크기
+						407 text 65.2MB
+
+The focused UI element is 364 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse

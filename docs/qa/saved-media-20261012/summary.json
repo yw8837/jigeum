@@ -1,0 +1,111 @@
+{
+  "version_name": "0.5.24-beta",
+  "version_code": 38,
+  "status": "alpha38_available_to_selected_testers",
+  "last_confirmed_play_code": 38,
+  "product_source_commit": "0f0cb825bb1d3ab296adf0ab821c5c6e41d54e1b",
+  "source_head_at_recording": "f17b6ce01a7d5ef860707f18375660835c1d5ad8",
+  "user_original_gallery_video": {
+    "evidence_type": "user_report",
+    "video_card_saved": true,
+    "scene_record_saved": true,
+    "agent_read_original": false
+  },
+  "host_passed": 44,
+  "emulator": {
+    "passed": 47,
+    "failed": 1,
+    "skipped": 0,
+    "failure": "goldfish HEVC HDR decoder"
+  },
+  "s25_renderer": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "s25_public20_first_and_repeat_ms": [
+    6145,
+    5516
+  ],
+  "s25_tone20_ms": 7410,
+  "s25_tone20_visual_observations": 100,
+  "historical_emulator_timeout_root_cause": "environment-dependent; software-renderer timeouts preserved; exact causal attribution unresolved",
+  "signed_package_pass": true,
+  "signed_upgrade_preservation_pass": true,
+  "signed20_ui_seconds": null,
+  "signed20_result": "two cold-process quiet runs and signed UI/export gate passed with host GPU",
+  "signed_release_relock_pass": true,
+  "signed_release_relock_status": "pass_same_build",
+  "artifacts": {
+    "Agattok-0.5.24-beta-code38.apk": {
+      "bytes": 255179763,
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae"
+    },
+    "Agattok-0.5.24-beta-code38.aab": {
+      "bytes": 160206297,
+      "sha256": "6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217"
+    }
+  },
+  "general_accuracy_validated": false,
+  "emotion_or_need_accuracy_validated": false,
+  "phone_user_records_preserved": true,
+  "automation33": "PAUSED",
+  "ultraqa": {
+    "cycles": 5,
+    "status": "ULTRAQA STOPPED: Max cycles",
+    "remaining_gate": "signed beta20 timeout; cleanup policy blocks remain",
+    "followup": "Focused local delivery gates and owned emulator cleanup complete in2 cycles; prior failed five-cycle run and old deletion blocks remain. Alpha38 actual availability confirmed2026-10-12 05:26 KST; Console publication05:19 KST."
+  },
+  "delivery_diagnosis": {
+    "software_gpu_verdicts": [
+      "fail",
+      "fail"
+    ],
+    "software_gpu_host_available_min_bytes": [
+      71299072,
+      1622016
+    ],
+    "host_gpu_verdicts": [
+      "pass",
+      "pass"
+    ],
+    "host_gpu_host_available_min_bytes": [
+      200704,
+      217726976
+    ],
+    "quiet_checks_are_not_latency_measurements": true,
+    "product_timeout_ms": 45000,
+    "product_code_changed_in_diagnosis": false,
+    "same_package_signed20_export_sha256": "6a60652453ed30639434c3a76a8e514b772e905d06a5b6d4696158e11d6efba8",
+    "same_package_signed20_export_seconds": "20.000000"
+  },
+  "play": {
+    "release_id": 18,
+    "track": "Alpha",
+    "release_name": "0.5.24-beta (38) - saved media fix",
+    "review_requested_at": "2026-10-12T04:38:00+09:00",
+    "submission_ui_state": "검토 중인 변경사항; 빠른 검사 실행 중",
+    "ui_state": "선택한 테스터에게 제공됩니다",
+    "console_published_at": "2026-10-12T05:19:00+09:00",
+    "availability_confirmation_recorded_at": "2026-10-12T05:26:36+09:00",
+    "availability_evidence": [
+      "delivery/play-available.png",
+      "delivery/play-available.txt"
+    ],
+    "managed_publishing": false,
+    "tester_availability_confirmed": true,
+    "last_confirmed_available_code": 38,
+    "individual_tester_installation_verified": false,
+    "twelve_testers_fourteen_continuous_days_verified": false,
+    "blocking_errors": 0,
+    "warnings": 2,
+    "removed_supported_devices": 0,
+    "new_install_mb": 112,
+    "new_install_change_kb": 7.14,
+    "monitor_id": "33",
+    "monitor_status": "PAUSED",
+    "monitor_paused_at": "2026-10-12T05:28:10+09:00",
+    "availability_evidence_commit": "632019fd5daa40439743243cabd48ee04a5a6ffb",
+    "availability_evidence_push_sha_match_clean": true
+  }
+}

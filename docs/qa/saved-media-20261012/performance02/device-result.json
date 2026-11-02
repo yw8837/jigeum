@@ -1,0 +1,25 @@
+{
+  "status": "fail",
+  "input_sha256": "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877",
+  "actual_device_clip_analyzer": true,
+  "quality_validated": false,
+  "scope": "one public input; process first call then warm call; not filesystem-cold",
+  "timeout_ms": 45000,
+  "rows": [
+    {
+      "index": 0,
+      "available_memory_bytes": 2786226176,
+      "low_memory": false,
+      "thermal_before": 0,
+      "elapsed_ms": 6594,
+      "has_interpretation": true,
+      "has_problem": false,
+      "issue": null,
+      "visual_frames": 20,
+      "visual_ordered": true,
+      "visual_covers_selection": false,
+      "thermal_after": 0
+    }
+  ],
+  "error_type": "AssertionError"
+}

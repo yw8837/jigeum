@@ -1,0 +1,56 @@
+[
+  {
+    "name": "native-01",
+    "execution": {
+      "status": "pass",
+      "tests": 94,
+      "passed_tests": 94,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 44.63,
+      "exit": 0
+    },
+    "evidence_sha256": "5890d73fb21893afebcb9d135260dcc5feefe8d246f32f841a45b7a2114b0422"
+  },
+  {
+    "name": "native-extra",
+    "execution": {
+      "status": "pass",
+      "tests": 84,
+      "passed_tests": 84,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 20.37,
+      "exit": 0
+    },
+    "evidence_sha256": "fbf7edfc807f0dc887a7d883083a0db1a3a05a062b7223ab648940c9a4b2b61f"
+  },
+  {
+    "name": "paired-01",
+    "execution": {
+      "status": "pass",
+      "tests": 1,
+      "passed_tests": 1,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 228.37,
+      "exit": 0
+    },
+    "evidence_sha256": "a3f074b51797915c4dd4fb3b3d89e32b193a6d19aec7af7d44224edf81b59cbc"
+  }
+]

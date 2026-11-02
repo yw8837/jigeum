@@ -30,12 +30,14 @@ def import_video(name):
     q.tap_text('아기말 번역하기')
     q.tap_text('저장된 영상 가져오기')
     choose_file(name)
-    q.wait_ui('어느 순간을 들어볼까요?')
+    q.wait_ui('구간 고르기')
 
 
 def install(apk):
     q.adb('install', '-r', str(apk), timeout=120)
-    evidence = installed_provenance(adb_command(), q.PACKAGE, hashlib.sha256(apk.read_bytes()).hexdigest())
+    with apk.open('rb') as source:
+        digest = hashlib.file_digest(source, 'sha256').hexdigest()
+    evidence = installed_provenance(adb_command(), q.PACKAGE, digest)
     assert evidence['verified'], evidence
     return evidence
 

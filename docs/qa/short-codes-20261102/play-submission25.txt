@@ -1,0 +1,74 @@
+Browser tab: 7, Title: "제출 세부정보 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/25/details".
+1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/25/details
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/home
+				7 button 알림 알림 센터 열기
+					8 text 알림
+				9 pop up button (collapsed) Description: 개발자 계정 전환, Secondary Actions: Expand
+				10 button (collapsed) Description: Google 계정: 뇽뇽 (bsfire1237@gmail.com), Google 멤버십, Secondary Actions: Expand
+			11 content list
+				386 container 홈
+					387 button 홈
+				388 container 계정 관리
+					389 button 계정 관리
+				390 container 아가톡 - 지금 내 기분이 그래
+					391 pop up button 아가톡 - 지금 내 기분이 그래
+				392 container 대시보드
+					393 button 대시보드
+				394 container 통계
+					395 button 통계
+				396 container 게시 개요
+					397 button 게시 개요
+				398 container Google Play로 보호됨
+					399 button Google Play로 보호됨
+				400 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					401 button 테스트 및 출시
+				402 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					403 button 모니터링 및 개선
+				404 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					405 button 사용자 늘리기
+				406 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					407 button Play를 통한 수익 창출
+			34 container main-content
+				35 container
+					408 link Description: 제출 활동 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+					409 heading 제출 25, Value: 1
+						410 text 제출 25
+					418 heading 변경사항 1개, Value: 2
+						419 text 변경사항 1개
+					420 table Changes
+						421 row 변경된 항목 설명
+							422 cell
+								423 text 변경된 항목
+							424 cell
+								425 text 설명
+						426 row 프로덕션
+							427 cell
+								428 text 프로덕션
+						429 row 0.5.31 (45) - short access codes 전체 출시 시작
+							430 cell
+								431 text 0.5.31 (45) - short access codes
+							432 cell
+								433 text 전체 출시 시작
+					434 text 제출 ID
+					435 text 25
+					436 text 소스
+					437 text Play Console
+					438 text 변경사항 제출됨
+					439 text 11월 02, 2026, 3:16 오전
+					440 text 상태
+					441 text 검토 중
+					442 button 게시 개요로 이동
+						443 text 게시 개요로 이동
+				411 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				412 link Description: 상태 대시보드, Value: status.play.google.com/
+				413 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				414 text © 2026 Google
+				415 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				416 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				417 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 1 AXWebArea 제출 세부정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity/25/details

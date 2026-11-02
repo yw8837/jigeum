@@ -1,0 +1,7 @@
+No result found.
+Success
+OK: killing emulator, bye bye
+
+OK
+
+Owned Gradle daemon stopped: 23832

@@ -1,0 +1,25 @@
+{
+  "testedAt": "2026-11-01T17:17:24.370Z",
+  "rows": [
+    {
+      "name": "invitation-short",
+      "status": "pass",
+      "http": 200,
+      "elapsedMs": 224
+    },
+    {
+      "name": "unknown-short",
+      "status": "pass",
+      "http": 403,
+      "elapsedMs": 85
+    },
+    {
+      "name": "discount-while-closed",
+      "status": "pass",
+      "http": 403,
+      "elapsedMs": 448
+    }
+  ],
+  "liveDiscountRegistrationConsumed": false,
+  "actualPurchaseTested": false
+}

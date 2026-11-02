@@ -1,0 +1,74 @@
+{
+  "status": "pass",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~tyaokEDocwI_LJzjv8yYXA==/com.moa.babylanguage-NUaPy3ttEqTPJGQVmkuVEA==/base.apk",
+      "sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+      "expected_sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+      "version_code": 37,
+      "version_name": "0.5.23-beta",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~0sVVKFcOBkLzREpuD7d7yg==/com.moa.babylanguage-e5B7-ziJYvk6a0VVL1qYWA==/base.apk",
+      "sha256": "d3028ee1785b93b646395bc7a57376e309c61af8a362f7496098f3c9cae2ad10",
+      "expected_sha256": "d3028ee1785b93b646395bc7a57376e309c61af8a362f7496098f3c9cae2ad10",
+      "version_code": 38,
+      "version_name": "0.5.24-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1791559002125,
+  "old_legacy_record": {
+    "id": 1791559002125,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1791559002040503700",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "old_media": {
+    "name": "아가톡-1791559136438.mp4",
+    "bytes": 932978,
+    "sha256": "641603a41b3dbacdb1c889a34beef6f9eac82ece0ccc9427f93addce924a08bb",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_media": {
+    "name": "아가톡-1791559136438.mp4",
+    "bytes": 932978,
+    "sha256": "641603a41b3dbacdb1c889a34beef6f9eac82ece0ccc9427f93addce924a08bb",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_legacy_record": {
+    "id": 1791559002125,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1791559002040503700",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "checks_passed": true,
+  "legacy_text_preserved": true,
+  "media_bytes_preserved": true,
+  "beta_full_access_retained": true,
+  "owned_external_files_removed": true
+}

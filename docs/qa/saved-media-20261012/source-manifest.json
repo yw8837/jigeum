@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-10-11T18:46:57.086248+00:00",
+  "baseline": "6499256a4d2e80f72894d5ab0c37b233259ddb76",
+  "source_sha256": {
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/CaptionHdrCompatibilityTest.kt": "d2c2a0b4fe5bf70b2a82193bec3e6898970509a1838a2ebd3783751e90b01d9e",
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ExpressionVarietyTest.kt": "3ef2da0a543fa2655d473735de506edd81bdce969c65c4b9e1460837688f3ff4",
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/SavedMediaFlowTest.kt": "8c3039ee9e911014c371d0ed52da33994bc8fd0442efd5225d0b706743a35995",
+    "outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/TranslatedMediaTests.kt": "5dbb4dbdeb0d8694034041a9bf6e2fba9e771f70590fd33e44446338ac92ccdb",
+    "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BabyExpression.kt": "d1c397f119b42835d275d9a36b791b81e3788b5c5d8224c405818210c3180dc0",
+    "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/CaptureFlow.kt": "cf4a94ea6b0611a4133288fbae44008960e1997b269477c7e9ce9d0a8b7c8677",
+    "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ClipEvidence.kt": "2b3bd32807a1ed62347a2d18a56203d75b797915ec854b188f0d4582ffb36536",
+    "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/MainActivity.kt": "3de26960025516011695e9e20579b097febc1b56e8f6564ea440e83a1d78ad2d",
+    "outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/TranslatedMedia.kt": "e5a8442ec99a1cdb074ddab0a8f41575643db82c53ce5f21016b736a7ccd408e",
+    "outputs/MoaAndroid/app/src/astProbeAndroidTest/java/com/moa/babylanguage/SavedMediaPerformanceTest.kt": "6bdee7957ac82ecb4f83b9ea2f5b9bef60f63409bad5abdecf9c6b59c5cac952",
+    "outputs/MoaAndroid/app/src/androidTest/assets/scene-hdr-pq.mp4": "6c490b999dff5373da7da661318bc1621e3813211467f3975a104e268c016cfd"
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "status": "physical_checks_passed_with_preserved_initial_failure",
+  "device": {
+    "ro.kernel.qemu": "0",
+    "ro.boot.qemu": "",
+    "ro.product.cpu.abi": "arm64-v8a",
+    "ro.product.model": "SM-S938N",
+    "ro.build.version.sdk": "36"
+  },
+  "general_accuracy_validated": false,
+  "play_app_ui_latency_measured": false,
+  "research_app_sha256": "72fb109e9742de012c492113536f116fa39b36914323f88f70d6647ccd4236be",
+  "research_test_updated_sha256": "bc59b3b25edc3a8faef9c0ef85515dd6e37b8de88c0f452a850394fbfdb93335",
+  "product_code_changed": false,
+  "play_version_on_device": "0.5.21-beta",
+  "face_stage_measurements": [
+    {
+      "id": "face10",
+      "elapsed_ms": 9867.760205,
+      "observations": 50,
+      "single_face": 50,
+      "stages_ms": {
+        "decode": 225.695677,
+        "yamnet": 401.65599,
+        "ast": 2947.844947,
+        "candidate_policy": 31.430886,
+        "acoustic_shape": 68.61276,
+        "visual": 5852.859216,
+        "base_interpreter": 35.793229,
+        "candidate_interpreter": 32.014115
+      },
+      "max_stage_pss_bytes": 261807104,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "face20",
+      "elapsed_ms": 15759.38416,
+      "observations": 100,
+      "single_face": 99,
+      "stages_ms": {
+        "decode": 207.798073,
+        "yamnet": 257.179948,
+        "ast": 5081.533071,
+        "candidate_policy": 30.771146,
+        "acoustic_shape": 66.080312,
+        "visual": 9789.360726,
+        "base_interpreter": 32.252031,
+        "candidate_interpreter": 28.690781
+      },
+      "max_stage_pss_bytes": 273170432,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "id": "repeat20",
+      "elapsed_ms": 15541.916453,
+      "observations": 100,
+      "single_face": 99,
+      "stages_ms": {
+        "decode": 257.145312,
+        "yamnet": 245.651771,
+        "ast": 5012.963123,
+        "candidate_policy": 28.28875,
+        "acoustic_shape": 60.359062,
+        "visual": 9615.06609,
+        "base_interpreter": 30.695782,
+        "candidate_interpreter": 28.339479
+      },
+      "max_stage_pss_bytes": 284804096,
+      "timeline_ordered": true,
+      "covers_selection": true
+    }
+  ],
+  "integrated_synthetic_measurements": [
+    {
+      "index": 0,
+      "status": "measured",
+      "start_ms": 100000,
+      "end_ms": 110000,
+      "duration_ms": 10000,
+      "visual": true,
+      "thermal_before": 0,
+      "elapsed_ms": 3627,
+      "analysis_returned": true,
+      "has_interpretation": false,
+      "issue": "INFANT_UNCONFIRMED",
+      "has_problem": true,
+      "visual_status": "COMPLETE",
+      "visual_frame_count": 50,
+      "visual_ordered": true,
+      "visual_covers_selection": true,
+      "input_preserved": true,
+      "sampler_terminated": true,
+      "sampler_error_type": null,
+      "peak_sampled_pss_kb": 543633,
+      "pss_samples": 32,
+      "thermal_after": 0,
+      "ast_model_store_entries": 1
+    },
+    {
+      "index": 1,
+      "status": "measured",
+      "start_ms": 100000,
+      "end_ms": 120000,
+      "duration_ms": 20000,
+      "visual": true,
+      "thermal_before": 0,
+      "elapsed_ms": 7398,
+      "analysis_returned": true,
+      "has_interpretation": false,
+      "issue": "INFANT_UNCONFIRMED",
+      "has_problem": true,
+      "visual_status": "COMPLETE",
+      "visual_frame_count": 100,
+      "visual_ordered": true,
+      "visual_covers_selection": true,
+      "input_preserved": true,
+      "sampler_terminated": true,
+      "sampler_error_type": null,
+      "peak_sampled_pss_kb": 553121,
+      "pss_samples": 64,
+      "thermal_after": 0,
+      "ast_model_store_entries": 1
+    }
+  ],
+  "thermal_scope": "run01 only; USB powered; brief test, not long-duration or low-end phone guarantee",
+  "thermal": {
+    "initial_thermal": {
+      "monotonic_s": 74895.4852151,
+      "thermal_status": 0,
+      "battery_c": 31.0,
+      "usb_powered": true
+    },
+    "face_thermal": {
+      "samples": 40,
+      "first": {
+        "monotonic_s": 74934.3098166,
+        "thermal_status": 0,
+        "battery_c": 31.0,
+        "usb_powered": true
+      },
+      "last": {
+        "monotonic_s": 74976.8522829,
+        "thermal_status": 0,
+        "battery_c": 31.5,
+        "usb_powered": true
+      },
+      "max_battery_c": 31.5,
+      "max_thermal_status": 0,
+      "sampler_errors": []
+    },
+    "integrated_thermal": {
+      "samples": 13,
+      "first": {
+        "monotonic_s": 74977.1334382,
+        "thermal_status": 0,
+        "battery_c": 31.5,
+        "usb_powered": true
+      },
+      "last": {
+        "monotonic_s": 74989.3413523,
+        "thermal_status": 0,
+        "battery_c": 31.7,
+        "usb_powered": true
+      },
+      "max_battery_c": 31.7,
+      "max_thermal_status": 0,
+      "sampler_errors": []
+    },
+    "recovery_thermal": {
+      "samples": 8,
+      "first": {
+        "monotonic_s": 74989.5707179,
+        "thermal_status": 0,
+        "battery_c": 31.7,
+        "usb_powered": true
+      },
+      "last": {
+        "monotonic_s": 74996.4049334,
+        "thermal_status": 0,
+        "battery_c": 31.7,
+        "usb_powered": true
+      },
+      "max_battery_c": 31.7,
+      "max_thermal_status": 0,
+      "sampler_errors": []
+    }
+  },
+  "initial_recovery": {
+    "passed": 3,
+    "failed": 1,
+    "reason": "S25 default H264 decoder rejects unsupported 64x64 fixture before cancellation"
+  },
+  "scoped_recovery": {
+    "status": "pass",
+    "tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 1.36,
+    "exit": 0
+  },
+  "recovery_fix": "Same H264 sequence/PTS at 320x320 plus decoder capability assertion; original 64x64 input retained",
+  "exact_prior_evidence_sha256": "e95a0ea5ad76a8afa003a863b9fea94d698e034df2ed78e5b848346ac5098e30",
+  "original_media_unchanged": true,
+  "production_install_metadata_unchanged": true,
+  "user_records_read_or_byte_verified": false,
+  "temporary_apps_removed": true,
+  "local_derived_video_removed": true,
+  "new_build_cleanup": {
+    "status": "policy_blocked_even_after_explicit_user_approval",
+    "files": 1831,
+    "bytes": 280343219
+  },
+  "separate_prior_build_cleanup_bytes": 2383214379,
+  "cleanup_failure_exit_propagation_check": [
+    {
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "status": "failed",
+      "exit_code": 1
+    }
+  ],
+  "free_disk_bytes": 77455634432,
+  "ultraqa_status": "BLOCKED: new build-folder cleanup policy rejection; physical verification passed; lifecycle cleared"
+}

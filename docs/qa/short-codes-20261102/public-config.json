@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "artifacts": [
+    {
+      "file": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.apk",
+      "sha256": "fb6d3ac1a5d73acb9c446d98874f124bdafb53f0b39b043dfeddf24c24f2997c",
+      "checks": {
+        "verification_endpoint": true,
+        "community_endpoint": true,
+        "public_key": true
+      }
+    },
+    {
+      "file": "D:\\Codex\\Agattok\\short-codes-20261102\\delivery\\Agattok-0.5.31-release-code45.aab",
+      "sha256": "1ce09db54abf8c1e909b81cb1b7ded20d2529ae979f2ad283a57a0282af79157",
+      "checks": {
+        "verification_endpoint": true,
+        "community_endpoint": true,
+        "public_key": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+Browser tab: 3, Title: "게시 개요 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing".
+0 AXWebArea 게시 개요 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				6 container
+					7 button 읽지 않은 알림 알림 센터 닫기
+						8 text 읽지 않은 알림
+					9 container Description: 알림 팝업, ID: aBE0C9AA7-EFFB-431D-AE70-B3A6FE4EB449--1
+						10 content list
+							11 container
+								12 container 읽지 않음 아가톡 - 지금 내 기분이 그래 10월 9일 앱 업데이트가 게시되었습니다. 변경사항이 사용자에게 즉시 표시되지만 시간이 더 걸릴 수도 있습니다. 알림 접기
+									13 text 신규
+									14 image 아가톡 - 지금 내 기분이 그래
+									15 text 10월 9일
+									16 text 앱 업데이트가 게시되었습니다. 변경사항이 사용자에게 즉시 표시되지만 시간이 더 걸릴 수도 있습니다.
+								17 link Description: 게시 개요로 이동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing
+								18 button 알림 삭제
+							19 button (collapsed) Description: 아가톡 - 지금 내 기분이 그래 10월 7일 사용 중인 SDK 버전이 오래됨 알림 펼치기, Secondary Actions: Expand
+								20 image 아가톡 - 지금 내 기분이 그래
+								21 text 10월 7일
+								22 text 사용 중인 SDK 버전이 오래됨
+							23 button (collapsed) Description: Yeolmae 10월 2일 Google Ads의 ₩600,000 크레딧으로 앱 성장시키기 알림 펼치기, Secondary Actions: Expand
+								24 image Yeolmae
+								25 text 10월 2일
+								26 text Google Ads의 ₩600,000 크레딧으로 앱 성장시키기
+							27 button (collapsed) Description: 읽지 않음 Yeolmae 10월 1일 15% 서비스 수수료 프로그램 등록을 시작하세요 알림 펼치기, Secondary Actions: Expand
+								28 image Yeolmae
+								29 text 10월 1일
+								30 text 15% 서비스 수수료 프로그램 등록을 시작하세요
+							31 button (collapsed) Description: Yeolmae 10월 1일 본인 인증이 완료되었습니다 알림 펼치기, Secondary Actions: Expand
+								32 image Yeolmae
+								33 text 10월 1일
+								34 text 본인 인증이 완료되었습니다
+				35 button 아가톡 - 지금 내 기분이 그래
+					36 text 아가톡 - 지금 내 기분이 그래
+				37 button 개발자 계정 전환
+					38 image 개발자 계정 전환
+			39 container
+				40 link Description: 모든 앱, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				41 content list
+					42 container 대시보드
+						43 button 대시보드
+							44 text 대시보드
+					45 container 통계
+						46 button 통계
+							47 text 통계
+					48 container 게시 개요
+						49 button 게시 개요
+							50 text 게시 개요
+					51 container Google Play로 보호됨
+						52 button Google Play로 보호됨
+							53 text Google Play로 보호됨
+					54 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+						55 button 테스트 및 출시
+							56 text 테스트 및 출시
+					57 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+						58 button 모니터링 및 개선
+							59 text 모니터링 및 개선
+					60 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+						61 button 사용자 늘리기
+							62 text 사용자 늘리기
+					63 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+						64 button Play를 통한 수익 창출
+							65 text Play를 통한 수익 창출
+			66 container main-content
+				67 container
+					68 heading 게시 개요, Value: 1
+						69 text 게시 개요
+					70 container
+						71 text 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+						72 button 게시 개요에 관한 세부정보 더보기
+					73 pop up button (collapsed) 관리형 게시가 사용 중지됨, ID: a8234E5EC-8FB1-4019-B7F4-CECE514716F9--0, Secondary Actions: Expand
+					74 text 최근 게시일: 2026년 10월 9일
+					75 link Description: 제출 활동, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+				76 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				77 link Description: 상태 대시보드, Value: status.play.google.com/
+				78 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				79 text © 2026 Google
+				80 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				81 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				82 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 17 link Description: 게시 개요로 이동, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing

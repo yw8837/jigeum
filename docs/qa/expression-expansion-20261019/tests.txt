@@ -1,0 +1,8 @@
+JUnit version 4.13.2
+............SYNTHETIC_PCM_VARIETY=201/256 (wording selection only)
+.VISUAL_GROUP_COUNTS={basic=7680, sustained=13312, pause=3584, ordered=66048}
+EXPRESSION_AUDIT={"basic":3584,"sustained":6144,"pause":2048,"ordered":19200,"eventOrders":150,"audioOnly":30976,"withVisual":90624,"authoredSentenceUnits":336,"basicWhitespaceWords":527,"basicMaxChars":55,"audioMaxChars":96,"visualMaxChars":119}
+.....................................................
+Time: 2.313
+
+OK (66 tests)

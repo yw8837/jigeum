@@ -111,6 +111,26 @@ class VideoAudioTest {
         } finally { file.delete() }
     }
 
+    @Test fun realDecoderDistinguishesDelayedTrackFromSelectionAlignedPcm() = runBlocking {
+        for ((name, selection, aligned) in listOf(
+            Triple("delayed-audio-clock-5.mp4", ClipRange(0, 5000), false),
+            Triple("delayed-audio-clock-5.mp4", ClipRange(3200, 4800), true),
+            Triple("range-silence-tone.mp4", ClipRange(8000, 11000), true),
+            Triple("tone44-mono.mp4", ClipRange(0, 2000), true))) {
+            val file = fixture(name)
+            try {
+                val decoded = VideoAudioDecoder.decodeWithTiming(context, Uri.fromFile(file),
+                    selection.startMs, selection.endMs)!!
+                try {
+                    assertEquals("Actual codec time mapping $name/$selection", aligned, decoded.selectionTimelineAligned)
+                    assertTrue(decoded.samples.isNotEmpty())
+                    if (name.startsWith("delayed") && selection.startMs == 0L)
+                        assertTrue("PCM remains unpadded; late track cannot masquerade as time-zero sound", decoded.samples.size < 48_000)
+                } finally { decoded.samples.fill(0f) }
+            } finally { file.delete() }
+        }
+    }
+
     @Test fun realModelCannotTurnSilenceOrToneIntoBabyPhrase() = runBlocking {
         for (name in listOf("silence.mp4", "tone44-mono.mp4", "no-audio.mp4")) {
             val file = fixture(name)

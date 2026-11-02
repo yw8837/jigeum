@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-22",
+  "public_url": "https://baby.yeolmaeapps.kr/",
+  "project_id": "appgprj_6ad8c78c34bc819195637bb9ae46db53",
+  "web": {
+    "audience": "public",
+    "version": 3,
+    "version_id": "appgprj_6ad8c78c34bc819195637bb9ae46db53~appgver_c215886b4ce481919d8e3527312f2431",
+    "source_sha": "d54afb9e30cd20fd04fb808f8efdca722a8c0168",
+    "deployment_id": "appgdep_6ad9d3c6913c819198524ffda1e6716a",
+    "deployment_status": "succeeded",
+    "deployed_at": "2026-10-22T09:13:54.259107+00:00",
+    "domain_ssl": "active",
+    "node_tests_passed": 24,
+    "typescript": "passed",
+    "production_build": "passed",
+    "hosted_smoke": "hosted-baby-quality.json",
+    "viewport_checks": [360, 390],
+    "horizontal_overflow": false,
+    "offline_retry_preserved_draft": true,
+    "offline_retry_created_posts": 1,
+    "comment_draft_survives_manage_report_back": true
+  },
+  "android": {
+    "community_url": "https://baby.yeolmaeapps.kr",
+    "debug_build": "passed",
+    "instrumentation_tests_passed": 4,
+    "device": "owned MoaQA35 emulator API35",
+    "evidence": "android-instrumentation.txt",
+    "explicit_prepared_card_preview": "passed",
+    "return_confirmation_and_draft_cleanup": "passed",
+    "physical_phone_tested": false,
+    "new_signed_beta_built": false,
+    "new_play_package_submitted": false
+  },
+  "play": {
+    "current_available_beta": "0.5.25-beta (39)",
+    "production_access_application": "received; under review",
+    "application_time_kst": "2026-10-22 17:43",
+    "production_published": false
+  },
+  "pending": [
+    "Google/Kakao OAuth and optional My Page",
+    "actual operator-account moderation UI acceptance",
+    "external privacy policy and Play UGC/Data Safety/content rating update before app release",
+    "higher versionCode signed beta and update-path verification",
+    "actual Play submission and tester availability"
+  ],
+  "cleanup": {
+    "hosted_synthetic_posts_deleted": 2,
+    "local_synthetic_posts_deleted": 3,
+    "synthetic_media_inaccessible_after_delete": true,
+    "owned_emulator_qa_packages_uninstalled": true,
+    "owned_emulator_stopped": true,
+    "local_preview_stopped": true,
+    "browser_offline_and_viewport_overrides_cleared": true,
+    "user_phone_records_touched": false,
+    "blocked_directory_deletion_retried": false,
+    "new_automation_created": false
+  }
+}

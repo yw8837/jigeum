@@ -1,0 +1,72 @@
+{
+  "scope": "local_visual_observation_candidate",
+  "play_uploaded": false,
+  "release_version_assigned": false,
+  "phone_performance_verified": false,
+  "infant_accuracy_verified": false,
+  "audio_abstention_recovery_verified": false,
+  "cadence_ms": 200,
+  "observations_10s": 50,
+  "observations_20s": 100,
+  "android_native": {
+    "status": "pass",
+    "tests": 98,
+    "passed_tests": 98,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 9.05,
+    "exit": 0
+  },
+  "host_tests": 19,
+  "python_tests": 5,
+  "artifacts": {
+    "research-app.apk": {
+      "bytes": 264656665,
+      "sha256": "72fb109e9742de012c492113536f116fa39b36914323f88f70d6647ccd4236be"
+    },
+    "research-test.apk": {
+      "bytes": 2819762,
+      "sha256": "be04fc947564d0757df419ec9cfd13f676a1ed7740aeea1353b0101f2d99b42b"
+    }
+  },
+  "code35_aab_preserved": true,
+  "emulator_synthetic_av": {
+    "durations_ms": [
+      10000,
+      20000
+    ],
+    "elapsed_ms": [
+      2601,
+      4552
+    ],
+    "observations": [
+      50,
+      100
+    ],
+    "phone_evidence": false
+  },
+  "pc_existing_development_clip": {
+    "steps_ms": [
+      500,
+      200,
+      100
+    ],
+    "mouth_state_changes": [
+      6,
+      19,
+      23
+    ],
+    "independent_ground_truth": false,
+    "final_per_frame_exact": true
+  },
+  "reviews": {
+    "spec_mandatory": 0,
+    "standards_mandatory": 0,
+    "standards_optional": 0
+  }
+}

@@ -2,6 +2,7 @@ package com.moa.babylanguage
 
 enum class BillingPlan(val basePlanId: String) {
     MONTHLY("monthly"),
+    LAUNCH_MONTHLY("monthly"),
     THREE_MONTH_PREPAID("three-month-prepaid")
 }
 
@@ -9,7 +10,7 @@ enum class BillingStatus {
     UNAVAILABLE, CONNECTING, READY, PURCHASING, PENDING, VERIFYING, PREMIUM, ERROR
 }
 
-enum class EntitlementSource { NONE, PLAY_PURCHASE, PLAY_REVIEW }
+enum class EntitlementSource { NONE, PLAY_PURCHASE, PLAY_REVIEW, INVITATION }
 enum class ReviewAccessStatus { UNAVAILABLE, INACTIVE, VERIFYING, ACTIVE, ERROR }
 
 data class BillingProduct(
@@ -24,7 +25,9 @@ data class BillingOption(
     val basePlanId: String,
     val formattedPrice: String,
     val billingPeriod: String,
-    val renewalType: String
+    val renewalType: String,
+    val renewalFormattedPrice: String? = null,
+    val introductoryCycles: Int = 0
 )
 
 data class BillingUiState(
@@ -35,5 +38,8 @@ data class BillingUiState(
     val message: String? = null,
     val entitlementSource: EntitlementSource = EntitlementSource.NONE,
     val reviewStatus: ReviewAccessStatus = ReviewAccessStatus.UNAVAILABLE,
-    val reviewMessage: String? = null
+    val reviewMessage: String? = null,
+    val codeStatus: ReviewAccessStatus = ReviewAccessStatus.UNAVAILABLE,
+    val codeKind: AccessCodeKind = AccessCodeKind.NONE,
+    val codeMessage: String? = null
 )

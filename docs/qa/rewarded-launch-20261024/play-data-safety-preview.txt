@@ -1,0 +1,91 @@
+Browser tab: 7, Title: "데이터 보안 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/data-privacy-security".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 407-408, 485-486
+~						248 tab (selected, settable, boolean) Description: 5/5단계, 미리보기, Value: 1
+5
+미리보기
+~						411 button 모두 접기
+~							412 text 모두 접기
+~						419 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							420 text 세부정보 숨기기
++						485 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--327
++							486 heading 공유되는 데이터 및 공유 목적, Value: 4
++								487 text 공유되는 데이터 및 공유 목적
++							488 text 대략적인 위치
++							489 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						423 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							424 text 세부정보 숨기기
++						490 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--356
++							491 heading 공유되는 데이터 및 공유 목적, Value: 4
++								492 text 공유되는 데이터 및 공유 목적
++							493 text 진단
++							494 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						427 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							428 text 세부정보 숨기기
++						495 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--384
++							496 heading 공유되는 데이터 및 공유 목적, Value: 4
++								497 text 공유되는 데이터 및 공유 목적
++							498 text 앱 상호작용
++							499 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						431 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							432 text 세부정보 숨기기
++						500 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--412
++							501 heading 공유되는 데이터 및 공유 목적, Value: 4
++								502 text 공유되는 데이터 및 공유 목적
++							503 text 기기 또는 기타 ID
++							504 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						438 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							439 text 세부정보 숨기기
++						505 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--293
++							506 heading 수집되는 데이터 및 수집 목적, Value: 4
++								507 text 수집되는 데이터 및 수집 목적
++							508 text 이름
++							509 text 옵션
++							510 text 앱 기능, 사기 예방, 보안, 규정 준수
+~						442 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							443 text 세부정보 숨기기
++						511 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--336
++							512 heading 수집되는 데이터 및 수집 목적, Value: 4
++								513 text 수집되는 데이터 및 수집 목적
++							514 text 대략적인 위치
++							515 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						446 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							447 text 세부정보 숨기기
++						516 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--294
++							517 heading 수집되는 데이터 및 수집 목적, Value: 4
++								518 text 수집되는 데이터 및 수집 목적
++							519 text 사진
++							520 text 옵션
++							521 text 앱 기능, 사기 예방, 보안, 규정 준수
++							522 text 동영상
++							523 text 옵션
++							524 text 앱 기능, 사기 예방, 보안, 규정 준수
+~						450 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							451 text 세부정보 숨기기
++						525 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--295
++							526 heading 수집되는 데이터 및 수집 목적, Value: 4
++								527 text 수집되는 데이터 및 수집 목적
++							528 text 진단
++							529 text 옵션
++							530 text 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
+~						454 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							455 text 세부정보 숨기기
++						531 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--296
++							532 heading 수집되는 데이터 및 수집 목적, Value: 4
++								533 text 수집되는 데이터 및 수집 목적
++							534 text 앱 상호작용
++							535 text 옵션
++							536 text 앱 기능, 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
++							537 text 기타 사용자 제작 콘텐츠
++							538 text 옵션
++							539 text 앱 기능, 사기 예방, 보안, 규정 준수
+~						458 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~							459 text 세부정보 숨기기
++						540 container aCFC5F72B-EE1C-4B45-9008-62DE7A75346E--297
++							541 heading 수집되는 데이터 및 수집 목적, Value: 4
++								542 text 수집되는 데이터 및 수집 목적
++							543 text 기기 또는 기타 ID
++							544 text 옵션
++							545 text 앱 기능, 애널리틱스, 사기 예방, 보안, 규정 준수, 광고 또는 마케팅
++		546 text 앱 활동 데이터 표가 업데이트되었습니다.
+The focused UI element is 411 button 모두 접기

@@ -1,0 +1,60 @@
+{
+  "status": "pass",
+  "resumed_from": "upgrade/signed-media-upgrade-result.json",
+  "app_data_cleared": false,
+  "actual_play_install_tested": false,
+  "old_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~j0hojnwrcDTfs97Qh47zOw==/com.moa.babylanguage-o0U_GlQL-7TuMM5f9dnQMQ==/base.apk",
+    "sha256": "5571e959b782ef2bb43bfa05b63e81da96707362d0db6680ac13a4947a3f1f0d",
+    "expected_sha256": "5571e959b782ef2bb43bfa05b63e81da96707362d0db6680ac13a4947a3f1f0d",
+    "version_code": 39,
+    "version_name": "0.5.25-beta",
+    "verified": true,
+    "errors": []
+  },
+  "old_media": {
+    "name": "아가톡-1792667747399.mp4",
+    "bytes": 929917,
+    "sha256": "a5c431446c60183c1b262c89208f0d410d118554c6422d0073b9edccdb7fc8e9",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "new_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~IYQWi3avXigkqRZTRl6AFQ==/com.moa.babylanguage-7cDrfpZjSEo5mI3r9WiRGw==/base.apk",
+    "sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
+    "expected_sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
+    "version_code": 40,
+    "version_name": "0.5.26-beta",
+    "verified": true,
+    "errors": []
+  },
+  "new_media": {
+    "name": "아가톡-1792667747399.mp4",
+    "bytes": 929917,
+    "sha256": "a5c431446c60183c1b262c89208f0d410d118554c6422d0073b9edccdb7fc8e9",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "preserved_record": {
+    "id": 1792667642948,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1792667642868170900",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "legacy_text_preserved": true,
+  "media_bytes_preserved": true,
+  "beta_full_access_retained": true,
+  "owned_external_files_removed": true
+}

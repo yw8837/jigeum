@@ -1,0 +1,3 @@
+10-27 15:12:11.311  4229  4245 I System.out: SYNTHETIC_PCM_VARIETY=232/256 (wording selection only)
+10-27 15:12:21.308  4229  4245 I System.out: VISUAL_GROUP_COUNTS={basic=17280, sustained=29952, pause=8064, ordered=66048}
+10-27 15:12:21.744  4229  4245 I System.out: EXPRESSION_AUDIT={"basic":8064,"sustained":13824,"pause":4608,"ordered":19200,"eventOrders":150,"audioOnly":45696,"withVisual":121344,"authoredSentenceUnits":504,"basicWhitespaceWords":741,"basicMaxChars":55,"audioMaxChars":96,"visualMaxChars":119}

@@ -1,0 +1,17 @@
+{
+  "release/beta-build01.txt": {
+    "original_sha256": "298c548e5295bff3ef2d6d58e9dad25a14ec59d134e2fbd6c0a6d859a3c4ae8d",
+    "original_encoding": "cp949",
+    "normalized_sha256": "ff830337c5507ba00f9da8e69bea6eb31e9e3dc645698ba55413ce1ac5b3ecdb"
+  },
+  "release/release-build01.txt": {
+    "original_sha256": "e93e4fc1a85b994cacba6351bb115e6792685f62f7572b6eaebf9db663d18d9c",
+    "original_encoding": "cp949",
+    "normalized_sha256": "ad1123c0d2e17ded342d9e0c49d1f578493ae241d6b546e532b87ac33330aa97"
+  },
+  "release/signed-upgrade-final/process.txt": {
+    "original_sha256": "ff753331e0639fd7931025c80c39bbdc89d1bcfb592b06b69341e3ad5935058d",
+    "original_encoding": "utf8",
+    "normalized_sha256": "ff753331e0639fd7931025c80c39bbdc89d1bcfb592b06b69341e3ad5935058d"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "status": "fail",
+  "public_post_created": false,
+  "actual_play_install_tested": false,
+  "beta_media": {
+    "name": "아가톡-1792668275782.mp4",
+    "bytes": 1475046,
+    "sha256": "1f9daabf49ff628b3c2eadcce426ec622468f15584a9227dffec8dfe1f2a577b",
+    "duration": "20.064000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "board_result_entry_and_local_preview": true,
+  "board_home_entry": true,
+  "beta_pdf": true,
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~CD-XotnrmKCnznJNUb_ESg==/com.moa.babylanguage-J8nZHKKwTPODweZdHzqg9Q==/base.apk",
+    "sha256": "b6193ed5a166ae251add91d5784adf71eaf50193eab61565ff45fe35de20fad9",
+    "expected_sha256": "b6193ed5a166ae251add91d5784adf71eaf50193eab61565ff45fe35de20fad9",
+    "version_code": 40,
+    "version_name": "0.5.26",
+    "verified": true,
+    "errors": []
+  },
+  "error": "UI missing 아기말 번역하기; current: ['Sharing 1 file', 'jigeum-album-2026-10-5b86c561-e0a1-45a4-868a-cb9e7840e04a.pdf', 'No recommended people to share with', 'Quick Share', 'Print', 'Drive', 'Messages', 'Bluetooth']",
+  "owned_export_files_removed": true
+}

@@ -1,0 +1,39 @@
+{
+  "status": "pass",
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "installed": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~Onmy9Jb6WR4_HebPIjocxA==/com.moa.babylanguage-Vu9fP7m9ENrj2sshRTmj0A==/base.apk",
+    "sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+    "expected_sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+    "version_code": 44,
+    "version_name": "0.5.30",
+    "verified": true,
+    "errors": []
+  },
+  "media": {
+    "name": "아가톡-1793118317588.mp4",
+    "bytes": 943385,
+    "sha256": "7e1685242c1c1ab05bac5af875bfd998fe1efcdbbf5032c0d4197f56314325d2",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "legacy_record": {
+    "id": 1793118201382,
+    "sound": "옹알이",
+    "context": "QA",
+    "note": "Synthetic signed upgrade fixture",
+    "phrase": "이전 버전의 검사 기록 1793118201301269400",
+    "source": "VIDEO_FILE",
+    "modelCue": "",
+    "basis": "LEGACY"
+  },
+  "media_bytes_preserved": true,
+  "legacy_text_preserved": true,
+  "release_free_limits": true,
+  "owned_external_files_removed": true
+}

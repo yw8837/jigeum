@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.core.content.edit
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -84,6 +85,7 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
     private val installationId: String? = preferences.getString("installation_id", null)
         ?.takeIf { it.matches(Regex("[0-9a-fA-F-]{36}")) } ?: run {
         val generated = UUID.randomUUID().toString()
+        // Use the ID only after a successful durable write; KTX edit returns Unit.
         if (preferences.edit().putString("installation_id", generated).commit()) generated else null
     }
     private val credentials = installationId?.let { ReviewCredentialStore(context, it, preferences) }
@@ -97,9 +99,15 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
     }
 
     private fun clearGrant(removeCredential: Boolean = false) {
-        preferences.edit().remove("entitlement").remove("cache_version")
-            .remove("received_wall").remove("received_elapsed").remove("boot_count")
-            .apply { if (removeCredential) remove("credential") }.commit()
+        // Revocation stays synchronous across the following key-deletion/crash boundary.
+        preferences.edit(commit = true) {
+            remove("entitlement")
+            remove("cache_version")
+            remove("received_wall")
+            remove("received_elapsed")
+            remove("boot_count")
+            if (removeCredential) remove("credential")
+        }
     }
 
     override fun cachedExpiryMs(): Long? {
@@ -130,6 +138,7 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
         val anchor = EntitlementClockAnchor(ENTITLEMENT_CACHE_VERSION, now.wall, now.elapsed, now.boot)
         if (remaining(envelope, anchor, now) == null) return false
         val encrypted = runCatching { credentials?.encrypt(code) }.getOrNull() ?: return false
+        // Acceptance must return commit's success Boolean; KTX edit returns Unit.
         return preferences.edit().putString("entitlement", envelope).putString("credential", encrypted)
             .putInt("cache_version", anchor.version).putLong("received_wall", anchor.receivedAtWallMs)
             .putLong("received_elapsed", anchor.receivedAtElapsedMs).putInt("boot_count", anchor.bootCount).commit()
@@ -205,7 +214,8 @@ internal class ReviewAccessVerifier(private val context: Context) : ReviewEntitl
 internal class ReviewCredentialStore(
     context: Context,
     private val installationId: String,
-    private val preferences: SharedPreferences
+    private val preferences: SharedPreferences,
+    private val accessCodeMode: Boolean = false
 ) {
     private val packageName = context.packageName
     private val keyAlias = "$packageName.play_review_code_v1.$installationId"
@@ -219,15 +229,15 @@ internal class ReviewCredentialStore(
         if (data.getInt("version") != 1) return null
         val iv = Base64.decode(data.getString("iv"), Base64.NO_WRAP)
         val bytes = Base64.decode(data.getString("ciphertext"), Base64.NO_WRAP)
-        if (iv.size != 12 || bytes.size !in 48..144) return null
+        if (iv.size != 12 || bytes.size !in (if (accessCodeMode) 24 else 48)..144) return null
         val key = keystore().getKey(keyAlias, null) as? SecretKey ?: return null
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(128, iv))
         cipher.updateAAD(aad())
-        String(cipher.doFinal(bytes), Charsets.UTF_8).takeIf(::validReviewCode)
+        String(cipher.doFinal(bytes), Charsets.UTF_8).takeIf { if (accessCodeMode) validAccessCode(it) else validReviewCode(it) }
     }.getOrNull()
     fun encrypt(code: String): String {
-        require(validReviewCode(code))
+        require(if (accessCodeMode) validAccessCode(code) else validReviewCode(code))
         val store = keystore()
         val key = (store.getKey(keyAlias, null) as? SecretKey) ?: KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore").run {
             init(KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)

@@ -1,0 +1,22 @@
+{
+  "app": {
+    "package": "com.moa.babylanguage.astcandidate",
+    "base_apk": "/data/app/~~ioOLe2tETpKrvZBwOM_TiQ==/com.moa.babylanguage.astcandidate-IQ2m7zbjQJYW0ab3StAZlA==/base.apk",
+    "sha256": "d582ec2f21abc8cb716c84acfd99e05f73580a7cec8065671ff9707f66dc0c4b",
+    "expected_sha256": "d582ec2f21abc8cb716c84acfd99e05f73580a7cec8065671ff9707f66dc0c4b",
+    "version_code": 38,
+    "version_name": "0.5.24-astcandidate",
+    "verified": true,
+    "errors": []
+  },
+  "test": {
+    "package": "com.moa.babylanguage.astcandidate.test",
+    "base_apk": "/data/app/~~yz6QKCxEmwugiHM15ZV9iQ==/com.moa.babylanguage.astcandidate.test-ldlxnZAeaaCrnaUW_HJdKA==/base.apk",
+    "sha256": "b3a5182695d20004a3b7f5b0173e3096c3555af3a433473cfabc1a6cd55a39f5",
+    "expected_sha256": "b3a5182695d20004a3b7f5b0173e3096c3555af3a433473cfabc1a6cd55a39f5",
+    "version_code": 0,
+    "version_name": "null",
+    "verified": true,
+    "errors": []
+  }
+}

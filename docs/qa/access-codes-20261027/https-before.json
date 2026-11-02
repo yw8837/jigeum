@@ -1,0 +1,38 @@
+{
+  "origin": "https://jigeum-verifier-th7ce7roma-du.a.run.app",
+  "checks": [
+    {
+      "name": "process-health",
+      "pass": true
+    },
+    {
+      "name": "public/privacy",
+      "pass": true
+    },
+    {
+      "name": "public/terms",
+      "pass": true
+    },
+    {
+      "name": "public/support",
+      "pass": true
+    },
+    {
+      "name": "unknown-route",
+      "pass": true
+    },
+    {
+      "name": "malformed-purchase-request",
+      "pass": true
+    },
+    {
+      "name": "unapproved-review-credential",
+      "pass": true
+    },
+    {
+      "name": "invalid-purchase-token-rejected",
+      "pass": true
+    }
+  ],
+  "livePlayPurchaseTested": false
+}

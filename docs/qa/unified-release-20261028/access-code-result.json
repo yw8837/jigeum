@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "real_server": true,
+  "real_play_purchase": false,
+  "real_discount_codes_consumed": 0,
+  "secret_written_to_evidence": false,
+  "version_code": 44,
+  "version_name": "0.5.30",
+  "invitation_accepted": true,
+  "restart_retained": true,
+  "local_removal_relocks": true
+}

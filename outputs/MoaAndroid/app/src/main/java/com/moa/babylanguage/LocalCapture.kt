@@ -22,6 +22,8 @@ internal data class LocalClip(val uri: Uri, val durationMs: Long, val hasVideo: 
 internal object CaptureFiles {
     fun create(context: Context, video: Boolean): File {
         val dir = File(context.cacheDir, "captures").apply { mkdirs() }
+        // Readiness requires immediate free space. Allocatable bytes include cache
+        // the system might evict; this guard neither evicts nor reserves that space.
         check(dir.isDirectory && dir.usableSpace > 40L * 1024 * 1024) { "저장 공간이 부족해요. 공간을 확보한 뒤 다시 촬영해 주세요." }
         return File(dir, UUID.randomUUID().toString() + if (video) ".mp4" else ".m4a")
     }

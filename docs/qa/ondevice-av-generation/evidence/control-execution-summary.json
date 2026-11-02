@@ -1,0 +1,172 @@
+[
+  {
+    "case": "control10-cpuvision",
+    "synthetic_ground_truth": {
+      "audio": "440Hz sine tone only, no human speech",
+      "video": "red then blue, reversed only for reverse case"
+    },
+    "summary": {
+      "backend": "cpu",
+      "load_seconds": 2.739,
+      "inference_seconds": 113.273,
+      "mode": "perception",
+      "constrained": true,
+      "vision_backend": "cpu",
+      "reversed_frames": false,
+      "audio_only": false,
+      "video_only": false,
+      "prompt_sha256": "50a7f2b7dfdbdc386b1be7ae843704f10747668a33dbc934fe0f16dc14a623b1",
+      "duration_ms": 10000,
+      "frame_count": 10,
+      "status": "observed",
+      "schema_errors": [],
+      "quality_validated": false,
+      "python_network_blocked": true,
+      "android_validated": false,
+      "prefill_tokens": 3114,
+      "decode_tokens": 231,
+      "first_token_seconds": 27.89592548825,
+      "exit_code": 0,
+      "timed_out": false,
+      "model_sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
+      "runtime": "litert-lm-api==0.17.1"
+    },
+    "synthetic_response": "{\n\"observations\":\n[\n{\n\"id\":\n\"obs_1\",\n\"start_ms\":\n0,\n\"end_ms\":\n1000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen is solid red.\"\n},\n{\n\"id\":\n\"obs_2\",\n\"start_ms\":\n1000,\n\"end_ms\":\n2000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen remains solid red.\"\n},\n{\n\"id\":\n\"obs_3\",\n\"start_ms\":\n2000,\n\"end_ms\":\n3000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen remains solid red.\"\n}\n],\n\"limitations\":\n[\n\"Audio is unclear throughout the clip.\",\n\"No nonverbal sounds or speech were detected.\",\n\"The visual content is limited to solid color changes between red and blue.\"\n]\n}"
+  },
+  {
+    "case": "control10-tone",
+    "synthetic_ground_truth": {
+      "audio": "440Hz sine tone only, no human speech",
+      "video": "red then blue, reversed only for reverse case"
+    },
+    "summary": {
+      "backend": "cpu",
+      "load_seconds": 0.358,
+      "inference_seconds": 37.864,
+      "mode": "perception",
+      "constrained": true,
+      "vision_backend": null,
+      "reversed_frames": false,
+      "audio_only": true,
+      "video_only": false,
+      "prompt_sha256": "354f21c712992a07266de5c549cb77c7c988f5d120d323cc483d412ebadbd779",
+      "duration_ms": 10000,
+      "frame_count": 0,
+      "status": "observed",
+      "schema_errors": [],
+      "quality_validated": false,
+      "python_network_blocked": true,
+      "android_validated": false,
+      "prefill_tokens": 435,
+      "decode_tokens": 197,
+      "first_token_seconds": 6.253305066999999,
+      "exit_code": 0,
+      "timed_out": false,
+      "model_sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
+      "runtime": "litert-lm-api==0.17.1"
+    },
+    "synthetic_response": "{\"observations\":\n[\n{\"id\":\n\"obs1\",\n\"start_ms\":\n0,\n\"end_ms\":\n1000,\n\"audio\":\n\"Speech is audible, a person is speaking.\",\n\"visual\":\n\"Visual is not supplied.\"\n},\n{\"id\":\n\"obs2\",\n\"start_ms\":\n2000,\n\"end_ms\":\n4000,\n\"audio\":\n\"Speech is audible, a person is speaking.\",\n\"visual\":\n\"Visual is not supplied.\"\n},\n{\"id\":\n\"obs3\",\n\"start_ms\":\n6000,\n\"end_ms\":\n8000,\n\"audio\":\n\"Speech is audible, a person is speaking.\",\n\"visual\":\n\"Visual is not supplied.\"\n}\n],\n\"limitations\":\n[]\n}"
+  },
+  {
+    "case": "control10-av",
+    "synthetic_ground_truth": {
+      "audio": "440Hz sine tone only, no human speech",
+      "video": "red then blue, reversed only for reverse case"
+    },
+    "summary": {
+      "backend": "cpu",
+      "load_seconds": 0.434,
+      "inference_seconds": 61.914,
+      "mode": "perception",
+      "constrained": true,
+      "vision_backend": "gpu",
+      "reversed_frames": false,
+      "audio_only": false,
+      "video_only": false,
+      "prompt_sha256": "50a7f2b7dfdbdc386b1be7ae843704f10747668a33dbc934fe0f16dc14a623b1",
+      "duration_ms": 10000,
+      "frame_count": 10,
+      "status": "observed",
+      "schema_errors": [],
+      "quality_validated": false,
+      "python_network_blocked": true,
+      "android_validated": false,
+      "prefill_tokens": 3114,
+      "decode_tokens": 188,
+      "first_token_seconds": 22.23423156625,
+      "exit_code": 0,
+      "timed_out": false,
+      "model_sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
+      "runtime": "litert-lm-api==0.17.1"
+    },
+    "synthetic_response": "{\n\"observations\":[\n{\n\"id\":\n\"obs1\",\n\"start_ms\":\n0,\n\"end_ms\":\n1000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n},\n{\n\"id\":\n\"obs2\",\n\"start_ms\":\n1000,\n\"end_ms\":\n2000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n},\n{\n\"id\":\n\"obs3\",\n\"start_ms\":\n2000,\n\"end_ms\":\n3000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n}\n],\n\"limitations\":[]\n}"
+  },
+  {
+    "case": "control10-reverse",
+    "synthetic_ground_truth": {
+      "audio": "440Hz sine tone only, no human speech",
+      "video": "red then blue, reversed only for reverse case"
+    },
+    "summary": {
+      "backend": "cpu",
+      "load_seconds": 0.405,
+      "inference_seconds": 78.152,
+      "mode": "perception",
+      "constrained": true,
+      "vision_backend": "gpu",
+      "reversed_frames": true,
+      "audio_only": false,
+      "video_only": false,
+      "prompt_sha256": "50a7f2b7dfdbdc386b1be7ae843704f10747668a33dbc934fe0f16dc14a623b1",
+      "duration_ms": 10000,
+      "frame_count": 10,
+      "status": "observed",
+      "schema_errors": [],
+      "quality_validated": false,
+      "python_network_blocked": true,
+      "android_validated": false,
+      "prefill_tokens": 3114,
+      "decode_tokens": 203,
+      "first_token_seconds": 23.41778087925,
+      "exit_code": 0,
+      "timed_out": false,
+      "model_sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
+      "runtime": "litert-lm-api==0.17.1"
+    },
+    "synthetic_response": "{\n\"observations\":[\n{\n\"id\":\n\"obs_1\",\n\"start_ms\":\n0,\n\"end_ms\":\n1000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen is a blue pattern with vertical stripes.\"\n},\n{\n\"id\":\n\"obs_2\",\n\"start_ms\":\n1000,\n\"end_ms\":\n2000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen remains a blue pattern with vertical stripes.\"\n},\n{\n\"id\":\n\"obs_3\",\n\"start_ms\":\n2000,\n\"end_ms\":\n3000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The screen remains a blue pattern with vertical stripes.\"\n}\n],\n\"limitations\":[]\n}"
+  },
+  {
+    "case": "control20-av",
+    "synthetic_ground_truth": {
+      "audio": "440Hz sine tone only, no human speech",
+      "video": "red then blue, reversed only for reverse case"
+    },
+    "summary": {
+      "backend": "cpu",
+      "load_seconds": 0.467,
+      "inference_seconds": 97.418,
+      "mode": "perception",
+      "constrained": true,
+      "vision_backend": "gpu",
+      "reversed_frames": false,
+      "audio_only": false,
+      "video_only": false,
+      "prompt_sha256": "ca2640b39b5c8eab4d7a4090def6f7835a9dbb1f2a75853f30b325d284465214",
+      "duration_ms": 20000,
+      "frame_count": 20,
+      "status": "observed",
+      "schema_errors": [],
+      "quality_validated": false,
+      "python_network_blocked": true,
+      "android_validated": false,
+      "prefill_tokens": 6054,
+      "decode_tokens": 229,
+      "first_token_seconds": 49.7405025375,
+      "exit_code": 0,
+      "timed_out": false,
+      "model_sha256": "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
+      "runtime": "litert-lm-api==0.17.1"
+    },
+    "synthetic_response": "{\n\"observations\":\n[\n{\n\"id\":\n\"obs_1\",\n\"start_ms\":\n0,\n\"end_ms\":\n1000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n},\n{\n\"id\":\n\"obs_2\",\n\"start_ms\":\n1000,\n\"end_ms\":\n2000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n},\n{\n\"id\":\n\"obs_3\",\n\"start_ms\":\n2000,\n\"end_ms\":\n3000,\n\"audio\":\n\"unclear\",\n\"visual\":\n\"The frame is solid red.\"\n}\n],\n\"limitations\":\n[\n\"Audio is unclear throughout the clip.\",\n\"Visual information is limited to solid color frames, making it impossible to describe any actions or changes beyond the color transition.\"\n]\n}"
+  }
+]

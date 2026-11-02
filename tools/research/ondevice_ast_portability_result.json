@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-04",
+  "purpose": "Execution and numerical portability, not calibrated infant accuracy",
+  "quality_validated": false,
+  "android_validated": false,
+  "adopted_decision_gate": null,
+  "environment": {
+    "os": "Windows",
+    "python": "3.13.14",
+    "torch": "2.13.0+cpu",
+    "transformers": "5.14.1",
+    "onnxruntime": "1.24.4",
+    "cpu_threads": 4
+  },
+  "original_model": {
+    "repository": "MIT/ast-finetuned-audioset-10-10-0.4593",
+    "revision": "f826b80d28226b62986cc218e5cec390b1096902",
+    "weights_sha256": "ae0c1e2ad4e1381d851fa9bf298ba13ebc9c5a914cdee2dbe427a6583869924d",
+    "config_pins": {
+      "config.json": {
+        "size_bytes": 26763,
+        "sha256": "a93d525511d77e8ecc933d09674b85099815bbbb417c228a4edd655e252fb9ff"
+      },
+      "preprocessor_config.json": {
+        "size_bytes": 297,
+        "sha256": "8d04ba5a9c6fca5d39d0de2b1fd05ecf79deb589fbba279728bbebac39934231"
+      }
+    }
+  },
+  "fp32": {
+    "graph": {
+      "size_bytes": 346557779,
+      "sha256": "f171a6b0dc4c5d6051cc52f00d4cdf0183a116729677b08e4ef672899c0c4d98",
+      "ir_version": 8,
+      "opsets": {
+        "ai.onnx": 17
+      },
+      "operators": {
+        "Add": 122,
+        "Cast": 24,
+        "Concat": 2,
+        "Constant": 117,
+        "ConstantOfShape": 3,
+        "Conv": 1,
+        "Div": 13,
+        "Equal": 3,
+        "Erf": 12,
+        "Expand": 3,
+        "Gather": 2,
+        "Gemm": 1,
+        "GreaterOrEqual": 1,
+        "LayerNormalization": 26,
+        "MatMul": 96,
+        "Mul": 39,
+        "Reshape": 49,
+        "Shape": 1,
+        "Slice": 1,
+        "Softmax": 12,
+        "Transpose": 50,
+        "Unsqueeze": 1,
+        "Where": 4
+      },
+      "external_data": false,
+      "initializer_bytes": 346376252,
+      "inputs": [
+        {
+          "name": "input_values",
+          "shape": [
+            1,
+            1024,
+            128
+          ],
+          "element_type": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "logits",
+          "shape": [
+            1,
+            527
+          ],
+          "element_type": 1
+        }
+      ]
+    },
+    "export_seconds": 5.483,
+    "windows": 60,
+    "all_passed": true,
+    "feature_max_abs": 0.0,
+    "logits_max_abs": 1.811981201171875e-05,
+    "sigmoid_max_abs": 2.9802322387695312e-06,
+    "ort_single_window_seconds_range": [
+      0.821852,
+      1.400958
+    ],
+    "controls": "1,2.847,10,15,20s synthetic tone/sweep/silence/impulse; adult TTS; public sources; known owner development case"
+  },
+  "kotlin": {
+    "windows": 36,
+    "all_passed": true,
+    "feature_max_abs": 0.0,
+    "contracts": "invalid lengths/nonfinite/cancel/padding passed on JVM; Android unverified"
+  },
+  "int8": {
+    "graph": {
+      "size_bytes": 91134123,
+      "sha256": "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e",
+      "ir_version": 8,
+      "opsets": {
+        "ai.onnx": 17
+      },
+      "operators": {
+        "Add": 123,
+        "Cast": 97,
+        "Concat": 2,
+        "Constant": 117,
+        "ConstantOfShape": 3,
+        "Conv": 1,
+        "Div": 13,
+        "DynamicQuantizeLinear": 49,
+        "Equal": 3,
+        "Erf": 12,
+        "Expand": 3,
+        "Gather": 2,
+        "GreaterOrEqual": 1,
+        "LayerNormalization": 26,
+        "MatMul": 24,
+        "MatMulInteger": 73,
+        "Mul": 185,
+        "Reshape": 49,
+        "Shape": 1,
+        "Slice": 1,
+        "Softmax": 12,
+        "Transpose": 50,
+        "Unsqueeze": 1,
+        "Where": 4
+      },
+      "external_data": false,
+      "initializer_bytes": 90358076,
+      "inputs": [
+        {
+          "name": "input_values",
+          "shape": [
+            1,
+            1024,
+            128
+          ],
+          "element_type": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "logits",
+          "shape": [
+            1,
+            527
+          ],
+          "element_type": 1
+        }
+      ]
+    },
+    "quantization": "dynamic QInt8 per-channel MatMul/Gemm only; Conv remains FP32",
+    "windows": 56,
+    "sigmoid_max_abs": 0.07863157987594604,
+    "logits_max_abs": 0.8097691535949707,
+    "top1_changed_windows": 2,
+    "monitored_max_abs_drift": {
+      "Babbling": 0.041234344244003296,
+      "Baby cry, infant cry": 0.03925389051437378,
+      "Baby laughter": 0.013202041387557983,
+      "Child speech, kid speaking": 0.03044581413269043,
+      "Speech": 0.029759585857391357,
+      "Hubbub, speech noise, speech babble": 0.0002943859435617924,
+      "Sine wave": 0.03499472141265869,
+      "Silence": 0.05515924096107483,
+      "Music": 0.021669745445251465
+    },
+    "exploratory_thresholds": [
+      0.01,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.5
+    ],
+    "exploratory_crossing_windows": {
+      "Babbling": 1,
+      "Baby cry, infant cry": 0,
+      "Baby laughter": 0,
+      "Child speech, kid speaking": 2,
+      "Speech": 1,
+      "Hubbub, speech noise, speech babble": 0,
+      "Sine wave": 0,
+      "Silence": 3,
+      "Music": 0
+    },
+    "calibrated_decision_flips": "Not measured: AST has no adopted gate. Thresholds above are numerical sensitivity only.",
+    "runtime_only": {
+      "fp32": {
+        "onnxruntime": "1.24.4",
+        "cpu_threads": 4,
+        "initial": {
+          "rss_bytes": 55037952,
+          "peak_working_set_bytes": 70201344
+        },
+        "android_validated": false,
+        "load_seconds": 0.452233,
+        "after_load": {
+          "rss_bytes": 418566144,
+          "peak_working_set_bytes": 431984640
+        },
+        "after_inference": {
+          "rss_bytes": 812478464,
+          "peak_working_set_bytes": 822276096
+        },
+        "three_20s_window_seconds": [
+          0.870788,
+          0.977209,
+          1.135171
+        ]
+      },
+      "int8": {
+        "onnxruntime": "1.24.4",
+        "cpu_threads": 4,
+        "initial": {
+          "rss_bytes": 55013376,
+          "peak_working_set_bytes": 70156288
+        },
+        "android_validated": false,
+        "load_seconds": 0.230855,
+        "after_load": {
+          "rss_bytes": 172441600,
+          "peak_working_set_bytes": 181293056
+        },
+        "after_inference": {
+          "rss_bytes": 552546304,
+          "peak_working_set_bytes": 563396608
+        },
+        "three_20s_window_seconds": [
+          0.575647,
+          0.51194,
+          0.517275
+        ]
+      }
+    }
+  },
+  "preparation_failures": [
+    {
+      "run": "int8-01",
+      "reason": "Native ONNX path-based shape inference lost Unicode model path"
+    },
+    {
+      "run": "int8-02",
+      "reason": "Relative model path fixed source but ORT internal temp path still contained Unicode"
+    },
+    {
+      "run": "int8-03",
+      "result": "Success using in-memory protobuf shape inference with Python file IO; same model/quant settings"
+    }
+  ],
+  "boundary": {
+    "private_outputs": "Fresh Git-ignored repository work/ directory only",
+    "downloads_from_runners": false,
+    "model_format": "safetensors; no pickle",
+    "python_socket_block": true,
+    "native_egress_independently_verified": false
+  },
+  "android_requirements": [
+    "Full ONNX Runtime CPU build with ai.onnx opset17/IR8 and listed operators; no custom domain",
+    "Verify packaged model SHA256 before session creation; do not accept file existence alone",
+    "Use [1,1024,128] FP32 frame-major tensor; retain 0-10/5-15/10-20s all windows",
+    "Output logits are multilabel: apply per-class sigmoid, never output softmax",
+    "Invoke cancellation in frontend and ORT RunOptions; close tensors/results/session in lifecycle",
+    "Android ARM offline/latency/peak memory/thermal/performance/quality gates remain"
+  ],
+  "source_sha256": {
+    "ondevice_ast_features.py": "ec9c7ec815508733a8a150a36b81a5052daa0d019b618ef6f2d185ff12fab018",
+    "ondevice_ast_frontend.kt": "4b50368d8a3323316e8929e34425acbd0e597f61fe9d800d04d24bc281948b05",
+    "ondevice_ast_golden.json": "2eb0cce5597a795a87dbc16b720a51826afcf1683dbd24db6fb3b138182398aa",
+    "ondevice_ast_portability.py": "882591d6b2ef1b5d54a3e374d2d2caf672a153e3b54894261041c41d4776fbe1",
+    "ondevice_ast_quantize.py": "713e6b01f3c84ba95ba69231ed891bd73056954736d82a876b5f0f4486d59552",
+    "ondevice_ast_verify_kotlin.py": "6871363769ba0d9c5ec859b4ba294f2cc6532bd9d4f155d732f6da5518dd21b6"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "status": "fail",
+  "installs": [
+    {
+      "package": "com.moa.babylanguage",
+      "base_apk": "/data/app/~~Co8tAiBBtiWL6CCEOQHpjg==/com.moa.babylanguage-jS63Q6om2IAOfZnEloSruw==/base.apk",
+      "sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "expected_sha256": "106507f17a717cbf2cde5339df7faee9bb94b7669013837a927ca3b496cf5dae",
+      "version_code": 38,
+      "version_name": "0.5.24-beta",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "actual_play_install_tested": false,
+  "app_data_cleared": false,
+  "infant_intent_accuracy_tested": false,
+  "seed_record_id": 1791809403420,
+  "error": "Command failed ['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'shell', 'input', 'tap', '360', '939']: adb.: protocol fault (couldn't read status): connection reset\r\n",
+  "diagnostic_error": "Command failed ['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'exec-out', 'screencap', '-p']: * daemon not running; starting now at tcp:5037\r\n* daemon started successfully\r\nerror: device 'emulator-5556' not found\r\n",
+  "cleanup_error": "Command failed ['C:\\\\Users\\\\최용우\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe', '-s', 'emulator-5556', 'shell', 'am', 'force-stop', 'com.moa.babylanguage']: adb.: device 'emulator-5556' not found\r\n"
+}

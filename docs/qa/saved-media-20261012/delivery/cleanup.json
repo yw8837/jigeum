@@ -1,0 +1,10 @@
+{
+  "owned_emulator_absent": true,
+  "owned_app_uninstall_result": "Success",
+  "owned_external_files_removed": true,
+  "owned_uiautomator_xml_removed": true,
+  "user_phone_app_and_records_untouched": true,
+  "new_builds": 0,
+  "new_avds": 0,
+  "old_policy_blocks_unchanged": true
+}

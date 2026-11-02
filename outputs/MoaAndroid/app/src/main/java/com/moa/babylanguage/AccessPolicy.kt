@@ -12,6 +12,8 @@ internal interface AccessBilling {
     fun purchase(activity: Activity, plan: BillingPlan)
     fun activateReviewAccess(code: String) = Unit
     fun deactivateReviewAccess() = Unit
+    fun activateAccessCode(code: String) = Unit
+    fun deactivateAccessCode() = Unit
 }
 
 internal class PlayAccessBilling(private val manager: BillingManager) : AccessBilling {
@@ -22,6 +24,8 @@ internal class PlayAccessBilling(private val manager: BillingManager) : AccessBi
     override fun purchase(activity: Activity, plan: BillingPlan) = manager.purchase(activity, plan)
     override fun activateReviewAccess(code: String) = manager.activateReviewAccess(code)
     override fun deactivateReviewAccess() = manager.deactivateReviewAccess()
+    override fun activateAccessCode(code: String) = manager.activateAccessCode(code)
+    override fun deactivateAccessCode() = manager.deactivateAccessCode()
 }
 
 /** All features use one policy. Free records and drafts never depend on their input source. */

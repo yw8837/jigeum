@@ -180,7 +180,8 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                          onMessage: (String) -> Unit, operationScope: CoroutineScope? = null,
                          exporting: Boolean = false, onExportingChange: (Boolean) -> Unit = {},
                          artifactExporter: ArtifactExporter = DeviceArtifactExporter,
-                         authorizeExport: (List<Observation>) -> Boolean = { false }) {
+                         authorizeExport: (List<Observation>) -> Boolean = { false },
+                         onExportFinished: (Boolean) -> Unit = {}) {
     val context = LocalContext.current
     val localScope = rememberCoroutineScope()
     val scope = operationScope ?: localScope
@@ -242,17 +243,19 @@ internal fun AlbumScreen(records: List<Observation>, premium: Boolean, onPremium
                         busy = true
                         onExportingChange(true)
                         scope.launch {
+                            var succeeded = false
                             try {
                                 val file = artifactExporter.album(context, records.toList(), selected, theme, includeNotes, generation)
                                 try {
                                     coroutineContext.ensureActive()
                                     artifactExporter.share(context, file, "application/pdf", generation)
+                                    succeeded = true
                                 } finally { MemoryArtifacts.discardUnshared(context, file) }
                             } catch (e: Exception) {
                                 if (e is CancellationException) throw e
                                 onMessage(if (e is IllegalArgumentException || e is IllegalStateException) e.message ?: "기록을 확인해 주세요."
                                     else "파일을 만들지 못했어요. 저장 공간을 확인해 주세요.")
-                            } finally { busy = false; onExportingChange(false) }
+                            } finally { onExportFinished(succeeded); busy = false; onExportingChange(false) }
                         }
                     }
                 }, enabled = !busy && !exporting && monthRecords.isNotEmpty() && monthRecords.size <= MemoryArtifacts.MAX_ALBUM_RECORDS)
@@ -305,13 +308,21 @@ internal fun PremiumScreen(
     onTerms: () -> Unit,
     onReviewActivate: (String) -> Unit,
     onReviewDeactivate: () -> Unit,
-    testDistribution: Boolean = false
+    testDistribution: Boolean = false,
+    rewardAccess: RewardAccess = NoRewardAccess,
+    onCodeActivate: (String) -> Unit = {},
+    onCodeDeactivate: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var managementError by rememberSaveable { mutableStateOf<String?>(null) }
+    val reward by rewardAccess.state.collectAsState()
+    val rewardKind = if (requestedFeature == AppFeature.PDF) RewardKind.PDF else RewardKind.ANALYSIS
+    DisposableEffect(rewardAccess) { onDispose { rewardAccess.cancelAd() } }
     val processing = state.status in listOf(BillingStatus.CONNECTING, BillingStatus.PURCHASING, BillingStatus.VERIFYING)
+    val visibleOptions = state.options.filter { it.plan != BillingPlan.LAUNCH_MONTHLY || state.codeKind == AccessCodeKind.LAUNCH_OFFER }
+        .sortedBy { if (it.plan == BillingPlan.LAUNCH_MONTHLY) 0 else 1 }
     val title = when (requestedFeature) {
-        AppFeature.VISUAL_ANALYSIS -> "지금의 표정도 함께 살펴봐요"
+        AppFeature.VISUAL_ANALYSIS -> "더 긴 순간을 함께 살펴봐요"
         AppFeature.PDF -> "쌓인 아기말을 한 권으로"
         else -> "전체 이용권을 확인해요"
     }
@@ -334,7 +345,7 @@ internal fun PremiumScreen(
                     lineHeight = 22.sp, modifier = Modifier.padding(top = 14.dp))
                 Spacer(Modifier.height(18.dp))
                 if (testDistribution || state.isPremium) {
-                    Text(if (testDistribution) "이 설치본은 전체 기능 테스트용이에요." else if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else "전체 이용권을 확인했어요.",
+                    Text(if (testDistribution) "이 설치본은 전체 기능 테스트용이에요." else if (state.entitlementSource == EntitlementSource.PLAY_REVIEW) "Play 심사 이용권으로 확인 중이에요." else if (state.entitlementSource == EntitlementSource.INVITATION) "초대 이용권으로 무료 이용 중이에요." else "전체 이용권을 확인했어요.",
                         color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(12.dp))
                     PrimaryButton(continueLabel, onContinue)
@@ -348,16 +359,42 @@ internal fun PremiumScreen(
                         color = Muted, fontSize = 13.sp, lineHeight = 21.sp, modifier = Modifier.padding(top = 12.dp))
                 }
                 Spacer(Modifier.height(22.dp))
-                if (!testDistribution && !state.isPremium && state.options.isNotEmpty()) {
-                    state.options.forEach { option ->
-                        val monthly = option.plan == BillingPlan.MONTHLY
+                if (!testDistribution && !state.isPremium && reward.enabled) {
+                    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(PaleApricot).padding(18.dp)) {
+                        Text("광고 보고 한 번 이용하기", color = Ink, fontWeight = FontWeight.Bold)
+                        Text(if (rewardKind == RewardKind.PDF) "광고 1회 완료로 아기말북 PDF 1권을 만들어요."
+                            else "광고 1회 완료로 2분 촬영·200MB 가져오기·20초 분석·표정 관찰을 한 번 이용해요.",
+                            color = Ink, lineHeight = 23.sp, modifier = Modifier.padding(vertical = 10.dp))
+                        Text("결과를 만들지 못하거나 취소하면 기회가 남아요. 만들어진 카드·영상 저장은 무료예요. 광고가 없을 때도 기본 무료 기능을 이용할 수 있어요.",
+                            color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                        Spacer(Modifier.height(12.dp))
+                        if (rewardKind in reward.ready) PrimaryButton(
+                            if (rewardKind == RewardKind.PDF) "준비된 PDF 1회 이용하기" else "준비된 분석 1회 이용하기", onContinue)
+                        else PrimaryButton(if (reward.busy) "광고를 준비하고 있어요" else if (rewardKind == RewardKind.PDF) "광고 보고 PDF 1회 받기" else "광고 보고 분석 1회 받기",
+                            { rewardAccess.watch(rewardKind) }, enabled = !reward.busy && !processing)
+                        reward.message?.let { Text(it, color = Muted, fontSize = 13.sp, modifier = Modifier.padding(top = 10.dp)) }
+                    }
+                    Spacer(Modifier.height(22.dp))
+                }
+                if (!testDistribution) {
+                    AccessCodeSection(state, onCodeActivate, onCodeDeactivate)
+                    Spacer(Modifier.height(22.dp))
+                    if (state.codeKind == AccessCodeKind.LAUNCH_OFFER && visibleOptions.none { it.plan == BillingPlan.LAUNCH_MONTHLY }) {
+                        Text("할인 상품을 불러오지 못했어요. 신규 구독 대상인지 확인하고 다시 시도해 주세요. 일반 상품을 선택하면 할인은 적용되지 않아요.", color = Muted, fontSize = 13.sp, lineHeight = 21.sp)
+                        TextButton(onClick = onRetry, enabled = !processing) { Text("할인 상품 다시 확인", color = Ink) }
+                    }
+                }
+                if (!testDistribution && !state.isPremium && visibleOptions.isNotEmpty()) {
+                    visibleOptions.forEach { option ->
+                        val launch = option.plan == BillingPlan.LAUNCH_MONTHLY
+                        val monthly = option.plan != BillingPlan.THREE_MONTH_PREPAID
                         OutlinedButton(onClick = { onPurchase(option.plan) }, enabled = state.status == BillingStatus.READY,
                             modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp).heightIn(min = 86.dp),
                             shape = RoundedCornerShape(18.dp)) {
                             Column(Modifier.fillMaxWidth().padding(10.dp)) {
-                                Text(if (monthly) "월간 전체 이용권" else "3개월 전체 이용권", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                                Text(if (launch) "출시 할인 · 첫 2개월 50%" else if (monthly) "월간 전체 이용권" else "3개월 전체 이용권", color = Ink, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                                 Text(option.formattedPrice, color = Ink, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                                Text(if (monthly) "매월 자동 갱신 · Play에서 해지 가능" else "3개월 1회 결제 · 자동 갱신 없음",
+                                Text(if (launch) "첫 2개월 매월 ${option.formattedPrice}\n이후 매월 ${option.renewalFormattedPrice} 자동 갱신 · Play에서 해지 가능" else if (monthly) "매월 자동 갱신 · Play에서 해지 가능" else "3개월 1회 결제 · 자동 갱신 없음",
                                     color = Muted, fontSize = 13.sp)
                             }
                         }
@@ -393,6 +430,9 @@ internal fun PremiumScreen(
                 }
                 TextButton(onClick = onTerms) { Text("이용 조건", color = Ink) }
                 TextButton(onClick = onPrivacy) { Text("개인정보처리방침", color = Ink) }
+                if (reward.privacyRequired) TextButton(onClick = rewardAccess::privacyOptions, enabled = !reward.busy) {
+                    Text("광고 개인정보 설정", color = Ink)
+                }
                 if (!testDistribution) Text("이용권은 결제한 Play 계정 기준이에요. 다른 가족 계정으로 자동 공유되지 않아요. 앱 삭제나 기록 삭제로 구독이 해지되지는 않아요.",
                     color = Muted, fontSize = 12.sp, lineHeight = 20.sp)
                 if (testDistribution) Text("테스트 기간에는 구매 없이 2분 촬영·20초 분석·표정 관찰·PDF를 모두 사용할 수 있어요. 구매 이용권이 생기는 것은 아니에요. 정식 버전으로 업데이트하면 무료 범위와 전체 이용권이 적용되며, 이미 저장한 기록과 영상은 유지돼요.",
@@ -408,10 +448,11 @@ internal fun ServiceTermsScreen(onBack: () -> Unit) {
     val sections = listOf(
         "표현 예시를 함께 만들어요" to "6~18개월 아기의 성인 보호자를 위한 서비스예요. 문장은 실제 소리 단서를 아이 시점으로 풀어 쓴 표현이며, 아기의 의도·감정·건강을 판정하거나 의료 진단을 하지 않아요. 표현 후보는 유한하므로 다시 나올 수 있어요.",
         "무료 기본과 전체 이용권" to "촬영·녹음·영상 가져오기·재생·구간 선택·소리 분석·문장 수정·저장·기록·PNG 공유·JSON 백업과 복원·CSV 내보내기·주간 요약·앨범 미리보기는 무료예요. 전체 이용권은 최대 2분 촬영·20초 구간 분석과 시각 관찰·월별 PDF 생성을 제공해요. 기록은 최대 10,000건, 무료 미디어는 1분·100MB와 10초 분석, 전체 이용권은 2분·200MB와 20초 분석까지예요. PDF는 한 권에 300개 기록·300쪽까지예요.",
-        "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 월간은 매월 자동 갱신하며 Play에서 해지할 수 있어요. 3개월은 선불 1회 결제이며 자동 갱신하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
+        "결제와 해지" to "가격과 기간은 Google Play 상품 화면과 결제 확인창에 표시된 내용을 따릅니다. 한국 월간 전체 이용권은 월 4,900원으로 매월 자동 갱신하며 Play에서 해지할 수 있어요. 별도 무료 체험이나 3개월 상품은 제공하지 않아요. 앱 삭제·기록 삭제는 구독 해지가 아닙니다. 환불·청약철회는 적용 법령과 Google Play 절차를 따르며 법정 권리를 제한하지 않아요.",
+        "선택형 보상 광고" to "광고 완료 1회로 분석 흐름 1회 또는 PDF 만들기 1회를 이용해요. 분석 실패·취소·결과 보류에는 기회가 남아요. 분석과 PDF의 기회는 각각 한 번씩 보관하며 누적 적립·이전·현금 교환은 할 수 없어요. 앱 데이터 삭제 시 남은 기회도 지워져요. 광고가 없거나 시청하지 않아도 기본 무료 기능을 이용할 수 있고, 이미 만든 결과 저장은 계속 무료예요.",
         "구매 복원과 기록 복원" to "앱 회원가입 없이 같은 Play 계정의 유효한 구매를 다시 확인할 수 있어요. 다른 가족 계정에 권한이 자동 공유되지는 않아요. 아기 기록은 기기에만 저장되며 구매 복원으로 되살아나지 않아요. JSON 백업에는 문장과 메모만 담겨요. 영상은 기록에서 MP4로 따로 내려받아 보관해 주세요.",
         "이용권 확인이 필요할 때" to "유효한 서명 이용권은 최대 24시간 또는 구독 만료 중 빠른 시각까지 사용할 수 있어요. 휴대전화를 재부팅하면 온라인에서 이용권을 다시 확인해야 해요. 오프라인에서는 새 환불을 즉시 알 수 없지만, 명시적인 권한 철회를 확인하면 새 유료 작업을 막아요. 시각 분석은 중지하고, 이미 만든 문장의 무료 편집·저장과 기존 기록은 유지해요. 유효할 때 시작한 PDF 생성은 마칠 수 있으며 직접 보관한 PDF는 계속 볼 수 있어요.",
-        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 이용약관과 개인정보처리방침 시행일은 2026년 10월 1일입니다."
+        "보관과 문의" to "앱 삭제·기기 분실 시 서버에서 기록을 복구할 수 없어요. 이미 공유 화면에 전달한 파일은 기록을 지워도 수신 앱의 읽기를 위해 남아요. 전달 후 24시간이 지나면 다음 앱 시작·공유·기록 삭제 때 정리 대상이며 최대 20개·64MiB가 차면 새 공유를 잠시 중단해요. 앱 데이터 삭제·앱 제거로 이 캐시를 지울 수 있어요. 직접 내보내거나 공유한 외부 파일은 해당 저장 위치에서 관리·삭제해 주세요. 운영자 최용우 · 문의 bsfire1237@gmail.com. 이용약관과 개인정보처리방침은 2026년 10월 24일 개정했습니다."
     )
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(24.dp)) {
         item {

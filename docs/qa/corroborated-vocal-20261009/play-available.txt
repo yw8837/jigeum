@@ -1,0 +1,116 @@
+Browser tab: 2, Title: "출시 트랙 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217".
+0 AXWebArea 출시 트랙 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				149 button 읽지 않은 알림 알림 센터 열기
+					150 text 읽지 않은 알림
+				7 button 아가톡 - 지금 내 기분이 그래
+					58 text 아가톡 - 지금 내 기분이 그래
+				8 button 개발자 계정 전환
+					9 image 개발자 계정 전환
+			10 container
+				11 link Description: 모든 앱, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				12 content list
+					59 container 대시보드
+						60 button 대시보드
+							61 text 대시보드
+					62 container 통계
+						63 button 통계
+							64 text 통계
+					65 container 게시 개요
+						66 button 게시 개요
+							67 text 게시 개요
+					68 container Google Play로 보호됨
+						69 button Google Play로 보호됨
+							70 text Google Play로 보호됨
+					71 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+						72 button 테스트 및 출시
+							73 text 테스트 및 출시
+						74 content list
+							75 container
+								76 container 최신 버전 및 번들
+									77 button 최신 버전 및 번들
+								78 container 프로덕션
+									79 button 프로덕션
+								80 container (expanded) Description: 테스트, Secondary Actions: Collapse
+									81 button 테스트
+									82 content list
+										83 container
+											84 container 공개 테스트
+												85 button 공개 테스트
+											86 container 비공개 테스트
+												87 button 비공개 테스트
+											88 container 내부 테스트
+												89 button 내부 테스트
+											90 container (collapsed) Description: 사전 출시 보고서, Secondary Actions: Expand
+												91 button 사전 출시 보고서
+											92 container 내부 앱 공유
+												93 button 내부 앱 공유
+								94 container 사전 등록
+									95 button 사전 등록
+								96 container 앱 무결성
+									97 button 앱 무결성
+								98 container 고급 설정
+									99 button 고급 설정
+					100 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+						101 button 모니터링 및 개선
+							102 text 모니터링 및 개선
+					103 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+						104 button 사용자 늘리기
+							105 text 사용자 늘리기
+					106 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+						107 button Play를 통한 수익 창출
+							108 text Play를 통한 수익 창출
+			21 container main-content
+				109 container
+					110 link Description: 비공개 테스트 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/closed-testing?releaseType=defaultReleases
+					111 heading 비공개 테스트 - Alpha, Value: 1
+						112 text 비공개 테스트 - Alpha
+					113 button 새 버전 만들기
+						114 text 새 버전 만들기
+					115 container
+						116 text 비공개 테스트 버전을 생성 및 관리하여 내가 지정한 테스터를 대상으로 출시 전 버전의 앱을 테스트하세요.
+						117 link Description: 비공개 테스트 - Alpha 자세히 알아보기(새 탭에서 열림), Value: play.google.com/console/about/closed-testing
+					118 heading 휴대전화, 태블릿, Desktop, Android XR 트랙 요약, Value: 4
+						119 text 휴대전화, 태블릿, Desktop, Android XR 트랙 요약
+					120 button 트랙 일시중지
+						121 text 트랙 일시중지
+					122 content list
+						123 text 활성
+						124 container
+							125 text 최신 출시 버전: 0.5.21-beta (35) - vocal corroboration
+						126 container
+							127 text 국가/지역 1개
+					128 tab group
+						129 tab (selected, settable, boolean) Description: 출시, Value: 1
+						130 tab (selectable, settable, boolean) Description: 국가/지역, Value: 0
+						131 tab (selectable, settable, boolean) Description: 테스터, Value: 0
+					132 heading 출시, Value: 2
+						133 text 출시
+					134 container
+						135 heading Description: 버전: 0.5.21-beta (35) - vocal corroboration, Value: 3
+							136 text 0.5.21-beta (35) - vocal corroboration
+						137 link Description: 버전 0.5.21-beta (35) - vocal corroboration 관리, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217/releases/15/details
+						138 pop up button (collapsed) Description: 버전 승급, Secondary Actions: Expand
+							139 text 버전 승급
+						140 pop up button (collapsed) Description: 출시 관리, Secondary Actions: Expand
+							141 text 출시 관리
+						142 text 선택한 테스터에게 제공됩니다. 버전 코드 1개 게시일: 10월 9일 오후 5:56
+						143 button (collapsed) Description: 0.5.21-beta (35) - vocal corroboration 요약 표시, Secondary Actions: Expand
+							144 text 요약 표시
+					145 heading 출시 내역, Value: 2
+						146 text 출시 내역
+					147 button (collapsed) Description: 콘텐츠 표시: 출시 내역, Secondary Actions: Expand
+						148 text 표시
+				22 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				23 link Description: 상태 대시보드, Value: status.play.google.com/
+				24 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				25 text © 2026 Google
+				26 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				27 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				28 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 149 button 읽지 않은 알림 알림 센터 열기

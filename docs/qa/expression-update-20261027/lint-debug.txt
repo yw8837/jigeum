@@ -1,0 +1,179 @@
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\AccessCodeVerifier.kt:76: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+            .remove("received_wall").remove("received_elapsed").remove("boot_count").commit()
+                                                                                     ~~~~~~~~
+
+   Explanation for issues of type "ApplySharedPref":
+   Consider using apply() instead of commit on shared preferences. Whereas
+   commit blocks and writes its data to persistent storage immediately, apply
+   will handle it in the background.
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\gradle\wrapper\gradle-wrapper.properties:3: Warning: A newer version of Gradle than 8.14.3 is available: 8.14.6 [AndroidGradlePluginVersion]
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.3-all.zip
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "AndroidGradlePluginVersion":
+   This detector looks for usage of the Android Gradle Plugin where the
+   version you are using is not the current stable release. Using older
+   versions is fine, and there are cases where you deliberately want to stick
+   with an older version. However, you may simply not be aware that a more
+   recent version is available, and that is what this lint check helps find.
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts:390: Warning: A newer version of androidx.fragment:fragment than 1.8.9 is available: 1.9.1 [GradleDependency]
+    implementation("androidx.fragment:fragment:1.8.9")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts:396: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.9.4 is available: 2.11.0 [GradleDependency]
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts:405: Warning: A newer version of com.google.mediapipe:tasks-vision than 1.0.0 is available: 1.1.1 [GradleDependency]
+    implementation("com.google.mediapipe:tasks-vision:1.0.0")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts:406: Warning: A newer version of com.google.mediapipe:tasks-audio than 1.0.0 is available: 1.1.1 [GradleDependency]
+    implementation("com.google.mediapipe:tasks-audio:1.0.0")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\LocalCapture.kt:27: Warning: Consider also using StorageManager#getAllocatableBytes and allocateBytes which will consider clearable cached data [UsableSpace]
+        check(dir.isDirectory && dir.usableSpace > 40L * 1024 * 1024) { "저장 공간이 부족해요. 공간을 확보한 뒤 다시 촬영해 주세요." }
+                                     ~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\TranslatedMedia.kt:99: Warning: Consider also using StorageManager#getAllocatableBytes and allocateBytes which will consider clearable cached data [UsableSpace]
+        check(folder.usableSpace > MAX_BYTES + 16L * 1024 * 1024) { "영상으로 남길 공간이 부족해요. 공간을 확보한 뒤 다시 시도해 주세요." }
+                     ~~~~~~~~~~~
+
+   Explanation for issues of type "UsableSpace":
+   When you need to allocate disk space for large files, consider using the
+   new allocateBytes(FileDescriptor, long) API, which will automatically clear
+   cached files belonging to other apps (as needed) to meet your request.
+
+   When deciding if the device has enough disk space to hold your new data,
+   call getAllocatableBytes(UUID) instead of using getUsableSpace(), since the
+   former will consider any cached data that the system is willing to clear on
+   your behalf.
+
+   Note that these methods require API level 26. If your app is running on
+   older devices, you will probably need to use both APIs, conditionally
+   switching on Build.VERSION.SDK_INT. Lint only looks in the same compilation
+   unit to see if you are already using both APIs, so if it warns even though
+   you are already using the new API, consider moving the calls to the same
+   file or suppressing the warning.
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\AccessCodeVerifier.kt:70: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        if (preferences.edit().putString("installation_id", id).commit()) id else null
+            ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\AccessCodeVerifier.kt:75: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        preferences.edit().remove("credential").remove("entitlement").remove("cache_version")
+        ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\AccessCodeVerifier.kt:100: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        return preferences.edit().putString("entitlement", envelope).putString("credential", encrypted)
+               ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\GalleryMedia.kt:38: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        check(journal(context).edit().putString(token, JSONObject().put("uri",uri?.toString() ?: "")
+              ~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\GalleryMedia.kt:45: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        check(journal(context).edit().remove(token).commit()) { "앨범 저장 상태를 정리하지 못했어요." }
+              ~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ObservationStore.kt:242: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+            !legacy.edit().remove("events").remove("age_band").commit())
+             ~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\PlayUpdateNotice.kt:69: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        preferences.edit().putInt("dismissed-version", candidate)
+        ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\PlayUpdateNotice.kt:83: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.moa.babylanguage"))
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\PlayUpdateNotice.kt:85: Warning: Use the KTX extension function String.toUri instead? [UseKtx]
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.moa.babylanguage"))
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\PurchaseVerifier.kt:102: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+            if (preferences.edit().putString("installation_id", generated).commit()) generated else null
+                ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\PurchaseVerifier.kt:129: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        return preferences.edit()
+               ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ReviewAccessVerifier.kt:89: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        if (preferences.edit().putString("installation_id", generated).commit()) generated else null
+            ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\ReviewAccessVerifier.kt:142: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        return preferences.edit().putString("entitlement", envelope).putString("credential", encrypted)
+               ~~~~~~~~~~~~~~~~~~
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\src\main\java\com\moa\babylanguage\RewardedAds.kt:43: Warning: Use the KTX extension function SharedPreferences.edit instead? [UseKtx]
+        return preferences.edit().putString("state", json.toString()).commit()
+               ~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseKtx":
+   The Android KTX libraries decorates the Android platform SDK as well as
+   various libraries with more convenient extension functions available from
+   Kotlin, allowing you to use default parameters, named parameters, and
+   more.
+
+   Available options:
+
+   **remove-defaults** (default is true):
+   Whether to skip arguments that match the defaults provided by the extension.
+
+   Extensions often provide default values for some of the parameters. For example:
+   ```kotlin
+   fun Path.readLines(charset: Charset = Charsets.UTF_8): List<String> { return Files.readAllLines(this, charset) }
+   ```
+   This lint check will by default automatically omit parameters that match the default, so if your code was calling
+
+   ```kotlin
+   Files.readAllLines(file, Charset.UTF_8)
+   ```
+   lint would replace this with
+   ```kotlin
+   file.readLines()
+   ```
+   rather than
+
+   ```kotlin
+   file.readLines(Charset.UTF_8
+   ```
+   You can turn this behavior off using this option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UseKtx">
+           <option name="remove-defaults" value="true" />
+       </issue>
+   </lint>
+   ```
+
+   **require-present** (default is true):
+   Whether to only offer extensions already available.
+
+   This option lets you only have lint suggest extension replacements if those extensions are already available on the class path (in other words, you're already depending on the library containing the extension method.)
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UseKtx">
+           <option name="require-present" value="true" />
+       </issue>
+   </lint>
+   ```
+
+C:\Users\최용우\Documents\Codex\2026-09-29\plugin-browser-openai-bundled-mention-tab\outputs\MoaAndroid\app\build.gradle.kts:390: Hint: Add suffix -ktx to enable the Kotlin extensions for this library [KtxExtensionAvailable]
+    implementation("androidx.fragment:fragment:1.8.9")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "KtxExtensionAvailable":
+   Android KTX extensions augment some libraries with support for modern
+   Kotlin language features like extension functions, extension properties,
+   lambdas, named parameters, coroutines, and more.
+
+   In Kotlin projects, use the KTX version of a library by replacing the
+   dependency in your build.gradle file. For example, you can replace
+   androidx.fragment:fragment with androidx.fragment:fragment-ktx.
+
+   https://developer.android.com/kotlin/ktx
+
+0 errors, 22 warnings, 1 hint

@@ -1,0 +1,24 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "generated_on": "2026-10-28 KST",
+  "selected": [
+    {
+      "file": "01-hello-agattok-feed.png",
+      "path": "C:\\Users\\최용우\\.codex\\generated_images\\01a0edc0-6dea-76c2-8347-484ebba90200\\exec-01683b7a-0e7a-4ed7-97e8-46e8f08d6ab7.png"
+    },
+    {
+      "file": "02-keep-the-voice-feed.png",
+      "path": "C:\\Users\\최용우\\.codex\\generated_images\\01a0edc0-6dea-76c2-8347-484ebba90200\\exec-0be94625-8bbf-4df4-9714-40b686ee0da8.png"
+    },
+    {
+      "file": "03-our-baby-community-feed.png",
+      "path": "C:\\Users\\최용우\\.codex\\generated_images\\01a0edc0-6dea-76c2-8347-484ebba90200\\exec-8b9ff52e-d1e7-48e7-8895-8027e74d1e2a.png"
+    },
+    {
+      "file": "04-agattok-story.png",
+      "path": "C:\\Users\\최용우\\.codex\\generated_images\\01a0edc0-6dea-76c2-8347-484ebba90200\\exec-506cd625-cbd7-4546-981a-8104e56d6119.png"
+    }
+  ],
+  "discarded_project_variants": "Earlier community/story layout variants were not copied into the deliverable kit; generated originals remain in Codex generated_images.",
+  "reference": "../launch-20261027/feature-source.png"
+}

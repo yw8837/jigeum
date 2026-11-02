@@ -1,0 +1,860 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaFlowTest:
+INSTRUMENTATION_STATUS: test=failedAnalysisStillSavesVideoWithoutSentence
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=failedAnalysisStillSavesVideoWithoutSentence
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=hdrImportedVideoCanRenderCaption
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stack=com.moa.babylanguage.StoreException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia.renderMedia(TranslatedMedia.kt:81)
+	at com.moa.babylanguage.TranslatedMedia.access$renderMedia(TranslatedMedia.kt:48)
+	at com.moa.babylanguage.TranslatedMedia$renderMedia$1.invokeSuspend(Unknown Source:18)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:187)
+	... 67 trimmed
+Caused by: java.lang.IllegalStateException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia$export$2$1$1.onError(TranslatedMedia.kt:167)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.lambda$onError$1$androidx-media3-transformer-Transformer$ExportOperationListener(Transformer.java:1512)
+	at androidx.media3.transformer.Transformer$ExportOperationListener$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet$ListenerHolder.invoke(ListenerSet.java:466)
+	at androidx.media3.common.util.ListenerSet.lambda$queueEvent$0(ListenerSet.java:334)
+	at androidx.media3.common.util.ListenerSet$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet.flushEvents(ListenerSet.java:358)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:386)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:373)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.onError(Transformer.java:1511)
+	at androidx.media3.transformer.DefaultExportOperation$ComponentListener.onError(DefaultExportOperation.java:194)
+	at androidx.media3.transformer.TransformerInternal.lambda$endInternal$0$androidx-media3-transformer-TransformerInternal(TransformerInternal.java:521)
+	at androidx.media3.transformer.TransformerInternal$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+	at android.os.Handler.handleCallback(Handler.java:959)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+Caused by: androidx.media3.transformer.ExportException: Codec exception: CodecInfo{type=VideoDecoder, configurationFormat={max-bitrate=471080, exo-pixel-width-height-ratio-float=1.0, sar-width=1, allow-frame-drop=0, importance=2000, mime=video/hevc, bitrate=471080, language=und, sar-height=1, is-autoselect=0, is-default=0, color-range=2, frame-rate=24.0, max-input-size=8117, rotation-degrees=0, height=360, track-id=1, is-forced-subtitle=0, level=16, profile=2, codecs-string=hvc1.2.4.L63.90, encoder-delay=0, width=640, encoder-padding=0, csd-0=java.nio.HeapByteBuffer[pos=0 lim=2422 cap=2422]}, name=c2.goldfish.hevc.decoder}
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:487)
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:465)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:401)
+	at androidx.media3.transformer.DefaultCodec.getOutputBufferInfo(DefaultCodec.java:312)
+	at androidx.media3.transformer.ExoAssetLoaderVideoRenderer.feedConsumerFromDecoder(ExoAssetLoaderVideoRenderer.java:186)
+	at androidx.media3.transformer.ExoAssetLoaderBaseRenderer.render(ExoAssetLoaderBaseRenderer.java:110)
+	at androidx.media3.exoplayer.RendererHolder.render(RendererHolder.java:425)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.doSomeWork(ExoPlayerImplInternal.java:1484)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.handleMessage(ExoPlayerImplInternal.java:765)
+	at android.os.Handler.dispatchMessage(Handler.java:103)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.os.HandlerThread.run(HandlerThread.java:85)
+Caused by: java.lang.IllegalStateException: Invalid to call at Released state; only valid in executing state
+
+	at android.media.MediaCodec.native_dequeueOutputBuffer(Native Method)
+	at android.media.MediaCodec.dequeueOutputBuffer(MediaCodec.java:4057)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:398)
+	... 10 more
+
+INSTRUMENTATION_STATUS: stream=
+Error in hdrImportedVideoCanRenderCaption(com.moa.babylanguage.SavedMediaFlowTest):
+com.moa.babylanguage.StoreException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia.renderMedia(TranslatedMedia.kt:81)
+	at com.moa.babylanguage.TranslatedMedia.access$renderMedia(TranslatedMedia.kt:48)
+	at com.moa.babylanguage.TranslatedMedia$renderMedia$1.invokeSuspend(Unknown Source:18)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:187)
+	... 67 trimmed
+Caused by: java.lang.IllegalStateException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia$export$2$1$1.onError(TranslatedMedia.kt:167)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.lambda$onError$1$androidx-media3-transformer-Transformer$ExportOperationListener(Transformer.java:1512)
+	at androidx.media3.transformer.Transformer$ExportOperationListener$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet$ListenerHolder.invoke(ListenerSet.java:466)
+	at androidx.media3.common.util.ListenerSet.lambda$queueEvent$0(ListenerSet.java:334)
+	at androidx.media3.common.util.ListenerSet$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet.flushEvents(ListenerSet.java:358)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:386)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:373)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.onError(Transformer.java:1511)
+	at androidx.media3.transformer.DefaultExportOperation$ComponentListener.onError(DefaultExportOperation.java:194)
+	at androidx.media3.transformer.TransformerInternal.lambda$endInternal$0$androidx-media3-transformer-TransformerInternal(TransformerInternal.java:521)
+	at androidx.media3.transformer.TransformerInternal$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+	at android.os.Handler.handleCallback(Handler.java:959)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+Caused by: androidx.media3.transformer.ExportException: Codec exception: CodecInfo{type=VideoDecoder, configurationFormat={max-bitrate=471080, exo-pixel-width-height-ratio-float=1.0, sar-width=1, allow-frame-drop=0, importance=2000, mime=video/hevc, bitrate=471080, language=und, sar-height=1, is-autoselect=0, is-default=0, color-range=2, frame-rate=24.0, max-input-size=8117, rotation-degrees=0, height=360, track-id=1, is-forced-subtitle=0, level=16, profile=2, codecs-string=hvc1.2.4.L63.90, encoder-delay=0, width=640, encoder-padding=0, csd-0=java.nio.HeapByteBuffer[pos=0 lim=2422 cap=2422]}, name=c2.goldfish.hevc.decoder}
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:487)
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:465)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:401)
+	at androidx.media3.transformer.DefaultCodec.getOutputBufferInfo(DefaultCodec.java:312)
+	at androidx.media3.transformer.ExoAssetLoaderVideoRenderer.feedConsumerFromDecoder(ExoAssetLoaderVideoRenderer.java:186)
+	at androidx.media3.transformer.ExoAssetLoaderBaseRenderer.render(ExoAssetLoaderBaseRenderer.java:110)
+	at androidx.media3.exoplayer.RendererHolder.render(RendererHolder.java:425)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.doSomeWork(ExoPlayerImplInternal.java:1484)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.handleMessage(ExoPlayerImplInternal.java:765)
+	at android.os.Handler.dispatchMessage(Handler.java:103)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.os.HandlerThread.run(HandlerThread.java:85)
+Caused by: java.lang.IllegalStateException: Invalid to call at Released state; only valid in executing state
+
+	at android.media.MediaCodec.native_dequeueOutputBuffer(Native Method)
+	at android.media.MediaCodec.dequeueOutputBuffer(MediaCodec.java:4057)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:398)
+	... 10 more
+
+INSTRUMENTATION_STATUS: test=hdrImportedVideoCanRenderCaption
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptionHdrCompatibilityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.CaptionHdrCompatibilityTest:
+INSTRUMENTATION_STATUS: test=plainCaptionFailsInLegacyHdrShaderAndDrawsInSdrShader
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptionHdrCompatibilityTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=plainCaptionFailsInLegacyHdrShaderAndDrawsInSdrShader
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptionHdrCompatibilityTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualExportCompositionToneMapsOnlyCaptionedVideoAndInfersSourceTracks
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptionHdrCompatibilityTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualExportCompositionToneMapsOnlyCaptionedVideoAndInfersSourceTracks
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.TranslatedMediaTests:
+INSTRUMENTATION_STATUS: test=duplicateAndInvalidSavePreserveExistingRecordAndMedia
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=duplicateAndInvalidSavePreserveExistingRecordAndMedia
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=failedFileDeletionKeepsRetryIntentAndAccurateSnapshot
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=failedFileDeletionKeepsRetryIntentAndAccurateSnapshot
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=selectedVideoCancellationAndCorruptSourceLeaveNoPartialOutput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=10
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=selectedVideoCancellationAndCorruptSourceLeaveNoPartialOutput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=extremeCaptionFitsAndLeavesSceneTransparent
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=11
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=extremeCaptionFitsAndLeavesSceneTransparent
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=videoWithoutAudioKeepsSceneCaptionAndSelectedDurationWithoutAddingAudio
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=12
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=videoWithoutAudioKeepsSceneCaptionAndSelectedDurationWithoutAddingAudio
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=completeSceneSurvivesLandscapeAndRotation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=13
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=completeSceneSurvivesLandscapeAndRotation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancelCorruptAndStaleExportsLeaveNoPartialFiles
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=14
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancelCorruptAndStaleExportsLeaveNoPartialFiles
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=voiceOnlyRendersCardWithOriginalSound
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=15
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=voiceOnlyRendersCardWithOriginalSound
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=selectedVideoKeepsLateIntervalAudioAndDoesNotCreateCaptionOrRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=16
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=selectedVideoKeepsLateIntervalAudioAndDoesNotCreateCaptionOrRecord
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=lateVideoRangeHasAudioCaptionAndSurvivesStoreReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=17
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=lateVideoRangeHasAudioCaptionAndSurvivesStoreReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=selectedVideoWithoutAudioNeverAddsAudioTrack
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.TranslatedMediaTests
+INSTRUMENTATION_STATUS: current=18
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=selectedVideoWithoutAudioNeverAddsAudioTrack
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.GalleryMediaTests:
+INSTRUMENTATION_STATUS: test=providerOutageReturnsRetryableCleanupWithoutThrowingOrLosingJournal
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=19
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=providerOutageReturnsRetryableCleanupWithoutThrowingOrLosingJournal
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=failedPublicationAndFailedRollbackRemainDeletionIntentAndRecover
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=20
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=failedPublicationAndFailedRollbackRemainDeletionIntentAndRecover
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=largeFontProducesLargerReadableBodyInsteadOfShrinkingWholePhrase
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=21
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=largeFontProducesLargerReadableBodyInsteadOfShrinkingWholePhrase
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=writerFailureRemovesPendingRowAndDoesNotTouchExistingRows
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=22
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=writerFailureRemovesPendingRowAndDoesNotTouchExistingRows
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=pngIsReadablePublishedAndVisibleInAgattokAlbumWithoutPhotoReadPermission
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=23
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=pngIsReadablePublishedAndVisibleInAgattokAlbumWithoutPhotoReadPermission
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellationAfterWrittenJournalAndFailedDeletionNeverRecoversAsSuccess
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=24
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationAfterWrittenJournalAndFailedDeletionNeverRecoversAsSuccess
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancellationAfterInsertRemovesPendingRow
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=25
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationAfterInsertRemovesPendingRow
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=corruptPosterAndMissingMoviePreserveInputAndPublishNothing
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=26
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=corruptPosterAndMissingMoviePreserveInputAndPublishNothing
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=completedPendingWriteIsRecoveredAndPublishedWithReadablePixels
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=27
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=completedPendingWriteIsRecoveredAndPublishedWithReadablePixels
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=missingJournalUriRecoversOnlyExactLegacyPathAndPreservesFinishedCopy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=28
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=missingJournalUriRecoversOnlyExactLegacyPathAndPreservesFinishedCopy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=mp4PublishedWithOriginalAudioAndDurationAndRemainsAfterRecordInvalidation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=29
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=mp4PublishedWithOriginalAudioAndDurationAndRemainsAfterRecordInvalidation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=captionPixelsInPosterUseTheSameRendererAsMovieAndEditedTextChangesCard
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=30
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=captionPixelsInPosterUseTheSameRendererAsMovieAndEditedTextChangesCard
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=malformedJournalCannotDeleteDifferentPublishedCopyOrPrivateInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=31
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=malformedJournalCannotDeleteDifferentPublishedCopyOrPrivateInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=interruptedPendingInsertIsRemovedButPublishedCopySurvivesStartupCleanup
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=32
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=interruptedPendingInsertIsRemovedButPublishedCopySurvivesStartupCleanup
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=staleGenerationBeforeAndDuringWritePublishesNothing
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=33
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=staleGenerationBeforeAndDuringWritePublishesNothing
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.CaptureAccessLimitsTest:
+INSTRUMENTATION_STATUS: test=completedExtendedResultRemainsVisibleAndSaveableAfterExpiry
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=34
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=completedExtendedResultRemainsVisibleAndSaveableAfterExpiry
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=extendedAnalysisExpiryClampsParentRangeAndNextFreeRequestUsesTenSeconds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=35
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=extendedAnalysisExpiryClampsParentRangeAndNextFreeRequestUsesTenSeconds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=previewAllowsTwentySecondVisualAnalysisWithNoEntitlement
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=36
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=previewAllowsTwentySecondVisualAnalysisWithNoEntitlement
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=freeEndpointCannotProduceAnExtendedAnalysisRequest
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=37
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=freeEndpointCannotProduceAnExtendedAnalysisRequest
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=permissionLostImmediatelyBeforeModelReturnCannotExposeExtendedResult
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.CaptureAccessLimitsTest
+INSTRUMENTATION_STATUS: current=38
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=permissionLostImmediatelyBeforeModelReturnCannotExposeExtendedResult
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.ExpressionVarietyTest:
+INSTRUMENTATION_STATUS: test=broadBabbleCanOfferSoundPlayWithoutInventingRhythmOrHunger
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=39
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=broadBabbleCanOfferSoundPlayWithoutInventingRhythmOrHunger
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=duplicateSparseAlternatingOrOutOfRangeObservationsCannotInventAnOrderedStory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=40
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=duplicateSparseAlternatingOrOutOfRangeObservationsCannotInventAnOrderedStory
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=broadAstDoesNotPromoteWaveformMotionIntoTheBabysTimeline
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=41
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=broadAstDoesNotPromoteWaveformMotionIntoTheBabysTimeline
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cryDoesNotRequireAnOnomatopoeiaOrAnAttentionRequest
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=42
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cryDoesNotRequireAnOnomatopoeiaOrAnAttentionRequest
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=anIgnoredConflictingSourceFrameCannotDisappearFromTheSequence
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=43
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=anIgnoredConflictingSourceFrameCannotDisappearFromTheSequence
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=44
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=childSpeechNeverBecomesBabblingInAnOrderedExpression
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=45
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=childSpeechNeverBecomesBabblingInAnOrderedExpression
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=allKeysAreBoundedStableAndNeverTurnNoiseIntoWords
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=46
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=allKeysAreBoundedStableAndNeverTurnNoiseIntoWords
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=broadPartialOrIsolatedSoundCannotBorrowWholeClipPause
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=47
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=broadPartialOrIsolatedSoundCannotBorrowWholeClipPause
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=stableObservedOrderChangesTheExpressionWithoutChangingAcceptance
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ExpressionVarietyTest
+INSTRUMENTATION_STATUS: current=48
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=48
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=stableObservedOrderChangesTheExpressionWithoutChangingAcceptance
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 111.291
+There was 1 failure:
+1) hdrImportedVideoCanRenderCaption(com.moa.babylanguage.SavedMediaFlowTest)
+com.moa.babylanguage.StoreException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia.renderMedia(TranslatedMedia.kt:81)
+	at com.moa.babylanguage.TranslatedMedia.access$renderMedia(TranslatedMedia.kt:48)
+	at com.moa.babylanguage.TranslatedMedia$renderMedia$1.invokeSuspend(Unknown Source:18)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:187)
+	... 67 trimmed
+Caused by: java.lang.IllegalStateException: 영상 변환을 마치지 못했어요. 다른 구간이나 파일로 다시 시도해 주세요.
+	at com.moa.babylanguage.TranslatedMedia$export$2$1$1.onError(TranslatedMedia.kt:167)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.lambda$onError$1$androidx-media3-transformer-Transformer$ExportOperationListener(Transformer.java:1512)
+	at androidx.media3.transformer.Transformer$ExportOperationListener$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet$ListenerHolder.invoke(ListenerSet.java:466)
+	at androidx.media3.common.util.ListenerSet.lambda$queueEvent$0(ListenerSet.java:334)
+	at androidx.media3.common.util.ListenerSet$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)
+	at androidx.media3.common.util.ListenerSet.flushEvents(ListenerSet.java:358)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:386)
+	at androidx.media3.common.util.ListenerSet.sendEvent(ListenerSet.java:373)
+	at androidx.media3.transformer.Transformer$ExportOperationListener.onError(Transformer.java:1511)
+	at androidx.media3.transformer.DefaultExportOperation$ComponentListener.onError(DefaultExportOperation.java:194)
+	at androidx.media3.transformer.TransformerInternal.lambda$endInternal$0$androidx-media3-transformer-TransformerInternal(TransformerInternal.java:521)
+	at androidx.media3.transformer.TransformerInternal$$ExternalSyntheticLambda2.run(D8$$SyntheticClass:0)
+	at android.os.Handler.handleCallback(Handler.java:959)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+Caused by: androidx.media3.transformer.ExportException: Codec exception: CodecInfo{type=VideoDecoder, configurationFormat={max-bitrate=471080, exo-pixel-width-height-ratio-float=1.0, sar-width=1, allow-frame-drop=0, importance=2000, mime=video/hevc, bitrate=471080, language=und, sar-height=1, is-autoselect=0, is-default=0, color-range=2, frame-rate=24.0, max-input-size=8117, rotation-degrees=0, height=360, track-id=1, is-forced-subtitle=0, level=16, profile=2, codecs-string=hvc1.2.4.L63.90, encoder-delay=0, width=640, encoder-padding=0, csd-0=java.nio.HeapByteBuffer[pos=0 lim=2422 cap=2422]}, name=c2.goldfish.hevc.decoder}
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:487)
+	at androidx.media3.transformer.DefaultCodec.createExportException(DefaultCodec.java:465)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:401)
+	at androidx.media3.transformer.DefaultCodec.getOutputBufferInfo(DefaultCodec.java:312)
+	at androidx.media3.transformer.ExoAssetLoaderVideoRenderer.feedConsumerFromDecoder(ExoAssetLoaderVideoRenderer.java:186)
+	at androidx.media3.transformer.ExoAssetLoaderBaseRenderer.render(ExoAssetLoaderBaseRenderer.java:110)
+	at androidx.media3.exoplayer.RendererHolder.render(RendererHolder.java:425)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.doSomeWork(ExoPlayerImplInternal.java:1484)
+	at androidx.media3.exoplayer.ExoPlayerImplInternal.handleMessage(ExoPlayerImplInternal.java:765)
+	at android.os.Handler.dispatchMessage(Handler.java:103)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.os.HandlerThread.run(HandlerThread.java:85)
+Caused by: java.lang.IllegalStateException: Invalid to call at Released state; only valid in executing state
+
+	at android.media.MediaCodec.native_dequeueOutputBuffer(Native Method)
+	at android.media.MediaCodec.dequeueOutputBuffer(MediaCodec.java:4057)
+	at androidx.media3.transformer.DefaultCodec.maybeDequeueOutputBuffer(DefaultCodec.java:398)
+	... 10 more
+
+FAILURES!!!
+Tests run: 48,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

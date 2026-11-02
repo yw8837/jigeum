@@ -1,0 +1,35 @@
+{
+  "status": "pass",
+  "rows": [
+    {
+      "run": 1,
+      "observed": "PARTIAL_INFANT_VOICE_RESULT",
+      "selected_ms": 20000,
+      "ui_observed_within_seconds": 25.296
+    },
+    {
+      "run": 2,
+      "observed": "PARTIAL_INFANT_VOICE_RESULT",
+      "selected_ms": 20000,
+      "ui_observed_within_seconds": 25.247
+    }
+  ],
+  "general_accuracy_validated": false,
+  "encoding_attempts": [
+    "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877"
+  ],
+  "movie_sha256": "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877",
+  "install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~BTtecl4myGaDU8DM3N4Yug==/com.moa.babylanguage-rj5Z3OzHLHatWZqTwD74Jw==/base.apk",
+    "sha256": "d3028ee1785b93b646395bc7a57376e309c61af8a362f7496098f3c9cae2ad10",
+    "expected_sha256": "d3028ee1785b93b646395bc7a57376e309c61af8a362f7496098f3c9cae2ad10",
+    "version_code": 38,
+    "version_name": "0.5.24-beta",
+    "verified": true,
+    "errors": []
+  },
+  "partial_saved": true,
+  "temporary_media_removed": true,
+  "source_unchanged": true
+}

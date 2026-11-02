@@ -1,0 +1,193 @@
+Browser tab: 1, Title: "콘텐츠 등급 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/content-rating-iarc-questionnaire".
+1 AXWebArea 콘텐츠 등급 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/content-rating-iarc-questionnaire
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				170 button 탐색 사이드바 표시
+				171 button 읽지 않은 알림 알림 센터 열기
+			172 content list
+				173 container 홈
+					174 button 홈
+						175 text 홈
+				176 container 계정 관리
+					177 button 계정 관리
+						178 text 계정 관리
+				179 container 아가톡 - 지금 내 기분이 그래
+					180 pop up button 아가톡 - 지금 내 기분이 그래
+				181 container 대시보드
+					182 button 대시보드
+						183 text 대시보드
+				184 container 통계
+					185 button 통계
+						186 text 통계
+				187 container 게시 개요
+					188 button 게시 개요
+						189 text 게시 개요
+				190 container Google Play로 보호됨
+					191 button Google Play로 보호됨
+						192 text Google Play로 보호됨
+				193 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					194 button 테스트 및 출시
+						195 text 테스트 및 출시
+				196 container (expanded) Description: 모니터링 및 개선, Secondary Actions: Collapse
+					197 button 모니터링 및 개선
+						198 text 모니터링 및 개선
+					199 content list
+						200 container
+							201 container (collapsed) Description: 도달범위 및 기기, Secondary Actions: Expand
+								202 button 도달범위 및 기기
+							203 container (collapsed) Description: 평점 및 리뷰, Secondary Actions: Expand
+								204 button 평점 및 리뷰
+							205 container (collapsed) Description: Android vitals, Secondary Actions: Expand
+								206 button Android vitals
+							207 container (expanded) Description: 정책 및 프로그램, Secondary Actions: Collapse
+								208 button 정책 및 프로그램
+								209 content list
+									210 container
+										211 container 정책 상태
+											212 button 정책 상태
+										213 container 앱 콘텐츠
+											214 button 앱 콘텐츠
+										215 container (collapsed) Description: 프로그램, Secondary Actions: Expand
+											216 button 프로그램
+				217 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					218 button 사용자 늘리기
+						219 text 사용자 늘리기
+				220 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					221 button Play를 통한 수익 창출
+						222 text Play를 통한 수익 창출
+			34 container main-content
+				42 container
+					223 link Description: 앱 콘텐츠 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/overview
+					224 heading 콘텐츠 등급, Value: 1
+						225 text 콘텐츠 등급
+					226 button (disabled) 변경사항 취소
+						227 text 변경사항 취소
+					228 tab group
+						229 tab (selectable, disabled, settable, boolean) Description: 1/3단계, 카테고리, Value: 0
+카테고리
+						230 tab (selectable, disabled, settable, boolean) Description: 2/3단계, 설문지, Value: 0
+설문지
+						231 tab (selected, settable, boolean) Description: 3/3단계, 요약, Value: 1
+							274 text 3
+							275 text 요약
+					232 container aFA9E2DAA-25A6-4B73-9D7B-756FAF9E9A0A--9
+						276 heading 요약, Value: 2
+							277 text 요약
+						278 text 아래 표시된 등급은 Google Play에서 사용자에게 표시되는 등급과 다를 수 있습니다.
+						279 content list
+							280 container
+								281 AXListMarker •
+								282 text 앱 콘텐츠에 대한 허위 진술이 있는 경우 Google에서 앱 또는 앱 업데이트를 거부할 수 있습니다.
+							283 container
+								284 AXListMarker •
+								285 text Google은 귀하의 설문지 응답을 바탕으로 현지 법률의 요구에 따라 특정 지역에서 표시될 등급을 결정할 수 있습니다.
+							286 container
+								287 AXListMarker •
+								288 text IARC에 참여하는 등급 부여 기관은 귀하의 앱을 검토한 후 등급을 변경할 수 있습니다.
+						289 container
+							290 text Google 및 IARC는 등급 부여 기관과 연락처 정보, 설문지 응답, 등급, 개발자 지원 요청, 앱 세부정보를 공유합니다.
+							291 link Description: 앱 및 게임의 콘텐츠 등급 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/googleplay/android-developer/answer/188189
+						292 text 카테고리
+						293 text 다른 모든 앱 유형
+						294 text 사용자 컨텐츠 공유
+						295 text 사용자 또는 사용자 생성 콘텐츠를 차단할 수 있음
+						296 text 사용자 또는 사용자 생성 콘텐츠를 보고할 수 있음
+						297 text 중재된 채팅
+						298 heading 내 등급, Value: 2
+							299 text 내 등급
+						300 heading 브라질, Value: 3
+							301 text 브라질
+						302 text 등급 부여 기관: Classificação Indicativa (ClassInd)
+						303 container
+							304 text 평점
+							305 image 전체이용가
+							306 text 전체이용가
+							307 text 콘텐츠 설명어
+							308 text -
+							309 text 상호작용 요소
+							310 text 사용자 상호작용
+						311 heading 북미, Value: 3
+							312 text 북미
+						313 text 등급 부여 기관: Entertainment Software Rating Board (ESRB)
+						314 container
+							315 text 평점
+							316 image 전체이용가
+							317 text 전체이용가
+							318 text 콘텐츠 설명어
+							319 text -
+							320 text 상호작용 요소
+							321 text 사용자 상호작용
+						322 heading 유럽, Value: 3
+							323 text 유럽
+						324 text 등급 부여 기관: Pan-European Game Information (PEGI)
+						325 container
+							326 text 평점
+							327 image PEGI 3
+							328 text PEGI 3
+							329 text 콘텐츠 설명어
+							330 text -
+							331 text 상호작용 요소
+							332 text 사용자 상호작용
+						333 heading 독일, Value: 3
+							334 text 독일
+						335 text 등급 부여 기관: Unterhaltungssoftware Selbstkontrolle (USK)
+						336 container
+							337 text 평점
+							338 image USK: 전체이용가
+							339 text USK: 전체이용가
+							340 text 콘텐츠 설명어
+							341 text -
+							342 text 상호작용 요소
+							343 text 사용자 상호작용
+						344 heading 기타 국가, Value: 3
+							345 text 기타 국가
+						346 text 등급 부여 기관: IARC Generic
+						347 container
+							348 text 평점
+							349 image 만 3세 이상
+							350 text 만 3세 이상
+							351 text 콘텐츠 설명어
+							352 text -
+							353 text 상호작용 요소
+							354 text 사용자 상호작용
+						355 heading 러시아, Value: 3
+							356 text 러시아
+						357 text 등급 부여 기관: Google Play
+						358 container
+							359 text 평점
+							360 image 3세 이상
+							361 text 3세 이상
+							362 text 콘텐츠 설명어
+							363 text -
+							364 text 상호작용 요소
+							365 text 사용자 상호작용
+						366 heading 대한민국, Value: 3
+							367 text 대한민국
+						368 text 등급 부여 기관: Google Play
+						369 text 만 19세 미만의 사용자에게 적합하지 않은 게임은 게임물관리위원회에서 등급을 지정하지 않았다면 대한민국 Google Play에서 삭제될 수 있습니다.
+						370 link Description: GRAC 자세히 알아보기, 새 탭에서 열기, Value: grac.or.kr/english/enforcement/Enforcement.aspx
+						371 container
+							372 text 평점
+							373 image 3세 이상
+							374 text 3세 이상
+							375 text 콘텐츠 설명어
+							376 text -
+							377 text 상호작용 요소
+							378 text 사용자 상호작용
+					379 container
+						380 text 저장하면 변경사항이 게시 개요에 저장되고 검토를 위해 Google에 전송될 준비가 됩니다.
+						381 button 뒤로
+							382 text 뒤로
+						383 button 저장
+							384 text 저장
+				267 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				268 link Description: 상태 대시보드, Value: status.play.google.com/
+				269 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				270 text © 2026 Google
+				271 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				272 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				273 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 231 tab (selected, settable, boolean) Description: 3/3단계, 요약, Value: 1

@@ -1,0 +1,1 @@
+allprojects { p -> if (p.path == ':app') { p.layout.buildDirectory.set(new File('C:/Users/최용우/.codex/worktrees/ondevice-av-probe/plugin-browser-openai-bundled-mention-tab/work/interval-evidence-20261009/build')) } }

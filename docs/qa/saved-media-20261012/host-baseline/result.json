@@ -1,0 +1,20 @@
+{
+  "compile_exit": 0,
+  "android_inference": false,
+  "source_sha256": {
+    "SoundTimeline.kt": "aaa263bbe691c207cdceaf0e8fb18dd5b40d2b3f5e5a397fd68e7274ff2cc32d",
+    "InfantVoiceSupportPolicy.kt": "d9087c439a0beb618e88737bdf9b9898a6733bdfcb207003f78551ce399e7e52",
+    "SoundPhaseRecovery.kt": "f06c2770e6d005b031481d4f977504c5d231374c1fbda84fe5f2b5744c27c656",
+    "BabbleSupportPolicy.kt": "935698426697b7cbbda0dfd98e803c31d2182d0b239b714c321ebd5a8fe46f26",
+    "AstAudioTypes.kt": "93034a33cc101fd394fd97539a20feb7d3e84eba9b26169db9feb3256e7a5457",
+    "AudioCleanup.kt": "a31c172b1fc80469a26f30110edbbeeed2e9d587f44fb732ef36afc7592d7c9d",
+    "VisualTimeline.kt": "61e9bcabe0b162d3fcca950050c6fe85e527ac6b8d554485616632ca89163117",
+    "VisualSoundAlignment.kt": "2e3182d26472a00c8ef0738f29e3879b65aa8e421578705f49c420d5ea9d0bf9",
+    "AudioTimestampAudit.kt": "5eccfe115234b613d2a1bcdbbb5e433239f3273d99e6bcffe4bde09dadd9a682",
+    "BabyExpression.kt": "0b32cd68d4cb5790f170208a395825ffc2f10da809b21b4cbc57adf8ad5e6c5f",
+    "Cadence.kt": "d76ddcb5572a8506bdab5070d0f13459ff8f48335c5bde237d1a2d3aaa02d67d",
+    "ExpressionVarietyTest.kt": "3ef2da0a543fa2655d473735de506edd81bdce969c65c4b9e1460837688f3ff4",
+    "ClipEvidence.kt": "2b3bd32807a1ed62347a2d18a56203d75b797915ec854b188f0d4582ffb36536"
+  },
+  "test_exit": 1
+}

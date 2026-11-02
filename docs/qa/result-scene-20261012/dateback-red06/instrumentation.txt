@@ -1,0 +1,111 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.GalleryMediaTests:
+INSTRUMENTATION_STATUS: test=newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.GalleryMediaTests
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: New MP4 must carry its save date
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.moa.babylanguage.GalleryMediaTests$newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate$1.invokeSuspend(GalleryMediaTests.kt:67)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at com.moa.babylanguage.GalleryMediaTests.newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate(GalleryMediaTests.kt:47)
+
+INSTRUMENTATION_STATUS: stream=
+Error in newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate(com.moa.babylanguage.GalleryMediaTests):
+java.lang.AssertionError: New MP4 must carry its save date
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.moa.babylanguage.GalleryMediaTests$newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate$1.invokeSuspend(GalleryMediaTests.kt:67)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at com.moa.babylanguage.GalleryMediaTests.newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate(GalleryMediaTests.kt:47)
+
+INSTRUMENTATION_STATUS: test=newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ResultNavigationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.ResultNavigationTest:
+INSTRUMENTATION_STATUS: test=resultBackCanLeaveInsteadOfCyclingThroughRangeEditor
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.ResultNavigationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'confirm-close-capture')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.ResultNavigationTest.resultBackCanLeaveInsteadOfCyclingThroughRangeEditor(ResultNavigationTest.kt:138)
+
+INSTRUMENTATION_STATUS: stream=
+Error in resultBackCanLeaveInsteadOfCyclingThroughRangeEditor(com.moa.babylanguage.ResultNavigationTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'confirm-close-capture')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.ResultNavigationTest.resultBackCanLeaveInsteadOfCyclingThroughRangeEditor(ResultNavigationTest.kt:138)
+
+INSTRUMENTATION_STATUS: test=resultBackCanLeaveInsteadOfCyclingThroughRangeEditor
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.47
+There were 2 failures:
+1) newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate(com.moa.babylanguage.GalleryMediaTests)
+java.lang.AssertionError: New MP4 must carry its save date
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.moa.babylanguage.GalleryMediaTests$newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate$1.invokeSuspend(GalleryMediaTests.kt:67)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(dex-id-257a79067fb846ae40fcdb298029c829b5e29342:1)
+	at com.moa.babylanguage.GalleryMediaTests.newVideoCopiesUseSaveDateInsteadOfOriginalRecordingDate(GalleryMediaTests.kt:47)
+2) resultBackCanLeaveInsteadOfCyclingThroughRangeEditor(com.moa.babylanguage.ResultNavigationTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'confirm-close-capture')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.moa.babylanguage.ResultNavigationTest.resultBackCanLeaveInsteadOfCyclingThroughRangeEditor(ResultNavigationTest.kt:138)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

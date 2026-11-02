@@ -1,5 +1,10 @@
 # Local work logs, transient fixtures and generated deliverables.
 work/
+# Verified local AST derivative; preparation helper pins size and SHA256.
+outputs/MoaAndroid/app/src/astProbe/assets/ast-dynamic-int8.onnx
+outputs/MoaAndroid/app/src/astProbe/assets/ast-*.partial
+outputs/MoaAndroid/app/src/infantPresence/assets/*.onnx
+outputs/MoaAndroid/app/src/infantCaption/assets/*.f32
 .serena/
 **/.gradle/
 **/.kotlin/

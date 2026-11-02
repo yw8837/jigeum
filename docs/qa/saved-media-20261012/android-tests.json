@@ -1,0 +1,242 @@
+[
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "failedAnalysisStillSavesVideoWithoutSentence",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "nextImportedVideoReplacesPriorResultAndCaregiverDraftImmediately",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "galleryVideoResultSavesPngMp4AndSceneRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "hdrImportedVideoCanRenderCaption",
+    "code": -2
+  },
+  {
+    "class": "com.moa.babylanguage.SavedMediaFlowTest",
+    "test": "withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptionHdrCompatibilityTest",
+    "test": "plainCaptionFailsInLegacyHdrShaderAndDrawsInSdrShader",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptionHdrCompatibilityTest",
+    "test": "actualExportCompositionToneMapsOnlyCaptionedVideoAndInfersSourceTracks",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "duplicateAndInvalidSavePreserveExistingRecordAndMedia",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "failedFileDeletionKeepsRetryIntentAndAccurateSnapshot",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoCancellationAndCorruptSourceLeaveNoPartialOutput",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "extremeCaptionFitsAndLeavesSceneTransparent",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "videoWithoutAudioKeepsSceneCaptionAndSelectedDurationWithoutAddingAudio",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "completeSceneSurvivesLandscapeAndRotation",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "cancelCorruptAndStaleExportsLeaveNoPartialFiles",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "voiceOnlyRendersCardWithOriginalSound",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoKeepsLateIntervalAudioAndDoesNotCreateCaptionOrRecord",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "lateVideoRangeHasAudioCaptionAndSurvivesStoreReopen",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.TranslatedMediaTests",
+    "test": "selectedVideoWithoutAudioNeverAddsAudioTrack",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "providerOutageReturnsRetryableCleanupWithoutThrowingOrLosingJournal",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "failedPublicationAndFailedRollbackRemainDeletionIntentAndRecover",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "largeFontProducesLargerReadableBodyInsteadOfShrinkingWholePhrase",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "writerFailureRemovesPendingRowAndDoesNotTouchExistingRows",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "pngIsReadablePublishedAndVisibleInAgattokAlbumWithoutPhotoReadPermission",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "cancellationAfterWrittenJournalAndFailedDeletionNeverRecoversAsSuccess",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "cancellationAfterInsertRemovesPendingRow",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "corruptPosterAndMissingMoviePreserveInputAndPublishNothing",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "completedPendingWriteIsRecoveredAndPublishedWithReadablePixels",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "missingJournalUriRecoversOnlyExactLegacyPathAndPreservesFinishedCopy",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "mp4PublishedWithOriginalAudioAndDurationAndRemainsAfterRecordInvalidation",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "captionPixelsInPosterUseTheSameRendererAsMovieAndEditedTextChangesCard",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "malformedJournalCannotDeleteDifferentPublishedCopyOrPrivateInput",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "interruptedPendingInsertIsRemovedButPublishedCopySurvivesStartupCleanup",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.GalleryMediaTests",
+    "test": "staleGenerationBeforeAndDuringWritePublishesNothing",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptureAccessLimitsTest",
+    "test": "completedExtendedResultRemainsVisibleAndSaveableAfterExpiry",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptureAccessLimitsTest",
+    "test": "extendedAnalysisExpiryClampsParentRangeAndNextFreeRequestUsesTenSeconds",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptureAccessLimitsTest",
+    "test": "previewAllowsTwentySecondVisualAnalysisWithNoEntitlement",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptureAccessLimitsTest",
+    "test": "freeEndpointCannotProduceAnExtendedAnalysisRequest",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.CaptureAccessLimitsTest",
+    "test": "permissionLostImmediatelyBeforeModelReturnCannotExposeExtendedResult",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "broadBabbleCanOfferSoundPlayWithoutInventingRhythmOrHunger",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "duplicateSparseAlternatingOrOutOfRangeObservationsCannotInventAnOrderedStory",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "broadAstDoesNotPromoteWaveformMotionIntoTheBabysTimeline",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "cryDoesNotRequireAnOnomatopoeiaOrAnAttentionRequest",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "anIgnoredConflictingSourceFrameCannotDisappearFromTheSequence",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "childSpeechNeverBecomesBabblingInAnOrderedExpression",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "allKeysAreBoundedStableAndNeverTurnNoiseIntoWords",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "broadPartialOrIsolatedSoundCannotBorrowWholeClipPause",
+    "code": 0
+  },
+  {
+    "class": "com.moa.babylanguage.ExpressionVarietyTest",
+    "test": "stableObservedOrderChangesTheExpressionWithoutChangingAcceptance",
+    "code": 0
+  }
+]

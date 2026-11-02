@@ -1,0 +1,78 @@
+{
+  "Status": "pass",
+  "BeforeFreeBytes": 51609907200,
+  "Removed": [
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\paid-launch-20261024\\final\\Agattok-0.5.27-release-code41.aab",
+      "Bytes": 160294042,
+      "Reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\paid-launch-20261024\\final\\Agattok-0.5.27-release-code41.apk",
+      "Bytes": 255265516,
+      "Reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\final\\Agattok-0.5.27-release-code41.aab",
+      "Bytes": 163130778,
+      "Reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\final\\Agattok-0.5.27-release-code41.apk",
+      "Bytes": 258196378,
+      "Reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    }
+  ],
+  "PreservedPackages": [
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\delivery\\Agattok-0.5.27-release-code41.aab",
+      "Bytes": 163130926,
+      "SHA256": "1EAED7504B1D449C16B1E8A6AF986144A8791982D8A6210A73DD5B431641FEE8"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\delivery\\Agattok-0.5.27-release-code41.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\delivery\\Agattok-0.5.27-release-code41.apk",
+      "Bytes": 258196378,
+      "SHA256": "2AB52EB8E4A02E116EBE338E9A7C737FAC90A022F5E77728F576E2A914DD9A59"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.aab",
+      "Bytes": 160293923,
+      "SHA256": "AA12D9CD8699815B0CCF518C76F3D27012DE8AAE249548CBD5FC70B21986AA61"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-beta-code40.apk",
+      "Bytes": 255265516,
+      "SHA256": "3A7D37F31D40F58A31DCD5463351B43536D70C07BC8177A107DC8F6C29CEB809"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.aab",
+      "Bytes": 46816873,
+      "SHA256": "6DF3CCBA410F59B061A99CDBE3ACC7FAD8042AB6F43B7A30D428A56EDF6CFE05"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.aab.signature.txt",
+      "Bytes": 717,
+      "SHA256": "30BD334BFB219AB4BABBC1AC860E182663FEB180B01F1B6AF4FE59E66ED59D3D"
+    },
+    {
+      "Path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final\\Agattok-0.5.26-release-code40-policy-only.apk",
+      "Bytes": 75466948,
+      "SHA256": "B6193ED5A166AE251ADD91D5784ADF71EAF50193EAB61565FF45FE35DE20FAD9"
+    }
+  ],
+  "PreservedReports": [],
+  "Errors": [],
+  "AfterFreeBytes": 52446867456,
+  "RecoveredVolumeBytes": 836960256,
+  "CompletedAt": "2026-10-24T03:36:00.4571430+09:00"
+}

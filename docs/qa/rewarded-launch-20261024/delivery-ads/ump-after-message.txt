@@ -1,0 +1,11 @@
+--------- beginning of main
+10-23 18:27:11.619 13671 13697 I UserMessagingPlatform: Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("B3EEABB8EE11C2BE770B684D95219ECB") to set this as a debug device.
+10-23 18:27:11.619 13671 13697 D UserMessagingPlatform: Stored info not exists: IABTCF_TCString
+10-23 18:27:11.619 13671 13697 D UserMessagingPlatform: Stored info not exists: IABGPP_HDR_GppString
+10-23 18:27:11.619 13671 13697 D UserMessagingPlatform: Stored info not exists: IABGPP_GppSID
+10-23 18:27:11.619 13671 13697 D UserMessagingPlatform: Stored info not exists: IABUSPrivacy_String
+10-23 18:27:13.532 13671 13697 D UserMessagingPlatform: Action[clear]: {"keys":["UMP_eids"]}
+10-23 18:27:13.535 13671 13697 D UserMessagingPlatform: Action[write]: {"UMP_consentModeValues":"4444","IABTCF_CmpSdkID":300,"IABTCF_gdprApplies":0}
+10-23 18:27:13.535 13671 13697 D UserMessagingPlatform: Writing to storage: [UMP_consentModeValues] 4444
+10-23 18:27:13.535 13671 13697 D UserMessagingPlatform: Writing to storage: [IABTCF_CmpSdkID] 300
+10-23 18:27:13.535 13671 13697 D UserMessagingPlatform: Writing to storage: [IABTCF_gdprApplies] 0

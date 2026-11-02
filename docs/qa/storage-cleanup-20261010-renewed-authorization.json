@@ -1,0 +1,18 @@
+{
+  "status": "blocked_before_process_start",
+  "user_authorized_exact_scope": true,
+  "requested_administrator_execution": true,
+  "current_process_elevated": false,
+  "administrator_elevation_attempted": false,
+  "error": "exec_command CreateProcess rejected: blocked by policy",
+  "detailed_policy_rule_available": false,
+  "existing_files": 82,
+  "existing_directories": 3,
+  "removed_this_attempt": 0,
+  "exclusive_read_lock_checks_passed": 82,
+  "active_related_builds_or_probes": 0,
+  "sampled_file_and_directory_acl_grants_owner_full_control": true,
+  "planned_logical_bytes": 8725782297,
+  "free_bytes_at_check": 56369983488,
+  "checked_at": "2026-10-10T01:22:03.4695024+09:00"
+}

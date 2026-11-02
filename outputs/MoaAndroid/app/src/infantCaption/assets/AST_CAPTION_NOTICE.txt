@@ -1,0 +1,14 @@
+Supplemental public caption-only infant-presence head, frozen 2026-10-07.
+769 FP32 parameters, 3076 bytes. Not an emotion/intent or speaker-identity model.
+NPZ SHA256: 4929cee8c7c3d11cc98c351a73148837f9c312250c50e7ef9a41a5420c3e4ad5
+Binary SHA256: 979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1
+Uses the unchanged AST representation. Original AST BSD license and original
+public-source attribution are retained in AST_MODEL_NOTICE.txt.
+Additional caption-only whole-recording training bags:
+https://freesound.org/people/Rodcencko/sounds/9437/ (Rodcencko, CC0)
+https://freesound.org/people/Sauron974/sounds/244237/ (Sauron974, CC0)
+https://creativecommons.org/publicdomain/zero/1.0/
+Audio event/speaker/age truth has not been independently reviewed. No user media
+or features were used to train, calibrate or augment this head. Enabled only in
+explicit research builds and the physically verified closed-test beta; disabled
+in the default and production release builds.

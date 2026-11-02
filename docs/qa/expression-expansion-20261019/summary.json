@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-18T15:36:47.940278+00:00",
+  "base_revision": "b4044ad7f66d3e96ab1dc2be30057cd9780cfeb2",
+  "branch": "codex/ondevice-av-probe",
+  "counts": {
+    "basic": 3584,
+    "sustained": 6144,
+    "pause": 2048,
+    "ordered": 19200,
+    "eventOrders": 150,
+    "audioOnly": 30976,
+    "withVisual": 90624,
+    "authoredSentenceUnits": 336,
+    "basicWhitespaceWords": 527,
+    "basicMaxChars": 55,
+    "audioMaxChars": 96,
+    "visualMaxChars": 119
+  },
+  "baseline": {
+    "basic": 56,
+    "audioOnly": 1384,
+    "withVisual": 4512,
+    "choicesPerOrder": 8
+  },
+  "tests": {
+    "runtime": "host JVM / actual platform-free Kotlin sources",
+    "passed": 66,
+    "failed": 0,
+    "synthetic_pcm_inputs": 256,
+    "synthetic_pcm_distinct_phrases": 201
+  },
+  "source_version_code": 39,
+  "source_version_name": "0.5.25",
+  "new_package_built": false,
+  "new_play_submission": false,
+  "current_play_status_checked": false,
+  "device_ui_verified": false,
+  "classifier_changed": false,
+  "recognition_accuracy_measured": false,
+  "board_implemented": false
+}

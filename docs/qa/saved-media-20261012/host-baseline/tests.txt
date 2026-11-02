@@ -1,0 +1,12 @@
+JUnit version 4.13.2
+......E....
+Time: 0.519
+There was 1 failure:
+1) measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression(com.moa.babylanguage.ExpressionVarietyTest)
+java.lang.AssertionError: 내 입에서 소리가 나왔어요. 우리 소리 놀이 해볼까요?
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.moa.babylanguage.ExpressionVarietyTest.measuredQuietBetweenRepeatedAcceptedSoundsChangesShortExpression(ExpressionVarietyTest.kt:116)
+
+FAILURES!!!
+Tests run: 10,  Failures: 1

@@ -1,0 +1,14 @@
+{
+  "path": "D:\\Codex\\Agattok\\marketing-20261028\\Agattok-Instagram-Threads-20261028.zip",
+  "bytes": 6875738,
+  "sha256": "010f774b59f6d99b9a6849c13ec4d975988746b954375ca9daa509407985bc56",
+  "files": 19,
+  "excludes": [
+    "hold/",
+    "posts.json containing hold draft",
+    "private codes",
+    "unselected generated variants",
+    "actual child media"
+  ],
+  "zip_integrity": "pass"
+}

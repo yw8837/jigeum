@@ -1,0 +1,740 @@
+{
+  "version_name": "0.5.21-beta",
+  "version_code": 35,
+  "app_source_commit": "ed52fae",
+  "scope": "Measured infant vocal presence corroboration; no event-kind, emotion, intent or general-accuracy claim",
+  "general_accuracy_validated": false,
+  "new_physical_device_performance_measured": false,
+  "comparison": {
+    "status": "pass",
+    "general_accuracy_validated": false,
+    "groups": [
+      {
+        "name": "quiet28",
+        "conditions": 28,
+        "previous_outputs_preserved": [
+          "cry_original",
+          "laugh_original",
+          "babble_seven_month_original",
+          "babble_seven_month_rms6",
+          "babble_seven_month_rms9"
+        ],
+        "recovered": [
+          "laugh_rms6",
+          "laugh_rms9"
+        ],
+        "remaining_held": [
+          "cry_rms6",
+          "cry_rms9",
+          "babble_original",
+          "babble_rms6",
+          "babble_rms9",
+          "conversation_original",
+          "conversation_rms6",
+          "conversation_rms9",
+          "generic_laugh_original",
+          "generic_laugh_rms6",
+          "generic_laugh_rms9",
+          "piano_original",
+          "piano_rms6",
+          "piano_rms9",
+          "vacuum_original",
+          "vacuum_rms6",
+          "vacuum_rms9",
+          "silence_original",
+          "dc_original",
+          "rumble_original",
+          "noise_original"
+        ],
+        "negative_controls": [
+          "conversation_original",
+          "conversation_rms6",
+          "conversation_rms9",
+          "generic_laugh_original",
+          "generic_laugh_rms6",
+          "generic_laugh_rms9",
+          "piano_original",
+          "piano_rms6",
+          "piano_rms9",
+          "vacuum_original",
+          "vacuum_rms6",
+          "vacuum_rms9",
+          "silence_original",
+          "dc_original",
+          "rumble_original",
+          "noise_original"
+        ],
+        "negative_outputs": 0,
+        "original_report_sha256": "643e6ac35d211b07a0e762ba38b1454655290539747c46fd7547114305bddf53",
+        "candidate_report_sha256": "133340f8fa7a8d5cf71f970cc4a2e6ccabdc14bdd94e77a24096b1c329642f2e"
+      },
+      {
+        "name": "regression53",
+        "conditions": 53,
+        "previous_outputs_preserved": [
+          "cry",
+          "laugh",
+          "almost_laugh",
+          "cry_six_month",
+          "babble_seven_month",
+          "laugh_then_cry",
+          "cry_then_laugh",
+          "cry_with_dc",
+          "public_babble_eleven_month",
+          "public_babble_crib",
+          "keng_2month",
+          "manoj_newborn",
+          "clip_b_0_base",
+          "clip_b_1_base",
+          "clip_c_0_base",
+          "extra_416677",
+          "extra_416635",
+          "extra_416702",
+          "extra_259609",
+          "extra_254465"
+        ],
+        "recovered": [
+          "laugh_quiet",
+          "overlap",
+          "laugh_with_rumble",
+          "stephan_5month",
+          "clod111_11month",
+          "extra_254471"
+        ],
+        "remaining_held": [
+          "babble",
+          "laugh_babble",
+          "conversation",
+          "vacuum",
+          "piano",
+          "generic_laugh",
+          "silence",
+          "tone",
+          "noise",
+          "rumble",
+          "dc",
+          "mayra_context",
+          "cchenail_laugh",
+          "duducsepel_voice",
+          "ripc_laugh",
+          "noisecollector_9month",
+          "silence10",
+          "dc10",
+          "click10",
+          "quiettone10",
+          "shorttone20",
+          "adulttail20",
+          "musictail20",
+          "extra_416681",
+          "extra_254454",
+          "extra_254455",
+          "extra_128479"
+        ],
+        "negative_controls": [
+          "conversation",
+          "vacuum",
+          "piano",
+          "generic_laugh",
+          "silence",
+          "tone",
+          "noise",
+          "rumble",
+          "dc",
+          "cchenail_laugh",
+          "duducsepel_voice",
+          "ripc_laugh",
+          "silence10",
+          "dc10",
+          "click10",
+          "quiettone10",
+          "shorttone20",
+          "adulttail20",
+          "musictail20",
+          "extra_128479"
+        ],
+        "negative_outputs": 0,
+        "original_report_sha256": "6cc40c5eff8c101208d2198e2cf63615171eb95de54266dea1ba94f7588f7654",
+        "candidate_report_sha256": "1505accdc796925cbc828e5dd2fdd0cab7986c6c833119efa1b4fcc2fda215c5"
+      }
+    ]
+  },
+  "native": {
+    "status": "pass",
+    "tests": 108,
+    "passed_tests": 108,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 8.13,
+    "exit": 0
+  },
+  "regression": {
+    "status": "pass",
+    "tests": 80,
+    "passed_tests": 80,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 70.36,
+    "exit": 0
+  },
+  "capture_cancel_resume": {
+    "status": "pass",
+    "tests": 1,
+    "passed_tests": 1,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 14.93,
+    "exit": 0
+  },
+  "new_branch": {
+    "status": "pass",
+    "installed": {
+      "package": "com.moa.babylanguage.astcandidate",
+      "sha256": "f8367360dff7e5a37c68812e385699137fab73f72d6e9de37bfaa30d72b5cfc8",
+      "expected_sha256": "f8367360dff7e5a37c68812e385699137fab73f72d6e9de37bfaa30d72b5cfc8",
+      "version_code": 35,
+      "version_name": "0.5.21-astcandidate",
+      "verified": true,
+      "errors": []
+    },
+    "run_id": "cdc56195e24f4f2d954c303ed491ea5b",
+    "source_sha256": "2bb061a12e4611edd6c2097011227f38542a5e4f5bde82332c8bcb227c0cc35e",
+    "fixture_sha256": "285fa9ca904a545a77a02351d29a8f5787b77c9ab7e495617ac1e8a46bf90856",
+    "execution": {
+      "status": "pass",
+      "tests": 1,
+      "passed_tests": 1,
+      "failed_tests": 0,
+      "ignored_tests": 0,
+      "assumption_skipped_tests": 0,
+      "skipped_test_ids": [],
+      "unexpected_skips": [],
+      "allowed_skips": [],
+      "validation_errors": [],
+      "seconds": 6.94,
+      "exit": 0
+    },
+    "measurement": {
+      "run_id": "cdc56195e24f4f2d954c303ed491ea5b",
+      "completed": true,
+      "elapsed_ms": 4386,
+      "runtime_failure_preserved": true,
+      "cancellation_preserved": true,
+      "subsequent_real_inference_succeeded": true,
+      "fixture_unchanged": true
+    },
+    "source_unchanged": true,
+    "runtime_copy_absent": true
+  },
+  "signed_recovery": {
+    "status": "pass",
+    "source_sha256": "2bb061a12e4611edd6c2097011227f38542a5e4f5bde82332c8bcb227c0cc35e",
+    "attenuated_pcm_sha256": "5b560b339784387f9b56a338fc04beac360034a6943b4829d6e30bc58cf92f1d",
+    "general_accuracy_validated": false,
+    "rows": [
+      {
+        "version": 34,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "expected_sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+          "version_code": 34,
+          "version_name": "0.5.20-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "ABSTAINED",
+        "ui_seconds": 10.297
+      },
+      {
+        "version": 35,
+        "install": {
+          "package": "com.moa.babylanguage",
+          "sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+          "expected_sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+          "version_code": 35,
+          "version_name": "0.5.21-beta",
+          "verified": true,
+          "errors": []
+        },
+        "observed": "UNCERTAIN_INFANT_VOICE_RESULT",
+        "ui_seconds": 31.65
+      }
+    ],
+    "movie_sha256": "152e8436be31b921ef78f75d42074be79349469d0c125c0b4387df72be51ec9a",
+    "local_movie_removed": true,
+    "remote_movie_removed": true,
+    "source_unchanged": true
+  },
+  "signed_upgrade": {
+    "status": "pass",
+    "installs": [
+      {
+        "package": "com.moa.babylanguage",
+        "sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+        "expected_sha256": "80072d9b8ef144a827b16e82e7cbe07010d49c4d33d374e3a73e7163a9a6664e",
+        "version_code": 34,
+        "version_name": "0.5.20-beta",
+        "verified": true,
+        "errors": []
+      },
+      {
+        "package": "com.moa.babylanguage",
+        "sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+        "expected_sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+        "version_code": 35,
+        "version_name": "0.5.21-beta",
+        "verified": true,
+        "errors": []
+      }
+    ],
+    "actual_play_install_tested": false,
+    "app_data_cleared": false,
+    "infant_intent_accuracy_tested": false,
+    "seed_record_id": 1791532887775,
+    "old_legacy_record": {
+      "id": 1791532887775,
+      "sound": "옹알이",
+      "context": "QA",
+      "note": "Synthetic signed upgrade fixture",
+      "phrase": "이전 버전의 검사 기록 1791532887674134700",
+      "source": "VIDEO_FILE",
+      "modelCue": "",
+      "basis": "LEGACY"
+    },
+    "old_media": {
+      "name": "아가톡-1791532981555.mp4",
+      "bytes": 932978,
+      "sha256": "50e39f14086c033079b705e3d3d1e2c3daaf9634499dd06a72b4260398106d38",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "new_media": {
+      "name": "아가톡-1791532981555.mp4",
+      "bytes": 932978,
+      "sha256": "50e39f14086c033079b705e3d3d1e2c3daaf9634499dd06a72b4260398106d38",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "new_legacy_record": {
+      "id": 1791532887775,
+      "sound": "옹알이",
+      "context": "QA",
+      "note": "Synthetic signed upgrade fixture",
+      "phrase": "이전 버전의 검사 기록 1791532887674134700",
+      "source": "VIDEO_FILE",
+      "modelCue": "",
+      "basis": "LEGACY"
+    },
+    "checks_passed": true,
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true,
+    "owned_external_files_removed": true
+  },
+  "signed_access": {
+    "status": "pass",
+    "scenarios": [
+      "small: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "font200: full access visible, purchase/restore hidden, explanation/capture reachable",
+      "real signed beta: 120s capture, 20s actual analysis without a paywall, no invented silence phrase",
+      "beta imports valid exact 200MiB video and rejects 200MiB+1 byte",
+      "beta runs real YAMNet + face model, saves clip/result and exports actual PDF without purchase",
+      "cold restart retains distribution access and records without a purchase or code",
+      "same-key release update restores 60/10/100, visual/PDF gates and preserves records/media"
+    ],
+    "installs": [
+      {
+        "package": "com.moa.babylanguage",
+        "sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+        "expected_sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+        "version_code": 35,
+        "version_name": "0.5.21-beta",
+        "verified": true,
+        "errors": []
+      },
+      {
+        "package": "com.moa.babylanguage",
+        "sha256": "6996ddcb8602a18cebff09be6118b5cad8f3b926384eae4d524fab1499fb6e2c",
+        "expected_sha256": "6996ddcb8602a18cebff09be6118b5cad8f3b926384eae4d524fab1499fb6e2c",
+        "version_code": 35,
+        "version_name": "0.5.21",
+        "verified": true,
+        "errors": []
+      }
+    ],
+    "actual_play_install_tested": false,
+    "infant_intent_accuracy_tested": false,
+    "fixture": "the_yura CC0 cry + plain-color video",
+    "observed_capture_seconds": 122.15,
+    "capture_timeline": {
+      "end_label": "1:59.7",
+      "lower_ms": 119700,
+      "precision_ms": 100
+    },
+    "abstention_message": "선택한 구간이 거의 무음이에요. 다시 들어보고 소리가 있는 구간을 골라 주세요.",
+    "large_fixture_bytes": 209715200,
+    "oversized_fixture_bytes": 209715201,
+    "beta_media": {
+      "name": "아가톡-1791533532594.mp4",
+      "bytes": 932978,
+      "sha256": "2a45663dc2e889b90e8f3ba4aefc348def4035c5f57a7e299b39bf9bb0cc59aa",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "release_media": {
+      "name": "아가톡-1791533532594.mp4",
+      "bytes": 932978,
+      "sha256": "2a45663dc2e889b90e8f3ba4aefc348def4035c5f57a7e299b39bf9bb0cc59aa",
+      "duration": "10.000000",
+      "streams": [
+        "audio",
+        "video"
+      ]
+    },
+    "cleanup": {
+      "owned_external_files_removed": true,
+      "large_local_files_removed": true,
+      "raw_downloaded_media_removed": true,
+      "display_restored": true,
+      "font_restored": true,
+      "errors": []
+    }
+  },
+  "packages": {
+    "status": "pass",
+    "variants": {
+      "beta": {
+        "package": {
+          "status": "pass",
+          "distribution_checked": "beta",
+          "backup_domains_excluded_in_both_modes": [
+            "database",
+            "device_database",
+            "device_file",
+            "device_root",
+            "device_sharedpref",
+            "external",
+            "file",
+            "root",
+            "sharedpref"
+          ],
+          "compiled_apk_has_internet_permission": true,
+          "allowBackup": false,
+          "fullBackupContent": false,
+          "baseline_comparison": {
+            "status": "pass",
+            "files_compared": 26,
+            "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-beta-code34.apk"
+          },
+          "aab_checked": true,
+          "aab_unsigned": false,
+          "physical_OEM_transfer_tested": false,
+          "apk_sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145",
+          "aab_distribution": {
+            "package": "com.moa.babylanguage",
+            "version_code": 35,
+            "version_name": "0.5.21-beta",
+            "test_distribution": true,
+            "closed_test_distribution": true
+          },
+          "aab_sha256": "6608e17f827c193df3a82a6b3eaa595467ba880037d40fb343877444fc36cd13"
+        },
+        "payload": [
+          {
+            "status": "pass",
+            "expected": "present",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-beta-code35.apk",
+            "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+            "model_variant": "infant-caption",
+            "abis": [
+              "arm64-v8a",
+              "armeabi-v7a",
+              "x86",
+              "x86_64"
+            ],
+            "payload_entries": [
+              "assets/AST_CAPTION_NOTICE.txt",
+              "assets/AST_MODEL_NOTICE.txt",
+              "assets/ONNX_RUNTIME_LICENSE.txt",
+              "assets/ONNX_RUNTIME_NOTICE.txt",
+              "assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+              "assets/ast-caption-presence.f32",
+              "assets/ast-infant-presence-candidate.onnx",
+              "lib/arm64-v8a/libonnxruntime.so",
+              "lib/arm64-v8a/libonnxruntime4j_jni.so",
+              "lib/armeabi-v7a/libonnxruntime.so",
+              "lib/armeabi-v7a/libonnxruntime4j_jni.so",
+              "lib/x86/libonnxruntime.so",
+              "lib/x86/libonnxruntime4j_jni.so",
+              "lib/x86_64/libonnxruntime.so",
+              "lib/x86_64/libonnxruntime4j_jni.so"
+            ]
+          },
+          {
+            "status": "pass",
+            "expected": "present",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-beta-code35.aab",
+            "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+            "model_variant": "infant-caption",
+            "abis": [
+              "arm64-v8a",
+              "armeabi-v7a",
+              "x86",
+              "x86_64"
+            ],
+            "payload_entries": [
+              "base/assets/AST_CAPTION_NOTICE.txt",
+              "base/assets/AST_MODEL_NOTICE.txt",
+              "base/assets/ONNX_RUNTIME_LICENSE.txt",
+              "base/assets/ONNX_RUNTIME_NOTICE.txt",
+              "base/assets/ONNX_RUNTIME_THIRD_PARTY_NOTICES.txt",
+              "base/assets/ast-caption-presence.f32",
+              "base/assets/ast-infant-presence-candidate.onnx",
+              "base/lib/arm64-v8a/libonnxruntime.so",
+              "base/lib/arm64-v8a/libonnxruntime4j_jni.so",
+              "base/lib/armeabi-v7a/libonnxruntime.so",
+              "base/lib/armeabi-v7a/libonnxruntime4j_jni.so",
+              "base/lib/x86/libonnxruntime.so",
+              "base/lib/x86/libonnxruntime4j_jni.so",
+              "base/lib/x86_64/libonnxruntime.so",
+              "base/lib/x86_64/libonnxruntime4j_jni.so"
+            ]
+          }
+        ],
+        "flags": {
+          "AST_INFANT_CAPTION": true,
+          "AST_INFANT_PRESENCE": true,
+          "AST_BABBLE_SUPPORT": true,
+          "AST_INTEGRATED_CANDIDATE": false,
+          "FULL_ACCESS_CLOSED_TEST": true,
+          "FULL_ACCESS_PREVIEW": false,
+          "DEBUG": false
+        },
+        "files": {
+          "Agattok-0.5.21-beta-code35.apk": {
+            "bytes": 255179763,
+            "sha256": "2dbd5c1f3f20c5437859ad9e9eca4a382174e37f6453f790321792247a55b145"
+          },
+          "Agattok-0.5.21-beta-code35.aab": {
+            "bytes": 160197432,
+            "sha256": "6608e17f827c193df3a82a6b3eaa595467ba880037d40fb343877444fc36cd13"
+          }
+        }
+      },
+      "release": {
+        "package": {
+          "status": "pass",
+          "distribution_checked": "release",
+          "backup_domains_excluded_in_both_modes": [
+            "database",
+            "device_database",
+            "device_file",
+            "device_root",
+            "device_sharedpref",
+            "external",
+            "file",
+            "root",
+            "sharedpref"
+          ],
+          "compiled_apk_has_internet_permission": true,
+          "allowBackup": false,
+          "fullBackupContent": false,
+          "baseline_comparison": {
+            "status": "pass",
+            "files_compared": 18,
+            "baseline": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\accepted-vocal-audibility-20261007\\final\\Agattok-0.5.20-release-code34.apk"
+          },
+          "aab_checked": true,
+          "aab_unsigned": false,
+          "physical_OEM_transfer_tested": false,
+          "apk_sha256": "6996ddcb8602a18cebff09be6118b5cad8f3b926384eae4d524fab1499fb6e2c",
+          "aab_distribution": {
+            "package": "com.moa.babylanguage",
+            "version_code": 35,
+            "version_name": "0.5.21",
+            "test_distribution": false,
+            "closed_test_distribution": false
+          },
+          "aab_sha256": "4397c9fd229014f8bbe77e565a88c3484e7d8f74579eabb7bf3066d00a5ad155"
+        },
+        "payload": [
+          {
+            "status": "pass",
+            "expected": "absent",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-release-code35.apk",
+            "payload_entries": []
+          },
+          {
+            "status": "pass",
+            "expected": "absent",
+            "archive": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\corroborated-vocal-20261009\\final\\Agattok-0.5.21-release-code35.aab",
+            "payload_entries": []
+          }
+        ],
+        "flags": {
+          "AST_INFANT_CAPTION": false,
+          "AST_INFANT_PRESENCE": false,
+          "AST_BABBLE_SUPPORT": false,
+          "AST_INTEGRATED_CANDIDATE": false,
+          "FULL_ACCESS_CLOSED_TEST": false,
+          "FULL_ACCESS_PREVIEW": false,
+          "DEBUG": false
+        },
+        "files": {
+          "Agattok-0.5.21-release-code35.apk": {
+            "bytes": 75381231,
+            "sha256": "6996ddcb8602a18cebff09be6118b5cad8f3b926384eae4d524fab1499fb6e2c"
+          },
+          "Agattok-0.5.21-release-code35.aab": {
+            "bytes": 46720579,
+            "sha256": "4397c9fd229014f8bbe77e565a88c3484e7d8f74579eabb7bf3066d00a5ad155"
+          }
+        }
+      }
+    }
+  },
+  "builds": {
+    "beta": {
+      "exit_code": 0,
+      "elapsed_seconds": 129.83318,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 4958220288,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5503,
+      "output_truncated": false
+    },
+    "release": {
+      "exit_code": 0,
+      "elapsed_seconds": 116.154736,
+      "termination": null,
+      "cleanup_complete": true,
+      "remaining_job_processes": 0,
+      "peak_job_committed_bytes": 3909509120,
+      "memory_limit_bytes": 12884901888,
+      "memory_limit_hit": false,
+      "output_bytes": 5206,
+      "output_truncated": false
+    }
+  },
+  "review": {
+    "Spec": {
+      "mandatory": 0,
+      "resolved": "New AST error masked as normal missing infant"
+    },
+    "Standards": {
+      "mandatory": 0,
+      "resolved": [
+        "Same AST failure masking",
+        "Duplicate frame duration constant"
+      ]
+    }
+  },
+  "failures_preserved": [
+    {
+      "name": "gain28",
+      "disposition": "recovery 0; not included in product"
+    },
+    {
+      "name": "research build01/02",
+      "gradle_exit": 0,
+      "wrapper_exit": 1,
+      "termination": "orphan_cleanup",
+      "remaining_descendants": 0
+    },
+    {
+      "name": "new-branch01",
+      "disposition": "rms6 PCM16 eligibility precondition failed; detailed cause unmeasured; fixed pre-existing rms9 condition passed with unchanged product code"
+    },
+    {
+      "name": "private AV original absent",
+      "disposition": "failed before AV execution; retained PCM/public signed AV substitute; no new private10/20s AV claim"
+    },
+    {
+      "name": "signed-upgrade-final",
+      "disposition": "setup downgrade from installed35 to34 rejected; owned QA install removed; retry02 passed"
+    }
+  ],
+  "play": {
+    "status": "available_to_selected_testers",
+    "track": "Alpha",
+    "version_code": 35,
+    "release_name": "0.5.21-beta (35) - vocal corroboration",
+    "requested_at": "2026-10-09T17:20:00+09:00",
+    "last_available_code": 35,
+    "availability_verified": true,
+    "published_at": "2026-10-09T17:56:00+09:00",
+    "availability_observed_at": "2026-10-09T18:13:00+09:00",
+    "review_items_resolved": true,
+    "managed_publishing_enabled": false,
+    "visual_interval_ms_in_published_artifact": 500,
+    "followup_200ms_candidate_published": false,
+    "actual_tester_install_verified": false,
+    "continuous_14_days_verified": false,
+    "availability_evidence": ["play-available.txt", "play-available.png", "play-published-overview.txt", "play-published-overview.png"],
+    "warnings": 2,
+    "blocking_errors": 0,
+    "supported_device_loss": 0,
+    "install_size": "112MB",
+    "install_size_delta": "1.92KB",
+    "automation_id": "33",
+    "automation_status": "PAUSED",
+    "availability_git_commit": "ba80920b7bce26649ea1620e2be6e70136043d14",
+    "availability_git_remote_equal": true,
+    "availability_git_clean": true,
+    "overall_improvement_goal_complete": false,
+    "evidence": "play-review.md"
+  },
+  "artifact_hashes_reverified": true,
+  "cleanup": {
+    "status": "pass",
+    "shared_avd_preserved": true,
+    "files_deleted": 5282,
+    "bytes_deleted": 3598502380.0,
+    "packages": [
+      "com.moa.babylanguage.astcandidate.test",
+      "com.moa.babylanguage.astcandidate",
+      "com.moa.babylanguage"
+    ],
+    "disk_free_before": 67165978624,
+    "removed_root": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\outputs\\MoaAndroid\\app\\build",
+    "disk_free_after": 83420282880
+  },
+  "local_ultraqa": {
+    "status": "complete",
+    "cycles": 2,
+    "state_cleared": true,
+    "state_absent": true
+  },
+  "pre_submit_git": {
+    "head": "86cbd1456f6014990ce75e6d08c6e856b1d41304",
+    "remote_equal": true,
+    "clean": true
+  }
+}

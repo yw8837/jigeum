@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "tests": 2,
+  "passed_tests": 2,
+  "failed_tests": 0,
+  "ignored_tests": 0,
+  "assumption_skipped_tests": 0,
+  "skipped_test_ids": [],
+  "unexpected_skips": [],
+  "allowed_skips": [],
+  "validation_errors": [],
+  "seconds": 6.03,
+  "exit": 0,
+  "play_metadata_unchanged": true
+}

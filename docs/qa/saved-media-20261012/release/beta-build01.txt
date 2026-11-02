@@ -1,0 +1,111 @@
+{"status": "pass", "run_id": "a04e79c5779240fc853261832276f385", "model": "SM-S938N", "abi": "arm64-v8a", "synthetic_only": true, "general_accuracy_validated": false}
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preBetaBuild UP-TO-DATE
+> Task :app:processBetaNavigationResources UP-TO-DATE
+> Task :app:compileBetaNavigationResources UP-TO-DATE
+> Task :app:generateBetaResValues UP-TO-DATE
+> Task :app:mapBetaSourceSetPaths UP-TO-DATE
+> Task :app:generateBetaResources UP-TO-DATE
+> Task :app:mergeBetaResources UP-TO-DATE
+> Task :app:createBetaCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksBeta UP-TO-DATE
+> Task :app:processBetaMainManifest UP-TO-DATE
+> Task :app:processBetaManifest UP-TO-DATE
+> Task :app:processApplicationManifestBetaForBundle UP-TO-DATE
+> Task :app:checkBetaAarMetadata UP-TO-DATE
+> Task :app:packageBetaResources UP-TO-DATE
+> Task :app:parseBetaLocalResources UP-TO-DATE
+> Task :app:processBetaManifestForPackage UP-TO-DATE
+> Task :app:processBetaResources UP-TO-DATE
+> Task :app:bundleBetaResources UP-TO-DATE
+> Task :app:extractBetaVersionControlInfo UP-TO-DATE
+> Task :app:mergeBetaShaders UP-TO-DATE
+> Task :app:compileBetaShaders NO-SOURCE
+> Task :app:generateBetaAssets UP-TO-DATE
+> Task :app:verifyAstModel
+> Task :app:verifyInfantCaptionHead
+> Task :app:stageInfantPresenceAssets UP-TO-DATE
+
+> Task :app:verifyInfantPresenceArm
+{"status": "pass", "run_id": "a04e79c5779240fc853261832276f385", "model": "SM-S938N", "abi": "arm64-v8a", "synthetic_only": true, "general_accuracy_validated": false}
+
+> Task :app:mergeBetaAssets UP-TO-DATE
+> Task :app:desugarBetaFileDependencies UP-TO-DATE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateBetaBuildConfig UP-TO-DATE
+> Task :app:compileBetaKotlin
+> Task :app:javaPreCompileBeta UP-TO-DATE
+> Task :app:compileBetaJavaWithJavac UP-TO-DATE
+> Task :app:dexBuilderBeta
+> Task :app:mergeBetaGlobalSynthetics UP-TO-DATE
+> Task :app:processBetaJavaRes UP-TO-DATE
+> Task :app:mergeBetaJavaResource UP-TO-DATE
+> Task :app:checkBetaDuplicateClasses UP-TO-DATE
+> Task :app:mergeBetaStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexBeta UP-TO-DATE
+> Task :app:mergeDexBeta
+> Task :app:mergeBetaJniLibFolders UP-TO-DATE
+> Task :app:mergeBetaNativeLibs UP-TO-DATE
+> Task :app:stripBetaDebugSymbols UP-TO-DATE
+> Task :app:writeBetaAppMetadata UP-TO-DATE
+> Task :app:buildBetaPreBundle
+> Task :app:mergeBetaArtProfile UP-TO-DATE
+> Task :app:compileBetaArtProfile
+> Task :app:collectBetaDependencies UP-TO-DATE
+> Task :app:configureBetaDependencies UP-TO-DATE
+> Task :app:extractBetaNativeSymbolTables UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateBetaLintVitalReportModel
+> Task :app:lintVitalAnalyzeBeta
+> Task :app:lintVitalReportBeta UP-TO-DATE
+> Task :app:lintVitalBeta
+> Task :app:parseBetaIntegrityConfig UP-TO-DATE
+> Task :app:packageBetaBundle
+> Task :app:validateSigningBeta UP-TO-DATE
+> Task :app:signBetaBundle
+> Task :app:produceBetaBundleIdeListingFile
+> Task :app:createBetaBundleListingFileRedirect UP-TO-DATE
+> Task :app:bundleBeta
+> Task :app:mergeBetaNativeDebugMetadata NO-SOURCE
+> Task :app:compressBetaAssets UP-TO-DATE
+> Task :app:optimizeBetaResources UP-TO-DATE
+> Task :app:sdkBetaDependencyData UP-TO-DATE
+> Task :app:writeBetaSigningConfigVersions UP-TO-DATE
+> Task :app:packageBeta
+> Task :app:createBetaApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleBeta
+
+BUILD SUCCESSFUL in 3m 45s
+65 actionable tasks: 15 executed, 50 up-to-date
+jar signed.
+
+Warning:
+The signer's certificate is self-signed.
+POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.
+
+jar verified.
+
+Warning:
+This jar contains entries whose certificate chain is invalid. Reason: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+This jar contains entries whose signer certificate is self-signed.
+This jar contains signatures that do not include a timestamp. Without a timestamp, users may not be able to validate this jar after any of the signer certificates expire (as early as 2054-02-16).
+POSIX file permission and/or symlink attributes detected. These attributes are ignored when signing and are not protected by the signature.
+
+Re-run with the -verbose and -certs options for more details.
+{
+  "purpose": "closed-test",
+  "playTrack": "closed-test-only",
+  "billingConfigured": false,
+  "artifact": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\saved-media-20261012\\final\\Agattok-0.5.24-beta-code38.aab",
+  "bytes": 160206297,
+  "sha256": "6c3e3eaebb8897c5cf586d3d723432d96c771a227c3ac1009bfe1e20899f9217"
+}

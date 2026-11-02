@@ -1,0 +1,71 @@
+Browser tab: 3, Title: "Google AdMob", URL: "https://admob.google.com/v2/apps/3259646120/update?ctp=%2Fapps%2F3259646120%2Fsettings&appPlatform=2".
+1 AXWebArea Google AdMob, URL: admob.google.com/v2/apps/3259646120/update?ctp=%2Fapps%2F3259646120%2Fsettings&appPlatform=2
+	2 container
+		3 button 메인 콘텐츠로 건너뛰기
+			4 text 메인 콘텐츠로 건너뛰기
+		5 container
+			6 container am-tlc-app-bar-api-apps
+				7 button 닫기
+				8 heading 앱에 앱 스토어 추가, Value: 1
+					9 text 앱에 앱 스토어 추가
+				10 pop up button 추가 옵션
+			11 container
+				12 tab group
+					13 tab (selected, settable, boolean) Description: 1/2단계, 앱 스토어 선택, Value: 1
+1
+앱 스토어 선택
+					14 tab (selectable, disabled, settable, boolean) Description: 2/2단계, 패키지 이름 확인, Value: 0
+2
+패키지 이름 확인
+				15 container aFEB579FA-19CB-4231-A504-AE9095849635--0
+					16 container 아가톡 - 지금 내 기분이 그래 Android
+					17 heading 앱 스토어, Value: 2
+						18 text 앱 스토어
+					19 pop up button 앱 스토어의 자세한 내용을 확인하려면 이 아이콘 위로 마우스를 올리거나 Enter 키를 누르세요.
+					20 heading Google Play, Value: 3
+						21 text Google Play
+					22 text 앱이 Play 스토어에 등록된 경우 앱을 찾아서 연결하세요. 패키지 이름 또는 앱 URL로 검색하여 결과를 좁힐 수 있습니다. 앱 URL로 검색하는 경우 앱 스토어 등록정보에서 URL을 복사하세요.
+					23 link Description: 앱 URL에 대해 자세히 알아보기, 새 탭에서 열기, Value: support.google.com/admob/answer/3086746?hl=ko
+					24 container
+						26 text field (settable) Description: 앱 이름, 개발자 이름, 패키지 이름 또는 앱 URL로 검색, Value: https://play.google.com/store/apps/details?id=com.moa.babylanguage
+						50 button 모두 지우기
+							51 container 모두 지우기
+					27 button 검색
+						28 text 검색
+					52 table 앱 목록
+						53 row 앱 개발자 앱스토어 앱 추가
+							54 cell
+								55 text 앱
+							56 cell
+								57 text 개발자
+							58 cell
+								59 text 앱스토어
+							60 cell
+								61 text 앱 추가
+						62 row 앱을 찾을 수 없는 경우 앱 스토어 세부사항을 확인한 후 다시 시도해 보세요.
+							63 cell
+								64 text 앱을 찾을 수 없는 경우 앱 스토어 세부사항을 확인한 후 다시 시도해 보세요.
+					29 heading 다른 Android 스토어, Value: 3
+						30 text 다른 Android 스토어
+					31 text 앱이 다른 Android 앱 스토어에 등록된 경우 여기에서 해당 앱 스토어를 선택하세요.
+					32 link Description: 앱 스토어를 찾을 수 없나요?open_in_new, Value: support.google.com/admob/answer/9989980#appstore
+					33 checkbox Amazon Appstore, Value: 0
+						34 text Amazon Appstore
+					35 checkbox OPPO App Market, Value: 0
+						36 text OPPO App Market
+					37 checkbox 삼성 Galaxy Store, Value: 0
+						38 text 삼성 Galaxy Store
+					39 checkbox VIVO App Store, Value: 0
+						40 text VIVO App Store
+					41 checkbox Xiaomi GetApps, Value: 0
+						42 text Xiaomi GetApps
+					43 button (disabled) 계속
+						44 text 계속
+					45 button 취소
+						46 text 취소
+			65 container
+				66 text © 2026 Google
+				67 link Description: 개인정보처리방침open_in_new, Value: google.com/intl/ko/policies/privacy
+				68 link Description: 약관open_in_new, Value: adsense.google.com/adsense/terms
+
+The focused UI element is 27 button 검색

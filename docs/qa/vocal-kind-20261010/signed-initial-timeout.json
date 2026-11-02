@@ -1,0 +1,28 @@
+{
+  "status": "fail",
+  "source_sha256": "7d94b29116df67113375501ea8bf2ee03551e5cca24e458faf7bdfb54e9eb025",
+  "attenuated_pcm_sha256": "7d94b29116df67113375501ea8bf2ee03551e5cca24e458faf7bdfb54e9eb025",
+  "general_accuracy_validated": false,
+  "rows": [
+    {
+      "version": 37,
+      "install": {
+        "package": "com.moa.babylanguage",
+        "base_apk": "/data/app/~~ZFJjvgnwiampSEdZM3D68w==/com.moa.babylanguage-CPVSH7rjq-aPbiFd7Jcy-Q==/base.apk",
+        "sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+        "expected_sha256": "0683358f1e860c780e3962946cc369b028d9e1ae45ae41d516a99406b4daef88",
+        "version_code": 37,
+        "version_name": "0.5.23-beta",
+        "verified": true,
+        "errors": []
+      },
+      "observed": "ABSTAINED",
+      "ui_seconds": 29.96
+    }
+  ],
+  "movie_sha256": "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877",
+  "error": "UI missing 장면과 함께 저장하기; current: ['테스트 버전 · 전체 기능 열림', '닫기', '구간 고르기', '0:00.0', '0:20.0', '선택 영역 밖을 톡 누르면 그 순간으로 이동해요.', '구간 통째로 옮기기', '전체', '2배 확대', '4배 확대', '최대 20초 선택', '미세 조절 접기', '시작', '0:00.0', '끝', '0:20.0', '구간 이동', '길이는 그대로', '표정도 함께 보기', '테스트에서 바로 사용 · 같은 구간의 얼굴·입 관찰', '다른 영상·녹음 고르기', '다시 촬영하기', '분석이 오래 걸려 멈췄어요. 구간을 줄여 다시 시도해 주세요.', '0:00.0 – 0:20.0 · 20초 선택', '영상 + 소리로 번역하기']",
+  "local_movie_removed": true,
+  "remote_movie_removed": true,
+  "source_unchanged": true
+}

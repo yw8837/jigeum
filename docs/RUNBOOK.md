@@ -1,4 +1,56 @@
+# 0.5.14/code28 짧은 발성 보완
+
+최신 [QA](qa/audio-window-0.5.14/README.md), [구현 계약](UX-SOUND-PHASE-0.5.14.md)을 따른다.
+고정 산출물은 ignored `work/sound-phase-20261005/Agattok-0.5.14-beta-code28.apk/.aab`다.
+`tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 경로>`로
+검증된 beta만 만든다. 비교용 정식 release AAB는 Play에 제출하지 않는다.
+baseline 조사 API `SoundAnalyzer.analyzeDetailed`는 유지했고, 제품만 `analyzeWithSupport`에서
+기본 YAMNet→기존 AST→미확정 추가 창 순으로 실행한다. 기준값을 낮추거나 겹친 창을 합산하지 않는다.
+
+이번 계측53, 실제37조건, 서명27→28 기록/영상 보존, 실패 화면2배율과 최종 약국 UI를 검증했다.
+새 에뮬레이터가 필요하면 독립 이름을 사용한다. `AgattokPhase28`은 시험 후 삭제됐으며
+기존 `C:/MoaAVD/MoaQA35`나 사용자 기기에 같은 정리 명령을 적용하지 않는다.
+실제 Play 상태는 QA 배포 기록을 보고, 동일 code28을 중복 업로드하지 않는다.
+
+---
+
+# 이전 0.5.13/code27 음성 변환 개선 — 비공개 검토 제출
+
+최신 실행 증거는 [0.5.13 QA](qa/audio-resampling-0.5.13/README.md)를 먼저 읽는다.
+고정 패키지는 ignored `work/model-specialization-20261005/`의 `Agattok-0.5.13-beta-code27.apk/.aab`다.
+정식 정책 비교용 release 사본은 같은 폴더에 있으나 Play 제출 대상이 아니다.
+
+- 제품 변경: `BoundedPcmResampler`의 anti-alias FIR, EOF 길이, PCM 유한성, native16kHz 보존.
+- 실제 Android48개와 서명26→27 기록/MP4 보존, beta/release package 및 lint, 최종 UI7·약국 UI를 통과했다.
+- 2026-10-05 03:27 KST 비공개 Alpha 검토 제출. 최종 제공 여부는 위 QA 문서를 따른다. 중복 업로드하지 않는다.
+- 정식 전환은 게시된 beta27보다 높은 code28 이상과 실제 Play 서명/업데이트 경로 검증이 필요하다.
+- 명시적 beta AST 빌드: `tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 경로>`.
+- Gemma/EfficientAT/GTCRN 연구 실행기는 제품에 포함하지 않는다. 선택한 아기 구간을 외부로 전송하지 않는다.
+- QA 담당자는 한 명이다. 이 실행은 `AgattokAudio27` / `emulator-5556`에 한정했고 시험 후 둘 다 정리했다.
+
+아래는 이전 실행 당시 기록이다. 최신 버전·상태는 HANDOFF와 위 QA 문서를 우선한다.
+
+---
+
+# 0.5.11/code25 로컬 후보 실행 안내
+
+최신 사본은 `work/ast-beta-package-03/`이고 Play 미제출이다. [최종 QA](qa/ondevice-av-generation/AST-BETA-PACKAGE-QA.md)를 먼저 읽는다.
+고정 AST 파일은 Git에 넣지 않는다. 기존 `tools/research/setup_android_ast.py --model <고정 SHA와 일치하는 로컬 ONNX>`로 준비한다.
+일반 빌드는 AST가 없으며, 베타 후보는 `tools/release/build-play-bundle.ps1 -Purpose closed-test -AstBabbleSupport -Destination <새 beta-code25.aab>`로 만든다.
+속성은 정확한 true/false만 허용한다. AST beta와 debug/release/preview 또는 연구 속성을 혼합하지 않는다.
+정식 정책 비교용 release는 `-Purpose paid-candidate`이며 AST switch를 쓰지 않는다. 비교용 release AAB는 Play에 제출하지 않는다.
+
+`verify_ast_payload.py`의 present/absent 검사와 `check_package.py`의 서명·배포 표시·정렬 검사를 함께 수행한다.
+최종 dex 플래그·실제 서명 업데이트·기록/MP4 보존은 별도 확인한다. 모델·native·서명 검사는 서로를 대신하지 않는다.
+Media3 1.11.1 / Activity1.13.0 / Lifecycle2.9.4 / protobuf4.36.2를 사용한다. 아래1.8.0 등은 이전 실행 이력이다.
+정식 전환은 실제 게시된 beta보다 높은 versionCode와 Play 서명/업데이트 경로 확인이 필요하다.
+이 후보를 게시한다면 이후 정식 전환에는 code26 이상이 필요하다. 베타에 자체 만료는 없고 정식 entitlement 검사는 유지한다.
+
+---
+
 # 0.5.9-beta/code23 실행 안내
+
+개발 브랜치의 최신 로컬 후보는 **0.5.10/code24**이며 아직 배포하지 않았다. 서명·업데이트·실제 미디어 보존 검사와 현재 재현 명령은 [서명 후보 QA](qa/ondevice-av-generation/SIGNED-CANDIDATE-QA.md)를 따른다. 아래0.5.9는 기존 Play 기준본의 실행 기록이다.
 
 먼저 [HANDOFF](HANDOFF.md), [변경 계약](UX-SOUND-VISUAL-0.5.9.md), [최신 QA](qa/sound-visual-0.5.9/README.md)를 따른다. 전체 Android 계측281통과/0실패/3명시제외, 호스트30통과, beta/release lint 각각 오류0/기존경고20. 서명 UI와 실제 배포 상태도 최신 QA를 확인한다.
 
@@ -186,3 +238,21 @@ npm test
 ## 0.4.2 결제 계약
 
 검증 서버는 허용 가능한 구매의 acknowledge를 완료하거나 Play의 ACKNOWLEDGED 상태를 확인한 뒤 서명한다. 앱은 서명 수락 후 현재 토큰의 SHA-256과 일치하는 확인값에서만 중복 client acknowledge를 생략한다. 운영 서비스 계정에는 조회와 구독 acknowledge 권한이 필요하며, 새 앱·서버를 함께 실제 Play에서 검증한다. 자세한 오류·동시성·기한 제한은 [서버 README](../outputs/PlayVerifier/README.md)를 따른다. 실제 운영 서버/Play 앱 한정 접근은 연결됐고 실제 구매/ACK는 미검증이다.
+
+## 실험 종료 후 용량 정리
+
+사용자는 완료된 실험 생성물을 정리하면서 작업하도록 요청했다. [2026-10-06 정리 결과](qa/storage-cleanup-20261006.md)를 따른다.
+
+1. 실험 시작/종료 때 관련 작업 폴더와 C 드라이브 여유를 기록한다. 공용 QA AVD `MoaQA35`를 우선 재사용한다.
+2. 종료 때 로그·JSON/XML·스크린샷·실패/복구 결과·모델 출처/revision/SHA를 먼저 보존한다.
+3. 배포 산출물은 최신과 직전 복구본을 유지하고 완료된 중간 APK/AAB 복사본을 제거한다.
+   0.2.1/0.3.0 기준본, 아기 원본·저장미디어·서명키·현재 제품 모델은 보호한다.
+4. 당장 사용하지 않는 큰 공개 연구 가중치는 다시 받을 고정 원천과 SHA가 있을 때 정리한다.
+   곧 이어서 비교할 후보·공용 의존성 캐시는 유지해 같은 다운로드를 반복하지 않는다.
+5. 빌드 디렉터리 제거 전 그 안의 유일한 보고서를 별도 보관하고 복사SHA를 검증한다.
+   Git 추적파일 부재·절대경로 경계·reparse 부재·활성 실행 여부를 확인한다.
+6. `tools/cleanup_research_artifacts.ps1 -PlanPath <이번 run의 plan.json>`으로preview를 확인하고,
+   사용자 승인 범위의 대상만 `-Apply`로 정리한다. 실제 파일과 드라이브 여유를 전후 확인한다.
+   AVD·다른 프로젝트·공유 캐시는 이 도구가 자동으로 삭제하지 않는다.
+
+검증 보고서의 로컬 바이너리를 제거했다면 정리 기록을 연결한다. 과거실행의 SHA와 새빌드의 SHA를 혼동하지 않는다.

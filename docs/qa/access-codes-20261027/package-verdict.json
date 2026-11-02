@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "distribution_checked": "release",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "pass",
+    "files_compared": 26,
+    "baseline": "C:\\Users\\\ucd5c\uc6a9\uc6b0\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\delivery\\Agattok-0.5.27-release-code41.apk"
+  },
+  "aab_checked": true,
+  "aab_unsigned": false,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "ef58a09ce243c6fdb5ed3ea7398d5ae194ccda6f32c196b5fd6d9efe8690dbb4",
+  "aab_distribution": {
+    "package": "com.moa.babylanguage",
+    "version_code": 42,
+    "version_name": "0.5.28",
+    "test_distribution": false,
+    "closed_test_distribution": false
+  },
+  "admob_app_id_checked": "ca-app-pub-2269464728885792~3259646120",
+  "aab_sha256": "104a3ba0b90667a00da6f6ee59cfebd94af14c8624be9b64be00fa82ff813714"
+}

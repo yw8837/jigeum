@@ -1,0 +1,41 @@
+{
+  "status": "failed",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "scenarios": [
+    "New signed beta39 actual 10-second AV analysis, scene save, and MP4 export without purchase"
+  ],
+  "beta_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~Ll1G6SvHBhpFZt7jBNnB-g==/com.moa.babylanguage-CbdM9cKEVEX0j0WZ3yLy9A==/base.apk",
+    "sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+    "expected_sha256": "7492ecda786b46f03871d19a281bfa2050fa2519e2f8e0ab0ae161c07a862b17",
+    "version_code": 39,
+    "version_name": "0.5.25-beta",
+    "verified": true,
+    "errors": []
+  },
+  "analysis_confirmation_seconds_including_46_second_quiet_wait": 48.233,
+  "beta_media": {
+    "name": "아가톡-1791815201070.mp4",
+    "bytes": 809284,
+    "sha256": "5cab33d8ae4007a87d35345e4108514d10c45b19b7d376bcc66ecbfb08d39bc2",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_install": {
+    "package": "com.moa.babylanguage",
+    "base_apk": "/data/app/~~Ew2tcqpXxxG4k8ziN4WdEg==/com.moa.babylanguage-BLmNDsIH3KkiwqTfEzAspQ==/base.apk",
+    "sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+    "expected_sha256": "2ffc3d78ce295eff62df39ef304b0f6b91e7020438b966303aa41e4952b4b5c1",
+    "version_code": 39,
+    "version_name": "0.5.25",
+    "verified": true,
+    "errors": []
+  },
+  "error": "UI missing 앨범에 영상 저장; current: ['기록으로 돌아가기', '그때의 아기말', '10월 12일 · 14:26 · 0:00–0:10', '선택 구간 다시 듣기 · 영상 함께 보기', '내 소리에 귀 기울여 주세요. 무슨 뜻인지 서두르지 말고 함께해요.', '소리를 바탕으로 예상한 아기말', '선택 구간 · 원래 소리 · 번역 자막이 함께 담긴 MP4예요.']",
+  "owned_external_files_removed": true
+}

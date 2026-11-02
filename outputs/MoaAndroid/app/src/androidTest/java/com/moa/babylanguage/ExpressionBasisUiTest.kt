@@ -81,6 +81,23 @@ class ExpressionBasisUiTest {
         }
     }
 
+    @Test fun automaticPlayfulProvenanceSurvivesRestoreAndExportWithoutManualSelection() {
+        analyzer.basis = ExpressionBasis.AUDIO_PLAYFUL
+        start(); click("영상 + 소리로 번역하기")
+        await(ExpressionBasis.label(ExpressionBasis.AUDIO_PLAYFUL))
+        compose.onNodeWithTag("caption-picker-toggle").assertDoesNotExist()
+        restoration.emulateSavedInstanceStateRestore()
+        compose.onNodeWithTag("expression-basis").assertTextEquals(ExpressionBasis.label(ExpressionBasis.AUDIO_PLAYFUL))
+        click("카드 이미지 앨범에 저장")
+        compose.runOnIdle {
+            assertEquals(ExpressionBasis.AUDIO_PLAYFUL, gallery!!.first.basis)
+            assertEquals(1, analyzer.calls)
+        }
+        click("이 문장 저장하기")
+        compose.runOnIdle { assertEquals(ExpressionBasis.AUDIO_PLAYFUL, saved!!.first.basis) }
+    }
+
+
     @Test fun completedVisualObservationCannotRelabelAudioOnlySentence() {
         analyzer.basis = ExpressionBasis.AUDIO
         start(); click("영상 + 소리로 번역하기")
@@ -94,6 +111,8 @@ class ExpressionBasisUiTest {
         analyzer.withhold = true
         start(); click("영상 + 소리로 번역하기")
         await("아기 발성 종류를 아직 구분하지 못했어요.")
+        compose.onNodeWithTag("withheld-visual-evidence").assertDoesNotExist()
+        compose.onNodeWithTag("toggle-withheld-evidence").performScrollTo().performClick()
         compose.onNodeWithTag("withheld-visual-evidence").performScrollTo().assertTextEquals("같은 구간에서 얼굴을 관찰했어요.")
         compose.onNodeWithTag("baby-phrase").assertDoesNotExist()
         compose.onNodeWithText("이 문장 저장하기").assertDoesNotExist()

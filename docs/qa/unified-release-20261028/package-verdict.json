@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "distribution_checked": "release",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "pass",
+    "files_compared": 26,
+    "baseline": "D:\\Codex\\Agattok\\release-20261027\\delivery\\Agattok-0.5.28-release-code42.apk"
+  },
+  "aab_checked": true,
+  "aab_unsigned": false,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "7de166e11cf5feb5185c8251120a08eb7f87822b7e294564a768a23e88c21551",
+  "aab_distribution": {
+    "package": "com.moa.babylanguage",
+    "version_code": 44,
+    "version_name": "0.5.30",
+    "test_distribution": false,
+    "closed_test_distribution": false
+  },
+  "admob_app_id_checked": "ca-app-pub-2269464728885792~3259646120",
+  "aab_sha256": "c2fcb676d5c68c11b1a95bf8dac435e6328c420109f757532ff706f309801fb0"
+}

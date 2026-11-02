@@ -1,0 +1,77 @@
+- progressbar
+- generic: Google Play Console 로드 중
+- banner:
+  - link "Google Play Console 로고":
+    - /url: /console/u/0/developers/8736564730162379651/app-list
+    - button "Google Play Console 로고"
+  - button "읽지 않은 알림 알림 센터 열기":
+    - img: notifications_unread
+    - generic: 읽지 않은 알림
+  - button "아가톡 - 지금 내 기분이 그래":
+    - generic: 아가톡 - 지금 내 기분이 그래
+  - button "개발자 계정 전환":
+    - img "개발자 계정 전환"
+- navigation:
+  - link "모든 앱":
+    - /url: /console/u/0/developers/8736564730162379651/app-list
+    - img: keyboard_backspace
+    - generic: 모든 앱
+  - list:
+    - listitem "대시보드":
+      - button "대시보드":
+        - img: dashboard
+        - generic: 대시보드
+    - listitem "통계":
+      - button "통계":
+        - img: bar_chart
+        - generic: 통계
+    - listitem "게시 개요":
+      - button "게시 개요" [active]:
+        - img: overview
+        - generic: 게시 개요
+    - listitem "Google Play로 보호됨":
+      - button "Google Play로 보호됨":
+        - img: shield
+        - generic: Google Play로 보호됨
+    - listitem "테스트 및 출시":
+      - button "테스트 및 출시":
+        - img: rocket_launch
+        - generic: 테스트 및 출시
+    - listitem "모니터링 및 개선":
+      - button "모니터링 및 개선":
+        - img: vital_signs
+        - generic: 모니터링 및 개선
+    - listitem "사용자 늘리기":
+      - button "사용자 늘리기":
+        - img: finance_mode
+        - generic: 사용자 늘리기
+    - listitem "Play를 통한 수익 창출":
+      - button "Play를 통한 수익 창출":
+        - img: sell
+        - generic: Play를 통한 수익 창출
+- heading "게시 개요" [level=1]
+- text: 앱 변경사항의 개요를 확인하고, 변경사항을 전송하여 검토를 받거나 게시할 시점을 관리하세요.
+- button "게시 개요에 관한 세부정보 더보기": 더보기
+- button "관리형 게시가 사용 중지됨":
+  - img: sync_disabled
+  - generic: 관리형 게시가 사용 중지됨
+  - img: arrow_drop_down
+- img: history
+- generic: "최근 게시일: 2026년 10월 9일"
+- link "제출 활동":
+  - /url: /console/u/0/developers/8736564730162379651/app/4975993958261665020/publishing/submission-activity
+  - generic: 제출 활동
+  - img: arrow_right_alt
+- link "제품 업데이트":
+  - /url: https://play.google.com/console/about/whats-new/
+- link "상태 대시보드":
+  - /url: https://status.play.google.com/
+- link "도움말":
+  - /url: /console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+- generic: © 2026 Google
+- link "개인 정보 보호":
+  - /url: https://www.google.com/policies/privacy/
+- link "개발자 배포 계약":
+  - /url: https://play.google.com/about/developer-distribution-agreement.html
+- link "서비스 약관":
+  - /url: https://play.google.com/about/console/terms-of-service/

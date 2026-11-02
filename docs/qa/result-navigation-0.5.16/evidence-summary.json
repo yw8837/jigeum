@@ -1,0 +1,106 @@
+{
+  "version": "0.5.16",
+  "version_code": 30,
+  "product_source": "5311e6f",
+  "test_source": "fce7dd5",
+  "android_unique_passed": 105,
+  "final_failed": 0,
+  "final_skipped": 0,
+  "passing_per_run": {
+    "navigation-preview-final\\instrumentation.txt": 50,
+    "navigation-landscape-preview-final\\instrumentation.txt": 2,
+    "playback-assert-final\\instrumentation.txt": 1,
+    "integration-media-final\\integration.txt": 5,
+    "integration-media-final\\ui-real.txt": 1,
+    "integration-media-final\\media.txt": 46
+  },
+  "research_android_tests": 1,
+  "research_synthetic_conditions": 7,
+  "new_infant_accuracy_validated": false,
+  "package": {
+    "beta": {
+      "files": {
+        "Agattok-0.5.16-beta-code30.apk": {
+          "bytes": 255154786,
+          "sha256": "7bde746993ae42369ff0599b405ebcbfa451b6ea4f4f8469bfd8f54257057499"
+        },
+        "Agattok-0.5.16-beta-code30.aab": {
+          "bytes": 160174133,
+          "sha256": "363f565a5d90cdb8787faa3176f1e53d61d5da8ecffaf11f6f6c8881a1ba4d9e"
+        }
+      },
+      "flags": {
+        "AST_BABBLE_SUPPORT": true,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": true,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      }
+    },
+    "release": {
+      "files": {
+        "Agattok-0.5.16-release-code30.apk": {
+          "bytes": 75364843,
+          "sha256": "1466b263a5fcff9d6d08aa5d47d1cdbab2cb727e8dc84c88d7dc7b853623aab3"
+        },
+        "Agattok-0.5.16-release-code30.aab": {
+          "bytes": 46704803,
+          "sha256": "ae351890cc95617e53a5fc153e7e610e4740bb205b90795693be73f6fcbc1a3f"
+        }
+      },
+      "flags": {
+        "AST_BABBLE_SUPPORT": false,
+        "AST_INTEGRATED_CANDIDATE": false,
+        "FULL_ACCESS_CLOSED_TEST": false,
+        "FULL_ACCESS_PREVIEW": false,
+        "DEBUG": false
+      }
+    }
+  },
+  "lint": {
+    "lint-ast-beta.xml": {
+      "Warning": 10
+    },
+    "lint-release.xml": {
+      "Warning": 10
+    }
+  },
+  "signed_upgrade": {
+    "status": "pass",
+    "legacy_text_preserved": true,
+    "media_bytes_preserved": true,
+    "beta_full_access_retained": true,
+    "owned_external_files_removed": true
+  },
+  "signed_ui": {
+    "status": "pass",
+    "same_range_return": true,
+    "os_picker_cancel_preserves_result": true,
+    "new_capture_cancel_preserves_result": true,
+    "remote_copy_absent": true,
+    "source_unchanged": true
+  },
+  "efficient_sed_product_payload": false,
+  "actual_play_install_tested": false,
+  "physical_phone_tested": false,
+  "cleanup": {
+    "qaProcessCount": 0,
+    "avdFolderRemaining": true,
+    "registrationRemaining": true,
+    "cleanupBlocked": true,
+    "reason": "Deletion rejected before execution: blocked by policy",
+    "isolated_qa_state_absent": true
+  },
+  "play": {
+    "track": "Alpha",
+    "version_code": 30,
+    "review_requested_at_kst": "2026-10-06 10:36",
+    "state": "review_requested_automatic_checks_running",
+    "managed_publishing": false,
+    "new_version_published_confirmed": false,
+    "support_removed_devices": 0,
+    "recommended_warnings": 2,
+    "displayed_download_mb": 112,
+    "displayed_update_mb": 2.54
+  }
+}

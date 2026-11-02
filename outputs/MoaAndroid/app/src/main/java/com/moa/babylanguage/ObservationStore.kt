@@ -236,6 +236,8 @@ internal class ObservationStore(context: Context,
     }
 
     private fun clearLegacy() {
+        // Report failed durable cleanup and retain the migration recovery path;
+        // KTX edit returns Unit instead of the success Boolean required here.
         if ((legacy.contains("events") || legacy.contains("age_band")) &&
             !legacy.edit().remove("events").remove("age_band").commit())
             throw StoreException("이전 기록 사본을 정리하지 못했어요. 저장 공간을 확인하고 다시 시도해 주세요.")

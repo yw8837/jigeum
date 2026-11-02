@@ -1,0 +1,14 @@
+[
+  {
+    "name": "ast-infant-presence-candidate.onnx",
+    "sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+    "bytes": 91138597,
+    "source": "installed Play beta39 base.apk"
+  },
+  {
+    "name": "ast-caption-presence.f32",
+    "sha256": "979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1",
+    "bytes": 3076,
+    "source": "installed Play beta39 base.apk"
+  }
+]

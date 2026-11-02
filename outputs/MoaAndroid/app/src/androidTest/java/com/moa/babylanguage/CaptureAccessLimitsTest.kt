@@ -42,7 +42,7 @@ class CaptureAccessLimitsTest {
         }
     }
 
-    private fun start(paid: Boolean = false, preview: Boolean = false) {
+    private fun start(paid: Boolean = false, preview: Boolean = false, rewards: RewardAccess = NoRewardAccess) {
         entitled.set(paid)
         val duration = if (paid || preview) 120_000L else 60_000L
         // A missing preview must not gate editing or the injected analysis. No real user media.
@@ -57,7 +57,7 @@ class CaptureAccessLimitsTest {
                 onBack = {}, saving = false,
                 onSave = { result, _, _ -> saved = result },
                 passContent = { _ -> Text("이용권 화면", modifier = Modifier.testTag("test-pass")) },
-                analyzer = analyzer, initialClip = clip, testDistribution = preview
+                analyzer = analyzer, initialClip = clip, testDistribution = preview, rewardAccess = rewards
             )
         } }
         awaitText("어느 순간을 들어볼까요?")
@@ -175,6 +175,79 @@ class CaptureAccessLimitsTest {
         assertFalse(analyzer.calls.single().visual)
     }
 
+    @Test fun rewardedVisualAnalysisConsumesOnceAndCompletedResultRemainsSaveable() {
+        val rewards = TestRewardAccess().apply { earn(RewardKind.ANALYSIS) }
+        start(rewards = rewards)
+        setEnd(20_000f)
+        compose.onNodeWithTag("visual-analysis").performScrollTo().performClick()
+        click("영상 + 소리로 번역하기")
+        awaitResult()
+        assertEquals(ClipRange(0, 20_000), analyzer.calls.single().range)
+        assertTrue(analyzer.calls.single().visual)
+        assertFalse(rewards.available(RewardKind.ANALYSIS))
+        click("이 문장 저장하기")
+        assertEquals("테스트 한마디 1", saved?.phrase)
+        click("같은 영상에서 다른 구간")
+        compose.waitUntil(8_000) {
+            compose.onAllNodesWithText("0:00.0 – 0:10.0 · 10초").fetchSemanticsNodes().isNotEmpty()
+        }
+        click("이 구간 소리로 번역하기")
+        awaitResult()
+        assertEquals(ClipRange(0, 10_000), analyzer.calls.last().range)
+        assertFalse(analyzer.calls.last().visual)
+    }
+
+    @Test fun cancelledRewardedAnalysisReturnsCreditAndLateResultCannotSpendAgain() {
+        val rewards = TestRewardAccess().apply { earn(RewardKind.ANALYSIS) }
+        val stale = CompletableDeferred<Unit>()
+        analyzer.hold = stale
+        analyzer.ignoreCancellation = true
+        start(rewards = rewards)
+        setEnd(20_000f)
+        click("이 구간 소리로 번역하기")
+        compose.waitUntil(8_000) { analyzer.calls.size == 1 }
+        assertFalse(rewards.available(RewardKind.ANALYSIS))
+        compose.runOnIdle { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        awaitText("이 구간 소리로 번역하기")
+        assertTrue(rewards.available(RewardKind.ANALYSIS))
+        analyzer.hold = null
+        click("이 구간 소리로 번역하기")
+        awaitResult()
+        assertFalse(rewards.available(RewardKind.ANALYSIS))
+        stale.complete(Unit)
+        compose.waitUntil(8_000) { analyzer.calls.first().finished.get() }
+        compose.onNodeWithTag("baby-phrase").assertTextEquals("테스트 한마디 2")
+        assertFalse(rewards.available(RewardKind.ANALYSIS))
+    }
+
+    @Test fun failedAndWithheldAnalysisPreserveRewardForRetry() {
+        val rewards = TestRewardAccess().apply { earn(RewardKind.ANALYSIS) }
+        start(rewards = rewards)
+        setEnd(20_000f)
+        analyzer.fail = true
+        click("이 구간 소리로 번역하기")
+        awaitText("이 구간을 분석하지 못했어요. 다시 재생해 보고 다른 구간이나 파일을 골라 주세요.")
+        assertTrue(rewards.available(RewardKind.ANALYSIS))
+        analyzer.fail = false
+        analyzer.withhold = true
+        click("이 구간 소리로 번역하기")
+        awaitText("시험: 판단할 소리가 부족해요.")
+        assertTrue(rewards.available(RewardKind.ANALYSIS))
+        analyzer.withhold = false
+        click("이 구간 소리로 번역하기")
+        awaitResult()
+        assertFalse(rewards.available(RewardKind.ANALYSIS))
+    }
+
+    @Test fun subscriberDoesNotSpendAnEarnedReward() {
+        val rewards = TestRewardAccess().apply { earn(RewardKind.ANALYSIS) }
+        start(paid = true, rewards = rewards)
+        setEnd(20_000f)
+        click("이 구간 소리로 번역하기")
+        awaitResult()
+        assertTrue(rewards.available(RewardKind.ANALYSIS))
+    }
+
     private data class Call(val number: Int, val range: ClipRange, val visual: Boolean,
                             val gate: CompletableDeferred<Unit>?, val finished: AtomicBoolean = AtomicBoolean(false))
 
@@ -183,6 +256,8 @@ class CaptureAccessLimitsTest {
         @Volatile var hold: CompletableDeferred<Unit>? = null
         @Volatile var ignoreCancellation = false
         @Volatile var beforeReturn: (() -> Unit)? = null
+        @Volatile var fail = false
+        @Volatile var withhold = false
 
         override suspend fun analyze(context: Context, uri: Uri, range: ClipRange, visual: Boolean): ClipAnalysisResult {
             val call = Call(calls.size + 1, range, visual, hold)
@@ -191,6 +266,8 @@ class CaptureAccessLimitsTest {
                 if (ignoreCancellation) withContext(NonCancellable) { call.gate?.await() }
                 else call.gate?.await()
                 beforeReturn?.invoke()
+                if (fail) error("Synthetic model failure")
+                if (withhold) return ClipAnalysisResult(null, problem = "시험: 판단할 소리가 부족해요.")
                 return ClipAnalysisResult(ClipInterpretation("테스트 한마디 ${call.number}", "테스트 소리",
                     "테스트에서 제공한 근거", "테스트 안내", range.label(), visual))
             } finally { call.finished.set(true) }

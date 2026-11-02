@@ -1,0 +1,38 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaPerformanceTest:
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaPerformanceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=retainedTwentySecondInputCompletesWithoutFabricatingLowFrameRateCoverage
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstIntegratedPerformanceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.AstIntegratedPerformanceTest:
+INSTRUMENTATION_STATUS: test=measureActualVisualTenAndTwentySecondCalls
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.AstIntegratedPerformanceTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=measureActualVisualTenAndTwentySecondCalls
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 22.224
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,37 @@
+{
+  "targets": [
+    {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\paid-launch-20261024\\final\\Agattok-0.5.27-release-code41.aab",
+      "kind": "file",
+      "bytes": 160294042,
+      "sha256": "5a1140fb27d4a4550d6c916476a40eae03c320aec5d2d5a1e6179adbad1cb159",
+      "reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\paid-launch-20261024\\final\\Agattok-0.5.27-release-code41.apk",
+      "kind": "file",
+      "bytes": 255265516,
+      "sha256": "6bdb5d2f7b098006c3f1c9eebf78bef8fea7a306873608bb6b8e530a59104902",
+      "reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\final\\Agattok-0.5.27-release-code41.aab",
+      "kind": "file",
+      "bytes": 163130778,
+      "sha256": "a870434ed2e3fd8e4c3f176533dd8d22bf529e8400fd5a1c9115f07087ee2d87",
+      "reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    },
+    {
+      "path": "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\final\\Agattok-0.5.27-release-code41.apk",
+      "kind": "file",
+      "bytes": 258196378,
+      "sha256": "eb09e4b1cb824b7d741e21e10fc50c22e0596856f0ef817b688aa8be753e7c04",
+      "reason": "Superseded code41 intermediate; exact delivered package and reports preserved"
+    }
+  ],
+  "preserved_release_roots": {
+    "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\rewarded-launch-20261024\\delivery": "Exact internal Play code41",
+    "C:\\Users\\최용우\\Documents\\Codex\\2026-09-29\\plugin-browser-openai-bundled-mention-tab\\work\\community-release-20261022\\final": "Previous beta40 and policy baseline"
+  },
+  "blocked_legacy_folders_excluded": true
+}

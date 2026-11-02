@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "checked_at_kst": "2026-10-23T20:08:51+09:00",
+  "status": "production_access_approved_launch_scope_pending",
+  "production_access_approved": true,
+  "alpha_available_version_code": 40,
+  "alpha_published_at_kst": "2026-10-22T21:31:00+09:00",
+  "production_track": "inactive",
+  "production_countries_selected": false,
+  "subscriptions_registered": false,
+  "public_launch_authorized": true,
+  "commercial_scope_reply_pending": true,
+  "source_version": "0.5.27",
+  "source_version_code": 41,
+  "final_signed_artifact_created": false,
+  "play_upload_submitted": false,
+  "public_available": false,
+  "checks": {
+    "release_compile": "pass",
+    "release_lint_errors": 0,
+    "release_lint_warnings": 14,
+    "release_lint_hints": 1,
+    "release_tool_tests": 15,
+    "model_pins": "pass",
+    "physical_arm_proof": "pass_existing_20261022",
+    "mixed_beta_rejected": true,
+    "wrong_variant_rejected": true,
+    "missing_proof_rejected": true
+  },
+  "initial_failure": "11 Media3 opt-in lint errors; explicit AndroidX OptIn added to MomentCardRenderer.frame",
+  "model_threshold_changed": false,
+  "phone_used": false,
+  "new_schedule_created": false,
+  "remaining": [
+    "User launch access scope selection",
+    "Final package and user-visible access configuration",
+    "Final package signature/model/flags and beta40-to-production41 runtime preservation QA",
+    "Production country selection and release submission",
+    "Actual Google publication status"
+  ]
+}

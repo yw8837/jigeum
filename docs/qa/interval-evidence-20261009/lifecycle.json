@@ -1,0 +1,16 @@
+{
+  "stopped": {
+    "success": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\state\\.omx\\state\\ultraqa-state.json"
+  },
+  "clear": {
+    "cleared": true,
+    "mode": "ultraqa",
+    "path": "C:\\Users\\최용우\\.codex\\worktrees\\ondevice-av-probe\\plugin-browser-openai-bundled-mention-tab\\work\\interval-evidence-20261009\\state\\.omx\\state\\ultraqa-state.json"
+  },
+  "read": {
+    "exists": false,
+    "mode": "ultraqa"
+  }
+}

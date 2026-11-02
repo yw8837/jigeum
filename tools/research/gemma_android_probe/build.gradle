@@ -1,0 +1,54 @@
+plugins { id 'com.android.application' version '8.13.2' }
+
+android {
+    namespace 'com.agattok.gemmaprobe'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'com.agattok.gemmaprobe'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName 'research-0.1'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes { debug { debuggable true } }
+}
+
+dependencies {
+    implementation('com.google.ai.edge.litertlm:litertlm-android:0.17.1') {
+        version { strictly '0.17.1' }
+    }
+}
+
+// This independent APK must never become a release/Play artifact.
+gradle.taskGraph.whenReady { graph ->
+    if (graph.allTasks.any { it.name.toLowerCase(Locale.ROOT).contains('release') }) {
+        throw new GradleException('Gemma research runner refuses all release tasks')
+    }
+}
+if (gradle.startParameter.taskNames.any { it.toLowerCase(Locale.ROOT).contains('release') }) {
+    throw new GradleException('Gemma research runner refuses all release tasks')
+}
+
+def verifyPinnedSdk = tasks.register('verifyPinnedSdk') {
+    doLast {
+        def artifacts = configurations.debugRuntimeClasspath.resolvedConfiguration.resolvedArtifacts
+        def sdk = artifacts.find { it.moduleVersion.id.group == 'com.google.ai.edge.litertlm' && it.name == 'litertlm-android' }
+        if (sdk == null || sdk.moduleVersion.id.version != '0.17.1' || sdk.file.length() != 20493837L) {
+            throw new GradleException('Pinned LiteRT-LM AAR missing or wrong size/version')
+        }
+        def digest = java.security.MessageDigest.getInstance('SHA-256')
+        sdk.file.withInputStream { stream ->
+            byte[] buffer = new byte[1048576]
+            for (int n = stream.read(buffer); n != -1; n = stream.read(buffer)) digest.update(buffer, 0, n)
+        }
+        if (digest.digest().encodeHex().toString() != 'a8aeaa6b128e9b0f1c7fe5e620932a7030cfff1ac9c0dc133d8c79711de5cf4d') {
+            throw new GradleException('Pinned LiteRT-LM AAR hash mismatch')
+        }
+    }
+}
+tasks.named('preBuild').configure { dependsOn verifyPinnedSdk }

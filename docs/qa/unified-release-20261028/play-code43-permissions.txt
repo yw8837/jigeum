@@ -1,0 +1,6 @@
+Browser tab: 1, Title: "버전 검토 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4697837620700937386/releases/3/review".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~							359 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse
+~								382 text 세부정보 숨기기
++							415 text android.permission.ACCESS_ADSERVICES_AD_ID, android.permission.ACCESS_ADSERVICES_ATTRIBUTION, android.permission.ACCESS_ADSERVICES_TOPICS, android.permission.ACCESS_NETWORK_STATE, android.permission.CAMERA, android.permission.FOREGROUND_SERVICE, android.permission.INTERNET, android.permission.READ_EXTERNAL_STORAGE, android.permission.RECORD_AUDIO, android.permission.WAKE_LOCK, android.permission.WRITE_EXTERNAL_STORAGE, com.android.vending.BILLING, com.android.vending.CHECK_LICENSE, com.google.android.gms.permission.AD_ID, com.moa.babylanguage.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+The focused UI element is 359 button (expanded) Description: 세부정보 숨기기, Secondary Actions: Collapse

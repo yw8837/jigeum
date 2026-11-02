@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "actual_play_install_tested": false,
+  "physical_device": false,
+  "scenarios": [
+    "Signed beta37 actual AV analysis, save, and MP4 export without purchase",
+    "Same-key release37 relocks visual/PDF and 60/10 capture while saved MP4 hash remains identical"
+  ],
+  "analysis_ui_seconds": 9.612,
+  "beta_media": {
+    "name": "아가톡-1791550311191.mp4",
+    "bytes": 932978,
+    "sha256": "da0c676ed86e26cffde556172847825daa2d7786fe17d009155692392707ae88",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "release_media": {
+    "name": "아가톡-1791550311191.mp4",
+    "bytes": 932978,
+    "sha256": "da0c676ed86e26cffde556172847825daa2d7786fe17d009155692392707ae88",
+    "duration": "10.000000",
+    "streams": [
+      "audio",
+      "video"
+    ]
+  },
+  "owned_external_files_removed": true
+}

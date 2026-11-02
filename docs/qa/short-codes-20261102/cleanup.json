@@ -1,0 +1,17 @@
+{
+  "scope": "D:\\Codex\\Agattok\\short-codes-20261102",
+  "build_path": "D:\\Codex\\Agattok\\short-codes-20261102\\build",
+  "build_present": true,
+  "build_logical_bytes": 2718239425,
+  "build_deletion": "blocked_by_automatic_approval_policy_before_execution",
+  "blocked_action_retried": false,
+  "basic_qa_apks_preserved": true,
+  "final45_and_previous44_preserved": true,
+  "frozen_proof_pair_preserved": true,
+  "previous_blocked_targets_untouched": true,
+  "drive_free_bytes": 37604556800,
+  "owned_emulator_app_removed": true,
+  "owned_xml_and_external_fixtures_removed": true,
+  "owned_emulator_stopped": true,
+  "phone_qa_cleanup_complete": true
+}

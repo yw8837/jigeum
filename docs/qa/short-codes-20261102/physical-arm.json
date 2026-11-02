@@ -1,0 +1,257 @@
+{
+  "run_id": "6e0917c89eb742b9bd6162efa4e55a73",
+  "status": "pass",
+  "quality_validated": false,
+  "stage": "complete",
+  "storage_before": {
+    "measured_at": "2026-11-01T17:51:24.059527+00:00",
+    "scope": "D:\\Codex\\Agattok\\short-codes-20261102\\arm01",
+    "file_count": 0,
+    "folder_logical_bytes": 0,
+    "drive_free_bytes": 40020869120
+  },
+  "candidate_revision": "caption-short-codes-20261102",
+  "app_manifest": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "permissions": [
+      "android.permission.ACCESS_ADSERVICES_AD_ID",
+      "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+      "android.permission.ACCESS_ADSERVICES_TOPICS",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.CAMERA",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.WAKE_LOCK",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "com.google.android.gms.permission.AD_ID",
+      "com.moa.babylanguage.astcandidate.releaseqa.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ]
+  },
+  "test_manifest": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa.test",
+    "permissions": [
+      "android.permission.REORDER_TASKS"
+    ]
+  },
+  "provenance": {
+    "app_apk": {
+      "path": "D:\\Codex\\Agattok\\short-codes-20261102\\arm01\\.frozen-apks-s44twz82\\probe-app.apk",
+      "sha256": "a1cd56e88a36fc42751a5e7b27a2ad2b506d02b9d96c67f69444075a0c01df9c",
+      "bytes": 267839660
+    },
+    "test_apk": {
+      "path": "D:\\Codex\\Agattok\\short-codes-20261102\\arm01\\.frozen-apks-s44twz82\\probe-test.apk",
+      "sha256": "a71192e894f12633163cd30f20ad26e92dcc6ddb65fe4de39f43afbc2565c042",
+      "bytes": 2585907
+    },
+    "git": {
+      "sha": "bf08dd63e894e9583b0b64154d4c29601c117554",
+      "dirty": true,
+      "porcelain": [
+        " M outputs/MoaAndroid/app/build.gradle.kts",
+        " M outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/AccessCodeTest.kt",
+        " M outputs/MoaAndroid/app/src/astProbeAndroidTest/java/com/moa/babylanguage/AstDeviceBenchmarkTest.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeSection.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeVerifier.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/BillingManager.kt",
+        " M outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/ReviewAccessVerifier.kt",
+        " M outputs/PlayVerifier/src/access-codes.js",
+        " M outputs/PlayVerifier/src/server.js",
+        " M tools/deploy/access-codes-plan.json",
+        " M tools/qa/access_code_release_smoke.py",
+        " M tools/release/test_verify_infant_presence_arm.py",
+        " M tools/release/verify_infant_presence_arm.py",
+        " M tools/research/ast_device_benchmark.py",
+        "?? docs/qa/dex-review-20261102/remediation.md",
+        "?? docs/qa/short-codes-20261102/",
+        "?? outputs/MoaAndroid/app/src/androidTest/java/com/moa/babylanguage/ShortAccessCodeTest.kt",
+        "?? outputs/MoaAndroid/app/src/main/java/com/moa/babylanguage/AccessCodeInput.kt",
+        "?? outputs/PlayVerifier/src/campaign-reservations.js",
+        "?? outputs/PlayVerifier/test/campaign-dashboard.test.js",
+        "?? outputs/PlayVerifier/test/shared-campaign.test.js",
+        "?? tools/access-campaign/",
+        "?? tools/qa/short_code_tests.py"
+      ]
+    }
+  },
+  "physical_device": {
+    "ro.kernel.qemu": "0",
+    "ro.boot.qemu": "",
+    "ro.product.cpu.abi": "arm64-v8a",
+    "ro.product.model": "SM-S938N",
+    "ro.build.version.sdk": "37"
+  },
+  "production_before": {
+    "installed": true,
+    "apk_hashes": [
+      "059d3db7050e9da13ec740cf0a350e177d3d31c44e254dc0f427422110f302ae",
+      "33ca8b8966c50a6e22c1ab10c4a17260e27e0680c483ff70f41ffa8f291e56ac",
+      "66845ad39e4efdc94d5ca13183be34dc5f74ac4fa9266c76b6e34d24369a8211",
+      "6f1b6d415926123561ea11a7f02106e4a336e8c8d684117313ff250c0ad0145a"
+    ],
+    "versionCode": "44 minSdk=26 targetSdk=36",
+    "versionName": "0.5.30",
+    "lastUpdateTime": "2026-10-29 11:55:09"
+  },
+  "app_installed": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "base_apk": "/data/app/~~zu_apXo3YfHNgAmoAcg3yg==/com.moa.babylanguage.astcandidate.releaseqa-UT3ZRRgIPyOrRHRIp4xObg==/base.apk",
+    "sha256": "a1cd56e88a36fc42751a5e7b27a2ad2b506d02b9d96c67f69444075a0c01df9c",
+    "expected_sha256": "a1cd56e88a36fc42751a5e7b27a2ad2b506d02b9d96c67f69444075a0c01df9c",
+    "version_code": 45,
+    "version_name": "0.5.31-astcandidate",
+    "verified": true,
+    "errors": []
+  },
+  "test_installed": {
+    "package": "com.moa.babylanguage.astcandidate.releaseqa.test",
+    "base_apk": "/data/app/~~Rzi7PQXhgzFBkjlnYBieHg==/com.moa.babylanguage.astcandidate.releaseqa.test-QlSrpJH7zw0kS7iFO7bJNg==/base.apk",
+    "sha256": "a71192e894f12633163cd30f20ad26e92dcc6ddb65fe4de39f43afbc2565c042",
+    "expected_sha256": "a71192e894f12633163cd30f20ad26e92dcc6ddb65fe4de39f43afbc2565c042",
+    "version_code": 0,
+    "version_name": "null",
+    "verified": true,
+    "errors": []
+  },
+  "benchmark": {
+    "status": "pass",
+    "tests": 1,
+    "passed_tests": 1,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 12.64,
+    "exit": 0
+  },
+  "measurement": {
+    "run_id": "6e0917c89eb742b9bd6162efa4e55a73",
+    "status": "completed",
+    "model_sha256": "4a378476dcbe5f6b13c5f67295797d59376dab3627fe3dbd56bfeeadbd7f802a",
+    "device_model": "SM-S938N",
+    "api": 37,
+    "abi": "arm64-v8a",
+    "synthetic_only": true,
+    "infant_presence_candidate": true,
+    "cases": [
+      {
+        "index": 0,
+        "duration_ms": 10000,
+        "input_samples": 160000,
+        "elapsed_ms": 2429,
+        "peak_sampled_pss_kb": 520199,
+        "pss_samples": 23,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          }
+        ],
+        "caption_native_windows": 1,
+        "caption_scores_finite": true
+      },
+      {
+        "index": 1,
+        "duration_ms": 20000,
+        "input_samples": 320000,
+        "elapsed_ms": 4486,
+        "peak_sampled_pss_kb": 529607,
+        "pss_samples": 41,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          },
+          {
+            "start_ms": 5000,
+            "end_ms": 15000
+          },
+          {
+            "start_ms": 10000,
+            "end_ms": 20000
+          }
+        ],
+        "caption_native_windows": 3,
+        "caption_scores_finite": true
+      },
+      {
+        "index": 2,
+        "duration_ms": 20000,
+        "input_samples": 320000,
+        "elapsed_ms": 4453,
+        "peak_sampled_pss_kb": 536750,
+        "pss_samples": 41,
+        "thermal_before": 0,
+        "thermal_after": 0,
+        "problem": null,
+        "windows": [
+          {
+            "start_ms": 0,
+            "end_ms": 10000
+          },
+          {
+            "start_ms": 5000,
+            "end_ms": 15000
+          },
+          {
+            "start_ms": 10000,
+            "end_ms": 20000
+          }
+        ],
+        "caption_native_windows": 3,
+        "caption_scores_finite": true
+      }
+    ],
+    "infant_caption_candidate": true,
+    "research_package": "com.moa.babylanguage.astcandidate.releaseqa",
+    "candidate_revision": "caption-short-codes-20261102",
+    "caption_head_sha256": "979e79448a5b27293c02642eb8a72ccc6fbf322fd16cc9ee43a467e7434c2df1"
+  },
+  "recovery": {
+    "status": "pass",
+    "tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 5.95,
+    "exit": 0
+  },
+  "cleanup_complete": true,
+  "production_after": {
+    "installed": true,
+    "apk_hashes": [
+      "059d3db7050e9da13ec740cf0a350e177d3d31c44e254dc0f427422110f302ae",
+      "33ca8b8966c50a6e22c1ab10c4a17260e27e0680c483ff70f41ffa8f291e56ac",
+      "66845ad39e4efdc94d5ca13183be34dc5f74ac4fa9266c76b6e34d24369a8211",
+      "6f1b6d415926123561ea11a7f02106e4a336e8c8d684117313ff250c0ad0145a"
+    ],
+    "versionCode": "44 minSdk=26 targetSdk=36",
+    "versionName": "0.5.30",
+    "lastUpdateTime": "2026-10-29 11:55:09"
+  },
+  "production_install_unchanged": true,
+  "frozen_apk_copies_removed": true,
+  "storage_after": {
+    "measured_at": "2026-11-01T17:52:27.204751+00:00",
+    "scope": "D:\\Codex\\Agattok\\short-codes-20261102\\arm01",
+    "file_count": 5,
+    "folder_logical_bytes": 4575,
+    "drive_free_bytes": 40020213760
+  },
+  "completed_at": "2026-11-01T17:52:27.205811+00:00",
+  "arm_gate_passed": true
+}

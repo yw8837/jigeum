@@ -1,0 +1,151 @@
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+com.moa.babylanguage.SavedMediaFlowTest:
+INSTRUMENTATION_STATUS: test=failedAnalysisStillSavesVideoWithoutSentence
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.failedAnalysisStillSavesVideoWithoutSentence(SavedMediaFlowTest.kt:148)
+
+INSTRUMENTATION_STATUS: stream=
+Error in failedAnalysisStillSavesVideoWithoutSentence(com.moa.babylanguage.SavedMediaFlowTest):
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.failedAnalysisStillSavesVideoWithoutSentence(SavedMediaFlowTest.kt:148)
+
+INSTRUMENTATION_STATUS: test=failedAnalysisStillSavesVideoWithoutSentence
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=galleryVideoResultSavesPngMp4AndSceneRecord
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=hdrImportedVideoCanRenderCaption
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: 이 장면의 카드 이미지를 만들지 못했어요. 영상으로 저장하거나 다른 구간을 골라 주세요.
+	at com.moa.babylanguage.MomentCardRenderer.frame(ResultMomentCard.kt:44)
+	at com.moa.babylanguage.SavedMediaFlowTest$hdrImportedVideoCanRenderCaption$1.invokeSuspend(SavedMediaFlowTest.kt:166)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:164)
+
+INSTRUMENTATION_STATUS: stream=
+Error in hdrImportedVideoCanRenderCaption(com.moa.babylanguage.SavedMediaFlowTest):
+java.lang.IllegalStateException: 이 장면의 카드 이미지를 만들지 못했어요. 영상으로 저장하거나 다른 구간을 골라 주세요.
+	at com.moa.babylanguage.MomentCardRenderer.frame(ResultMomentCard.kt:44)
+	at com.moa.babylanguage.SavedMediaFlowTest$hdrImportedVideoCanRenderCaption$1.invokeSuspend(SavedMediaFlowTest.kt:166)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:164)
+
+INSTRUMENTATION_STATUS: test=hdrImportedVideoCanRenderCaption
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.moa.babylanguage.SavedMediaFlowTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord(SavedMediaFlowTest.kt:137)
+
+INSTRUMENTATION_STATUS: stream=
+Error in withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord(com.moa.babylanguage.SavedMediaFlowTest):
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord(SavedMediaFlowTest.kt:137)
+
+INSTRUMENTATION_STATUS: test=withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 47.707
+There were 3 failures:
+1) failedAnalysisStillSavesVideoWithoutSentence(com.moa.babylanguage.SavedMediaFlowTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.failedAnalysisStillSavesVideoWithoutSentence(SavedMediaFlowTest.kt:148)
+2) hdrImportedVideoCanRenderCaption(com.moa.babylanguage.SavedMediaFlowTest)
+java.lang.IllegalStateException: 이 장면의 카드 이미지를 만들지 못했어요. 영상으로 저장하거나 다른 구간을 골라 주세요.
+	at com.moa.babylanguage.MomentCardRenderer.frame(ResultMomentCard.kt:44)
+	at com.moa.babylanguage.SavedMediaFlowTest$hdrImportedVideoCanRenderCaption$1.invokeSuspend(SavedMediaFlowTest.kt:166)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.moa.babylanguage.SavedMediaFlowTest.hdrImportedVideoCanRenderCaption(SavedMediaFlowTest.kt:164)
+3) withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord(com.moa.babylanguage.SavedMediaFlowTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.moa.babylanguage.SavedMediaFlowTest.assertPlainVideo(SavedMediaFlowTest.kt:159)
+	at com.moa.babylanguage.SavedMediaFlowTest.withheldAnalysisCanSaveSelectedVideoWithoutInventingRecord(SavedMediaFlowTest.kt:137)
+
+FAILURES!!!
+Tests run: 4,  Failures: 3
+
+
+INSTRUMENTATION_CODE: -1

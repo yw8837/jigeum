@@ -1,0 +1,740 @@
+{
+  "date": "2026-10-04",
+  "scope": "Local development probes; not Android rollout or accuracy validation",
+  "private_media_included": false,
+  "private_response_text_included": false,
+  "quality_validated": false,
+  "android_validated": false,
+  "scores_are_calibrated_probabilities": false,
+  "scores_are_loudness": false,
+  "owner_cases_are_independent_evaluation": false,
+  "source_summary_sha256": {
+    "ast-initial": "8aa8bdf6f06c3fe50d9090f381235e07ed21ae1438a142611ab23df5555f6069",
+    "ast-evaluation": "58d8b55b517c20f72fc4182d2a4dc846f5cd43c970d6656548029188e123fdb2",
+    "yamnet-owner2": "296bd4ec1e2d7d39de2c2af93d97df0f5b864dc012fce26b27dd0bcc2c643824"
+  },
+  "yamnet_same_input_comparison": [
+    {
+      "case": "owner2_10",
+      "model": "current",
+      "preprocess": "raw",
+      "max_groups": {
+        "cry": 0.0,
+        "laugh": 0.0,
+        "babble": 0.0,
+        "child": 0.04296875,
+        "generic_cry": 0.0,
+        "generic_laugh": 0.0,
+        "scream": 0.0,
+        "speech": 0.33203125,
+        "background": 0.5
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_10",
+      "model": "current",
+      "preprocess": "app_filter",
+      "max_groups": {
+        "cry": 0.0,
+        "laugh": 0.0,
+        "babble": 0.0,
+        "child": 0.05859375,
+        "generic_cry": 0.0,
+        "generic_laugh": 0.0,
+        "scream": 0.0,
+        "speech": 0.4140625,
+        "background": 0.5859375
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_10",
+      "model": "original_float",
+      "preprocess": "raw",
+      "max_groups": {
+        "cry": 0.001362878130748868,
+        "laugh": 2.4653309083078057e-05,
+        "babble": 0.0006939865997992456,
+        "child": 0.15779997408390045,
+        "generic_cry": 0.0028025151696056128,
+        "generic_laugh": 0.0022878432646393776,
+        "scream": 0.0011447994038462639,
+        "speech": 0.5891077518463135,
+        "background": 0.20328153669834137
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_10",
+      "model": "original_float",
+      "preprocess": "app_filter",
+      "max_groups": {
+        "cry": 0.0010495855240151286,
+        "laugh": 4.1840503399726003e-05,
+        "babble": 0.0009877331322059035,
+        "child": 0.17634660005569458,
+        "generic_cry": 0.0022054119035601616,
+        "generic_laugh": 0.002184008713811636,
+        "scream": 0.0007842765189707279,
+        "speech": 0.5540558695793152,
+        "background": 0.27238142490386963
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_20",
+      "model": "current",
+      "preprocess": "raw",
+      "max_groups": {
+        "cry": 0.0,
+        "laugh": 0.0,
+        "babble": 0.0,
+        "child": 0.04296875,
+        "generic_cry": 0.0,
+        "generic_laugh": 0.00390625,
+        "scream": 0.0,
+        "speech": 0.8515625,
+        "background": 0.5
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_20",
+      "model": "current",
+      "preprocess": "app_filter",
+      "max_groups": {
+        "cry": 0.0,
+        "laugh": 0.0,
+        "babble": 0.0,
+        "child": 0.05859375,
+        "generic_cry": 0.0,
+        "generic_laugh": 0.00390625,
+        "scream": 0.0,
+        "speech": 0.890625,
+        "background": 0.5859375
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_20",
+      "model": "original_float",
+      "preprocess": "raw",
+      "max_groups": {
+        "cry": 0.0008286683005280793,
+        "laugh": 2.4653309083078057e-05,
+        "babble": 0.0006939865997992456,
+        "child": 0.15779997408390045,
+        "generic_cry": 0.001297317910939455,
+        "generic_laugh": 0.0046729291789233685,
+        "scream": 0.0002860920212697238,
+        "speech": 0.9716460704803467,
+        "background": 0.23954612016677856
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    },
+    {
+      "case": "owner2_20",
+      "model": "original_float",
+      "preprocess": "app_filter",
+      "max_groups": {
+        "cry": 0.0008124796440824866,
+        "laugh": 4.1840503399726003e-05,
+        "babble": 0.0009877331322059035,
+        "child": 0.17634660005569458,
+        "generic_cry": 0.0012664662208408117,
+        "generic_laugh": 0.004513062071055174,
+        "scream": 0.00024540856247767806,
+        "speech": 0.9747189879417419,
+        "background": 0.27238142490386963
+      },
+      "event": "abstain",
+      "reason": "insufficient"
+    }
+  ],
+  "ast_model": {
+    "model": "MIT/ast-finetuned-audioset-10-10-0.4593",
+    "revision": "f826b80d28226b62986cc218e5cec390b1096902",
+    "model_sha256": "ae0c1e2ad4e1381d851fa9bf298ba13ebc9c5a914cdee2dbe427a6583869924d",
+    "config_sha256": "a93d525511d77e8ecc933d09674b85099815bbbb417c228a4edd655e252fb9ff",
+    "preprocessor_sha256": "8d04ba5a9c6fca5d39d0de2b1fd05ecf79deb589fbba279728bbebac39934231",
+    "torch": "2.13.0+cpu",
+    "transformers": "5.14.1",
+    "backend": "cpu",
+    "threads": 4
+  },
+  "ast_cases": {
+    "tone10": {
+      "duration_ms": 10000,
+      "inference_seconds": 0.964,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 8e-06,
+            "Baby cry, infant cry": 1.1e-05,
+            "Baby laughter": 6e-06,
+            "Child speech, kid speaking": 7e-05,
+            "Speech": 0.000761,
+            "Hubbub, speech noise, speech babble": 7e-06,
+            "Sine wave": 0.871971,
+            "Silence": 0.002335,
+            "Music": 0.001603
+          }
+        }
+      ]
+    },
+    "speech10": {
+      "duration_ms": 10000,
+      "inference_seconds": 0.863,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 1.8e-05,
+            "Baby cry, infant cry": 2.1e-05,
+            "Baby laughter": 2.2e-05,
+            "Child speech, kid speaking": 0.00112,
+            "Speech": 0.587925,
+            "Hubbub, speech noise, speech babble": 9.4e-05,
+            "Sine wave": 8.3e-05,
+            "Silence": 0.022425,
+            "Music": 0.001051
+          }
+        }
+      ]
+    },
+    "owner2_10": {
+      "duration_ms": 10000,
+      "inference_seconds": 0.923,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.419032,
+            "Baby cry, infant cry": 0.002595,
+            "Baby laughter": 0.009742,
+            "Child speech, kid speaking": 0.332148,
+            "Speech": 0.712814,
+            "Hubbub, speech noise, speech babble": 0.000442,
+            "Sine wave": 2.7e-05,
+            "Silence": 0.001451,
+            "Music": 0.834885
+          }
+        }
+      ]
+    },
+    "public_cry": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.515,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.007096,
+            "Baby cry, infant cry": 0.62724,
+            "Baby laughter": 0.000801,
+            "Child speech, kid speaking": 0.001218,
+            "Speech": 0.012975,
+            "Hubbub, speech noise, speech babble": 2.1e-05,
+            "Sine wave": 1.6e-05,
+            "Silence": 0.001297,
+            "Music": 0.002008
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.001948,
+            "Baby cry, infant cry": 0.658615,
+            "Baby laughter": 0.000738,
+            "Child speech, kid speaking": 0.001679,
+            "Speech": 0.020526,
+            "Hubbub, speech noise, speech babble": 2.3e-05,
+            "Sine wave": 1.5e-05,
+            "Silence": 0.00134,
+            "Music": 0.001612
+          }
+        }
+      ]
+    },
+    "public_laugh": {
+      "duration_ms": 2479,
+      "inference_seconds": 0.975,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 2479,
+          "monitored_scores": {
+            "Babbling": 0.074298,
+            "Baby cry, infant cry": 0.060122,
+            "Baby laughter": 0.214193,
+            "Child speech, kid speaking": 0.00352,
+            "Speech": 0.04031,
+            "Hubbub, speech noise, speech babble": 3e-05,
+            "Sine wave": 5.8e-05,
+            "Silence": 0.002911,
+            "Music": 0.007705
+          }
+        }
+      ]
+    },
+    "public_babble": {
+      "duration_ms": 2847,
+      "inference_seconds": 1.116,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 2847,
+          "monitored_scores": {
+            "Babbling": 0.002835,
+            "Baby cry, infant cry": 0.066927,
+            "Baby laughter": 0.128572,
+            "Child speech, kid speaking": 0.045226,
+            "Speech": 0.537534,
+            "Hubbub, speech noise, speech babble": 3.8e-05,
+            "Sine wave": 0.0001,
+            "Silence": 0.002192,
+            "Music": 0.005334
+          }
+        }
+      ]
+    },
+    "public_laugh_babble": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.178,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.011012,
+            "Baby cry, infant cry": 0.421059,
+            "Baby laughter": 0.008882,
+            "Child speech, kid speaking": 0.002509,
+            "Speech": 0.009044,
+            "Hubbub, speech noise, speech babble": 1.9e-05,
+            "Sine wave": 4.3e-05,
+            "Silence": 0.002685,
+            "Music": 0.002195
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.064444,
+            "Baby cry, infant cry": 0.279462,
+            "Baby laughter": 0.002263,
+            "Child speech, kid speaking": 0.001386,
+            "Speech": 0.015054,
+            "Hubbub, speech noise, speech babble": 1e-05,
+            "Sine wave": 3e-05,
+            "Silence": 0.004423,
+            "Music": 0.001382
+          }
+        }
+      ]
+    },
+    "public_almost_laugh": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.618,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.125733,
+            "Baby cry, infant cry": 0.153362,
+            "Baby laughter": 0.053768,
+            "Child speech, kid speaking": 0.000794,
+            "Speech": 0.00794,
+            "Hubbub, speech noise, speech babble": 2.8e-05,
+            "Sine wave": 2.2e-05,
+            "Silence": 0.005074,
+            "Music": 0.002851
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.138236,
+            "Baby cry, infant cry": 0.038776,
+            "Baby laughter": 0.151457,
+            "Child speech, kid speaking": 0.001938,
+            "Speech": 0.013182,
+            "Hubbub, speech noise, speech babble": 1.5e-05,
+            "Sine wave": 8.7e-05,
+            "Silence": 0.007721,
+            "Music": 0.001615
+          }
+        }
+      ]
+    },
+    "public_cry_six_month": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.306,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.007306,
+            "Baby cry, infant cry": 0.539745,
+            "Baby laughter": 0.001833,
+            "Child speech, kid speaking": 0.00159,
+            "Speech": 0.010738,
+            "Hubbub, speech noise, speech babble": 2e-05,
+            "Sine wave": 6.2e-05,
+            "Silence": 0.001658,
+            "Music": 0.005846
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.009699,
+            "Baby cry, infant cry": 0.526776,
+            "Baby laughter": 0.007006,
+            "Child speech, kid speaking": 0.003631,
+            "Speech": 0.015641,
+            "Hubbub, speech noise, speech babble": 1.5e-05,
+            "Sine wave": 4.3e-05,
+            "Silence": 0.001657,
+            "Music": 0.008932
+          }
+        }
+      ]
+    },
+    "public_conversation": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.277,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.00243,
+            "Baby cry, infant cry": 0.000102,
+            "Baby laughter": 0.000287,
+            "Child speech, kid speaking": 0.065901,
+            "Speech": 0.925175,
+            "Hubbub, speech noise, speech babble": 0.000193,
+            "Sine wave": 1e-05,
+            "Silence": 0.007677,
+            "Music": 0.001973
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.000131,
+            "Baby cry, infant cry": 2.4e-05,
+            "Baby laughter": 3.1e-05,
+            "Child speech, kid speaking": 0.009049,
+            "Speech": 0.864419,
+            "Hubbub, speech noise, speech babble": 0.000126,
+            "Sine wave": 1.5e-05,
+            "Silence": 0.00176,
+            "Music": 0.028493
+          }
+        }
+      ]
+    },
+    "public_vacuum": {
+      "duration_ms": 15000,
+      "inference_seconds": 1.965,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 5.2e-05,
+            "Baby cry, infant cry": 1.7e-05,
+            "Baby laughter": 1e-05,
+            "Child speech, kid speaking": 0.000452,
+            "Speech": 0.010117,
+            "Hubbub, speech noise, speech babble": 1e-05,
+            "Sine wave": 0.000204,
+            "Silence": 0.001889,
+            "Music": 0.002194
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 3.5e-05,
+            "Baby cry, infant cry": 2.4e-05,
+            "Baby laughter": 5e-06,
+            "Child speech, kid speaking": 0.000488,
+            "Speech": 0.012963,
+            "Hubbub, speech noise, speech babble": 4.2e-05,
+            "Sine wave": 0.000599,
+            "Silence": 0.000825,
+            "Music": 0.004495
+          }
+        }
+      ]
+    },
+    "public_piano": {
+      "duration_ms": 7999,
+      "inference_seconds": 0.975,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 7999,
+          "monitored_scores": {
+            "Babbling": 2.9e-05,
+            "Baby cry, infant cry": 3.1e-05,
+            "Baby laughter": 7.2e-05,
+            "Child speech, kid speaking": 0.00013,
+            "Speech": 0.001747,
+            "Hubbub, speech noise, speech babble": 5.1e-05,
+            "Sine wave": 0.000134,
+            "Silence": 0.000517,
+            "Music": 0.891197
+          }
+        }
+      ]
+    },
+    "public_generic_laugh": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.089,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.000297,
+            "Baby cry, infant cry": 0.000178,
+            "Baby laughter": 0.003558,
+            "Child speech, kid speaking": 0.00091,
+            "Speech": 0.041162,
+            "Hubbub, speech noise, speech babble": 2.2e-05,
+            "Sine wave": 1.4e-05,
+            "Silence": 0.001599,
+            "Music": 0.002108
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.000304,
+            "Baby cry, infant cry": 0.000347,
+            "Baby laughter": 0.004708,
+            "Child speech, kid speaking": 0.001145,
+            "Speech": 0.057822,
+            "Hubbub, speech noise, speech babble": 4.5e-05,
+            "Sine wave": 3.3e-05,
+            "Silence": 0.002813,
+            "Music": 0.004025
+          }
+        }
+      ]
+    },
+    "public_babble_seven_month": {
+      "duration_ms": 15000,
+      "inference_seconds": 2.005,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.077433,
+            "Baby cry, infant cry": 0.000825,
+            "Baby laughter": 0.000357,
+            "Child speech, kid speaking": 0.421634,
+            "Speech": 0.736336,
+            "Hubbub, speech noise, speech babble": 3.2e-05,
+            "Sine wave": 6e-06,
+            "Silence": 0.002274,
+            "Music": 0.001235
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.15936,
+            "Baby cry, infant cry": 0.002752,
+            "Baby laughter": 0.002676,
+            "Child speech, kid speaking": 0.520459,
+            "Speech": 0.868484,
+            "Hubbub, speech noise, speech babble": 3.7e-05,
+            "Sine wave": 1.1e-05,
+            "Silence": 0.001733,
+            "Music": 0.000829
+          }
+        }
+      ]
+    },
+    "owner2_20": {
+      "duration_ms": 20000,
+      "inference_seconds": 3.137,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000,
+          "monitored_scores": {
+            "Babbling": 0.419032,
+            "Baby cry, infant cry": 0.002595,
+            "Baby laughter": 0.009742,
+            "Child speech, kid speaking": 0.332148,
+            "Speech": 0.712814,
+            "Hubbub, speech noise, speech babble": 0.000442,
+            "Sine wave": 2.7e-05,
+            "Silence": 0.001451,
+            "Music": 0.834885
+          }
+        },
+        {
+          "start_ms": 5000,
+          "end_ms": 15000,
+          "monitored_scores": {
+            "Babbling": 0.005229,
+            "Baby cry, infant cry": 0.00193,
+            "Baby laughter": 0.000359,
+            "Child speech, kid speaking": 0.033471,
+            "Speech": 0.783536,
+            "Hubbub, speech noise, speech babble": 0.001472,
+            "Sine wave": 8.1e-05,
+            "Silence": 0.000709,
+            "Music": 0.779811
+          }
+        },
+        {
+          "start_ms": 10000,
+          "end_ms": 20000,
+          "monitored_scores": {
+            "Babbling": 0.013788,
+            "Baby cry, infant cry": 0.001821,
+            "Baby laughter": 0.000282,
+            "Child speech, kid speaking": 0.045097,
+            "Speech": 0.814947,
+            "Hubbub, speech noise, speech babble": 0.005378,
+            "Sine wave": 3.1e-05,
+            "Silence": 0.001061,
+            "Music": 0.832588
+          }
+        }
+      ]
+    }
+  },
+  "synthetic_av_controls": {
+    "event10-av-4k": {
+      "status": "observed",
+      "inference_seconds": 47.713,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": false,
+      "media_order": null,
+      "quality_validated": false,
+      "semantic_note": "Only the first three seconds described; temporal coverage failed.",
+      "source_summary_sha256": "b52dcb75ee800c80f2f315964a18c068c851793c2c6c30c5af6ed1044852b850"
+    },
+    "whole10-av-4k": {
+      "status": "observed",
+      "inference_seconds": 42.613,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": null,
+      "quality_validated": false,
+      "semantic_note": "Red then blue described; invented stripes and audio confusion remain.",
+      "source_summary_sha256": "06310658ea02ef7081372326f59d4f5c70859604343afcfae914153c7202ec3f"
+    },
+    "whole10-reverse-4k": {
+      "status": "observed",
+      "inference_seconds": 36.486,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": null,
+      "quality_validated": false,
+      "semantic_note": "Blue then red described; supplied audio omitted.",
+      "source_summary_sha256": "05d9a4a40206578fcd36e3633740c03afcba4d844b5ffa52c21336bb4eca6ffe"
+    },
+    "whole10-tone-4k": {
+      "status": "observed",
+      "inference_seconds": 20.949,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": null,
+      "quality_validated": false,
+      "semantic_note": "Invented clicks and a visual scene despite audio-only input.",
+      "source_summary_sha256": "aa82aee0e0a51d2f4a47a31ec489e5b4731d4c726329cc03e39c6b5250241fc6"
+    },
+    "whole20-av-8k": {
+      "status": "invalid",
+      "inference_seconds": 111.059,
+      "exit_code": 0,
+      "schema_errors": [
+        "non_json_response"
+      ],
+      "context_tokens": 8192,
+      "whole_interval": true,
+      "media_order": null,
+      "quality_validated": false,
+      "semantic_note": "Repetitive imaginary events; 450-token cap and non-JSON response.",
+      "source_summary_sha256": "e1cafcd4541730800056998056d0d351c29cfdf7fe26fa44ad3b611ca5100921"
+    },
+    "recommended10-av-4k-valid": {
+      "status": "observed",
+      "inference_seconds": 37.51,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": "recommended",
+      "quality_validated": false,
+      "semantic_note": "Recommended image/text/audio order still confuses colors with audio, invents stripes and omits the tone.",
+      "source_summary_sha256": "fc7a0731b661974c848da884d404ff4d7a69f879f8ef3a4267a95b398f3c5aaf"
+    },
+    "recommended10-reverse-4k": {
+      "status": "observed",
+      "inference_seconds": 40.284,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": "recommended",
+      "quality_validated": false,
+      "semantic_note": "Recommended order partially retains reversal but invents stripes and places the 5-second transition at 4 seconds.",
+      "source_summary_sha256": "0a14ecd4254544be09b41a518846033a1a66779aef33ca232d081dd3a35308bc"
+    },
+    "recommended10-tone-4k": {
+      "status": "observed",
+      "inference_seconds": 14.72,
+      "exit_code": 0,
+      "schema_errors": [],
+      "context_tokens": 4096,
+      "whole_interval": true,
+      "media_order": "recommended",
+      "quality_validated": false,
+      "semantic_note": "Recommended order audio-only input still invents clicks and an absent visual scene.",
+      "source_summary_sha256": "728486ec18b2cc0f4501b9368711f447d65a14c90ddcaaef09e3c95de8093510"
+    }
+  }
+}

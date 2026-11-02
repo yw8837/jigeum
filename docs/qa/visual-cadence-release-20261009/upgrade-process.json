@@ -1,0 +1,9 @@
+{
+  "mode": "upgrade",
+  "status": "pass",
+  "timeout_seconds": 700,
+  "synthetic_or_public_fixture_only": true,
+  "avd": "MoaQA35",
+  "exit": 0,
+  "seconds": 209.73
+}

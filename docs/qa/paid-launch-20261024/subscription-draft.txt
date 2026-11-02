@@ -1,0 +1,118 @@
+Browser tab: 7, Title: "정기 결제 수정 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album".
+0 AXWebArea 정기 결제 수정 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 button 탐색 사이드바 표시
+				6 button 읽지 않은 알림 알림 센터 열기
+			7 content list
+				8 container 홈
+					9 button 홈
+						10 text 홈
+				11 container 계정 관리
+					12 button 계정 관리
+						13 text 계정 관리
+				14 container 아가톡 - 지금 내 기분이 그래
+					15 pop up button 아가톡 - 지금 내 기분이 그래
+				16 container 대시보드
+					17 button 대시보드
+						18 text 대시보드
+				19 container 통계
+					20 button 통계
+						21 text 통계
+				22 container 게시 개요
+					23 button 게시 개요
+						24 text 게시 개요
+				25 container Google Play로 보호됨
+					26 button Google Play로 보호됨
+						27 text Google Play로 보호됨
+				28 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					29 button 테스트 및 출시
+						30 text 테스트 및 출시
+				31 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+					32 button 모니터링 및 개선
+						33 text 모니터링 및 개선
+				34 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					35 button 사용자 늘리기
+						36 text 사용자 늘리기
+				37 container (expanded) Description: Play를 통한 수익 창출, Secondary Actions: Collapse
+					38 button Play를 통한 수익 창출
+						39 text Play를 통한 수익 창출
+					40 content list
+						41 container
+							42 container (expanded) Description: 제품, Secondary Actions: Collapse
+								43 button 제품
+								44 content list
+									45 container
+										46 container 앱 가격
+											47 button 앱 가격
+										48 container 일회성 제품
+											49 button 일회성 제품
+										50 container 정기 결제
+											51 button 정기 결제
+							52 container 상품화 및 최적화
+								53 button 상품화 및 최적화
+							54 container 가격 실험
+								55 button 가격 실험
+							56 container 프로모션 코드
+								57 button 프로모션 코드
+							58 container (collapsed) Description: 재무 보고서, Secondary Actions: Expand
+								59 button 재무 보고서
+							60 container 수익 창출 설정
+								61 button 수익 창출 설정
+			62 container main-content
+				63 container
+					64 link Description: 정기 결제 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions
+					65 heading 아가톡 전체 이용권, Value: 1
+						66 text 아가톡 전체 이용권
+					95 button 삭제
+						96 text 삭제
+					97 heading 정기 결제 설정, Value: 3
+						98 text 정기 결제 설정
+					99 text 정기 결제를 구매할 수 있도록 혜택을 설명한 후 기본 요금제와 혜택을 만드세요.
+					100 progress indicator Description: 정기 결제 설정, Value: 25
+					101 button (expanded) Description: 정기 결제 설정의 완료된 작업 4개 중 1개 숨기기, Secondary Actions: Collapse
+						102 text 1/4 완료
+					103 container
+						104 container 작업이 완료됨 정기 결제 혜택 추가(권장)
+							105 text 정기 결제 혜택 추가(권장)
+						106 button 기본 요금제 추가
+						107 container 작업이 잠김 무료 체험과 같은 혜택 추가(선택사항)
+							108 text 무료 체험과 같은 혜택 추가(선택사항)
+						109 container 작업이 잠김 정기 결제를 구매할 수 있도록 기본 요금제를 활성화하세요.
+							110 text 정기 결제를 구매할 수 있도록 기본 요금제를 활성화하세요.
+					67 heading 구독 세부정보, Value: 2
+						68 text 구독 세부정보
+					69 button 정기 결제 항목 세부정보 수정
+						70 text 정기 결제 항목 세부정보 수정
+					71 text 제품 ID
+					72 text jigeum_album
+					73 text 혜택
+					74 content list
+						75 text 최대 2분 촬영·200MB 영상 가져오기
+						76 container
+							77 text 최대 20초 소리 분석과 같은 구간 시각 관찰
+						78 container
+							79 text 월별 PDF 아기말북 만들기
+					80 text 세금 및 정책 설정
+					111 content list
+						112 text 디지털 앱 판매
+						113 container
+							114 text 서비스
+					81 heading 기본 요금제 및 혜택, Value: 2
+						82 text 기본 요금제 및 혜택
+					83 button (collapsed) Description: "기본 요금제 및 혜택"에 대한 추가 정보, Secondary Actions: Expand
+					84 text 이 정기 결제를 제공하려면 1개 이상의 기본 요금제를 추가하고 게시하세요. 언제든지 혜택 및 추가 기본 요금제를 만들 수 있습니다.
+					85 button 기본 요금제 추가
+						86 text 기본 요금제 추가
+					87 link Description: 새 기본 요금제 추가 자세히 알아보기, Value: support.google.com/googleplay/android-developer/answer/12154973#overview_base_plan
+				88 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				89 link Description: 상태 대시보드, Value: status.play.google.com/
+				90 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				91 text © 2026 Google
+				92 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				93 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				94 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 정기 결제 수정 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/subscriptions/s/jigeum_album

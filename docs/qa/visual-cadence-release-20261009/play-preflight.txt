@@ -1,0 +1,331 @@
+Browser tab: 3, Title: "버전 검토 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217/releases/16/review".
+1 AXWebArea 버전 검토 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/tracks/4698530107310345217/releases/16/review
+	2 container
+		3 text Google Play Console 로드 중
+		4 container
+			5 container
+				6 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				10 button 읽지 않은 알림 알림 센터 열기
+					11 text 읽지 않은 알림
+				44 button 아가톡 - 지금 내 기분이 그래
+					45 text 아가톡 - 지금 내 기분이 그래
+				7 button 개발자 계정 전환
+					8 image 개발자 계정 전환
+			46 container
+				47 link Description: 모든 앱, Value: play.google.com/console/u/0/developers/8736564730162379651/app-list
+				48 content list
+					49 container 대시보드
+						50 button 대시보드
+							51 text 대시보드
+					52 container 통계
+						53 button 통계
+							54 text 통계
+					55 container 게시 개요
+						56 button 게시 개요
+							57 text 게시 개요
+					58 container Google Play로 보호됨
+						59 button Google Play로 보호됨
+							60 text Google Play로 보호됨
+					61 container (expanded) Description: 테스트 및 출시, Secondary Actions: Collapse
+						62 button 테스트 및 출시
+							63 text 테스트 및 출시
+						73 content list
+							74 container
+								75 container 최신 버전 및 번들
+									76 button 최신 버전 및 번들
+								77 container 프로덕션
+									78 button 프로덕션
+								79 container (expanded) Description: 테스트, Secondary Actions: Collapse
+									80 button 테스트
+									87 content list
+										88 container
+											89 container 공개 테스트
+												90 button 공개 테스트
+											91 container 비공개 테스트
+												92 button 비공개 테스트
+											93 container 내부 테스트
+												94 button 내부 테스트
+											95 container (collapsed) Description: 사전 출시 보고서, Secondary Actions: Expand
+												96 button 사전 출시 보고서
+											97 container 내부 앱 공유
+												98 button 내부 앱 공유
+								81 container 사전 등록
+									82 button 사전 등록
+								83 container 앱 무결성
+									84 button 앱 무결성
+								85 container 고급 설정
+									86 button 고급 설정
+					64 container (collapsed) Description: 모니터링 및 개선, Secondary Actions: Expand
+						65 button 모니터링 및 개선
+							66 text 모니터링 및 개선
+					67 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+						68 button 사용자 늘리기
+							69 text 사용자 늘리기
+					70 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+						71 button Play를 통한 수익 창출
+							72 text Play를 통한 수익 창출
+			9 container main-content
+				99 container
+					100 heading 비공개 테스트 버전 생성, Value: 1
+						101 text 비공개 테스트 버전 생성
+					102 container
+						103 text 버전에 문제가 있습니다.
+					104 tab group
+						105 tab (selectable, disabled, settable, boolean) Description: 1/2단계, 새 버전 출시하기, Value: 0
+새 버전 출시하기
+						106 tab (selected, settable, boolean) Description: 2/2단계, 미리보기 및 확인, Value: 1
+2
+미리보기 및 확인
+					107 button 임시 출시 삭제
+						108 text 임시 출시 삭제
+					109 heading 오류, 경고 및 메시지, Value: 2
+						110 text 오류, 경고 및 메시지
+					111 text 경고 2개
+					112 button (expanded) Description: 검증 세부정보 간략히 보기, Secondary Actions: Collapse
+						113 text 간략히
+					352 container
+						353 text 버전 코드 36 메시지 2개 경고 이 App Bundle 유형과 연결된 가독화 파일이 없습니다. 난독화된 코드(R8/proguard)를 사용하는 경우 가독화 파일을 업로드하면 비정상 종료 및 ANR을 더 쉽게 분석하고 디버그할 수 있습니다. R8/proguard를 사용하면 앱 크기를 줄이는 데 도움이 됩니다. 
+						354 link Description: 자세히 알아보기, Value: developer.android.com/studio/build/shrink-code#decode-stack-trace
+						355 text 경고 이 App Bundle 아티팩트 유형은 네이티브 코드를 포함하며 아직 디버그 기호가 업로드되지 않았습니다. 비정상 종료 및 ANR을 더 쉽게 분석하고 디버그할 수 있도록 기호 파일을 업로드하는 것이 좋습니다. 
+						356 link Description: 자세히 알아보기, Value: developer.android.com/studio/build/shrink-code#native-crash-support
+					114 heading 지원 기기 변경사항, Value: 2
+						115 text 지원 기기 변경사항
+					116 text 지원 기기가 변경된 이유는 매니페스트가 변경되었거나 App Bundle이 누락되었기 때문일 수 있습니다. 기기 카탈로그에서 제외된 기기는 여기에 표시되지 않습니다.
+					117 table 지원되는 폼 팩터
+						118 row 폼 팩터 마지막 출시에서 지원하는 기기 수 더 이상 지원되지 않는 기기 새롭게 지원되는 기기 이 출시에서 지원하는 총 기기 수
+							119 cell
+							120 cell 폼 팩터
+								121 text 폼 팩터
+							122 cell 마지막 출시에서 지원하는 기기 수
+								123 text 마지막 출시에서 지원하는 기기 수
+							124 cell 더 이상 지원되지 않는 기기
+								125 text 더 이상 지원되지 않는 기기
+							126 cell 새롭게 지원되는 기기
+								127 text 새롭게 지원되는 기기
+							128 cell 이 출시에서 지원하는 총 기기 수
+								129 text 이 출시에서 지원하는 총 기기 수
+							130 cell
+						131 row 전화 11,321 0 0 11,321
+							132 cell
+							133 cell
+								134 text 전화
+							135 cell
+								136 text 11,321
+							137 cell
+								138 text 0
+							139 cell
+								140 text 0
+							141 cell
+								142 text 11,321
+							143 cell
+						144 row 태블릿 6,439 0 0 6,439
+							145 cell
+							146 cell
+								147 text 태블릿
+							148 cell
+								149 text 6,439
+							150 cell
+								151 text 0
+							152 cell
+								153 text 0
+							154 cell
+								155 text 6,439
+							156 cell
+						157 row TV 6 0 0 6
+							158 cell
+							159 cell
+								160 text TV
+							161 cell
+								162 text 6
+							163 cell
+								164 text 0
+							165 cell
+								166 text 0
+							167 cell
+								168 text 6
+							169 cell
+						170 row 웨어러블 0 0 0 0
+							171 cell
+							172 cell
+								173 text 웨어러블
+							174 cell
+								175 text 0
+							176 cell
+								177 text 0
+							178 cell
+								179 text 0
+							180 cell
+								181 text 0
+							182 cell
+						183 row 차량 27 0 0 27
+							184 cell
+							185 cell
+								186 text 차량
+							187 cell
+								188 text 27
+							189 cell
+								190 text 0
+							191 cell
+								192 text 0
+							193 cell
+								194 text 27
+							195 cell
+						196 row Chromebook 77 0 0 77
+							197 cell
+							198 cell
+								199 text Chromebook
+							200 cell
+								201 text 77
+							202 cell
+								203 text 0
+							204 cell
+								205 text 0
+							206 cell
+								207 text 77
+							208 cell
+						209 row Android XR 1 0 0 1
+							210 cell
+							211 cell
+								212 text Android XR
+							213 cell
+								214 text 1
+							215 cell
+								216 text 0
+							217 cell
+								218 text 0
+							219 cell
+								220 text 1
+							221 cell
+					222 heading 출시 버전 제공, Value: 2
+						223 text 출시 버전 제공
+					224 container
+						225 button (collapsed) 신규 설치 크기, Secondary Actions: Expand
+						226 text 112MB -901B
+						227 text (이전 출시 버전 대비)
+					228 container
+						229 button (collapsed) 다운로드 시간, Secondary Actions: Expand
+						230 text 1분 2초 0초
+						231 text (이전 출시 버전 대비)
+					232 container
+						233 button (collapsed) 업데이트 크기, Secondary Actions: Expand
+					234 heading 새 App Bundle, Value: 2
+						235 text 새 App Bundle
+					236 table 아티팩트
+						237 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+							238 cell
+							239 cell 파일 형식
+								240 text 파일 형식
+							241 cell 버전
+								242 text 버전
+							243 cell API 수준
+								244 text API 수준
+							245 cell 타겟 SDK
+								246 text 타겟 SDK
+							247 cell 화면 레이아웃
+								248 text 화면 레이아웃
+							249 cell ABI
+								250 text ABI
+							251 cell 필수 기능
+								252 text 필수 기능
+							253 cell
+						254 row App bundle 고급 36 (0.5.22-beta) 26 이상 36 4 4 4 App Bundle: 36(0.5.22-beta) 세부정보 보기
+							255 cell
+							256 cell
+								257 text App bundle
+								258 button (collapsed) 고급, Secondary Actions: Expand
+									259 text 고급
+							260 cell
+								261 text 36 (0.5.22-beta)
+							262 cell
+								263 text 26 이상
+							264 cell
+								265 text 36
+							266 cell
+								267 text 4
+							268 cell
+								269 text 4
+							270 cell
+								271 text 4
+							272 cell
+								273 button App Bundle: 36(0.5.22-beta) 세부정보 보기
+					274 heading 이전 버전, Value: 3
+						275 text 이전 버전
+					276 heading 포함됨, Value: 4
+						277 text 포함됨
+					278 text 이번 버전에 포함되는 이전 버전의 App Bundle이 없습니다
+					279 heading 포함되지 않음, Value: 4
+						280 text 포함되지 않음
+					281 text 이전 버전의 다음과 같은 아티팩트 버전이 이번 버전에 포함되지 않습니다.
+					282 table 아티팩트
+						283 row 파일 형식 버전 API 수준 타겟 SDK 화면 레이아웃 ABI 필수 기능
+							284 cell 파일 형식
+								285 text 파일 형식
+							286 cell 버전
+								287 text 버전
+							288 cell API 수준
+								289 text API 수준
+							290 cell 타겟 SDK
+								291 text 타겟 SDK
+							292 cell 화면 레이아웃
+								293 text 화면 레이아웃
+							294 cell ABI
+								295 text ABI
+							296 cell 필수 기능
+								297 text 필수 기능
+							298 cell
+						299 row App bundle 고급 35 (0.5.21-beta) 26 이상 36 4 4 4 App Bundle: 35(0.5.21-beta) 세부정보 보기
+							300 cell
+								301 text App bundle
+								302 button (collapsed) 고급, Secondary Actions: Expand
+									303 text 고급
+							304 cell
+								305 text 35 (0.5.21-beta)
+							306 cell
+								307 text 26 이상
+							308 cell
+								309 text 36
+							310 cell
+								311 text 4
+							312 cell
+								313 text 4
+							314 cell
+								315 text 4
+							316 cell
+								317 button App Bundle: 35(0.5.21-beta) 세부정보 보기
+					318 heading 출시 노트, Value: 2
+						319 text 출시 노트
+					320 text 기본 언어 - ko-KR
+					321 text 선택한 영상 구간의 표정과 입 움직임을 더 촘촘하게 관찰하도록 개선했습니다.
+짧은 입 움직임의 관찰 누락을 줄이고, 움직임이 이어지는 시간을 확인하는 처리를 보완했습니다.
+					322 heading 단계적 출시, Value: 2
+						323 text 단계적 출시
+					324 text 이 버전을 사용자층의 몇 퍼센트를 대상으로 출시할지 입력합니다.
+					325 container 활성 기기 설치 수: 0
+						326 text 사용 중인 기기에 설치된 횟수
+						327 text 0
+					328 container 출시율
+						329 container
+							330 text 출시율
+							331 container 필수 입력란
+								332 text *
+						333 container
+							334 text field (settable) %, Value: 100.0
+							335 text %
+					336 container 단계적 출시 대상 설치 사용자 수 0회
+						337 text 단계적 출시 대상 설치 사용자 수
+						338 text 0
+					339 container
+						340 text 저장하면 변경사항이 게시 개요에 저장되고 검토를 위해 Google에 전송될 준비가 됩니다.
+						341 button 뒤로
+							342 text 뒤로
+						343 button 저장
+							344 text 저장
+				345 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				346 link Description: 상태 대시보드, Value: status.play.google.com/
+				347 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				348 text © 2026 Google
+				349 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				350 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				351 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 112 button (expanded) Description: 검증 세부정보 간략히 보기, Secondary Actions: Collapse

@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Choi Yongwoo, O=Jigeum, C=KR
+Signer #1 certificate SHA-256 digest: f1ed4457b926b985b0355d3e9d2bba285b7b6fc6142c395423c383ee92ea961d
+Signer #1 certificate SHA-1 digest: bd0776ddca66026be65fdf0b9b323f12c8f9aa49
+Signer #1 certificate MD5 digest: 2349cc7b879bfde17d087d35ce6178d0
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: 899490534282b03edae0a0211ba889d3c6cfe54d0f10666b69a1b140fbf37e3d
+Signer #1 public key SHA-1 digest: ffbc13a5855f54ba66e723265a56c17fe7bee5ad
+Signer #1 public key MD5 digest: 0181cc47edaa665a4a070f5122ba3dcd

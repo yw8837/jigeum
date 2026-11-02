@@ -1,0 +1,114 @@
+Browser tab: 5, Title: "콘텐츠 등급 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/content-rating-overview".
+0 AXWebArea 콘텐츠 등급 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/content-rating-overview
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/home
+				6 button 읽지 않은 알림 알림 센터 열기
+					7 text 읽지 않은 알림
+				8 pop up button (collapsed) Description: 개발자 계정 전환, Secondary Actions: Expand
+				9 button (collapsed) Description: Google 계정: 뇽뇽 (bsfire1237@gmail.com), Google 멤버십, Secondary Actions: Expand
+			10 content list
+				11 container 홈
+					12 button 홈
+				13 container 계정 관리
+					14 button 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+				19 container 통계
+					20 button 통계
+				21 container 게시 개요
+					22 button 게시 개요
+				23 container Google Play로 보호됨
+					24 button Google Play로 보호됨
+				25 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					26 button 테스트 및 출시
+				27 container (expanded) Description: 모니터링 및 개선, Secondary Actions: Collapse
+					28 button 모니터링 및 개선
+				29 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					30 button 사용자 늘리기
+				31 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					32 button Play를 통한 수익 창출
+			33 container main-content
+				34 container
+					35 link Description: 앱 콘텐츠 페이지로 돌아가기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/overview
+					36 heading 콘텐츠 등급, Value: 1
+						37 text 콘텐츠 등급
+					38 container
+						39 text 공식 등급 부여 기관으로부터 앱에 대한 콘텐츠 등급을 받으세요.
+						40 button 콘텐츠 등급에 관한 세부정보 더보기
+					41 text 앱에서 이전 응답에 영향을 줄 수 있는 부분을 변경한 경우 새 설문지를 제출하세요.
+					42 button 새 설문지 시작
+						43 text 새 설문지 시작
+					44 heading 현재 등급, Value: 3
+						45 text 현재 등급
+					46 container
+						47 text IARC 상태
+						48 text 완료됨
+						49 button 상세 평점 보기
+							50 text 세부정보 보기
+						51 text 이메일 주소
+						52 text bsfire1237@gmail.com
+						53 button 수정
+							54 text 수정
+						55 text IARC 인증 ID
+						56 text b917e49f-a80e-86f6-8340-3fb431ccc20e
+						57 text 제출됨
+						58 text 2026년 10월 22일, 오후 8:24
+						59 text 내 등급
+						60 image 전체이용가, Classificação Indicativa (ClassInd), 브라질
+						61 image 전체이용가, Entertainment Software Rating Board (ESRB), 북미
+						62 image PEGI 3, Pan-European Game Information (PEGI), 유럽
+						63 image USK: 전체이용가, Unterhaltungssoftware Selbstkontrolle (USK), 독일
+						64 image 만 3세 이상, IARC Generic, 기타 국가
+						65 image 3세 이상, Google Play, 러시아
+						66 image 3세 이상, Google Play, 대한민국
+					67 heading 이전 설문지, Value: 3
+						68 text 이전 설문지
+					69 button (expanded) Description: 콘텐츠 숨기기: 이전 설문지, Secondary Actions: Collapse
+						70 text 숨기기
+					71 table 설문지 기록
+						72 row 제출됨 IARC 인증 ID 이메일 주소
+							73 cell 제출됨
+								74 text 제출됨
+							75 cell IARC 인증 ID
+								76 text IARC 인증 ID
+							77 cell 이메일 주소
+								78 text 이메일 주소
+							79 cell
+						80 row 2026년 10월 22일, 오후 8:24 b917e49f-a80e-86f6-8340-3fb431ccc20e bsfire1237@gmail.com 상세 평점 보기
+							81 cell
+								82 text 2026년 10월 22일, 오후 8:24
+							83 cell
+								84 text b917e49f-a80e-86f6-8340-3fb431ccc20e
+							85 cell
+								86 text bsfire1237@gmail.com
+							87 cell
+								88 button 상세 평점 보기
+						89 row 2026년 10월 1일, 오후 1:10 - bsfire1237@gmail.com 상세 평점 보기
+							90 cell
+								91 text 2026년 10월 1일, 오후 1:10
+							92 cell
+								93 text -
+							94 cell
+								95 text bsfire1237@gmail.com
+							96 cell
+								97 button 상세 평점 보기
+					98 container
+						99 text Google Play의 콘텐츠 등급은
+						100 link Description: IARC(International Age Rating Coalition), Value: globalratings.com/
+						101 text 에서 제공합니다. 이 설문지를 작성하면 IARC의
+						102 link Description: 서비스 약관, Value: web.iarcservices.com/terms
+						103 text 에 동의하는 것으로 간주됩니다.
+				104 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				105 link Description: 상태 대시보드, Value: status.play.google.com/
+				106 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				107 text © 2026 Google
+				108 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				109 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				110 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 콘텐츠 등급 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-content/content-rating-overview

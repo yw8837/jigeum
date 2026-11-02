@@ -1,0 +1,72 @@
+{
+  "version": "0.5.30",
+  "version_code": 44,
+  "real_app_ui": true,
+  "generated_ui": false,
+  "private_baby_media": false,
+  "screens": [
+    {
+      "file": "01-home.png",
+      "source": "raw/store-01-home.png",
+      "raw_sha256": "a693b68a7d848f04a8d162c8736efae16131b572aafe9f43823686116b809929",
+      "sha256": "1cae155ccb83656c0225947b9c983551a7ba0174e4ad74afd745cf9e18969ee5",
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "source_crop_px": null
+    },
+    {
+      "file": "02-expression.png",
+      "source": "raw/store-03-expression.png",
+      "raw_sha256": "ff1418d5621cdf9b64995b2c91c26677fa0e6931820366fa33e8e9f5a50b029d",
+      "sha256": "c24df8d1e762f3af40b6258574f6a6cfc1ee73890771bbb7485813ea4f62b48a",
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "source_crop_px": [
+        0,
+        925,
+        1080,
+        1825
+      ]
+    },
+    {
+      "file": "03-record.png",
+      "source": "raw/store-04-record.png",
+      "raw_sha256": "1ae2183921095e54b07ccbb15ae1e38f9a1fc8b4f8856e7aec1b90c30daa3e54",
+      "sha256": "91e32723c8921683785c43d710c6f22b6d8c3fcbad915e3ee2582846bea2a2d5",
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "source_crop_px": null
+    },
+    {
+      "file": "04-code.png",
+      "source": "raw/code-entry-empty.png",
+      "raw_sha256": "01cd1fbacf97d453ec249ed8b761022041384d6a158ddf97936b78e6cf76eba9",
+      "sha256": "c0d15e8cacb6911680b8db300594086a3807722b578312a6a01f718159831a27",
+      "dimensions": [
+        1080,
+        1920
+      ],
+      "source_crop_px": [
+        64,
+        418,
+        1016,
+        1265
+      ]
+    }
+  ],
+  "status": "play_submission24_in_review_not_publicly_verified",
+  "feature_graphic": {
+    "source": "actual home and record screenshots",
+    "dimensions": [
+      1024,
+      500
+    ]
+  },
+  "play_submission_id": 24
+}

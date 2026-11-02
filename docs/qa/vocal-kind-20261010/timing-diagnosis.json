@@ -1,0 +1,67 @@
+{
+  "status": "pass",
+  "quality_validated": false,
+  "movie_sha256": "9d57307e1fbd0ff3329e9ed5eba90d6713e619c9ac5d7b65cc6118a5876d8877",
+  "execution": {
+    "status": "pass",
+    "tests": 1,
+    "passed_tests": 1,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 42.85,
+    "exit": 0
+  },
+  "rows": [
+    {
+      "id": "av1",
+      "status": "completed",
+      "total_ms": 19688.707094,
+      "stages": {
+        "decode": 997.509411,
+        "yamnet": 1165.148061,
+        "ast": 15682.801674,
+        "candidate_policy": 22.568522,
+        "acoustic_shape": 76.730133,
+        "visual": 1503.883875,
+        "base_interpreter": 30.405225,
+        "candidate_interpreter": 27.533105
+      }
+    },
+    {
+      "id": "audio",
+      "status": "completed",
+      "total_ms": 8747.675348,
+      "stages": {
+        "decode": 850.882681,
+        "yamnet": 389.737606,
+        "ast": 7237.539482,
+        "candidate_policy": 15.721033,
+        "acoustic_shape": 45.750367,
+        "base_interpreter": 24.492857,
+        "candidate_interpreter": 21.079323
+      }
+    },
+    {
+      "id": "av2",
+      "status": "completed",
+      "total_ms": 6113.691012,
+      "stages": {
+        "decode": 394.630845,
+        "yamnet": 251.310195,
+        "ast": 4299.018585,
+        "candidate_policy": 24.352773,
+        "acoustic_shape": 46.83097,
+        "visual": 895.413217,
+        "base_interpreter": 26.524742,
+        "candidate_interpreter": 21.252432
+      }
+    }
+  ],
+  "source_preserved": true,
+  "temporary_media_removed": true
+}

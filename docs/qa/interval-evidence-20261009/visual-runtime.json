@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "basis": "AUDIO_VISUAL",
+      "id": "face10",
+      "elapsed_ms": 9700.33888,
+      "observations": 50,
+      "single_face": 50,
+      "visual_ms": 7107.9222,
+      "max_stage_pss_bytes": 263409664,
+      "timeline_ordered": true,
+      "covers_selection": true
+    },
+    {
+      "basis": "AUDIO",
+      "id": "face20",
+      "elapsed_ms": 23877.316435,
+      "observations": 100,
+      "single_face": 99,
+      "visual_ms": 14332.295608,
+      "max_stage_pss_bytes": 262385664,
+      "timeline_ordered": true,
+      "covers_selection": true
+    }
+  ],
+  "physical_device": false,
+  "originals_unchanged": true,
+  "reconstructed_repeated_ten_seconds": true,
+  "independent_twenty_second_accuracy": false,
+  "evidence_sha256": "6944f7ec8ef0fcdc7eff0f7845e5582af160935c1b336a5c5bf4ef0e62646748"
+}

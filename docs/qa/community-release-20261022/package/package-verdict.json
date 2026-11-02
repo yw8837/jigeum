@@ -1,0 +1,34 @@
+{
+  "status": "pass",
+  "distribution_checked": "beta",
+  "backup_domains_excluded_in_both_modes": [
+    "database",
+    "device_database",
+    "device_file",
+    "device_root",
+    "device_sharedpref",
+    "external",
+    "file",
+    "root",
+    "sharedpref"
+  ],
+  "compiled_apk_has_internet_permission": true,
+  "allowBackup": false,
+  "fullBackupContent": false,
+  "baseline_comparison": {
+    "status": "skipped",
+    "reason": "No --baseline supplied"
+  },
+  "aab_checked": true,
+  "aab_unsigned": false,
+  "physical_OEM_transfer_tested": false,
+  "apk_sha256": "3a7d37f31d40f58a31dcd5463351b43536d70c07bc8177a107dc8f6c29ceb809",
+  "aab_distribution": {
+    "package": "com.moa.babylanguage",
+    "version_code": 40,
+    "version_name": "0.5.26-beta",
+    "test_distribution": true,
+    "closed_test_distribution": true
+  },
+  "aab_sha256": "aa12d9cd8699815b0ccf518c76f3d27012de8aae249548cbd5fc70b21986aa61"
+}

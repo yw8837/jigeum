@@ -1,0 +1,14 @@
+Observed in Play Console on 2026-11-02 KST, App Bundle: 45 (0.5.31).
+Artifact ID: 4860246878015832563
+Source: https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-bundle-explorer?artifactId=4860246878015832563
+
+This is a written record of the visible bundle-details permission expansion, not a raw accessibility dump.
+Permission count: 15.
+Confirmed: com.google.android.gms.permission.AD_ID
+Also present: android.permission.ACCESS_ADSERVICES_AD_ID
+Visible memory page-size status: 16KB 지원.
+
+The release review reported an AD_ID error for one active artifact, although exact45 has AD_ID in both the uploaded Console bundle and local manifest.
+Prior44 submission recorded the old no-ad Alpha40 condition. The existing app-wide advertising declaration was left unchanged.
+Selected '권한 없이 출시' only for release5; Console then displayed '오류(이번 출시에서는 무시됨)'.
+Remaining warnings: no deobfuscation file; no native debug symbols. R8 remains off.

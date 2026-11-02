@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "date_kst": "2026-10-04",
+  "environment": {
+    "android_api": 35,
+    "abi": "x86_64",
+    "physical_arm_device": false
+  },
+  "overall_product_goal_complete": false,
+  "new_play_deployment": false,
+  "production_babble_policy_enabled": false,
+  "full_regression_before_v2_and_build_split": {
+    "status": "pass",
+    "tests": 324,
+    "passed_tests": 322,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 2,
+    "skipped_test_ids": [
+      "com.moa.babylanguage.AstPerceptionProbeTest#evaluateLocalPerceptionManifest",
+      "com.moa.babylanguage.PublicAudioProbeTest#reportPublicSoundEventProbes"
+    ],
+    "validation_errors": [],
+    "seconds": 596.7,
+    "exit": 0,
+    "local_evidence": "work/ondevice-av/android-ast-full1/instrumentation-result.json",
+    "apk": {
+      "app_apk": {
+        "sha256": "91c39ee1df3410a5d5e0f6c6c2da8e3cc191fa6bed61211e86d5232985de2b91",
+        "bytes": 267634121
+      },
+      "test_apk": {
+        "sha256": "37483b4f9c3bdbf7882b49df874178a5c510a21e1fcfb7d3251689d79c02a907",
+        "bytes": 2340903
+      }
+    }
+  },
+  "default_after_v2_and_build_split": {
+    "status": "pass",
+    "tests": 116,
+    "passed_tests": 116,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "validation_errors": [],
+    "seconds": 34.83,
+    "exit": 0,
+    "local_evidence": "work/ondevice-av/android-default-focused1/result.json",
+    "apk": {
+      "app_apk": {
+        "sha256": "3230855934fc9d22379f1fcc9dfc358dd5490995cc41e78411cb14ee4d934cca",
+        "bytes": 97260228
+      },
+      "test_apk": {
+        "sha256": "1bf70b4ed0a3991fa52a92598ae45332a4ca809e50c83f1d68aa6e7b5bc00ca1",
+        "bytes": 2295691
+      }
+    }
+  },
+  "probe_after_v2_and_build_split": {
+    "status": "pass",
+    "tests": 27,
+    "passed_tests": 27,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "validation_errors": [],
+    "seconds": 18.68,
+    "exit": 0,
+    "local_evidence": "work/ondevice-av/android-probe-focused4/result.json",
+    "apk": {
+      "app_apk": {
+        "sha256": "0531bb1fb817fa021552f99efbfca1be2a5a5f1223af3a25b42727613b3a5185",
+        "bytes": 267634121
+      },
+      "test_apk": {
+        "sha256": "a9bd1817ca5c77157ef1e6647de7a3950f2bce670118167b9eb491eec37da0bd",
+        "bytes": 2340903
+      }
+    }
+  },
+  "test_counts_overlap": true,
+  "default_packages_and_lint": {
+    "default_debug": {
+      "bytes": 97260228,
+      "sha256": "3230855934fc9d22379f1fcc9dfc358dd5490995cc41e78411cb14ee4d934cca",
+      "unwanted_ast_entries": [],
+      "yamnet_present": true
+    },
+    "default_beta": {
+      "bytes": 46670862,
+      "sha256": "6fd331d1cc630629e13afec704c28ea6ddd8013655437eec5297c76543adaf5f",
+      "unwanted_ast_entries": [],
+      "yamnet_present": true
+    },
+    "lint_beta": {
+      "Error": 0,
+      "Warning": 19,
+      "Information": 0,
+      "Fatal": 0
+    },
+    "lint_release": {
+      "Error": 0,
+      "Warning": 19,
+      "Information": 0,
+      "Fatal": 0
+    }
+  },
+  "research_package": {
+    "bytes": 267634121,
+    "model_bytes": 91134123,
+    "model_sha256": "3dff0cc2b374977ae1460258261608e33428f4767a6959cb8bc910b09433f71e",
+    "ort_entries": 8,
+    "notice": true
+  },
+  "package_failure_gates": [
+    {
+      "id": "default_missing_model",
+      "exit_code": 0,
+      "expected_success": true,
+      "expected_message": null,
+      "passed": true,
+      "seconds": 11.42
+    },
+    {
+      "id": "probe_missing_model",
+      "exit_code": 1,
+      "expected_success": false,
+      "expected_message": "verifyAstModel",
+      "passed": true,
+      "seconds": 9.29
+    },
+    {
+      "id": "probe_wrong_hash",
+      "exit_code": 1,
+      "expected_success": false,
+      "expected_message": "SHA256 mismatch",
+      "passed": true,
+      "seconds": 9.0
+    },
+    {
+      "id": "forbid_beta",
+      "exit_code": 1,
+      "expected_success": false,
+      "expected_message": "AST probe is debug-only",
+      "passed": true,
+      "seconds": 9.79
+    },
+    {
+      "id": "forbid_release",
+      "exit_code": 1,
+      "expected_success": false,
+      "expected_message": "AST probe is debug-only",
+      "passed": true,
+      "seconds": 9.89
+    },
+    {
+      "id": "forbid_preview",
+      "exit_code": 1,
+      "expected_success": false,
+      "expected_message": "AST probe is debug-only",
+      "passed": true,
+      "seconds": 9.75
+    }
+  ],
+  "offline_network": {
+    "before": {
+      "wifi_on": "1",
+      "mobile_data": "1",
+      "active_default_network": "100",
+      "connected_network_agents": 2
+    },
+    "offline": {
+      "wifi_on": "0",
+      "mobile_data": "0",
+      "active_default_network": "none",
+      "connected_network_agents": 0
+    },
+    "probe_exit_code": 0,
+    "after_probe": {
+      "wifi_on": "0",
+      "mobile_data": "0",
+      "active_default_network": "none",
+      "connected_network_agents": 0
+    },
+    "restored": {
+      "wifi_on": "1",
+      "mobile_data": "1",
+      "active_default_network": "none",
+      "connected_network_agents": 0
+    },
+    "settings_restored": true
+  },
+  "private_development_probe_aggregate": {
+    "executed_cases": 3,
+    "no_audio_correctly_withheld": 1,
+    "previously_unconfirmed_intervals_recovered_by_opt_in_candidate": 2,
+    "independent_accuracy_validation": false,
+    "quality_validated": false,
+    "original_media_or_individual_response_included": false
+  },
+  "cleanup": {
+    "permanent_files_before": 6,
+    "permanent_files_after": 6,
+    "permanent_file_hashes_unchanged": true,
+    "removed_research_model_cache": true,
+    "restored_apks": {
+      "app": {
+        "sha256": "3230855934fc9d22379f1fcc9dfc358dd5490995cc41e78411cb14ee4d934cca",
+        "verified": true
+      },
+      "test": {
+        "sha256": "1bf70b4ed0a3991fa52a92598ae45332a4ca809e50c83f1d68aa6e7b5bc00ca1",
+        "verified": true
+      }
+    },
+    "probe_files_removed": 5,
+    "emulator_shutdown_acknowledged": true
+  },
+  "reviewed_source_fingerprint": {
+    "files": 87,
+    "sha256": "9d2136d0df5ee83eb707a20bbc904928a29c8f7e05bd8545087c4e79f911808f",
+    "algorithm": "ordered relative UTF-8 path, NUL, LF-normalized bytes, NUL"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "status": "pass",
+  "prior_partial_sha256": "e95a0ea5ad76a8afa003a863b9fea94d698e034df2ed78e5b848346ac5098e30",
+  "retained_passed_recovery_tests": 3,
+  "new_product_code": false,
+  "device": {
+    "ro.kernel.qemu": "0",
+    "ro.boot.qemu": "",
+    "ro.product.cpu.abi": "arm64-v8a",
+    "ro.product.model": "SM-S938N",
+    "ro.build.version.sdk": "36"
+  },
+  "installed": [
+    {
+      "package": "com.moa.babylanguage.astcandidate",
+      "base_apk": "/data/app/~~lEl6TTKS2zjQ-shjMtSUfg==/com.moa.babylanguage.astcandidate-JMxod81xkQEzfTPpF2XjxQ==/base.apk",
+      "sha256": "72fb109e9742de012c492113536f116fa39b36914323f88f70d6647ccd4236be",
+      "expected_sha256": "72fb109e9742de012c492113536f116fa39b36914323f88f70d6647ccd4236be",
+      "version_code": 35,
+      "version_name": "0.5.21-astcandidate",
+      "verified": true,
+      "errors": []
+    },
+    {
+      "package": "com.moa.babylanguage.astcandidate.test",
+      "base_apk": "/data/app/~~YCJRq57USagxisCdZqN09g==/com.moa.babylanguage.astcandidate.test-mIhiymOHOd4uE4Acbkd02w==/base.apk",
+      "sha256": "bc59b3b25edc3a8faef9c0ef85515dd6e37b8de88c0f452a850394fbfdb93335",
+      "expected_sha256": "bc59b3b25edc3a8faef9c0ef85515dd6e37b8de88c0f452a850394fbfdb93335",
+      "version_code": 0,
+      "version_name": "null",
+      "verified": true,
+      "errors": []
+    }
+  ],
+  "execution": {
+    "status": "pass",
+    "tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "ignored_tests": 0,
+    "assumption_skipped_tests": 0,
+    "skipped_test_ids": [],
+    "unexpected_skips": [],
+    "allowed_skips": [],
+    "validation_errors": [],
+    "seconds": 1.36,
+    "exit": 0
+  },
+  "cleanup_errors": [],
+  "production_unchanged": true
+}

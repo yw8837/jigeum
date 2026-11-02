@@ -1,0 +1,113 @@
+Browser tab: 5, Title: "모니터링 및 개선 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/monitor".
+0 AXWebArea 모니터링 및 개선 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/monitor
+	1 container
+		2 text Google Play Console 로드 중
+		3 container
+			4 container
+				5 link Description: Google Play Console 로고, Value: play.google.com/console/u/0/developers/8736564730162379651/home
+				6 button 알림 알림 센터 열기
+					7 text 알림
+				8 pop up button (collapsed) Description: 개발자 계정 전환, Secondary Actions: Expand
+				9 button (collapsed) Description: Google 계정: 뇽뇽 (bsfire1237@gmail.com), Google 멤버십, Secondary Actions: Expand
+			10 content list
+				11 container 홈
+					12 button 홈
+						97 text 홈
+				13 container 계정 관리
+					14 button 계정 관리
+						98 text 계정 관리
+				15 container 아가톡 - 지금 내 기분이 그래
+					16 pop up button 아가톡 - 지금 내 기분이 그래
+				17 container 대시보드
+					18 button 대시보드
+						99 text 대시보드
+				19 container 통계
+					20 button 통계
+						100 text 통계
+				21 container 게시 개요
+					22 button 게시 개요
+						101 text 게시 개요
+				23 container Google Play로 보호됨
+					24 button Google Play로 보호됨
+						102 text Google Play로 보호됨
+				25 container (collapsed) Description: 테스트 및 출시, Secondary Actions: Expand
+					26 button 테스트 및 출시
+						103 text 테스트 및 출시
+				27 container (expanded) Description: 모니터링 및 개선, Secondary Actions: Collapse
+					28 button 모니터링 및 개선
+						104 text 모니터링 및 개선
+					107 content list
+						108 container
+							109 container (collapsed) Description: 도달범위 및 기기, Secondary Actions: Expand
+								110 button 도달범위 및 기기
+							111 container (collapsed) Description: 평점 및 리뷰, Secondary Actions: Expand
+								112 button 평점 및 리뷰
+							113 container (collapsed) Description: Android vitals, Secondary Actions: Expand
+								114 button Android vitals
+							115 container (collapsed) Description: 정책 및 프로그램, Secondary Actions: Expand
+								116 button 정책 및 프로그램
+				29 container (collapsed) Description: 사용자 늘리기, Secondary Actions: Expand
+					30 button 사용자 늘리기
+						105 text 사용자 늘리기
+				31 container (collapsed) Description: Play를 통한 수익 창출, Secondary Actions: Expand
+					32 button Play를 통한 수익 창출
+						106 text Play를 통한 수익 창출
+			33 container main-content
+				34 container
+					117 heading 모니터링 및 개선, Value: 1
+						118 text 모니터링 및 개선
+					119 text 정책 상태 발견된 정책 문제가 없습니다.
+					120 link Description: 정책 문제 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/policy-center
+					121 heading Android vitals, Value: 2
+						122 text Android vitals
+					123 text 지난 28일
+					124 container
+						125 button (collapsed) 사용자 인식 비정상 종료 발생률, Secondary Actions: Expand
+						126 text -
+					127 link Description: 측정항목 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/vitals/metrics/details?aggregationPeriod=AGGREGATION_PERIOD_28D&days=28&metric=USER_PERCEIVED_CRASHES&granularity=DAILY_GRANULARITY
+					128 text 데이터 없음
+					129 container
+						130 button (collapsed) 사용자 인식 ANR 발생률, Secondary Actions: Expand
+						131 text -
+					132 link Description: 측정항목 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/vitals/metrics/details?aggregationPeriod=AGGREGATION_PERIOD_28D&days=28&metric=USER_PERCEIVED_ANRS&granularity=DAILY_GRANULARITY
+					133 text 데이터 없음
+					134 container
+						135 button (collapsed) 느린 콜드 스타트 발생률, Secondary Actions: Expand
+						136 text -
+					137 link Description: 측정항목 세부정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/vitals/metrics/details?aggregationPeriod=AGGREGATION_PERIOD_28D&days=28&metric=COLD_STARTUP_TIME&granularity=DAILY_GRANULARITY
+					138 text 데이터 없음
+					139 heading 평점 및 리뷰, Value: 2
+						140 text 평점 및 리뷰
+					141 link Description: 평점 페이지 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/user-feedback/ratings
+					142 link Description: 평점 페이지 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/user-feedback/ratings
+					143 link Description: 리뷰 페이지 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/user-feedback/reviews
+					144 heading 조치 취하기, Value: 2
+						145 text 조치 취하기
+					146 text 주의 필요
+					147 heading DEX 코드 최적화가 기준점 미만입니다, Value: 3
+						148 text DEX 코드 최적화가 기준점 미만입니다
+					149 container aDD7A061A-1604-47F0-9928-622E29505C44--20
+						150 text 다음 카테고리에서 비율을 개선하세요.
+						151 content list
+							152 container
+								153 AXListMarker •
+								154 text 난독화(0%)
+						155 container
+							156 text 비율이 25% 미만인 앱 카테고리가 있으면 Google Play에서 앱의 공개 상태와 게시 기능이 영향을 받을 수 있습니다. 이를 방지하려면 기한 내에 앱을 최적화하세요.
+							157 link Description: 앱 최적화 자세히 알아보기, Value: developer.android.com/topic/performance/vitals/code-optimization
+						158 text 메모리 사용량
+						159 text 비정상적인 동작
+						160 text 출시 이름: 0.5.30 (44) - codes expressions and update notice
+					161 container
+						162 text 해결 기한
+						163 text 2월 2027
+					164 link Description: 영향을 받는 Bundle 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/app-bundle-explorer?artifactId=4860245128099605119&tab=details
+				165 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
+				166 link Description: 상태 대시보드, Value: status.play.google.com/
+				167 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
+				168 text © 2026 Google
+				169 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
+				170 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
+				171 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+
+The focused UI element is 0 AXWebArea 모니터링 및 개선 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/monitor

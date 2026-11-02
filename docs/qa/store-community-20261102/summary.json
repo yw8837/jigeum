@@ -1,0 +1,93 @@
+{
+  "status": "store_review_submitted",
+  "source_url": "https://baby.yeolmaeapps.kr/",
+  "purpose": "user_authorized_actual_community_screenshot_for_Play_store",
+  "local_only_evidence_directory": "D:/Codex/Agattok/store-community-20261102",
+  "screenshots_in_public_git": false,
+  "image_generation_service_used": false,
+  "selected_image": {
+    "name": "05-community-actual.jpg",
+    "width": 525,
+    "height": 933,
+    "format": "JPEG",
+    "play_accepted": true,
+    "position": 5,
+    "phone_screenshot_count": 5
+  },
+  "rejected_capture": {
+    "name": "05-community-1080x1920.png",
+    "reason": "2x2 repeated screenshot tiling",
+    "uploaded": false
+  },
+  "play": {
+    "submission_id": 26,
+    "submitted_at_kst": "2026-11-02T12:58:00+09:00",
+    "status": "in_review",
+    "quick_checks": "in_progress_at_submission",
+    "managed_publishing": false,
+    "public_store_image_verified": false,
+    "scope": "ko-KR phone screenshots only",
+    "previous_4_images_preserved": true,
+    "existing_feature_graphic_ai_label_preserved": true,
+    "previous_submission_cancelled": false
+  },
+  "app_release": {
+    "version_code": 45,
+    "version_name": "0.5.31",
+    "submission_id": 25,
+    "release_id": 5,
+    "status": "Google Play에 제공됨",
+    "released_at_kst": "2026-11-02T03:49:00+09:00",
+    "actual_play_install_or_transaction_tested": false
+  },
+  "browser_overrides_restored": true,
+  "automations_created": false,
+  "new_build_or_adb_used": false,
+  "files": [
+    {
+      "name": "05-community-actual.jpg",
+      "bytes": 62477,
+      "sha256": "02b0dbd59d97caea903ddef88a861f0d74208d7f15e97676ae46002c6a95ec45"
+    },
+    {
+      "name": "play45-released.jpg",
+      "bytes": 38330,
+      "sha256": "7e4fef742a06ef2cf9e1a159d7a6ee4e053e22d0bd2e66455e97200f696b7b88"
+    },
+    {
+      "name": "play45-released.txt",
+      "bytes": 3875,
+      "sha256": "1738a23d149a8e0db13451d039e6f0888b38ecb368fb70ae53726c70d918a34a"
+    },
+    {
+      "name": "play45-available.jpg",
+      "bytes": 49596,
+      "sha256": "8eae578a33353713d907da3ea84f5d267537878b9f093d6607dd3e8e3a9a00ad"
+    },
+    {
+      "name": "play45-available.txt",
+      "bytes": 4995,
+      "sha256": "20e92d8bc38c8cf59efbcf753086b3d6bc566cc746ca975613a4922da93ddb29"
+    },
+    {
+      "name": "play-community-review.jpg",
+      "bytes": 56084,
+      "sha256": "51164192703352b763eefbd49011f80c59564a626f643252770879b9cb31adb2"
+    },
+    {
+      "name": "play-community-review.txt",
+      "bytes": 5416,
+      "sha256": "7505e2433b84f9d5d2fc1b2b4cf60938646491e54fe0afa853e4c105e1256dac"
+    },
+    {
+      "name": "play-submissions25-26.jpg",
+      "bytes": 62321,
+      "sha256": "8026446642dd248086da84f7b7bfc2b560ec5926a4264ee21d967bf5b7605533"
+    },
+    {
+      "name": "play-submissions25-26.txt",
+      "bytes": 9252,
+      "sha256": "1d799c00132e28076c8f170f2125efbfa6a88eebde1e3512402e3b0251443b77"
+    }
+  ]
+}

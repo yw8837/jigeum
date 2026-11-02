@@ -1,0 +1,22 @@
+{
+  "cases": 53,
+  "baseline_outputs": 28,
+  "candidate_outputs": 29,
+  "existing_outputs_exact": true,
+  "source_and_ast_exact": true,
+  "new_control_outputs": 0,
+  "changed": [
+    {
+      "id": "mayra_context",
+      "before_issue": "MIXED_VOCAL",
+      "after": "아기 발성",
+      "partial": true,
+      "windows": [
+        {
+          "start_ms": 0,
+          "end_ms": 10000
+        }
+      ]
+    }
+  ]
+}

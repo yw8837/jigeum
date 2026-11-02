@@ -1,0 +1,72 @@
+Browser tab: 1, Title: "스토어 등록정보 | 아가톡 - 지금 내 기분이 그래", URL: "https://play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/store-listings?metric=METRIC_ACQUISITION&dateRange=2026_09_26-2026_10_23".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 350, 357-391, 398-405
+~1 AXWebArea 스토어 등록정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/store-listings?metric=METRIC_ACQUISITION&dateRange=2026_09_26-2026_10_23
++						398 text date_range
++					399 container
++						400 button (collapsed) 도달범위 방문자의 세부정보 표시, Secondary Actions: Expand
++							401 text 도달범위
++							402 text 방문자의 세부정보 표시
++						403 button (collapsed) 방문자, Secondary Actions: Expand
++						404 text 7 0% 델타(증가할수록 좋음)
++						405 text 이전 기간 대비
++						406 container 차트 왼쪽과 오른쪽 키를 사용하여 도메인 값을 탐색하세요.
++					407 container
++						408 button (collapsed) 확보 순 사용자 설치 클릭수의 세부정보 표시, Secondary Actions: Expand
++							409 text 확보
++							410 text 순 사용자 설치 클릭수의 세부정보 표시
++						411 button (collapsed) 순 사용자 설치 클릭수, Secondary Actions: Expand
++						412 text 3 0% 델타(증가할수록 좋음)
++						413 text 이전 기간 대비
++						414 container 차트 왼쪽과 오른쪽 키를 사용하여 도메인 값을 탐색하세요.
++					415 container
++						416 button (collapsed) 확보(%) 클릭률의 세부정보 표시, Secondary Actions: Expand
++							417 text 확보(%)
++							418 text 클릭률의 세부정보 표시
++						419 button (collapsed) 클릭률, Secondary Actions: Expand
++						420 text 43% 0% 델타(증가할수록 좋음)
++						421 text 이전 기간 대비
++						422 container 차트 왼쪽과 오른쪽 키를 사용하여 도메인 값을 탐색하세요.
++							423 row 이름 최근 업데이트 날짜 방문자 전환율 실험 상태
++								424 cell 이름
++									425 text 이름
++								426 cell 최근 업데이트 날짜
++									427 text 최근 업데이트 날짜
++								428 cell 방문자
++									429 text 방문자
++								430 cell 전환율
++									431 text 전환율
++								432 cell 실험
++									433 text 실험
++								434 cell 상태
++									435 text 상태
++								436 cell
++								437 cell
++							438 row 기본 스토어 등록정보 2026년 10월 27일 4 75.0% 설정 현재 게시 중 변경사항을 전송하여 검토받을 수 있음 작업 선택: 데이터 보기, 그룹 내에 새 등록정보 만들기 기본 등록정보 보기
++								439 cell
++									440 text 기본 스토어 등록정보
++								441 cell
++									442 text 2026년 10월 27일
++								443 cell
++									444 text 4
++								445 cell
++									446 text 75.0%
++								447 cell
++									448 button 설정
++										449 text 설정
++								450 cell
++									451 text 현재 게시 중
++									452 button (collapsed) 변경사항을 전송하여 검토받을 수 있음, Secondary Actions: Expand
++								453 cell
++									454 list 작업 선택: 데이터 보기, 그룹 내에 새 등록정보 만들기
++										455 pop up button (collapsed) Description: 작업 선택: 데이터 보기, 그룹 내에 새 등록정보 만들기, Secondary Actions: Expand
++								456 cell
++									457 link Description: 기본 등록정보 보기, Value: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/store-listings/0
++				458 link Description: 제품 업데이트, Value: play.google.com/console/about/whats-new/
++				459 link Description: 상태 대시보드, Value: status.play.google.com/
++				460 link Description: 도움말, Value: play.google.com/console/u/0/developers/8736564730162379651/help-and-support?app=4975993958261665020
++				461 text © 2026 Google
++				462 link Description: 개인 정보 보호, Value: google.com/policies/privacy/
++				463 link Description: 개발자 배포 계약, Value: play.google.com/about/developer-distribution-agreement.html
++				464 link Description: 서비스 약관, Value: play.google.com/about/console/terms-of-service/
+The focused UI element is 1 AXWebArea 스토어 등록정보 | 아가톡 - 지금 내 기분이 그래, URL: play.google.com/console/u/0/developers/8736564730162379651/app/4975993958261665020/store-listings?metric=METRIC_ACQUISITION&dateRange=2026_09_26-2026_10_23

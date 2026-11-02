@@ -1,0 +1,8 @@
+{
+  "compiled_derived_file_sha256": {
+    "ClipEvidence.kt": "d78f10337131fff38b130331f6980dbb7bf679bfc58e963102e5e90df5ad6001",
+    "Cadence.kt": "d76ddcb5572a8506bdab5070d0f13459ff8f48335c5bde237d1a2d3aaa02d67d",
+    "Types.kt": "00ad64b1325af93f99bc1d3114f1b639ec407c1b1a0d5ba799d7571693fc12b5"
+  },
+  "note": "Raw result source_sha256.ClipEvidence.kt identifies the current repository source, not the stripped baseline compilation file. Baseline driver loads exact git 6499256 content before stripping Android-only sections."
+}

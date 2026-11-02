@@ -1,0 +1,24 @@
+{
+  "repo": "fschmid56/EfficientAT",
+  "revision": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+  "model": "mn04_as",
+  "filename": "mn04_as_mAP_432.pt",
+  "size_bytes": 4066513,
+  "sha256": "899a8c6217063f6941793102a2780b3dd788ab11fce468d9cf5f0577c453321c",
+  "source_files": {
+    "models/mn/model.py": "471b2c482248d782b93881c5e834c0edc23c1e7e6f42a437e4c096b9d8ed4c3e",
+    "models/mn/utils.py": "deb551bd854f90ca1473d731de1d7586af9449fc95fd2432f4cc9d0ccd38c11b",
+    "models/mn/block_types.py": "e13ae49b6885217d6936d9203567aad1b6cb2f1229979d6d1ae77b836f3d1344",
+    "models/mn/attention_pooling.py": "52b6903d5d62b3639ec609166cd08c36342588bd7988fe41ac72f3cfc496ce4f",
+    "models/preprocess.py": "f4d5942eab7b916cb67fdda0f7ddfee152a31fa9a90f0f23ad21019d7a1081cf",
+    "helpers/utils.py": "5d1e0e9198d098b92837fea0d002f116e2d0e2df9d9ee16775e519c45c171011",
+    "metadata/class_labels_indices.csv": "cdd1049833c4b86127c2773ac0d14a2754b6a6d0d1798002ed5c66e699708429"
+  },
+  "sample_rate_hz": 32000,
+  "num_classes": 527,
+  "runtime": {
+    "torch": "2.11.0+cpu",
+    "torchvision": "0.26.0+cpu",
+    "torchaudio": "2.11.0+cpu"
+  }
+}

@@ -1,0 +1,30 @@
+/**
+ * Automatically generated file. DO NOT MODIFY
+ */
+package com.moa.babylanguage;
+
+public final class BuildConfig {
+  public static final boolean DEBUG = false;
+  public static final String APPLICATION_ID = "com.moa.babylanguage";
+  public static final String BUILD_TYPE = "beta";
+  public static final int VERSION_CODE = 40;
+  public static final String VERSION_NAME = "0.5.26-beta";
+  // Field from build type: beta
+  public static final boolean AST_BABBLE_SUPPORT = true;
+  // Field from build type: beta
+  public static final boolean AST_INFANT_CAPTION = true;
+  // Field from build type: beta
+  public static final boolean AST_INFANT_PRESENCE = true;
+  // Field from default config.
+  public static final boolean AST_INTEGRATED_CANDIDATE = false;
+  // Field from default config.
+  public static final String COMMUNITY_URL = "https://baby.yeolmaeapps.kr/";
+  // Field from build type: beta
+  public static final boolean FULL_ACCESS_CLOSED_TEST = true;
+  // Field from default config.
+  public static final boolean FULL_ACCESS_PREVIEW = false;
+  // Field from build type: beta
+  public static final String PLAY_ENTITLEMENT_PUBLIC_KEY = "";
+  // Field from build type: beta
+  public static final String PLAY_VERIFY_URL = "";
+}
